@@ -17,16 +17,19 @@ public class JDBCImportManager {
 	/**
 	 * Starts the import process.
 	 * 
+	 * @param connectionData A container with the necessary data for the database connection.
 	 * @return A diagram from a selected JDBC connection.
 	 */
-	public DiagrammModel importDiagram() {
+	public DiagrammModel importDiagram(JDBCImportConnectionData connectionData) {
 		try {
 			// TODO: Collect all necessary data.
 			DBObjectFactory factory = new DefaultDBObjectFactory();
 			DBTypeConverter typeConverter = new DBTypeConverter();
 			Class.forName("org.hsqldb.jdbc.JDBCDriver");
-			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord("org.hsqldb.jdbc.JDBCDriver",
-					"jdbc:hsqldb:file:~/eclipse-workspace/restacf/src/test/resources/db/testdb", "sa", "");
+			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord(connectionData.getDriverName(), connectionData.getUrl(),
+					connectionData.getUserName(), connectionData.getPassword());
+//			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord("org.hsqldb.jdbc.JDBCDriver",
+//					"jdbc:hsqldb:file:~/eclipse-workspace/restacf/src/test/resources/db/testdb", "sa", "");
 			Connection connection = ConnectionManager.GetConnection(dsr);
 			String schemeName = null;
 			// TODO: Import model from JDBC.

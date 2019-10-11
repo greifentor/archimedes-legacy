@@ -90,7 +90,9 @@ import archimedes.legacy.gui.connections.ConnectionsMainFrame;
 import archimedes.legacy.gui.diagram.DiagramGUIObjectCreator;
 import archimedes.legacy.gui.indices.ComplexIndicesAdministrationFrame;
 import archimedes.legacy.gui.table.TableModelFrame;
+import archimedes.legacy.importer.jdbc.JDBCImportConnectionData;
 import archimedes.legacy.importer.jdbc.JDBCImportManager;
+import archimedes.legacy.importer.jdbc.JDBCImportManagerConfigurationDialog;
 import archimedes.legacy.model.DiagramSaveMode;
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.legacy.model.DiagrammModelListener;
@@ -1099,18 +1101,31 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * @changed OLI 28.09.2019 - Added.
 	 */
 	public void doImportFromJDBC() {
-		this.diagramm = (Diagramm) new JDBCImportManager().importDiagram();
-		this.diagramm.addDataModelListener(this);
-		this.diagramm.addDiagrammModelListener(this);
-		this.diagramm.addGUIDiagramModelListener(this);
-		this.guiObjectCreator.setDiagram(this.diagramm);
-		this.component.setView((GUIViewModel) this.diagramm.getViews().get(0));
-		this.component.setDiagram(this.diagramm);
-		if (this.fov != null) {
-			this.fov.setDiagramm(this.diagramm);
-		}
-		this.updateViewMenu(this.viewmenu, this.diagramm.getViews());
-		this.diagramm.clearAltered();
+		JDBCImportConnectionData connectionData = new JDBCImportConnectionData();
+		JDBCImportManagerConfigurationDialog connectionDialog = new JDBCImportManagerConfigurationDialog(connectionData,
+				this.guiBundle);
+		final FrameArchimedes frameArchimedes = this;
+		connectionDialog.setVisible(true);
+		connectionDialog.addEditorFrameListener(
+				new EditorFrameListener<EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame>>() {
+					@Override
+					public void eventFired(final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
+						if (event.getEventType() == EditorFrameEventType.OK) {
+							diagramm = (Diagramm) new JDBCImportManager().importDiagram(connectionData);
+							diagramm.addDataModelListener(frameArchimedes);
+							diagramm.addDiagrammModelListener(frameArchimedes);
+							diagramm.addGUIDiagramModelListener(frameArchimedes);
+							guiObjectCreator.setDiagram(diagramm);
+							component.setView((GUIViewModel) diagramm.getViews().get(0));
+							component.setDiagram(diagramm);
+							if (fov != null) {
+								fov.setDiagramm(diagramm);
+							}
+							updateViewMenu(viewmenu, diagramm.getViews());
+							diagramm.clearAltered();
+						}
+					}
+				});
 	}
 
 	/**
@@ -1825,6 +1840,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						System.out.println("\nwaiting (" + j + ")");
 
 						final Thread th = new Thread() {
+
 							@Override
 							public void run() {
 								try {
@@ -1841,7 +1857,9 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						try {
 							Class.forName(dsr.getDriver());
 							c = DriverManager.getConnection(dsr.getDBName(), dsr.getUser(), dsr.getPassword());
-						} catch (Exception e1) {
+						} catch (
+
+						Exception e1) {
 							e1.printStackTrace();
 						}
 					}
