@@ -1,0 +1,86 @@
+<HTML>
+    <HEAD>
+        <TITLE>Archimedes-Arkanum</TITLE>
+    </HEAD>
+    <BODY>
+        <H1>Einf&uuml;hrung</H1>
+        <HR>
+        <P>Dieses Dokument enth&auml;lt das gesammte Voodoo-Wissen ;o) zur Entwicklung von 
+        Software mit der Archimedes-Bibliothek. Die einzelnen Punkte werden in Form von 
+        speziellen Fragestellungen behandelt.
+        <P>
+        <HR SIZE=3>
+        <H1>Wo liegt das Problem, wenn aus einem SortedListSubEditor immer das erste Element
+        der Liste gel&ouml;scht wird, wenn man den Entfernenbutton dr&uuml;ckt?</H1>
+        <HR>
+        <P>Mit hoher Wahrscheinlichkeit ist die equals-Methode des in dem SubEditor angezeigten
+        Elements nicht korrekt implementiert oder falsch oder gar nicht im Archimedes-Modell
+        konfiguriert. Sobald das geschehen ist, klappt's auch mit dem Entfernen :o)
+        <P>&nbsp;
+        <HR SIZE=3>
+        <H1>Ich habe einen ListOwner auf einen ExtendedListOwner erweitert. Trotzdem bleiben 
+        deaktivierte Buttons im SubEditor sichtbar!</H1>
+        <HR>
+        <P>Pr&uuml;fen Sie, ob Sie das Interface auch in der Kopfzeile der Klasse innerhalb der
+        <TT>implements</TT>-Klausel auf den <TT>ExtendedListOwner</TT> erweitert haben ...
+        <P>&nbsp;
+        <HR>
+        <H1>Ausgetriebene Geister</H1>
+        <HR SIZE=3>
+        <H2>ArrayIndexOutOfBoundsException: 0 >= 0 nach Objektauswahl</H2> 
+        <HR>
+        <P><B>Fehlermeldung:</B>
+        <PRE> 
+Exception in thread "AWT-EventQueue-0" java.lang.ArrayIndexOutOfBoundsException: 0 >= 0
+    at java.util.Vector.elementAt(Vector.java:432)
+    at corent.djinn.InternalFrameSelectionEditorDjinnDBF$1.selectionDone(InternalFrameSelectionEditorDjinnDBF.java:129)
+        </PRE>
+        <P>Bei diesem Verhalten sollten Sie &uuml;berpr&uuml;fen, ob der die Bedingungen zum 
+        Lesen der Datens&auml;tze korrekt sind. Mir ist hier manchmal ein durch Copy-And-Paste 
+        bedingter Fehler unterlaufen, der an dieser Stelle explizit das gew&auml;hlte Objekt
+        ausgeschlossen hat.
+        <P>&nbsp;
+        <HR SIZE=3>
+        <H2>
+            Exception in thread "main" java.lang.ExceptionInInitializerError bei Programmstart 
+            (Server)
+        </H2> 
+        <HR>
+        <P><B>Fehlermeldung:</B>
+        <PRE>
+     [java] Exception in thread "main" java.lang.ExceptionInInitializerError
+     [java]     at msbdb.scheme.db.DBFactoryFirma.create(DBFactoryFirma.java:42)
+
+     [java]     at msbdb.scheme.db.DBFactoryFirma.create(DBFactoryFirma.java:29)
+
+     [java]     at corent.db.xs.AbstractDBFactory.&lt;init&gt;(AbstractDBFactory.java:
+118)
+     [java]     at archimedes.app.DefaultDBFactory.&lt;init&gt;(DefaultDBFactory.java:
+55)
+     [java]     at msbdb.scheme.db.DBFactoryFirma.&lt;init&gt;(DBFactoryFirma.java:38)
+
+     [java]     at msbdb.MSBDBCore.createFactories(MSBDBCore.java:60)
+     [java]     at msbdb.MSBDB.GetFactories(MSBDB.java:333)
+     [java]     at msbdb.db.RemoteMSBDBServer.getFactories(RemoteMSBDBServer.jav
+a:66)
+     [java]     at corent.db.xs.AbstractRemoteDBFCServer.main(AbstractRemoteDBFC
+Server.java:181)
+     [java] Caused by: java.lang.NullPointerException
+     [java]     at archimedes.app.DefaultArchimedesDescriptorFactory.getDynamicD
+escriptor(DefaultArchimedesDescriptorFactory.java:103)
+     [java]     at archimedes.app.ApplicationObject.&lt;init&gt;(ApplicationObject.jav
+a:65)
+     [java]     at msbdb.scheme.udschebtis.FirmaUdschebti.&lt;init&gt;(FirmaUdschebti.
+java:56)
+     [java]     at msbdb.scheme.Firma.&lt;init&gt;(Firma.java:65)
+     [java]     at msbdb.scheme.Firma.&lt;clinit&gt;(Firma.java:39)
+     [java]     ... 9 more
+     [java] java.lang.NullPointerException
+     [java]     at msbdb.db.RemoteMSBDBServer.run(RemoteMSBDBServer.java:125)
+     [java]     at java.lang.Thread.run(Thread.java:595)
+     </PRE>
+     <P>Diese Fehlermeldung weist darauf hin, das die Archimedes-Applikationsschicht versucht 
+     einen Tabelle-Descriptor f&uuml;r eine Tabelle zu erstellen, die im Archimedes-Modell nicht
+     vorhanden ist. Checken Sie Ihr Modell ...
+    </BODY>
+</HTML>

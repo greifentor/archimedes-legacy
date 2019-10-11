@@ -1,0 +1,55 @@
+Archimedes
+==========
+
+- Die $-Klausel in den Packagenamen wird zur Laufzeit nicht korrekt aufgelöst.
+
+- PDate können offensichtlich nicht als -1 übergeben werden.
+
+- Die generierte Implementierung des EditorDjinnMaster-Interfaces muß angepaßt
+  werden.
+  
+- Übersicht der Tabellen mit Löschfunktion für Codieren-Flagge.
+
+- Ändern der Panelreihenfolge ist ein wenig krank.
+
+- Eine Funktion mit der Unterschiede aus dem Datenschema der Datenbank in das Datenmodell 
+  übernommen werden können (sehr kontrolliert und nur im "Einzelschrittmodus").
+  
+- Wenn beim Abgleich mit der Datenbank keine Änderungen auftreten, soll nur noch ein kleiner 
+  Dialog erscheinen, der über diesen Zustand informiert (anstelle der leeren Beschreibung und 
+  des leeren Scripts).
+
+- Korrektes Scripting für Primärschlüsseländerungen (MSSQL):
+  
+  alter table Historieneintragsreferenz alter column Historieneintrag int not null;
+  go
+  alter table Historieneintragsreferenz alter column Tabelle int not null;
+  go
+  alter table Historieneintragsreferenz add primary key (Historieneintrag, Tabelle)
+
+  bzw.
+
+  Meldung, daß das nicht automatisch geht, wenn der PK gelöscht werden soll. 
+  
+- XML-Speicherung (alternativ, die alte Methode muß zumindest für's Einlesen weitergepflegt 
+  werden).
+  
+- NOT-NULL wird bei den Templates nicht akzeptiert.
+
+- <PROJEKT>Core.java ist nicht mehr im richtigen Pfad. (Ist das so ???)
+
+- Aktualisierung der Listenansicht an Neuanlage von eigenständigem Datensatz fehlt.
+
+- CodeWriter - CLASS-Zeile muß raus.
+
+- CodeWriter - Bei Referenzen in N:M-Beziehungen auf nicht Schlüsselfelder gibt es Probleme mit 
+  dem Attributsnamen.
+
+- Die Geaendert-Flagge sollte bei Auswahl über die Zoom-/-Tabelle-finden-Funktion nicht gesetzt
+  werden.
+  
+- java.sql.SQLException("not yet implemented") muß beim Einlesen und abgleichen eines Modells 
+  ignoriert werden.
+
+- Die TabellenModel.getFieldnames-Methode muß auch qualifizierte Feldlisten generieren können.
+

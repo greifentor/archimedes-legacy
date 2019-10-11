@@ -1,0 +1,55 @@
+Archimedes Anwendungen Tips & Tricks
+====================================
+
+
+Der SelectionDjinn
+------------------
+
+Wie kann ich die Tabellenüberschriften ändern?
+
+Das kannst Du auf zwei verschiedene Arten erreichen:
+
+Variante 1) Du überschreibst in der DBFactory-Klasse zu der Klasse für die der SelectionDjinn anders reagieren die Methode getSelectionView. Hier kannst Du neue Spaltenüberschriften festlegen (siehe Beispiel). Nun implementierst Du das Interface AlternateSelectionTableModelOwner aus dem Package corent.djinn in der Klasse, deren Datensätze durch den SelectionDjinn ausgewählt werden können. Dieses Interface hat keine eigenen Methoden, die Du implementieren mußt; es handelt sich lediglich um eine Markierung.
+
+Beispiel für eine überschriebene getSelectionView-Methode:
+
+    public SelectionTableModel getSelectionView(String w, String aj, Connection c) 
+            throws SQLException {
+        Vector server = this.read(w, c);
+        Vector keys = new Vector();
+        for (int i = 0, len = server.size(); i < len; i++) {
+            keys.addElement(new Integer(((Server) server.elementAt(i)).getServer()));
+        }
+        Vector data = new Vector();
+        for (int i = 0, len = server.size(); i < len; i++) {
+            Server s = (Server) server.elementAt(i);
+            Vector row = new Vector();
+            row.addElement(s.getName());
+            row.addElement(s.getBindung());
+            row.addElement(s.getPort());
+            row.addElement(s.isAktiv());
+            row.addElement(s.getAnzahlBenutzer());
+            data.addElement(row);
+        }
+        Vector columnNames = new Vector();
+        columnNames.addElement("Name");
+        columnNames.addElement("Bindung");
+        columnNames.addElement("Port");
+        columnNames.addElement("Aktiv");
+        columnNames.addElement("User (Anzahl)");
+        DefaultSelectionTableModel dstm = new DefaultSelectionTableModel(keys, data, columnNames
+                );
+        dstm.setClassForColumn(3, Boolean.class);
+        return dstm;
+    }
+
+
+Variante 2) Du legst eigene Ressourcen für die Tabellenspalten. Dies geschied über Properties und hat folgenden Aufbau:  
+
+archimedes.app.DefaultArchimedesDescriptorFactory.[vollständiger Klassenname].table.view.header.[qualifizierter Datenbankfeldname]=Gewünschter Spaltenname
+
+Der vollständige Klassenname meint den Namen der Klasse mit Packagenamen. Als qualifizierten Namen des Datenfeldes gibst Du den Namen der Tabelle, einen Punkt und den Namen der Spalte an. Hier ein Beispiel:
+
+archimedes.app.DefaultArchimedesDescriptorFactory.application.scheme.ItemGroup.table.view.header.ItemGroup.Description=Bezeichnung
+
+In dem SelectionView für die Klasse application.scheme.ItemGroup wird als Überschrift für die Spalte, in der das Datenbankfeld Description auf der Tabelle ItemGroup abgebildet wird, der Text "Bezeichnung" gesetzt.
