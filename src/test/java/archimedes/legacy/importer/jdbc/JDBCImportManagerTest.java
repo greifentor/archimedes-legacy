@@ -13,7 +13,7 @@ public class JDBCImportManagerTest {
 
 	@Test
 	void test() {
-		this.unitUnderTest.importDiagram(new JDBCImportConnectionData());
+		this.unitUnderTest.importDiagram();
 	}
 
 }
