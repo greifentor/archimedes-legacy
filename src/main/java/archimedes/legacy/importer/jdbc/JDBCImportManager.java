@@ -25,7 +25,7 @@ public class JDBCImportManager {
 			// TODO: Collect all necessary data.
 			DBObjectFactory factory = new DefaultDBObjectFactory();
 			DBTypeConverter typeConverter = new DBTypeConverter();
-			Class.forName("org.hsqldb.jdbc.JDBCDriver");
+			Class.forName(connectionData.getDriverName());
 			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord(connectionData.getDriverName(), connectionData.getUrl(),
 					connectionData.getUserName(), connectionData.getPassword());
 //			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord("org.hsqldb.jdbc.JDBCDriver",

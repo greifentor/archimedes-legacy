@@ -3,7 +3,6 @@ package archimedes.legacy.importer.jdbc;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import lombok.experimental.FieldNameConstants;
 
 /**
  * A container for JDBC import connection data.
@@ -13,8 +12,12 @@ import lombok.experimental.FieldNameConstants;
 @Accessors(chain = true)
 @Data
 @NoArgsConstructor
-@FieldNameConstants
 public class JDBCImportConnectionData {
+
+	public static final String FIELD_DRIVER_NAME = "FIELD_DRIVER_NAME";
+	public static final String FIELD_URL = "FIELD_URL";
+	public static final String FIELD_USER_NAME = "FIELD_USER_NAME";
+	public static final String FIELD_PASSWORD = "FIELD_PASSWORD";
 
 	private String driverName;
 	private String url;
