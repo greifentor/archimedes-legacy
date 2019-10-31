@@ -4,7 +4,7 @@
 
 	<groupId>de.ollie</groupId>
 	<artifactId>archimedes-legacy</artifactId>
-	<version>1.82.2</version>
+	<version>1.82.3</version>
 	<packaging>jar</packaging>
 
 	<name>Archimedes (Legacy)</name>
