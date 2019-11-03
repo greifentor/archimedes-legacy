@@ -8,7 +8,6 @@
 package archimedes.legacy.importer.jdbc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Connection;
@@ -17,6 +16,8 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -97,7 +98,8 @@ public class JDBCModelReaderTest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		this.connectionSource = getConnection(this.dbNameSource);
-		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME);
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false);
 	}
 
 	private Connection getConnection(String dbName) throws Exception {

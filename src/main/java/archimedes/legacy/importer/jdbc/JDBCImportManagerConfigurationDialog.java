@@ -1,7 +1,17 @@
 package archimedes.legacy.importer.jdbc;
 
-import javax.swing.JFrame;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.Arrays;
 
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+
+import archimedes.connections.DatabaseConnection;
 import baccara.gui.GUIBundle;
 import baccara.gui.generics.AbstractEditorFrame;
 import baccara.gui.generics.ComponentData;
@@ -29,15 +39,22 @@ public class JDBCImportManagerConfigurationDialog extends
 
 	@Override
 	protected ComponentData<?>[] getComponentData(JDBCImportConnectionData data) {
-		return new ComponentData<?>[] {
-				new ComponentData<Object>(JDBCImportConnectionData.FIELD_DRIVER_NAME, baccara.gui.generics.Type.STRING,
-						data.getDriverName()),
-				new ComponentData<Object>(JDBCImportConnectionData.FIELD_URL, baccara.gui.generics.Type.STRING,
-						data.getUrl()),
-				new ComponentData<Object>(JDBCImportConnectionData.FIELD_USER_NAME, baccara.gui.generics.Type.STRING,
-						data.getUserName()),
-				new ComponentData<Object>(JDBCImportConnectionData.FIELD_PASSWORD, baccara.gui.generics.Type.STRING,
-						data.getPassword()) };
+		return new ComponentData<?>[] { //
+				new ComponentData<Object>( //
+						JDBCImportConnectionData.FIELD_CONNECTION, //
+						Arrays.asList(data.getConnections()), //
+						data.getConnection(), //
+						new ConnectListCellRenderer(), //
+						false),
+				new ComponentData<String>( //
+						JDBCImportConnectionData.FIELD_PASSWORD, //
+						baccara.gui.generics.Type.STRING, //
+						data.getPassword()), //
+				new ComponentData<String>( //
+						JDBCImportConnectionData.FIELD_IGNORE_INDICES, //
+						baccara.gui.generics.Type.BOOLEAN, //
+						data.isIgnoreIndices()) //
+		};
 	}
 
 	@Override
@@ -47,10 +64,36 @@ public class JDBCImportManagerConfigurationDialog extends
 
 	@Override
 	protected void transferChangesToObject() {
-		this.object.setDriverName(this.getTextFromComponent(JDBCImportConnectionData.FIELD_DRIVER_NAME));
+		this.object.setIgnoreIndices(this.getBooleanFromComponent(JDBCImportConnectionData.FIELD_IGNORE_INDICES));
+		this.object.setConnection(this.getConnectionFromComponent(JDBCImportConnectionData.FIELD_CONNECTION));
 		this.object.setPassword(this.getTextFromComponent(JDBCImportConnectionData.FIELD_PASSWORD));
-		this.object.setUrl(this.getTextFromComponent(JDBCImportConnectionData.FIELD_URL));
-		this.object.setUserName(this.getTextFromComponent(JDBCImportConnectionData.FIELD_USER_NAME));
+	}
+
+	private boolean getBooleanFromComponent(String name) {
+		return ((JCheckBox) this.getEditorComponent(name)).isSelected();
+	}
+
+	private DatabaseConnection getConnectionFromComponent(String name) {
+		return (DatabaseConnection) ((JComboBox<?>) this.getEditorComponent(name)).getSelectedItem();
+	}
+
+}
+
+class ConnectListCellRenderer implements ListCellRenderer<Object> {
+
+	@Override
+	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+			boolean cellHasFocus) {
+		JLabel l = new JLabel("-");
+		if (value instanceof DatabaseConnection) {
+			DatabaseConnection dc = (DatabaseConnection) value;
+			l = new JLabel(dc.getName() + " (" + dc.getDBMode() + ")");
+		}
+		if (isSelected) {
+			l.setBackground(Color.LIGHT_GRAY);
+			l.setOpaque(true);
+		}
+		return l;
 	}
 
 }

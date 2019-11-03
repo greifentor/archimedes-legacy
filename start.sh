@@ -2,6 +2,7 @@ LIB=./lib
 
 CP=./target/archimedes-legacy-1.82.3.jar
 
+CP=$CP:$LIB/antlr.jar
 CP=$CP:$LIB/archimedes-core-1.0.jar
 CP=$CP:$LIB/baccara-1.10.1.jar
 CP=$CP:$LIB/baccaraacf.jar

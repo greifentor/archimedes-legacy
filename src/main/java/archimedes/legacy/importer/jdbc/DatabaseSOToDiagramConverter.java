@@ -61,6 +61,7 @@ public class DatabaseSOToDiagramConverter {
 		for (ColumnSO column : table.getColumns()) {
 			DomainModel d = getDomain(column.getName(), column.getType(), diagram);
 			ColumnModel c = new Tabellenspalte(column.getName(), d, column.isPkMember());
+			c.setNotNull(!column.isNullable());
 			t.addColumn(c);
 		}
 		return t;

@@ -1101,7 +1101,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * @changed OLI 28.09.2019 - Added.
 	 */
 	public void doImportFromJDBC() {
-		JDBCImportConnectionData connectionData = new JDBCImportConnectionData();
+		JDBCImportConnectionData connectionData = new JDBCImportConnectionData() //
+				.setConnections(this.diagramm.getDatabaseConnections());
 		JDBCImportManagerConfigurationDialog connectionDialog = new JDBCImportManagerConfigurationDialog(connectionData,
 				this.guiBundle);
 		final FrameArchimedes frameArchimedes = this;

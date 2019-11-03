@@ -38,6 +38,7 @@ public class JDBCModelReader implements ModelReader {
 	private DBTypeConverter typeConverter;
 	private Connection connection;
 	private String schemeName;
+	private boolean ignoreIndices;
 
 	/**
 	 * Creates a new model reader with the passed parameters.
@@ -47,13 +48,15 @@ public class JDBCModelReader implements ModelReader {
 	 * @param connection    The connection whose data model should be read.
 	 * @param schemeName    The name of the scheme whose data are to read (pass "null" to ignore scheme and load all
 	 *                      tables).
+	 * @param ignoreIndices Set this flag to ignore indices while import.
 	 * @throws IllegalArgumentException Passing null value.
 	 */
 	public JDBCModelReader(DBObjectFactory factory, DBTypeConverter typeConverter, Connection connection,
-			String schemeName) {
+			String schemeName, boolean ignoreIndices) {
 		super();
 		this.connection = connection;
 		this.factory = factory;
+		this.ignoreIndices = ignoreIndices;
 		this.schemeName = schemeName;
 		this.typeConverter = typeConverter;
 	}
@@ -72,7 +75,9 @@ public class JDBCModelReader implements ModelReader {
 		loadColumns(dbmd, scheme);
 		loadPrimaryKeys(dbmd, scheme);
 		loadForeignKeys(dbmd, scheme);
-		loadIndices(dbmd, scheme.getTables());
+		if (!this.ignoreIndices) {
+			loadIndices(dbmd, scheme.getTables());
+		}
 	}
 
 	private void loadTables(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {
@@ -161,6 +166,7 @@ public class JDBCModelReader implements ModelReader {
 								.setReferencingColumn(referencingTable.getColumnByName(fkColumnName)
 										.orElseThrow(() -> new ColumnNotFoundException(fkTableName, fkColumnName))));
 						table.addForeignKeys(fk);
+						System.out.println("FK created: " + fk);
 					});
 				} catch (Exception e) {
 					System.out.println("ERROR while reading from model: " + e.getMessage());
