@@ -42,8 +42,10 @@ public class ModelCheckerNoComplexPrimaryKey implements ModelChecker {
 		ensure(model != null, "data model cannot be null.");
 		return Arrays.asList(model.getTables()).stream() //
 				.filter(t -> (t.getPrimaryKeyColumns().length > 1 && !t.isManyToManyRelation())) //
-				.map(t -> new ModelCheckerMessage(Level.ERROR,
-						guiBundle.getResourceText(RES_MODEL_CHECKER_NO_COMPLEX_PRIMARY_KEY, t.getName())))
+				.map(t -> new ModelCheckerMessage( //
+						Level.ERROR, //
+						guiBundle.getResourceText(RES_MODEL_CHECKER_NO_COMPLEX_PRIMARY_KEY, t.getName()), //
+						t)) //
 				.collect(Collectors.toList()) //
 				.toArray(new ModelCheckerMessage[0]);
 	}
