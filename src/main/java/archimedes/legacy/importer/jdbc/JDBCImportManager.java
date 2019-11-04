@@ -32,10 +32,10 @@ public class JDBCImportManager {
 //			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord("org.hsqldb.jdbc.JDBCDriver",
 //					"jdbc:hsqldb:file:~/eclipse-workspace/restacf/src/test/resources/db/testdb", "sa", "");
 			Connection connection = ConnectionManager.GetConnection(dsr);
-			String schemeName = null;
+			String schemeName = ("".equals(connectionData.getSchema()) ? null : connectionData.getSchema());
 			// TODO: Import model from JDBC.
 			DatabaseSO database = new JDBCModelReader(factory, typeConverter, connection, schemeName,
-					connectionData.isIgnoreIndices()).readModel();
+					connectionData.isIgnoreIndices(), connectionData.getIgnoreTablePatterns()).readModel();
 			// TODO: Convert to Diagram
 			return new DatabaseSOToDiagramConverter().convert(database);
 		} catch (Exception e) {

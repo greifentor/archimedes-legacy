@@ -2,25 +2,27 @@ package archimedes.legacy.importer.jdbc;
 
 import java.util.List;
 
+import archimedes.legacy.Archimedes;
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.legacy.scheme.Diagramm;
 import archimedes.legacy.scheme.Domain;
+import archimedes.legacy.scheme.MainView;
+import archimedes.legacy.scheme.Panel;
 import archimedes.legacy.scheme.Relation;
 import archimedes.legacy.scheme.Tabelle;
 import archimedes.legacy.scheme.Tabellenspalte;
-import archimedes.legacy.scheme.View;
 import archimedes.model.ColumnModel;
 import archimedes.model.DomainModel;
 import archimedes.model.TableModel;
 import archimedes.model.ViewModel;
 import archimedes.model.gui.GUIViewModel;
 import corent.base.Direction;
+import corent.base.StrUtil;
 import de.ollie.archimedes.alexandrian.service.so.ColumnSO;
 import de.ollie.archimedes.alexandrian.service.so.DatabaseSO;
 import de.ollie.archimedes.alexandrian.service.so.ForeignKeySO;
 import de.ollie.archimedes.alexandrian.service.so.ReferenceSO;
 import de.ollie.archimedes.alexandrian.service.so.TableSO;
-import de.ollie.archimedes.alexandrian.service.so.TypeSO;
 
 /**
  * A converter which converts database service objects into diagrams.
@@ -37,12 +39,15 @@ public class DatabaseSOToDiagramConverter {
 	 */
 	public DiagrammModel convert(DatabaseSO database) {
 		DiagrammModel diagram = new Diagramm();
-		ViewModel mainView = new View("Gesamt", "Gesamtsicht", true);
+		ViewModel mainView = new MainView("Gesamt", "Gesamtsicht", true);
 		diagram.addView((GUIViewModel) mainView);
 		int x = 50;
 		int y = 50;
 		for (TableSO table : database.getSchemes().get(0).getTables()) {
-			diagram.addTable(createTabelle(table, mainView, x, y, diagram));
+			Tabelle tabelle = createTabelle(table, mainView, x, y, diagram);
+			tabelle.setFontColor(Archimedes.PALETTE.get("schwarz"));
+			tabelle.setBackgroundColor(Archimedes.PALETTE.get(StrUtil.FromHTML("wei&szlig;")));
+			diagram.addTable(tabelle);
 			y += 50;
 			if (y > 1000) {
 				y = 50;
@@ -58,21 +63,30 @@ public class DatabaseSOToDiagramConverter {
 		t.setCodeFolder("");
 		t.setDraft(false);
 		t.setName(table.getName());
+		Panel p = new Panel();
+		p.setPanelNumber(0);
+		t.addPanel(p);
 		for (ColumnSO column : table.getColumns()) {
-			DomainModel d = getDomain(column.getName(), column.getType(), diagram);
+			DomainModel d = getDomain(column, diagram);
 			ColumnModel c = new Tabellenspalte(column.getName(), d, column.isPkMember());
 			c.setNotNull(!column.isNullable());
+			c.setPanel(p);
 			t.addColumn(c);
 		}
 		return t;
 	}
 
-	private DomainModel getDomain(String columnName, TypeSO type, DiagrammModel diagram) {
-		DomainModel domain = diagram.getDomainByName(columnName);
+	private DomainModel getDomain(ColumnSO column, DiagrammModel diagram) {
+		Domain dom = new Domain("*", column.getType().getSqlType(),
+				column.getType().getLength() == null ? -1 : column.getType().getLength(),
+				column.getType().getPrecision() == null ? -1 : column.getType().getPrecision());
+		String typeName = dom.getType().replace("(", "").replace(")", "").replace(" ", "");
+		typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1);
+		DomainModel domain = diagram.getDomainByName(typeName);
 		if (domain == null) {
-			System.out.println(columnName + " " + type);
-			domain = new Domain(columnName, type.getSqlType(), type.getLength() == null ? -1 : type.getLength(),
-					type.getPrecision() == null ? -1 : type.getPrecision());
+			domain = new Domain(typeName, column.getType().getSqlType(),
+					column.getType().getLength() == null ? -1 : column.getType().getLength(),
+					column.getType().getPrecision() == null ? -1 : column.getType().getPrecision());
 			diagram.addDomain(domain);
 		}
 		return domain;

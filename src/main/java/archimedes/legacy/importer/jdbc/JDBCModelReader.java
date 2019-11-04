@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import corentx.util.Str;
 import de.ollie.archimedes.alexandrian.service.exception.ColumnNotFoundException;
 import de.ollie.archimedes.alexandrian.service.exception.TableNotFoundException;
 import de.ollie.archimedes.alexandrian.service.so.ColumnSO;
@@ -39,26 +40,33 @@ public class JDBCModelReader implements ModelReader {
 	private Connection connection;
 	private String schemeName;
 	private boolean ignoreIndices;
+	private String[] ignoreTablePatterns;
 
 	/**
 	 * Creates a new model reader with the passed parameters.
 	 *
-	 * @param factory       An object factory implementation to create the DB objects.
-	 * @param typeConverter A converter for database types.
-	 * @param connection    The connection whose data model should be read.
-	 * @param schemeName    The name of the scheme whose data are to read (pass "null" to ignore scheme and load all
-	 *                      tables).
-	 * @param ignoreIndices Set this flag to ignore indices while import.
+	 * @param factory             An object factory implementation to create the DB objects.
+	 * @param typeConverter       A converter for database types.
+	 * @param connection          The connection whose data model should be read.
+	 * @param schemeName          The name of the scheme whose data are to read (pass "null" to ignore scheme and load
+	 *                            all tables).
+	 * @param ignoreIndices       Set this flag to ignore indices while import.
+	 * @param ignoreTablePatterns Patterns of table names which should be returned.
 	 * @throws IllegalArgumentException Passing null value.
 	 */
 	public JDBCModelReader(DBObjectFactory factory, DBTypeConverter typeConverter, Connection connection,
-			String schemeName, boolean ignoreIndices) {
+			String schemeName, boolean ignoreIndices, String ignoreTablePatterns) {
 		super();
 		this.connection = connection;
 		this.factory = factory;
 		this.ignoreIndices = ignoreIndices;
+		this.ignoreTablePatterns = getIgnoreTablePatterns(ignoreTablePatterns);
 		this.schemeName = schemeName;
 		this.typeConverter = typeConverter;
+	}
+
+	private String[] getIgnoreTablePatterns(String s) {
+		return Str.splitToList(s, ";").toArray(new String[0]);
 	}
 
 	@Override
@@ -84,11 +92,28 @@ public class JDBCModelReader implements ModelReader {
 		ResultSet rs = dbmd.getTables(null, this.schemeName, "%", new String[] { "TABLE" });
 		while (rs.next()) {
 			String tableName = rs.getString("TABLE_NAME");
+			if (isMatchingIgnorePattern(tableName)) {
+				System.out.println(
+						LocalDateTime.now() + " - table ignored: " + rs.getString("TABLE_SCHEM") + "." + tableName);
+				continue;
+			}
 			scheme.addTables(this.factory.createTable(tableName, new ArrayList<>()));
 			System.out
 					.println(LocalDateTime.now() + " - table added: " + rs.getString("TABLE_SCHEM") + "." + tableName);
 		}
 		rs.close();
+	}
+
+	private boolean isMatchingIgnorePattern(String tableName) {
+		for (String pattern : this.ignoreTablePatterns) {
+			if ((pattern.startsWith("*") && pattern.endsWith("*")
+					&& tableName.contains(pattern.substring(1, pattern.length() - 1))) //
+					|| (pattern.startsWith("*") && tableName.endsWith(pattern.substring(1))) //
+					|| (pattern.endsWith("*") && tableName.startsWith(pattern.substring(0, pattern.length() - 1)))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void loadColumns(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {

@@ -18,10 +18,14 @@ public class JDBCImportConnectionData {
 	public static final String FIELD_CONNECTION = "FIELD_CONNECTION";
 	public static final String FIELD_PASSWORD = "FIELD_PASSWORD";
 	public static final String FIELD_IGNORE_INDICES = "FIELD_IGNORE_INDICES";
+	public static final String FIELD_SCHEMA = "FIELD_SCHEMA";
+	public static final String FIELD_IGNORE_TABLES_PATTERNS = "FIELD_IGNORE_TABLES_PATTERNS";
 
 	private DatabaseConnection connection;
 	private DatabaseConnection[] connections;
 	private String password;
 	private boolean ignoreIndices = false;
+	private String schema;
+	private String ignoreTablePatterns;
 
 }
