@@ -1,3 +1,4 @@
+load("nashorn:mozilla_compat.js");
 importPackage(Packages.corent.db);
 importPackage(Packages.archimedes.connections);
 

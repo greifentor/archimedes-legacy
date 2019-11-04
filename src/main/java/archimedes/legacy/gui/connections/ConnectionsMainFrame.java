@@ -58,8 +58,8 @@ import corentx.util.SortedVector;
  * @changed OLI 20.01.2015 - Added.
  */
 
-public class ConnectionsMainFrame<ET extends EditorFrameEvent<?, ? extends Window>> extends JFrameWithInifile implements
-		ActionListener, EditorFrameListener<ET>, MouseListener {
+public class ConnectionsMainFrame<ET extends EditorFrameEvent<?, ? extends Window>> extends JFrameWithInifile
+		implements ActionListener, EditorFrameListener<ET>, MouseListener {
 
 	private static final Logger LOG = Logger.getLogger(ConnectionsMainFrame.class);
 
@@ -76,12 +76,9 @@ public class ConnectionsMainFrame<ET extends EditorFrameEvent<?, ? extends Windo
 	/**
 	 * Creates a new main dialog for database connections.
 	 * 
-	 * @param owner
-	 *            The frame which is used as owner of the dialog.
-	 * @param guiBundle
-	 *            A GUI bundle e. g. for resource access.
-	 * @param ini
-	 *            The ini file which contains the parameters for reconstruction.
+	 * @param owner     The frame which is used as owner of the dialog.
+	 * @param guiBundle A GUI bundle e. g. for resource access.
+	 * @param ini       The ini file which contains the parameters for reconstruction.
 	 * 
 	 * @changed OLI 20.01.2015 - Added.
 	 */
@@ -167,17 +164,16 @@ public class ConnectionsMainFrame<ET extends EditorFrameEvent<?, ? extends Windo
 		List<DatabaseConnection> ldc = this.readDatabaseConnectionTemplates();
 		String prefix = "archimedes.ConnectionTemplateSelection";
 		SelectionDialog sd = new SelectionDialog(this, this.guiBundle.getResourceText(prefix + ".title"),
-				this.guiBundle, ldc.toArray(new DatabaseConnection[0]), this.guiBundle.getResourceText(prefix
-						+ ".button.select.title"), this.guiBundle.getResourceText(prefix + ".button.cancel.title"),
-				new ConnectionListCellRenderer());
+				this.guiBundle, ldc.toArray(new DatabaseConnection[0]),
+				this.guiBundle.getResourceText(prefix + ".button.select.title"),
+				this.guiBundle.getResourceText(prefix + ".button.cancel.title"), new ConnectionListCellRenderer());
 		sd.setModal(true);
 		sd.setVisible(true);
 		List<?> selected = sd.getResult();
 		if ((selected != null) && (selected.size() == 1)) {
 			DatabaseConnection dc = (DatabaseConnection) selected.get(0);
-			DatabaseConnection dcc = new DatabaseConnection(dc.getName(), dc.getDriver(), dc.getUrl(),
-					dc.getUserName(), dc.getDBMode(), dc.isSetDomains(), dc.isSetNotNull(), dc.isSetReferences(), dc
-							.getQuote());
+			DatabaseConnection dcc = new DatabaseConnection(dc.getName(), dc.getDriver(), dc.getUrl(), dc.getUserName(),
+					dc.getDBMode(), dc.isSetDomains(), dc.isSetNotNull(), dc.isSetReferences(), dc.getQuote());
 			ConnectionEditorFrame cef = new ConnectionEditorFrame(dcc, this.guiBundle, ConnectionEditorFrameType.COPY);
 			cef.addEditorFrameListener(this);
 			cef.setVisible(true);
@@ -186,7 +182,7 @@ public class ConnectionsMainFrame<ET extends EditorFrameEvent<?, ? extends Windo
 
 	private List<DatabaseConnection> readDatabaseConnectionTemplates() {
 		SortedVector<DatabaseConnection> ldc = new SortedVector<DatabaseConnection>();
-		String fileName = "./conf/connection_templates.js";
+		String fileName = "src/main/resources/conf/connection_templates.js";
 		if (new File(fileName).exists()) {
 			try {
 				ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
@@ -199,6 +195,8 @@ public class ConnectionsMainFrame<ET extends EditorFrameEvent<?, ? extends Windo
 				LOG.warn("error while reading connection templates file: " + fileName + ", exception: "
 						+ e.getMessage());
 			}
+		} else {
+			LOG.warn("templates file not found: " + new File(fileName).getAbsolutePath());
 		}
 		return ldc;
 	}
@@ -207,9 +205,8 @@ public class ConnectionsMainFrame<ET extends EditorFrameEvent<?, ? extends Windo
 		LOG.info("copy button pressed.");
 		DatabaseConnection dc = this.getSelectedDatabaseConnection();
 		if (dc != null) {
-			DatabaseConnection dcc = new DatabaseConnection(dc.getName(), dc.getDriver(), dc.getUrl(),
-					dc.getUserName(), dc.getDBMode(), dc.isSetDomains(), dc.isSetNotNull(), dc.isSetReferences(), dc
-							.getQuote());
+			DatabaseConnection dcc = new DatabaseConnection(dc.getName(), dc.getDriver(), dc.getUrl(), dc.getUserName(),
+					dc.getDBMode(), dc.isSetDomains(), dc.isSetNotNull(), dc.isSetReferences(), dc.getQuote());
 			ConnectionEditorFrame cef = new ConnectionEditorFrame(dcc, this.guiBundle, ConnectionEditorFrameType.COPY);
 			cef.addEditorFrameListener(this);
 			cef.setVisible(true);
@@ -249,19 +246,17 @@ public class ConnectionsMainFrame<ET extends EditorFrameEvent<?, ? extends Windo
 		if (e.getEventType() == EditorFrameEventType.OK) {
 			DatabaseConnection dbc = (DatabaseConnection) e.getEditedObject();
 			if (this.isDatabaseConnectionWithSameNameAlreadyInDiagram(dbc)) {
-				JOptionPane
-						.showMessageDialog(
-								null,
-								this.guiBundle
-										.getResourceText("archimedes.ConnectionsMainDialog.error.connection.already.exists.text"),
-								this.guiBundle
-										.getResourceText("archimedes.ConnectionsMainDialog.error.connection.already.exists.title"),
-								JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,
+						this.guiBundle.getResourceText(
+								"archimedes.ConnectionsMainDialog.error.connection.already.exists.text"),
+						this.guiBundle.getResourceText(
+								"archimedes.ConnectionsMainDialog.error.connection.already.exists.title"),
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			if ((this.getSelectedDatabaseConnection() != null)
-					&& (e instanceof ConnectionEditorFrameEvent)
-					&& (((ConnectionEditorFrameEvent) e).getConnectionEditorFrameType() == ConnectionEditorFrameType.EDIT)) {
+			if ((this.getSelectedDatabaseConnection() != null) && (e instanceof ConnectionEditorFrameEvent)
+					&& (((ConnectionEditorFrameEvent) e)
+							.getConnectionEditorFrameType() == ConnectionEditorFrameType.EDIT)) {
 				this.diagram.removeDatabaseConnection(this.getSelectedDatabaseConnection().getName());
 			}
 			this.diagram.addDatabaseConnection(dbc);
