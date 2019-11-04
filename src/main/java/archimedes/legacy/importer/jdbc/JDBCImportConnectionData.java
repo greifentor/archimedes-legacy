@@ -1,5 +1,6 @@
 package archimedes.legacy.importer.jdbc;
 
+import archimedes.connections.DatabaseConnection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -14,14 +15,13 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 public class JDBCImportConnectionData {
 
-	public static final String FIELD_DRIVER_NAME = "FIELD_DRIVER_NAME";
-	public static final String FIELD_URL = "FIELD_URL";
-	public static final String FIELD_USER_NAME = "FIELD_USER_NAME";
+	public static final String FIELD_CONNECTION = "FIELD_CONNECTION";
 	public static final String FIELD_PASSWORD = "FIELD_PASSWORD";
+	public static final String FIELD_IGNORE_INDICES = "FIELD_IGNORE_INDICES";
 
-	private String driverName;
-	private String url;
-	private String userName;
+	private DatabaseConnection connection;
+	private DatabaseConnection[] connections;
 	private String password;
+	private boolean ignoreIndices = false;
 
 }

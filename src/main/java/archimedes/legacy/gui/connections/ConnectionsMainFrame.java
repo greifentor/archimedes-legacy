@@ -39,6 +39,7 @@ import javax.swing.border.EmptyBorder;
 import org.apache.log4j.Logger;
 
 import archimedes.connections.DatabaseConnection;
+import archimedes.legacy.Archimedes;
 import archimedes.legacy.model.DiagrammModel;
 import baccara.gui.GUIBundle;
 import baccara.gui.generics.EditorFrameEvent;
@@ -182,7 +183,7 @@ public class ConnectionsMainFrame<ET extends EditorFrameEvent<?, ? extends Windo
 
 	private List<DatabaseConnection> readDatabaseConnectionTemplates() {
 		SortedVector<DatabaseConnection> ldc = new SortedVector<DatabaseConnection>();
-		String fileName = "src/main/resources/conf/connection_templates.js";
+		String fileName = Archimedes.CONF_PATH + "connection_templates.js";
 		if (new File(fileName).exists()) {
 			try {
 				ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");

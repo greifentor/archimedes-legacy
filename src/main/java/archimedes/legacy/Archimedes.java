@@ -1803,6 +1803,8 @@ import corentx.util.Str;
 
 public class Archimedes {
 
+	public static final String CONF_PATH = "./src/main/resources/conf/";
+
 	/** Der DBMode, unter dem die Anwendung laufen soll. */
 	public static DBExecMode DBMODE = DBExecMode.MYSQL;
 	/** Referenz auf die g&uuml;tige Archimedes-ObjectFactory. */
@@ -1932,8 +1934,7 @@ public class Archimedes {
 			e.printStackTrace();
 			System.out.println("\nProblem beim Lesen der Ini-Datei (" + inifilename + ")\n");
 		}
-		String propfn = System.getProperty("archimedes.Archimedes.properties",
-				"src/main/resources/conf/archimedes.properties");
+		String propfn = System.getProperty("archimedes.Archimedes.properties", CONF_PATH + "archimedes.properties");
 		try {
 			corentx.io.FileUtil.readProperties(System.getProperties(), propfn);
 		} catch (FileNotFoundException e) {
@@ -1970,7 +1971,7 @@ public class Archimedes {
 		}
 		String lang = System.getProperty("archimedes.user.language");
 		ResourceManager rm = new PropertyResourceManager(new PropertyFileManager()
-				.open(System.getProperty("archimedes.user.language.resource.path", "src/main/resources/conf/")
+				.open(System.getProperty("archimedes.user.language.resource.path", Archimedes.CONF_PATH)
 						+ "archimedes_resource_" + lang + ".properties"));
 		ImageProvider ip = new FileImageProvider(new ImageMapBuilder("img").build());
 		guiBundle = new GUIBundle(ini, rm, ip, 3, 3);

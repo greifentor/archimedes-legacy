@@ -25,15 +25,17 @@ public class JDBCImportManager {
 			// TODO: Collect all necessary data.
 			DBObjectFactory factory = new DefaultDBObjectFactory();
 			DBTypeConverter typeConverter = new DBTypeConverter();
-			Class.forName(connectionData.getDriverName());
-			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord(connectionData.getDriverName(), connectionData.getUrl(),
-					connectionData.getUserName(), connectionData.getPassword());
+			Class.forName(connectionData.getConnection().getDriver());
+			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord(connectionData.getConnection().getDriver(),
+					connectionData.getConnection().getUrl(), connectionData.getConnection().getUserName(),
+					connectionData.getPassword());
 //			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord("org.hsqldb.jdbc.JDBCDriver",
 //					"jdbc:hsqldb:file:~/eclipse-workspace/restacf/src/test/resources/db/testdb", "sa", "");
 			Connection connection = ConnectionManager.GetConnection(dsr);
 			String schemeName = null;
 			// TODO: Import model from JDBC.
-			DatabaseSO database = new JDBCModelReader(factory, typeConverter, connection, schemeName).readModel();
+			DatabaseSO database = new JDBCModelReader(factory, typeConverter, connection, schemeName,
+					connectionData.isIgnoreIndices()).readModel();
 			// TODO: Convert to Diagram
 			return new DatabaseSOToDiagramConverter().convert(database);
 		} catch (Exception e) {

@@ -1101,7 +1101,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * @changed OLI 28.09.2019 - Added.
 	 */
 	public void doImportFromJDBC() {
-		JDBCImportConnectionData connectionData = new JDBCImportConnectionData();
+		JDBCImportConnectionData connectionData = new JDBCImportConnectionData() //
+				.setConnections(this.diagramm.getDatabaseConnections());
 		JDBCImportManagerConfigurationDialog connectionDialog = new JDBCImportManagerConfigurationDialog(connectionData,
 				this.guiBundle);
 		final FrameArchimedes frameArchimedes = this;
@@ -1675,7 +1676,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		String lang = System.getProperty("archimedes.user.language", "en");
 		ResourceManager rm = null;
 		for (int i = 0; i < applicationNames.length; i++) {
-			String fn = "src/main/resources/conf/" + applicationNames[i] + "_resource_" + lang + ".properties";
+			String fn = Archimedes.CONF_PATH + applicationNames[i] + "_resource_" + lang + ".properties";
 			if (new File(fn).exists()) {
 				if (rm == null) {
 					rm = new PropertyResourceManager(new PropertyFileManager().open(fn));
