@@ -108,6 +108,7 @@ import archimedes.legacy.scheme.Sequence;
 import archimedes.legacy.scheme.Stereotype;
 import archimedes.legacy.scheme.Tabelle;
 import archimedes.legacy.scheme.View;
+import archimedes.legacy.scripting.DialogScriptExecuter;
 import archimedes.legacy.transfer.DefaultCopyAndPasteController;
 import archimedes.legacy.util.VersionIncrementer;
 import archimedes.legacy.util.VersionStringBuilder;
@@ -509,6 +510,13 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				doBearbeitenDatenmodellVergleichen();
+			}
+		}));
+		menu.addSeparator();
+		menu.add(this.createMenuItem("menu.edit.item.run.javascript", "run", new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				doBearbeitenRunJavaScript();
 			}
 		}));
 		menuBar.add(menu);
@@ -1513,6 +1521,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void doBearbeitenDatenmodellVergleichen() {
 		new DataModelComparison(this.diagramm, this.getInifile());
+	}
+
+	public void doBearbeitenRunJavaScript() {
+		new DialogScriptExecuter(this.getInifile(), this, this.diagramm, "JavaScripts");
 	}
 
 	/**
