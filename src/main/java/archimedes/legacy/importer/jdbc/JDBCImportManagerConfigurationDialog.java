@@ -12,6 +12,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import archimedes.connections.DatabaseConnection;
+import archimedes.legacy.importer.jdbc.JDBCImportConnectionData.Adjustment;
 import baccara.gui.GUIBundle;
 import baccara.gui.generics.AbstractEditorFrame;
 import baccara.gui.generics.ComponentData;
@@ -27,9 +28,12 @@ import baccara.gui.generics.EditorFrameEventType;
 public class JDBCImportManagerConfigurationDialog extends
 		AbstractEditorFrame<JDBCImportConnectionData, JFrame, EditorFrameEvent<JDBCImportConnectionData, JFrame>, String> {
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public JDBCImportManagerConfigurationDialog(JDBCImportConnectionData object, GUIBundle guiBundle) {
 		super(object, "", guiBundle, new EditorFrameConfiguration(true, false, true));
 		this.setTitle(guiBundle.getResourceText(this.getMainResourceIdentifierPrefix() + ".title"));
+		((JComboBox) this.getEditorComponent(JDBCImportConnectionData.FIELD_ADJUSTMENT))
+				.setRenderer(new AdjustmentListCellRenderer(guiBundle));
 	}
 
 	@Override
@@ -61,7 +65,13 @@ public class JDBCImportManagerConfigurationDialog extends
 				new ComponentData<String>( //
 						JDBCImportConnectionData.FIELD_IGNORE_TABLES_PATTERNS, //
 						baccara.gui.generics.Type.STRING, //
-						data.getIgnoreTablePatterns()) //
+						data.getIgnoreTablePatterns()), //
+				new ComponentData<String>( //
+						JDBCImportConnectionData.FIELD_ADJUSTMENT, //
+						Arrays.asList(Adjustment.values()), //
+						data.getAdjustment(), //
+						new AdjustmentListCellRenderer(null), //
+						false) //
 		};
 	}
 
@@ -72,10 +82,11 @@ public class JDBCImportManagerConfigurationDialog extends
 
 	@Override
 	protected void transferChangesToObject() {
+		this.object.setAdjustment(this.getAdjustmentFromComponent(JDBCImportConnectionData.FIELD_ADJUSTMENT));
+		this.object.setConnection(this.getConnectionFromComponent(JDBCImportConnectionData.FIELD_CONNECTION));
 		this.object.setIgnoreIndices(this.getBooleanFromComponent(JDBCImportConnectionData.FIELD_IGNORE_INDICES));
 		this.object.setIgnoreTablePatterns(
 				this.getTextFromComponent(JDBCImportConnectionData.FIELD_IGNORE_TABLES_PATTERNS));
-		this.object.setConnection(this.getConnectionFromComponent(JDBCImportConnectionData.FIELD_CONNECTION));
 		this.object.setPassword(this.getTextFromComponent(JDBCImportConnectionData.FIELD_PASSWORD));
 		this.object.setSchema(this.getTextFromComponent(JDBCImportConnectionData.FIELD_SCHEMA));
 	}
@@ -86,6 +97,11 @@ public class JDBCImportManagerConfigurationDialog extends
 
 	private DatabaseConnection getConnectionFromComponent(String name) {
 		return (DatabaseConnection) ((JComboBox<?>) this.getEditorComponent(name)).getSelectedItem();
+	}
+
+	@SuppressWarnings("rawtypes")
+	private Adjustment getAdjustmentFromComponent(String name) {
+		return (Adjustment) ((JComboBox) this.getEditorComponent(name)).getSelectedItem();
 	}
 
 }
@@ -99,6 +115,37 @@ class ConnectListCellRenderer implements ListCellRenderer<Object> {
 		if (value instanceof DatabaseConnection) {
 			DatabaseConnection dc = (DatabaseConnection) value;
 			l = new JLabel(dc.getName() + " (" + dc.getDBMode() + ")");
+		}
+		if (isSelected) {
+			l.setBackground(Color.LIGHT_GRAY);
+			l.setOpaque(true);
+		}
+		return l;
+	}
+
+}
+
+class AdjustmentListCellRenderer implements ListCellRenderer<Object> {
+
+	private GUIBundle guiBundle;
+
+	public AdjustmentListCellRenderer(GUIBundle guiBundle) {
+		super();
+		this.guiBundle = guiBundle;
+	}
+
+	@Override
+	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+			boolean cellHasFocus) {
+		JLabel l = new JLabel("-");
+		if (value instanceof Adjustment) {
+			Adjustment a = (Adjustment) value;
+			if (this.guiBundle != null) {
+				l.setText(this.guiBundle
+						.getResourceText("JDBCImportManagerConfigurationDialog.Adjustment." + a.name() + ".label"));
+			} else {
+				l.setText(a.name());
+			}
 		}
 		if (isSelected) {
 			l.setBackground(Color.LIGHT_GRAY);

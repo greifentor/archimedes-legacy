@@ -37,7 +37,7 @@ public class JDBCImportManager {
 			DatabaseSO database = new JDBCModelReader(factory, typeConverter, connection, schemeName,
 					connectionData.isIgnoreIndices(), connectionData.getIgnoreTablePatterns()).readModel();
 			// TODO: Convert to Diagram
-			return new DatabaseSOToDiagramConverter().convert(database);
+			return new DatabaseSOToDiagramConverter(connectionData.getAdjustment()).convert(database);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

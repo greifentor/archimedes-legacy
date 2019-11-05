@@ -1112,18 +1112,26 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					@Override
 					public void eventFired(final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
 						if (event.getEventType() == EditorFrameEventType.OK) {
-							diagramm = (Diagramm) new JDBCImportManager().importDiagram(connectionData);
-							diagramm.addDataModelListener(frameArchimedes);
-							diagramm.addDiagrammModelListener(frameArchimedes);
-							diagramm.addGUIDiagramModelListener(frameArchimedes);
-							guiObjectCreator.setDiagram(diagramm);
-							component.setView((GUIViewModel) diagramm.getViews().get(0));
-							component.setDiagram(diagramm);
-							if (fov != null) {
-								fov.setDiagramm(diagramm);
+							try {
+								Diagramm d = (Diagramm) new JDBCImportManager().importDiagram(connectionData);
+								if (d != null) {
+									diagramm = d;
+									diagramm.addDataModelListener(frameArchimedes);
+									diagramm.addDiagrammModelListener(frameArchimedes);
+									diagramm.addGUIDiagramModelListener(frameArchimedes);
+									guiObjectCreator.setDiagram(diagramm);
+									component.setView((GUIViewModel) diagramm.getViews().get(0));
+									component.setDiagram(diagramm);
+									if (fov != null) {
+										fov.setDiagramm(diagramm);
+									}
+									updateViewMenu(viewmenu, diagramm.getViews());
+									diagramm.clearAltered();
+								}
+							} catch (Exception e) {
+								LOG.error("error detected while importing from JDBC connection: " + e.getMessage());
+								e.printStackTrace();
 							}
-							updateViewMenu(viewmenu, diagramm.getViews());
-							diagramm.clearAltered();
 						}
 					}
 				});

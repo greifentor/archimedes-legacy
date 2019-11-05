@@ -15,12 +15,19 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 public class JDBCImportConnectionData {
 
+	public static final String FIELD_ADJUSTMENT = "FIELD_ADJUSTMENT";
 	public static final String FIELD_CONNECTION = "FIELD_CONNECTION";
 	public static final String FIELD_PASSWORD = "FIELD_PASSWORD";
 	public static final String FIELD_IGNORE_INDICES = "FIELD_IGNORE_INDICES";
 	public static final String FIELD_SCHEMA = "FIELD_SCHEMA";
 	public static final String FIELD_IGNORE_TABLES_PATTERNS = "FIELD_IGNORE_TABLES_PATTERNS";
 
+	public enum Adjustment {
+		LEFT_BY_NAME, //
+		CENTER_BY_REFERENCE_COUNT
+	}
+
+	private Adjustment adjustment;
 	private DatabaseConnection connection;
 	private DatabaseConnection[] connections;
 	private String password;
