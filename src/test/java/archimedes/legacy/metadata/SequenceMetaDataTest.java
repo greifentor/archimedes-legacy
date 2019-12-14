@@ -80,7 +80,7 @@ public class SequenceMetaDataTest {
 	 */
 	@Test
 	public void testEqualsReturnsFalsePassingAnotherClassType() {
-		assertFalse(this.unitUnderTest.equals(":op"));
+		assertFalse(this.unitUnderTest.equals(":op")); // NOSONAR OLI: Should so ...
 	}
 
 	/**

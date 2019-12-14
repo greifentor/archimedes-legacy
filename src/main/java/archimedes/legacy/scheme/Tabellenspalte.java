@@ -10,7 +10,6 @@
 package archimedes.legacy.scheme;
 
 import static corentx.util.Checks.ensure;
-import gengen.metadata.ClassMetaData;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,39 +47,31 @@ import corent.djinn.EditorDescriptorList;
 import corent.djinn.Selectable;
 import corent.djinn.TabDescriptor;
 import corent.djinn.TabbedPaneFactory;
+import gengen.metadata.ClassMetaData;
 
 /**
- * Diese Klasse repr&auml;sentiert eine Tabellenspalte innerhalb der
- * Archimedes-Applikation.
+ * Diese Klasse repr&auml;sentiert eine Tabellenspalte innerhalb der Archimedes-Applikation.
  * <P>
- * &Uuml;ber die Properties
- * <I>archimedes.scheme.Tabellenspalte.diagramm.writeable.prefix</I> und
- * <I>archimedes.scheme.Tabellenspalte.diagramm.writeable.suffix</I> kann die
- * Kennzeichnung konfiguriert werden. Die Voreinstellung h&auml;ngt dem
- * Spaltennamen einen Asterix ("*") an.
+ * &Uuml;ber die Properties <I>archimedes.scheme.Tabellenspalte.diagramm.writeable.prefix</I> und
+ * <I>archimedes.scheme.Tabellenspalte.diagramm.writeable.suffix</I> kann die Kennzeichnung konfiguriert werden. Die
+ * Voreinstellung h&auml;ngt dem Spaltennamen einen Asterix ("*") an.
  * 
  * @author ollie
  * 
- * @changed OLI 11.05.2008 - Erweiterung der Implementierung des Interfaces
- *          <TT>TabbedEditable</TT> um die Methode <TT>isTabEnabled(int)</TT>.
- * @changed OLI 09.08.2008 - Erweiterung um die Implementierung der Methoden
- *          <TT>isTechnicalField()</TT> und <TT>setTechnicalField(boolean)</TT>,
- *          &uuml;ber die Tabellenspalten als technische Felder gekennzeichnet
- *          werden k&ouml;nnen. Erweiterung der Tabellenspaltenanzeige im
- *          Diagramm um einen Hinweis darauf, ob das Feld eine
- *          Gel&ouml;scht-Flagge ist.
- * @changed OLI 11.08.2008 - Absicherung der <TT>equals(Object)</TT>-Methode
- *          gegen Vergleiche mit Tabellenspalten, deren Tabellenreferenz noch
- *          nicht gesetzt ist.
- * @changed OLI 22.09.2008 - Erweiterung um das Attribut <TT>listItemField</TT>
- *          mit entsprechendem Getter, Setter und Pflegefunktion.
- * @changed OLI 09.03.2009 - Implementierung f&uuml;r die Attribute
- *          <TT>unique</TT> und <TT>parameter</TT>.
- * @changed OLI 18.11.2010 - Erweiterung um die Methoden <TT>getMaxLength()</TT>
- *          und <TT>isNotNull()</TT>.
- * @changed OLI 27.10.2014 - Entfernung der Referenzen auf die Klasse
- *          <CODE>Tabelle</CODE> und das Interface <CODE>TabellenModel</CODE>
- *          zugunsten des Interfaces <CODE>TableModel</CODE>.
+ * @changed OLI 11.05.2008 - Erweiterung der Implementierung des Interfaces <TT>TabbedEditable</TT> um die Methode
+ *          <TT>isTabEnabled(int)</TT>.
+ * @changed OLI 09.08.2008 - Erweiterung um die Implementierung der Methoden <TT>isTechnicalField()</TT> und
+ *          <TT>setTechnicalField(boolean)</TT>, &uuml;ber die Tabellenspalten als technische Felder gekennzeichnet
+ *          werden k&ouml;nnen. Erweiterung der Tabellenspaltenanzeige im Diagramm um einen Hinweis darauf, ob das Feld
+ *          eine Gel&ouml;scht-Flagge ist.
+ * @changed OLI 11.08.2008 - Absicherung der <TT>equals(Object)</TT>-Methode gegen Vergleiche mit Tabellenspalten, deren
+ *          Tabellenreferenz noch nicht gesetzt ist.
+ * @changed OLI 22.09.2008 - Erweiterung um das Attribut <TT>listItemField</TT> mit entsprechendem Getter, Setter und
+ *          Pflegefunktion.
+ * @changed OLI 09.03.2009 - Implementierung f&uuml;r die Attribute <TT>unique</TT> und <TT>parameter</TT>.
+ * @changed OLI 18.11.2010 - Erweiterung um die Methoden <TT>getMaxLength()</TT> und <TT>isNotNull()</TT>.
+ * @changed OLI 27.10.2014 - Entfernung der Referenzen auf die Klasse <CODE>Tabelle</CODE> und das Interface
+ *          <CODE>TabellenModel</CODE> zugunsten des Interfaces <CODE>TableModel</CODE>.
  */
 
 public class Tabellenspalte implements Selectable, TabellenspaltenModel {
@@ -94,22 +85,19 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	/** Ein Bezeichner zum Zugriff auf die Domain der Tabellenspalte. */
 	public static final int ID_DOMAIN = 2;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Relation der Tabellenspalte, falls
-	 * eine vorhanden ist.
+	 * Ein Bezeichner zum Zugriff auf die Relation der Tabellenspalte, falls eine vorhanden ist.
 	 */
 	public static final int ID_RELATION = 3;
 	/** Ein Bezeichner zum Zugriff auf den Namen der Tabellenspalte. */
 	public static final int ID_NAME = 4;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Tabelle zu der die Tabellenspalte
-	 * geh&ouml;rt.
+	 * Ein Bezeichner zum Zugriff auf die Tabelle zu der die Tabellenspalte geh&ouml;rt.
 	 */
 	public static final int ID_TABELLE = 5;
 	/** Ein Bezeichner zum Zugriff auf die Beschreibung zur Tabellenspalte. */
 	public static final int ID_COMMENT = 6;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die eventuell referenzierte
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die eventuell referenzierte Tabellenspalte.
 	 */
 	public static final int ID_REFERENZIERTESPALTE = 7;
 	/** Ein Bezeichner zum Zugriff auf die Aufgehoben-Markierung des Objektes. */
@@ -117,8 +105,7 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	/** Ein Bezeichner zum Zugriff auf die Editormember-Markierung des Objektes. */
 	public static final int ID_EDITORMEMBER = 9;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Writeablemember-Markierung des
-	 * Objektes.
+	 * Ein Bezeichner zum Zugriff auf die Writeablemember-Markierung des Objektes.
 	 */
 	public static final int ID_WRITEABLEMEMBER = 10;
 	/** Ein Bezeichner zum Zugriff auf den Labeltext zur Tabellenspalte. */
@@ -134,13 +121,11 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	 */
 	public static final int ID_EDITORPOSITION = 15;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die zu erwartende Anzahl der
-	 * Auswahlm&ouml;glichkeiten.
+	 * Ein Bezeichner zum Zugriff auf die zu erwartende Anzahl der Auswahlm&ouml;glichkeiten.
 	 */
 	public static final int ID_REFERENCEWEIGHT = 16;
 	/**
-	 * Ein Bezeichner zum Zugriff auf den Ressourcenbezeichner zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf den Ressourcenbezeichner zur Tabellenspalte.
 	 */
 	public static final int ID_RESSOURCENIDENTIFIER = 17;
 	/** Ein Bezeichner zum Zugriff auf die Kodiertflagge zur Tabellenspalte. */
@@ -150,8 +135,7 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	/** Ein Bezeichner zum Zugriff auf die Indexedflagge zur Tabellenspalte. */
 	public static final int ID_INDEXED = 20;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Maximaleingabebreite zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die Maximaleingabebreite zur Tabellenspalte.
 	 */
 	public static final int ID_MAXCHARACTERS = 21;
 	/** Ein Bezeichner zum Zugriff auf die Global-Flagge zur Tabellenspalte. */
@@ -159,43 +143,35 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	/** Ein Bezeichner zum Zugriff auf die Global-Id-Flagge zur Tabellenspalte. */
 	public static final int ID_GLOBALID = 23;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die AlterInBatch-Flagge zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die AlterInBatch-Flagge zur Tabellenspalte.
 	 */
 	public static final int ID_ALTERINBATCH = 24;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die LastModificationField-Flagge zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die LastModificationField-Flagge zur Tabellenspalte.
 	 */
 	public static final int ID_LASTMODIFICATIONFIELD = 25;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die RemovedStateField-Flagge zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die RemovedStateField-Flagge zur Tabellenspalte.
 	 */
 	public static final int ID_REMOVEDSTATEFIELD = 26;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die IndexSearchMember-Flagge zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die IndexSearchMember-Flagge zur Tabellenspalte.
 	 */
 	public static final int ID_INDEXSEARCHMEMBER = 27;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die CanBeReferenced-Flagge zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die CanBeReferenced-Flagge zur Tabellenspalte.
 	 */
 	public static final int ID_CANBEREFERENCED = 28;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die HideReference-Flagge zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die HideReference-Flagge zur Tabellenspalte.
 	 */
 	public static final int ID_HIDEREFERENCE = 29;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die TechnicalField-Flagge zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die TechnicalField-Flagge zur Tabellenspalte.
 	 */
 	public static final int ID_TECHNICALFIELD = 30;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die ListItemField-Flagge zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die ListItemField-Flagge zur Tabellenspalte.
 	 */
 	public static final int ID_LISTITEMFIELD = 31;
 	/** Ein Bezeichner zum Zugriff auf die Unique-Flagge der Tabellenspalte. */
@@ -203,8 +179,7 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	/** Ein Bezeichner zum Zugriff auf die Parameter-Flagge der Tabellenspalte. */
 	public static final int ID_PARAMETER = 33;
 	/**
-	 * Ein Bezeichner zum Zugriff auf den individuellen Defaultwert der
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf den individuellen Defaultwert der Tabellenspalte.
 	 */
 	public static final int ID_INDIVIDUALDEFAULTVALUE = 34;
 	/** Ein Bezeichner zum Zugriff auf die Historie zur Tabellenspalte. */
@@ -216,16 +191,14 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	/** Ein Bezeichner zum Zugriff auf die Transient-Flagge zur Tabellenspalte. */
 	public static final int ID_TRANSIENT = 37;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die SuppressForeignKeyContraint-Flagge zur
-	 * Tabellenspalte.
+	 * Ein Bezeichner zum Zugriff auf die SuppressForeignKeyContraint-Flagge zur Tabellenspalte.
 	 */
 	public static final int ID_SUPPRESS_FOREIGN_KEY_CONSTRAINT = 38;
 
 	/**
 	 * Creates a copy of the passed column model.
 	 * 
-	 * @param c
-	 *            The column model to copy.
+	 * @param c The column model to copy.
 	 * 
 	 * @changed OLI 05.08.2016 - Added.
 	 */
@@ -271,10 +244,8 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	/**
 	 * Generiert eine Tabellenspalte anhand der &uuml;bergebenen Parameter.
 	 * 
-	 * @param n
-	 *            Der Name der Tabellenspalte.
-	 * @param dom
-	 *            Die Domain zur Tabellenspalte.
+	 * @param n   Der Name der Tabellenspalte.
+	 * @param dom Die Domain zur Tabellenspalte.
 	 */
 	public Tabellenspalte(String n, DomainModel dom) {
 		this(n, dom, false);
@@ -283,13 +254,10 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	/**
 	 * Generiert eine Tabellenspalte anhand der &uuml;bergebenen Parameter.
 	 * 
-	 * @param n
-	 *            Der Name der Tabellenspalte.
-	 * @param dom
-	 *            Die Domain zur Tabellenspalte.
-	 * @param pk
-	 *            Wird diese Flagge gesetzt, so handelt es sich bei der
-	 *            Tabellenspalte um ein Member des Prim&auml;rschl&uuml;ssels.
+	 * @param n   Der Name der Tabellenspalte.
+	 * @param dom Die Domain zur Tabellenspalte.
+	 * @param pk  Wird diese Flagge gesetzt, so handelt es sich bei der Tabellenspalte um ein Member des
+	 *            Prim&auml;rschl&uuml;ssels.
 	 */
 	public Tabellenspalte(String n, DomainModel dom, boolean pk) {
 		super();
@@ -346,10 +314,9 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	/* Ueberschreiben der Methoden der Superklasse. */
 
 	/**
-	 * @changed OLI 11.08.2008 - Absicherung des Falles, da&szlig; eine
-	 *          Tabellenspalte verglichen werden soll, deren Tabellenreferenz
-	 *          noch nicht gesetzt worden ist (dies kann beim Einf&uuml;gen von
-	 *          Tabellenspalten &uuml;ber die Oberfl&auml;che vorkommen).
+	 * @changed OLI 11.08.2008 - Absicherung des Falles, da&szlig; eine Tabellenspalte verglichen werden soll, deren
+	 *          Tabellenreferenz noch nicht gesetzt worden ist (dies kann beim Einf&uuml;gen von Tabellenspalten
+	 *          &uuml;ber die Oberfl&auml;che vorkommen).
 	 * 
 	 */
 	@Override
@@ -384,22 +351,23 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	public String toDiagrammString() {
 		DiagrammModel dm = this.getTabelle().getDiagramm();
 		return (this.isListItemField() ? "(#) " : "")
-				+ (dm.markWriteablemembers() && this.isWriteablemember() ? System.getProperty(
-						"archimedes.scheme.Tabellenspalte.diagramm.writeable.prefix", "") : "")
+				+ (dm.markWriteablemembers() && this.isWriteablemember()
+						? System.getProperty("archimedes.scheme.Tabellenspalte.diagramm.writeable.prefix", "")
+						: "")
 				+ this.getName()
-				+ (dm.markWriteablemembers() && this.isWriteablemember() ? System.getProperty(
-						"archimedes.scheme.Tabellenspalte.diagramm.writeable.suffix", "*") : "") + " :"
-				+ this.getDomainAndDefaultValue() + (this.isPrimarykey() ? " (PK)" : "")
+				+ (dm.markWriteablemembers() && this.isWriteablemember()
+						? System.getProperty("archimedes.scheme.Tabellenspalte.diagramm.writeable.suffix", "*")
+						: "")
+				+ " :" + this.getDomainAndDefaultValue() + (this.isPrimarykey() ? " (PK)" : "")
 				+ (this.getRelation() != null ? " (FK)" : "") + (this.isIndexed() ? " (I)" : "")
 				+ (this.isUnique() ? " (U)" : "") + (this.isRemovedStateField() ? " (RS)" : "")
 				+ (this.isSynchronizeId() ? " (GID)" : "")
 				+ (this.isNotNull() && !this.isPrimarykey() ? " NOT NULL" : "");
 		/*
-		 * Nette Variante. Machts Tabellchen aber zu breit. return
-		 * this.getName() + " :" + this.getDomain() + (this.isPrimarykey() ?
-		 * " (PK)" : "") + (this.getRelation() != null ? " (FK->" +
-		 * this.getRelation().getReferenced( ).getFullName() + ")" : "") +
-		 * (this.isNotNull() && !this.isPrimarykey() ? " NOT NULL" : "");
+		 * Nette Variante. Machts Tabellchen aber zu breit. return this.getName() + " :" + this.getDomain() +
+		 * (this.isPrimarykey() ? " (PK)" : "") + (this.getRelation() != null ? " (FK->" +
+		 * this.getRelation().getReferenced( ).getFullName() + ")" : "") + (this.isNotNull() && !this.isPrimarykey() ?
+		 * " NOT NULL" : "");
 		 */
 	}
 
@@ -522,8 +490,8 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 		case ID_TRANSIENT:
 			return new Boolean(this.isTransient());
 		}
-		throw new IllegalArgumentException("Klasse Tabellenspalte verfuegt nicht ueber ein " + "Attribut " + id
-				+ " (get)!");
+		throw new IllegalArgumentException(
+				"Klasse Tabellenspalte verfuegt nicht ueber ein " + "Attribut " + id + " (get)!");
 	}
 
 	public void set(int id, Object value) throws ClassCastException, IllegalArgumentException {
@@ -651,35 +619,33 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 			this.setTransient(((Boolean) value).booleanValue());
 			return;
 		}
-		throw new IllegalArgumentException("Klasse Tabellenspalte verfuegt nicht ueber ein " + "Attribut " + id
-				+ " (set)!");
+		throw new IllegalArgumentException(
+				"Klasse Tabellenspalte verfuegt nicht ueber ein " + "Attribut " + id + " (set)!");
 	}
 
 	public EditorDescriptorList getEditorDescriptorList() {
 		DefaultComponentFactory dcf = DefaultComponentFactory.INSTANZ;
 		DefaultComponentFactory dcfdom = new DefaultComponentFactory(this.getTabelle().getDiagramm().getDomains());
 		/*
-		 * DefaultComponentFactory dcfkey = new
-		 * DefaultComponentFactory(this.getTabelle(
+		 * DefaultComponentFactory dcfkey = new DefaultComponentFactory(this.getTabelle(
 		 * ).getDiagramm().getKeycolumns(this.getTabelle()));
 		 */
 		/*
-		 * Alte Version. DefaultComponentFactory dcfkey = new
-		 * DefaultComponentFactory(this.getTabelle(
+		 * Alte Version. DefaultComponentFactory dcfkey = new DefaultComponentFactory(this.getTabelle(
 		 * ).getDiagramm().getKeycolumns(null));
 		 */
-		DefaultComponentFactory dcfkey = new DefaultComponentFactory(this.getTabelle().getDiagramm()
-				.getColumnsToBeReferenced(null));
+		DefaultComponentFactory dcfkey = new DefaultComponentFactory(
+				this.getTabelle().getDiagramm().getColumnsToBeReferenced(null));
 		Vector refweights = new Vector();
 		for (int i = 0; i < ReferenceWeight.values().length; i++) {
 			refweights.addElement(ReferenceWeight.values()[i]);
 		}
 		DefaultComponentFactory dcfrws = new DefaultComponentFactory(refweights);
-		DefaultComponentFactory dcfseq = new DefaultComponentFactory(Arrays.asList(this.getTable().getDataModel()
-				.getSequences()));
+		DefaultComponentFactory dcfseq = new DefaultComponentFactory(
+				Arrays.asList(this.getTable().getDataModel().getSequences()));
 		DefaultEditorDescriptorList dedl = new DefaultEditorDescriptorList();
-		DefaultComponentFactory dcfpanels = new DefaultComponentFactory(((Tabelle) this.getTabelle())
-				.getPanelsByReference());
+		DefaultComponentFactory dcfpanels = new DefaultComponentFactory(
+				((Tabelle) this.getTabelle()).getPanelsByReference());
 		if (this.get(ID_PANEL) == null) {
 			this.set(ID_PANEL, this.getTable().getPanels()[0]);
 		}
@@ -690,11 +656,11 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 				"Die Domain zur Tabellenspalte"));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_INDIVIDUALDEFAULTVALUE, dlf, dcf,
 				"Individueller Defaultwert", '\0', null, "Ein individueller Defaultwert " + "zur Tabellenspalte"));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_PRIMARYKEY, dlf, dcf, StrUtil
-				.FromHTML("Prim&auml;rschl&uuml;ssel"), 'P', null, StrUtil
-				.FromHTML("Setzen Sie diese Flagge um ein Prim&auml;rschl&uuml;sselmitglied zu " + "kennzeichnen.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_NOTNULL, dlf, dcf, "Not-Null", 'O', null, StrUtil
-				.FromHTML("Setzen Sie diese Flagge, wenn f&uuml;r"
+		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_PRIMARYKEY, dlf, dcf,
+				StrUtil.FromHTML("Prim&auml;rschl&uuml;ssel"), 'P', null, StrUtil.FromHTML(
+						"Setzen Sie diese Flagge um ein Prim&auml;rschl&uuml;sselmitglied zu " + "kennzeichnen.")));
+		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_NOTNULL, dlf, dcf, "Not-Null", 'O', null,
+				StrUtil.FromHTML("Setzen Sie diese Flagge, wenn f&uuml;r"
 						+ " das Attribut ein Not-Null-Constraint gesetzt werden soll.")));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_REFERENZIERTESPALTE, dlf, dcfkey, "Referenziert", 'R',
 				null, "Eine durch die Tabellenspalte referenzierte" + " Tabellenspalte"));
@@ -708,49 +674,67 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 						+ "diese Flagge, um die Referenzanzeige f&uuml;r die Tabellenspalte zu " + "deaktivieren.")));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_AUFGEHOBEN, dlf, dcf, "Aufgehoben", 'A', null,
 				"Die Aufgehoben-Flagge der Tabellenspalte"));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_KODIERT, dlf, dcf, "Kodiert", 'K', null, StrUtil
-				.FromHTML("Setzen Sie diese Flagge, um die "
+		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_KODIERT, dlf, dcf, "Kodiert", 'K', null,
+				StrUtil.FromHTML("Setzen Sie diese Flagge, um die "
 						+ "Kodierung f&uuml;r die Inhalte der Spalte zu initiieren (VORSICHT: Das kann "
 						+ "zu Problemen bei Suchanfragen auf die Spalte f&uuml;hren).")));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_UNIQUE, dlf, dcf, "Unique", 'U', null,
 				"Setzen Sie diese Flagge, um die Tabellenspalte als " + "einzigartig zu kennzeichnen."));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_INDEXED, dlf, dcf, "Indiziert", 'I', null,
 				"Setzen Sie diese Flagge, um die Tabellenspalte im " + "Datenmodell als indiziert zu kennzeichnen."));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_GLOBAL, dlf, dcf, "Global", 'G', null,
-				"Setzen Sie diese Flagge, um die Tabellenspalte als " + "globales Attribut zu kennzeichnen."));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_GLOBALID, dlf, dcf, "Globale Id", 'L', null, StrUtil
-				.FromHTML("Setzen Sie diese Flagge, um die "
-						+ "Tabellenspalte als globales Schl&uuml;sselattribut zu kennzeichnen.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_ALTERINBATCH, dlf, dcf, StrUtil
-				.FromHTML("Stapel&auml;nderung"), 'S', null, StrUtil.FromHTML("Setzen "
-				+ "Sie diese Flagge, um die Tabellenspalte als &auml;nderbar im Stapel zu " + "kennzeichnen.")));
+		if (isCompatibilityModeVersion1()) {
+			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_GLOBAL, dlf, dcf, "Global", 'G', null,
+					"Setzen Sie diese Flagge, um die Tabellenspalte als " + "globales Attribut zu kennzeichnen."));
+			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_GLOBALID, dlf, dcf, "Globale Id", 'L', null,
+					StrUtil.FromHTML("Setzen Sie diese Flagge, um die "
+							+ "Tabellenspalte als globales Schl&uuml;sselattribut zu kennzeichnen.")));
+			dedl.addElement(
+					new DefaultEditorDescriptor(0, this, ID_ALTERINBATCH, dlf, dcf,
+							StrUtil.FromHTML("Stapel&auml;nderung"), 'S', null,
+							StrUtil.FromHTML("Setzen "
+									+ "Sie diese Flagge, um die Tabellenspalte als &auml;nderbar im Stapel zu "
+									+ "kennzeichnen.")));
+		}
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_LASTMODIFICATIONFIELD, dlf, dcf,
-				"Letzte-Modifikation-Feld", 'M', null, StrUtil.FromHTML("Setzen Sie diese "
+				"Letzte-Modifikation-Feld", 'M', null,
+				StrUtil.FromHTML("Setzen Sie diese "
 						+ "Flagge, um die Tabellenspalte als Feld f&uuml;r die Aufnahme des letzten "
 						+ "Modifikationszeitpunktes zu kennzeichnen.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_REMOVEDSTATEFIELD, dlf, dcf, StrUtil
-				.FromHTML("Gel&ouml;scht-Status-Feld"), 'U', null, StrUtil
-				.FromHTML("Setzen Sie diese Flagge, um die Tabellenspalte als Feld f&uuml;r die Aufnahme "
-						+ "eines Gel&ouml;schtstatus zu kennzeichnen.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_TECHNICALFIELD, dlf, dcf, StrUtil
-				.FromHTML("Technisches Feld"), 'T', null, StrUtil
-				.FromHTML("Setzen Sie diese Flagge, um die Tabellenspalte als Feld mit rein technischem "
+		if (isCompatibilityModeVersion1()) {
+			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_REMOVEDSTATEFIELD, dlf, dcf,
+					StrUtil.FromHTML("Gel&ouml;scht-Status-Feld"), 'U', null,
+					StrUtil.FromHTML("Setzen Sie diese Flagge, um die Tabellenspalte als Feld f&uuml;r die Aufnahme "
+							+ "eines Gel&ouml;schtstatus zu kennzeichnen.")));
+		}
+		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_TECHNICALFIELD, dlf, dcf,
+				StrUtil.FromHTML("Technisches Feld"), 'T', null,
+				StrUtil.FromHTML("Setzen Sie diese Flagge, um die Tabellenspalte als Feld mit rein technischem "
 						+ "Charakter zu kennzeichnen.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_LISTITEMFIELD, dlf, dcf, StrUtil
-				.FromHTML("Positionsattribut"), 'P', null, StrUtil
-				.FromHTML("Setzen Sie diese Flagge als Kennzeichen f&uuml;r ein Positionsattribut im "
-						+ "Falle einer \"flachgespeicherten\" Liste.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_INDEXSEARCHMEMBER, dlf, dcf,
-				"Bei Indexsuche einbeziehen", 'X', null, StrUtil.FromHTML("Setzen Sie diese "
-						+ "Flagge, um die Tabellenspalte in eine tabellen&uuml;bergreifende Indexsuche "
-						+ "aufzunehmen.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_TRANSIENT, dlf, dcf, StrUtil
-				.FromHTML("Transientes Feld"), '\0', null, StrUtil
-				.FromHTML("Setzen Sie diese Flagge, um die Tabellenspalte als transient zu kennzeichnen.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_SUPPRESS_FOREIGN_KEY_CONSTRAINT, dlf, dcf, StrUtil
-				.FromHTML("FOREIGN-KEY-Constraint unterdr&uuml;cken"), '\0', null, StrUtil
-				.FromHTML("Setzen Sie diese Flagge, um f&uuml;r die Tabellenspalte"
-						+ " die FOREIGN-KEY-Constraints zu deaktivieren.")));
+		if (isCompatibilityModeVersion1()) {
+			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_LISTITEMFIELD, dlf, dcf,
+					StrUtil.FromHTML("Positionsattribut"), 'P', null,
+					StrUtil.FromHTML("Setzen Sie diese Flagge als Kennzeichen f&uuml;r ein Positionsattribut im "
+							+ "Falle einer \"flachgespeicherten\" Liste.")));
+			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_INDEXSEARCHMEMBER, dlf, dcf,
+					"Bei Indexsuche einbeziehen", 'X', null,
+					StrUtil.FromHTML("Setzen Sie diese "
+							+ "Flagge, um die Tabellenspalte in eine tabellen&uuml;bergreifende Indexsuche "
+							+ "aufzunehmen.")));
+		}
+		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_TRANSIENT, dlf, dcf,
+				StrUtil.FromHTML("Transientes Feld"), '\0', null,
+				StrUtil.FromHTML("Setzen Sie diese Flagge, um die Tabellenspalte als transient zu kennzeichnen.")));
+		if (isCompatibilityModeVersion1()) {
+			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_SUPPRESS_FOREIGN_KEY_CONSTRAINT, dlf, dcf,
+					StrUtil.FromHTML("FOREIGN-KEY-Constraint unterdr&uuml;cken"), '\0', null,
+					StrUtil.FromHTML("Setzen Sie diese Flagge, um f&uuml;r die Tabellenspalte"
+							+ " die FOREIGN-KEY-Constraints zu deaktivieren.")));
+		}
+		if (!isCompatibilityModeVersion1()) {
+			dedl.addElement(new ArchimedesEditorDescriptor("Parameter", 0, this, Tabellenspalte.ID_PARAMETER, dlf, dcf,
+					"Parameter", '\0', null, StrUtil.FromHTML(
+							"Hier k&ouml;nnen Sie einen freidefinierbaren Parameter zur " + "Tabellenspalte.")));
+		}
 		dedl.addElement(new DefaultSubEditorDescriptor(1, this, new CommentSubEditorFactory()));
 		dedl.addElement(new DefaultSubEditorDescriptor(2, this, new HistoryOwnerSubEditorFactory()));
 		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_EDITORMEMBER, dlf, dcf, "Editormember", 'M', null,
@@ -763,30 +747,37 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 				"Ein Mnemonic zum Label"));
 		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_TOOLTIPTEXT, dlf, dcf, "ToolTipText", 'T', null,
 				"Ein ToolTip zum Editorfeld"));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_PANEL, dlf, dcfpanels, "Panel", 'P', null, StrUtil
-				.FromHTML("W&auml;hlen Sie hier das Panel aus, auf "
+		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_PANEL, dlf, dcfpanels, "Panel", 'P', null,
+				StrUtil.FromHTML("W&auml;hlen Sie hier das Panel aus, auf "
 						+ "dem das Control zur Tabellenspalte abgebildet werden soll")));
 		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_EDITORPOSITION, dlf, dcf, "Editor-Position", 'E', null,
-				StrUtil.FromHTML("Hier m&uuml;ssen Sie die "
-						+ "Position des Editorfeldes innerhalb des Panels festlegen!")));
+				StrUtil.FromHTML(
+						"Hier m&uuml;ssen Sie die " + "Position des Editorfeldes innerhalb des Panels festlegen!")));
 		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_REFERENCEWEIGHT, dlf, dcfrws, "Auswahl", 'A', null,
 				StrUtil.FromHTML("Legen Sie hier die Menge der "
 						+ "zuerwartenden Auswahlm&ouml;glichkeiten fest (nur bei Referenzfeldern)")));
 		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_RESSOURCENIDENTIFIER, dlf, dcf, "Ressourcebezeichner",
-				'R', null, StrUtil.FromHTML("Hier k&ouml;nnen Sie einen "
+				'R', null,
+				StrUtil.FromHTML("Hier k&ouml;nnen Sie einen "
 						+ "Bezeichner (z. B. zum Bezug von Ressourcen) f&uuml;r die Komponente zur "
 						+ "Tabellenspalte setzen.")));
 		dedl.addElement(new DefaultEditorDescriptor(3, this, Tabellenspalte.ID_MAXCHARACTERS, dlf, dcf,
-				"Maximalbreite (Eingabefeld)", 'M', null, StrUtil
-						.FromHTML("Hier k&ouml;nnen Sie eine maximale Breite f&uuml;r das mit der Tabellenspalte "
-								+ "zusammenh&auml;ngende Eingabefeld definieren.")));
-		dedl.addElement(new ArchimedesEditorDescriptor("Parameter", 3, this, Tabellenspalte.ID_PARAMETER, dlf, dcf,
-				"Parameter", '\0', null, StrUtil.FromHTML("Hier k&ouml;nnen Sie einen freidefinierbaren Parameter zur "
-						+ "Tabellenspalte.")));
+				"Maximalbreite (Eingabefeld)", 'M', null,
+				StrUtil.FromHTML("Hier k&ouml;nnen Sie eine maximale Breite f&uuml;r das mit der Tabellenspalte "
+						+ "zusammenh&auml;ngende Eingabefeld definieren.")));
+		if (isCompatibilityModeVersion1()) {
+			dedl.addElement(new ArchimedesEditorDescriptor("Parameter", 3, this, Tabellenspalte.ID_PARAMETER, dlf, dcf,
+					"Parameter", '\0', null, StrUtil.FromHTML(
+							"Hier k&ouml;nnen Sie einen freidefinierbaren Parameter zur " + "Tabellenspalte.")));
+		}
 		dedl.addElement(new DefaultEditorDescriptor(4, this, ID_WRITEABLEMEMBER, dlf, dcf, "Writeable", 'W', null,
 				StrUtil.FromHTML("Setzen Sie diese Flagge um die "
 						+ "Tabellenspalte im Code f&uuml;r die Schreibbarkeitspr&uuml;fung " + "wiederzufinden.")));
 		return dedl;
+	}
+
+	private boolean isCompatibilityModeVersion1() {
+		return System.getProperty("archimedes.compatibility.mode", "NONE").equals("VERSION_1");
 	}
 
 	public Object createObject() {
@@ -1020,8 +1011,7 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	/* Implementierungen zum Interface AttributeMetaData. */
 
 	/**
-	 * @changed OLI 14.06.2011 - Ber&uuml;cksichtigung des individuellen
-	 *          Defaultwertes zur Tabellenspalte.
+	 * @changed OLI 14.06.2011 - Ber&uuml;cksichtigung des individuellen Defaultwertes zur Tabellenspalte.
 	 */
 	@Override
 	public String getDefaultValue() {
@@ -1062,8 +1052,7 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	}
 
 	/*
-	 * The following methods are approved by the current model interface
-	 * (TableModel).
+	 * The following methods are approved by the current model interface (TableModel).
 	 */
 
 	private boolean alterInBatch = false;
@@ -1829,9 +1818,7 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 				return;
 			}
 		}
-		this.setParameters(this.getParameters()
-				+ (this.getParameters().length() > 0 ? "|" : "")
-				+ option.getName()
+		this.setParameters(this.getParameters() + (this.getParameters().length() > 0 ? "|" : "") + option.getName()
 				+ ((option.getParameter() != null) && !option.getParameter().isEmpty() ? ":" + option.getParameter()
 						: ""));
 	}
