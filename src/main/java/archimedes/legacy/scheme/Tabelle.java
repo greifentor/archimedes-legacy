@@ -10,11 +10,6 @@
 package archimedes.legacy.scheme;
 
 import static corentx.util.Checks.ensure;
-import gengen.metadata.AttributeMetaData;
-import gengen.metadata.ModelMetaData;
-import gengen.metadata.OrderDirection;
-import gengen.metadata.OrderMetaData;
-import gengen.metadata.SelectionViewMetaData;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -55,6 +50,7 @@ import archimedes.legacy.model.NReferenzModel;
 import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TabellenspaltenModel;
 import archimedes.legacy.transfer.DefaultCopyAndPasteController;
+import archimedes.legacy.util.StringTrimer;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
@@ -88,6 +84,11 @@ import corent.djinn.Selectable;
 import corent.djinn.TabDescriptor;
 import corent.djinn.TabbedPaneFactory;
 import corentx.util.SortedVector;
+import gengen.metadata.AttributeMetaData;
+import gengen.metadata.ModelMetaData;
+import gengen.metadata.OrderDirection;
+import gengen.metadata.OrderMetaData;
+import gengen.metadata.SelectionViewMetaData;
 
 /**
  * Diese Klasse repr&auml;sentiert eine Tabelle der Archimedes-Applikation.
@@ -106,10 +107,8 @@ import corentx.util.SortedVector;
  * table.out.of.bounds</TD>
  * <TD>false</TD>
  * <TD>Boolean</TD>
- * <TD>
- * Wird diese Property gesetzt, so werden die Fehlermeldungen, die &uuml;ber
- * fehlende Views informieren, innerhalb der Methoden <TT>getX(ViewModel)</TT>
- * und <TT>getX(ViewModel)</TT> unterdr&uuml;ckt.</TD>
+ * <TD>Wird diese Property gesetzt, so werden die Fehlermeldungen, die &uuml;ber fehlende Views informieren, innerhalb
+ * der Methoden <TT>getX(ViewModel)</TT> und <TT>getX(ViewModel)</TT> unterdr&uuml;ckt.</TD>
  * </TR>
  * </TABLE>
  * <P>
@@ -117,50 +116,34 @@ import corentx.util.SortedVector;
  * 
  * @author ollie
  * 
- * @changed OLI 18.12.2007 - Erweiterung um die Implementierung des Interfaces
- *          Transferable. Einbau M&oumg;glichkeit die Fehlerausgabe bei
- *          fehlendem View in den Methoden <TT>getX(ViewModel)</TT> und
- *          <TT>getX(ViewModel)</TT>zu unterdr&uuml;cken (Property
- *          <I>archimedes.scheme.Tabelle.suppress.table.out.of.bounds</I>).
- *          Einf&uuml;gen der Methode <TT>toTemplate()</TT>.
- * @changed OLI 24.04.2008 - Der Bug aus der Methode <TT>toTemplate()</TT>, der
- *          zu einer <TT>NullPointerException</TT> beim Kopieren einer Tabelle
- *          f&uuml;hrte, wenn keine Farbe f&uuml;r den Hintergrund des
- *          Tabellenkopfes angegeben war, sollte nun behoben sein. Wenn keine
- *          Farben f&uuml;r Schrift und Tabellenhintergrund angegeben, werden
- *          nun die Defaults schwarz f&uuml;r die Schrift und wei&szlig;
- *          f&uuml;r den Hintergrund angenommen.
- * @changed OLI 11.05.2008 - Erweiterung der Implementierung des Interfaces
- *          <TT>TabbedEditable</TT> um die Methode <TT>isTabEnabled(int)</TT>.
- *          Entsprechende Erweiterung der Anzeigeroutine.
- * @changed OLI 10.08.2008 - Erweiterung um das Abgrauen bzw. Abblenden von
- *          technischen Feldern.
- * @changed OLI 11.08.2008 - Einbeziehung der TechnicalField-Flagge in das
- *          Template. Dies wird im Zusammenspiel mit der
+ * @changed OLI 18.12.2007 - Erweiterung um die Implementierung des Interfaces Transferable. Einbau M&oumg;glichkeit die
+ *          Fehlerausgabe bei fehlendem View in den Methoden <TT>getX(ViewModel)</TT> und <TT>getX(ViewModel)</TT>zu
+ *          unterdr&uuml;cken (Property <I>archimedes.scheme.Tabelle.suppress.table.out.of.bounds</I>). Einf&uuml;gen
+ *          der Methode <TT>toTemplate()</TT>.
+ * @changed OLI 24.04.2008 - Der Bug aus der Methode <TT>toTemplate()</TT>, der zu einer <TT>NullPointerException</TT>
+ *          beim Kopieren einer Tabelle f&uuml;hrte, wenn keine Farbe f&uuml;r den Hintergrund des Tabellenkopfes
+ *          angegeben war, sollte nun behoben sein. Wenn keine Farben f&uuml;r Schrift und Tabellenhintergrund
+ *          angegeben, werden nun die Defaults schwarz f&uuml;r die Schrift und wei&szlig; f&uuml;r den Hintergrund
+ *          angenommen.
+ * @changed OLI 11.05.2008 - Erweiterung der Implementierung des Interfaces <TT>TabbedEditable</TT> um die Methode
+ *          <TT>isTabEnabled(int)</TT>. Entsprechende Erweiterung der Anzeigeroutine.
+ * @changed OLI 10.08.2008 - Erweiterung um das Abgrauen bzw. Abblenden von technischen Feldern.
+ * @changed OLI 11.08.2008 - Einbeziehung der TechnicalField-Flagge in das Template. Dies wird im Zusammenspiel mit der
  *          Copy-&amp;-Paste-Mechanik wichtig.
- * @changed OLI 15.09.2008 - Erweiterung um die Implementierung der Methoden
- *          <TT>getCodeGeneratorOptions()</TT> und
+ * @changed OLI 15.09.2008 - Erweiterung um die Implementierung der Methoden <TT>getCodeGeneratorOptions()</TT> und
  *          <TT>setCodeGeneratorOptions(String)</TT>.
- * @changed OLI 11.10.2008 - Erweiterung um die Anzeige der Kuller um
- *          Relationsknicke.
- * @changed OLI 30.12.2008 - Erweiterung um die Ber&uuml;cksichtigung von
- *          Defaultwerten bei der Generierung von Create-Statements f&uuml;r die
- *          Tabelle (Methode
- *          <TT>makeCreateStatement(boolean, boolean, boolean)</TT>).
+ * @changed OLI 11.10.2008 - Erweiterung um die Anzeige der Kuller um Relationsknicke.
+ * @changed OLI 30.12.2008 - Erweiterung um die Ber&uuml;cksichtigung von Defaultwerten bei der Generierung von
+ *          Create-Statements f&uuml;r die Tabelle (Methode <TT>makeCreateStatement(boolean, boolean, boolean)</TT>).
  * @changed OLI 12.05.2009 - Erweiterung um die Implementierung der Methode
  *          <TT>makeCreateStatement(boolean, boolean, boolean, String)</TT>.
- * @changed OLI 17.05.2009 - Erweiterung um die Implementierung der Methode
- *          <TT>makeInsertStatementCounted()</TT>.
- * @changed OLI 28.05.2009 - Debugging an der Methode
- *          <TT>getFieldnamesPKFirst(boolean,
+ * @changed OLI 17.05.2009 - Erweiterung um die Implementierung der Methode <TT>makeInsertStatementCounted()</TT>.
+ * @changed OLI 28.05.2009 - Debugging an der Methode <TT>getFieldnamesPKFirst(boolean,
  *         boolean)</TT>.
- * @changed OLI 06.10.2009 - Erweiterung um die Implementierung der Methode
- *          <TT>isOfStereotype(String)</TT>.
- * @changed OLI 04.06.2010 - Anpassung an die Erweiterungen des
- *          ClassMetaData-Interfaces. Erweiterung um die Implementierung des
- *          <TT>SelectionViewMetaData</TT>-Interfaces.
- * @changed OLI 20.12.2011 - Erweiterung um die Implementierung der Methode
- *          <CODE>getAttribute(String)</CODE>.
+ * @changed OLI 06.10.2009 - Erweiterung um die Implementierung der Methode <TT>isOfStereotype(String)</TT>.
+ * @changed OLI 04.06.2010 - Anpassung an die Erweiterungen des ClassMetaData-Interfaces. Erweiterung um die
+ *          Implementierung des <TT>SelectionViewMetaData</TT>-Interfaces.
+ * @changed OLI 20.12.2011 - Erweiterung um die Implementierung der Methode <CODE>getAttribute(String)</CODE>.
  */
 
 public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel, Transferable {
@@ -178,50 +161,41 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	/** Ein Bezeichner zum Zugriff auf das CodeVezeichnis zur Tabelle. */
 	public static final int ID_CODEVERZEICHNIS = 5;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Liste mit den Equalsmembers der
-	 * Tabelle.
+	 * Ein Bezeichner zum Zugriff auf die Liste mit den Equalsmembers der Tabelle.
 	 */
 	public static final int ID_EQUALSMEMBERS = 6;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Liste mit den Comparemembers der
-	 * Tabelle.
+	 * Ein Bezeichner zum Zugriff auf die Liste mit den Comparemembers der Tabelle.
 	 */
 	public static final int ID_COMPAREMEMBERS = 7;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Liste mit den ToStringmembers der
-	 * Tabelle.
+	 * Ein Bezeichner zum Zugriff auf die Liste mit den ToStringmembers der Tabelle.
 	 */
 	public static final int ID_TOSTRINGMEMBERS = 8;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Liste mit den ToCombomembers der
-	 * Tabelle.
+	 * Ein Bezeichner zum Zugriff auf die Liste mit den ToCombomembers der Tabelle.
 	 */
 	public static final int ID_TOCOMBOMEMBERS = 9;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Liste mit den HashCodemembers der
-	 * Tabelle.
+	 * Ein Bezeichner zum Zugriff auf die Liste mit den HashCodemembers der Tabelle.
 	 */
 	public static final int ID_HASHCODEMEMBERS = 10;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Liste mit den Auswahlmembers der
-	 * Tabelle.
+	 * Ein Bezeichner zum Zugriff auf die Liste mit den Auswahlmembers der Tabelle.
 	 */
 	public static final int ID_AUSWAHLMEMBERS = 11;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Liste mit den Ordermembers der
-	 * Tabelle.
+	 * Ein Bezeichner zum Zugriff auf die Liste mit den Ordermembers der Tabelle.
 	 */
 	public static final int ID_ORDERMEMBERS = 12;
 	/**
-	 * Ein Bezeichner zum Zugriff auf den Kontextbezeichner der Tabelle
-	 * (Editordescriptor).
+	 * Ein Bezeichner zum Zugriff auf den Kontextbezeichner der Tabelle (Editordescriptor).
 	 */
 	public static final int ID_KONTEXTNAME = 13;
 	/** Ein Bezeichner zum Zugriff auf die Unique-Formel f&uuml;r die Tabelle. */
 	public static final int ID_UNIQUEFORMULA = 14;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Liste mit den manipulierbaren
-	 * NReferenzen der Tabelle.
+	 * Ein Bezeichner zum Zugriff auf die Liste mit den manipulierbaren NReferenzen der Tabelle.
 	 */
 	public static final int ID_NREFERENZEN = 15;
 	/** Ein Bezeichner zum Zugriff auf die Beschriftungsfarbe der Tabelle. */
@@ -249,19 +223,19 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	/** Ein Bezeichner zum Zugriff auf die Optionen. */
 	public static final int ID_OPTIONS = 27;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die zus&auml;tzlichen Constraints f&uuml;r
-	 * die Create-Statments der Tabelle.
+	 * Ein Bezeichner zum Zugriff auf die zus&auml;tzlichen Constraints f&uuml;r die Create-Statments der Tabelle.
 	 */
 	public static final int ID_ADDITIONAL_CREATE_CONSTRAINTS = 28;
 	/** Ein Bezeichner zum Zugriff auf die Flagge f&uuml;r externe Tabellen. */
 	public static final int ID_EXTERNAL_TABLE = 29;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die komplexe
-	 * Fremdschl&uuml;ssel-Definition.
+	 * Ein Bezeichner zum Zugriff auf die komplexe Fremdschl&uuml;ssel-Definition.
 	 */
 	public static final int ID_COMPLEX_FOREIGN_KEY_DEFINITION = 30;
 
 	private static int Count = 0;
+
+	private static final StringTrimer trimmer = new StringTrimer();
 
 	private boolean activeInApplication = false;
 	private Color beschriftungsfarbe = Color.black;
@@ -293,14 +267,10 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	/**
 	 * Generiert eine neue Tabelle mit den angegebenen Parametern.
 	 * 
-	 * @param view
-	 *            Der View, auf dem die Tabelle erstellt werden soll.
-	 * @param x
-	 *            Die X-Koordinate der linken, oberen Ecke der Tabelle.
-	 * @param y
-	 *            Die Y-Koordinate der linken, oberen Ecke der Tabelle.
-	 * @param d
-	 *            Das Diagramm, zu dem die Tabelle geh&ouml;rt.
+	 * @param view Der View, auf dem die Tabelle erstellt werden soll.
+	 * @param x    Die X-Koordinate der linken, oberen Ecke der Tabelle.
+	 * @param y    Die Y-Koordinate der linken, oberen Ecke der Tabelle.
+	 * @param d    Das Diagramm, zu dem die Tabelle geh&ouml;rt.
 	 */
 	public Tabelle(ViewModel view, int x, int y, DiagrammModel d) {
 		super();
@@ -311,11 +281,9 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	/* Mutatoren und Accessoren. */
 
 	/**
-	 * Setzt den &uuml;bergebenen Wert als neuen Wert f&uuml;r das Attribut
-	 * Name.
+	 * Setzt den &uuml;bergebenen Wert als neuen Wert f&uuml;r das Attribut Name.
 	 * 
-	 * @param name
-	 *            Der neue Wert f&uuml;r das Attribut Name.
+	 * @param name Der neue Wert f&uuml;r das Attribut Name.
 	 */
 	@Override
 	public void setName(String name) {
@@ -328,21 +296,16 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	/**
 	 * Diese Methode wandelt die Tabelle in ein Property-Template um.
 	 * 
-	 * @return Ein String mit der Property-Template-Repr&auml;sentation der
-	 *         Tabelle.
+	 * @return Ein String mit der Property-Template-Repr&auml;sentation der Tabelle.
 	 * 
 	 * @changed OLI 18.12.2007 - Hinzugef&uuml;gt.
 	 *          <P>
-	 *          OLI 22.12.2007 - Vervollst&auml;ndigung des Templates auf alle
-	 *          Attribute.
+	 *          OLI 22.12.2007 - Vervollst&auml;ndigung des Templates auf alle Attribute.
 	 *          <P>
-	 *          OLI 24.04.2008 - Wenn keine Farben f&uuml;r Schrift und
-	 *          Tabellenhintergrund angegeben, werden nun die Defaults schwarz
-	 *          f&uuml;r die Schrift und wei&szlig; f&uuml;r den Hintergrund
-	 *          angenommen.
+	 *          OLI 24.04.2008 - Wenn keine Farben f&uuml;r Schrift und Tabellenhintergrund angegeben, werden nun die
+	 *          Defaults schwarz f&uuml;r die Schrift und wei&szlig; f&uuml;r den Hintergrund angenommen.
 	 *          <P>
-	 *          OLI 11.08.2008 - Einbeziehung der TechnicalField-Flagge in das
-	 *          Template.
+	 *          OLI 11.08.2008 - Einbeziehung der TechnicalField-Flagge in das Template.
 	 * 
 	 */
 	public String toTemplate() {
@@ -570,8 +533,8 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 		}
 		return null;
 		/*
-		 * throw new NoSuchElementException("Tabellespalte mit Namen \"" + n +
-		 * "\" existiert " + "nicht in Tabelle \"" + this.getName() + "\"!");
+		 * throw new NoSuchElementException("Tabellespalte mit Namen \"" + n + "\" existiert " + "nicht in Tabelle \"" +
+		 * this.getName() + "\"!");
 		 */
 	}
 
@@ -585,8 +548,7 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	/**
 	 * @changed OLI 12.11.2008 - Erweiterung um den PaintMode.
 	 *          <P>
-	 *          OLI 16.12.2008 - Erweiterung um das ComponentDiagramm als
-	 *          Parameter.
+	 *          OLI 16.12.2008 - Erweiterung um das ComponentDiagramm als Parameter.
 	 *          <P>
 	 * 
 	 */
@@ -615,6 +577,7 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 		g2d.setFont(new Font("sansserif", Font.BOLD, fontsize));
 		hos = g2d.getFontMetrics().getHeight();
 		String namestr = (this.isInherited() ? "* " : "") + this.name;
+		namestr = trimLength(namestr);
 		if (this.isDraft()) {
 			namestr = "(".concat(namestr).concat(")");
 		}
@@ -732,13 +695,13 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 		y0 = this.drawHeader(cd, g2d, x, tmy, this.width, y0, fontsize, hos, pntm);
 		if (this.getHintergrundfarbe() != null) {
 			g2d.setColor(this.getHintergrundfarbe());
-			g2d.fillRect(cd.convert(tmx), cd.convert(tmy), cd.convert(this.width), cd
-					.convert((y0 + (int) ((double) hos * 0.6)) - tmy));
+			g2d.fillRect(cd.convert(tmx), cd.convert(tmy), cd.convert(this.width),
+					cd.convert((y0 + (int) ((double) hos * 0.6)) - tmy));
 			g2d.setColor(dcolor);
 		}
 		y0 = this.drawHeader(cd, g2d, x, tmy, this.width, ty0, fontsize, hos, pntm);
-		g2d.drawLine(cd.convert(tmx), cd.convert(y0 + (int) ((double) hos * 0.6)), cd.convert(tmx + this.width), cd
-				.convert(y0 + (int) ((double) hos * 0.6)));
+		g2d.drawLine(cd.convert(tmx), cd.convert(y0 + (int) ((double) hos * 0.6)), cd.convert(tmx + this.width),
+				cd.convert(y0 + (int) ((double) hos * 0.6)));
 		g.drawRect(cd.convert(tmx), cd.convert(tmy), cd.convert(this.width), cd.convert(this.height));
 		g2d.setColor(Color.lightGray);
 		g.fillRect(cd.convert(tmx + 3), cd.convert(tmy + this.height + 1), cd.convert(this.width + 1), cd.convert(3));
@@ -747,15 +710,19 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 			g2d.setColor(Color.red);
 			Stroke stroke = g2d.getStroke();
 			g2d.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER));
-			g.drawLine(cd.convert(tmx - 3), cd.convert(tmy - 3), cd.convert(tmx + this.width + 5), cd.convert(tmy
-					+ this.height + 5));
-			g.drawLine(cd.convert(tmx + this.width + 5), cd.convert(tmy - 3), cd.convert(tmx - 3), cd.convert(tmy
-					+ this.height + 5));
+			g.drawLine(cd.convert(tmx - 3), cd.convert(tmy - 3), cd.convert(tmx + this.width + 5),
+					cd.convert(tmy + this.height + 5));
+			g.drawLine(cd.convert(tmx + this.width + 5), cd.convert(tmy - 3), cd.convert(tmx - 3),
+					cd.convert(tmy + this.height + 5));
 			g2d.setStroke(stroke);
 		}
 		g2d.setColor(dcolor);
-		return new ShapeContainer(new Rectangle(cd.convert(tmx), cd.convert(tmy), cd.convert(this.width), cd
-				.convert(this.height)), this);
+		return new ShapeContainer(
+				new Rectangle(cd.convert(tmx), cd.convert(tmy), cd.convert(this.width), cd.convert(this.height)), this);
+	}
+
+	private String trimLength(String s) {
+		return trimmer.trimLength(s, Integer.getInteger("archimedes.maximum.strlen.table.header", 50), true);
 	}
 
 	private int getHeaderWidth(Graphics2D g2d, int fontsize) {
@@ -771,8 +738,8 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 		return w;
 	}
 
-	private int drawHeader(CoordinateConverter cd, Graphics2D g2d, int x, int yf, int w0, int y0, int fontsize,
-			int hos, PaintMode pntm) {
+	private int drawHeader(CoordinateConverter cd, Graphics2D g2d, int x, int yf, int w0, int y0, int fontsize, int hos,
+			PaintMode pntm) {
 		g2d.setFont(new Font("sansserif", Font.BOLD, fontsize - 2));
 		if (this.isNMRelation()) {
 			g2d.drawString("N:M", cd.convert(x + 2), cd.convert(yf + g2d.getFontMetrics().getHeight() - 2));
@@ -801,7 +768,7 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	}
 
 	private String getTableNameString() {
-		String n = (this.isInherited() ? "* " : "") + this.name;
+		String n = trimLength((this.isInherited() ? "* " : "") + this.name);
 		if (this.isDraft()) {
 			n = "(".concat(n).concat(")");
 		}
@@ -809,11 +776,11 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	}
 
 	private String getStereoTypeString(StereotypeModel stereotype) {
-		return "<< " + stereotype.toString() + " >>";
+		return "<< " + trimLength(stereotype.toString()) + " >>";
 	}
 
 	private String getOptionString(OptionModel option) {
-		return "-- " + this.renderOption(option) + " --";
+		return "-- " + trimLength(this.renderOption(option)) + " --";
 	}
 
 	private String renderOption(OptionModel option) {
@@ -825,8 +792,7 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	}
 
 	/**
-	 * @changed OLI 11.11.2008 - Erweiterung um die Anzeige der Kuller um
-	 *          Relationsknicke.
+	 * @changed OLI 11.11.2008 - Erweiterung um die Anzeige der Kuller um Relationsknicke.
 	 *          <P>
 	 *          OLI 12.11.2008 - Erweiterung um den PaintMode.
 	 *          <P>
@@ -857,9 +823,9 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 						g2d.setColor(new Color(0, 153, 102));
 						for (int j = 0; j < lenj; j++) {
 							p = (Point) points.elementAt(j);
-							g2d.drawArc((int) cd.convert(p.getX() - hthalf), (int) cd.convert(p.getY() - hthalf), cd
-									.convert(ComponentDiagramm.HIT_TOLERANCE), cd
-									.convert(ComponentDiagramm.HIT_TOLERANCE), 0, 360);
+							g2d.drawArc((int) cd.convert(p.getX() - hthalf), (int) cd.convert(p.getY() - hthalf),
+									cd.convert(ComponentDiagramm.HIT_TOLERANCE),
+									cd.convert(ComponentDiagramm.HIT_TOLERANCE), 0, 360);
 						}
 					}
 					if (ts.getReferencedTable().isExternalTable()) {
@@ -906,9 +872,8 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	}
 
 	/**
-	 * @changed OLI 18.12.2007 - Einbau der M&oumg;glichkeit die Fehlerausgabe
-	 *          bei fehlendem View zu unterdr&uuml;cken (Property
-	 *          <I>archimedes.scheme.Tabelle.suppress.table.out.of.bounds</I>).<BR>
+	 * @changed OLI 18.12.2007 - Einbau der M&oumg;glichkeit die Fehlerausgabe bei fehlendem View zu unterdr&uuml;cken
+	 *          (Property <I>archimedes.scheme.Tabelle.suppress.table.out.of.bounds</I>).<BR>
 	 */
 	@Override
 	public int getX(ViewModel view) {
@@ -923,9 +888,8 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	}
 
 	/**
-	 * @changed OLI 18.12.2007 - Einbau der M&oumg;glichkeit die Fehlerausgabe
-	 *          bei fehlendem View zu unterdr&uuml;cken (Property
-	 *          <I>archimedes.scheme.Tabelle.suppress.table.out.of.bounds</I>).<BR>
+	 * @changed OLI 18.12.2007 - Einbau der M&oumg;glichkeit die Fehlerausgabe bei fehlendem View zu unterdr&uuml;cken
+	 *          (Property <I>archimedes.scheme.Tabelle.suppress.table.out.of.bounds</I>).<BR>
 	 */
 	@Override
 	public int getY(ViewModel view) {
@@ -1116,8 +1080,8 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 		DefaultComponentFactory dcfcol = new DefaultComponentFactory(Archimedes.PALETTE.getColors());
 		DefaultEditorDescriptorList dedl = new DefaultEditorDescriptorList();
 		DefaultLabelFactory dlf = DefaultLabelFactory.INSTANZ;
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_NAME, dlf, dcf, "Name", 'M', null,
-				"Der Name der Tabelle"));
+		dedl.addElement(
+				new DefaultEditorDescriptor(0, this, ID_NAME, dlf, dcf, "Name", 'M', null, "Der Name der Tabelle"));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_DEPRECATED, dlf, dcf, "Aufgehoben", 'U', null,
 				"Die Aufgehoben-Markierung der Tabelle"));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_BESCHRIFTUNGSFARBE, dlf, dcfcol, "Beschriftungsfarbe",
@@ -1132,43 +1096,43 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 						+ "um die Tabelle in den produktiven Betrieb zu &uuml;bernehmen.")));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_EXTERNAL_TABLE, dlf, dcf, "Externe Tabelle", 'X', null,
 				StrUtil.FromHTML("Setzen Sie diese Flagge, um die" + " Tabelle als externe Tabelle zu markieren.")));
-		dedl.addElement(new DefaultSubEditorDescriptor(1, this, new TabellenspaltenSubEditorFactory(
-				DefaultVectorPanelButtonFactory.INSTANCE, Archimedes.guiBundle)));
-		dedl.addElement(new DefaultSubEditorDescriptor(2, this, new StereotypenSubEditorFactory(
-				DefaultVectorPanelButtonFactory.INSTANCE)));
+		dedl.addElement(new DefaultSubEditorDescriptor(1, this,
+				new TabellenspaltenSubEditorFactory(DefaultVectorPanelButtonFactory.INSTANCE, Archimedes.guiBundle)));
+		dedl.addElement(new DefaultSubEditorDescriptor(2, this,
+				new StereotypenSubEditorFactory(DefaultVectorPanelButtonFactory.INSTANCE)));
 		dedl.addElement(new DefaultSubEditorDescriptor(3, this, new CommentSubEditorFactory()));
 		dedl.addElement(new DefaultSubEditorDescriptor(4, this, new HistoryOwnerSubEditorFactory()));
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_CODIEREN, dlf, dcf, "Kodieren", 'K', null, StrUtil
 				.FromHTML("Setzen Sie diese Flagge, wenn f&uuml;r die " + "Tabelle Code generiert werden soll")));
-		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_CODEVERZEICHNIS, dlf, dcf, "Code-Verzeichnis", 'V',
-				null, StrUtil.FromHTML("Hier kann ein Verzeichnis "
-						+ "relativ zum eigentlichen Codepfad definiert werden in das der Code f&uuml;r "
-						+ "die Tabelle generiert werden soll")));
+		dedl.addElement(
+				new DefaultEditorDescriptor(5, this, ID_CODEVERZEICHNIS, dlf, dcf, "Code-Verzeichnis", 'V', null,
+						StrUtil.FromHTML("Hier kann ein Verzeichnis "
+								+ "relativ zum eigentlichen Codepfad definiert werden in das der Code f&uuml;r "
+								+ "die Tabelle generiert werden soll")));
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_KONTEXTNAME, dlf, dcf, "Kontextname", 'K', null,
 				StrUtil.FromHTML("Hier kann ein Kontextbezeichner " + "f&uuml;r die Tabelle definiert werden (z. B. "
 						+ "BIERBAUCHPFLEGE_GUMMIBAERCHENTABELLE)")));
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_UNIQUEFORMULA, dlf, dcf, "Unifikatsformel", 'U', null,
 				StrUtil.FromHTML("Eine Formel f&uuml;r den Bau " + "von Unifikatspr&uuml;fungen")));
-		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_COMPLEX_FOREIGN_KEY_DEFINITION, dlf, dcf, StrUtil
-				.FromHTML("Komplexer Fremdsch&uuml;ssel"), 'X', null, StrUtil
-				.FromHTML("Eine Formel f&uuml;r komplexen (mehrspaltigen) " + "Fremdschl&uuml;ssel der Tabelle.")));
+		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_COMPLEX_FOREIGN_KEY_DEFINITION, dlf, dcf,
+				StrUtil.FromHTML("Komplexer Fremdsch&uuml;ssel"), 'X', null, StrUtil.FromHTML(
+						"Eine Formel f&uuml;r komplexen (mehrspaltigen) " + "Fremdschl&uuml;ssel der Tabelle.")));
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_DYNAMICCODE, dlf, dcf, "Dynamic codieren", 'Y', null,
 				"Setzen Sie diese Flagge, wenn der Codegenerator" + " eine dynamische Klasse generieren soll"));
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_INHERITED, dlf, dcf, "Ererbt", 'E', null,
 				"Setzen Sie diese Flagge, um die Tabelle als ererbt zu kennzeichnen"));
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_ACTIVEINAPPLICATION, dlf, dcf, "Aktiv in Applikation",
-				'P', null, "Setzen Sie diese Flagge, um die Tabelle als"
-						+ " aktive Klasse in der Applikation zu kennzeichnen"));
+				'P', null,
+				"Setzen Sie diese Flagge, um die Tabelle als" + " aktive Klasse in der Applikation zu kennzeichnen"));
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_FIRSTGENERATIONDONE, dlf, dcf,
-				"Erstgenerierung erfolgt", 'G', null, StrUtil.FromHTML("Setzen Sie diese "
-						+ "Flagge, um f&uuml;r die Tabelle zu kennzeichnen, da&szlig; die "
+				"Erstgenerierung erfolgt", 'G', null,
+				StrUtil.FromHTML("Setzen Sie diese " + "Flagge, um f&uuml;r die Tabelle zu kennzeichnen, da&szlig; die "
 						+ "Codeerstgenerierung bereits erfolgt ist")));
-		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_CODEGENERATOROPTIONS, dlf, dcf,
-				"Codegeneratoroptionen", 'O', null, StrUtil.FromHTML("Hier k&ouml;nnen Sie "
-						+ "Optionen zum Codegenerator hinterlegen.")));
-		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_ADDITIONAL_CREATE_CONSTRAINTS, dlf, dcf, StrUtil
-				.FromHTML("Zust&auml;tzliche Create-Constraints"), 'Z', null, StrUtil
-				.FromHTML("Hier k&ouml;nnen Sie zus&auml;tzliche Constraints zum Create-" + "Statement hinterlegen.")));
+		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_CODEGENERATOROPTIONS, dlf, dcf, "Codegeneratoroptionen",
+				'O', null, StrUtil.FromHTML("Hier k&ouml;nnen Sie " + "Optionen zum Codegenerator hinterlegen.")));
+		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_ADDITIONAL_CREATE_CONSTRAINTS, dlf, dcf,
+				StrUtil.FromHTML("Zust&auml;tzliche Create-Constraints"), 'Z', null, StrUtil.FromHTML(
+						"Hier k&ouml;nnen Sie zus&auml;tzliche Constraints zum Create-" + "Statement hinterlegen.")));
 		dedl.addElement(new DefaultSubEditorDescriptor(6, this, new TabellenspaltenlistenSubEditorFactory(
 				DefaultVectorPanelButtonFactory.INSTANCE, ID_EQUALSMEMBERS, false)));
 		dedl.addElement(new DefaultSubEditorDescriptor(7, this, new TabellenspaltenlistenSubEditorFactory(
@@ -1183,13 +1147,13 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 				DefaultVectorPanelButtonFactory.INSTANCE, ID_AUSWAHLMEMBERS, true, 4, true)));
 		dedl.addElement(new DefaultSubEditorDescriptor(12, this, new TabellenspaltenlistenSubEditorFactory(
 				DefaultVectorPanelButtonFactory.INSTANCE, ID_ORDERMEMBERS, true, 3, true)));
-		dedl.addElement(new DefaultSubEditorDescriptor(13, this, new NReferenzlistenSubEditorFactory(
-				DefaultVectorPanelButtonFactory.INSTANCE, ID_NREFERENZEN, true)));
-		dedl.addElement(new DefaultSubEditorDescriptor(14, this, new PanellistenSubEditorFactory(
-				DefaultVectorPanelButtonFactory.INSTANCE)));
-		dedl.addElement(new DefaultSubEditorDescriptor(15, this, new OptionListSubEditorFactory(
-				DefaultVectorPanelButtonFactory.INSTANCE, Archimedes.guiBundle, this.diagramm
-						.getPredeterminedOptionProvider(), OptionType.TABLE)));
+		dedl.addElement(new DefaultSubEditorDescriptor(13, this,
+				new NReferenzlistenSubEditorFactory(DefaultVectorPanelButtonFactory.INSTANCE, ID_NREFERENZEN, true)));
+		dedl.addElement(new DefaultSubEditorDescriptor(14, this,
+				new PanellistenSubEditorFactory(DefaultVectorPanelButtonFactory.INSTANCE)));
+		dedl.addElement(new DefaultSubEditorDescriptor(15, this,
+				new OptionListSubEditorFactory(DefaultVectorPanelButtonFactory.INSTANCE, Archimedes.guiBundle,
+						this.diagramm.getPredeterminedOptionProvider(), OptionType.TABLE)));
 		return dedl;
 	}
 
@@ -1330,12 +1294,9 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	@Override
 	public int getPanelCount() {
 		/*
-		 * Vector v = new Vector(); int panel = 0; for (int i = 0, len =
-		 * this.getTabellenspaltenCount(); i < len; i++) { TabellenspaltenModel
-		 * tsm = this.getTabellenspalteAt(i); if (!v.contains(new
-		 * Integer(tsm.getPanelNumber()))) { v.addElement(new
-		 * Integer(tsm.getPanelNumber())); } } return v.size() +
-		 * this.getNReferenzModelCount();
+		 * Vector v = new Vector(); int panel = 0; for (int i = 0, len = this.getTabellenspaltenCount(); i < len; i++) {
+		 * TabellenspaltenModel tsm = this.getTabellenspalteAt(i); if (!v.contains(new Integer(tsm.getPanelNumber()))) {
+		 * v.addElement(new Integer(tsm.getPanelNumber())); } } return v.size() + this.getNReferenzModelCount();
 		 */
 		return this.panels.size();
 	}
@@ -1505,8 +1466,8 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	/**
 	 * @changed OLI 22.05.2009 - Hinzugef&uuml;gt
 	 *          <P>
-	 *          OLI 28.05.2009 - Debugging: Beseitigung des Fehlers, wenn keine
-	 *          Nichtprim&auml;rschl&uuml;sselattribute vorhanden sind.
+	 *          OLI 28.05.2009 - Debugging: Beseitigung des Fehlers, wenn keine Nichtprim&auml;rschl&uuml;sselattribute
+	 *          vorhanden sind.
 	 *          <P>
 	 * 
 	 */
@@ -1572,10 +1533,9 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	}
 
 	/**
-	 * @changed OLI 30.12.2008 - Erweiterung um die Ber&uuml;cksichtigung von
-	 *          Defaultwerten. Hat eine Domain den String "NULL" als
-	 *          Initialwert, wird dieser in den Datenbanken NULL-Wert umgesetzt
-	 *          und bleibt unber&uuml;cksichtigt.
+	 * @changed OLI 30.12.2008 - Erweiterung um die Ber&uuml;cksichtigung von Defaultwerten. Hat eine Domain den String
+	 *          "NULL" als Initialwert, wird dieser in den Datenbanken NULL-Wert umgesetzt und bleibt
+	 *          unber&uuml;cksichtigt.
 	 *          <P>
 	 * 
 	 */
@@ -1592,8 +1552,7 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	}
 
 	/**
-	 * @changed OLI 12.05.2009 - Hinzugef&uuml;gt (durch Signatur
-	 *          &Auml;nderung).
+	 * @changed OLI 12.05.2009 - Hinzugef&uuml;gt (durch Signatur &Auml;nderung).
 	 */
 	@Override
 	public String makeCreateStatement(boolean hasDomains, boolean setReferences, boolean noticeFkNotNull,
@@ -1612,8 +1571,8 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 		}
 		for (int j = 0, lenj = this.getTabellenspaltenCount(); j < lenj; j++) {
 			tsm = this.getTabellenspalteAt(j);
-			sb.append("    ").append(this.quoteString(tsm.getName(), nameQuotes)).append(" ").append(
-					(hasDomains ? tsm.getDomain().getName() : tsm.getDomain().getType()));
+			sb.append("    ").append(this.quoteString(tsm.getName(), nameQuotes)).append(" ")
+					.append((hasDomains ? tsm.getDomain().getName() : tsm.getDomain().getType()));
 			notnull = (tsm.isNotNull() && (tsm.isPrimarykey() || ((tsm.getRelation() != null) && noticeFkNotNull)));
 			if (tsm.isPrimarykey()) {
 				if (pkcount == 1) {
@@ -1634,10 +1593,10 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 				}
 			}
 			if (setReferences && (tsm.getRelation() != null)) {
-				sb.append(" references ").append(
-						this.quoteString(tsm.getRelation().getReferenced().getTable().getName(), nameQuotes)).append(
-						" (").append(this.quoteString(tsm.getRelation().getReferenced().getName(), nameQuotes)).append(
-						")");
+				sb.append(" references ")
+						.append(this.quoteString(tsm.getRelation().getReferenced().getTable().getName(), nameQuotes))
+						.append(" (").append(this.quoteString(tsm.getRelation().getReferenced().getName(), nameQuotes))
+						.append(")");
 			}
 			if ((j < lenj - 1) || (pkcount > 1)) {
 				sb.append(",");
@@ -1695,8 +1654,8 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	public String makeInsertStatementCounted() {
 		int i = 0;
 		int leni = 0;
-		StringBuffer sb = new StringBuffer("insert into ").append(this.getName()).append(" (").append(
-				this.getFieldnames(true, true)).append(") values (");
+		StringBuffer sb = new StringBuffer("insert into ").append(this.getName()).append(" (")
+				.append(this.getFieldnames(true, true)).append(") values (");
 		for (i = 0, leni = this.getTabellenspaltenCount(); i < leni; i++) {
 			if (i != 0) {
 				sb.append(", ");
@@ -1763,22 +1722,16 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	/* Statische Methoden. */
 
 	/**
-	 * Pr&uuml;ft, ob jedes TabellenspaltenModel in referenced von einem
-	 * TabellenspaltenModel in <TT>referencing</TT> referenziert wird und ob
-	 * beide Vektoren gleich viele Elemente haben. Falls dies so ist, folgt
-	 * daraus, dass jedes TabellenspaltenModel in <TT>referencing</TT> ein
-	 * TabellenspaltenModel in <TT>referenced</TT> referenziert.
+	 * Pr&uuml;ft, ob jedes TabellenspaltenModel in referenced von einem TabellenspaltenModel in <TT>referencing</TT>
+	 * referenziert wird und ob beide Vektoren gleich viele Elemente haben. Falls dies so ist, folgt daraus, dass jedes
+	 * TabellenspaltenModel in <TT>referencing</TT> ein TabellenspaltenModel in <TT>referenced</TT> referenziert.
 	 * 
-	 * @param referencing
-	 *            Die (potenziellen) Fremdschl&uuml;sselspalten
-	 * @param referenced
-	 *            Die (m&ouml;glicherweise) referenzierten Spalten.
-	 * @return <TT>true</TT>, falls jedes TabellenspaltenModel in
-	 *         <TT>referenced</TT> von einem TabellenspaltenModel in
-	 *         <TT>referencing</TT> referenziert wird und falls beide Vektoren
-	 *         au&szlig;erdem gleich viele Elemente haben. <TT>false</TT> sonst.
-	 * @exception IllegalArgumentException
-	 *                Wird geworfen, falls ein Parameter <TT>null</TT> ist.
+	 * @param referencing Die (potenziellen) Fremdschl&uuml;sselspalten
+	 * @param referenced  Die (m&ouml;glicherweise) referenzierten Spalten.
+	 * @return <TT>true</TT>, falls jedes TabellenspaltenModel in <TT>referenced</TT> von einem TabellenspaltenModel in
+	 *         <TT>referencing</TT> referenziert wird und falls beide Vektoren au&szlig;erdem gleich viele Elemente
+	 *         haben. <TT>false</TT> sonst.
+	 * @exception IllegalArgumentException Wird geworfen, falls ein Parameter <TT>null</TT> ist.
 	 */
 	public static boolean IsFullReferenced(Vector<TabellenspaltenModel> referencing,
 			Vector<TabellenspaltenModel> referenced) {
@@ -1806,14 +1759,12 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	}
 
 	/**
-	 * Liefert eine Map mit den Tabellenspalten, die Felder der vorliegenden
-	 * Tabelle referenzieren. Die Tabellenspalten bilden hierbei den
-	 * Schl&uuml;sselwert f&uuml;r die Map. Der Wertteil des Tupels ist die
-	 * Tabellenspalten der vorliegenden Tabelle, auf die referenziert wird.
+	 * Liefert eine Map mit den Tabellenspalten, die Felder der vorliegenden Tabelle referenzieren. Die Tabellenspalten
+	 * bilden hierbei den Schl&uuml;sselwert f&uuml;r die Map. Der Wertteil des Tupels ist die Tabellenspalten der
+	 * vorliegenden Tabelle, auf die referenziert wird.
 	 * 
-	 * @return Map&gt;Tabellenspalte, Tabellenspalte&lt; mit den
-	 *         Tabellenspalten, die auf eine Spalte der Tabelle verweisen und
-	 *         den Tabellenspalten, auf die verwiesen wird.
+	 * @return Map&gt;Tabellenspalte, Tabellenspalte&lt; mit den Tabellenspalten, die auf eine Spalte der Tabelle
+	 *         verweisen und den Tabellenspalten, auf die verwiesen wird.
 	 * 
 	 * @changed OLI 05.09.2008 - Hinzugef&uuml;gt.
 	 *          <P>
@@ -2027,11 +1978,9 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	}
 
 	/*
-	 * TODO: Take the missing methods and attributes over to this
-	 * implementation.
+	 * TODO: Take the missing methods and attributes over to this implementation.
 	 * 
-	 * The following methods are approved by the current model interface
-	 * (TableModel).
+	 * The following methods are approved by the current model interface (TableModel).
 	 */
 
 	private String additionalCreateConstraints = "";
