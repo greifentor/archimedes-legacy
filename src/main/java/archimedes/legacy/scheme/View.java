@@ -31,29 +31,28 @@ import corent.djinn.DefaultLabelFactory;
 import corent.djinn.DefaultSubEditorDescriptor;
 import corent.djinn.DefaultTabDescriptor;
 import corent.djinn.DefaultTabbedPaneFactory;
-import corent.djinn.Editable;
 import corent.djinn.EditorDescriptorList;
 import corent.djinn.TabDescriptor;
+import corent.djinn.TabbedEditable;
 import corent.djinn.TabbedPaneFactory;
 
 /**
- * Diese Klasse repr&auml;sentiert einen View f&uuml;r Tabellen des
- * Archimedes-Systems.
+ * Diese Klasse repr&auml;sentiert einen View f&uuml;r Tabellen des Archimedes-Systems.
  * 
  * @author ollie
  *         <P>
  * 
- * @changed <P>
- *          OLI 11.05.2008 - Erweiterung der Implementierung des Interfaces
- *          <TT>TabbedEditable</TT> um die Methode <TT>isTabEnabled(int)</TT>.
+ * @changed
  *          <P>
- *          OLI 10.08.2008 - Erweiterung um die M&ouml;glichkeit angeben zu
- *          k&ouml;nnen, ob technische Felder in der Diagrammanzeige versteckt
- *          werden sollen.
+ *          OLI 11.05.2008 - Erweiterung der Implementierung des Interfaces <TT>TabbedEditable</TT> um die Methode
+ *          <TT>isTabEnabled(int)</TT>.
+ *          <P>
+ *          OLI 10.08.2008 - Erweiterung um die M&ouml;glichkeit angeben zu k&ouml;nnen, ob technische Felder in der
+ *          Diagrammanzeige versteckt werden sollen.
  * 
  */
 
-public class View implements Attributed, Editable, GUIViewModel, ViewModel {
+public class View implements Attributed, TabbedEditable, GUIViewModel, ViewModel {
 
 	/** Bezeichner f&uuml;r den Zugriff auf die Eigenschaft Bezeichnung. */
 	public static final int ID_BEZEICHNUNG = 0;
@@ -62,13 +61,11 @@ public class View implements Attributed, Editable, GUIViewModel, ViewModel {
 	/** Bezeichner f&uuml;r den Zugriff auf die Eigenschaft Tabellen. */
 	public static final int ID_TABELLEN = 2;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Flagge zur Anzeige von referenzierten
-	 * Spaltennamen im Diagramm.
+	 * Ein Bezeichner zum Zugriff auf die Flagge zur Anzeige von referenzierten Spaltennamen im Diagramm.
 	 */
 	public static final int ID_SHOWREFERENCEDCOLUMNAMES = 3;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Flagge zur Anzeige von technischen
-	 * Spaltennamen im Diagramm.
+	 * Ein Bezeichner zum Zugriff auf die Flagge zur Anzeige von technischen Spaltennamen im Diagramm.
 	 */
 	public static final int ID_HIDETECHNICALFIELDS = 4;
 
@@ -80,14 +77,10 @@ public class View implements Attributed, Editable, GUIViewModel, ViewModel {
 	/**
 	 * Generiert eine Instanz der Klasse mit Defaultwerten.
 	 * 
-	 * @param bezeichnung
-	 *            Eine Bezeichnung f&uuml;r die View.
-	 * @param kommentar
-	 *            Ein Kommentar zur View.
-	 * @param isShowReferencedColumns
-	 *            Mit diesem Parameter wird angegeben, ob in dem View die
-	 *            FK-Referenzen mit des referenzierten Spaltennamen ausgegeben
-	 *            werden sollen.
+	 * @param bezeichnung             Eine Bezeichnung f&uuml;r die View.
+	 * @param kommentar               Ein Kommentar zur View.
+	 * @param isShowReferencedColumns Mit diesem Parameter wird angegeben, ob in dem View die FK-Referenzen mit des
+	 *                                referenzierten Spaltennamen ausgegeben werden sollen.
 	 */
 	public View(String bezeichnung, String kommentar, boolean isShowReferencedColumns) {
 		super();
@@ -114,8 +107,7 @@ public class View implements Attributed, Editable, GUIViewModel, ViewModel {
 	/**
 	 * Mutator f&uuml;r das Attribut Bezeichnung.
 	 * 
-	 * @param bezeichnung
-	 *            Der neue Wert des Attributs Bezeichnung.
+	 * @param bezeichnung Der neue Wert des Attributs Bezeichnung.
 	 */
 	public void setBezeichnung(String bezeichnung) {
 		if (bezeichnung == null) {
@@ -214,12 +206,12 @@ public class View implements Attributed, Editable, GUIViewModel, ViewModel {
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_BEZEICHNUNG, dlf, dcf, "Bezeichnung", 'B', null,
 				"Der Name des View"));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_SHOWREFERENCEDCOLUMNAMES, dlf, dcf,
-				"Referenzierte Spalten anzeigen", 'R', null, "Setzen Sie diese Flagge, um "
-						+ "die Namen der durch Foreignkeys referenzierten Spalten\nim Diagramm "
+				"Referenzierte Spalten anzeigen", 'R', null,
+				"Setzen Sie diese Flagge, um " + "die Namen der durch Foreignkeys referenzierten Spalten\nim Diagramm "
 						+ "angezeigt zu bekommen"));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_HIDETECHNICALFIELDS, dlf, dcf,
-				"Technische Spalten nicht anzeigen", 'T', null, "Setzen Sie diese Flagge, "
-						+ "um die Anzeige technischer Spalten im Diagramm zu unterbinden."));
+				"Technische Spalten nicht anzeigen", 'T', null,
+				"Setzen Sie diese Flagge, " + "um die Anzeige technischer Spalten im Diagramm zu unterbinden."));
 		dedl.addElement(new DefaultSubEditorDescriptor(1, this, new CommentSubEditorFactory()));
 		return dedl;
 	}
