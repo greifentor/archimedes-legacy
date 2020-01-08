@@ -456,12 +456,14 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				doBearbeitenStereotype();
 			}
 		}));
-		menu.add(this.createMenuItem("menu.edit.item.views", null, new ActionListener() {
+		JMenuItem menuItemEditViews = this.createMenuItem("menu.edit.item.views", null, new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				doBearbeitenViews();
 			}
-		}));
+		});
+		menuItemEditViews.setEnabled(Boolean.getBoolean("diagramm.views.enabled"));
+		menu.add(menuItemEditViews);
 		menu.add(new JSeparator());
 		menu.add(this.createMenuItem("menu.edit.item.diagramm.parameters", null, new ActionListener() {
 			@Override
@@ -590,6 +592,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		}));
 		menuBar.add(menu);
 		this.viewmenu = this.createMenu("menu.views", "views");
+		this.viewmenu.setEnabled(Boolean.getBoolean("diagramm.views.enabled"));
 		this.menuitemtabletoview = this.createMenuItem("menu.views.item.add.table", "tableinsert",
 				new ActionListener() {
 					@Override
