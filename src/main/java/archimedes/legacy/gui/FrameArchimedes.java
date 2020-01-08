@@ -402,18 +402,21 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 		menuBar.add(menu);
 		menu = this.createMenu("menu.new", "filenew");
-		menu.add(this.createMenuItem("menu.new.item.table", "tablenew", new ActionListener() {
+		this.menuitemneutabelle = this.createMenuItem("menu.new.item.table", "tablenew", new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				doNeuTabelle(false);
 			}
-		}));
-		menu.add(this.createMenuItem("menu.new.item.table.standard", null, new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				doNeuTabelle(true);
-			}
-		}));
+		});
+		menu.add(this.menuitemneutabelle);
+		this.menuitemneustandardtabelle = this.createMenuItem("menu.new.item.table.standard", null,
+				new ActionListener() {
+					@Override
+					public void actionPerformed(final ActionEvent e) {
+						doNeuTabelle(true);
+					}
+				});
+		menu.add(this.menuitemneustandardtabelle);
 		menu.add(this.createMenuItem("menu.new.item.read.template", "tableimport", new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
