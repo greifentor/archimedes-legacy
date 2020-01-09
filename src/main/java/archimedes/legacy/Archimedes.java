@@ -1938,7 +1938,7 @@ public class Archimedes {
 		try {
 			corentx.io.FileUtil.readProperties(System.getProperties(), propfn);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("configured properties file not found: " + propfn);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1986,44 +1986,46 @@ public class Archimedes {
 		 * System.getProperty("archimedes.main.instance.host.name", "RHODOS"); userPing = new UserPing(serverName,
 		 * System.getProperty("archimedes.user.token")); frame.setUserPing(userPing); }
 		 */
-		ADF.setApplication(new ArchimedesApplication() {
-			public String getPrintername() {
-				return null;
-			}
+		if (ADF != null) {
+			ADF.setApplication(new ArchimedesApplication() {
+				public String getPrintername() {
+					return null;
+				}
 
-			public SecurityController getSecurityController() {
-				return null;
-			}
+				public SecurityController getSecurityController() {
+					return null;
+				}
 
-			public JFrame getFrame() {
-				return frame;
-			}
+				public JFrame getFrame() {
+					return frame;
+				}
 
-			public JDesktopPane getDesktop() {
-				return null;
-			}
+				public JDesktopPane getDesktop() {
+					return null;
+				}
 
-			public DBFactoryController getDFC() {
-				return null;
-			}
+				public DBFactoryController getDFC() {
+					return null;
+				}
 
-			public String getImagePath() {
-				return null;
-			}
+				public String getImagePath() {
+					return null;
+				}
 
-			public ArchimedesDescriptorFactory getADF() {
-				return ADF;
-			}
+				public ArchimedesDescriptorFactory getADF() {
+					return ADF;
+				}
 
-			public Object getUser() {
-				return null;
-			}
+				public Object getUser() {
+					return null;
+				}
 
-			public Hashtable<Class, DBFactory> createFactories(ArchimedesDescriptorFactory adf) {
-				return null;
-			}
-		});
-		ApplicationObject.STANDARDAPP = ADF.getApplication();
+				public Hashtable<Class, DBFactory> createFactories(ArchimedesDescriptorFactory adf) {
+					return null;
+				}
+			});
+			ApplicationObject.STANDARDAPP = ADF.getApplication();
+		}
 	}
 
 	/**

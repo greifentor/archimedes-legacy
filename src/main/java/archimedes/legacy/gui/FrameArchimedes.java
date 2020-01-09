@@ -462,7 +462,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				doBearbeitenViews();
 			}
 		});
-		menuItemEditViews.setEnabled(Boolean.getBoolean("diagramm.views.enabled"));
+		menuItemEditViews.setEnabled(isViewLogicEnabled());
 		menu.add(menuItemEditViews);
 		menu.add(new JSeparator());
 		menu.add(this.createMenuItem("menu.edit.item.diagramm.parameters", null, new ActionListener() {
@@ -592,7 +592,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		}));
 		menuBar.add(menu);
 		this.viewmenu = this.createMenu("menu.views", "views");
-		this.viewmenu.setEnabled(Boolean.getBoolean("diagramm.views.enabled"));
+		this.viewmenu.setEnabled(isViewLogicEnabled());
 		this.menuitemtabletoview = this.createMenuItem("menu.views.item.add.table", "tableinsert",
 				new ActionListener() {
 					@Override
@@ -666,6 +666,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		this.createUserInformations(ini);
 		this.setBounds(ini.readInt("MainWindow", "x", 100), ini.readInt("MainWindow", "y", 100),
 				ini.readInt("MainWindow", "width", 600), ini.readInt("MainWindow", "height", 480));
+	}
+
+	private boolean isViewLogicEnabled() {
+		return Boolean.getBoolean("archimedes.diagram.view.logic.enabled");
 	}
 
 	private JMenu createMenu(final String resourceId, final String imageId) {
@@ -1664,7 +1668,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 		try {
 			if ((cfcn == null) || (cfcn.length() == 0)) {
-				cfcn = this.ini.readStr("CodeGenerator", "Class", "CODEFACTORYCLASS");
+				cfcn = this.ini.readStr("CodeGenerator", "Class",
+						System.getProperty("archimedes.default.codefactory.class", "CODEFACTORYCLASS"));
 			}
 
 			if (cfcn.startsWith("gengen:")) {
