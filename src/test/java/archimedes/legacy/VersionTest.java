@@ -33,13 +33,13 @@ public class VersionTest {
 	@Test
 	/** Test der Methode <TT>getVersion()</TT>. */
 	public void testGetVersion() {
-		assertEquals("1.83.5", Version.INSTANCE.getVersion());
+		assertEquals("1.83.6", Version.INSTANCE.getVersion());
 	}
 
 	@Test
 	/** Test der Methode <TT>toString()</TT>. */
 	public void testToString() {
-		assertEquals("1.83.5", Version.INSTANCE.toString());
+		assertEquals("1.83.6", Version.INSTANCE.toString());
 	}
 
 }

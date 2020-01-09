@@ -504,19 +504,25 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			}
 		}));
 		menu.add(new JSeparator());
-		menu.add(this.createMenuItem("menu.edit.item.create.update.script", "generate", new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				doBearbeitenUpdateScriptErstellenNeu();
-			}
-		}));
+		JMenuItem menuItemUpdateScript = this.createMenuItem("menu.edit.item.create.update.script", "generate",
+				new ActionListener() {
+					@Override
+					public void actionPerformed(final ActionEvent e) {
+						doBearbeitenUpdateScriptErstellenNeu();
+					}
+				});
+		menuItemUpdateScript.setEnabled(isSQLLogicEnabled());
+		menu.add(menuItemUpdateScript);
 		menu.addSeparator();
-		menu.add(this.createMenuItem("menu.edit.item.compare.models", "compare", new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				doBearbeitenDatenmodellVergleichen();
-			}
-		}));
+		JMenuItem menuItemCompareModels = this.createMenuItem("menu.edit.item.compare.models", "compare",
+				new ActionListener() {
+					@Override
+					public void actionPerformed(final ActionEvent e) {
+						doBearbeitenDatenmodellVergleichen();
+					}
+				});
+		menuItemCompareModels.setEnabled(isSQLLogicEnabled());
+		menu.add(menuItemCompareModels);
 		menu.addSeparator();
 		menu.add(this.createMenuItem("menu.edit.item.run.javascript", "run", new ActionListener() {
 			@Override
@@ -670,6 +676,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 	private boolean isViewLogicEnabled() {
 		return Boolean.getBoolean("archimedes.diagram.view.logic.enabled");
+	}
+
+	private boolean isSQLLogicEnabled() {
+		return Boolean.getBoolean("archimedes.diagram.sql.logic.enabled");
 	}
 
 	private JMenu createMenu(final String resourceId, final String imageId) {
