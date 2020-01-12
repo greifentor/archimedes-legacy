@@ -36,7 +36,7 @@ public class Version {
 	 * @return Die Versionsnummer zur Applikation.
 	 */
 	public String getVersion() {
-		return "1.83.6";
+		return "1.84.1";
 	}
 
 	@Override

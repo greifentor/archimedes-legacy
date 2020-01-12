@@ -80,6 +80,7 @@ import archimedes.gui.diagram.ComponentDiagramListener;
 import archimedes.gui.diagram.ComponentDiagramm;
 import archimedes.gui.diagram.GUIObjectTypes;
 import archimedes.legacy.Archimedes;
+import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.app.ApplicationUtil;
 import archimedes.legacy.gui.comparision.DataModelComparison;
 import archimedes.legacy.gui.configuration.BaseConfiguration;
@@ -1660,15 +1661,19 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			}
 		} else {
 			final FrameArchimedes fa = this;
-			final Thread t = new Thread(new Runnable() {
-				public void run() {
-					((CodeFactory) cf).addCodeFactoryListener(fa);
-					((CodeFactory) cf).setDataModel(fa.diagramm);
-					((CodeFactory) cf).generate(path);
+			final Thread t = new Thread(() -> {
+				((CodeFactory) cf).addCodeFactoryListener(fa);
+				((CodeFactory) cf).setDataModel(fa.diagramm);
+				if (cf instanceof CodeFactoryProgressionEventProvider) {
+					((CodeFactoryProgressionEventProvider) cf).addCodeFactoryProgressionListener(event -> {
+						LOG.info("Detected: " + event);
+					});
 				}
+				((CodeFactory) cf).generate(path);
 			});
 			t.start();
 		}
+
 	}
 
 	private Object getCodeFactory(final String path) {
