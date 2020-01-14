@@ -14,7 +14,9 @@ SET CP=%CP%;%LIB%\corentx-taglets-1.23.1.jar
 SET CP=%CP%;%LIB%\gengen-1.12.2.jar
 SET CP=%CP%;%LIB%\log4j-1.2.13.jar
 
-SET DEBUG_OPTIONS=-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n
+IF "%1"=="NO_DEBUG" GOTO NoDebug
+    SET DEBUG_OPTIONS=-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n
+:NoDebug
 
 SET ADDITIONAL_OPTIONS=-Darchimedes.maximum.strlen.table.header=50
 
