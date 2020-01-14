@@ -81,6 +81,8 @@ import archimedes.gui.diagram.ComponentDiagramm;
 import archimedes.gui.diagram.GUIObjectTypes;
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
+import archimedes.legacy.acf.gui.CodeFactoryProgressionFrame;
+import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.legacy.app.ApplicationUtil;
 import archimedes.legacy.gui.comparision.DataModelComparison;
 import archimedes.legacy.gui.configuration.BaseConfiguration;
@@ -1661,15 +1663,23 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			}
 		} else {
 			final FrameArchimedes fa = this;
+			final CodeFactoryProgressionFrame progressionFrame = (cf instanceof StandardCodeFactoryProgressionFrameUser
+					? new CodeFactoryProgressionFrame(guiBundle)
+					: null);
 			final Thread t = new Thread(() -> {
 				((CodeFactory) cf).addCodeFactoryListener(fa);
 				((CodeFactory) cf).setDataModel(fa.diagramm);
 				if (cf instanceof CodeFactoryProgressionEventProvider) {
 					((CodeFactoryProgressionEventProvider) cf).addCodeFactoryProgressionListener(event -> {
-						LOG.info("Detected: " + event);
+						if (progressionFrame != null) {
+							progressionFrame.processEvent(event);
+						}
 					});
 				}
 				((CodeFactory) cf).generate(path);
+				if (progressionFrame != null) {
+					progressionFrame.enableCloseButton();
+				}
 			});
 			t.start();
 		}

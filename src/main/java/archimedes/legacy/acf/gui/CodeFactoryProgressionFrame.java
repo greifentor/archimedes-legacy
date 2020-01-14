@@ -1,5 +1,19 @@
 package archimedes.legacy.acf.gui;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+import archimedes.legacy.acf.event.CodeFactoryProgressionEvent;
 import baccara.gui.GUIBundle;
 import corent.gui.JFrameWithInifile;
 
@@ -8,10 +22,97 @@ import corent.gui.JFrameWithInifile;
  *
  * @author ollie (12.01.2020)
  */
-public class CodeFactoryProgressionFrame extends JFrameWithInifile {
+public class CodeFactoryProgressionFrame extends JFrameWithInifile implements ActionListener {
+
+	private JButton buttonClose = null;
+	private JLabel labelProcess = new JLabel();
+	private JLabel labelStep = new JLabel();
+	private JProgressBar progressBarProcesses = new JProgressBar();
+	private JProgressBar progressBarSteps = new JProgressBar();
+	private JTextArea textArea = new JTextArea(40, 10);
+
+	private GUIBundle guiBundle = null;
 
 	public CodeFactoryProgressionFrame(GUIBundle guiBundle) {
 		super(guiBundle.getInifile());
+		this.guiBundle = guiBundle;
+		setContentPane(getMainPanel());
+		pack();
+		setVisible(true);
+	}
+
+	private JPanel getMainPanel() {
+		JPanel panel = new JPanel(new BorderLayout(this.guiBundle.getHGap(), this.guiBundle.getVGap()));
+		panel.add(getProgressBarPanel(), BorderLayout.NORTH);
+		panel.add(getMessagePanel(), BorderLayout.CENTER);
+		panel.add(getButtonPanel(), BorderLayout.SOUTH);
+		return panel;
+	}
+
+	private JPanel getProgressBarPanel() {
+		JPanel panel = new JPanel(new GridLayout(4, 1, this.guiBundle.getHGap(), this.guiBundle.getVGap()));
+		this.progressBarProcesses.setStringPainted(true);
+		this.progressBarSteps.setStringPainted(true);
+		panel.add(this.labelStep);
+		panel.add(this.progressBarSteps);
+		panel.add(this.labelProcess);
+		panel.add(this.progressBarProcesses);
+		return panel;
+	}
+
+	private JPanel getMessagePanel() {
+		JPanel panel = new JPanel(new GridLayout(1, 1, this.guiBundle.getHGap(), this.guiBundle.getVGap()));
+		panel.add(new JScrollPane(this.textArea));
+		return panel;
+	}
+
+	private JPanel getButtonPanel() {
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, this.guiBundle.getHGap(), this.guiBundle.getVGap()));
+		this.buttonClose = new JButton("CLOSE");
+		this.buttonClose.addActionListener(this);
+		this.buttonClose.setEnabled(false);
+		panel.add(this.buttonClose);
+		return panel;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == this.buttonClose) {
+			setVisible(false);
+			dispose();
+		}
+	}
+
+	public void enableCloseButton() {
+		this.buttonClose.setEnabled(true);
+	}
+
+	public void processEvent(CodeFactoryProgressionEvent event) {
+		System.out.println("PROCESSED: " + event);
+		if (event.getCurrentProcess() != null) {
+			this.progressBarProcesses.setValue(event.getCurrentProcess());
+			this.progressBarProcesses.setString("" + event.getCurrentProcess());
+		}
+		if (event.getCurrentStep() != null) {
+			this.progressBarSteps.setValue(event.getCurrentStep());
+			this.progressBarSteps.setString("" + event.getCurrentStep());
+		}
+		if (event.getFactoryName() != null) {
+			this.labelStep.setText(event.getFactoryName());
+		}
+		if (event.getMaximumProcessCount() != null) {
+			this.progressBarProcesses.setMaximum(event.getMaximumProcessCount());
+		}
+		if (event.getMaximumStepCount() != null) {
+			this.progressBarSteps.setMaximum(event.getMaximumStepCount());
+		}
+		if (event.getMessage() != null) {
+			this.textArea.setText(
+					this.textArea.getText() + (this.textArea.getText().isEmpty() ? "" : "\n") + event.getMessage());
+		}
+		if (event.getProcessName() != null) {
+			this.labelProcess.setText(event.getProcessName());
+		}
 	}
 
 }
