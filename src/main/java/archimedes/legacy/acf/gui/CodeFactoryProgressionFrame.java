@@ -36,6 +36,7 @@ public class CodeFactoryProgressionFrame extends JFrameWithInifile implements Ac
 	public CodeFactoryProgressionFrame(GUIBundle guiBundle) {
 		super(guiBundle.getInifile());
 		this.guiBundle = guiBundle;
+		setTitle(this.guiBundle.getResourceText("archimedes.CodeFactoryProgressionFrame.title"));
 		setContentPane(getMainPanel());
 		pack();
 		setVisible(true);
@@ -62,14 +63,15 @@ public class CodeFactoryProgressionFrame extends JFrameWithInifile implements Ac
 
 	private JPanel getMessagePanel() {
 		JPanel panel = new JPanel(new GridLayout(1, 1, this.guiBundle.getHGap(), this.guiBundle.getVGap()));
+		this.textArea.setEditable(false);
 		panel.add(new JScrollPane(this.textArea));
 		return panel;
 	}
 
 	private JPanel getButtonPanel() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, this.guiBundle.getHGap(), this.guiBundle.getVGap()));
-		this.buttonClose = new JButton("CLOSE");
-		this.buttonClose.addActionListener(this);
+		this.buttonClose = this.guiBundle.createButton("archimedes.CodeFactoryProgressionFrame.button.close", "close",
+				this, panel);
 		this.buttonClose.setEnabled(false);
 		panel.add(this.buttonClose);
 		return panel;
@@ -88,7 +90,6 @@ public class CodeFactoryProgressionFrame extends JFrameWithInifile implements Ac
 	}
 
 	public void processEvent(CodeFactoryProgressionEvent event) {
-		System.out.println("PROCESSED: " + event);
 		if (event.getCurrentProcess() != null) {
 			this.progressBarProcesses.setValue(event.getCurrentProcess());
 			this.progressBarProcesses.setString("" + event.getCurrentProcess());
