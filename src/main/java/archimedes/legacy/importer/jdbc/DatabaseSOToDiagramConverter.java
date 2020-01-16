@@ -61,6 +61,7 @@ public class DatabaseSOToDiagramConverter {
 		if (this.tableAdjustment == Adjustment.CENTER_BY_REFERENCE_COUNT) {
 			x = 5250;
 		}
+		diagram.setName(database.getName());
 		SchemeSO scheme = database.getSchemes().get(0);
 		List<TableSO> l = scheme.getTables() //
 				.stream() //
