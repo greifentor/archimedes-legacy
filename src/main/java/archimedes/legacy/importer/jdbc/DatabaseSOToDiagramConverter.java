@@ -18,11 +18,13 @@ import archimedes.model.DomainModel;
 import archimedes.model.TableModel;
 import archimedes.model.ViewModel;
 import archimedes.model.gui.GUIViewModel;
+import archimedes.scheme.Option;
 import corent.base.Direction;
 import corent.base.StrUtil;
 import de.ollie.archimedes.alexandrian.service.so.ColumnSO;
 import de.ollie.archimedes.alexandrian.service.so.DatabaseSO;
 import de.ollie.archimedes.alexandrian.service.so.ForeignKeySO;
+import de.ollie.archimedes.alexandrian.service.so.OptionSO;
 import de.ollie.archimedes.alexandrian.service.so.ReferenceSO;
 import de.ollie.archimedes.alexandrian.service.so.SchemeSO;
 import de.ollie.archimedes.alexandrian.service.so.TableSO;
@@ -131,6 +133,9 @@ public class DatabaseSOToDiagramConverter {
 			c.setNotNull(!column.isNullable());
 			c.setPanel(p);
 			t.addColumn(c);
+		}
+		for (OptionSO option : table.getMetaInfo().getOptions()) {
+			t.addOption(new Option(option.getName(), option.getValue()));
 		}
 		return t;
 	}

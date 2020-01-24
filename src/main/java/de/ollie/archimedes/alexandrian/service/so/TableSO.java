@@ -48,6 +48,13 @@ public class TableSO {
 		return this;
 	}
 
+	public TableSO addOptions(OptionSO... options) {
+		for (OptionSO option : options) {
+			this.metaInfo.getOptions().add(option);
+		}
+		return this;
+	}
+
 	public Optional<ColumnSO> getColumnByName(String name) {
 		for (ColumnSO column : this.columns) {
 			if (column.getName().equalsIgnoreCase(name)) {
