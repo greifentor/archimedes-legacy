@@ -1,6 +1,6 @@
 LIB=./lib
 
-CP=./target/archimedes-legacy-1.84.2.jar
+CP=./target/archimedes-legacy-1.85.1.jar
 
 CP=$CP:$LIB/antlr.jar
 CP=$CP:$LIB/archimedes-core-1.0.jar

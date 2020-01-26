@@ -84,6 +84,7 @@ import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.CodeFactoryProgressionFrame;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.legacy.app.ApplicationUtil;
+import archimedes.legacy.gui.codepath.CodePathProvider;
 import archimedes.legacy.gui.comparision.DataModelComparison;
 import archimedes.legacy.gui.configuration.BaseConfiguration;
 import archimedes.legacy.gui.configuration.BaseConfigurationFrame;
@@ -1651,7 +1652,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * This Method is called if the user clicks on the menu item "Generate" / "Code".
 	 */
 	public void doGenerateCode() {
-		final String path = this.diagramm.getCodePfad().replace("~", System.getProperty("user.home"));
+		final String path = new CodePathProvider(this.guiBundle, this.diagramm).getCodePath();
 		final Object cf = this.getCodeFactory(path);
 
 		if (cf instanceof CodeGenerator) {
