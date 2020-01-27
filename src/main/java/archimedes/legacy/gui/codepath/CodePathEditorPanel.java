@@ -13,7 +13,7 @@ import baccara.gui.generics.Type;
  *
  * @author ollie (26.01.2020)
  */
-public class CodePathEditorPanel extends BaccaraEditorPanel<String, CodePath> {
+public class CodePathEditorPanel extends BaccaraEditorPanel<String, CodePath> { // NOSONAR OLI: Was soll man machen ?!?
 
 	@SuppressWarnings("unchecked")
 	public CodePathEditorPanel(GUIBundle guiBundle, Container parent, ActionListener actionListener,
@@ -25,7 +25,7 @@ public class CodePathEditorPanel extends BaccaraEditorPanel<String, CodePath> {
 
 	@Override
 	public void setAttribute(CodePath codePath, ComponentData<String> component, Object obj) {
-		codePath.setPath((String) component.getValue());
+		codePath.setPath((String) obj);
 	}
 
 }

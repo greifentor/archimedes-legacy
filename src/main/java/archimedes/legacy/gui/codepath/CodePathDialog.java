@@ -24,6 +24,7 @@ public class CodePathDialog extends JDialogWithInifile implements ActionListener
 
 	public CodePathDialog(GUIBundle guiBundle, String path) {
 		super(guiBundle.getInifile());
+		this.setTitle(guiBundle.getResourceText("CodePathDialog.title"));
 		this.path = new CodePath().setPath(path);
 		this.setContentPane(createMainPanel(guiBundle));
 		this.pack();
