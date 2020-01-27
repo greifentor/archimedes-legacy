@@ -1653,38 +1653,39 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void doGenerateCode() {
 		final String path = new CodePathProvider(this.guiBundle, this.diagramm).getCodePath();
-		final Object cf = this.getCodeFactory(path);
+		if (!path.isEmpty()) {
+			final Object cf = this.getCodeFactory(path);
 
-		if (cf instanceof CodeGenerator) {
-			try {
-				((CodeGenerator) cf).generate(this.diagramm);
-			} catch (Exception e) {
-				new JDialogThrowable(e, "Error while running code generator " + cf.getClass().getSimpleName() + "!",
-						this.getInifile(), new PropertyRessourceManager());
+			if (cf instanceof CodeGenerator) {
+				try {
+					((CodeGenerator) cf).generate(this.diagramm);
+				} catch (Exception e) {
+					new JDialogThrowable(e, "Error while running code generator " + cf.getClass().getSimpleName() + "!",
+							this.getInifile(), new PropertyRessourceManager());
+				}
+			} else {
+				final FrameArchimedes fa = this;
+				final CodeFactoryProgressionFrame progressionFrame = (cf instanceof StandardCodeFactoryProgressionFrameUser
+						? new CodeFactoryProgressionFrame(guiBundle)
+						: null);
+				final Thread t = new Thread(() -> {
+					((CodeFactory) cf).addCodeFactoryListener(fa);
+					((CodeFactory) cf).setDataModel(fa.diagramm);
+					if (cf instanceof CodeFactoryProgressionEventProvider) {
+						((CodeFactoryProgressionEventProvider) cf).addCodeFactoryProgressionListener(event -> {
+							if (progressionFrame != null) {
+								progressionFrame.processEvent(event);
+							}
+						});
+					}
+					((CodeFactory) cf).generate(path);
+					if (progressionFrame != null) {
+						progressionFrame.enableCloseButton();
+					}
+				});
+				t.start();
 			}
-		} else {
-			final FrameArchimedes fa = this;
-			final CodeFactoryProgressionFrame progressionFrame = (cf instanceof StandardCodeFactoryProgressionFrameUser
-					? new CodeFactoryProgressionFrame(guiBundle)
-					: null);
-			final Thread t = new Thread(() -> {
-				((CodeFactory) cf).addCodeFactoryListener(fa);
-				((CodeFactory) cf).setDataModel(fa.diagramm);
-				if (cf instanceof CodeFactoryProgressionEventProvider) {
-					((CodeFactoryProgressionEventProvider) cf).addCodeFactoryProgressionListener(event -> {
-						if (progressionFrame != null) {
-							progressionFrame.processEvent(event);
-						}
-					});
-				}
-				((CodeFactory) cf).generate(path);
-				if (progressionFrame != null) {
-					progressionFrame.enableCloseButton();
-				}
-			});
-			t.start();
 		}
-
 	}
 
 	private Object getCodeFactory(final String path) {

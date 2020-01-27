@@ -18,7 +18,7 @@ public class CodePathEditorPanel extends BaccaraEditorPanel<String, CodePath> { 
 	@SuppressWarnings("unchecked")
 	public CodePathEditorPanel(GUIBundle guiBundle, Container parent, ActionListener actionListener,
 			CodePath codePath) {
-		super(guiBundle, parent, "CodePath", actionListener, codePath, new ComponentData[] { // NOSONAR
+		super(guiBundle, parent, "CodePathDialog", actionListener, codePath, new ComponentData[] { // NOSONAR
 				new ComponentData<>("path", Type.STRING, codePath.getPath()) //
 		});
 	}
