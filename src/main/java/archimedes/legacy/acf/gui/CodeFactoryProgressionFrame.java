@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
 
 import archimedes.legacy.acf.event.CodeFactoryProgressionEvent;
 import baccara.gui.GUIBundle;
@@ -44,6 +45,8 @@ public class CodeFactoryProgressionFrame extends JFrameWithInifile implements Ac
 
 	private JPanel getMainPanel() {
 		JPanel panel = new JPanel(new BorderLayout(this.guiBundle.getHGap(), this.guiBundle.getVGap()));
+		panel.setBorder(new EmptyBorder(this.guiBundle.getVGap(), this.guiBundle.getHGap(), this.guiBundle.getVGap(),
+				this.guiBundle.getHGap()));
 		panel.add(getProgressBarPanel(), BorderLayout.NORTH);
 		panel.add(getMessagePanel(), BorderLayout.CENTER);
 		panel.add(getButtonPanel(), BorderLayout.SOUTH);

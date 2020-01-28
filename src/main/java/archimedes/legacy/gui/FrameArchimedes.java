@@ -1652,10 +1652,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * This Method is called if the user clicks on the menu item "Generate" / "Code".
 	 */
 	public void doGenerateCode() {
-		final String path = new CodePathProvider(this.guiBundle, this.diagramm).getCodePath();
+		final CodePathProvider codePathProvider = new CodePathProvider(this.guiBundle, this.diagramm);
+		final String path = codePathProvider.getCodePath();
 		if (!path.isEmpty()) {
 			final Object cf = this.getCodeFactory(path);
-
 			if (cf instanceof CodeGenerator) {
 				try {
 					((CodeGenerator) cf).generate(this.diagramm);
@@ -1682,6 +1682,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					if (progressionFrame != null) {
 						progressionFrame.enableCloseButton();
 					}
+					try {
+						codePathProvider.storePath(path);
+					} catch (IOException e) {
+						LOG.error("error while setting code path to ini file: " + e.getMessage());
+					}
 				});
 				t.start();
 			}
@@ -1692,22 +1697,18 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		CodeFactory cf = null;
 		CodeGenerator cg = null;
 		String cfcn = this.diagramm.getCodeFactoryClassName();
-
 		try {
 			if ((cfcn == null) || (cfcn.length() == 0)) {
 				cfcn = this.ini.readStr("CodeGenerator", "Class",
 						System.getProperty("archimedes.default.codefactory.class", "CODEFACTORYCLASS"));
 			}
-
 			if (cfcn.startsWith("gengen:")) {
 				try {
 					cfcn = cfcn.substring(7, cfcn.length());
 					cg = (CodeGenerator) Class.forName(cfcn).newInstance();
-
 					if (cg instanceof AbstractCodeGenerator) {
 						((AbstractCodeGenerator) cg).setBasePath(path);
 					}
-
 					return cg;
 				} catch (Exception e) {
 					new JDialogThrowable(e,
@@ -1715,7 +1716,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 							this.getInifile(), new PropertyRessourceManager());
 				}
 			}
-
 			cf = Archimedes.Factory.createCodeFactory(cfcn);
 			cf.setDataModel(this.diagramm);
 			cf.setGUIBundle(getGUIBundle(this.guiBundle, cf.getResourceBundleNames()));
@@ -1725,7 +1725,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					+ e.getMessage());
 			e.printStackTrace();
 		}
-
 		return cf;
 	}
 
