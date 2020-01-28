@@ -9,6 +9,7 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import baccara.gui.GUIBundle;
 import corent.gui.JDialogWithInifile;
@@ -20,32 +21,36 @@ import corent.gui.JDialogWithInifile;
  */
 public class CodePathDialog extends JDialogWithInifile implements ActionListener, WindowListener { // NOSONAR
 
-	private CodePath path = null;
 	private JButton buttonOk = null;
 	private CodePathEditorPanel codePathEditorPanel = null;
+	private GUIBundle guiBundle = null;
+	private CodePath path = null;
 
 	public CodePathDialog(GUIBundle guiBundle, String path) {
 		super(guiBundle.getInifile());
+		this.guiBundle = guiBundle;
 		this.addWindowListener(this);
 		this.setTitle(guiBundle.getResourceText("CodePathDialog.title"));
 		this.path = new CodePath().setPath(path);
-		this.setContentPane(createMainPanel(guiBundle));
+		this.setContentPane(createMainPanel());
 		this.pack();
 		this.setModal(true);
 		this.setVisible(true);
 	}
 
-	private JPanel createMainPanel(GUIBundle guiBundle) {
-		JPanel p = new JPanel(new BorderLayout(guiBundle.getHGap(), guiBundle.getVGap()));
+	private JPanel createMainPanel() {
+		JPanel p = new JPanel(new BorderLayout(this.guiBundle.getHGap(), this.guiBundle.getVGap()));
+		p.setBorder(new EmptyBorder(this.guiBundle.getVGap(), this.guiBundle.getHGap(), this.guiBundle.getVGap(),
+				this.guiBundle.getHGap()));
 		this.codePathEditorPanel = new CodePathEditorPanel(guiBundle, this, this, this.path);
 		p.add(this.codePathEditorPanel, BorderLayout.NORTH);
-		p.add(createButtonPanel(guiBundle), BorderLayout.SOUTH);
+		p.add(createButtonPanel(), BorderLayout.SOUTH);
 		return p;
 	}
 
-	private JPanel createButtonPanel(GUIBundle guiBundle) {
-		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, guiBundle.getHGap(), guiBundle.getVGap()));
-		this.buttonOk = guiBundle.createButton("CodePathDialog.button.ok", "ok", this, p);
+	private JPanel createButtonPanel() {
+		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, this.guiBundle.getHGap(), this.guiBundle.getVGap()));
+		this.buttonOk = this.guiBundle.createButton("CodePathDialog.button.ok", "ok", this, p);
 		p.add(this.buttonOk);
 		return p;
 	}
@@ -86,7 +91,7 @@ public class CodePathDialog extends JDialogWithInifile implements ActionListener
 	}
 
 	@Override
-	public void windowDeiconified(WindowEvent arg0) { // NOSONAR OLI Is empty ...
+	public void windowDeiconified(WindowEvent e) { // NOSONAR OLI Is empty ...
 	}
 
 	@Override
