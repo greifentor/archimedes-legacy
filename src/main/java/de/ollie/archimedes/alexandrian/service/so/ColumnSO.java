@@ -12,9 +12,9 @@ import lombok.experimental.Accessors;
  * @author ollie
  *
  */
-@Generated
 @Accessors(chain = true)
 @Data
+@Generated
 @NoArgsConstructor
 public class ColumnSO {
 
@@ -26,6 +26,14 @@ public class ColumnSO {
 	private boolean unique;
 	@NonNull
 	private TableSO table;
+	private ColumnMetaInfo metaInfo = new ColumnMetaInfo();
+
+	public ColumnSO addOptions(OptionSO... options) {
+		for (OptionSO option : options) {
+			this.metaInfo.getOptions().add(option);
+		}
+		return this;
+	}
 
 	@Override
 	public boolean equals(Object o) {

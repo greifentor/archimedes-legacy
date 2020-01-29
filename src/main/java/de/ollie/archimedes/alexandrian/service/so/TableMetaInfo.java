@@ -13,9 +13,9 @@ import lombok.experimental.Accessors;
  * @author ollie
  *
  */
-@Generated
-@Data
 @Accessors(chain = true)
+@Data
+@Generated
 public class TableMetaInfo {
 
 	private List<OptionSO> options = new ArrayList<>();

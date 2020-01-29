@@ -132,6 +132,9 @@ public class DatabaseSOToDiagramConverter {
 			ColumnModel c = new Tabellenspalte(column.getName(), d, column.isPkMember());
 			c.setNotNull(!column.isNullable());
 			c.setPanel(p);
+			for (OptionSO option : column.getMetaInfo().getOptions()) {
+				c.addOption(new Option(option.getName(), option.getValue()));
+			}
 			t.addColumn(c);
 		}
 		for (OptionSO option : table.getMetaInfo().getOptions()) {
