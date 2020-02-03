@@ -1973,7 +1973,8 @@ public class Archimedes {
 		ResourceManager rm = new PropertyResourceManager(new PropertyFileManager()
 				.open(System.getProperty("archimedes.user.language.resource.path", Archimedes.CONF_PATH)
 						+ "archimedes_resource_" + lang + ".properties"));
-		ImageProvider ip = new FileImageProvider(new ImageMapBuilder("img").build());
+		ImageProvider ip = new FileImageProvider(
+				new ImageMapBuilder(System.getProperty("archimedes.img.path", "img")).build());
 		guiBundle = new GUIBundle(ini, rm, ip, 3, 3);
 		final FrameArchimedes frame = new FrameArchimedes(guiBundle, serverMode);
 		/*
