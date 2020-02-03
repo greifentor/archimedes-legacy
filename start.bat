@@ -2,7 +2,7 @@ SET PATH=C:\Software\Java\openjdk-11.0.2\bin;%PATH%
 
 SET LIB=.\lib
 
-SET CP=.\target\archimedes-legacy-1.85.2.jar
+SET CP=.\target\archimedes-legacy-1.86.1.jar
 
 SET CP=%CP%;%LIB%\archimedes-core-1.0.jar
 SET CP=%CP%;%LIB%\baccara-1.10.1.jar
