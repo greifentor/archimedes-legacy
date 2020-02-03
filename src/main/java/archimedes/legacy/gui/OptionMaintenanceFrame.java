@@ -25,6 +25,7 @@ import baccara.gui.GUIBundle;
 import baccara.gui.generics.AbstractEditorFrame;
 import baccara.gui.generics.ComponentData;
 import baccara.gui.generics.EditorFrameEventType;
+import corent.gui.LineTextEditor;
 
 /**
  * A maintenance frame for options.
@@ -34,9 +35,9 @@ import baccara.gui.generics.EditorFrameEventType;
  * @changed OLI 15.10.2013 - Added.
  */
 
-public class OptionMaintenanceFrame extends
-		AbstractEditorFrame<OptionModel, OptionMaintenanceFrame, OptionMaintenanceFrameEvent, String> implements
-		KeyListener, MouseListener {
+public class OptionMaintenanceFrame
+		extends AbstractEditorFrame<OptionModel, OptionMaintenanceFrame, OptionMaintenanceFrameEvent, String>
+		implements KeyListener, MouseListener {
 
 	private String action = null;
 	private GUIBundle guiBundle = null;
@@ -47,19 +48,16 @@ public class OptionMaintenanceFrame extends
 	/**
 	 * Creates a new maintenance frame for options.
 	 * 
-	 * @param option
-	 *            The option to edit.
-	 * @param action
-	 *            The action which is performed with the frame.
-	 * @param guiBundle
-	 *            A bundle with GUI information.
+	 * @param option    The option to edit.
+	 * @param action    The action which is performed with the frame.
+	 * @param guiBundle A bundle with GUI information.
 	 * 
 	 * @changed OLI 15.10.2013 - Added.
 	 */
 	public OptionMaintenanceFrame(OptionModel option, String action, GUIBundle guiBundle,
 			PredeterminedOptionProvider predeterminedOptionProvider, OptionType optionType) {
-		super(option, guiBundle.getResourceText("option.maintenance.frame.title").replace("$ACTION$", action).replace(
-				"$NAME$", option.getName()), guiBundle);
+		super(option, guiBundle.getResourceText("option.maintenance.frame.title").replace("$ACTION$", action)
+				.replace("$NAME$", option.getName()), guiBundle);
 		this.action = action;
 		this.guiBundle = guiBundle;
 		this.optionType = optionType;
@@ -79,7 +77,7 @@ public class OptionMaintenanceFrame extends
 	protected ComponentData<?>[] getComponentData(OptionModel option) {
 		return new ComponentData[] {
 				new ComponentData<String>("Name", baccara.gui.generics.Type.STRING, option.getName()),
-				new ComponentData<String>("Parameter", baccara.gui.generics.Type.STRING, option.getParameter()) };
+				new ComponentData<String>("Parameter", baccara.gui.generics.Type.TEXT, option.getParameter()) };
 	}
 
 	/**
@@ -88,7 +86,7 @@ public class OptionMaintenanceFrame extends
 	@Override
 	protected void transferChangesToObject() {
 		this.object.setName(this.getTextFromComponent("Name"));
-		this.object.setParameter(this.getTextFromComponent("Parameter"));
+		this.object.setParameter(((LineTextEditor) this.getEditorComponent("Parameter")).getText());
 	}
 
 	/**
@@ -136,8 +134,8 @@ public class OptionMaintenanceFrame extends
 				new OptionsPopupMenu(this.predeterminedOptionProvider, this.optionType, this.textFieldName.getX(),
 						this.textFieldName.getY(), this, this);
 			} else {
-				this.setTitle(this.guiBundle.getResourceText("option.maintenance.frame.title").replace("$ACTION$",
-						this.action).replace("$NAME$", this.textFieldName.getText()));
+				this.setTitle(this.guiBundle.getResourceText("option.maintenance.frame.title")
+						.replace("$ACTION$", this.action).replace("$NAME$", this.textFieldName.getText()));
 			}
 		}
 	}
