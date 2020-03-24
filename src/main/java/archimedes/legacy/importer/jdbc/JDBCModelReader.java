@@ -66,6 +66,9 @@ public class JDBCModelReader implements ModelReader {
 	}
 
 	private String[] getIgnoreTablePatterns(String s) {
+		if (s == null) {
+			return new String[0];
+		}
 		return Str.splitToList(s, ";").toArray(new String[0]);
 	}
 

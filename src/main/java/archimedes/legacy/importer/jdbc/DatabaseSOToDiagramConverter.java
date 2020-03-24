@@ -1,5 +1,6 @@
 package archimedes.legacy.importer.jdbc;
 
+import java.sql.Types;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -144,14 +145,17 @@ public class DatabaseSOToDiagramConverter {
 	}
 
 	private DomainModel getDomain(ColumnSO column, DiagrammModel diagram) {
-		Domain dom = new Domain("*", column.getType().getSqlType(),
-				column.getType().getLength() == null ? -1 : column.getType().getLength(),
+		int sqlType = column.getType().getSqlType();
+		if (sqlType == 16) { // Boolean
+			sqlType = Types.INTEGER;
+		}
+		Domain dom = new Domain("*", sqlType, column.getType().getLength() == null ? -1 : column.getType().getLength(),
 				column.getType().getPrecision() == null ? -1 : column.getType().getPrecision());
 		String typeName = dom.getType().replace("(", "").replace(")", "").replace(" ", "");
 		typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1);
 		DomainModel domain = diagram.getDomainByName(typeName);
 		if (domain == null) {
-			domain = new Domain(typeName, column.getType().getSqlType(),
+			domain = new Domain(typeName, sqlType,
 					column.getType().getLength() == null ? -1 : column.getType().getLength(),
 					column.getType().getPrecision() == null ? -1 : column.getType().getPrecision());
 			diagram.addDomain(domain);
