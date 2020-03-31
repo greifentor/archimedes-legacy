@@ -171,6 +171,7 @@ import corent.gui.JDialogThrowable;
 import corent.gui.JFrameWithInifile;
 import corent.gui.PropertyRessourceManager;
 import corent.util.MemoryMonitor;
+import corentx.io.FileUtil;
 import gengen.generator.AbstractCodeGenerator;
 import gengen.generator.CodeGenerator;
 
@@ -1743,6 +1744,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					} else {
 						((PropertyResourceManager) rm).addResources(new PropertyFileManager().open(fn));
 					}
+				} else {
+					LOG.warn("Ignored. File not existing: + fn");
 				}
 			}
 		}
@@ -1754,7 +1757,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		StringTokenizer st = new StringTokenizer(System.getProperty("archimedes.resource.paths", Archimedes.CONF_PATH),
 				",");
 		while (st.hasMoreTokens()) {
-			l.add(st.nextToken().trim());
+			l.add(FileUtil.completePath(st.nextToken().trim()));
 		}
 		return l;
 	}
