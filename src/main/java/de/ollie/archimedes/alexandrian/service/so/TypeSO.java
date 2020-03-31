@@ -15,8 +15,17 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class TypeSO {
 
+	private TypeMetaInfo metaInfo = new TypeMetaInfo();
+
 	private int sqlType;
 	private Integer length;
 	private Integer precision;
+
+	public TypeSO addOptions(OptionSO... options) {
+		for (OptionSO option : options) {
+			this.metaInfo.getOptions().add(option);
+		}
+		return this;
+	}
 
 }
