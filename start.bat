@@ -18,7 +18,7 @@ IF "%1"=="NO_DEBUG" GOTO NoDebug
     SET DEBUG_OPTIONS=-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n
 :NoDebug
 
-SET ADDITIONAL_OPTIONS=-Darchimedes.maximum.strlen.table.header=50
+SET ADDITIONAL_OPTIONS=-Darchimedes.maximum.strlen.table.header=50 -Darchimedes.diagram.view.logic.enabled=true
 
 SET FILE=archimedes-legacy-additions.bat
 IF NOT EXIST %FILE% GOTO StartArchimedes
