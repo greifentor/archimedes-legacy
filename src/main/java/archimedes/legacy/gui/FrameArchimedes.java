@@ -1745,7 +1745,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						((PropertyResourceManager) rm).addResources(new PropertyFileManager().open(fn));
 					}
 				} else {
-					LOG.warn("Ignored. File not existing: + fn");
+					LOG.warn("Ignored. File not existing: " + fn);
 				}
 			}
 		}
