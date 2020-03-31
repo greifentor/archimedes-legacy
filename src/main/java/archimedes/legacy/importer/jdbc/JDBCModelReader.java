@@ -75,7 +75,7 @@ public class JDBCModelReader implements ModelReader {
 		DatabaseMetaData dbmd = this.connection.getMetaData();
 		addTables(dbmd, scheme);
 		List<SequenceSO> sequences = getSequences(dbmd);
-		return new DatabaseSO().setName("database").addScheme(scheme);
+		return new DatabaseSO().setName("database").addSchemes(scheme);
 	}
 
 	private void addTables(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {

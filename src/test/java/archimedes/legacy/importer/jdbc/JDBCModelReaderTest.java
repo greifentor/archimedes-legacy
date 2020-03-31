@@ -8,7 +8,6 @@
 package archimedes.legacy.importer.jdbc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Connection;
@@ -17,6 +16,8 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -116,7 +117,7 @@ public class JDBCModelReaderTest {
 	public void readModel_ValidConnectionOfAnEmptyDatabasePassed_ReturnsAnEmptyModel() throws Exception {
 		// Prepare
 		DatabaseSO expected = new DatabaseSO().setName("database")
-				.addScheme(this.factory.createScheme(SCHEME_NAME, new ArrayList<>()));
+				.addSchemes(this.factory.createScheme(SCHEME_NAME, new ArrayList<>()));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -182,7 +183,7 @@ public class JDBCModelReaderTest {
 		tables.add(table);
 		DatabaseSO expected = new DatabaseSO() //
 				.setName("database") //
-				.addScheme(new SchemeSO() //
+				.addSchemes(new SchemeSO() //
 						.setName(SCHEME_NAME) //
 						.setTables(tables));
 
@@ -229,7 +230,7 @@ public class JDBCModelReaderTest {
 		tables.add(table2);
 		DatabaseSO expected = new DatabaseSO() //
 				.setName("database") //
-				.addScheme(new SchemeSO() //
+				.addSchemes(new SchemeSO() //
 						.setName(SCHEME_NAME) //
 						.setTables(tables));
 
@@ -269,7 +270,7 @@ public class JDBCModelReaderTest {
 		List<TableSO> tables = new ArrayList<>();
 		tables.add(table);
 		DatabaseSO expected = new DatabaseSO().setName("database")
-				.addScheme(new SchemeSO().setName(SCHEME_NAME).setTables(tables));
+				.addSchemes(new SchemeSO().setName(SCHEME_NAME).setTables(tables));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -405,7 +406,7 @@ public class JDBCModelReaderTest {
 		tables.add(table);
 		DatabaseSO expected = new DatabaseSO() //
 				.setName("database") //
-				.addScheme(new SchemeSO(). //
+				.addSchemes(new SchemeSO(). //
 						setName(SCHEME_NAME) //
 						.setTables(tables));
 
@@ -445,7 +446,7 @@ public class JDBCModelReaderTest {
 		tables.add(table);
 		DatabaseSO expected = new DatabaseSO() //
 				.setName("database") //
-				.addScheme(new SchemeSO(). //
+				.addSchemes(new SchemeSO(). //
 						setName(SCHEME_NAME) //
 						.setTables(tables));
 
