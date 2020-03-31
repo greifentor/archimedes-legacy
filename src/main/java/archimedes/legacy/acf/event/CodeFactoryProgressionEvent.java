@@ -24,4 +24,9 @@ public class CodeFactoryProgressionEvent {
 	private Integer maximumProcessCount;
 	private Integer maximumStepCount;
 
+	public CodeFactoryProgressionEvent(String factoryName, String processName, String message, Integer currentProcess,
+			Integer currentStep) {
+		this(factoryName, processName, message, currentProcess, currentStep, null, null);
+	}
+
 }

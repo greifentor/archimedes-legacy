@@ -64,6 +64,15 @@ public class TableSO {
 		return Optional.empty();
 	}
 
+	public Optional<OptionSO> getOptionByName(String name) {
+		for (OptionSO option : this.getMetaInfo().getOptions()) {
+			if (option.getName().equalsIgnoreCase(name)) {
+				return Optional.of(option);
+			}
+		}
+		return Optional.empty();
+	}
+
 	public Optional<ForeignKeySO> getForeignKeyByName(String name) {
 		for (ForeignKeySO foreignKey : this.foreignKeys) {
 			if (foreignKey.getName().equalsIgnoreCase(name)) {
