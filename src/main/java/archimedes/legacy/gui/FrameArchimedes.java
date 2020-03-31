@@ -33,12 +33,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -1733,16 +1735,28 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		String lang = System.getProperty("archimedes.user.language", "en");
 		ResourceManager rm = null;
 		for (int i = 0; i < applicationNames.length; i++) {
-			String fn = Archimedes.CONF_PATH + applicationNames[i] + "_resource_" + lang + ".properties";
-			if (new File(fn).exists()) {
-				if (rm == null) {
-					rm = new PropertyResourceManager(new PropertyFileManager().open(fn));
-				} else {
-					((PropertyResourceManager) rm).addResources(new PropertyFileManager().open(fn));
+			for (String confPath : getConfPaths()) {
+				String fn = confPath + applicationNames[i] + "_resource_" + lang + ".properties";
+				if (new File(fn).exists()) {
+					if (rm == null) {
+						rm = new PropertyResourceManager(new PropertyFileManager().open(fn));
+					} else {
+						((PropertyResourceManager) rm).addResources(new PropertyFileManager().open(fn));
+					}
 				}
 			}
 		}
 		return new GUIBundle(agb.getInifile(), rm, agb.getImageProvider(), agb.getHGap(), agb.getVGap());
+	}
+
+	private static List<String> getConfPaths() {
+		List<String> l = new ArrayList<>();
+		StringTokenizer st = new StringTokenizer(System.getProperty("archimedes.resource.paths", Archimedes.CONF_PATH),
+				",");
+		while (st.hasMoreTokens()) {
+			l.add(st.nextToken().trim());
+		}
+		return l;
 	}
 
 	/**
