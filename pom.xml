@@ -4,7 +4,7 @@
 
 	<groupId>de.ollie</groupId>
 	<artifactId>archimedes-legacy</artifactId>
-	<version>1.87.3</version>
+	<version>1.88.1</version>
 	<packaging>jar</packaging>
 
 	<name>Archimedes (Legacy)</name>
@@ -99,11 +99,11 @@
 			<artifactId>baccara</artifactId>
 			<version>1.10.1</version>
 		</dependency>
-		<dependency>
+		<!-- dependency>
 			<groupId>de.ollie</groupId>
 			<artifactId>corent</artifactId>
 			<version>1.67.1</version>
-		</dependency>
+		</dependency -->
 		<dependency>
 			<groupId>de.ollie</groupId>
 			<artifactId>corentx</artifactId>
@@ -123,6 +123,21 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.8</version>
+		</dependency>
+				<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
