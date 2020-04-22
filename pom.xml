@@ -103,12 +103,12 @@
 			<groupId>de.ollie</groupId>
 			<artifactId>corent</artifactId>
 			<version>1.67.1</version>
-		</dependency -->
+		</dependency>
 		<dependency>
 			<groupId>de.ollie</groupId>
 			<artifactId>corentx</artifactId>
 			<version>1.46.1</version>
-		</dependency>
+		</dependency -->
 		<dependency>
 			<groupId>de.ollie</groupId>
 			<artifactId>gengen</artifactId>
