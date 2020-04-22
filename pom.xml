@@ -94,12 +94,12 @@
 			<artifactId>core</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<dependency>
+		<!-- dependency>
 			<groupId>de.ollie</groupId>
 			<artifactId>baccara</artifactId>
 			<version>1.10.1</version>
 		</dependency>
-		<!--  dependency>
+		<dependency>
 			<groupId>de.ollie</groupId>
 			<artifactId>corent</artifactId>
 			<version>1.67.1</version>
