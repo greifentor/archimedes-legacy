@@ -4,14 +4,14 @@ SET LIB=.\lib
 
 SET CP=.\target\archimedes-legacy-1.87.3.jar
 
-SET CP=%CP%;%LIB%\archimedes-core-1.0.jar
-SET CP=%CP%;%LIB%\baccara-1.10.1.jar
+REM SET CP=%CP%;%LIB%\archimedes-core-1.0.jar
+REM SET CP=%CP%;%LIB%\baccara-1.10.1.jar
 SET CP=%CP%;%LIB%\baccaraacf.jar
 SET CP=%CP%;%LIB%\commons-lang3-3.1.jar
-SET CP=%CP%;%LIB%\corent-1.67.1.jar
-SET CP=%CP%;%LIB%\corentx-1.46.1.jar
-SET CP=%CP%;%LIB%\corentx-taglets-1.23.1.jar
-SET CP=%CP%;%LIB%\gengen-1.12.2.jar
+REM SET CP=%CP%;%LIB%\corent-1.67.1.jar
+REM SET CP=%CP%;%LIB%\corentx-1.46.1.jar
+REM SET CP=%CP%;%LIB%\corentx-taglets-1.23.1.jar
+REM SET CP=%CP%;%LIB%\gengen-1.12.2.jar
 SET CP=%CP%;%LIB%\log4j-1.2.13.jar
 
 IF "%1"=="NO_DEBUG" GOTO NoDebug
