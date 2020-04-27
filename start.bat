@@ -4,7 +4,7 @@ SET LIB=.\lib
 
 SET CP=.\target\archimedes-legacy-1.87.3.jar
 
-SET CP=%CP%;%LIB%\archimedes-core-1.0.jar
+SET CP=%CP%;%LIB%\archimedes-core-1.24.1.jar
 SET CP=%CP%;%LIB%\baccara-1.10.1.jar
 SET CP=%CP%;%LIB%\baccaraacf.jar
 SET CP=%CP%;%LIB%\commons-lang3-3.1.jar
