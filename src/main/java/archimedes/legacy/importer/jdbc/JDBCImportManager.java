@@ -35,7 +35,8 @@ public class JDBCImportManager {
 			String schemeName = ("".equals(connectionData.getSchema()) ? null : connectionData.getSchema());
 			// TODO: Import model from JDBC.
 			DatabaseSO database = new JDBCModelReader(factory, typeConverter, connection, schemeName,
-					connectionData.isIgnoreIndices(), connectionData.getIgnoreTablePatterns()).readModel();
+					connectionData.isIgnoreIndices(), connectionData.getIgnoreTablePatterns(),
+					connectionData.getImportOnlyTablePatterns()).readModel();
 			// TODO: Convert to Diagram
 			return new DatabaseSOToDiagramConverter(connectionData.getAdjustment()).convert(database);
 		} catch (Exception e) {

@@ -21,6 +21,7 @@ public class JDBCImportConnectionData {
 	public static final String FIELD_IGNORE_INDICES = "FIELD_IGNORE_INDICES";
 	public static final String FIELD_SCHEMA = "FIELD_SCHEMA";
 	public static final String FIELD_IGNORE_TABLES_PATTERNS = "FIELD_IGNORE_TABLES_PATTERNS";
+	public static final String FIELD_IMPORT_ONLY_TABLES_PATTERNS = "FIELD_IMPORT_ONLY_TABLES_PATTERNS";
 
 	public enum Adjustment {
 		LEFT_BY_NAME, //
@@ -34,5 +35,6 @@ public class JDBCImportConnectionData {
 	private boolean ignoreIndices = false;
 	private String schema;
 	private String ignoreTablePatterns;
+	private String importOnlyTablePatterns = "*";
 
 }

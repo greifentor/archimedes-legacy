@@ -4,7 +4,7 @@
 
 	<groupId>de.ollie</groupId>
 	<artifactId>archimedes-legacy</artifactId>
-	<version>1.88.1</version>
+	<version>1.89.1</version>
 	<packaging>jar</packaging>
 
 	<name>Archimedes (Legacy)</name>
@@ -24,6 +24,11 @@
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr4-runtime</artifactId>
 			<version>4.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-commons</artifactId>
+			<version>1.5.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

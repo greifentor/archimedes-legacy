@@ -1,16 +1,10 @@
 LIB=./lib
 
-CP=./target/archimedes-legacy-1.88.1.jar
+CP=./target/archimedes-legacy-1.89.1.jar
 
 CP=$CP:$LIB/antlr.jar
-# CP=$CP:$LIB/archimedes-core-1.0.jar
-# CP=$CP:$LIB/baccara-1.10.1.jar
 CP=$CP:$LIB/baccaraacf.jar
 CP=$CP:$LIB/commons-lang3-3.1.jar
-# CP=$CP:$LIB/corent-1.67.1.jar
-# CP=$CP:$LIB/corentx-1.46.1.jar
-# CP=$CP:$LIB/corentx-taglets-1.23.1.jar
-# CP=$CP:$LIB/gengen-1.12.2.jar
 CP=$CP:$LIB/log4j-1.2.13.jar
 
 FILE=./archimedes-legacy-additions.sh
