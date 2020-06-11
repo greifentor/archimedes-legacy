@@ -23,6 +23,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import de.ollie.archimedes.alexandrian.service.so.ColumnSO;
 import de.ollie.archimedes.alexandrian.service.so.DatabaseSO;
@@ -38,6 +40,7 @@ import de.ollie.archimedes.alexandrian.service.so.TypeSO;
  *
  * @author O.Lieshoff
  */
+@ExtendWith(MockitoExtension.class)
 public class JDBCModelReaderTest {
 
 	private static final String COLUMN_NAME_1 = "Id";
@@ -99,7 +102,7 @@ public class JDBCModelReaderTest {
 	public void setUp() throws Exception {
 		this.connectionSource = getConnection(this.dbNameSource);
 		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
-				false, null);
+				false, null, "*");
 	}
 
 	private Connection getConnection(String dbName) throws Exception {
@@ -448,6 +451,175 @@ public class JDBCModelReaderTest {
 				.setName("database") //
 				.addSchemes(new SchemeSO(). //
 						setName(SCHEME_NAME) //
+						.setTables(tables));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndUnMatchingIgnorePattern_ReturnsTheModelOfTheDatabaseSuitableToTheConnection()
+			throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, "BLA", "*");
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		List<ColumnSO> columns = new ArrayList<>();
+		columns.add(new ColumnSO() //
+				.setName(COLUMN_NAME_1.toUpperCase()) //
+				.setNullable(false) //
+				.setType(this.typeInteger));
+		columns.add(new ColumnSO() //
+				.setName(COLUMN_NAME_2.toUpperCase()) //
+				.setType(this.typeVarchar100));
+		TableSO table = new TableSO() //
+				.setName(TABLE_NAME_1.toUpperCase()) //
+				.addColumns(columns.toArray(new ColumnSO[0]));
+		List<TableSO> tables = new ArrayList<>();
+		tables.add(table);
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME) //
+						.setTables(tables));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndMatchingIgnorePattern_ReturnsAnEmptyModel() throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, TABLE_NAME_1.toUpperCase(), "*");
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndMatchingIgnorePatternEndsWithAsterix_ReturnsAnEmptyModel()
+			throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, TABLE_NAME_1.toUpperCase().substring(0, 4) + "*", "*");
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndMatchingIgnorePatternStartsWithAsterix_ReturnsAnEmptyModel()
+			throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, "*" + TABLE_NAME_1.toUpperCase().substring(5), "*");
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndMatchingIgnorePatternStartsAndEndsWithAsterix_ReturnsAnEmptyModel()
+			throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, "*" + TABLE_NAME_1.toUpperCase().substring(3, 6) + "*", "*");
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndUnmatchingImportOnlyTablePattern_ReturnsAnEmptyModel()
+			throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, null, "Unmatching");
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndMatchingImportOnlyTablePattern_ReturnsAnEmptyModel()
+			throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, null, TABLE_NAME_2.toUpperCase());
+		createDatabaseWithTwoTables(this.connectionSource);
+
+		List<ColumnSO> columns2 = new ArrayList<>();
+		columns2.add(new ColumnSO() //
+				.setName(COLUMN_NAME_1.toUpperCase()) //
+				.setType(this.typeInteger));
+		columns2.add(new ColumnSO() //
+				.setName(COLUMN_NAME_2.toUpperCase()) //
+				.setType(this.typeVarchar100));
+		columns2.add(new ColumnSO() //
+				.setName(COLUMN_NAME_3.toUpperCase()) //
+				.setType(this.typeNumeric102));
+		TableSO table2 = new TableSO() //
+				.setName(TABLE_NAME_2.toUpperCase()) //
+				.addColumns(columns2.toArray(new ColumnSO[0]));
+		List<TableSO> tables = new ArrayList<>();
+		tables.add(table2);
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO() //
+						.setName(SCHEME_NAME) //
 						.setTables(tables));
 
 		// Run

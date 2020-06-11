@@ -67,6 +67,10 @@ public class JDBCImportManagerConfigurationDialog extends
 						baccara.gui.generics.Type.STRING, //
 						data.getIgnoreTablePatterns()), //
 				new ComponentData<String>( //
+						JDBCImportConnectionData.FIELD_IMPORT_ONLY_TABLES_PATTERNS, //
+						baccara.gui.generics.Type.STRING, //
+						data.getImportOnlyTablePatterns()), //
+				new ComponentData<String>( //
 						JDBCImportConnectionData.FIELD_ADJUSTMENT, //
 						Arrays.asList(Adjustment.values()), //
 						data.getAdjustment(), //
@@ -87,6 +91,8 @@ public class JDBCImportManagerConfigurationDialog extends
 		this.object.setIgnoreIndices(this.getBooleanFromComponent(JDBCImportConnectionData.FIELD_IGNORE_INDICES));
 		this.object.setIgnoreTablePatterns(
 				this.getTextFromComponent(JDBCImportConnectionData.FIELD_IGNORE_TABLES_PATTERNS));
+		this.object.setImportOnlyTablePatterns(
+				this.getTextFromComponent(JDBCImportConnectionData.FIELD_IMPORT_ONLY_TABLES_PATTERNS));
 		this.object.setPassword(this.getTextFromComponent(JDBCImportConnectionData.FIELD_PASSWORD));
 		this.object.setSchema(this.getTextFromComponent(JDBCImportConnectionData.FIELD_SCHEMA));
 	}

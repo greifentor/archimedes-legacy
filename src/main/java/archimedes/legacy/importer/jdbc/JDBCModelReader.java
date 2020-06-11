@@ -41,31 +41,36 @@ public class JDBCModelReader implements ModelReader {
 	private String schemeName;
 	private boolean ignoreIndices;
 	private String[] ignoreTablePatterns;
+	private String[] importOnlyTablePatterns;
 
 	/**
 	 * Creates a new model reader with the passed parameters.
 	 *
-	 * @param factory             An object factory implementation to create the DB objects.
-	 * @param typeConverter       A converter for database types.
-	 * @param connection          The connection whose data model should be read.
-	 * @param schemeName          The name of the scheme whose data are to read (pass "null" to ignore scheme and load
-	 *                            all tables).
-	 * @param ignoreIndices       Set this flag to ignore indices while import.
-	 * @param ignoreTablePatterns Patterns of table names which should be returned.
+	 * @param factory                 An object factory implementation to create the DB objects.
+	 * @param typeConverter           A converter for database types.
+	 * @param connection              The connection whose data model should be read.
+	 * @param schemeName              The name of the scheme whose data are to read (pass "null" to ignore scheme and
+	 *                                load all tables).
+	 * @param ignoreIndices           Set this flag to ignore indices while import.
+	 * @param ignoreTablePatterns     Patterns of table names which should be returned.
+	 * @param importOnlyTablePatterns Patterns of table names which are to import if the table name matches the at least
+	 *                                one pattern. The patterns to import only are checked before ignore table patterns
+	 *                                (set "*" if all tables are to import).
 	 * @throws IllegalArgumentException Passing null value.
 	 */
 	public JDBCModelReader(DBObjectFactory factory, DBTypeConverter typeConverter, Connection connection,
-			String schemeName, boolean ignoreIndices, String ignoreTablePatterns) {
+			String schemeName, boolean ignoreIndices, String ignoreTablePatterns, String importOnlyTablePatterns) {
 		super();
 		this.connection = connection;
 		this.factory = factory;
 		this.ignoreIndices = ignoreIndices;
-		this.ignoreTablePatterns = getIgnoreTablePatterns(ignoreTablePatterns);
+		this.ignoreTablePatterns = getPatterns(ignoreTablePatterns);
+		this.importOnlyTablePatterns = getPatterns(importOnlyTablePatterns);
 		this.schemeName = schemeName;
 		this.typeConverter = typeConverter;
 	}
 
-	private String[] getIgnoreTablePatterns(String s) {
+	private String[] getPatterns(String s) {
 		if (s == null) {
 			return new String[0];
 		}
@@ -95,9 +100,14 @@ public class JDBCModelReader implements ModelReader {
 		ResultSet rs = dbmd.getTables(null, this.schemeName, "%", new String[] { "TABLE" });
 		while (rs.next()) {
 			String tableName = rs.getString("TABLE_NAME");
+			if (!isMatchingImportOnlyPattern(tableName)) {
+				System.out.println(LocalDateTime.now() + " - table ignored (import only pattern): "
+						+ rs.getString("TABLE_SCHEM") + "." + tableName);
+				continue;
+			}
 			if (isMatchingIgnorePattern(tableName)) {
-				System.out.println(
-						LocalDateTime.now() + " - table ignored: " + rs.getString("TABLE_SCHEM") + "." + tableName);
+				System.out.println(LocalDateTime.now() + " - table ignored (ignore pattern): "
+						+ rs.getString("TABLE_SCHEM") + "." + tableName);
 				continue;
 			}
 			scheme.addTables(this.factory.createTable(tableName, new ArrayList<>()));
@@ -109,8 +119,22 @@ public class JDBCModelReader implements ModelReader {
 
 	private boolean isMatchingIgnorePattern(String tableName) {
 		for (String pattern : this.ignoreTablePatterns) {
-			if ((pattern.startsWith("*") && pattern.endsWith("*")
-					&& tableName.contains(pattern.substring(1, pattern.length() - 1))) //
+			if (pattern.equals("*") || pattern.equals(tableName)
+					|| (pattern.startsWith("*") && pattern.endsWith("*")
+							&& tableName.contains(pattern.substring(1, pattern.length() - 1))) //
+					|| (pattern.startsWith("*") && tableName.endsWith(pattern.substring(1))) //
+					|| (pattern.endsWith("*") && tableName.startsWith(pattern.substring(0, pattern.length() - 1)))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isMatchingImportOnlyPattern(String tableName) {
+		for (String pattern : this.importOnlyTablePatterns) {
+			if (pattern.equals("*") || pattern.equals(tableName)
+					|| (pattern.startsWith("*") && pattern.endsWith("*")
+							&& tableName.contains(pattern.substring(1, pattern.length() - 1))) //
 					|| (pattern.startsWith("*") && tableName.endsWith(pattern.substring(1))) //
 					|| (pattern.endsWith("*") && tableName.startsWith(pattern.substring(0, pattern.length() - 1)))) {
 				return true;
