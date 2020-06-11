@@ -8,6 +8,7 @@
 package archimedes.legacy.importer.jdbc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Connection;
@@ -16,8 +17,6 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -449,6 +448,119 @@ public class JDBCModelReaderTest {
 				.addSchemes(new SchemeSO(). //
 						setName(SCHEME_NAME) //
 						.setTables(tables));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndUnMatchingIgnorePattern_ReturnsTheModelOfTheDatabaseSuitableToTheConnection()
+			throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, "BLA");
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		List<ColumnSO> columns = new ArrayList<>();
+		columns.add(new ColumnSO() //
+				.setName(COLUMN_NAME_1.toUpperCase()) //
+				.setNullable(false) //
+				.setType(this.typeInteger));
+		columns.add(new ColumnSO() //
+				.setName(COLUMN_NAME_2.toUpperCase()) //
+				.setType(this.typeVarchar100));
+		TableSO table = new TableSO() //
+				.setName(TABLE_NAME_1.toUpperCase()) //
+				.addColumns(columns.toArray(new ColumnSO[0]));
+		List<TableSO> tables = new ArrayList<>();
+		tables.add(table);
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME) //
+						.setTables(tables));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndMatchingIgnorePattern_ReturnsAnEmptyModel() throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, TABLE_NAME_1.toUpperCase());
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndMatchingIgnorePatternEndsWithAsterix_ReturnsAnEmptyModel()
+			throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, TABLE_NAME_1.toUpperCase().substring(0, 4) + "*");
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndMatchingIgnorePatternStartsWithAsterix_ReturnsAnEmptyModel()
+			throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, "*" + TABLE_NAME_1.toUpperCase().substring(5));
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME));
+
+		// Run
+		DatabaseSO returned = this.unitUnderTest.readModel();
+
+		// Check
+		assertEquals(expected.toString(), returned.toString());
+	}
+
+	@Test
+	public void readModel_ValidConnectionWithATableAndMatchingIgnorePatternStartsAndEndsWithAsterix_ReturnsAnEmptyModel()
+			throws Exception {
+		// Prepare
+		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
+				false, "*" + TABLE_NAME_1.toUpperCase().substring(3, 6) + "*");
+		createDatabase_TableWithNotNullColumn(this.connectionSource);
+
+		DatabaseSO expected = new DatabaseSO() //
+				.setName("database") //
+				.addSchemes(new SchemeSO(). //
+						setName(SCHEME_NAME));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();

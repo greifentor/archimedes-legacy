@@ -109,8 +109,9 @@ public class JDBCModelReader implements ModelReader {
 
 	private boolean isMatchingIgnorePattern(String tableName) {
 		for (String pattern : this.ignoreTablePatterns) {
-			if ((pattern.startsWith("*") && pattern.endsWith("*")
-					&& tableName.contains(pattern.substring(1, pattern.length() - 1))) //
+			if (pattern.equals(tableName)
+					|| (pattern.startsWith("*") && pattern.endsWith("*")
+							&& tableName.contains(pattern.substring(1, pattern.length() - 1))) //
 					|| (pattern.startsWith("*") && tableName.endsWith(pattern.substring(1))) //
 					|| (pattern.endsWith("*") && tableName.startsWith(pattern.substring(0, pattern.length() - 1)))) {
 				return true;
