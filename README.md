@@ -10,7 +10,6 @@ The good old archimedes (cleaned up).
 
 ## Build
 
-* Start `ìnstall-libs` script for your operation system.
 * Type `mvn clean install` in a shell.
 
 

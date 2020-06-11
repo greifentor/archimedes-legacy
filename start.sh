@@ -2,7 +2,6 @@ LIB=./lib
 
 CP=./target/archimedes-legacy-1.89.1.jar
 
-CP=$CP:$LIB/antlr.jar
 CP=$CP:$LIB/baccaraacf.jar
 CP=$CP:$LIB/commons-lang3-3.1.jar
 CP=$CP:$LIB/log4j-1.2.13.jar
