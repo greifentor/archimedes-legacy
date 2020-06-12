@@ -179,21 +179,17 @@ import gengen.generator.CodeGenerator;
  * Diese Klasse bietet das Hauptfenster der Archimedes-Applikation.
  *
  * @author ollie
- * @changed OLI 30.09.2007 - Entfernung des Aufrufs einer aufgehobenen Methode
- *          auf dem Konstruktor.
+ * @changed OLI 30.09.2007 - Entfernung des Aufrufs einer aufgehobenen Methode auf dem Konstruktor.
  * @changed OLI 27.11.2007 - Erweiterung um die Methode <TT>raiseAltered()</TT>.
- * @changed OLI 01.01.2008 - Anpassungen an die Erweiterung der Signatur der
- *          paint-Methode der Klasse ComponentDiagramm.
+ * @changed OLI 01.01.2008 - Anpassungen an die Erweiterung der Signatur der paint-Methode der Klasse ComponentDiagramm.
  * @changed OLI 09.01.2008 - Korrektur der Index-Datengewinnung in der Methode
  *          <TT>getIndexMetadata(JDBCDataSourceRecord)</TT> (private).
- * @changed OLI 16.08.2008 - Erweiterung der Schreibroutine in der Form, das
- *          eine Datei f&uuml;r die Pflege des Datenmodells und eine kleinere
- *          zur Nutzung in der Applikationsschicht geschrieben werden.
- * @changed OLI 22.09.2008 - Austausch der Tilde im CodeGeneratoraufruf durch
- *          den Inhalt der System-Property "user.home". Ich bilde mir ein,
- *          hierdurch eine bessere Konfigurierbarkeit zu erreichen.
- * @changed OLI 02.10.2009 - Verbesserung des Fehlerhandlings beim Bau der
- *          Updatescripte und beim Import von Datenmodellen.
+ * @changed OLI 16.08.2008 - Erweiterung der Schreibroutine in der Form, das eine Datei f&uuml;r die Pflege des
+ *          Datenmodells und eine kleinere zur Nutzung in der Applikationsschicht geschrieben werden.
+ * @changed OLI 22.09.2008 - Austausch der Tilde im CodeGeneratoraufruf durch den Inhalt der System-Property
+ *          "user.home". Ich bilde mir ein, hierdurch eine bessere Konfigurierbarkeit zu erreichen.
+ * @changed OLI 02.10.2009 - Verbesserung des Fehlerhandlings beim Bau der Updatescripte und beim Import von
+ *          Datenmodellen.
  */
 
 public class FrameArchimedes extends JFrameWithInifile implements ActionListener,
@@ -230,20 +226,17 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	private JCheckBoxMenuItem menuitemswitchrelationtoview = null;
 
 	/*
-	 * Der Men&uuml;punkt zum Zu-/Abschalten der technischen Felder im aktuellen
-	 * View.
+	 * Der Men&uuml;punkt zum Zu-/Abschalten der technischen Felder im aktuellen View.
 	 */
 	private JCheckBoxMenuItem menuitemswitchtechnicalfieldstoview = null;
 
 	/*
-	 * Der Men&uuml;punkt zum Zu-/Abschalten der transienten Felder im aktuellen
-	 * View.
+	 * Der Men&uuml;punkt zum Zu-/Abschalten der transienten Felder im aktuellen View.
 	 */
 	private JCheckBoxMenuItem menuitemswitchtransientfieldstoview = null;
 
 	/*
-	 * Dieser Label zeigt die aktuelle Position der Maus &uuml;ber der
-	 * Diagramm-Komponente an.
+	 * Dieser Label zeigt die aktuelle Position der Maus &uuml;ber der Diagramm-Komponente an.
 	 */
 	// private JLabel labelPosition = new JLabel("(0,0)");
 	/* Referenz auf das Datei-Men&uuml; zwecks Dateinamencache-Erweiterung. */
@@ -256,20 +249,17 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	private JMenuItem[] dateinamencache = new JMenuItem[20];
 
 	/*
-	 * MenuItem, das die Aktion zum Einf&uuml;gen einer Tabelle in das Datenmodell
-	 * ausl&ouml;st.
+	 * MenuItem, das die Aktion zum Einf&uuml;gen einer Tabelle in das Datenmodell ausl&ouml;st.
 	 */
 	private JMenuItem menuitemneutabelle = null;
 
 	/*
-	 * MenuItem, das die Aktion zum Einf&uuml;gen einer Standardtabelle in das
-	 * Datenmodell ausl&ouml;st.
+	 * MenuItem, das die Aktion zum Einf&uuml;gen einer Standardtabelle in das Datenmodell ausl&ouml;st.
 	 */
 	private JMenuItem menuitemneustandardtabelle = null;
 
 	/*
-	 * MenuItem, das die Aktion zum Einf&uuml;gen einer Tabelle in eine View
-	 * ausl&ouml;st.
+	 * MenuItem, das die Aktion zum Einf&uuml;gen einer Tabelle in eine View ausl&ouml;st.
 	 */
 	private JMenuItem menuitemtabletoview = null;
 
@@ -283,8 +273,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	private String datenpfad = ".";
 
 	/*
-	 * Die Benutzerinformationen des Benutzer der Installation, z. B. fuer
-	 * Generatoren.
+	 * Die Benutzerinformationen des Benutzer der Installation, z. B. fuer Generatoren.
 	 */
 	private UserInformation userInformation = null;
 	private DiagramGUIObjectCreator guiObjectCreator = null;
@@ -304,9 +293,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * @param guiBundle  A bundle with GUI information.
 	 * @param serverMode Set this flag if the application is started in server mode.
 	 *
-	 * @changed OLI 30.09.2007 - Ersetzen des Aufrufs der aufgehobenen Methode
-	 *          <TT>setRasterwidth(int)</TT> des <TT>component</TT>-Objekts gegen
-	 *          den der Methode <TT>setRasterWidth(int)</TT>.
+	 * @changed OLI 30.09.2007 - Ersetzen des Aufrufs der aufgehobenen Methode <TT>setRasterwidth(int)</TT> des
+	 *          <TT>component</TT>-Objekts gegen den der Methode <TT>setRasterWidth(int)</TT>.
 	 */
 	public FrameArchimedes(final GUIBundle guiBundle, final boolean serverMode) {
 		super("", guiBundle.getInifile());
@@ -742,8 +730,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird ausgef&uuml;hrt, wenn der Benutzer den Men&uuml;punkt
-	 * &Ouml;ffnen w&auml;hlt.
+	 * Diese Methode wird ausgef&uuml;hrt, wenn der Benutzer den Men&uuml;punkt &Ouml;ffnen w&auml;hlt.
 	 */
 	public void doDateiOeffnen() {
 		if (this.diagramm.isAltered()) {
@@ -780,8 +767,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird ausgef&uuml;hrt, wenn der Benutzer den Men&uuml;punkt
-	 * &Ouml;ffnen w&auml;hlt.
+	 * Diese Methode wird ausgef&uuml;hrt, wenn der Benutzer den Men&uuml;punkt &Ouml;ffnen w&auml;hlt.
 	 *
 	 * @param dn Der Name der einzulesenden Datei.
 	 */
@@ -793,8 +779,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * This method is called if the user clicks the menu item "file / open".
 	 *
 	 * @param fileName The name of the file to read.
-	 * @param ask      If this flag is set in case of an altered data model, it will
-	 *                 be asked for saving the current model.
+	 * @param ask      If this flag is set in case of an altered data model, it will be asked for saving the current
+	 *                 model.
 	 *
 	 * @changed OLI 18.03.2016 - Comment to English. Introduced XML files.
 	 */
@@ -876,8 +862,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird ausgef&uuml;hrt, wenn der Benutzer den Men&uuml;punkt
-	 * Speichern unter... w&auml;hlt.
+	 * Diese Methode wird ausgef&uuml;hrt, wenn der Benutzer den Men&uuml;punkt Speichern unter... w&auml;hlt.
 	 */
 	public void doDateiSpeichernUnter() {
 		String dn = "";
@@ -900,15 +885,12 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	/**
 	 * Stores the data model in the file system.
 	 *
-	 * @param fileName     The name of the file which the data model is to store
-	 *                     into.
-	 * @param ignoreErrors Set this flag if a model with errors is to be stored
-	 *                     also.
+	 * @param fileName     The name of the file which the data model is to store into.
+	 * @param ignoreErrors Set this flag if a model with errors is to be stored also.
 	 *
-	 * @changed OLI 16.08.2008 - There will be two different versions of the model
-	 *          stored: one is for editing the data model, the other for using as
-	 *          application layer in Archimedes applications (this works for ADS
-	 *          files only).
+	 * @changed OLI 16.08.2008 - There will be two different versions of the model stored: one is for editing the data
+	 *          model, the other for using as application layer in Archimedes applications (this works for ADS files
+	 *          only).
 	 * @changed OLI 11.07.2016 - Refactored.
 	 */
 	public void doDateiSpeichern(final String name, final boolean ignoreErrors) {
@@ -1055,8 +1037,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Datei /
-	 * Drucken bet&auml;tigt hat.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Datei / Drucken bet&auml;tigt hat.
 	 */
 	public void doDateiDrucken() {
 		new DiagramPrinter().print(this, this.getInifile(), this.component,
@@ -1066,12 +1047,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Datei /
-	 * Grafikexport aufruft.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Datei / Grafikexport aufruft.
 	 *
-	 * @changed OLI 01.01.2008 - Anpassung an die neue Signatur des paint-Aufrufes
-	 *          der ComponentDiagramm zur Kennzeichnung von Ausdrucken oder
-	 *          Grafikexporten.<BR>
+	 * @changed OLI 01.01.2008 - Anpassung an die neue Signatur des paint-Aufrufes der ComponentDiagramm zur
+	 *          Kennzeichnung von Ausdrucken oder Grafikexporten.<BR>
 	 */
 	public void doDateiGrafikexport() {
 		new GraphicExporter().export(this, this.dateiname, this.datenpfad, this.component);
@@ -1195,8 +1174,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * This method will be called if the menu item "info / versions to clip board"
-	 * is selected.
+	 * This method will be called if the menu item "info / versions to clip board" is selected.
 	 *
 	 * @changed OLI 18.04.2017 - Added.
 	 */
@@ -1212,11 +1190,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Neu /
-	 * Tabelle bet&auml;tigt.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Neu / Tabelle bet&auml;tigt.
 	 *
-	 * @param filled Wird diese Flagge gesetzt, so wird eine Tabelle mit den
-	 *               &uuml;blichen Standard-Einstellungen und -Spalten generiert.
+	 * @param filled Wird diese Flagge gesetzt, so wird eine Tabelle mit den &uuml;blichen Standard-Einstellungen und
+	 *               -Spalten generiert.
 	 */
 	public void doNeuTabelle(final boolean filled) {
 		this.component.setInsertMode(true);
@@ -1246,8 +1223,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode &ouml;ffnet ein zus&auml;tzliches Fenster mit einer
-	 * 10%-Darstellung des Datenmodells.
+	 * Diese Methode &ouml;ffnet ein zus&auml;tzliches Fenster mit einer 10%-Darstellung des Datenmodells.
 	 *
 	 * @changed OLI 16.12.2008 - Hinzugef&uuml;gt.
 	 */
@@ -1261,8 +1237,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode erzeugt oder aktualisiert (falls bereits vorhanden) einen Satz
-	 * von Domains, der immer wieder gern genutzt wird :o).
+	 * Diese Methode erzeugt oder aktualisiert (falls bereits vorhanden) einen Satz von Domains, der immer wieder gern
+	 * genutzt wird :o).
 	 */
 	public void doDomainsAnlegen() {
 		String dn = "";
@@ -1369,8 +1345,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt
-	 * Bearbeiten / Domains bet&auml;tigt.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Bearbeiten / Domains bet&auml;tigt.
 	 */
 	public void doBearbeitenDomains() {
 		final DiagrammModel dm = this.diagramm;
@@ -1407,8 +1382,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * This method will be called if the user selects the edit / sequences menu
-	 * item.
+	 * This method will be called if the user selects the edit / sequences menu item.
 	 */
 	public void doEditSequences() {
 		final DiagrammModel dm = this.diagramm;
@@ -1444,8 +1418,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt
-	 * Bearbeiten / Komplexe Indices aufruft.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Bearbeiten / Komplexe Indices aufruft.
 	 */
 	public void doBearbeitenKomplexeIndices() {
 		new ComplexIndicesAdministrationFrame("Complex index administration", this.getInifile(), this.diagramm,
@@ -1453,8 +1426,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt
-	 * Bearbeiten / Stereotype bet&auml;tigt.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Bearbeiten / Stereotype bet&auml;tigt.
 	 */
 	public void doBearbeitenStereotype() {
 		final DiagrammModel dm = this.diagramm;
@@ -1489,8 +1461,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt
-	 * Bearbeiten / Views bet&auml;tigt.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Bearbeiten / Views bet&auml;tigt.
 	 */
 	public void doBearbeitenViews() {
 		final DiagrammModel dm = this.diagramm;
@@ -1531,8 +1502,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt
-	 * Bearbeiten / Diagrammparameter bet&auml;tigt.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Bearbeiten / Diagrammparameter bet&auml;tigt.
 	 */
 	public void doBearbeitenDiagrammparameter() {
 		this.setPredeterminedOptionProviderForDiagram();
@@ -1561,8 +1531,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 *
 	 * @param userPing The new user ping for the frame.
 	 *
-	 * @changed OLI 22.03.2016 - Added. / public void setUserPing(UserPing userPing)
-	 *          { this.userPing = userPing; }
+	 * @changed OLI 22.03.2016 - Added. / public void setUserPing(UserPing userPing) { this.userPing = userPing; }
 	 *
 	 *          <p>
 	 *          /** Starts the database connections maintenance.
@@ -1640,8 +1609,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Zoom /
-	 * Zoom n% bet&auml;tigt.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Zoom / Zoom n% bet&auml;tigt.
 	 *
 	 * @param factor Der neue Zoomfaktor.
 	 */
@@ -1651,11 +1619,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Zoom /
-	 * Tabelle finden anclickt.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Zoom / Tabelle finden anclickt.
 	 *
-	 * @changed OLI 27.02.2009 - Die &Auml;nderungsflagge wird nach der
-	 *          Tabellenauswahl nicht mehr gesetzt (ist ja auch nicht sinnvoll).
+	 * @changed OLI 27.02.2009 - Die &Auml;nderungsflagge wird nach der Tabellenauswahl nicht mehr gesetzt (ist ja auch
+	 *          nicht sinnvoll).
 	 */
 	public void doTabelleFinden() {
 		final SortedVector<TableModel> sv = new SortedVector<TableModel>();
@@ -1678,16 +1645,15 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Genrieren
-	 * / Codegeneratoroptionen (&Uuml;bersicht) anclickt.
+	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Genrieren / Codegeneratoroptionen
+	 * (&Uuml;bersicht) anclickt.
 	 */
 	public void doGeneratorOptionen() {
 		new DialogTableGeneratorOptions(this, this.getInifile(), this.diagramm);
 	}
 
 	/**
-	 * This Method is called if the user clicks on the menu item "Generate" /
-	 * "Code".
+	 * This Method is called if the user clicks on the menu item "Generate" / "Code".
 	 */
 	public void doGenerateCode() {
 		final CodePathProvider codePathProvider = new CodePathProvider(this.guiBundle, this.diagramm);
@@ -1809,10 +1775,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * Liefert eine Liste mit den Index-Metadaten aus der angegebenen Datenbank.
 	 *
 	 * @param dsr        Die Daten zur Verbindung mit der Datenbank.
-	 * @param schemaName Ein Schemaname, falls das Modell auf ein spezielles Schema
-	 *                   der Datenbank abgestimmt werden soll. Soll das
-	 *                   Defaultschema genutzt werden, kann der Name leer
-	 *                   &uuml;bergeben werden.
+	 * @param schemaName Ein Schemaname, falls das Modell auf ein spezielles Schema der Datenbank abgestimmt werden
+	 *                   soll. Soll das Defaultschema genutzt werden, kann der Name leer &uuml;bergeben werden.
 	 *
 	 * @return Eine Liste mit den Index-Metadaten aus der angegebenen Datenbank.
 	 *
@@ -1844,10 +1808,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * Liefert eine Liste mit den Unique-Metadaten aus der angegebenen Datenbank.
 	 *
 	 * @param dsr        Die Daten zur Verbindung mit der Datenbank.
-	 * @param schemaName Ein Schemaname, falls das Modell auf ein spezielles Schema
-	 *                   der Datenbank abgestimmt werden soll. Soll das
-	 *                   Defaultschema genutzt werden, kann der Name leer
-	 *                   &uuml;bergeben werden.
+	 * @param schemaName Ein Schemaname, falls das Modell auf ein spezielles Schema der Datenbank abgestimmt werden
+	 *                   soll. Soll das Defaultschema genutzt werden, kann der Name leer &uuml;bergeben werden.
 	 *
 	 * @return Eine Liste mit den Unique-Metadaten aus der angegebenen Datenbank.
 	 *
@@ -1994,18 +1956,14 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * Updates the model name in the user ping.
 	 *
 	 * @param modelName The new model name for the user ping.
-	 * @param menu      Referenz auf das Men&uuml;, dessen Inhalt aus der Viewliste
-	 *                  gebildet werden soll.
-	 * @param views     Die Liste der Views, die in das Men&uuml; &uuml;bernommen
-	 *                  werden sollen.
+	 * @param menu      Referenz auf das Men&uuml;, dessen Inhalt aus der Viewliste gebildet werden soll.
+	 * @param views     Die Liste der Views, die in das Men&uuml; &uuml;bernommen werden sollen.
 	 *
-	 * @changed OLI 22.03.2016 - Added. / public void updateUserPingModelName() { if
-	 *          ((this.diagramm != null) && (this.userPing != null)) {
-	 *          this.userPing.setCurrentModelName(this.diagramm.getName()); } }
+	 * @changed OLI 22.03.2016 - Added. / public void updateUserPingModelName() { if ((this.diagramm != null) &&
+	 *          (this.userPing != null)) { this.userPing.setCurrentModelName(this.diagramm.getName()); } }
 	 *
 	 *          <p>
-	 *          /** Aktualisiert das View-Men&uuml; anhand der Viewliste des
-	 *          &uuml;bergebenen Diagramms.
+	 *          /** Aktualisiert das View-Men&uuml; anhand der Viewliste des &uuml;bergebenen Diagramms.
 	 *          </p>
 	 */
 	public void updateViewMenu(final JMenu menu, final java.util.List<GUIViewModel> views) {
@@ -2043,8 +2001,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Aktualisiert die Komponente zum Anzeigen des Diagramms auf den angegebenen
-	 * View.
+	 * Aktualisiert die Komponente zum Anzeigen des Diagramms auf den angegebenen View.
 	 *
 	 * @param view Der View, den die Komponente anzeigen soll.
 	 */
@@ -2054,8 +2011,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode wird aufgerufen, wenn der Meb&uuml;punkt Views / Tabelle
-	 * einf&uuml;gen anclickt.
+	 * Diese Methode wird aufgerufen, wenn der Meb&uuml;punkt Views / Tabelle einf&uuml;gen anclickt.
 	 */
 	public void doViewsEinfuegen() {
 		final corentx.util.SortedVector<TableModel> sv = new corentx.util.SortedVector<TableModel>();
@@ -2085,8 +2041,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	/**
 	 * Shows a monitor with the running Archimedes instances.
 	 *
-	 * @changed OLI 15.03.2016 - Added. / public void doServerMonitor() { new
-	 *          UserMonitorFrame(this.guiBundle); }
+	 * @changed OLI 15.03.2016 - Added. / public void doServerMonitor() { new UserMonitorFrame(this.guiBundle); }
 	 *
 	 *          <p>
 	 *          /** Setzt die Ge&auml;ndert-Flagge des aktuellen Diagramms.

@@ -47,22 +47,16 @@ public class JDBCModelReader implements ModelReader {
 	/**
 	 * Creates a new model reader with the passed parameters.
 	 *
-	 * @param factory                 An object factory implementation to create the
-	 *                                DB objects.
+	 * @param factory                 An object factory implementation to create the DB objects.
 	 * @param typeConverter           A converter for database types.
-	 * @param connection              The connection whose data model should be
-	 *                                read.
-	 * @param schemeName              The name of the scheme whose data are to read
-	 *                                (pass "null" to ignore scheme and load all
-	 *                                tables).
+	 * @param connection              The connection whose data model should be read.
+	 * @param schemeName              The name of the scheme whose data are to read (pass "null" to ignore scheme and
+	 *                                load all tables).
 	 * @param ignoreIndices           Set this flag to ignore indices while import.
-	 * @param ignoreTablePatterns     Patterns of table names which should be
-	 *                                returned.
-	 * @param importOnlyTablePatterns Patterns of table names which are to import if
-	 *                                the table name matches the at least one
-	 *                                pattern. The patterns to import only are
-	 *                                checked before ignore table patterns (set "*"
-	 *                                if all tables are to import).
+	 * @param ignoreTablePatterns     Patterns of table names which should be returned.
+	 * @param importOnlyTablePatterns Patterns of table names which are to import if the table name matches the at least
+	 *                                one pattern. The patterns to import only are checked before ignore table patterns
+	 *                                (set "*" if all tables are to import).
 	 * @throws IllegalArgumentException Passing null value.
 	 */
 	public JDBCModelReader(DBObjectFactory factory, DBTypeConverter typeConverter, Connection connection,
@@ -132,17 +126,18 @@ public class JDBCModelReader implements ModelReader {
 		int current = 0;
 		for (String tableName : tableNames) {
 			if (!isMatchingImportOnlyPattern(tableName)) {
-				fireModelReaderEvent(new ModelReaderEvent(current, max, 2,
+				fireModelReaderEvent(new ModelReaderEvent(current, max, 1,
 						ModelReaderEventType.IMPORT_ONLY_PATTERN_NOT_MATCHING, tableName));
 				continue;
 			}
 			if (isMatchingIgnorePattern(tableName)) {
 				fireModelReaderEvent(
-						new ModelReaderEvent(current, max, 2, ModelReaderEventType.IGNORED_BY_PATTERN, tableName));
+						new ModelReaderEvent(current, max, 1, ModelReaderEventType.IGNORED_BY_PATTERN, tableName));
 				continue;
 			}
 			scheme.addTables(this.factory.createTable(tableName, new ArrayList<>()));
-			fireModelReaderEvent(new ModelReaderEvent(current, max, 2, ModelReaderEventType.TABLE_ADDED, tableName));
+			fireModelReaderEvent(new ModelReaderEvent(current, max, 1, ModelReaderEventType.TABLE_ADDED, tableName));
+			current++;
 		}
 		rs.close();
 	}
@@ -205,6 +200,7 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			current++;
 		}
 	}
 
@@ -213,7 +209,7 @@ public class JDBCModelReader implements ModelReader {
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
 			fireModelReaderEvent(
-					new ModelReaderEvent(current, max, 2, ModelReaderEventType.PRIMARY_KEY_ADDED, table.getName()));
+					new ModelReaderEvent(current, max, 3, ModelReaderEventType.PRIMARY_KEY_ADDED, table.getName()));
 			ResultSet rs = dbmd.getPrimaryKeys(null, this.schemeName, table.getName());
 			while (rs.next()) {
 				String columnName = rs.getString("COLUMN_NAME");
@@ -226,6 +222,7 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			current++;
 		}
 	}
 
@@ -234,7 +231,7 @@ public class JDBCModelReader implements ModelReader {
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
 			fireModelReaderEvent(
-					new ModelReaderEvent(current, max, 2, ModelReaderEventType.FOREIGN_KEY_ADDED, table.getName()));
+					new ModelReaderEvent(current, max, 4, ModelReaderEventType.FOREIGN_KEY_ADDED, table.getName()));
 			ResultSet rs = dbmd.getImportedKeys(null, this.schemeName, table.getName());
 			while (rs.next()) {
 				try {
@@ -265,6 +262,7 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			current++;
 		}
 	}
 
@@ -273,7 +271,7 @@ public class JDBCModelReader implements ModelReader {
 		int current = 0;
 		for (TableSO table : tables) {
 			fireModelReaderEvent(
-					new ModelReaderEvent(current, max, 2, ModelReaderEventType.INDEX_ADDED, table.getName()));
+					new ModelReaderEvent(current, max, 5, ModelReaderEventType.INDEX_ADDED, table.getName()));
 			// TODO: Set "false, false" to "true, true" for large oracle tables.
 			ResultSet rs = dbmd.getIndexInfo(null, this.schemeName, table.getName(), false, false);
 			while (rs.next()) {
@@ -294,6 +292,7 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			current++;
 		}
 	}
 
