@@ -1147,27 +1147,32 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					@Override
 					public void eventFired(final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
 						if (event.getEventType() == EditorFrameEventType.OK) {
-							try {
-								Diagramm d = (Diagramm) new JDBCImportManager().importDiagram(connectionData,
-										e -> System.out.println(e));
-								if (d != null) {
-									diagramm = d;
-									diagramm.addDataModelListener(frameArchimedes);
-									diagramm.addDiagrammModelListener(frameArchimedes);
-									diagramm.addGUIDiagramModelListener(frameArchimedes);
-									guiObjectCreator.setDiagram(diagramm);
-									component.setView(diagramm.getViews().get(0));
-									component.setDiagram(diagramm);
-									if (fov != null) {
-										fov.setDiagramm(diagramm);
+							final Thread t = new Thread(() -> {
+								try {
+									ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(frameArchimedes,
+											guiBundle.getInifile());
+									Diagramm d = (Diagramm) new JDBCImportManager().importDiagram(connectionData,
+											mrpm::update);
+									if (d != null) {
+										diagramm = d;
+										diagramm.addDataModelListener(frameArchimedes);
+										diagramm.addDiagrammModelListener(frameArchimedes);
+										diagramm.addGUIDiagramModelListener(frameArchimedes);
+										guiObjectCreator.setDiagram(diagramm);
+										component.setView(diagramm.getViews().get(0));
+										component.setDiagram(diagramm);
+										if (fov != null) {
+											fov.setDiagramm(diagramm);
+										}
+										updateViewMenu(viewmenu, diagramm.getViews());
+										diagramm.clearAltered();
 									}
-									updateViewMenu(viewmenu, diagramm.getViews());
-									diagramm.clearAltered();
+								} catch (Exception e) {
+									LOG.error("error detected while importing from JDBC connection: " + e.getMessage());
+									e.printStackTrace();
 								}
-							} catch (Exception e) {
-								LOG.error("error detected while importing from JDBC connection: " + e.getMessage());
-								e.printStackTrace();
-							}
+							});
+							t.start();
 						}
 					}
 				});
