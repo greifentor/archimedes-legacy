@@ -42,6 +42,7 @@ public class JDBCModelReader implements ModelReader {
 	private boolean ignoreIndices;
 	private String[] ignoreTablePatterns;
 	private String[] importOnlyTablePatterns;
+	private List<ModelReaderListener> listeners = new ArrayList<>();
 
 	/**
 	 * Creates a new model reader with the passed parameters.
@@ -78,6 +79,24 @@ public class JDBCModelReader implements ModelReader {
 	}
 
 	@Override
+	public ModelReader addModelReaderListener(ModelReaderListener listener) {
+		if (listener != null) {
+			this.listeners.add(listener);
+		}
+		return this;
+	}
+
+	protected void fireModelReaderEvent(ModelReaderEvent event) {
+		for (ModelReaderListener l : listeners) {
+			try {
+				l.eventCaught(event);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
 	public DatabaseSO readModel() throws Exception {
 		SchemeSO scheme = this.factory.createScheme(this.schemeName, new ArrayList<>());
 		DatabaseMetaData dbmd = this.connection.getMetaData();
@@ -98,21 +117,27 @@ public class JDBCModelReader implements ModelReader {
 
 	private void loadTables(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {
 		ResultSet rs = dbmd.getTables(null, this.schemeName, "%", new String[] { "TABLE" });
+		List<String> tableNames = new ArrayList<>();
 		while (rs.next()) {
 			String tableName = rs.getString("TABLE_NAME");
+			tableNames.add(tableName);
+		}
+		int max = tableNames.size();
+		int current = 0;
+		for (String tableName : tableNames) {
 			if (!isMatchingImportOnlyPattern(tableName)) {
-				System.out.println(LocalDateTime.now() + " - table ignored (import only pattern): "
-						+ rs.getString("TABLE_SCHEM") + "." + tableName);
+				fireModelReaderEvent(new ModelReaderEvent(current, max, 1,
+						ModelReaderEventType.IMPORT_ONLY_PATTERN_NOT_MATCHING, tableName));
 				continue;
 			}
 			if (isMatchingIgnorePattern(tableName)) {
-				System.out.println(LocalDateTime.now() + " - table ignored (ignore pattern): "
-						+ rs.getString("TABLE_SCHEM") + "." + tableName);
+				fireModelReaderEvent(
+						new ModelReaderEvent(current, max, 1, ModelReaderEventType.IGNORED_BY_PATTERN, tableName));
 				continue;
 			}
 			scheme.addTables(this.factory.createTable(tableName, new ArrayList<>()));
-			System.out
-					.println(LocalDateTime.now() + " - table added: " + rs.getString("TABLE_SCHEM") + "." + tableName);
+			fireModelReaderEvent(new ModelReaderEvent(current, max, 1, ModelReaderEventType.TABLE_ADDED, tableName));
+			current++;
 		}
 		rs.close();
 	}
@@ -144,8 +169,11 @@ public class JDBCModelReader implements ModelReader {
 	}
 
 	private void loadColumns(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {
+		int max = scheme.getTables().size();
+		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			System.out.println(LocalDateTime.now() + " - reading columns for table: " + table.getName());
+			fireModelReaderEvent(
+					new ModelReaderEvent(current, max, 2, ModelReaderEventType.COLUMNS_ADDED, table.getName()));
 			ResultSet rs = dbmd.getColumns(null, this.schemeName, table.getName(), "%");
 			while (rs.next()) {
 				String columnName = rs.getString("COLUMN_NAME");
@@ -172,12 +200,16 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			current++;
 		}
 	}
 
 	private void loadPrimaryKeys(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {
+		int max = scheme.getTables().size();
+		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			System.out.println(LocalDateTime.now() + " - reading primary keys for table: " + table.getName());
+			fireModelReaderEvent(
+					new ModelReaderEvent(current, max, 3, ModelReaderEventType.PRIMARY_KEY_ADDED, table.getName()));
 			ResultSet rs = dbmd.getPrimaryKeys(null, this.schemeName, table.getName());
 			while (rs.next()) {
 				String columnName = rs.getString("COLUMN_NAME");
@@ -190,12 +222,16 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			current++;
 		}
 	}
 
 	private void loadForeignKeys(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {
+		int max = scheme.getTables().size();
+		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			System.out.println(LocalDateTime.now() + " - reading foreign keys for table: " + table.getName());
+			fireModelReaderEvent(
+					new ModelReaderEvent(current, max, 4, ModelReaderEventType.FOREIGN_KEY_ADDED, table.getName()));
 			ResultSet rs = dbmd.getImportedKeys(null, this.schemeName, table.getName());
 			while (rs.next()) {
 				try {
@@ -226,12 +262,16 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			current++;
 		}
 	}
 
 	private void loadIndices(DatabaseMetaData dbmd, List<TableSO> tables) throws SQLException {
+		int max = tables.size();
+		int current = 0;
 		for (TableSO table : tables) {
-			System.out.println(LocalDateTime.now() + " - reading indices for table: " + table.getName());
+			fireModelReaderEvent(
+					new ModelReaderEvent(current, max, 5, ModelReaderEventType.INDEX_ADDED, table.getName()));
 			// TODO: Set "false, false" to "true, true" for large oracle tables.
 			ResultSet rs = dbmd.getIndexInfo(null, this.schemeName, table.getName(), false, false);
 			while (rs.next()) {
@@ -252,6 +292,7 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			current++;
 		}
 	}
 
@@ -287,6 +328,13 @@ public class JDBCModelReader implements ModelReader {
 	private List<SequenceSO> getSequences(DatabaseMetaData dbmd) throws SQLException {
 		List<SequenceSO> sequences = new ArrayList<>();
 		return sequences;
+	}
+
+	@Override
+	public void removeModelReaderListener(ModelReaderListener listener) {
+		if (listener != null) {
+			this.listeners.remove(listener);
+		}
 	}
 
 }

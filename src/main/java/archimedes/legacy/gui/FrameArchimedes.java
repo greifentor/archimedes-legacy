@@ -317,7 +317,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		this.diagramm.getViews().add((GUIViewModel) Archimedes.Factory.createMainView("Main",
 				"Diese Sicht beinhaltet alle Tabellen des Schemas", true));
 		this.guiObjectCreator = new DiagramGUIObjectCreator(this.diagramm);
-		this.component = new DiagramComponentPanel<GUIObjectTypes>((GUIViewModel) this.diagramm.getViews().get(0),
+		this.component = new DiagramComponentPanel<GUIObjectTypes>(this.diagramm.getViews().get(0),
 				ComponentDiagramm.DOTSPERPAGEX * ComponentDiagramm.PAGESPERROW,
 				ComponentDiagramm.DOTSPERPAGEY * ComponentDiagramm.PAGESPERCOLUMN, this.diagramm, this.guiObjectCreator,
 				this, new ArchimedesStatusBarRenderer(), new DefaultCopyAndPasteController());
@@ -563,7 +563,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				}
 			}
 			;
-			menuItem.addActionListener(new ZoomActionListener(0.1d * (double) i));
+			menuItem.addActionListener(new ZoomActionListener(0.1d * i));
 			menu.add(menuItem);
 		}
 
@@ -825,7 +825,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			this.diagramm.addDiagrammModelListener(this);
 			this.diagramm.addGUIDiagramModelListener(this);
 			this.guiObjectCreator.setDiagram(this.diagramm);
-			this.component.setView((GUIViewModel) this.diagramm.getViews().get(0));
+			this.component.setView(this.diagramm.getViews().get(0));
 			this.component.setDiagram(this.diagramm);
 
 			if (this.fov != null) {
@@ -1148,14 +1148,15 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					public void eventFired(final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
 						if (event.getEventType() == EditorFrameEventType.OK) {
 							try {
-								Diagramm d = (Diagramm) new JDBCImportManager().importDiagram(connectionData);
+								Diagramm d = (Diagramm) new JDBCImportManager().importDiagram(connectionData,
+										e -> System.out.println(e));
 								if (d != null) {
 									diagramm = d;
 									diagramm.addDataModelListener(frameArchimedes);
 									diagramm.addDiagrammModelListener(frameArchimedes);
 									diagramm.addGUIDiagramModelListener(frameArchimedes);
 									guiObjectCreator.setDiagram(diagramm);
-									component.setView((GUIViewModel) diagramm.getViews().get(0));
+									component.setView(diagramm.getViews().get(0));
 									component.setDiagram(diagramm);
 									if (fov != null) {
 										fov.setDiagramm(diagramm);
@@ -1570,7 +1571,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			public void eventFired(final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
 				if (event.getEventType() == EditorFrameEventType.OK) {
 					try {
-						final DatabaseConnectionRecord dcr = (DatabaseConnectionRecord) event.getEditedObject();
+						final DatabaseConnectionRecord dcr = event.getEditedObject();
 
 						if ((dcr != null) && (dcr.getDatabaseConnection() != null)) {
 							getInifile().writeStr("Database-Connections", "Update-Preselection-" + diagramm.getName(),
@@ -2026,7 +2027,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					final TabellenModel tm = (TabellenModel) values.elementAt(i);
 
 					if (!tm.getViews().contains(component.getView())) {
-						tm.setXY((GUIViewModel) component.getView(), tm.getX(diagramm.getViews().get(0)),
+						tm.setXY(component.getView(), tm.getX(diagramm.getViews().get(0)),
 								tm.getY(diagramm.getViews().get(0)));
 					}
 
