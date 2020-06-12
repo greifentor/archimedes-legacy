@@ -17,10 +17,12 @@ public class JDBCImportManager {
 	/**
 	 * Starts the import process.
 	 * 
-	 * @param connectionData A container with the necessary data for the database connection.
+	 * @param connectionData A container with the necessary data for the database
+	 *                       connection.
+	 * @param listener       A listener to the model reader.
 	 * @return A diagram from a selected JDBC connection.
 	 */
-	public DiagrammModel importDiagram(JDBCImportConnectionData connectionData) {
+	public DiagrammModel importDiagram(JDBCImportConnectionData connectionData, ModelReaderListener listener) {
 		try {
 			// TODO: Collect all necessary data.
 			DBObjectFactory factory = new DefaultDBObjectFactory();
@@ -36,7 +38,7 @@ public class JDBCImportManager {
 			// TODO: Import model from JDBC.
 			DatabaseSO database = new JDBCModelReader(factory, typeConverter, connection, schemeName,
 					connectionData.isIgnoreIndices(), connectionData.getIgnoreTablePatterns(),
-					connectionData.getImportOnlyTablePatterns()).readModel();
+					connectionData.getImportOnlyTablePatterns()).addModelReaderListener(listener).readModel();
 			// TODO: Convert to Diagram
 			return new DatabaseSOToDiagramConverter(connectionData.getAdjustment()).convert(database);
 		} catch (Exception e) {
