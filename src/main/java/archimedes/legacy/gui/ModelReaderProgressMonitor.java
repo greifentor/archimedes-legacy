@@ -8,7 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -16,7 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import archimedes.legacy.importer.jdbc.ModelReaderEvent;
-import corent.files.Inifile;
+import baccara.gui.GUIBundle;
 import corent.gui.JFrameWithInifile;
 
 /**
@@ -26,10 +25,13 @@ import corent.gui.JFrameWithInifile;
  */
 public class ModelReaderProgressMonitor extends JFrameWithInifile {
 
+	private static final String RES_BASE = "ModelReaderProgressMonitor";
+
 	private static final int HGAP = 3;
 	private static final int VGAP = 3;
 
 	private JButton buttonClose = new JButton("Schließen");
+	private GUIBundle guiBundle = null;
 	private JLabel labelProgressAll = new JLabel("Progress of Model Read Process");
 	private JLabel labelProgressThread = new JLabel("Progress of Thread");
 	private JLabel labelMessages = new JLabel("Messages");
@@ -37,8 +39,9 @@ public class ModelReaderProgressMonitor extends JFrameWithInifile {
 	private JProgressBar progressBarThread = new JProgressBar(0, 100);
 	private JTextArea textAreaMessages = new JTextArea(10, 80);
 
-	public ModelReaderProgressMonitor(JFrame f, Inifile ini) {
-		super("Model Reader Progress", ini);
+	public ModelReaderProgressMonitor(GUIBundle guiBundle) {
+		super("Model Reader Progress", guiBundle.getInifile());
+		this.guiBundle = guiBundle;
 		this.setContentPane(createMainPanel());
 		this.pack();
 		this.setVisible(true);
@@ -72,7 +75,8 @@ public class ModelReaderProgressMonitor extends JFrameWithInifile {
 
 	private JPanel createButtonPanel() {
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, HGAP, VGAP));
-		this.buttonClose.addActionListener(event -> this.setVisible(false));
+		this.buttonClose = this.guiBundle.createButton(RES_BASE + ".buttons.close", "close",
+				event -> this.setVisible(false), p);
 		p.add(this.buttonClose);
 		return p;
 	}
@@ -84,8 +88,10 @@ public class ModelReaderProgressMonitor extends JFrameWithInifile {
 
 	public void update(ModelReaderEvent event) {
 		this.progressBarAll.setValue(event.getThread());
+		this.progressBarAll.setString("" + event.getThread());
 		this.progressBarThread.setMaximum(event.getMaximumProgress() - 1);
 		this.progressBarThread.setValue(event.getCurrentProgress());
+		this.progressBarThread.setString("" + event.getCurrentProgress());
 		this.textAreaMessages.setText(this.textAreaMessages.getText() //
 				+ String.format("%-30s - %s", event.getObjectName(), event.getType().name()) //
 				+ "\n" //

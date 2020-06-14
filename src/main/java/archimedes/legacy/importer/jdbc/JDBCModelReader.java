@@ -172,8 +172,6 @@ public class JDBCModelReader implements ModelReader {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			fireModelReaderEvent(
-					new ModelReaderEvent(current, max, 2, ModelReaderEventType.COLUMNS_ADDED, table.getName()));
 			ResultSet rs = dbmd.getColumns(null, this.schemeName, table.getName(), "%");
 			while (rs.next()) {
 				String columnName = rs.getString("COLUMN_NAME");
@@ -200,6 +198,8 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			fireModelReaderEvent(
+					new ModelReaderEvent(current, max, 2, ModelReaderEventType.COLUMNS_ADDED, table.getName()));
 			current++;
 		}
 	}
@@ -208,8 +208,6 @@ public class JDBCModelReader implements ModelReader {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			fireModelReaderEvent(
-					new ModelReaderEvent(current, max, 3, ModelReaderEventType.PRIMARY_KEY_ADDED, table.getName()));
 			ResultSet rs = dbmd.getPrimaryKeys(null, this.schemeName, table.getName());
 			while (rs.next()) {
 				String columnName = rs.getString("COLUMN_NAME");
@@ -222,6 +220,8 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			fireModelReaderEvent(
+					new ModelReaderEvent(current, max, 3, ModelReaderEventType.PRIMARY_KEY_ADDED, table.getName()));
 			current++;
 		}
 	}
@@ -230,8 +230,6 @@ public class JDBCModelReader implements ModelReader {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			fireModelReaderEvent(
-					new ModelReaderEvent(current, max, 4, ModelReaderEventType.FOREIGN_KEY_ADDED, table.getName()));
 			ResultSet rs = dbmd.getImportedKeys(null, this.schemeName, table.getName());
 			while (rs.next()) {
 				try {
@@ -262,6 +260,8 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			fireModelReaderEvent(
+					new ModelReaderEvent(current, max, 4, ModelReaderEventType.FOREIGN_KEY_ADDED, table.getName()));
 			current++;
 		}
 	}
@@ -270,8 +270,6 @@ public class JDBCModelReader implements ModelReader {
 		int max = tables.size();
 		int current = 0;
 		for (TableSO table : tables) {
-			fireModelReaderEvent(
-					new ModelReaderEvent(current, max, 5, ModelReaderEventType.INDEX_ADDED, table.getName()));
 			// TODO: Set "false, false" to "true, true" for large oracle tables.
 			ResultSet rs = dbmd.getIndexInfo(null, this.schemeName, table.getName(), false, false);
 			while (rs.next()) {
@@ -292,6 +290,8 @@ public class JDBCModelReader implements ModelReader {
 				}
 			}
 			rs.close();
+			fireModelReaderEvent(
+					new ModelReaderEvent(current, max, 5, ModelReaderEventType.INDEX_ADDED, table.getName()));
 			current++;
 		}
 	}

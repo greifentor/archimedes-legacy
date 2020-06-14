@@ -17,34 +17,24 @@ public class JDBCImportManager {
 	/**
 	 * Starts the import process.
 	 * 
-	 * @param connectionData A container with the necessary data for the database
-	 *                       connection.
+	 * @param connectionData A container with the necessary data for the database connection.
 	 * @param listener       A listener to the model reader.
 	 * @return A diagram from a selected JDBC connection.
 	 */
-	public DiagrammModel importDiagram(JDBCImportConnectionData connectionData, ModelReaderListener listener) {
-		try {
-			// TODO: Collect all necessary data.
-			DBObjectFactory factory = new DefaultDBObjectFactory();
-			DBTypeConverter typeConverter = new DBTypeConverter();
-			Class.forName(connectionData.getConnection().getDriver());
-			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord(connectionData.getConnection().getDriver(),
-					connectionData.getConnection().getUrl(), connectionData.getConnection().getUserName(),
-					connectionData.getPassword());
-//			JDBCDataSourceRecord dsr = new JDBCDataSourceRecord("org.hsqldb.jdbc.JDBCDriver",
-//					"jdbc:hsqldb:file:~/eclipse-workspace/restacf/src/test/resources/db/testdb", "sa", "");
-			Connection connection = ConnectionManager.GetConnection(dsr);
-			String schemeName = ("".equals(connectionData.getSchema()) ? null : connectionData.getSchema());
-			// TODO: Import model from JDBC.
-			DatabaseSO database = new JDBCModelReader(factory, typeConverter, connection, schemeName,
-					connectionData.isIgnoreIndices(), connectionData.getIgnoreTablePatterns(),
-					connectionData.getImportOnlyTablePatterns()).addModelReaderListener(listener).readModel();
-			// TODO: Convert to Diagram
-			return new DatabaseSOToDiagramConverter(connectionData.getAdjustment()).convert(database);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+	public DiagrammModel importDiagram(JDBCImportConnectionData connectionData, ModelReaderListener listener)
+			throws Exception {
+		DBObjectFactory factory = new DefaultDBObjectFactory();
+		DBTypeConverter typeConverter = new DBTypeConverter();
+		Class.forName(connectionData.getConnection().getDriver());
+		JDBCDataSourceRecord dsr = new JDBCDataSourceRecord(connectionData.getConnection().getDriver(),
+				connectionData.getConnection().getUrl(), connectionData.getConnection().getUserName(),
+				connectionData.getPassword());
+		Connection connection = ConnectionManager.GetConnection(dsr);
+		String schemeName = ("".equals(connectionData.getSchema()) ? null : connectionData.getSchema());
+		DatabaseSO database = new JDBCModelReader(factory, typeConverter, connection, schemeName,
+				connectionData.isIgnoreIndices(), connectionData.getIgnoreTablePatterns(),
+				connectionData.getImportOnlyTablePatterns()).addModelReaderListener(listener).readModel();
+		return new DatabaseSOToDiagramConverter(connectionData.getAdjustment()).convert(database);
 	}
 
 }

@@ -1148,9 +1148,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					public void eventFired(final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
 						if (event.getEventType() == EditorFrameEventType.OK) {
 							final Thread t = new Thread(() -> {
+								ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle);
 								try {
-									ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(frameArchimedes,
-											guiBundle.getInifile());
 									Diagramm d = (Diagramm) new JDBCImportManager().importDiagram(connectionData,
 											mrpm::update);
 									if (d != null) {
@@ -1168,8 +1167,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 										diagramm.clearAltered();
 									}
 								} catch (Exception e) {
+									mrpm.setVisible(false);
 									LOG.error("error detected while importing from JDBC connection: " + e.getMessage());
-									e.printStackTrace();
+									new ExceptionDialog(e,
+											guiBundle.getResourceText("Exception.ImportModel.text", e.getMessage()),
+											guiBundle);
 								}
 							});
 							t.start();
