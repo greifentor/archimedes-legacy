@@ -1656,7 +1656,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * (&Uuml;bersicht) anclickt.
 	 */
 	public void doGeneratorOptionen() {
-		new DialogTableGeneratorOptions(this, this.getInifile(), this.diagramm);
+		new DialogTableGeneratorOptions(this, this.guiBundle, this.diagramm);
 	}
 
 	/**
