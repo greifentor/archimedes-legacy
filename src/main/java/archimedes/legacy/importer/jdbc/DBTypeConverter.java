@@ -26,6 +26,8 @@ public class DBTypeConverter {
 			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.BLOB) {
 			return new TypeSO().setSqlType(dataType);
+		} else if (dataType == Types.BOOLEAN) {
+			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.CHAR) {
 			return new TypeSO().setSqlType(dataType).setLength(length);
 		} else if (dataType == Types.CLOB) {

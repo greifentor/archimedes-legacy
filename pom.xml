@@ -8,8 +8,6 @@
 	<packaging>jar</packaging>
 
 	<name>Archimedes (Legacy)</name>
-	<!-- FIXME change it to the project's website -->
-	<url>http://www.example.com</url>
 
 	<properties>
 		<java.version>11</java.version>
