@@ -12,7 +12,7 @@ package archimedes.legacy.scheme.stf.writer;
 import java.awt.Point;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import logging.Logger;
 
 import archimedes.legacy.model.DiagramSaveMode;
 import archimedes.legacy.scheme.Relation;

@@ -40,8 +40,6 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
-import org.apache.log4j.Logger;
-
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.model.ColumnMetaData;
 import archimedes.legacy.model.DiagrammModel;
@@ -62,15 +60,13 @@ import corent.files.StructuredTextFile;
 import corent.gui.COUtil;
 import corent.gui.ContextOwner;
 import corent.gui.UIMenuItem;
+import logging.Logger;
 
 /**
- * Diese Klasse enth&auml;t Standardroutinen, die in Archimedes-Applikationen
- * zum Einsatz kommen k&ouml;nnen.
+ * Diese Klasse enth&auml;t Standardroutinen, die in Archimedes-Applikationen zum Einsatz kommen k&ouml;nnen.
  * <P>
- * &Uuml;ber die Property
- * <I>archimedes.app.ApplicationUtil.GetMetaData.output</I> (Boolean) kann der
- * Konsolenoutput f&uuml;r die Methode
- * <TT>GetMetaData(JDBCDataSourceRecord, List&lt;
+ * &Uuml;ber die Property <I>archimedes.app.ApplicationUtil.GetMetaData.output</I> (Boolean) kann der Konsolenoutput
+ * f&uuml;r die Methode <TT>GetMetaData(JDBCDataSourceRecord, List&lt;
  * String&gt;)</TT> eingeschaltet werden.
  * 
  * <TABLE BORDER=1>
@@ -84,17 +80,13 @@ import corent.gui.UIMenuItem;
  * <TD>archimedes.app.ApplicationUtil.CreateADF.show.time</TD>
  * <TD>false</TD>
  * <TD>Boolean</TD>
- * <TD>
- * Das Setzen dieser Property sorgt f&uuml;r eine Ausgabe zur Dauer des
- * Einlesens eines Archimedesdatenmodells.</TD>
+ * <TD>Das Setzen dieser Property sorgt f&uuml;r eine Ausgabe zur Dauer des Einlesens eines Archimedesdatenmodells.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>archimedes.app.ApplicationUtil.GetMetaData.output</TD>
  * <TD>false</TD>
  * <TD>Boolean</TD>
- * <TD>
- * Schaltet eine Ausgabe der eingelesenen Metadaten f&uuml;r jede Tabelle bei
- * Aufruf der Methode
+ * <TD>Schaltet eine Ausgabe der eingelesenen Metadaten f&uuml;r jede Tabelle bei Aufruf der Methode
  * <TT>GetMetaData(JDBCDataSourceRecord, java.util.List&lt;String&gt;)
  *             </TT> ein.</TD>
  * </TR>
@@ -102,31 +94,22 @@ import corent.gui.UIMenuItem;
  * 
  * @author ollie
  * 
- * @changed OLI 21.08.2008 - Erweiterung um die Methoden
- *          <TT>CreateADF(DiagrammModel)</TT> und <TT>CreateDiagram(String)</TT>
- *          .
- * @changed OLI 30.12.2008 - Korrektur der Zuweisung der Not-Null-Flagge in der
- *          Methode
- *          <TT>GetMetaData(JDBCDataSourceRecord, java.util.List&lt;String&gt;)</TT>
- *          .
- * @changed OLI 14.01.2009 - Erweiterung um die Methoden <TT>BuildBorder()</TT>,
- *          <TT>BuildFullBorder()</TT>, <TT>BuildBorderedPanel()</TT> und
- *          <TT>BuildFullBorderedPanel()</TT>.
- * @changed OLI 26.01.2009 - Erweiterung um die Methode
- *          <TT>ReadProperties(Properties,
- *         String)</TT>. In diesem Zusammenhang ist die Methode
- *          <TT>ReadProperties(String)</TT> auf die neue Methode umgelenkt
- *          worden. <BR>
- *          &Auml;nderung des R&uuml;ckgabewertes der <TT>EvaluateArgLine</TT>
- *          -Methoden auf <TT>Map</TT>.
+ * @changed OLI 21.08.2008 - Erweiterung um die Methoden <TT>CreateADF(DiagrammModel)</TT> und
+ *          <TT>CreateDiagram(String)</TT> .
+ * @changed OLI 30.12.2008 - Korrektur der Zuweisung der Not-Null-Flagge in der Methode
+ *          <TT>GetMetaData(JDBCDataSourceRecord, java.util.List&lt;String&gt;)</TT> .
+ * @changed OLI 14.01.2009 - Erweiterung um die Methoden <TT>BuildBorder()</TT>, <TT>BuildFullBorder()</TT>,
+ *          <TT>BuildBorderedPanel()</TT> und <TT>BuildFullBorderedPanel()</TT>.
+ * @changed OLI 26.01.2009 - Erweiterung um die Methode <TT>ReadProperties(Properties,
+ *         String)</TT>. In diesem Zusammenhang ist die Methode <TT>ReadProperties(String)</TT> auf die neue Methode
+ *          umgelenkt worden. <BR>
+ *          &Auml;nderung des R&uuml;ckgabewertes der <TT>EvaluateArgLine</TT> -Methoden auf <TT>Map</TT>.
  * @changed OLI 11.02.2009 - Entfernung der Konsolenausgaben aus der Methode
  *          <TT>ReadProperties(Properties, String)</TT>.
  * @changed OLI 02.04.2009 - Umstellung auf log4j.
- * @changed OLI 31.05.2010 - Erweiterung um die Methode
- *          <TT>GetMetadata(Connection, List,
+ * @changed OLI 31.05.2010 - Erweiterung um die Methode <TT>GetMetadata(Connection, List,
  *         boolean)</TT>
- * @changed OLI 01.10.2010 - Erweiterung um die Methode
- *          <TT>GetIndexMetaData(Connection)</TT>.
+ * @changed OLI 01.10.2010 - Erweiterung um die Methode <TT>GetIndexMetaData(Connection)</TT>.
  */
 
 public class ApplicationUtil {
@@ -135,12 +118,11 @@ public class ApplicationUtil {
 	private static Logger log = Logger.getLogger(ApplicationUtil.class);
 
 	/**
-	 * Liefert eine Border, die aus einer Empty- und einer EtchedBorder besteht.
-	 * Die Gaps und der Etch-Type werden &uuml;ber die Parameter festgelegt.
+	 * Liefert eine Border, die aus einer Empty- und einer EtchedBorder besteht. Die Gaps und der Etch-Type werden
+	 * &uuml;ber die Parameter festgelegt.
 	 * 
-	 * @return Eine CompoundBorder (EtchedBorder, EmptyBorder) mit den
-	 *         Standardwerten aus der Klasse <TT>corent.base.Constants</TT>
-	 *         (HGAP, VGAP und ETCH).
+	 * @return Eine CompoundBorder (EtchedBorder, EmptyBorder) mit den Standardwerten aus der Klasse
+	 *         <TT>corent.base.Constants</TT> (HGAP, VGAP und ETCH).
 	 * 
 	 * @changed OLI 14.01.2009 - Hinzugef&uuml;gt.
 	 */
@@ -149,30 +131,24 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Liefert eine Border, die aus einer Empty- und einer EtchedBorder besteht.
-	 * Die Gaps und der Etch-Type werden &uuml;ber die Parameter festgelegt.
+	 * Liefert eine Border, die aus einer Empty- und einer EtchedBorder besteht. Die Gaps und der Etch-Type werden
+	 * &uuml;ber die Parameter festgelegt.
 	 * 
-	 * @param hgap
-	 *            Horizontale Dicke der EmptyBorder (links und rechts).
-	 * @param vgap
-	 *            Vertikale Dicke der EmptyBorder (oben und unten).
-	 * @param etchtype
-	 *            Der Typ in dem die EtchedBorder dargestellt werden soll.
-	 * @return Eine CompoundBorder (EtchedBorder, EmptyBorder) mit den
-	 *         angegebenen Parametern.
+	 * @param hgap     Horizontale Dicke der EmptyBorder (links und rechts).
+	 * @param vgap     Vertikale Dicke der EmptyBorder (oben und unten).
+	 * @param etchtype Der Typ in dem die EtchedBorder dargestellt werden soll.
+	 * @return Eine CompoundBorder (EtchedBorder, EmptyBorder) mit den angegebenen Parametern.
 	 */
 	public static Border BuildBorder(int hgap, int vgap, int etchtype) {
 		return new CompoundBorder(new EtchedBorder(etchtype), new EmptyBorder(hgap, vgap, hgap, vgap));
 	}
 
 	/**
-	 * Liefert eine Border, die aus einer Empty-, einer Etched- und einer
-	 * weiteren EmptyBorder besteht. Die Gaps und der Etch-Type werden &uuml;ber
-	 * die Parameter festgelegt.
+	 * Liefert eine Border, die aus einer Empty-, einer Etched- und einer weiteren EmptyBorder besteht. Die Gaps und der
+	 * Etch-Type werden &uuml;ber die Parameter festgelegt.
 	 * 
-	 * @return Eine CompoundBorder (EmptyBorder, EtchedBorder, EmptyBorder) mit
-	 *         den Standardwerten aus der Klasse <TT>corent.base.Constants</TT>
-	 *         (HGAP, VGAP und ETCH ).
+	 * @return Eine CompoundBorder (EmptyBorder, EtchedBorder, EmptyBorder) mit den Standardwerten aus der Klasse
+	 *         <TT>corent.base.Constants</TT> (HGAP, VGAP und ETCH ).
 	 * 
 	 * @changed OLI 14.01.2009 - Hinzugef&uuml;gt.
 	 */
@@ -181,29 +157,23 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Liefert eine Border, die aus einer Empty-, einer Etched- und einer
-	 * weiteren EmptyBorder besteht. Die Gaps und der Etch-Type werden &uuml;ber
-	 * die Parameter festgelegt.
+	 * Liefert eine Border, die aus einer Empty-, einer Etched- und einer weiteren EmptyBorder besteht. Die Gaps und der
+	 * Etch-Type werden &uuml;ber die Parameter festgelegt.
 	 * 
-	 * @param hgap
-	 *            Horizontale Dicke der EmptyBorder (links und rechts).
-	 * @param vgap
-	 *            Vertikale Dicke der EmptyBorder (oben und unten).
-	 * @param etchtype
-	 *            Der Typ in dem die EtchedBorder dargestellt werden soll.
-	 * @return Eine CompoundBorder (EmptyBorder, EtchedBorder, EmptyBorder) mit
-	 *         den angegebenen Parametern.
+	 * @param hgap     Horizontale Dicke der EmptyBorder (links und rechts).
+	 * @param vgap     Vertikale Dicke der EmptyBorder (oben und unten).
+	 * @param etchtype Der Typ in dem die EtchedBorder dargestellt werden soll.
+	 * @return Eine CompoundBorder (EmptyBorder, EtchedBorder, EmptyBorder) mit den angegebenen Parametern.
 	 */
 	public static Border BuildFullBorder(int hgap, int vgap, int etchtype) {
 		return new CompoundBorder(BuildBorder(hgap, vgap, etchtype), new EmptyBorder(hgap, vgap, hgap, vgap));
 	}
 
 	/**
-	 * Liefert ein JPanel mit einer durch <TT>BuildBorder</TT> erzeugen Border.
-	 * Die Gaps und der Etch-Type werden &uuml;ber die Parameter festgelegt.
+	 * Liefert ein JPanel mit einer durch <TT>BuildBorder</TT> erzeugen Border. Die Gaps und der Etch-Type werden
+	 * &uuml;ber die Parameter festgelegt.
 	 * 
-	 * @return Ein JPanel mit einer CompoundBorder (EmptyBorder, EtchedBorder)
-	 *         mit den Standardwerten aus der Klasse
+	 * @return Ein JPanel mit einer CompoundBorder (EmptyBorder, EtchedBorder) mit den Standardwerten aus der Klasse
 	 *         <TT>corent.base.Constants</TT> (HGAP, VGAP und ETCH ).
 	 * 
 	 * @changed OLI 14.01.2009 - Hinzugef&uuml;gt.
@@ -213,17 +183,13 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Liefert ein JPanel mit einer durch <TT>BuildBorder</TT> erzeugen Border.
-	 * Die Gaps und der Etch-Type werden &uuml;ber die Parameter festgelegt.
+	 * Liefert ein JPanel mit einer durch <TT>BuildBorder</TT> erzeugen Border. Die Gaps und der Etch-Type werden
+	 * &uuml;ber die Parameter festgelegt.
 	 * 
-	 * @param hgap
-	 *            Horizontale Dicke der EmptyBorder (links und rechts).
-	 * @param vgap
-	 *            Vertikale Dicke der EmptyBorder (oben und unten).
-	 * @param etchtype
-	 *            Der Typ in dem die EtchedBorder dargestellt werden soll.
-	 * @return Ein JPanel mit einer CompoundBorder (EtchedBorder, EmptyBorder)
-	 *         mit den angegebenen Parametern.
+	 * @param hgap     Horizontale Dicke der EmptyBorder (links und rechts).
+	 * @param vgap     Vertikale Dicke der EmptyBorder (oben und unten).
+	 * @param etchtype Der Typ in dem die EtchedBorder dargestellt werden soll.
+	 * @return Ein JPanel mit einer CompoundBorder (EtchedBorder, EmptyBorder) mit den angegebenen Parametern.
 	 */
 	public static JPanel BuildBorderedPanel(int hgap, int vgap, int etchtype) {
 		JPanel p = new JPanel(new BorderLayout(hgap, vgap));
@@ -232,13 +198,11 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Liefert ein JPanel mit einer durch <TT>BuildFullBorder</TT> erzeugen
-	 * Border. Die Gaps und der Etch-Type werden &uuml;ber die Parameter
-	 * festgelegt.
+	 * Liefert ein JPanel mit einer durch <TT>BuildFullBorder</TT> erzeugen Border. Die Gaps und der Etch-Type werden
+	 * &uuml;ber die Parameter festgelegt.
 	 * 
-	 * @return Ein JPanel mit einer CompoundBorder (EmptyBorder, EtchedBorder,
-	 *         EmptyBorder) mit den Standardwerten aus der Klasse
-	 *         <TT>corent.base.Constants</TT> (HGAP, VGAP und ETCH).
+	 * @return Ein JPanel mit einer CompoundBorder (EmptyBorder, EtchedBorder, EmptyBorder) mit den Standardwerten aus
+	 *         der Klasse <TT>corent.base.Constants</TT> (HGAP, VGAP und ETCH).
 	 * 
 	 * @changed OLI 14.01.2009 - Hinzugef&uuml;gt.
 	 */
@@ -247,18 +211,14 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Liefert ein JPanel mit einer durch <TT>BuildFullBorder</TT> erzeugen
-	 * Border. Die Gaps und der Etch-Type werden &uuml;ber die Parameter
-	 * festgelegt.
+	 * Liefert ein JPanel mit einer durch <TT>BuildFullBorder</TT> erzeugen Border. Die Gaps und der Etch-Type werden
+	 * &uuml;ber die Parameter festgelegt.
 	 * 
-	 * @param hgap
-	 *            Horizontale Dicke der EmptyBorder (links und rechts).
-	 * @param vgap
-	 *            Vertikale Dicke der EmptyBorder (oben und unten).
-	 * @param etchtype
-	 *            Der Typ in dem die EtchedBorder dargestellt werden soll.
-	 * @return Ein JPanel mit einer CompoundBorder (EmptyBorder, EtchedBorder,
-	 *         EmptyBorder) mit den angegebenen Parametern.
+	 * @param hgap     Horizontale Dicke der EmptyBorder (links und rechts).
+	 * @param vgap     Vertikale Dicke der EmptyBorder (oben und unten).
+	 * @param etchtype Der Typ in dem die EtchedBorder dargestellt werden soll.
+	 * @return Ein JPanel mit einer CompoundBorder (EmptyBorder, EtchedBorder, EmptyBorder) mit den angegebenen
+	 *         Parametern.
 	 */
 	public static JPanel BuildFullBorderedPanel(int hgap, int vgap, int etchtype) {
 		JPanel p = new JPanel(new BorderLayout(hgap, vgap));
@@ -267,25 +227,22 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Diese Methode &Ouml;ffnet einen Informationsdialog und gibt dort den
-	 * vollst&auml;ndigen Namen der &uuml;bergebenen Komponente aus. Es ist mehr
-	 * als hilfreich, wenn die Komponente das Interface ContextOwner
+	 * Diese Methode &Ouml;ffnet einen Informationsdialog und gibt dort den vollst&auml;ndigen Namen der
+	 * &uuml;bergebenen Komponente aus. Es ist mehr als hilfreich, wenn die Komponente das Interface ContextOwner
 	 * implementiert.
 	 * <P>
-	 * Durch Setzen der Property
-	 * <I>archimedes.app.ApplicationUtil.ShowComponentFullName.dialog</I> kann
-	 * die Ausgabe des Komponentennamens in einen Informationsdialog umgeleitet
-	 * werden, der allerdings modal und zu quittieren ist. Sonst erfolgt die
-	 * Ausgabe aus die Konsole.
+	 * Durch Setzen der Property <I>archimedes.app.ApplicationUtil.ShowComponentFullName.dialog</I> kann die Ausgabe des
+	 * Komponentennamens in einen Informationsdialog umgeleitet werden, der allerdings modal und zu quittieren ist.
+	 * Sonst erfolgt die Ausgabe aus die Konsole.
 	 * 
-	 * @param c
-	 *            Die Komponente, deren Namen ausgegeben werden soll.
+	 * @param c Die Komponente, deren Namen ausgegeben werden soll.
 	 */
 	public static void ShowComponentFullName(Component c) {
 		String s = COUtil.GetFullContext(c);
 		if (Boolean.getBoolean("archimedes.app.ApplicationUtil.ShowComponentFullName.dialog")) {
-			JOptionPane.showMessageDialog(null, (c instanceof ContextOwner ? "Der ContextOwner" : "Die Komponente")
-					+ " traegt den Namen:\n" + s + "\nComponent-Classname: " + c.getClass().getName(),
+			JOptionPane.showMessageDialog(null,
+					(c instanceof ContextOwner ? "Der ContextOwner" : "Die Komponente") + " traegt den Namen:\n" + s
+							+ "\nComponent-Classname: " + c.getClass().getName(),
 					"Komponentenname", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			System.out.println("context-name=" + s + (c instanceof ContextOwner ? " (ContextOwner)" : ""));
@@ -293,14 +250,11 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * &Uuml;ber diese Methode kann ein UIManager eingestellt werden. Wird das
-	 * angegebene Theme nicht gefunden, so wird das Defaulttheme eingestellt.
+	 * &Uuml;ber diese Methode kann ein UIManager eingestellt werden. Wird das angegebene Theme nicht gefunden, so wird
+	 * das Defaulttheme eingestellt.
 	 * 
-	 * @param themename
-	 *            Der Name des einzustellenden Themes.
-	 * @param w
-	 *            Das Window, das als Wurzel f&uuml;r die Aktualisierung der
-	 *            dienen soll.
+	 * @param themename Der Name des einzustellenden Themes.
+	 * @param w         Das Window, das als Wurzel f&uuml;r die Aktualisierung der dienen soll.
 	 */
 	public static void SelectUIManager(String themename, Window w) {
 		try {
@@ -319,18 +273,13 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Diese Methode generiert ein Men&uuml;, aus dem der Benutzer einen
-	 * UIManager ausw&auml;hlen kann, der dann f&uuml;r die Anwendung
-	 * eingestellt wird.
+	 * Diese Methode generiert ein Men&uuml;, aus dem der Benutzer einen UIManager ausw&auml;hlen kann, der dann
+	 * f&uuml;r die Anwendung eingestellt wird.
 	 * 
-	 * @param menutext
-	 *            Der Text, den Das MenmenuItem&uuml; tragen soll.
-	 * @param w
-	 *            Das Window, das als Wurzel f&uuml;r die Aktualisierung der
-	 *            dienen soll.
+	 * @param menutext Der Text, den Das MenmenuItem&uuml; tragen soll.
+	 * @param w        Das Window, das als Wurzel f&uuml;r die Aktualisierung der dienen soll.
 	 * 
-	 * @todo OLI - Hier mu&szlig; ein COMenu herauskommen (Mehrsprachigkeit,
-	 *       Icon) (OLI 17.02.2009).
+	 * @todo OLI - Hier mu&szlig; ein COMenu herauskommen (Mehrsprachigkeit, Icon) (OLI 17.02.2009).
 	 */
 	public static JMenu CreateUIMenu(String menutext, Window w) {
 		JMenu menu = new JMenu(menutext);
@@ -354,9 +303,8 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Diese Methode wertet eine Zeile von standardisierten
-	 * Kommandozeilenparametern aus und gibt entsprechende Werte in einer
-	 * Hashtable an die Applikation zur&uuml;ck.
+	 * Diese Methode wertet eine Zeile von standardisierten Kommandozeilenparametern aus und gibt entsprechende Werte in
+	 * einer Hashtable an die Applikation zur&uuml;ck.
 	 * <P>
 	 * Die ber&uuml;cksichtigten Parameter sind:
 	 * 
@@ -376,17 +324,11 @@ public class ApplicationUtil {
 	 *                                   Operation durchgef&uuml;hrt werden soll.
 	 * </PRE>
 	 * 
-	 * @param args
-	 *            Das String-Array mit den Kommandozeilenparametern.
-	 * @param ht
-	 *            Ein Dictionary mit den Defaulteinstellungen zu den Parametern.
-	 * @return Hashtable&lt;String, Object&gt; mit den Optionsnamen (z. B. "-i")
-	 *         und einem eventuell existierenden Parameter bzw. einem leeren
-	 *         String, falls kein Parameter f&uuml;r die Option erforderlich
-	 *         ist.
-	 * @throws Eine
-	 *             eventuell w&auml;hrend der Auswertung der Zeile aufgetretene
-	 *             Exception.
+	 * @param args Das String-Array mit den Kommandozeilenparametern.
+	 * @param ht   Ein Dictionary mit den Defaulteinstellungen zu den Parametern.
+	 * @return Hashtable&lt;String, Object&gt; mit den Optionsnamen (z. B. "-i") und einem eventuell existierenden
+	 *         Parameter bzw. einem leeren String, falls kein Parameter f&uuml;r die Option erforderlich ist.
+	 * @throws Eine eventuell w&auml;hrend der Auswertung der Zeile aufgetretene Exception.
 	 */
 	public static Map<String, Object> EvaluateArgLine(String[] args, Map<String, Object> ht) throws Exception {
 		for (int i = 0; i < args.length; i++) {
@@ -417,27 +359,18 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Diese Methode wertet eine Zeile von standardisierten
-	 * Kommandozeilenparametern aus und gibt entsprechende Werte in einer
-	 * Hashtable an die Applikation zur&uuml;ck.
+	 * Diese Methode wertet eine Zeile von standardisierten Kommandozeilenparametern aus und gibt entsprechende Werte in
+	 * einer Hashtable an die Applikation zur&uuml;ck.
 	 * 
 	 * <P>
-	 * <I>Hinweis:</I> Die m&ouml;glichen Parameter k&ouml;nnen der Beschreibung
-	 * der Methode
-	 * <TT>EvaluateArgLine(String[], HashMap&lt;String, String&gt;)</TT>
-	 * entnommen werden.
+	 * <I>Hinweis:</I> Die m&ouml;glichen Parameter k&ouml;nnen der Beschreibung der Methode
+	 * <TT>EvaluateArgLine(String[], HashMap&lt;String, String&gt;)</TT> entnommen werden.
 	 * 
-	 * @param args
-	 *            Das String-Array mit den Kommandozeilenparametern.
-	 * @param inifiledefault
-	 *            Der Name einer Default-Inidatei.
-	 * @return Hashtable&lt;String, Object&gt; mit den Optionsnamen (z. B. "-i")
-	 *         und einem eventuell existierenden Parameter bzw. einem leeren
-	 *         String, falls kein Parameter f&uuml;r die Option erforderlich
-	 *         ist.
-	 * @throws Eine
-	 *             eventuell w&auml;hrend der Auswertung der Zeile aufgetretene
-	 *             Exception.
+	 * @param args           Das String-Array mit den Kommandozeilenparametern.
+	 * @param inifiledefault Der Name einer Default-Inidatei.
+	 * @return Hashtable&lt;String, Object&gt; mit den Optionsnamen (z. B. "-i") und einem eventuell existierenden
+	 *         Parameter bzw. einem leeren String, falls kein Parameter f&uuml;r die Option erforderlich ist.
+	 * @throws Eine eventuell w&auml;hrend der Auswertung der Zeile aufgetretene Exception.
 	 */
 	public static Map<String, Object> EvaluateArgLine(String[] args, String inifiledefault) throws Exception {
 		Map<String, Object> ht = new Hashtable<String, Object>();
@@ -463,19 +396,18 @@ public class ApplicationUtil {
 
 	@Deprecated
 	/**
-	 * Liest die angegebene Property-Datei in die Systemproperties ein. Es wird entsprechender
-	 * Output auf der Konsole erzeugt.
+	 * Liest die angegebene Property-Datei in die Systemproperties ein. Es wird entsprechender Output auf der Konsole
+	 * erzeugt.
 	 *
 	 * @param pfn Der Name der Datei, aus der die Properties gelesen werden sollen.
 	 *
 	 * @changed OLI 26.01.2009 - R&uuml;ckbau zu Gunsten der Methode <TT>ReadProperties(
 	 *         Properties, String)</TT>.
 	 *
-	 * @todo OLI - Bei Gelegenheit sollten die Exceptions auch hier weitergereicht werden
-	 *         (OLI 26.01.2009).
+	 * @todo OLI - Bei Gelegenheit sollten die Exceptions auch hier weitergereicht werden (OLI 26.01.2009).
 	 *
-	 * @deprecated OLI 14.10.2009 - Nutzen Sie die Methode <TT>readProperties(String)</TT> aus
-	 *         der Klasse <TT>corent.io.FileUtil</TT>.
+	 * @deprecated OLI 14.10.2009 - Nutzen Sie die Methode <TT>readProperties(String)</TT> aus der Klasse
+	 *             <TT>corent.io.FileUtil</TT>.
 	 */
 	public static void ReadProperties(String pfn) {
 		String s = null;
@@ -484,8 +416,7 @@ public class ApplicationUtil {
 			s = "reading properties (" + pfn + ") ... ";
 			ReadProperties(System.getProperties(), pfn);
 			/*
-			 * File f = new File(pfn); FileInputStream fis = new
-			 * FileInputStream(f); System.getProperties().load(fis);
+			 * File f = new File(pfn); FileInputStream fis = new FileInputStream(f); System.getProperties().load(fis);
 			 * fis.close(); `
 			 */
 			log.info(s + "ok");
@@ -498,19 +429,19 @@ public class ApplicationUtil {
 
 	@Deprecated
 	/**
-	 * Liest die angegebene Property-Datei in die angegebenen Properties ein. Es wird
-	 * entsprechender Output auf der Konsole erzeugt.
+	 * Liest die angegebene Property-Datei in die angegebenen Properties ein. Es wird entsprechender Output auf der
+	 * Konsole erzeugt.
 	 *
-	 * @param p Die Properties, in die die Propertiesdatei eingelesen werden soll.
+	 * @param p   Die Properties, in die die Propertiesdatei eingelesen werden soll.
 	 * @param pfn Der Name der Datei, aus der die Properties gelesen werden sollen.
 	 * @throws FileNotFoundException Falls es keine Datei unter dem angegebenen Namen gibt.
-	 * @throws IOException Falls es beim Einlesen der Datei zu einem Fehler kommt.
+	 * @throws IOException           Falls es beim Einlesen der Datei zu einem Fehler kommt.
 	 *
 	 * @changed OLI 26.01.2009 - Hinzugef&uuml;gt.
 	 * @changed OLI 11.02.2009 - Konsolenausgaben entfernt.
 	 *
-	 * @deprecated OLI 14.10.2009 - Nutzen Sie die Methode <TT>readProperties(String)</TT> aus
-	 *         der Klasse <TT>corent.io.FileUtil</TT>.
+	 * @deprecated OLI 14.10.2009 - Nutzen Sie die Methode <TT>readProperties(String)</TT> aus der Klasse
+	 *             <TT>corent.io.FileUtil</TT>.
 	 */
 	public static void ReadProperties(Properties p, String pfn) throws FileNotFoundException, IOException {
 		File f = new File(pfn);
@@ -520,15 +451,12 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Generiert eine DefaultArchimedesDescriptorFactory zum angegebenen
-	 * Dateinamen.
+	 * Generiert eine DefaultArchimedesDescriptorFactory zum angegebenen Dateinamen.
 	 * 
-	 * @param dn
-	 *            Name der Datei, in der das Archimedes-Datenschema hinterlegt
-	 *            ist, auf das sich die Applikation beziehen soll.
+	 * @param dn Name der Datei, in der das Archimedes-Datenschema hinterlegt ist, auf das sich die Applikation beziehen
+	 *           soll.
 	 * 
-	 * @changed OLI 21.08.2008 - Umziehen der Implementierung in die Methode
-	 *          <TT>CreateADF(
+	 * @changed OLI 21.08.2008 - Umziehen der Implementierung in die Methode <TT>CreateADF(
 	 *         String, DiagrammModel)</TT>.
 	 */
 	public static DefaultArchimedesDescriptorFactory CreateADF(String dn) {
@@ -537,12 +465,9 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Generiert eine DefaultArchimedesDescriptorFactory zum angegebenen
-	 * Dateinamen.
+	 * Generiert eine DefaultArchimedesDescriptorFactory zum angegebenen Dateinamen.
 	 * 
-	 * @param dm
-	 *            Das DiagrammModel, aus dem die
-	 *            DefaultArchimedesDescriptorFactory generiert werden soll.
+	 * @param dm Das DiagrammModel, aus dem die DefaultArchimedesDescriptorFactory generiert werden soll.
 	 * 
 	 * @changed OLI 21.08.2008 - Hinzugef&uuml;gt.
 	 */
@@ -551,17 +476,14 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Generiert eine DefaultArchimedesDescriptorFactory zum angegebenen
-	 * Dateinamen.
+	 * Generiert eine DefaultArchimedesDescriptorFactory zum angegebenen Dateinamen.
 	 * 
-	 * @param dn
-	 *            Name der Datei, in der das Archimedes-Datenschema hinterlegt
-	 *            ist, auf das sich die Applikation beziehen soll.
+	 * @param dn Name der Datei, in der das Archimedes-Datenschema hinterlegt ist, auf das sich die Applikation beziehen
+	 *           soll.
 	 * 
-	 * @changed OLI 21.08.2008 - &Uuml;bernahme aus der urspr&uuml;nglichen
-	 *          Implementierung der Methode <TT>CreateADF(String)</TT>. Einbau
-	 *          einer M&ouml;glichkeit, die zum Einlesen des Modells
-	 *          ben&ouml;tigte Zeit zu ermitteln.
+	 * @changed OLI 21.08.2008 - &Uuml;bernahme aus der urspr&uuml;nglichen Implementierung der Methode
+	 *          <TT>CreateADF(String)</TT>. Einbau einer M&ouml;glichkeit, die zum Einlesen des Modells ben&ouml;tigte
+	 *          Zeit zu ermitteln.
 	 */
 	public static DiagrammModel CreateDiagram(String dn) {
 		boolean show = Boolean.getBoolean("archimedes.app.ApplicationUtil.CreateADF.show.time");
@@ -586,9 +508,8 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Diese Methode schreibt die Versionsnummern von Corent und Archimedes auf
-	 * die Konsole sofern die Properties <TT>corent.Corent.showversion</TT>
-	 * und/oder <TT>archimedes.Archimedes.showversion</TT> gesetzt sind (beide
+	 * Diese Methode schreibt die Versionsnummern von Corent und Archimedes auf die Konsole sofern die Properties
+	 * <TT>corent.Corent.showversion</TT> und/oder <TT>archimedes.Archimedes.showversion</TT> gesetzt sind (beide
 	 * Boolean).
 	 */
 	public static void ShowLibVersions() {
@@ -607,16 +528,10 @@ public class ApplicationUtil {
 	/**
 	 * Liefert eine Liste mit den Index-Metadaten aus der angegebenen Datenbank.
 	 * 
-	 * @param c
-	 *            Die Connection, &uuml;ber die die Index-Information gelesen
-	 *            werden sollen.
-	 * @param schemaName
-	 *            The name of a schema in case the model is not made for the
-	 *            default schema of the data base.
+	 * @param c          Die Connection, &uuml;ber die die Index-Information gelesen werden sollen.
+	 * @param schemaName The name of a schema in case the model is not made for the default schema of the data base.
 	 * @return Eine Liste mit den Index-Metadaten aus der angegebenen Datenbank.
-	 * @throws SQLException
-	 *             Falls w&auml;hrend des Zugriffs auf die Datenbank ein Fehler
-	 *             auftritt.
+	 * @throws SQLException Falls w&auml;hrend des Zugriffs auf die Datenbank ein Fehler auftritt.
 	 * 
 	 * @changed OLI 01.10.2010 - Hinzugef&uuml;gt.
 	 */
@@ -666,22 +581,14 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Liefert eine Struktur aus TableMetaData- und ColumnMetaData-Objekten, die
-	 * die Metadaten der durch den &uuml;bergebenen JDBCDataSourceRecord
-	 * erreichbaren Datenbank beschreiben.
+	 * Liefert eine Struktur aus TableMetaData- und ColumnMetaData-Objekten, die die Metadaten der durch den
+	 * &uuml;bergebenen JDBCDataSourceRecord erreichbaren Datenbank beschreiben.
 	 * 
-	 * @param c
-	 *            Die Connection zu der Datenbank, aus der die Metadaten gelesen
-	 *            werden sollen.
-	 * @param excl
-	 *            Liste mit den Namen der auszuschliessenden Tabellen.
-	 * @param schemaName
-	 *            The name of a schema in case the model is not made for the
-	 *            default schema of the data base.
-	 * @param dbExecMode
-	 *            The db mode which matches to the used dbms.
-	 * @return Eine Liste mit den TableMetaData-Objekten, die die Tabellen der
-	 *         Datenbank beschreiben.
+	 * @param c          Die Connection zu der Datenbank, aus der die Metadaten gelesen werden sollen.
+	 * @param excl       Liste mit den Namen der auszuschliessenden Tabellen.
+	 * @param schemaName The name of a schema in case the model is not made for the default schema of the data base.
+	 * @param dbExecMode The db mode which matches to the used dbms.
+	 * @return Eine Liste mit den TableMetaData-Objekten, die die Tabellen der Datenbank beschreiben.
 	 * 
 	 * @changed OLI 30.12.2008 - Korrektur der Zuweisung der Not-Null-Flagge.
 	 */
@@ -691,25 +598,16 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Liefert eine Struktur aus TableMetaData- und ColumnMetaData-Objekten, die
-	 * die Metadaten der durch den &uuml;bergebenen JDBCDataSourceRecord
-	 * erreichbaren Datenbank beschreiben.
+	 * Liefert eine Struktur aus TableMetaData- und ColumnMetaData-Objekten, die die Metadaten der durch den
+	 * &uuml;bergebenen JDBCDataSourceRecord erreichbaren Datenbank beschreiben.
 	 * 
-	 * @param c
-	 *            Die Connection zu der Datenbank, aus der die Metadaten gelesen
-	 *            werden sollen.
-	 * @param excl
-	 *            Liste mit den Namen der auszuschliessenden Tabellen.
-	 * @param closeConnection
-	 *            Wird dieser Parameter gesetzt, so wird die Connection nach
-	 *            getaner Arbeit freigegeben.
-	 * @param schemaName
-	 *            The name of a schema in case the model is not made for the
-	 *            default schema of the data base.
-	 * @param dbExecMode
-	 *            The db mode which matches to the used dbms.
-	 * @return Eine Liste mit den TableMetaData-Objekten, die die Tabellen der
-	 *         Datenbank beschreiben.
+	 * @param c               Die Connection zu der Datenbank, aus der die Metadaten gelesen werden sollen.
+	 * @param excl            Liste mit den Namen der auszuschliessenden Tabellen.
+	 * @param closeConnection Wird dieser Parameter gesetzt, so wird die Connection nach getaner Arbeit freigegeben.
+	 * @param schemaName      The name of a schema in case the model is not made for the default schema of the data
+	 *                        base.
+	 * @param dbExecMode      The db mode which matches to the used dbms.
+	 * @return Eine Liste mit den TableMetaData-Objekten, die die Tabellen der Datenbank beschreiben.
 	 * 
 	 * @changed OLI 31.05.2010 - Hinzugef&uuml;gt.
 	 */
@@ -841,25 +739,16 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Liefert eine Struktur aus TableMetaData- und ColumnMetaData-Objekten, die
-	 * die Metadaten der durch den &uuml;bergebenen JDBCDataSourceRecord
-	 * erreichbaren Datenbank beschreiben.
+	 * Liefert eine Struktur aus TableMetaData- und ColumnMetaData-Objekten, die die Metadaten der durch den
+	 * &uuml;bergebenen JDBCDataSourceRecord erreichbaren Datenbank beschreiben.
 	 * 
-	 * @param dsr
-	 *            Der JDBCDataSourceRecord, &uuml;ber den die Datenbank
-	 *            angesprochen werden kann, deren Metadaten ermittelt werden
-	 *            sollen.
-	 * @param excl
-	 *            Liste mit den Namen der auszuschliessenden Tabellen.
-	 * @param schemaName
-	 *            The name of a schema in case the model is not made for the
-	 *            default schema of the data base.
-	 * @param dbExecMode
-	 *            The db mode which matches to the used dbms.
-	 * @return Eine Liste mit den TableMetaData-Objekten, die die Tabellen der
-	 *         Datenbank beschreiben.
-	 * @throws SQLException
-	 *             Falls beim Auslesen der Metadaten ein Fehler auftritt.
+	 * @param dsr        Der JDBCDataSourceRecord, &uuml;ber den die Datenbank angesprochen werden kann, deren Metadaten
+	 *                   ermittelt werden sollen.
+	 * @param excl       Liste mit den Namen der auszuschliessenden Tabellen.
+	 * @param schemaName The name of a schema in case the model is not made for the default schema of the data base.
+	 * @param dbExecMode The db mode which matches to the used dbms.
+	 * @return Eine Liste mit den TableMetaData-Objekten, die die Tabellen der Datenbank beschreiben.
+	 * @throws SQLException Falls beim Auslesen der Metadaten ein Fehler auftritt.
 	 * 
 	 * @changed OLI 30.12.2008 - Korrektur der Zuweisung der Not-Null-Flagge.
 	 */
@@ -870,20 +759,12 @@ public class ApplicationUtil {
 	}
 
 	/**
-	 * Liefert eine Liste mit den Unique-Constraint-Metadaten aus der
-	 * angegebenen Datenbank.
+	 * Liefert eine Liste mit den Unique-Constraint-Metadaten aus der angegebenen Datenbank.
 	 * 
-	 * @param c
-	 *            Die Connection, &uuml;ber die die
-	 *            Unique-Constraint-Information gelesen werden sollen.
-	 * @param schemaName
-	 *            The name of a schema in case the model is not made for the
-	 *            default schema of the data base.
-	 * @return Eine Liste mit den Unique-Constraint-Metadaten aus der
-	 *         angegebenen Datenbank.
-	 * @throws SQLException
-	 *             Falls w&auml;hrend des Zugriffs auf die Datenbank ein Fehler
-	 *             auftritt.
+	 * @param c          Die Connection, &uuml;ber die die Unique-Constraint-Information gelesen werden sollen.
+	 * @param schemaName The name of a schema in case the model is not made for the default schema of the data base.
+	 * @return Eine Liste mit den Unique-Constraint-Metadaten aus der angegebenen Datenbank.
+	 * @throws SQLException Falls w&auml;hrend des Zugriffs auf die Datenbank ein Fehler auftritt.
 	 * 
 	 * @changed OLI 11.06.2013 - Hinzugef&uuml;gt.
 	 */

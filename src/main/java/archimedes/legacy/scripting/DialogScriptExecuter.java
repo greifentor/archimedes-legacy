@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import org.apache.log4j.Logger;
+import logging.Logger;
 
 import archimedes.legacy.app.ApplicationUtil;
 import archimedes.legacy.model.DiagrammModel;

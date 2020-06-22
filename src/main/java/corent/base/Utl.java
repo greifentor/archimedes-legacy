@@ -12,7 +12,7 @@ package corent.base;
 
 import java.util.*;
 
-import org.apache.log4j.*;
+import logging.Logger;
 
 
 /**

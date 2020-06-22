@@ -12,7 +12,7 @@ package archimedes.legacy.scheme;
 import static corentx.util.Checks.ensure;
 import gengen.metadata.AttributeMetaData;
 
-import org.apache.log4j.Logger;
+import logging.Logger;
 
 import archimedes.legacy.model.IndexListCleaner;
 import archimedes.model.DataModel;

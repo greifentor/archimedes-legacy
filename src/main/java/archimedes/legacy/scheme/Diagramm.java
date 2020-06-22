@@ -24,7 +24,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import org.apache.log4j.Logger;
+import logging.Logger;
 
 import archimedes.connections.ArchimedesImportJDBCDataSourceRecord;
 import archimedes.connections.DatabaseConnection;

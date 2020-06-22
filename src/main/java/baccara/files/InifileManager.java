@@ -14,7 +14,7 @@ import static corentx.util.Checks.*;
 
 import java.io.*;
 
-import org.apache.log4j.*;
+import logging.Logger;
 
 import corent.files.*;
 

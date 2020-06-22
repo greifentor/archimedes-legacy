@@ -15,7 +15,7 @@ import archimedes.legacy.scheme.stf.handler.*;
 import corent.files.*;
 import corent.gui.*;
 
-import org.apache.log4j.*;
+import logging.Logger;
 
 
 /**

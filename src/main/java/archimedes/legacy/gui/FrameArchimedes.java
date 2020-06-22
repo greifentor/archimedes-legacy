@@ -56,7 +56,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.log4j.Logger;
+import logging.Logger;
 
 import archimedes.acf.CodeGeneratorException;
 import archimedes.acf.ReadyToGenerateChecker;

@@ -10,7 +10,7 @@
 package corentx;
 
 
-import org.apache.log4j.*;
+import logging.Logger;
 
 
 /**

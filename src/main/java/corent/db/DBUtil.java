@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import logging.Logger;
 
 import corent.base.SortedVector;
 

@@ -17,7 +17,7 @@ import java.util.*;
 
 import javax.swing.*;
 
-import org.apache.log4j.*;
+import logging.Logger;
 
 
 /**

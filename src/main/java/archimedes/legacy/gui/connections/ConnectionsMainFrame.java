@@ -36,7 +36,7 @@ import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.log4j.Logger;
+import logging.Logger;
 
 import archimedes.connections.DatabaseConnection;
 import archimedes.legacy.Archimedes;

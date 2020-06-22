@@ -15,7 +15,7 @@ import corent.dates.*;
 import java.sql.*;
 import java.util.*;
 
-import org.apache.log4j.*;
+import logging.Logger;
 
 
 /**

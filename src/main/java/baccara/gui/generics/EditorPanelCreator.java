@@ -26,7 +26,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import org.apache.log4j.*;
+import logging.Logger;
 
 
 /**

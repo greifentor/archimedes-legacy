@@ -13,7 +13,7 @@ package corent.base.dynamic;
 import java.io.*;
 import java.util.*;
 
-import org.apache.log4j.*;
+import logging.Logger;
 
 
 /**

@@ -12,7 +12,7 @@ package corent.db;
 import java.sql.Types;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import logging.Logger;
 
 /**
  * Mit Hilfe dieser Implementierung eines typsicheren Enum werden SQL-Datentypen repr&auml;sentiert.

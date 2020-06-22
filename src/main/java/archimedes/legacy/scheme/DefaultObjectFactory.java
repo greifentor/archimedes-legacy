@@ -15,7 +15,7 @@ import java.sql.Types;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import logging.Logger;
 
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.app.ApplicationUtil;

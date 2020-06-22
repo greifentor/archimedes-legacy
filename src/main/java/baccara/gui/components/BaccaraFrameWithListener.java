@@ -15,7 +15,7 @@ import baccara.gui.*;
 
 import java.util.*;
 
-import org.apache.log4j.*;
+import logging.Logger;
 
 
 /**

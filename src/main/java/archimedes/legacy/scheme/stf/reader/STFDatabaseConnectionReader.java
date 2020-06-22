@@ -9,7 +9,7 @@
 
 package archimedes.legacy.scheme.stf.reader;
 
-import org.apache.log4j.Logger;
+import logging.Logger;
 
 import archimedes.connections.DatabaseConnection;
 import archimedes.legacy.model.DiagrammModel;
