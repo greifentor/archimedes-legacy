@@ -1679,6 +1679,12 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					codeFactories) //
 							? new CodeFactoryProgressionFrame(guiBundle) //
 							: null);
+			final Counter factoryCount = new Counter(0);
+			if (progressionFrame != null) {
+				new Thread(() -> {
+					progressionFrame.updateFactory(factoryCount.getValue(), codeFactories.size(), "-", null);
+				}).start();
+			}
 			for (Object cf : codeFactories) {
 				if (cf instanceof CodeGenerator) {
 					try {
@@ -1699,11 +1705,20 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 								}
 							});
 						}
+						progressionFrame.updateFactory(null, null, cf.getClass().getSimpleName(), null);
 						((CodeFactory) cf).generate(path);
 						try {
 							codePathProvider.storePath(path);
 						} catch (IOException e) {
 							LOG.error("error while setting code path to ini file: " + e.getMessage());
+						}
+						factoryCount.inc();
+						if (progressionFrame != null) {
+							progressionFrame.updateFactory(factoryCount.getValue(), null, cf.getClass().getSimpleName(),
+									factoryCount.getValue() <= codeFactories.size() //
+											? "\n\n" + cf.getClass().getSimpleName() + " finished.\n"
+													+ "--------------------------------------------------------------------------------\n\n\n"
+											: null);
 						}
 					});
 					t.start();
