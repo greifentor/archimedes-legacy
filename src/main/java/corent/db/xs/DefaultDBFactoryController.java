@@ -593,51 +593,11 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 					outfn = outfn.concat(System.getProperty("corent.db.xs.DefaultDBFactoryController.archive.extension."
 							+ arc.getArchiveMode().toString(), ".html"));
 					if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.archive.synchon")) {
-						try {
-//							JRExporter exporter = new JRHtmlExporter();
-//							if (arc.getArchiveMode() == ArchiveMode.PDF) {
-//								exporter = new JRPdfExporter();
-//							}
-//							exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outfn);
-//							exporter.setParameter(JRExporterParameter.JASPER_PRINT,
-//									this.print(arc, arc.getArchiveReportnumber()));
-//							exporter.exportReport();
-//							System.out.println("Archive file created (synchron): " + outfn);
-						} catch (Exception e) {
-							e.printStackTrace();
-							System.out.println("\nWARNING: Archive export has been failed! (" + outfn + ")");
-						}
+						System.out.println(
+								"\nWARNING: Archive file " + outfn + " is not created. Feature is deactivated!!!");
 					} else {
-						class ArchiveThread extends Thread {
-							private Archivable arc = null;
-							private String outfn = null;
-
-							public ArchiveThread(Archivable arc, String outfn) {
-								super();
-								this.arc = arc;
-								this.outfn = outfn;
-							}
-
-							public void run() {
-								try {
-//									JRExporter exporter = new JRHtmlExporter();
-//									if (this.arc.getArchiveMode() == ArchiveMode.PDF) {
-//										exporter = new JRPdfExporter();
-//									}
-//									exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, this.outfn);
-//									exporter.setParameter(JRExporterParameter.JASPER_PRINT,
-//											print(this.arc, this.arc.getArchiveReportnumber()));
-//									exporter.exportReport();
-//									System.out.println("Archive file created (asynchron): " + this.outfn);
-								} catch (Exception e) {
-									e.printStackTrace();
-									System.out.println(
-											"\nWARNING: Archive export has been " + "failed! (" + this.outfn + ")");
-								}
-							}
-						}
-						;
-						(new ArchiveThread(arc, outfn)).start();
+						System.out.println("\nWARNING: Archive file " + outfn
+								+ " is not created (asynchronous). Feature is deactivated!!!");
 					}
 				}
 			}
