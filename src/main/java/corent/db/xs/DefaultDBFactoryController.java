@@ -35,19 +35,14 @@ import corent.db.DBUtil;
 import corent.db.JDBCDataSourceRecord;
 import corent.db.OrderByDescriptor;
 import corent.print.Archivable;
-import corent.print.ArchiveMode;
 import corent.print.JasperReportable;
 import corent.print.JasperReportableCSV;
 import corent.util.SysUtil;
 import corentx.ds.Lockable;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
-import net.sf.jasperreports.engine.export.JRHtmlExporter;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
 
 /**
  * Diese Musterimplementierung eines DBFactoryControllers vermittelt einen &Uuml;berblick &uuml;ber die Arbeitsweise
@@ -599,15 +594,15 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 							+ arc.getArchiveMode().toString(), ".html"));
 					if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.archive.synchon")) {
 						try {
-							JRExporter exporter = new JRHtmlExporter();
-							if (arc.getArchiveMode() == ArchiveMode.PDF) {
-								exporter = new JRPdfExporter();
-							}
-							exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outfn);
-							exporter.setParameter(JRExporterParameter.JASPER_PRINT,
-									this.print(arc, arc.getArchiveReportnumber()));
-							exporter.exportReport();
-							System.out.println("Archive file created (synchron): " + outfn);
+//							JRExporter exporter = new JRHtmlExporter();
+//							if (arc.getArchiveMode() == ArchiveMode.PDF) {
+//								exporter = new JRPdfExporter();
+//							}
+//							exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outfn);
+//							exporter.setParameter(JRExporterParameter.JASPER_PRINT,
+//									this.print(arc, arc.getArchiveReportnumber()));
+//							exporter.exportReport();
+//							System.out.println("Archive file created (synchron): " + outfn);
 						} catch (Exception e) {
 							e.printStackTrace();
 							System.out.println("\nWARNING: Archive export has been failed! (" + outfn + ")");
@@ -625,15 +620,15 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 
 							public void run() {
 								try {
-									JRExporter exporter = new JRHtmlExporter();
-									if (this.arc.getArchiveMode() == ArchiveMode.PDF) {
-										exporter = new JRPdfExporter();
-									}
-									exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, this.outfn);
-									exporter.setParameter(JRExporterParameter.JASPER_PRINT,
-											print(this.arc, this.arc.getArchiveReportnumber()));
-									exporter.exportReport();
-									System.out.println("Archive file created (asynchron): " + this.outfn);
+//									JRExporter exporter = new JRHtmlExporter();
+//									if (this.arc.getArchiveMode() == ArchiveMode.PDF) {
+//										exporter = new JRPdfExporter();
+//									}
+//									exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, this.outfn);
+//									exporter.setParameter(JRExporterParameter.JASPER_PRINT,
+//											print(this.arc, this.arc.getArchiveReportnumber()));
+//									exporter.exportReport();
+//									System.out.println("Archive file created (asynchron): " + this.outfn);
 								} catch (Exception e) {
 									e.printStackTrace();
 									System.out.println(

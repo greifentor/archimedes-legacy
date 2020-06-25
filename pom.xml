@@ -132,7 +132,7 @@
 			<artifactId>commons-text</artifactId>
 			<version>1.8</version>
 		</dependency>
-				<dependency>
+		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.4</version>
@@ -140,7 +140,7 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>6.4.0</version>
+			<version>6.6.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
