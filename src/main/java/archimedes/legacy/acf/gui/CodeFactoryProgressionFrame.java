@@ -26,8 +26,10 @@ import corent.gui.JFrameWithInifile;
 public class CodeFactoryProgressionFrame extends JFrameWithInifile implements ActionListener {
 
 	private JButton buttonClose = null;
+	private JLabel labelFactory = new JLabel();
 	private JLabel labelProcess = new JLabel();
 	private JLabel labelStep = new JLabel();
+	private JProgressBar progressBarFactory = new JProgressBar();
 	private JProgressBar progressBarProcesses = new JProgressBar();
 	private JProgressBar progressBarSteps = new JProgressBar();
 	private JTextArea textArea = new JTextArea(40, 10);
@@ -54,9 +56,15 @@ public class CodeFactoryProgressionFrame extends JFrameWithInifile implements Ac
 	}
 
 	private JPanel getProgressBarPanel() {
-		JPanel panel = new JPanel(new GridLayout(4, 1, this.guiBundle.getHGap(), this.guiBundle.getVGap()));
+		JPanel panel = new JPanel(new GridLayout(6, 1, this.guiBundle.getHGap(), this.guiBundle.getVGap()));
+		this.progressBarFactory.setMinimum(0);
+		this.progressBarProcesses.setMinimum(1);
+		this.progressBarSteps.setMinimum(1);
+		this.progressBarFactory.setStringPainted(true);
 		this.progressBarProcesses.setStringPainted(true);
 		this.progressBarSteps.setStringPainted(true);
+		panel.add(this.labelFactory);
+		panel.add(this.progressBarFactory);
 		panel.add(this.labelStep);
 		panel.add(this.progressBarSteps);
 		panel.add(this.labelProcess);
@@ -93,22 +101,23 @@ public class CodeFactoryProgressionFrame extends JFrameWithInifile implements Ac
 	}
 
 	public void processEvent(CodeFactoryProgressionEvent event) {
-		if (event.getCurrentProcess() != null) {
-			this.progressBarProcesses.setValue(event.getCurrentProcess());
-			this.progressBarProcesses.setString("" + event.getCurrentProcess());
-		}
-		if (event.getCurrentStep() != null) {
-			this.progressBarSteps.setValue(event.getCurrentStep());
-			this.progressBarSteps.setString("" + event.getCurrentStep());
-		}
-		if (event.getFactoryName() != null) {
-			this.labelStep.setText(event.getFactoryName());
-		}
 		if (event.getMaximumProcessCount() != null) {
 			this.progressBarProcesses.setMaximum(event.getMaximumProcessCount());
 		}
 		if (event.getMaximumStepCount() != null) {
 			this.progressBarSteps.setMaximum(event.getMaximumStepCount());
+		}
+		if (event.getCurrentProcess() != null) {
+			this.progressBarProcesses.setValue(event.getCurrentProcess());
+			this.progressBarProcesses
+					.setString(event.getCurrentProcess() + " (" + progressBarProcesses.getMaximum() + ")");
+		}
+		if (event.getCurrentStep() != null) {
+			this.progressBarSteps.setValue(event.getCurrentStep());
+			this.progressBarSteps.setString(event.getCurrentStep() + " (" + progressBarSteps.getMaximum() + ")");
+		}
+		if (event.getFactoryName() != null) {
+			this.labelStep.setText(event.getFactoryName());
 		}
 		if (event.getMessage() != null) {
 			this.textArea.setText(
@@ -116,6 +125,22 @@ public class CodeFactoryProgressionFrame extends JFrameWithInifile implements Ac
 		}
 		if (event.getProcessName() != null) {
 			this.labelProcess.setText(event.getProcessName());
+		}
+	}
+
+	public void updateFactory(Integer current, Integer max, String factoryName, String message) {
+		if (max != null) {
+			this.progressBarFactory.setMaximum(max);
+		}
+		if (current != null) {
+			this.progressBarFactory.setValue(current);
+			this.progressBarFactory.setString(current + " (" + this.progressBarFactory.getMaximum() + ")");
+		}
+		if (factoryName != null) {
+			this.labelFactory.setText(factoryName);
+		}
+		if (message != null) {
+			this.textArea.setText(this.textArea.getText() + (this.textArea.getText().isEmpty() ? "" : "\n") + message);
 		}
 	}
 

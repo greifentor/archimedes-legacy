@@ -15,6 +15,8 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
+import logging.Logger;
+
 /**
  * Eine Klasse mit der Versionsnummer der Software.
  * 
@@ -27,7 +29,8 @@ public class Version {
 
 	public static final Version INSTANCE = new Version();
 
-	private static String version = "UNKNOWN";
+	private static Logger log = Logger.getLogger(Version.class);
+	private static String versionNumber = "UNKNOWN";
 
 	/*
 	 * Generiert eine Instanz der Versionsklasse mit Default-Parametern.
@@ -42,7 +45,7 @@ public class Version {
 	 * @return Die Versionsnummer zur Applikation.
 	 */
 	public String getVersion() {
-		return version;
+		return versionNumber;
 	}
 
 	@Override
@@ -51,7 +54,7 @@ public class Version {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Archimedes version is " + INSTANCE.getVersion());
+		log.info("Archimedes version is " + INSTANCE.getVersion());
 		new Thread(() -> JOptionPane.showMessageDialog(null, "Version of Archimedes is: " + INSTANCE.getVersion(),
 				"Archimedes version", JOptionPane.INFORMATION_MESSAGE)).start();
 	}
@@ -62,14 +65,14 @@ public class Version {
 			try {
 				Properties properties = new Properties();
 				properties.load(is);
-				version = properties.getProperty("archimedes.version");
+				versionNumber = properties.getProperty("archimedes.version");
 			} catch (IOException e) {
-				System.out.println("Version file could not be loaded. Kept to: " + version);
+				log.warn("Version file could not be loaded. Kept to: " + versionNumber);
 			}
 		} else {
-			System.out.println("Version file could not found. Kept to: " + version);
+			log.info("Version file could not found. Kept to: " + versionNumber);
 		}
-		System.out.println("Archimedes version: " + version);
+		log.info("Archimedes version: " + versionNumber);
 	}
 
 }

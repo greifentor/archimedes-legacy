@@ -34,6 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -56,7 +57,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import logging.Logger;
+import org.apache.commons.lang3.StringUtils;
 
 import archimedes.acf.CodeGeneratorException;
 import archimedes.acf.ReadyToGenerateChecker;
@@ -123,7 +124,6 @@ import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
 import archimedes.model.OptionType;
-import archimedes.model.PredeterminedOptionProvider;
 import archimedes.model.SequenceModel;
 import archimedes.model.SimpleIndexMetaData;
 import archimedes.model.StereotypeModel;
@@ -174,6 +174,7 @@ import corent.util.MemoryMonitor;
 import corentx.io.FileUtil;
 import gengen.generator.AbstractCodeGenerator;
 import gengen.generator.CodeGenerator;
+import logging.Logger;
 
 /**
  * Diese Klasse bietet das Hauptfenster der Archimedes-Applikation.
@@ -857,8 +858,13 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 	private void startChecker() {
 		final String path = this.diagramm.getCodePfad().replace("~", System.getProperty("user.home"));
-		final Object cf = this.getCodeFactory(path);
-		new ModelCheckerThread(this, this.diagramm, ((cf instanceof CodeFactory) ? (CodeFactory) cf : null));
+		List<ModelChecker> modelCheckers = new ArrayList<>();
+		for (Object cf : this.getCodeFactories(path)) {
+			if (cf instanceof CodeFactory) {
+				modelCheckers.addAll(Arrays.asList(((CodeFactory) cf).getModelCheckers()));
+			}
+		}
+		new ModelCheckerThread(this, this.diagramm, modelCheckers);
 	}
 
 	/**
@@ -947,42 +953,40 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 	private boolean isErrorsFound(final DataModel dm, final boolean showErrors) {
 		final String path = this.diagramm.getCodePfad().replace("~", System.getProperty("user.home"));
-		final Object cfo = this.getCodeFactory(path);
+		final List<ModelCheckerMessage> messages = new LinkedList<ModelCheckerMessage>();
+		for (Object cfo : this.getCodeFactories(path)) {
+			if (cfo instanceof CodeFactory) {
+				try {
+					final CodeFactory cf = (CodeFactory) cfo;
+					cf.setDataModel(this.diagramm);
+					cf.setGUIBundle(getGUIBundle(this.guiBundle, cf.getResourceBundleNames()));
+					cf.setModelCheckerMessageListFrameListeners(this);
 
-		if (cfo instanceof CodeFactory) {
-			try {
-				final CodeFactory cf = (CodeFactory) cfo;
-				cf.setDataModel(this.diagramm);
-				cf.setGUIBundle(getGUIBundle(this.guiBundle, cf.getResourceBundleNames()));
-				cf.setModelCheckerMessageListFrameListeners(this);
+					for (final ModelChecker mc : cf.getModelCheckers()) {
+						final ModelCheckerMessage[] mcms = mc.check(dm);
 
-				final List<ModelCheckerMessage> messages = new LinkedList<ModelCheckerMessage>();
-
-				for (final ModelChecker mc : cf.getModelCheckers()) {
-					final ModelCheckerMessage[] mcms = mc.check(dm);
-
-					if (mcms.length > 0) {
-						for (final ModelCheckerMessage mcm : mcms) {
-							if (mcm.getLevel() == Level.ERROR) {
-								messages.add(mcm);
+						if (mcms.length > 0) {
+							for (final ModelCheckerMessage mcm : mcms) {
+								if (mcm.getLevel() == Level.ERROR) {
+									messages.add(mcm);
+								}
 							}
 						}
 					}
-				}
 
-				if (messages.size() > 0) {
-					if (showErrors) {
-						new ModelCheckerMessageListDialog(this, this.guiBundle,
-								messages.toArray(new ModelCheckerMessage[0]), false);
-					}
-
-					return true;
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
+		if (messages.size() > 0) {
+			if (showErrors) {
+				new ModelCheckerMessageListDialog(this, this.guiBundle, messages.toArray(new ModelCheckerMessage[0]),
+						false);
+			}
 
+			return true;
+		}
 		return false;
 	}
 
@@ -1186,9 +1190,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * @changed OLI 18.04.2017 - Added.
 	 */
 	public void doInfoVersionsToClipboard() {
-		final Object cf = this.getCodeFactory("");
-		final String versions = this.versionStringBuilder
-				.getVersions(((cf instanceof CodeFactory) ? (CodeFactory) cf : null));
+		String versions = "";
+		for (Object cf : this.getCodeFactories("")) {
+			versions += this.versionStringBuilder.getVersions(((cf instanceof CodeFactory) ? (CodeFactory) cf : null))
+					+ "\n";
+		}
 		final Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
 		cb.setContents(new StringSelection(versions), null);
 		LOG.info("sent versions to clipboard");
@@ -1524,13 +1530,14 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	private void setPredeterminedOptionProviderForDiagram() {
-		final Object cf = this.getCodeFactory("");
-
-		if (cf instanceof PredeterminedOptionProvider) {
-			this.diagramm.setPredeterminedOptionProvider((PredeterminedOptionProvider) cf);
-		} else {
-			this.diagramm.setPredeterminedOptionProvider(null);
-		}
+		// TODO OLI: Does not work correctly anyway!
+//		final Object cf = this.getCodeFactory("");
+//
+//		if (cf instanceof PredeterminedOptionProvider) {
+//			this.diagramm.setPredeterminedOptionProvider((PredeterminedOptionProvider) cf);
+//		} else {
+//			this.diagramm.setPredeterminedOptionProvider(null);
+//		}
 	}
 
 	/**
@@ -1666,48 +1673,83 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		final CodePathProvider codePathProvider = new CodePathProvider(this.guiBundle, this.diagramm);
 		final String path = codePathProvider.getCodePath();
 		if (!path.isEmpty()) {
-			final Object cf = this.getCodeFactory(path);
-			if (cf instanceof CodeGenerator) {
-				try {
-					((CodeGenerator) cf).generate(this.diagramm);
-				} catch (Exception e) {
-					new JDialogThrowable(e, "Error while running code generator " + cf.getClass().getSimpleName() + "!",
-							this.getInifile(), new PropertyRessourceManager());
-				}
-			} else {
-				final FrameArchimedes fa = this;
-				final CodeFactoryProgressionFrame progressionFrame = (cf instanceof StandardCodeFactoryProgressionFrameUser
-						? new CodeFactoryProgressionFrame(guiBundle)
-						: null);
-				final Thread t = new Thread(() -> {
-					((CodeFactory) cf).addCodeFactoryListener(fa);
-					((CodeFactory) cf).setDataModel(fa.diagramm);
-					if (cf instanceof CodeFactoryProgressionEventProvider) {
-						((CodeFactoryProgressionEventProvider) cf).addCodeFactoryProgressionListener(event -> {
-							if (progressionFrame != null) {
-								progressionFrame.processEvent(event);
-							}
-						});
-					}
-					((CodeFactory) cf).generate(path);
-					if (progressionFrame != null) {
-						progressionFrame.enableCloseButton();
-					}
+			List<Object> codeFactories = getCodeFactories(path);
+			final FrameArchimedes fa = this;
+			final CodeFactoryProgressionFrame progressionFrame = (isAtLeastOneStandardCodeFactoryProgressionFrameUser(
+					codeFactories) //
+							? new CodeFactoryProgressionFrame(guiBundle) //
+							: null);
+			final Counter factoryCount = new Counter(0);
+			if (progressionFrame != null) {
+				new Thread(() -> {
+					progressionFrame.updateFactory(factoryCount.getValue(), codeFactories.size(), "-", null);
+				}).start();
+			}
+			for (Object cf : codeFactories) {
+				if (cf instanceof CodeGenerator) {
 					try {
-						codePathProvider.storePath(path);
-					} catch (IOException e) {
-						LOG.error("error while setting code path to ini file: " + e.getMessage());
+						((CodeGenerator) cf).generate(this.diagramm);
+					} catch (Exception e) {
+						new JDialogThrowable(e,
+								"Error while running code generator " + cf.getClass().getSimpleName() + "!",
+								this.getInifile(), new PropertyRessourceManager());
 					}
-				});
-				t.start();
+				} else {
+					final Thread t = new Thread(() -> {
+						((CodeFactory) cf).addCodeFactoryListener(fa);
+						((CodeFactory) cf).setDataModel(fa.diagramm);
+						if (cf instanceof CodeFactoryProgressionEventProvider) {
+							((CodeFactoryProgressionEventProvider) cf).addCodeFactoryProgressionListener(event -> {
+								if (progressionFrame != null) {
+									progressionFrame.processEvent(event);
+								}
+							});
+						}
+						progressionFrame.updateFactory(null, null, cf.getClass().getSimpleName(), null);
+						((CodeFactory) cf).generate(path);
+						try {
+							codePathProvider.storePath(path);
+						} catch (IOException e) {
+							LOG.error("error while setting code path to ini file: " + e.getMessage());
+						}
+						factoryCount.inc();
+						if (progressionFrame != null) {
+							progressionFrame.updateFactory(factoryCount.getValue(), null, cf.getClass().getSimpleName(),
+									factoryCount.getValue() <= codeFactories.size() //
+											? "\n\n" + cf.getClass().getSimpleName() + " finished.\n"
+													+ "--------------------------------------------------------------------------------\n\n\n"
+											: null);
+						}
+					});
+					t.start();
+				}
+			}
+			if (progressionFrame != null) {
+				progressionFrame.enableCloseButton();
 			}
 		}
 	}
 
-	private Object getCodeFactory(final String path) {
+	private List<Object> getCodeFactories(String path) {
+		List<Object> codeFactories = new ArrayList<>();
+		for (String cfcn : StringUtils.split(diagramm.getCodeFactoryClassName(), ';')) {
+			codeFactories.add(getCodeFactory(path, cfcn));
+		}
+		return codeFactories;
+	}
+
+	private boolean isAtLeastOneStandardCodeFactoryProgressionFrameUser(List<Object> codeFactories) {
+		for (Object object : codeFactories) {
+			if (object instanceof StandardCodeFactoryProgressionFrameUser) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Object getCodeFactory(final String path, String cfcn) {
 		CodeFactory cf = null;
 		CodeGenerator cg = null;
-		String cfcn = this.diagramm.getCodeFactoryClassName();
 		try {
 			if ((cfcn == null) || (cfcn.length() == 0)) {
 				cfcn = this.ini.readStr("CodeGenerator", "Class",
@@ -2332,18 +2374,23 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			this.updateWarnings(this.guiBundle.getResourceText(RES_WARNING_MESSAGES_NO_WARNINGS), false);
 		}
 
-		final String path = this.diagramm.getCodePfad().replace("~", System.getProperty("user.home"));
-		final Object cf = this.getCodeFactory(path);
-
-		if (cf instanceof ReadyToGenerateChecker) {
-			this.menuGenerate.setEnabled(((ReadyToGenerateChecker) cf).isReadyToGenerate(this.diagramm));
-		}
-
+		this.menuGenerate.setEnabled(isReadyToGenerate());
 		this.lastModelCheckerMessages = mcms;
 
 		if (this.modelCheckerMessageListFrame != null) {
 			this.modelCheckerMessageListFrame.updateMessages(mcms);
 		}
+	}
+
+	private boolean isReadyToGenerate() {
+		final String path = this.diagramm.getCodePfad().replace("~", System.getProperty("user.home"));
+		for (Object cf : this.getCodeFactories(path)) {
+			if ((cf instanceof ReadyToGenerateChecker)
+					&& !((ReadyToGenerateChecker) cf).isReadyToGenerate(this.diagramm)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private int getMessageCount(final ModelCheckerMessage[] mcms, final ModelCheckerMessage.Level level) {

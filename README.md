@@ -18,8 +18,10 @@ The good old archimedes (cleaned up).
 Call `start` script for your operation system.
 
 
-## Open Todos
+## Ideas
 
-- Make image path configurable (see archimedes.legacy.Archimedes line 1976).
-- Make build path relative by a configurable variable (e. g. "${base.output.path}").
-- Extend the CodeFactory interface by a "prepare" method which could be use to e. g. create a list with option identifiers to provide those identifiers in option dialogs. 
+### More than One Code Factory
+
+- Archimedes should be able to process mor than one code factory for a single code generation run.
+- The code factory monitor dialog should be extended by an additional progress bar for the code factories.
+- A specific listener (not this which is managed by the code factories) should implemented and used to update the new progress bar.

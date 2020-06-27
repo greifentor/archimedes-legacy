@@ -48,6 +48,7 @@ import corent.gui.AbstractExtendedColorPalette;
 import corent.gui.ExtendedColor;
 import corent.security.SecurityController;
 import corentx.util.Str;
+import logging.Logger;
 
 /**
  * Starterklasse f&uuml;r die Archimedes-Applikation. <BR>
@@ -1805,6 +1806,8 @@ public class Archimedes {
 
 	public static final String CONF_PATH = "./src/main/resources/conf/";
 
+	private static Logger log = Logger.getLogger(Archimedes.class);
+
 	/** Der DBMode, unter dem die Anwendung laufen soll. */
 	public static DBExecMode DBMODE = DBExecMode.MYSQL;
 	/** Referenz auf die g&uuml;tige Archimedes-ObjectFactory. */
@@ -1908,12 +1911,12 @@ public class Archimedes {
 		Inifile ini = new Inifile(inifilename);
 		try {
 			ini.load();
-			System.out.println("Ini-Datei (" + inifilename + ") gelesen ...");
+			log.info("Ini-Datei (" + inifilename + ") gelesen ...");
 			String cn = ini.readStr("Factories", "Objects", "");
 			if (cn.length() > 0) {
 				try {
 					Factory = (ObjectFactory) Class.forName(cn).newInstance();
-					System.out.println("DefaultObjectFactory changed to " + Factory);
+					log.info("DefaultObjectFactory changed to " + Factory);
 					InputStream in = ClassLoader.getSystemResourceAsStream("archimedes/dm/archimedes.ads");
 					StructuredTextFile stf = new StructuredTextFile(in);
 					try {
@@ -1923,24 +1926,23 @@ public class Archimedes {
 						ADF = new DefaultArchimedesDescriptorFactory(d);
 						Factory.setADF(ADF);
 					} catch (Exception e) {
-						e.printStackTrace();
+						log.error("error while creating ADF: " + e.getMessage(), e);
 					}
 				} catch (ClassNotFoundException cnfe) {
-					cnfe.printStackTrace();
-					System.out.println("ObjectFactory invocation failed. Factory set to default");
+					log.warn("ObjectFactory invocation failed. Factory set to default: " + cnfe.getMessage());
+					// cnfe.printStackTrace();
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("\nProblem beim Lesen der Ini-Datei (" + inifilename + ")\n");
+			log.error("\nProblem beim Lesen der Ini-Datei (" + inifilename + ")\n", e);
 		}
 		String propfn = System.getProperty("archimedes.Archimedes.properties", CONF_PATH + "archimedes.properties");
 		try {
 			corentx.io.FileUtil.readProperties(System.getProperties(), propfn);
 		} catch (FileNotFoundException e) {
-			System.out.println("configured properties file not found: " + propfn);
+			log.error("configured properties file not found: " + propfn, e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("error while loading configured properties file: " + propfn, e);
 		}
 		String perspropfn = corentx.io.FileUtil.completePath(System.getProperty("user.home"))
 				.concat(".archimedes.properties");
@@ -1948,9 +1950,9 @@ public class Archimedes {
 			try {
 				corentx.io.FileUtil.readProperties(System.getProperties(), perspropfn);
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(), e);
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(), e);
 			}
 		} else {
 			JOptionPane.showMessageDialog(null,
@@ -2049,26 +2051,25 @@ public class Archimedes {
 				d = (Diagramm) d.createDiagramm(stf);
 				Factory.setADF(new DefaultArchimedesDescriptorFactory(d));
 			} else {
-				System.out.println("WARNING: ADS file not found in resources");
+				log.warn("WARNING: ADS file not found in resources");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("ERROR: while loading Archimedes data model: " + e.getMessage(), e);
 		}
 		try {
 			new FontConfigurator().readFonts();
 		} catch (Exception e) {
-			System.out.println(
+			log.error(
 					"ERROR: while configuring the fonts: " + e.getClass().getSimpleName() + "(" + e.getMessage() + ")");
 		}
 		if (Corent.GetVersion().compareTo(GetMinimumCorentVersion()) == -1) {
-			System.out.println("************************************************************");
-			System.out.println("");
-			System.out.println(
-					"Archimdes " + GetVersion() + " requires Corent " + GetMinimumCorentVersion() + " or higher!");
-			System.out.println("");
-			System.out.println("System halted ...");
-			System.out.println("");
-			System.out.println("************************************************************");
+			log.error("************************************************************");
+			log.error("");
+			log.error("Archimdes " + GetVersion() + " requires Corent " + GetMinimumCorentVersion() + " or higher!");
+			log.error("");
+			log.error("System halted ...");
+			log.error("");
+			log.error("************************************************************");
 			System.exit(1);
 		}
 	}
