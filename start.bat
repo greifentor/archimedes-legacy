@@ -1,4 +1,6 @@
-SET PATH=C:\Software\Java\openjdk-11.0.2\bin;%PATH%
+IF NOT EXISTS java-engine-path.bat GOTO PathSet
+    CALL java-engine-path.bat
+:PathSet
 
 SET LIB=.\lib
 
