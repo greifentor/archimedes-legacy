@@ -36,6 +36,7 @@ import corent.base.StrUtil;
 import corent.djinn.FrameEditorDjinn;
 import corent.djinn.SubEditor;
 import corent.djinn.VectorPanelButtonFactory;
+import logging.Logger;
 
 /**
  * Ein in einen EditorDjinn einbindbarer SubEditor zur Bearbeitung der
@@ -53,6 +54,8 @@ import corent.djinn.VectorPanelButtonFactory;
 
 public class PanellistenSubEditor implements SubEditor {
 
+	private static final Logger log = Logger.getLogger(PanellistenSubEditor.class);
+
 	/* Der Bearbeiten-Button des Panels. */
 	private JButton buttonBearbeiten = null;
 	/* Der Einf&uuml;gen-Button des Panels. */
@@ -69,8 +72,8 @@ public class PanellistenSubEditor implements SubEditor {
 	/* Das Panel, auf dem der SubEditor abgebildet wird. */
 	private JPanel panel = null;
 	/*
-	 * Liste der JPanels, auf denen die zugreifbaren Components untergebracht
-	 * werden sollen.
+	 * Liste der JPanels, auf denen die zugreifbaren Components untergebracht werden
+	 * sollen.
 	 */
 	private JPanel[] panels = null;
 	/* Die Tabellenansicht zur Auswahl der Tabellenspalten. */
@@ -82,35 +85,37 @@ public class PanellistenSubEditor implements SubEditor {
 	/**
 	 * Generiert einen PanellistenSubEditor mit den &uuml;bergebenen Parametern.
 	 * 
-	 * @param tm
-	 *            Das TabellenModel, dessen Spalten manipuliert werden sollen.
-	 * @param vpbf
-	 *            Eine VectorPanelButtonFactory zum Erzeugen der Buttons des
-	 *            Panels.
+	 * @param tm   Das TabellenModel, dessen Spalten manipuliert werden sollen.
+	 * @param vpbf Eine VectorPanelButtonFactory zum Erzeugen der Buttons des
+	 *             Panels.
 	 */
 	public PanellistenSubEditor(TabellenModel tm, VectorPanelButtonFactory vpbf) {
 		super();
 		this.tabelle = tm;
 		this.buttonBearbeiten = vpbf.createButtonBearbeiten();
 		this.buttonBearbeiten.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				doButtonBearbeiten();
 			}
 		});
 		this.buttonEinfuegen = vpbf.createButtonEinfuegen();
 		this.buttonEinfuegen.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				doButtonEinfuegen();
 			}
 		});
 		this.buttonEntfernen = vpbf.createButtonEntfernen();
 		this.buttonEntfernen.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				doButtonEntfernen();
 			}
 		});
 		this.anzeige = new JTable(new PanellistenTableModel(tm));
 		this.anzeige.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				if ((e.getClickCount() == 2) && buttonBearbeiten.isVisible()) {
 					doButtonBearbeiten();
@@ -141,10 +146,12 @@ public class PanellistenSubEditor implements SubEditor {
 			final archimedes.legacy.scheme.Panel p = (archimedes.legacy.scheme.Panel) this.tabelle
 					.getPanelAt(this.anzeige.getSelectedRow());
 			new FrameEditorDjinn(StrUtil.FromHTML("&Auml;ndern Panel"), p, false, null) {
+				@Override
 				public void doClosed() {
 					doRepaint();
 				}
 
+				@Override
 				public void doChanged(boolean saveOnly) {
 					tabelle.removePanel(p);
 					tabelle.addPanel(p);
@@ -161,15 +168,18 @@ public class PanellistenSubEditor implements SubEditor {
 		final archimedes.legacy.scheme.Panel p = (archimedes.legacy.scheme.Panel) Archimedes.Factory.createPanel();
 		this.tabelle.addPanel(p);
 		new FrameEditorDjinn("Neuanlage Panel", p, false, null) {
+			@Override
 			public void doClosed() {
 				doRepaint();
 			}
 
+			@Override
 			public void doChanged(boolean saveOnly) {
 				tabelle.removePanel(p);
 				tabelle.addPanel(p);
 			}
 
+			@Override
 			public void doDiscarded() {
 				tabelle.removePanel(p);
 			}
@@ -182,14 +192,15 @@ public class PanellistenSubEditor implements SubEditor {
 	 */
 	public void doButtonEntfernen() {
 		if (this.anzeige.getSelectedRow() >= 0) {
-			PanelModel p = (PanelModel) this.tabelle.getPanelAt(this.anzeige.getSelectedRow());
+			PanelModel p = this.tabelle.getPanelAt(this.anzeige.getSelectedRow());
 			for (int i = 0, len = this.tabelle.getTabellenspaltenCount(); i < len; i++) {
 				TabellenspaltenModel tsm = this.tabelle.getTabellenspalteAt(i);
 				if (tsm.getPanel() == p) {
-					JOptionPane.showMessageDialog(null, StrUtil.FromHTML("Das Panel wird durch " + tsm.toString()
-							+ " referenziert!\nL&ouml;schen nicht " + "m&ouml;glich!"), "Referenzproblem!",
-							JOptionPane.YES_OPTION);
-					System.out.println("Wird Referenziert durch " + tsm.toString());
+					JOptionPane.showMessageDialog(null,
+							StrUtil.FromHTML("Das Panel wird durch " + tsm.toString()
+									+ " referenziert!\nL&ouml;schen nicht " + "m&ouml;glich!"),
+							"Referenzproblem!", JOptionPane.YES_OPTION);
+					log.warn("Wird Referenziert durch " + tsm.toString());
 					return;
 				}
 			}
@@ -205,25 +216,31 @@ public class PanellistenSubEditor implements SubEditor {
 
 	/* Implementierung des Interfaces SubEditorDesriptor. */
 
+	@Override
 	public void cleanupData() {
 	}
 
+	@Override
 	public JComponent getComponent(int n) {
 		return this.components[n];
 	}
 
+	@Override
 	public int getComponentCount() {
 		return this.components.length;
 	}
 
+	@Override
 	public JPanel getComponentPanel(int n) {
 		return this.panels[n];
 	}
 
+	@Override
 	public JLabel getLabel(int n) {
 		return this.labels[n];
 	}
 
+	@Override
 	public JPanel getPanel() {
 		return this.panel;
 	}
@@ -232,6 +249,7 @@ public class PanellistenSubEditor implements SubEditor {
 		this.tabelle = (TabellenModel) attr;
 	}
 
+	@Override
 	public void transferData() {
 	}
 
@@ -247,21 +265,25 @@ class PanellistenTableModel extends AbstractTableModel {
 		this.tm = tm;
 	}
 
+	@Override
 	public Class<?> getColumnClass(int column) {
 		return new String().getClass();
 	}
 
+	@Override
 	public String getColumnName(int column) {
 		if ((columnname != null) && (column >= 0) && (column < columnname.length) && (columnname[column] != null)) {
-			return (String) columnname[column];
+			return columnname[column];
 		}
 		return "";
 	}
 
+	@Override
 	public int getRowCount() {
 		return tm.getPanelCount();
 	}
 
+	@Override
 	public int getColumnCount() {
 		if (columnname != null) {
 			return columnname.length;
@@ -269,8 +291,9 @@ class PanellistenTableModel extends AbstractTableModel {
 		return 1;
 	}
 
+	@Override
 	public Object getValueAt(int row, int column) {
-		PanelModel pm = (PanelModel) tm.getPanelAt(row);
+		PanelModel pm = tm.getPanelAt(row);
 		switch (column) {
 		case 0:
 			return "" + pm.getPanelNumber();

@@ -58,12 +58,15 @@ import corent.gui.TimestampField;
 import corent.gui.TimestampFieldListener;
 import corent.print.JasperReportable;
 import corent.util.SysUtil;
+import logging.Logger;
 
 /**
  * Musterimplementierung des EditorDjinns auf Basis eines JPanels.
  * <P>
- * &Uuml;ber die Property <I>corent.djinn.DefaultEditorDjinnPanel.divider.offset</I> kann ein Wert gesetzt werden, um
- * den die Defaulteinstellung des Dividers bei der ersten Anzeige f&uuml;r eine Klasse erweitert werden soll. Hier durch
+ * &Uuml;ber die Property
+ * <I>corent.djinn.DefaultEditorDjinnPanel.divider.offset</I> kann ein Wert
+ * gesetzt werden, um den die Defaulteinstellung des Dividers bei der ersten
+ * Anzeige f&uuml;r eine Klasse erweitert werden soll. Hier durch
  * l&auml;&szlig;t sich das Problem der swing-internen Initialisierung umgehen.
  * <P>
  * &nbsp;
@@ -81,60 +84,65 @@ import corent.util.SysUtil;
  * <TD>corent.djinn.CreateCycle.vk.down</TD>
  * <TD>VK_DOWN</TD>
  * <TD>String</TD>
- * <TD>&Uuml;ber diese Property k&ouml;nnen kann der Tastatuscode zum Weiterschalten des Focus innerhalb der
- * EditorDjinn-Logik konfiguriert werden (vorw&auml;rts).</TD>
+ * <TD>&Uuml;ber diese Property k&ouml;nnen kann der Tastatuscode zum
+ * Weiterschalten des Focus innerhalb der EditorDjinn-Logik konfiguriert werden
+ * (vorw&auml;rts).</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>corent.djinn.CreateCycle.vk.down.alt</TD>
  * <TD>VK_ENTER</TD>
  * <TD>String</TD>
- * <TD>&Uuml;ber diese Property k&ouml;nnen kann der alternative Tastatuscode zum Weiterschalten des Focus innerhalb der
- * EditorDjinn-Logik konfiguriert werden (vorw&auml;rts).</TD>
+ * <TD>&Uuml;ber diese Property k&ouml;nnen kann der alternative Tastatuscode
+ * zum Weiterschalten des Focus innerhalb der EditorDjinn-Logik konfiguriert
+ * werden (vorw&auml;rts).</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>corent.djinn.CreateCycle.vk.escape</TD>
  * <TD>VK_ESCAPE</TD>
  * <TD>String</TD>
- * <TD>&Uuml;ber diese Property k&ouml;nnen kann der Tastatuscode zum Verwerfen der &Auml;nderungen im Dialog
- * konfiguriert werden.</TD>
+ * <TD>&Uuml;ber diese Property k&ouml;nnen kann der Tastatuscode zum Verwerfen
+ * der &Auml;nderungen im Dialog konfiguriert werden.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>corent.djinn.CreateCycle.vk.f12</TD>
  * <TD>VK_F12</TD>
  * <TD>String</TD>
- * <TD>&Uuml;ber diese Property k&ouml;nnen kann der Tastatuscode zum &Uuml;bernehmen der &Auml;nderungen im Dialog
- * konfiguriert werden.</TD>
+ * <TD>&Uuml;ber diese Property k&ouml;nnen kann der Tastatuscode zum
+ * &Uuml;bernehmen der &Auml;nderungen im Dialog konfiguriert werden.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>corent.djinn.CreateCycle.vk.up</TD>
  * <TD>VK_UP</TD>
  * <TD>String</TD>
- * <TD>&Uuml;ber diese Property k&ouml;nnen kann der Tastatuscode zum Weiterschalten des Focus innerhalb der
- * EditorDjinn-Logik konfiguriert werden (r&uuml;ckw&auml;rts).</TD>
+ * <TD>&Uuml;ber diese Property k&ouml;nnen kann der Tastatuscode zum
+ * Weiterschalten des Focus innerhalb der EditorDjinn-Logik konfiguriert werden
+ * (r&uuml;ckw&auml;rts).</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>corent.djinn.DefaultEditorDjinnPanel.<BR>
  * markup.first.field</TD>
  * <TD>false</TD>
  * <TD>Boolean</TD>
- * <TD>Setzen Sie diese Property, um im Falle einer Fokussierung eines Textfeldes als erste Komponente nach &Ouml;ffnen
- * des Panels, den Inhalt des Textfeldes zu markieren.</TD>
+ * <TD>Setzen Sie diese Property, um im Falle einer Fokussierung eines
+ * Textfeldes als erste Komponente nach &Ouml;ffnen des Panels, den Inhalt des
+ * Textfeldes zu markieren.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>corent.djinn.DefaultEditorDjinnPanel.<BR>
  * suppress.button.save</TD>
  * <TD>true</TD>
  * <TD>Boolean</TD>
- * <TD>Wenn diese Property gesetzt wird, werden die Speichern-Buttons generell nicht mit in das EditorDjinnPanel
- * &uuml;bernommen.</TD>
+ * <TD>Wenn diese Property gesetzt wird, werden die Speichern-Buttons generell
+ * nicht mit in das EditorDjinnPanel &uuml;bernommen.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>corent.djinn.DefaultEditorDjinnPanel.<BR>
  * suppress.button.save.<I>classname</I></TD>
  * <TD>true</TD>
  * <TD>Boolean</TD>
- * <TD>Wenn diese Property gesetzt wird, werden die Speichern-Buttons f&uuml;r Objekte der Klasse mit dem angegebenen
- * Namen nicht mit in das EditorDjinnPanel &uuml;bernommen.</TD>
+ * <TD>Wenn diese Property gesetzt wird, werden die Speichern-Buttons f&uuml;r
+ * Objekte der Klasse mit dem angegebenen Namen nicht mit in das
+ * EditorDjinnPanel &uuml;bernommen.</TD>
  * </TR>
  * </TABLE>
  * <P>
@@ -143,54 +151,69 @@ import corent.util.SysUtil;
  * @author O.Lieshoff
  *         <P>
  *
- * @changed OLI 23.09.2007 - Die Methode <TT>getComponentTable()</TT> ist, bedingt durch Erweiterung des Interfaces
- *          <TT>EditorDjinn</TT>, auf public gesetzt worden.
+ * @changed OLI 23.09.2007 - Die Methode <TT>getComponentTable()</TT> ist,
+ *          bedingt durch Erweiterung des Interfaces <TT>EditorDjinn</TT>, auf
+ *          public gesetzt worden.
  *          <P>
- *          OLI 29.10.2007 - Erweiterung um die notwendigen Codepassagen f&uuml;r den Einsatz eines Speichern-Buttons.
+ *          OLI 29.10.2007 - Erweiterung um die notwendigen Codepassagen
+ *          f&uuml;r den Einsatz eines Speichern-Buttons.
  *          <P>
- *          OLI 11.11.2007 - Erweiterung des Konstruktors um das Abblenden von Drucken- (nur bei JasperPrintables, die
- *          vor dem Speichern gedruckt werden m&uuml;ssen) und Speichern-Button bei gelockten Objekten. Au&szlig;erdem:
- *          Implementierung einer M&ouml;glichkeit &uuml;ber Properties, den Speichern-Button generell oder f&uuml;r
- *          einzelne Klassen von editierten Objekten wegzuschalten.
+ *          OLI 11.11.2007 - Erweiterung des Konstruktors um das Abblenden von
+ *          Drucken- (nur bei JasperPrintables, die vor dem Speichern gedruckt
+ *          werden m&uuml;ssen) und Speichern-Button bei gelockten Objekten.
+ *          Au&szlig;erdem: Implementierung einer M&ouml;glichkeit &uuml;ber
+ *          Properties, den Speichern-Button generell oder f&uuml;r einzelne
+ *          Klassen von editierten Objekten wegzuschalten.
  *          <P>
  *          OLI 26.02.2008 - Umbau auf EditorDjinnMode-Betrieb.
  *          <P>
  *          OLI 14.03.2008 - HTMLisierung verbliebener Aufrufe der Methode
- *          <TT>StrUtil.GetProperty(String, String, String)</TT> in der Methode <TT>transferValue(boolean)</TT>.
+ *          <TT>StrUtil.GetProperty(String, String, String)</TT> in der Methode
+ *          <TT>transferValue(boolean)</TT>.
  *          <P>
- *          OLI 17.04.2008 - Korrektur der HTML-Umwandlung. Die ersetzten Feldernamen werden nun auch korrekt behandelt
- *          in der Methode <TT>transferValues(boolean)</TT>.
+ *          OLI 17.04.2008 - Korrektur der HTML-Umwandlung. Die ersetzten
+ *          Feldernamen werden nun auch korrekt behandelt in der Methode
+ *          <TT>transferValues(boolean)</TT>.
  *          <P>
- *          OLI 13.05.2008 - Behandlung von <TT>SplittedEditorDjinnPanelListenern</TT>.
+ *          OLI 13.05.2008 - Behandlung von
+ *          <TT>SplittedEditorDjinnPanelListenern</TT>.
  *          <P>
- *          OLI 15.06.2008 - Hinzuf&uuml;gen der Methode <TT>doOpened()</TT>. Im Zusammenspiel mit &Auml;nderungen an
- *          den EditorDjinns wird dadurch die Fokussierung der ersten Komponente des EditorDjinnPanels nach &Ouml;ffnen
- *          des Djinns m&ouml;glich. Durch Konfiguration kann im Falle eines Textfeldes sogar dessen Inhalt markiert
- *          werden.
+ *          OLI 15.06.2008 - Hinzuf&uuml;gen der Methode <TT>doOpened()</TT>. Im
+ *          Zusammenspiel mit &Auml;nderungen an den EditorDjinns wird dadurch
+ *          die Fokussierung der ersten Komponente des EditorDjinnPanels nach
+ *          &Ouml;ffnen des Djinns m&ouml;glich. Durch Konfiguration kann im
+ *          Falle eines Textfeldes sogar dessen Inhalt markiert werden.
  *          <P>
- *          OLI 10.08.2008 - Erweiterung um die M&ouml;glichkeit die Funktionstasten (F12, Escape etc.) &uuml;ber
- *          Properties zu konfigurieren.
+ *          OLI 10.08.2008 - Erweiterung um die M&ouml;glichkeit die
+ *          Funktionstasten (F12, Escape etc.) &uuml;ber Properties zu
+ *          konfigurieren.
  *          <P>
- *          OLI 23.09.2008 - Entsch&auml;rfung des Threads zum Setzen des Rahmens um die fokussierte Komponente.
+ *          OLI 23.09.2008 - Entsch&auml;rfung des Threads zum Setzen des
+ *          Rahmens um die fokussierte Komponente.
  *          <P>
- *          OLI 15.01.2009 - Ausschlu&szlig; von Speichern-Buttons f&uuml;r EditorDjinnModes ungleich <TT>EDIT</TT>.
+ *          OLI 15.01.2009 - Ausschlu&szlig; von Speichern-Buttons f&uuml;r
+ *          EditorDjinnModes ungleich <TT>EDIT</TT>.
  *          <P>
- *          OLI 23.03.2009 - Einbau der Reaktionslogik auf <TT>CentrallyHeld</TT>-Objekte.
+ *          OLI 23.03.2009 - Einbau der Reaktionslogik auf
+ *          <TT>CentrallyHeld</TT>-Objekte.
  *          <P>
  *
  */
 
 public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runnable {
 
+	private static final Logger log = Logger.getLogger(DefaultEditorDjinnPanel.class);
+
 	/* Flagge zur Kennzeichnung eines Stapel&auml;nderungspanels. */
 	private boolean batch = false;
 	/*
-	 * Flagge zur Anzeige, da&szlig; es sich bei dem Objekt um ein zentrales Objekt in lokalem Zusammenhang zu
-	 * kennzeichnen.
+	 * Flagge zur Anzeige, da&szlig; es sich bei dem Objekt um ein zentrales Objekt
+	 * in lokalem Zusammenhang zu kennzeichnen.
 	 */
 	private boolean centralObject = false;
 	/*
-	 * Flagge zur Anzeige, da&szlig; es sich bei dem Panel eines f&uuml;r ein gelocktes Objekt handelt.
+	 * Flagge zur Anzeige, da&szlig; es sich bei dem Panel eines f&uuml;r ein
+	 * gelocktes Objekt handelt.
 	 */
 	private boolean locked = false;
 	/* Flagge zum Stoppen des Aktualisierungs-Threads. */
@@ -200,14 +223,15 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 	/* Referenz auf die Component, in der das DjinnPanel abgebildet werden soll. */
 	private Component owner = null;
 	/*
-	 * Die Komponententabelle, die die Komponenten der einzelnen Tabs enth&auml;lt und zugreifbar macht.
+	 * Die Komponententabelle, die die Komponenten der einzelnen Tabs enth&auml;lt
+	 * und zugreifbar macht.
 	 */
 	private ComponentTable komponenten = new ComponentTable();
 	/* Referenz auf das angezeigte und gegebenenfalls manipulierte Objekt. */
 	private Editable objekt = null;
 	/*
-	 * Eine Liste SubEditorDescriptoren geschl&uuml;sselt nach den Nummern der Tabs, in denen sie abgebildet werden
-	 * sollen.
+	 * Eine Liste SubEditorDescriptoren geschl&uuml;sselt nach den Nummern der Tabs,
+	 * in denen sie abgebildet werden sollen.
 	 */
 	private Hashtable subeditors = new Hashtable();
 	/* Die Inidatei der Applikation zur Weitergabe an die Komponenten. */
@@ -224,37 +248,50 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 	private JButton buttonUebernehmen = null;
 	/* Der Verwerfen-Button des Panels. */
 	private JButton buttonVerwerfen = null;
-	/* Eine Referenz auf das JSplitPane, falls das Panel ein solches besitzt, sonst null. */
+	/*
+	 * Eine Referenz auf das JSplitPane, falls das Panel ein solches besitzt, sonst
+	 * null.
+	 */
 	private JSplitPane jsplitpane = null;
 	/* Eine Referenz auf ein eventuell existierendes TabbedPane. */
 	private JTabbedPane jtabbedpane = null;
-	/* Der Thread zur Aktualisierung der Markierung f&uuml;r die fokussierte Komponente. */
+	/*
+	 * Der Thread zur Aktualisierung der Markierung f&uuml;r die fokussierte
+	 * Komponente.
+	 */
 	private Thread thread = null;
 	/*
-	 * Liste mit den EditorDjinnListenern, die auf die Ereignisse des EditorDjinns reagieren sollen.
+	 * Liste mit den EditorDjinnListenern, die auf die Ereignisse des EditorDjinns
+	 * reagieren sollen.
 	 */
 	private Vector listener = new Vector();
 	/*
-	 * Liste mit BatchCheckBoxen, &uuml;ber die bei einer Stapel&auml;nderung ge&auml;nderte Attribute markiert werden
-	 * k&ouml;nnen.
+	 * Liste mit BatchCheckBoxen, &uuml;ber die bei einer Stapel&auml;nderung
+	 * ge&auml;nderte Attribute markiert werden k&ouml;nnen.
 	 */
 	private Vector stapelmarken = new Vector();
 
 	/**
-	 * Generiert einen EditorDjinn und &uuml;bernimmt die Daten des &uuml;bergebenen Editables. Zur Produktion der
-	 * Buttons wird die ebenfalls &uuml;bergebenen EditorDjinnButtonFactory benutzt.
+	 * Generiert einen EditorDjinn und &uuml;bernimmt die Daten des &uuml;bergebenen
+	 * Editables. Zur Produktion der Buttons wird die ebenfalls &uuml;bergebenen
+	 * EditorDjinnButtonFactory benutzt.
 	 *
 	 * @param ownr   Die Component, in der der EditorDjinn abgebildet werden soll.
-	 * @param e      Das Editable, das in dem DefaultEditorDjinnPanel angezeigt werden soll.
-	 * @param edbf   Eine EditorDjinnButtonFactory, die die notwendigen Buttons f&uuml;r das DefaultEditorDjinnPanel
-	 *               produziert.
-	 * @param split  Wird diese Flagge gesetzt, so wird im Falle mehrerer Tabs das Panel des ersten Tabs in die obere
-	 *               H&auml;lfte des Fensters gesetzt, w&auml;hrend die anderen als TabbedPane in die untere wandern.
-	 *               Sonst werden alle Panels in einem TabbedPane zusammengefa&szlig;t.
-	 * @param locked Diese Flagge mu&szlig; gesetzt werden, wenn der Dialog gelockt ist und daher nicht gesperrt werden
-	 *               kann.
-	 * @param ini    Die Inidatei, aus der die Komponenten des Panels ihre Gestalt rekonstruieren k&ouml;nnen.
-	 * @param mode   Der Modus, in dem das Panel betrieben werden soll (Neuanlage, &Auml;nderung oder Duplikation).
+	 * @param e      Das Editable, das in dem DefaultEditorDjinnPanel angezeigt
+	 *               werden soll.
+	 * @param edbf   Eine EditorDjinnButtonFactory, die die notwendigen Buttons
+	 *               f&uuml;r das DefaultEditorDjinnPanel produziert.
+	 * @param split  Wird diese Flagge gesetzt, so wird im Falle mehrerer Tabs das
+	 *               Panel des ersten Tabs in die obere H&auml;lfte des Fensters
+	 *               gesetzt, w&auml;hrend die anderen als TabbedPane in die untere
+	 *               wandern. Sonst werden alle Panels in einem TabbedPane
+	 *               zusammengefa&szlig;t.
+	 * @param locked Diese Flagge mu&szlig; gesetzt werden, wenn der Dialog gelockt
+	 *               ist und daher nicht gesperrt werden kann.
+	 * @param ini    Die Inidatei, aus der die Komponenten des Panels ihre Gestalt
+	 *               rekonstruieren k&ouml;nnen.
+	 * @param mode   Der Modus, in dem das Panel betrieben werden soll (Neuanlage,
+	 *               &Auml;nderung oder Duplikation).
 	 */
 	public DefaultEditorDjinnPanel(Component ownr, Editable e, EditorDjinnButtonFactory edbf, boolean split,
 			boolean locked, Inifile ini, EditorDjinnMode mode) {
@@ -262,33 +299,45 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 	}
 
 	/**
-	 * Generiert einen EditorDjinn und &uuml;bernimmt die Daten des &uuml;bergebenen Editables. Zur Produktion der
-	 * Buttons wird die ebenfalls &uuml;bergebenen EditorDjinnButtonFactory benutzt.
+	 * Generiert einen EditorDjinn und &uuml;bernimmt die Daten des &uuml;bergebenen
+	 * Editables. Zur Produktion der Buttons wird die ebenfalls &uuml;bergebenen
+	 * EditorDjinnButtonFactory benutzt.
 	 *
 	 * @param ownr   Die Component, in der der EditorDjinn abgebildet werden soll.
-	 * @param e      Das Editable, das in dem DefaultEditorDjinnPanel angezeigt werden soll.
-	 * @param edbf   Eine EditorDjinnButtonFactory, die die notwendigen Buttons f&uuml;r das DefaultEditorDjinnPanel
-	 *               produziert.
-	 * @param split  Wird diese Flagge gesetzt, so wird im Falle mehrerer Tabs das Panel des ersten Tabs in die obere
-	 *               H&auml;lfte des Fensters gesetzt, w&auml;hrend die anderen als TabbedPane in die untere wandern.
-	 *               Sonst werden alle Panels in einem TabbedPane zusammengefa&szlig;t.
-	 * @param locked Diese Flagge mu&szlig; gesetzt werden, wenn der Dialog gelockt ist und daher nicht gesperrt werden
-	 *               kann.
-	 * @param ini    Die Inidatei, aus der die Komponenten des Panels ihre Gestalt rekonstruieren k&ouml;nnen.
-	 * @param mode   Der Modus, in dem das Panel betrieben werden soll (Neuanlage, &Auml;nderung oder Duplikation).
-	 * @param batch  &Uuml;ber diese Flagge wird gesteuert, ob das EditorDjinnPanel als Stapelpflege arbeiten soll.
+	 * @param e      Das Editable, das in dem DefaultEditorDjinnPanel angezeigt
+	 *               werden soll.
+	 * @param edbf   Eine EditorDjinnButtonFactory, die die notwendigen Buttons
+	 *               f&uuml;r das DefaultEditorDjinnPanel produziert.
+	 * @param split  Wird diese Flagge gesetzt, so wird im Falle mehrerer Tabs das
+	 *               Panel des ersten Tabs in die obere H&auml;lfte des Fensters
+	 *               gesetzt, w&auml;hrend die anderen als TabbedPane in die untere
+	 *               wandern. Sonst werden alle Panels in einem TabbedPane
+	 *               zusammengefa&szlig;t.
+	 * @param locked Diese Flagge mu&szlig; gesetzt werden, wenn der Dialog gelockt
+	 *               ist und daher nicht gesperrt werden kann.
+	 * @param ini    Die Inidatei, aus der die Komponenten des Panels ihre Gestalt
+	 *               rekonstruieren k&ouml;nnen.
+	 * @param mode   Der Modus, in dem das Panel betrieben werden soll (Neuanlage,
+	 *               &Auml;nderung oder Duplikation).
+	 * @param batch  &Uuml;ber diese Flagge wird gesteuert, ob das EditorDjinnPanel
+	 *               als Stapelpflege arbeiten soll.
 	 *
-	 * @changed OLI 11.11.2007 - Einbau des Abblendens von Drucken- (nur bei JasperPrintables, die vor dem Speichern
-	 *          gedruckt werden m&uuml;ssen) und Speichern-Button bei gelockten Objekten. Au&szlig;erdem:
-	 *          Implementierung einer M&ouml;glichkeit &uuml;ber Properties, den Speichern-Button generell oder f&uuml;r
-	 *          einzelne Klassen von editierten Objekten wegzuschalten.
+	 * @changed OLI 11.11.2007 - Einbau des Abblendens von Drucken- (nur bei
+	 *          JasperPrintables, die vor dem Speichern gedruckt werden m&uuml;ssen)
+	 *          und Speichern-Button bei gelockten Objekten. Au&szlig;erdem:
+	 *          Implementierung einer M&ouml;glichkeit &uuml;ber Properties, den
+	 *          Speichern-Button generell oder f&uuml;r einzelne Klassen von
+	 *          editierten Objekten wegzuschalten.
 	 *          <P>
-	 *          OLI 13.05.2008 - Behandlung von <TT>SplittedEditorDjinnPanelListenern</TT>.
+	 *          OLI 13.05.2008 - Behandlung von
+	 *          <TT>SplittedEditorDjinnPanelListenern</TT>.
 	 *          <P>
-	 *          OLI 15.01.2009 - Ausschlu&szlig; von Speichern-Buttons f&uuml;r EditorDjinnModes ungleich <TT>EDIT</TT>.
+	 *          OLI 15.01.2009 - Ausschlu&szlig; von Speichern-Buttons f&uuml;r
+	 *          EditorDjinnModes ungleich <TT>EDIT</TT>.
 	 *          <P>
-	 *          OLI 23.04.2009 - Einbau der Ausblendung von zentralen Feldern, wenn es sich bei dem bearbeiteten Objekt
-	 *          um ein zentrales Objekt in lokalem Umfeld handelt.
+	 *          OLI 23.04.2009 - Einbau der Ausblendung von zentralen Feldern, wenn
+	 *          es sich bei dem bearbeiteten Objekt um ein zentrales Objekt in
+	 *          lokalem Umfeld handelt.
 	 *          <P>
 	 *
 	 */
@@ -356,6 +405,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 		buttons.add(this.buttonVerwerfen);
 		if (this.buttonDrucken != null) {
 			this.buttonDrucken.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					doButtonDrucken();
 				}
@@ -363,6 +413,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 		}
 		if (this.buttonLoeschen != null) {
 			this.buttonLoeschen.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if ((objekt instanceof EditorDjinnMaster)
 							&& (((EditorDjinnMaster) objekt).isDeleteConfirmSuppressed())) {
@@ -377,24 +428,28 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 		}
 		if (this.buttonSpeichern != null) {
 			this.buttonSpeichern.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					doButtonUebernehmen(true);
 				}
 			});
 		}
 		this.buttonUebernehmen.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				doButtonUebernehmen(false);
 			}
 		});
 		if (this.buttonHistorie != null) {
 			this.buttonHistorie.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					doButtonHistorie();
 				}
 			});
 		}
 		this.buttonVerwerfen.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if ((objekt instanceof EditorDjinnMaster)
 						&& (((EditorDjinnMaster) objekt).isDiscardConfirmSuppressed())) {
@@ -438,9 +493,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 				continue;
 			}
 			if (ed instanceof SubEditorDescriptor) {
-				if (debug) {
-					System.out.println("se " + i + " - " + ed.getTab());
-				}
+				log.debug("se " + i + " - " + ed.getTab());
 				sed = (SubEditorDescriptor) ed;
 				se = sed.getSubEditorFactory().createSubEditor(this.getOwner(), (Attributed) this.objekt,
 						this.getComponentTable());
@@ -458,9 +511,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 				}
 				this.subeditors.put(new Integer(ed.getTab()), se);
 			} else {
-				if (debug) {
-					System.out.println("p  " + i + " - " + ed.getTab() + " - " + ed.getClass().getName() + " - " + ed);
-				}
+				log.debug("p  " + i + " - " + ed.getTab() + " - " + ed.getClass().getName() + " - " + ed);
 				label = ed.getLabelFactory().createLabel(ed);
 				comp = ed.getComponentFactory().createComponent(ed, owner, this.ini);
 				if (this.centralObject) {
@@ -492,6 +543,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 		} else if (tabCount > 1) {
 			jtp = ((TabbedEditable) this.objekt).getTabbedPaneFactory().createTabbedPane();
 			jtp.addKeyListener(new KeyAdapter() {
+				@Override
 				public void keyPressed(KeyEvent e) {
 					if (e.getKeyCode() == KeyEvent.VK_F12) {
 						buttonUebernehmen.requestFocus();
@@ -595,9 +647,8 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 												componentOnTabOne * 2));
 							}
 						} catch (Exception e0) {
-							e0.printStackTrace();
-							System.out.println("WARNING: while recreating dividers location in "
-									+ "JSplitPane in DefaultEditorDjinnPanel!");
+							log.warn("while recreating dividers location in JSplitPane in DefaultEditorDjinnPanel! "
+									+ e0.getMessage());
 						}
 					}
 					jtp.removeTabAt(0);
@@ -704,7 +755,8 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 	}
 
 	/**
-	 * Wird aufgerufen, sobald das Fenster, in dem das Panel angezeigt wird, sichtbar wird.
+	 * Wird aufgerufen, sobald das Fenster, in dem das Panel angezeigt wird,
+	 * sichtbar wird.
 	 *
 	 * @changed OLI 15.06.2008 - Hinzugef&uuml;gt.
 	 *
@@ -754,20 +806,24 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 	}
 
 	/**
-	 * Diese Methode kann aufgerufen werden, um den Inhalt des EditorDjinnPanels in das dazugeh%ouml;rige Objekt zu
-	 * &uuml;bernehmen. Sie wird auch von der Methode <TT>doButtonUebernehmen()</TT> aufgerufen.
+	 * Diese Methode kann aufgerufen werden, um den Inhalt des EditorDjinnPanels in
+	 * das dazugeh%ouml;rige Objekt zu &uuml;bernehmen. Sie wird auch von der
+	 * Methode <TT>doButtonUebernehmen()</TT> aufgerufen.
 	 *
-	 * @param saveOnly Diese Flagge wird gesetzt, wenn die Daten aus dem EditorDjinnPanel lediglich gespeichert, der
-	 *                 EditorDjinn aber nicht geschlossen werden soll.
-	 * @return <TT>true</TT>, wenn der Dialog mit dem EditorDjinnPanel geschlossen werden darf.
+	 * @param saveOnly Diese Flagge wird gesetzt, wenn die Daten aus dem
+	 *                 EditorDjinnPanel lediglich gespeichert, der EditorDjinn aber
+	 *                 nicht geschlossen werden soll.
+	 * @return <TT>true</TT>, wenn der Dialog mit dem EditorDjinnPanel geschlossen
+	 *         werden darf.
 	 *
-	 * @changed OLI 29.10.2007 - Erweiterung um den Parameter <TT>saveOnly</TT> und die angebundene Logik.
+	 * @changed OLI 29.10.2007 - Erweiterung um den Parameter <TT>saveOnly</TT> und
+	 *          die angebundene Logik.
 	 *          <P>
 	 *          OLI 14.03.2008 - HTMLisierung verbliebener Aufrufe der Methode
 	 *          <TT>StrUtil.GetProperty(String, String, String)</TT>.
 	 *          <P>
-	 *          OLI 17.04.2008 - Korrektur der HTML-Umwandlung. Die ersetzten Feldernamen werden nun auch korrekt
-	 *          behandelt.
+	 *          OLI 17.04.2008 - Korrektur der HTML-Umwandlung. Die ersetzten
+	 *          Feldernamen werden nun auch korrekt behandelt.
 	 *
 	 */
 	public boolean transferValues(boolean saveOnly) {
@@ -775,7 +831,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 			Hashtable<Integer, Object> contents = new Hashtable<Integer, Object>();
 			for (int t = 0, lent = this.komponenten.getTabCount(); t < lent; t++) {
 				for (int i = 0, len = this.komponenten.getSize(t); i < len; i++) {
-					DefaultEditorDjinnCell dedc = (DefaultEditorDjinnCell) this.komponenten.getCell(t, i);
+					DefaultEditorDjinnCell dedc = this.komponenten.getCell(t, i);
 					if (((dedc.getComponent() != null) && (dedc.getEditorDescriptor() != null))
 							&& (!(dedc.getEditorDescriptor() instanceof SubEditorDescriptor))) {
 						Object value = dedc.getEditorDescriptor().getComponentFactory()
@@ -792,7 +848,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 		}
 		for (int t = 0, lent = this.komponenten.getTabCount(); t < lent; t++) {
 			for (int i = 0, len = this.komponenten.getSize(t); i < len; i++) {
-				DefaultEditorDjinnCell dedc = (DefaultEditorDjinnCell) this.komponenten.getCell(t, i);
+				DefaultEditorDjinnCell dedc = this.komponenten.getCell(t, i);
 				if (((dedc.getComponent() != null) && (dedc.getEditorDescriptor() != null))
 						&& (!(dedc.getEditorDescriptor() instanceof SubEditorDescriptor))) {
 					dedc.getEditorDescriptor().getComponentFactory().transferValue(dedc.getEditorDescriptor(),
@@ -860,7 +916,8 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 	/**
 	 * Wird aufgerufen, wenn der Benutzer den Uebernehmen-Button bet&auml;tigt.
 	 *
-	 * @param saveOnly Diese Flagge mu&szlig; gesetzt werden, wenn nur gespeichert, nicht aber beendet werden soll.
+	 * @param saveOnly Diese Flagge mu&szlig; gesetzt werden, wenn nur gespeichert,
+	 *                 nicht aber beendet werden soll.
 	 */
 	protected void doButtonUebernehmen(boolean saveOnly) {
 		if (!this.batch) {
@@ -933,9 +990,8 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 				ini.writeInt(this.objekt.getClass().getName(), "JSplitPane-Divider",
 						this.jsplitpane.getDividerLocation());
 			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("WARNING: while saving dividers location in JSplitPane "
-						+ "in DefaultEditorDjinnPanel to inifile!");
+				log.warn("while saving dividers location in JSplitPane in DefaultEditorDjinnPanel to inifile! "
+						+ e.getMessage());
 			}
 		}
 		if (this.objekt instanceof EditorDjinnObserver) {
@@ -945,10 +1001,13 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 	}
 
 	/**
-	 * Diese Methode mu&szlig; den Wert <TT>true</TT> zur&uuml;ckliefern, wenn der Datensatz einzigartig ist.
+	 * Diese Methode mu&szlig; den Wert <TT>true</TT> zur&uuml;ckliefern, wenn der
+	 * Datensatz einzigartig ist.
 	 *
-	 * @param p Das Persistent-Objekt, das auf Einzigartigkeit gepr&uuml;ft werden soll.
-	 * @return <TT>true</TT>, falls das Objekt einzigartig ist, <TT>false</TT> sonst.
+	 * @param p Das Persistent-Objekt, das auf Einzigartigkeit gepr&uuml;ft werden
+	 *          soll.
+	 * @return <TT>true</TT>, falls das Objekt einzigartig ist, <TT>false</TT>
+	 *         sonst.
 	 */
 	public boolean isUnique(Persistent p) {
 		return true;
@@ -958,6 +1017,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 		if (comp instanceof AbstractMassiveListSelector) {
 			final AbstractMassiveListSelector mls = (AbstractMassiveListSelector) comp;
 			mls.addMassiveListSelectorListener(new MassiveListSelectorListener() {
+				@Override
 				public void selectionAltered(MassiveListSelectorEvent e) {
 					if (objekt instanceof EditorDjinnCellAlterListener) {
 						((EditorDjinnCellAlterListener) objekt).dataChanged(mls, getComponentTable());
@@ -968,6 +1028,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 					}
 				}
 
+				@Override
 				public void selectionCleared(MassiveListSelectorEvent e) {
 					if (objekt instanceof EditorDjinnCellAlterListener) {
 						((EditorDjinnCellAlterListener) objekt).dataChanged(mls, getComponentTable());
@@ -981,6 +1042,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 		} else if (comp instanceof JCheckBox) {
 			final JCheckBox jcb = (JCheckBox) comp;
 			jcb.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (objekt instanceof EditorDjinnCellAlterListener) {
 						((EditorDjinnCellAlterListener) objekt).dataChanged(jcb, getComponentTable());
@@ -994,6 +1056,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 		} else if (comp instanceof JTextField) {
 			final JTextField jtf = (JTextField) comp;
 			jtf.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (objekt instanceof EditorDjinnCellAlterListener) {
 						((EditorDjinnCellAlterListener) objekt).dataChanged(jtf, getComponentTable());
@@ -1005,12 +1068,13 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 				}
 			});
 			/*
-			 * eine Alternative ?!? jtf.addCaretListener(new CaretListener() { public void caretUpdate(CaretEvent e) { }
-			 * });
+			 * eine Alternative ?!? jtf.addCaretListener(new CaretListener() { public void
+			 * caretUpdate(CaretEvent e) { } });
 			 */
 		} else if (comp instanceof TimestampField) {
 			final TimestampField tsf = (TimestampField) comp;
 			tsf.addTimestampFieldListener(new TimestampFieldListener() {
+				@Override
 				public void dateChanged(TimestampModel ts) {
 					if (objekt instanceof EditorDjinnCellAlterListener) {
 						((EditorDjinnCellAlterListener) objekt).dataChanged(tsf, getComponentTable());
@@ -1021,6 +1085,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 					}
 				}
 
+				@Override
 				public void timeChanged(TimestampModel ts) {
 					if (objekt instanceof EditorDjinnCellAlterListener) {
 						((EditorDjinnCellAlterListener) objekt).dataChanged(tsf, getComponentTable());
@@ -1036,50 +1101,59 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 
 	/* Implementierung des Interfaces EditorDjinn. */
 
+	@Override
 	public void addEditorDjinnListener(EditorDjinnListener edl) {
 		this.listener.addElement(edl);
 	}
 
+	@Override
 	public void removeEditorDjinnListener(EditorDjinnListener edl) {
 		this.listener.removeElement(edl);
 	}
 
+	@Override
 	public void fireObjectBatchChanged(Hashtable<Integer, Object> ht) {
 		for (int i = 0, len = this.listener.size(); i < len; i++) {
 			((EditorDjinnListener) this.listener.elementAt(i)).objectBatchChanged(ht);
 		}
 	}
 
+	@Override
 	public void fireObjectChanged(boolean saveOnly) {
 		for (int i = 0, len = this.listener.size(); i < len; i++) {
 			((EditorDjinnListener) this.listener.elementAt(i)).objectChanged(saveOnly);
 		}
 	}
 
+	@Override
 	public void fireDjinnClosed() {
 		for (int i = 0, len = this.listener.size(); i < len; i++) {
 			((EditorDjinnListener) this.listener.elementAt(i)).djinnClosed();
 		}
 	}
 
+	@Override
 	public void fireDjinnClosing() {
 		for (int i = 0, len = this.listener.size(); i < len; i++) {
 			((EditorDjinnListener) this.listener.elementAt(i)).djinnClosing();
 		}
 	}
 
+	@Override
 	public void fireObjectDeleted() {
 		for (int i = 0, len = this.listener.size(); i < len; i++) {
 			((EditorDjinnListener) this.listener.elementAt(i)).objectDeleted();
 		}
 	}
 
+	@Override
 	public void fireObjectDiscarded() {
 		for (int i = 0, len = this.listener.size(); i < len; i++) {
 			((EditorDjinnListener) this.listener.elementAt(i)).objectDiscarded();
 		}
 	}
 
+	@Override
 	public void fireObjectPrinted() {
 		for (int i = 0, len = this.listener.size(); i < len; i++) {
 			((EditorDjinnListener) this.listener.elementAt(i)).objectPrinted();
@@ -1089,6 +1163,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 		}
 	}
 
+	@Override
 	public void fireObjectReadyToPrint() {
 		if (this.objekt instanceof EditorDjinnPrintMaster) {
 			((EditorDjinnPrintMaster) this.objekt).doBeforePrinting();
@@ -1103,10 +1178,12 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 		}
 	}
 
+	@Override
 	public Component getOwner() {
 		return this.owner;
 	}
 
+	@Override
 	public Editable getEditable() {
 		return this.objekt;
 	}
@@ -1114,27 +1191,33 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 	/*
 	 * *
 	 * 
-	 * @changed OLI 05.01.2009 - Hinzugef&uuml;gt. <P>OLI 12.01.2009 - Idee ist erstmal verworfen worden. <P>
+	 * @changed OLI 05.01.2009 - Hinzugef&uuml;gt. <P>OLI 12.01.2009 - Idee ist
+	 * erstmal verworfen worden. <P>
 	 *
 	 */
 	/*
-	 * public void setEditable(Editable e) { DefaultEditorDjinnCell dedc = null; this.objekt = e; // OLI 05.01.2009 -
-	 * Eigentlich wollte ich hier auf auf Nummer sicher gehen. Funktioniert // aber nicht, weil in
-	 * transferValues(boolean) ein Speicherereignis geworfen // wird ... // OLI 09.01.2009 - Und zwar, weil die
-	 * EditorDescriptoren neugesetzt werden m&uuml;ssen // (siehe untern). // this.transferValues(true); / * So geht es
-	 * im Moment auch nicht ... da hakt's bei den Subeditoren ... for (int t = 0, lent = this.komponenten.getTabCount();
-	 * t < lent; t++) { for (int i = 0, leni = this.komponenten.getSize(t); i < leni; i++) { dedc =
-	 * (DefaultEditorDjinnCell) this.komponenten.getCell(t, i); dedc.getEditorDescriptor().setObject((Attributed)
-	 * this.objekt); if (dedc.getComponent() instanceof SubEditor) { System.out.println("***** SubEditor detected."); }
-	 * } } / }
+	 * public void setEditable(Editable e) { DefaultEditorDjinnCell dedc = null;
+	 * this.objekt = e; // OLI 05.01.2009 - Eigentlich wollte ich hier auf auf
+	 * Nummer sicher gehen. Funktioniert // aber nicht, weil in
+	 * transferValues(boolean) ein Speicherereignis geworfen // wird ... // OLI
+	 * 09.01.2009 - Und zwar, weil die EditorDescriptoren neugesetzt werden
+	 * m&uuml;ssen // (siehe untern). // this.transferValues(true); / * So geht es
+	 * im Moment auch nicht ... da hakt's bei den Subeditoren ... for (int t = 0,
+	 * lent = this.komponenten.getTabCount(); t < lent; t++) { for (int i = 0, leni
+	 * = this.komponenten.getSize(t); i < leni; i++) { dedc =
+	 * (DefaultEditorDjinnCell) this.komponenten.getCell(t, i);
+	 * dedc.getEditorDescriptor().setObject((Attributed) this.objekt); if
+	 * (dedc.getComponent() instanceof SubEditor) {
+	 * log.info("***** SubEditor detected."); } } } / }
 	 */
 
 	/**
-	 * @changed OLI 23.09.2007 - Die Methode ist, bedingt durch Erweiterung des Interfaces <TT>EditorDjinn</TT>, auf
-	 *          public gesetzt worden.
+	 * @changed OLI 23.09.2007 - Die Methode ist, bedingt durch Erweiterung des
+	 *          Interfaces <TT>EditorDjinn</TT>, auf public gesetzt worden.
 	 *          <P>
 	 *
 	 */
+	@Override
 	public Hashtable<String, Component> getComponentTable() {
 		Hashtable<String, Component> htc = new Hashtable<String, Component>();
 		for (int t = 0, tabs = this.komponenten.getTabCount(); t < tabs; t++) {
@@ -1155,15 +1238,18 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 	/* Implementierung des Interfaces Runnable. */
 
 	/**
-	 * @changed OLI 23.09.2008 - Habe die Strategie zum Zeichnen des Rahmens um die fokussierte Komponenten
-	 *          entsch&auml;rft. Es wird nun gegebenenfalls tats&auml;chlich nur der gesetzte Rahmen entfernt und ein
-	 *          neuer gesetzt.
+	 * @changed OLI 23.09.2008 - Habe die Strategie zum Zeichnen des Rahmens um die
+	 *          fokussierte Komponenten entsch&auml;rft. Es wird nun gegebenenfalls
+	 *          tats&auml;chlich nur der gesetzte Rahmen entfernt und ein neuer
+	 *          gesetzt.
 	 *          <P>
-	 *          OLI 23.04.2009 - Einbau der Ausblendung von zentralen Feldern, wenn es sich bei dem bearbeiteten Objekt
-	 *          um ein zentrales Objekt in lokalem Umfeld handelt.
+	 *          OLI 23.04.2009 - Einbau der Ausblendung von zentralen Feldern, wenn
+	 *          es sich bei dem bearbeiteten Objekt um ein zentrales Objekt in
+	 *          lokalem Umfeld handelt.
 	 *          <P>
 	 *
 	 */
+	@Override
 	public void run() {
 		DefaultEditorDjinnCell dedcbefore = null;
 		java.util.List<String> nonCentralFields = (this.objekt instanceof CentrallyHeldWithLocalFields
@@ -1178,7 +1264,7 @@ public class DefaultEditorDjinnPanel extends JPanel implements EditorDjinn, Runn
 			try {
 				for (int t = 0, lent = this.komponenten.getTabCount(); t < lent; t++) {
 					for (int i = 0, len = this.komponenten.getSize(t); i < len; i++) {
-						DefaultEditorDjinnCell dedc = (DefaultEditorDjinnCell) this.komponenten.getCell(t, i);
+						DefaultEditorDjinnCell dedc = this.komponenten.getCell(t, i);
 						if (dedc.getPanel() != null) {
 							if (dedc.getComponent().hasFocus()) {
 								if (dedcbefore != dedc) {
@@ -1244,11 +1330,13 @@ class BatchCheckBox extends COCheckBox {
 	public Object getComponentValue() {
 		return ed.getComponentFactory().getValue(ed, comp);
 		/*
-		 * if (comp instanceof JCheckBox) { return ((JCheckBox) comp).isSelected(); } else if (comp instanceof
-		 * JComboBox) { return ((JComboBox) comp).getSelectedItem(); } else if (comp instanceof JTextField) { return
-		 * ((JTextField) comp).getText(); } else if (comp instanceof MassiveListSelector) { return
-		 * ((MassiveListSelector) comp).getSelected(); } else if (comp instanceof TimestampField) { return
-		 * ((TimestampField) comp).getTimestamp(); } return null;
+		 * if (comp instanceof JCheckBox) { return ((JCheckBox) comp).isSelected(); }
+		 * else if (comp instanceof JComboBox) { return ((JComboBox)
+		 * comp).getSelectedItem(); } else if (comp instanceof JTextField) { return
+		 * ((JTextField) comp).getText(); } else if (comp instanceof
+		 * MassiveListSelector) { return ((MassiveListSelector) comp).getSelected(); }
+		 * else if (comp instanceof TimestampField) { return ((TimestampField)
+		 * comp).getTimestamp(); } return null;
 		 */
 	}
 

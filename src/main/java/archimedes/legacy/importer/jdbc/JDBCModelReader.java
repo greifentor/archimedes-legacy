@@ -27,6 +27,7 @@ import de.ollie.archimedes.alexandrian.service.so.ReferenceSO;
 import de.ollie.archimedes.alexandrian.service.so.SchemeSO;
 import de.ollie.archimedes.alexandrian.service.so.SequenceSO;
 import de.ollie.archimedes.alexandrian.service.so.TableSO;
+import logging.Logger;
 
 /**
  * A class which is able to read the meta data of a database.
@@ -34,6 +35,8 @@ import de.ollie.archimedes.alexandrian.service.so.TableSO;
  * @author O.Lieshoff
  */
 public class JDBCModelReader implements ModelReader {
+
+	private static final Logger log = Logger.getLogger(JDBCModelReader.class);
 
 	private DBObjectFactory factory;
 	private DBTypeConverter typeConverter;
@@ -47,16 +50,22 @@ public class JDBCModelReader implements ModelReader {
 	/**
 	 * Creates a new model reader with the passed parameters.
 	 *
-	 * @param factory                 An object factory implementation to create the DB objects.
+	 * @param factory                 An object factory implementation to create the
+	 *                                DB objects.
 	 * @param typeConverter           A converter for database types.
-	 * @param connection              The connection whose data model should be read.
-	 * @param schemeName              The name of the scheme whose data are to read (pass "null" to ignore scheme and
-	 *                                load all tables).
+	 * @param connection              The connection whose data model should be
+	 *                                read.
+	 * @param schemeName              The name of the scheme whose data are to read
+	 *                                (pass "null" to ignore scheme and load all
+	 *                                tables).
 	 * @param ignoreIndices           Set this flag to ignore indices while import.
-	 * @param ignoreTablePatterns     Patterns of table names which should be returned.
-	 * @param importOnlyTablePatterns Patterns of table names which are to import if the table name matches the at least
-	 *                                one pattern. The patterns to import only are checked before ignore table patterns
-	 *                                (set "*" if all tables are to import).
+	 * @param ignoreTablePatterns     Patterns of table names which should be
+	 *                                returned.
+	 * @param importOnlyTablePatterns Patterns of table names which are to import if
+	 *                                the table name matches the at least one
+	 *                                pattern. The patterns to import only are
+	 *                                checked before ignore table patterns (set "*"
+	 *                                if all tables are to import).
 	 * @throws IllegalArgumentException Passing null value.
 	 */
 	public JDBCModelReader(DBObjectFactory factory, DBTypeConverter typeConverter, Connection connection,
@@ -192,9 +201,10 @@ public class JDBCModelReader implements ModelReader {
 					table.addColumns(this.factory.createColumn(columnName,
 							this.typeConverter.convert(dataType, columnSize, decimalDigits), nullable));
 				} catch (Exception e) {
-					System.out.println(
+					log.error(
 							"Problems while reading column '" + rs.getString("TABLE_SCHEM") + "." + table.getName()
-									+ "." + columnName + "' (" + typeName + " {" + dataType + "}): " + e.getMessage());
+									+ "." + columnName + "' (" + typeName + " {" + dataType + "}): " + e.getMessage(),
+							e);
 				}
 			}
 			rs.close();
@@ -216,7 +226,7 @@ public class JDBCModelReader implements ModelReader {
 					pkColumn.setNullable(false);
 					pkColumn.setPkMember(true);
 				} catch (IllegalArgumentException e) {
-					System.out.println("warning: " + e.getMessage());
+					log.warn("warning: " + e.getMessage());
 				}
 			}
 			rs.close();
@@ -239,7 +249,7 @@ public class JDBCModelReader implements ModelReader {
 					String pkTableName = rs.getString("PKTABLE_NAME");
 					String pkColumnName = rs.getString("PKCOLUMN_NAME");
 					table.getForeignKeyByName(fkName).ifPresentOrElse(fk -> {
-						System.out.println(fk);
+						log.info("FK: " + fk);
 					}, () -> {
 						ForeignKeySO fk = new ForeignKeySO().setName(fkName);
 						TableSO referencedTable = scheme.getTableByName(pkTableName)
@@ -252,11 +262,10 @@ public class JDBCModelReader implements ModelReader {
 								.setReferencingColumn(referencingTable.getColumnByName(fkColumnName)
 										.orElseThrow(() -> new ColumnNotFoundException(fkTableName, fkColumnName))));
 						table.addForeignKeys(fk);
-						System.out.println("FK created: " + fk);
+						log.info("FK created: " + fk);
 					});
 				} catch (Exception e) {
-					System.out.println("ERROR while reading from model: " + e.getMessage());
-					e.printStackTrace();
+					log.error("ERROR while reading from model: " + e.getMessage(), e);
 				}
 			}
 			rs.close();
@@ -283,8 +292,9 @@ public class JDBCModelReader implements ModelReader {
 							ColumnSO column = getColumnByName(columnName, table);
 							index.getColumns().add(column);
 						} catch (IllegalArgumentException iae) {
-							System.out.println(
-									LocalDateTime.now() + " - Index '" + indexName + "'not added: " + iae.getMessage());
+							log.error(
+									LocalDateTime.now() + " - Index '" + indexName + "'not added: " + iae.getMessage(),
+									iae);
 						}
 					}
 				}

@@ -20,15 +20,16 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.swing.UIManager;
 
+import corentx.io.FileUtil;
 import logging.Logger;
 
-import corentx.io.FileUtil;
-
 /**
- * This class configures the font for the application by an JavaScript and via the UIManager. <BR>
- * The JavaScript contains statements to fill a map (String, Font) which is processed by the
- * <CODE>FontConfigurator</CODE>. The JavaScript is could be placed in the users home folder or in the home folder of
- * the Archimedes installation. It has to be named as ".archimedes-fonts.js".
+ * This class configures the font for the application by an JavaScript and via
+ * the UIManager. <BR>
+ * The JavaScript contains statements to fill a map (String, Font) which is
+ * processed by the <CODE>FontConfigurator</CODE>. The JavaScript is could be
+ * placed in the users home folder or in the home folder of the Archimedes
+ * installation. It has to be named as ".archimedes-fonts.js".
  *
  * @author O.Lieshoff
  *
@@ -41,7 +42,8 @@ public class FontConfigurator {
 	private static final String FILENAME = ".archimedes-fonts.js";
 
 	/**
-	 * Reads the configuration script file (if existing) and adds the settings to the UIManager.
+	 * Reads the configuration script file (if existing) and adds the settings to
+	 * the UIManager.
 	 *
 	 * @throws IOException     If something goes wrong while reading the file.
 	 * @throws ScriptException If something goes wrong while executing the script.
@@ -50,12 +52,15 @@ public class FontConfigurator {
 	 */
 	public void readFonts() throws IOException, ScriptException {
 		/*
-		 * SortedVector<String> sv = new SortedVector<String>(); for (Map.Entry<Object, Object> entry :
-		 * javax.swing.UIManager.getDefaults().entrySet()) { Object key = entry.getKey(); Object value =
-		 * javax.swing.UIManager.get(key); // if (value instanceof FontUIResource) { // int style = ((FontUIResource)
-		 * value).getStyle(); // sv.add("m.put(\"" + key + "\", new FontUIResource(fontName, Font." // + (style ==
-		 * Font.PLAIN ? "PLAIN" : (style == Font.BOLD ? "BOLD" : // (style == Font.ITALIC ? "ITALIC" : "PLAIN"))) +
-		 * ", fontSize));"); sv.add(key + " > " + value); // } } for (String se : sv) { System.out.println(se); }
+		 * SortedVector<String> sv = new SortedVector<String>(); for (Map.Entry<Object,
+		 * Object> entry : javax.swing.UIManager.getDefaults().entrySet()) { Object key
+		 * = entry.getKey(); Object value = javax.swing.UIManager.get(key); // if (value
+		 * instanceof FontUIResource) { // int style = ((FontUIResource)
+		 * value).getStyle(); // sv.add("m.put(\"" + key +
+		 * "\", new FontUIResource(fontName, Font." // + (style == Font.PLAIN ? "PLAIN"
+		 * : (style == Font.BOLD ? "BOLD" : // (style == Font.ITALIC ? "ITALIC" :
+		 * "PLAIN"))) + ", fontSize));"); sv.add(key + " > " + value); // } } for
+		 * (String se : sv) { LOG.info(se); }
 		 */
 		Map<String, Font> m = new Hashtable<String, Font>();
 		String s = this.readScriptFile();

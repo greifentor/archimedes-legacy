@@ -39,28 +39,37 @@ import corent.print.JasperReportable;
 import corent.print.JasperReportableCSV;
 import corent.util.SysUtil;
 import corentx.ds.Lockable;
+import logging.Logger;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 
 /**
- * Diese Musterimplementierung eines DBFactoryControllers vermittelt einen &Uuml;berblick &uuml;ber die Arbeitsweise
- * einer solchen Klasse und l&auml;&szlig;t sich in den meisten Standardsituationen einsetzen.
+ * Diese Musterimplementierung eines DBFactoryControllers vermittelt einen
+ * &Uuml;berblick &uuml;ber die Arbeitsweise einer solchen Klasse und
+ * l&auml;&szlig;t sich in den meisten Standardsituationen einsetzen.
  * <P>
- * F&uuml;r jeden DDBFC (DefaultDBFactoryController) kann explizit eingestellt werden, ob er mit einer einzigen
- * Connection arbeiten soll, die zwischen den Aufrufen gehalten werden soll, oder ob er bei jedem Aufruf eine neue
- * Connection anfordern soll. Bei Datenbankoperationen, die &uuml;ber als Transaktionen zusammengefa&szlig;t werden
- * sollen oder die massiv auf die Datenbank zugreifen, empfiehlt es sich diese Konfiguration zu nutzen. Der Standardwert
- * wird &uuml;ber die Property <TT>corent.db.xs.DefaultDBFactoryController.holdConnection</TT> gesetzt.
+ * F&uuml;r jeden DDBFC (DefaultDBFactoryController) kann explizit eingestellt
+ * werden, ob er mit einer einzigen Connection arbeiten soll, die zwischen den
+ * Aufrufen gehalten werden soll, oder ob er bei jedem Aufruf eine neue
+ * Connection anfordern soll. Bei Datenbankoperationen, die &uuml;ber als
+ * Transaktionen zusammengefa&szlig;t werden sollen oder die massiv auf die
+ * Datenbank zugreifen, empfiehlt es sich diese Konfiguration zu nutzen. Der
+ * Standardwert wird &uuml;ber die Property
+ * <TT>corent.db.xs.DefaultDBFactoryController.holdConnection</TT> gesetzt.
  * <P>
- * Der Lock-Mechanismus kann entweder &uuml;ber eine speicherinterne Tabelle im DBFactoryController, oder &uuml;ber eine
- * Datenbanktabelle genutzt werden. Der erste Weg funktioniert nur, solange der Controller nicht im Cluster l&auml;uft.
- * In diesem Fall mu&szlig; auf jeden Fall die Variante mit der Datenbanktabelle genutzt werden. Sie wird durch das
- * Setzen der Property <TT>corent.db.xs.DefaultDBFactoryController.locksByDatabasetable</TT> aktiviert.
+ * Der Lock-Mechanismus kann entweder &uuml;ber eine speicherinterne Tabelle im
+ * DBFactoryController, oder &uuml;ber eine Datenbanktabelle genutzt werden. Der
+ * erste Weg funktioniert nur, solange der Controller nicht im Cluster
+ * l&auml;uft. In diesem Fall mu&szlig; auf jeden Fall die Variante mit der
+ * Datenbanktabelle genutzt werden. Sie wird durch das Setzen der Property
+ * <TT>corent.db.xs.DefaultDBFactoryController.locksByDatabasetable</TT>
+ * aktiviert.
  * <P>
- * Zur Abbildung der Locks in einer Datenbanktabelle ist die Erzeugung einer speziellen Tabelle n&ouml;tig. Das folgende
- * <TT>CREATE</TT>-Statement zeigt die Tabelle und ihre Felder mit der Default-Namensgebung:
+ * Zur Abbildung der Locks in einer Datenbanktabelle ist die Erzeugung einer
+ * speziellen Tabelle n&ouml;tig. Das folgende <TT>CREATE</TT>-Statement zeigt
+ * die Tabelle und ihre Felder mit der Default-Namensgebung:
  * 
  * <PRE>
  * create table LockObject (
@@ -70,104 +79,133 @@ import net.sf.jasperreports.engine.data.JRCsvDataSource;
  * );
  * </PRE>
  * 
- * Die Namen der Tabelle und ihrer Spalten k&ouml;nnen &uuml;ber die folgenden Properties angepa&szlig;t werden:
+ * Die Namen der Tabelle und ihrer Spalten k&ouml;nnen &uuml;ber die folgenden
+ * Properties angepa&szlig;t werden:
  * <TT>corent.db.xs.DefaultDBFactoryController.locks.tablename</TT>,
  * <TT>corent.db.xs.DefaultDBFactoryController.locks.column.LockObject</TT>,
  * <TT>corent.db.xs.DefaultDBFactoryController.locks.column.LastRequest</TT> und
  * <TT>corent.db.xs.DefaultDBFactoryController.locks.column.UserId</TT>.
  * <P>
- * Wird die Property <TT>corent.db.xs.DefaultDBFactoryController.debug</TT> auf den Wert <TT>true</TT> gesetzt, wird an
- * einigen Stellen der ausgef&uuml;hrten Methoden zus&auml;tzlicher Output generiert.
+ * Wird die Property <TT>corent.db.xs.DefaultDBFactoryController.debug</TT> auf
+ * den Wert <TT>true</TT> gesetzt, wird an einigen Stellen der ausgef&uuml;hrten
+ * Methoden zus&auml;tzlicher Output generiert.
  * <P>
- * Die Property <TT>corent.db.xs.DefaultDBFactoryController.showAccesstimes</TT> stellt einen Defaultwert f&uuml;r die
- * Eigenschaft <I>showAccesstimes</I> zur Verf&uuml;gung.
+ * Die Property <TT>corent.db.xs.DefaultDBFactoryController.showAccesstimes</TT>
+ * stellt einen Defaultwert f&uuml;r die Eigenschaft <I>showAccesstimes</I> zur
+ * Verf&uuml;gung.
  *
- * Die folgenden Properties dienen der Steuerung des Archiv-Drucks im Zusammenhang mit Objekten, die das Interface
- * <TT>Archivable</TT> implementieren:<BR>
- * <TT>corent.db.xs.DefaultDBFactoryController.archive.path</TT> (String, Default "./") definiert einen Pfad, in den die
- * Archiv-Exporte erfolgen sollen.<BR>
- * <TT>corent.db.xs.DefaultDBFactoryController.archive.timestamp</TT> (Boolean) kann gesetzt werden, um den Dateinamen
- * um eine millisekunden genauen Zeitstempel zu erweitern. Auf diese Weise k&ouml;nnen historische Zust&auml;nde
- * archiviert werden.<BR>
- * <TT>corent.db.xs.DefaultDBFactoryController.archive.extension</TT> (String, Default ".html") kann zur Definition
- * einer alternativen Dateinamenserweiterung der Archivdateien gesetzt werden.<BR>
- * <TT>corent.db.xs.DefaultDBFactoryController.archive.synchon</TT> (Boolean) kann gesetzt werden, um das Erzeugen der
- * Archiv-Exporte synchron ablaufen zu lassen. Hierbei kann es allerdings zu Wartezeiten beim Speichern kommen.
+ * Die folgenden Properties dienen der Steuerung des Archiv-Drucks im
+ * Zusammenhang mit Objekten, die das Interface <TT>Archivable</TT>
+ * implementieren:<BR>
+ * <TT>corent.db.xs.DefaultDBFactoryController.archive.path</TT> (String,
+ * Default "./") definiert einen Pfad, in den die Archiv-Exporte erfolgen
+ * sollen.<BR>
+ * <TT>corent.db.xs.DefaultDBFactoryController.archive.timestamp</TT> (Boolean)
+ * kann gesetzt werden, um den Dateinamen um eine millisekunden genauen
+ * Zeitstempel zu erweitern. Auf diese Weise k&ouml;nnen historische
+ * Zust&auml;nde archiviert werden.<BR>
+ * <TT>corent.db.xs.DefaultDBFactoryController.archive.extension</TT> (String,
+ * Default ".html") kann zur Definition einer alternativen
+ * Dateinamenserweiterung der Archivdateien gesetzt werden.<BR>
+ * <TT>corent.db.xs.DefaultDBFactoryController.archive.synchon</TT> (Boolean)
+ * kann gesetzt werden, um das Erzeugen der Archiv-Exporte synchron ablaufen zu
+ * lassen. Hierbei kann es allerdings zu Wartezeiten beim Speichern kommen.
  *
  * <P>
- * Die Methoden zum Setzen und Lesen der <B>Controllerproperties</B> sind zur Realisation ansynchroner Abl&auml;fe
- * gedacht. Hinter den Zugriffsmethoden steht kein echtes Property-Objekt. Es handelt sich auch nicht um die
- * System.properties. Vielmehr sind die Controllerproperties ein abgeschlossener Variablenbereich, &uuml;ber den der
- * Client mit dem Server relativ frei kommunizieren kann.<BR>
- * Asynchrone Anwendungen k&ouml;nnen beispielsweise dadurch erzeugt werden, da&szlig; bestimmte Methoden der an den
- * Controller gebundenen DBFactory-Implementierungen als Threads programmiert sind und beispielsweise ihren Fortschritt
- * regelm&auml;&szlig;ig in eine Controllerproperty hinterlegen. So w&auml;re ein Client in der Lage den aktuellen
- * Fortschritt seinerseits z. B. in einer Anzeige zu aktualisieren.
+ * Die Methoden zum Setzen und Lesen der <B>Controllerproperties</B> sind zur
+ * Realisation ansynchroner Abl&auml;fe gedacht. Hinter den Zugriffsmethoden
+ * steht kein echtes Property-Objekt. Es handelt sich auch nicht um die
+ * System.properties. Vielmehr sind die Controllerproperties ein abgeschlossener
+ * Variablenbereich, &uuml;ber den der Client mit dem Server relativ frei
+ * kommunizieren kann.<BR>
+ * Asynchrone Anwendungen k&ouml;nnen beispielsweise dadurch erzeugt werden,
+ * da&szlig; bestimmte Methoden der an den Controller gebundenen
+ * DBFactory-Implementierungen als Threads programmiert sind und beispielsweise
+ * ihren Fortschritt regelm&auml;&szlig;ig in eine Controllerproperty
+ * hinterlegen. So w&auml;re ein Client in der Lage den aktuellen Fortschritt
+ * seinerseits z. B. in einer Anzeige zu aktualisieren.
  *
  * <P>
  * Mit Hilfe der Property
- * <I>corent.db.xs.DefaultDBFactoryController.CreateFilter.convert.to.str.[Tablename].[Spaltenname]</I> kann eine
- * Konvertierung von numerischen Felder in den Typ VARCHAR bei der Bildung des Filters zur Auswahl von Datens&auml;tzen
- * erzwungen werden. Dies ist z. B. bei MYSQL 5 notwendig.
+ * <I>corent.db.xs.DefaultDBFactoryController.CreateFilter.convert.to.str.[Tablename].[Spaltenname]</I>
+ * kann eine Konvertierung von numerischen Felder in den Typ VARCHAR bei der
+ * Bildung des Filters zur Auswahl von Datens&auml;tzen erzwungen werden. Dies
+ * ist z. B. bei MYSQL 5 notwendig.
  *
- * Die Zeichensatzkodierung beim Drucken von CSV-Dateien l&auml;&szlig;t sich mit Hilfe der Property
- * <I>corent.db.xs.DefaultDBFactoryController.csv.encoding</I> konfigurieren. Als Default ist die "ISO-8859-1"
- * eingestellt.
+ * Die Zeichensatzkodierung beim Drucken von CSV-Dateien l&auml;&szlig;t sich
+ * mit Hilfe der Property
+ * <I>corent.db.xs.DefaultDBFactoryController.csv.encoding</I> konfigurieren.
+ * Als Default ist die "ISO-8859-1" eingestellt.
  *
  * <P>
- * <B>Hinweis:</B> Die Geschichte mit dem DBFactoryControllerListener ist noch nicht in Funktion.
+ * <B>Hinweis:</B> Die Geschichte mit dem DBFactoryControllerListener ist noch
+ * nicht in Funktion.
  *
  * @author O.Lieshoff
  *         <P>
  *
- * @changed OLI 22.08.2007 - Erweiterung um die Archivierungsfunktionalit&auml;t. Die <TT>write</TT>-Methode reagiert
- *          nun auf Implementierungen des Interfaces <TT>Archivable</TT>. Entsprechende Objekte werden gegebenenfalls in
- *          HTML exportiert (analog zum Reportdruck). Zur serverseitigen Steuerung des Exports gibt es einen Satz neuer
- *          Properties.
+ * @changed OLI 22.08.2007 - Erweiterung um die
+ *          Archivierungsfunktionalit&auml;t. Die <TT>write</TT>-Methode
+ *          reagiert nun auf Implementierungen des Interfaces
+ *          <TT>Archivable</TT>. Entsprechende Objekte werden gegebenenfalls in
+ *          HTML exportiert (analog zum Reportdruck). Zur serverseitigen
+ *          Steuerung des Exports gibt es einen Satz neuer Properties.
  *          <P>
- *          OLI 27.08.2007 - Erweiterung um die Controllerproperties und Implementierung der Zugriffsmethoden
- *          <TT>getControllerProperty(String)</TT> und <TT>setControllerProperty(String, Object)</TT> aus dem Interface
+ *          OLI 27.08.2007 - Erweiterung um die Controllerproperties und
+ *          Implementierung der Zugriffsmethoden
+ *          <TT>getControllerProperty(String)</TT> und
+ *          <TT>setControllerProperty(String, Object)</TT> aus dem Interface
  *          <TT>DBFactoryController</TT>.
  *          <P>
- *          OLI 04.11.2007 - Erweiterung um das Zusammenspiel mit der Erweiterung des Interfaces
- *          <TT>JasperReportable</TT> um die Methode <TT>isSaveBeforePrintingRequired()</TT>.
+ *          OLI 04.11.2007 - Erweiterung um das Zusammenspiel mit der
+ *          Erweiterung des Interfaces <TT>JasperReportable</TT> um die Methode
+ *          <TT>isSaveBeforePrintingRequired()</TT>.
  *          <P>
- *          OLI 24.01.2008 - Erweiterung um die Implementierung der Methode <TT>getTransactionNumber()</TT>.
+ *          OLI 24.01.2008 - Erweiterung um die Implementierung der Methode
+ *          <TT>getTransactionNumber()</TT>.
  *          <P>
- *          OLI 06.05.2008 - Erweiterung der Filterbildung um eine erzwungene Umwandlung von numerischen Werten nach
- *          VARCHAR.
+ *          OLI 06.05.2008 - Erweiterung der Filterbildung um eine erzwungene
+ *          Umwandlung von numerischen Werten nach VARCHAR.
  *          <P>
- *          OLI 16.07.2008 - &Auml;nderungen an der <TT>write</TT>-Methode im Rahmen der &Auml;nderung des Interfaces
- *          <TT>DBFactory</TT>
+ *          OLI 16.07.2008 - &Auml;nderungen an der <TT>write</TT>-Methode im
+ *          Rahmen der &Auml;nderung des Interfaces <TT>DBFactory</TT>
  *          <P>
- *          OLI 18.09.2008 - Anpassung an die M&ouml;glichkeit zur Unterdr&uuml;ckung von UserNotifications seitens des
- *          Interfaces <TT>UserChangesNoticeable</TT>.
+ *          OLI 18.09.2008 - Anpassung an die M&ouml;glichkeit zur
+ *          Unterdr&uuml;ckung von UserNotifications seitens des Interfaces
+ *          <TT>UserChangesNoticeable</TT>.
  *          <P>
- *          OLI 30.09.2008 - Einbau einer M&ouml;glichkeit die tempor&auml;re Datei beim Drucken einer CSV-Datei mit
- *          einer Zeichencodierung zu belegen.
+ *          OLI 30.09.2008 - Einbau einer M&ouml;glichkeit die tempor&auml;re
+ *          Datei beim Drucken einer CSV-Datei mit einer Zeichencodierung zu
+ *          belegen.
  *          <P>
- *          OLI 29.01.2009 - Erweiterung um die Methode <TT>getSelectionView(String, String, 
- *             Connection, boolean)</TT>. Daf&uuml;r ist die Methode <TT>getSelectionView(
+ *          OLI 29.01.2009 - Erweiterung um die Methode
+ *          <TT>getSelectionView(String, String, 
+ *             Connection, boolean)</TT>. Daf&uuml;r ist die Methode
+ *          <TT>getSelectionView(
  *             String, String, Connection)</TT> zur&uuml;ckgestellt worden.
  *          <P>
- *          OLI 27.03.2009 - Erweiterung um die Implementierung der Methode <TT>resetConnection()</TT>.
+ *          OLI 27.03.2009 - Erweiterung um die Implementierung der Methode
+ *          <TT>resetConnection()</TT>.
  *          <P>
  *
  */
 
 public class DefaultDBFactoryController extends UnicastRemoteObject implements DBFactoryController, Runnable {
 
+	private static final Logger log = Logger.getLogger(DefaultDBFactoryController.class);
+
 	/* Counter zur Identifikation der Operationen. */
 	private static long OpCounter = 0;
 
 	/*
-	 * Ist diese Flagge gesetzt, wird eine Connections &uml;ber die Lebensdauer des DBFC gehalten. Andernfalls wird bei
-	 * jedem Aufruf eine neue Connection erstellt.
+	 * Ist diese Flagge gesetzt, wird eine Connections &uml;ber die Lebensdauer des
+	 * DBFC gehalten. Andernfalls wird bei jedem Aufruf eine neue Connection
+	 * erstellt.
 	 */
 	private boolean holdConnection = Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.holdConnection");
 	/*
-	 * Ist diese Flagge gesetzt, wenn zu jeder Operation eine Information &uuml;ber deren Zeitverbrauch auf der Konsole
-	 * ausgegeben werden soll.
+	 * Ist diese Flagge gesetzt, wenn zu jeder Operation eine Information &uuml;ber
+	 * deren Zeitverbrauch auf der Konsole ausgegeben werden soll.
 	 */
 	private boolean showAccesstimes = Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.showAccesstimes");
 	/* Die Connection, auf der im Falle zu haltender Connections gearbeitet wird. */
@@ -183,16 +221,21 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	/* Die Id des DBFactoryControllers (z. B. zur Verwendung im Clusterbetrieb. */
 	private int id = 0;
 	/*
-	 * Der Thread, &uuml;ber den die Locks in regelm&auml;&szlig;igen Abst&auml;nden bereinigt werden.
+	 * Der Thread, &uuml;ber den die Locks in regelm&auml;&szlig;igen Abst&auml;nden
+	 * bereinigt werden.
 	 */
 	private Thread th = null;
 
 	/**
-	 * Generiert einen neuen Controller anhand des &uuml;bergebenen JDBCDataSourceRecord.
+	 * Generiert einen neuen Controller anhand des &uuml;bergebenen
+	 * JDBCDataSourceRecord.
 	 *
-	 * @param dsr       Der JDBCDataSourceRecord mit den Daten zur Verbindung mit der Datenbank.
-	 * @param factories Eine Tabelle mit Klassen-DBFactory-Tupeln, zum Zugriff auf die Datenbank.
-	 * @param id        Eine Id, falls der DBFactoryController im Clusterbetrieb gefahren werden kann.
+	 * @param dsr       Der JDBCDataSourceRecord mit den Daten zur Verbindung mit
+	 *                  der Datenbank.
+	 * @param factories Eine Tabelle mit Klassen-DBFactory-Tupeln, zum Zugriff auf
+	 *                  die Datenbank.
+	 * @param id        Eine Id, falls der DBFactoryController im Clusterbetrieb
+	 *                  gefahren werden kann.
 	 * @throws RemoteException ?!?
 	 */
 	public DefaultDBFactoryController(JDBCDataSourceRecord dsr, Hashtable<Class, DBFactory> factories, int id)
@@ -202,10 +245,13 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * Generiert einen neuen Controller anhand des &uuml;bergebenen JDBCDataSourceRecord.
+	 * Generiert einen neuen Controller anhand des &uuml;bergebenen
+	 * JDBCDataSourceRecord.
 	 *
-	 * @param dsr       Der JDBCDataSourceRecord mit den Daten zur Verbindung mit der Datenbank.
-	 * @param factories Eine Tabelle mit Klassen-DBFactory-Tupeln, zum Zugriff auf die Datenbank.
+	 * @param dsr       Der JDBCDataSourceRecord mit den Daten zur Verbindung mit
+	 *                  der Datenbank.
+	 * @param factories Eine Tabelle mit Klassen-DBFactory-Tupeln, zum Zugriff auf
+	 *                  die Datenbank.
 	 * @throws RemoteException ?!?
 	 */
 	public DefaultDBFactoryController(JDBCDataSourceRecord dsr, Hashtable<Class, DBFactory> factories)
@@ -238,10 +284,13 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	/* Statische Methoden. */
 
 	/**
-	 * Diese Methode generiert einen Standard-Suchfilter zur Nutzung mit den Selection-Djinns.
+	 * Diese Methode generiert einen Standard-Suchfilter zur Nutzung mit den
+	 * Selection-Djinns.
 	 *
-	 * @param cols     Liste mit den Namen der Tabellenspalten, die zur Selektion herangezogen werden sollen.
-	 * @param criteria Eine Liste mit den Kriterien, nach denen die Tabellenspalten durchsucht werden sollen.
+	 * @param cols     Liste mit den Namen der Tabellenspalten, die zur Selektion
+	 *                 herangezogen werden sollen.
+	 * @param criteria Eine Liste mit den Kriterien, nach denen die Tabellenspalten
+	 *                 durchsucht werden sollen.
 	 */
 	public static String CreateFilter(String[] cols, Object[] criteria) {
 		Vector<String> vs = new Vector<String>();
@@ -252,25 +301,34 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * Diese Methode generiert einen Standard-Suchfilter zur Nutzung mit den Selection-Djinns.
+	 * Diese Methode generiert einen Standard-Suchfilter zur Nutzung mit den
+	 * Selection-Djinns.
 	 * <P>
-	 * Ist dem Spaltennamen ein Asterix vorangestellt, so wird die Spalte als kodiert behandelt.
+	 * Ist dem Spaltennamen ein Asterix vorangestellt, so wird die Spalte als
+	 * kodiert behandelt.
 	 * <P>
-	 * Beginnt die der erste Eintrag in der criteria-Liste mit dem Pr&auml;fix <I>"$SQL:" </I>, so wird sie nicht weiter
-	 * &uuml;ber den PersistenceDescriptor manipuliert, sondern direkt an das DBMS durchgeleitet. Nach dem Pr&auml;fix
-	 * sind eine Where-Klausel (ohne das Schl&uuml;sselwort "where") und/oder eine order-by-Angabe (mit
-	 * Schl&uuml;sselwort "order by") erlaubt. Die einzelnen Komponenten der Klauseln k&ouml;nnen auf ein oder mehrere
-	 * Eintr&auml;ge in der criteria-Liste verteilt sein.
+	 * Beginnt die der erste Eintrag in der criteria-Liste mit dem Pr&auml;fix
+	 * <I>"$SQL:" </I>, so wird sie nicht weiter &uuml;ber den PersistenceDescriptor
+	 * manipuliert, sondern direkt an das DBMS durchgeleitet. Nach dem Pr&auml;fix
+	 * sind eine Where-Klausel (ohne das Schl&uuml;sselwort "where") und/oder eine
+	 * order-by-Angabe (mit Schl&uuml;sselwort "order by") erlaubt. Die einzelnen
+	 * Komponenten der Klauseln k&ouml;nnen auf ein oder mehrere Eintr&auml;ge in
+	 * der criteria-Liste verteilt sein.
 	 *
-	 * @param cols     Liste mit den Namen der Tabellenspalten, die zur Selektion herangezogen werden sollen.
-	 * @param criteria Eine Liste mit den Kriterien, nach denen die Tabellenspalten durchsucht werden sollen.
+	 * @param cols     Liste mit den Namen der Tabellenspalten, die zur Selektion
+	 *                 herangezogen werden sollen.
+	 * @param criteria Eine Liste mit den Kriterien, nach denen die Tabellenspalten
+	 *                 durchsucht werden sollen.
 	 *
-	 * @changed OLI 06.05.2008 - Erweiterung um die M&ouml;glichkeit &uuml;ber die Property
-	 *          <I>corent.db.xs.DefaultDBFactoryController.CreateFilter.convert.to.str...</I> eine Konvertierung von
-	 *          numerischen Felder in den Typ VARCHAR bei der Bildung des Filters zu erzwingen.
+	 * @changed OLI 06.05.2008 - Erweiterung um die M&ouml;glichkeit &uuml;ber die
+	 *          Property
+	 *          <I>corent.db.xs.DefaultDBFactoryController.CreateFilter.convert.to.str...</I>
+	 *          eine Konvertierung von numerischen Felder in den Typ VARCHAR bei der
+	 *          Bildung des Filters zu erzwingen.
 	 *          <P>
-	 *          OLI 27.04.2009 - Erweiterung um eine M&ouml;glichkeit die Typkonvertierung nach <TT>VARCHAR</TT>
-	 *          pauschal f&uuml;r alle Felder durchf&uuml;hren zu lassen.
+	 *          OLI 27.04.2009 - Erweiterung um eine M&ouml;glichkeit die
+	 *          Typkonvertierung nach <TT>VARCHAR</TT> pauschal f&uuml;r alle Felder
+	 *          durchf&uuml;hren zu lassen.
 	 *          <P>
 	 *
 	 */
@@ -344,7 +402,8 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * Diese Klasse ist ein einfacher Container f&uuml;r die Daten einer Zugriffszeitnahme.
+	 * Diese Klasse ist ein einfacher Container f&uuml;r die Daten einer
+	 * Zugriffszeitnahme.
 	 */
 	private class AccesstimeRecord {
 		public long opid = 0;
@@ -364,19 +423,19 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * Erzeugt eine Konsolenausgabe &uuml;ber den Start der angegebenen Operation und liefert die zur Zeitnahme
-	 * erforderlichen Daten.
+	 * Erzeugt eine Konsolenausgabe &uuml;ber den Start der angegebenen Operation
+	 * und liefert die zur Zeitnahme erforderlichen Daten.
 	 *
 	 * @param cls    Die Klasse, auf die sich die Operation bezieht.
-	 * @param opname Der Name der Operation. Hier bietet sich der Name der Methode an, innerhalb derer die Zeitnahme
-	 *               durchgef&uuml;hrt wird.
+	 * @param opname Der Name der Operation. Hier bietet sich der Name der Methode
+	 *               an, innerhalb derer die Zeitnahme durchgef&uuml;hrt wird.
 	 * @return Ein Datensatz mit den f&uuml;r die Zeitnahme erforderlichen Daten.
 	 */
 	private AccesstimeRecord startOperation(Class cls, String opname) {
 		long time = System.currentTimeMillis();
 		long opid = OpCounter++;
 		AccesstimeRecord atr = new AccesstimeRecord(time, opid, cls, opname);
-		System.out.println("OP#:" + atr.opid + ", TYPE:" + atr.opname + ", CLASS:" + atr.clsname + ", STATE:started;");
+		log.debug("OP#:" + atr.opid + ", TYPE:" + atr.opname + ", CLASS:" + atr.clsname + ", STATE:started;");
 		return atr;
 	}
 
@@ -388,12 +447,13 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	 */
 	private long stopOperation(AccesstimeRecord atr) {
 		long diff = System.currentTimeMillis() - atr.time;
-		System.out.println("OP#:" + atr.opid + ", TYPE:" + atr.opname + ", STATE:stopped, " + "TIME:" + diff + "ms");
+		log.debug("OP#:" + atr.opid + ", TYPE:" + atr.opname + ", STATE:stopped, " + "TIME:" + diff + "ms");
 		return diff;
 	}
 
 	/* Implementierung des Interfaces DBFactoryController. */
 
+	@Override
 	public Object create(Class c) throws RemoteException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -411,6 +471,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				"DBFactory for class " + c.getName() + " not found " + "in DefaultDBFactoryController.create(Class)!");
 	}
 
+	@Override
 	public String createFilter(Class c, Object[] criteria) throws RemoteException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -442,30 +503,37 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	/**
 	 * @changed OLI 27.08.2007 - Implementierung der Methoden hinzugef&uuml;gt.
 	 */
+	@Override
 	public Object getControllerProperty(String pn) throws RemoteException {
 		return this.controllerproperty.get(pn);
 	}
 
+	@Override
 	public Vector read(Class c, String w) throws IllegalArgumentException, RemoteException, SQLException {
 		return this.read(c, w, null, false, false);
 	}
 
+	@Override
 	public Vector read(Class c, String w, OrderByDescriptor o)
 			throws IllegalArgumentException, RemoteException, SQLException {
 		return this.read(c, w, o, false, false);
 	}
 
+	@Override
 	public Vector read(Class c, String w, OrderByDescriptor o, boolean sl)
 			throws IllegalArgumentException, RemoteException, SQLException {
 		return this.read(c, w, o, sl, false);
 	}
 
 	/**
-	 * @changed OLI 28.03.2008 - Ich habe den Block, in dem der eigentliche Lesezugriff stattfindet, synchronisiert. Im
-	 *          Kampfeinsatz (SPMi) kommt es immer wieder vor, da&szlig; durch eine unvorteilhafte Verzahnung die
-	 *          ShowStatements-Property der statischen DBExec-Instanz falsch gesetzt wird. Dies bleibt dann auch
-	 *          w&auml;hrend des folgenden Programmablaufes so.
+	 * @changed OLI 28.03.2008 - Ich habe den Block, in dem der eigentliche
+	 *          Lesezugriff stattfindet, synchronisiert. Im Kampfeinsatz (SPMi)
+	 *          kommt es immer wieder vor, da&szlig; durch eine unvorteilhafte
+	 *          Verzahnung die ShowStatements-Property der statischen DBExec-Instanz
+	 *          falsch gesetzt wird. Dies bleibt dann auch w&auml;hrend des
+	 *          folgenden Programmablaufes so.
 	 */
+	@Override
 	public Vector read(Class c, String w, OrderByDescriptor o, boolean sl, boolean includeRemoved)
 			throws IllegalArgumentException, RemoteException, SQLException {
 		AccesstimeRecord atr = null;
@@ -497,6 +565,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				+ "in DefaultDBFactoryController.read(Class, String)!");
 	}
 
+	@Override
 	public Object readFirst(Class c, String w) throws IllegalArgumentException, RemoteException, SQLException {
 // Hier sollte noch was mit Limits gemacht werden !!!                
 		AccesstimeRecord atr = null;
@@ -517,9 +586,11 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * @changed OLI 18.09.2008 - Einbau der Pr&uuml;fung auf <TT>SuppressUserNotification</TT>.
+	 * @changed OLI 18.09.2008 - Einbau der Pr&uuml;fung auf
+	 *          <TT>SuppressUserNotification</TT>.
 	 *          <P>
 	 */
+	@Override
 	public Object write(Object o) throws RemoteException, SQLException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -546,8 +617,8 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			if ((o instanceof CacheNotifier)
 					&& Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.cache.notification")) {
 				/*
-				 * Table varchar(255), Id varchar(255), Changer varchar(255), ChangeDate numeric(14,0), Mode varchar(5)
-				 * -- 'U' updated, 'R' removed.
+				 * Table varchar(255), Id varchar(255), Changer varchar(255), ChangeDate
+				 * numeric(14,0), Mode varchar(5) -- 'U' updated, 'R' removed.
 				 */
 				try {
 					CacheNotifier cn = (CacheNotifier) o;
@@ -593,11 +664,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 					outfn = outfn.concat(System.getProperty("corent.db.xs.DefaultDBFactoryController.archive.extension."
 							+ arc.getArchiveMode().toString(), ".html"));
 					if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.archive.synchon")) {
-						System.out.println(
-								"\nWARNING: Archive file " + outfn + " is not created. Feature is deactivated!!!");
+						log.warn("Archive file " + outfn + " is not created. Feature is deactivated!!!");
 					} else {
-						System.out.println("\nWARNING: Archive file " + outfn
-								+ " is not created (asynchronous). Feature is deactivated!!!");
+						log.warn("Archive file " + outfn + " is not created (asynchronous). Feature is deactivated!!!");
 					}
 				}
 			}
@@ -610,6 +679,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				+ " not found in DefaultDBFactoryController.write(Object)!");
 	}
 
+	@Override
 	public void writeBatch(Class cls, Vector k, Hashtable<Integer, Object> ta) throws RemoteException, SQLException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -660,6 +730,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				+ "Hashtable<Integer, Object>)!");
 	}
 
+	@Override
 	public Object generate(Class c) throws RemoteException, SQLException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -678,6 +749,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				+ "in DefaultDBFactoryController.generate(Class)!");
 	}
 
+	@Override
 	public Object duplicate(Object o) throws RemoteException, SQLException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -699,6 +771,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				+ " not found in DefaultDBFactoryController.duplicate(Object)!");
 	}
 
+	@Override
 	public void remove(Object o, boolean forced) throws RemoteException, SQLException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -766,6 +839,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				+ " not found in DefaultDBFactoryController.remove(Object, boolean)!");
 	}
 
+	@Override
 	public void removeBatch(Class cls, Vector k, boolean forced) throws RemoteException, SQLException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -815,6 +889,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				+ " not found in DefaultDBFactoryController.removeBatch(Class, Vector, boolean)" + "!");
 	}
 
+	@Override
 	public boolean isUnique(Object o) throws RemoteException, SQLException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -835,6 +910,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				+ " not found in DefaultDBFactoryController.isUnique(Object)!");
 	}
 
+	@Override
 	public JasperPrint print(JasperReportable jr) throws JRException, RemoteException, SQLException {
 		return this.print(jr, 0);
 	}
@@ -843,14 +919,16 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	private static int TmpFileCounter = 0;
 
 	/**
-	 * @changed OLI 04.11.2007 - Erweiterung um den Aufruf der <TT>write(Object)</TT>-Methode, im Falle, da&szlig; das
-	 *          Objekt vor dem Drucken zu speichern ist.
+	 * @changed OLI 04.11.2007 - Erweiterung um den Aufruf der
+	 *          <TT>write(Object)</TT>-Methode, im Falle, da&szlig; das Objekt vor
+	 *          dem Drucken zu speichern ist.
 	 *          <P>
-	 *          OLI 30.09.2008 - Erweiterung um die M&ouml;glichkeit die Zeichensatzkodierung beim Drucken von
-	 *          CSV-Dateien zu bestimmen.
+	 *          OLI 30.09.2008 - Erweiterung um die M&ouml;glichkeit die
+	 *          Zeichensatzkodierung beim Drucken von CSV-Dateien zu bestimmen.
 	 *          <P>
 	 *
 	 */
+	@Override
 	public JasperPrint print(JasperReportable jr, int reportnumber) throws JRException, RemoteException, SQLException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -869,14 +947,10 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				dbf.write(jr, c);
 			}
 		}
-		if (debug) {
-			System.out.println("Print> starting at " + new PTimestamp());
-			System.out.println("Print> file name: " + jr.getJasperReportFilename(reportnumber));
-		}
+		log.debug("Print> starting at " + new PTimestamp());
+		log.debug("Print> file name: " + jr.getJasperReportFilename(reportnumber));
 		if (jr instanceof JasperReportableCSV) {
-			if (debug) {
-				System.out.println("Print> csv report");
-			}
+			log.debug("Print> csv report");
 			JasperReportableCSV jrcsv = (JasperReportableCSV) jr;
 			TmpFileCounter++;
 			String csvcontent = jrcsv.getCSVContent(reportnumber).replace("\n", System.getProperty("line.separator"));
@@ -923,34 +997,38 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 					System.getProperty("corent.print.jasper.reportdir") + jr.getJasperReportFilename(reportnumber), hm,
 					c);
 		}
-		if (debug) {
-			System.out.println("Print> ready at " + new PTimestamp());
-		}
+		log.debug("Print> ready at " + new PTimestamp());
 		if (atr != null) {
 			this.stopOperation(atr);
 		}
 		return jp;
 	}
 
+	@Override
 	public boolean isHoldConnection() throws RemoteException {
 		return this.holdConnection;
 	}
 
+	@Override
 	public void setHoldConnection(boolean holdConnection) throws RemoteException {
 		this.holdConnection = holdConnection;
 	}
 
+	@Override
 	public Connection getHoldConnection() throws RemoteException {
 		return this.connection;
 	}
 
+	@Override
 	@Deprecated
 	/**
-	 * @changed OLI 29.01.2009 - Auf einen Aufruf der Methode <TT>getSelectionView(Object, String,
+	 * @changed OLI 29.01.2009 - Auf einen Aufruf der Methode
+	 *          <TT>getSelectionView(Object, String,
 	 *             boolean)</TT> umgestellt.
 	 *          <P>
 	 *
-	 * @deprecated OLI 29.01.2009 - Zugunsten der Methode <TT>getSelectionView(Object, String,
+	 * @deprecated OLI 29.01.2009 - Zugunsten der Methode
+	 *             <TT>getSelectionView(Object, String,
 	 *             boolean)</TT> zur&uuml;ckgesetzt.
 	 *
 	 */
@@ -969,10 +1047,12 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * @changed OLI 29.01.2009 - Auf Basis der Methode <TT>getSelectionView(Object, String)</TT> hinzugef&uuml;gt.
+	 * @changed OLI 29.01.2009 - Auf Basis der Methode
+	 *          <TT>getSelectionView(Object, String)</TT> hinzugef&uuml;gt.
 	 *          <P>
 	 *
 	 */
+	@Override
 	public SelectionTableModel getSelectionView(Object o, String w, boolean suppressFilling)
 			throws RemoteException, SQLException {
 		AccesstimeRecord atr = null;
@@ -997,6 +1077,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				+ " not found in DefaultDBFactoryController.getSelectionView(Object)!");
 	}
 
+	@Override
 	public Object doAction(Class c, int id, Object... p) throws RemoteException, SQLException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -1015,14 +1096,17 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				+ "in DefaultDBFactoryController.doAction(Class, int, Object...)!");
 	}
 
+	@Override
 	public PTimestamp getServerTime() throws RemoteException {
 		return new PTimestamp();
 	}
 
+	@Override
 	public long getTransactionNumber(long type) throws RemoteException {
 		return -1;
 	}
 
+	@Override
 	public synchronized String lock(Class cls, Object k, String userid) throws RemoteException {
 		if ((k instanceof Lockable) && !((Lockable) k).isLockable()) {
 			return null;
@@ -1097,6 +1181,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		return dbfcl0.getLockedObjectUserid().toString();
 	}
 
+	@Override
 	public synchronized boolean unlock(Class cls, Object k, String userid) throws RemoteException {
 		if ((k instanceof Lockable) && !((Lockable) k).isLockable()) {
 			return true;
@@ -1184,6 +1269,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		}
 	}
 
+	@Override
 	public synchronized void clearLocks(Class cls) throws RemoteException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -1217,6 +1303,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		}
 	}
 
+	@Override
 	public Vector<DBFactoryControllerLock> getLocks() throws RemoteException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -1268,6 +1355,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		return new Vector<DBFactoryControllerLock>(this.locks.values());
 	}
 
+	@Override
 	public void removeLock(DBFactoryControllerLock dbfcl) throws RemoteException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
@@ -1302,6 +1390,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	 *          <P>
 	 *
 	 */
+	@Override
 	public void resetConnection() throws RemoteException {
 		this.connection = null;
 		try {
@@ -1311,20 +1400,25 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		}
 	}
 
+	@Override
 	public void addDBFactoryControllerListener(DBFactoryControllerListener dbfcl) throws RemoteException {
 	}
 
+	@Override
 	public void removeDBFactoryControllerListener(DBFactoryControllerListener dbfcl) throws RemoteException {
 	}
 
+	@Override
 	public void fireEvent(Class cls, Object k, String userid, DBFactoryController.MessageTyp mt)
 			throws RemoteException {
 	}
 
+	@Override
 	public int getId() throws RemoteException {
 		return this.id;
 	}
 
+	@Override
 	public boolean isShowAccesstimes() throws RemoteException {
 		return this.showAccesstimes;
 	}
@@ -1332,6 +1426,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	/**
 	 * @changed OLI 27.08.2007 - Implementierung der Methoden hinzugef&uuml;gt.
 	 */
+	@Override
 	public void setControllerProperty(String pn, Object v) throws RemoteException {
 		if (v == null) {
 			this.controllerproperty.remove(pn);
@@ -1340,20 +1435,21 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		}
 	}
 
+	@Override
 	public void setShowAccesstimes(boolean b) throws RemoteException {
 		this.showAccesstimes = b;
 	}
 
 	/* Implementierung des Interfaces Runnable. */
 
+	@Override
 	public void run() {
 		while (true) {
 			try {
 				Thread.sleep(30000);
 				this.clearOldLocks();
 			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Problem in corent.db.xs.DefaultDBFactoryController.Thread!");
+				log.error("Problem in corent.db.xs.DefaultDBFactoryController.Thread!", e);
 			}
 		}
 	}

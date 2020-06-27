@@ -27,6 +27,7 @@ import archimedes.model.DataModel;
 import archimedes.model.RelationModel;
 import baccara.gui.GUIBundle;
 import corent.files.StructuredTextFile;
+import logging.Logger;
 
 /**
  * Diese Klasse erm&ouml;glicht das Erzeugen von Fifth-Code f&uuml;r
@@ -37,6 +38,8 @@ import corent.files.StructuredTextFile;
  */
 
 public class ArchimedesCodeWriter implements CodeFactory {
+
+	private static final Logger log = Logger.getLogger(ArchimedesCodeWriter.class);
 
 	private DataModel dataModel = null;
 
@@ -49,12 +52,11 @@ public class ArchimedesCodeWriter implements CodeFactory {
 	 * Untersucht alle Tabellen, erzeugt Fifth-Code (checkref und checknull) und
 	 * speichert ihn in eine Datei.
 	 * 
-	 * @param dataModel
-	 *            DataModel
-	 * @param out
-	 *            Name der Ausgabedatei
+	 * @param dataModel DataModel
+	 * @param out       Name der Ausgabedatei
 	 * @return TRUE, wenn Fifth-Code erzeugt wurde.
 	 */
+	@Override
 	public boolean generate(String out) {
 		DiagrammModel dm = (DiagrammModel) this.dataModel;
 		Vector v = dm.getTabellen();
@@ -66,7 +68,7 @@ public class ArchimedesCodeWriter implements CodeFactory {
 			fifthCode += getChecknullCode(tm);
 		}
 		if (fifthCode.length() == 0) {
-			System.out.println("\n\nEs wurde kein Fifth-Code erzeugt!\n");
+			log.info("\n\nEs wurde kein Fifth-Code erzeugt!\n");
 			return false;
 		}
 		fifthCode = "check 'integd.upn.IntegDInterpreter'" + fifthCode;
@@ -83,11 +85,10 @@ public class ArchimedesCodeWriter implements CodeFactory {
 	}
 
 	/**
-	 * Sucht alle Referezen im Tabellenmodell und erzeugt den Fifth-Code
-	 * f&uuml;r die Pr&uuml;fung dieser Referenzen.
+	 * Sucht alle Referezen im Tabellenmodell und erzeugt den Fifth-Code f&uuml;r
+	 * die Pr&uuml;fung dieser Referenzen.
 	 * 
-	 * @param tm
-	 *            ein Tabellenmodell, das durchgesucht werden soll
+	 * @param tm ein Tabellenmodell, das durchgesucht werden soll
 	 * @return der erzeugte Fifth-Code
 	 */
 	public String getCheckrefCode(TabellenModel tm) {
@@ -122,8 +123,7 @@ public class ArchimedesCodeWriter implements CodeFactory {
 	 * Sucht alle NotNull-Spallten im Tabellenmodell und erzeugt den Fith-Code
 	 * f&uuml;r die Pruefung dieser Spalten.
 	 * 
-	 * @param tm
-	 *            ein Tabellenmodell, das durchgesucht werden soll
+	 * @param tm ein Tabellenmodell, das durchgesucht werden soll
 	 * @return der erzeugte Fifth-Code
 	 */
 	public String getChecknullCode(TabellenModel tm) {
@@ -154,14 +154,14 @@ public class ArchimedesCodeWriter implements CodeFactory {
 	static private void printHelp() {
 		String strHelp = "";
 		strHelp = "\nBENUTZUNG: ArchimedesCodeWriter [ADS-Datei] [Ausgabe-Datei]\n";
-		System.out.println(strHelp);
+		log.info(strHelp);
 	}
 
 	/**
 	 * Mit dieser Methode kann der ArchimedesCodeWriter gestartet werden.
 	 * 
-	 * Als erstes Element im args-Array wird der Name des ADS-Datei
-	 * &uuml;bergeben. Als zweites - Ausgabedateiname.
+	 * Als erstes Element im args-Array wird der Name des ADS-Datei &uuml;bergeben.
+	 * Als zweites - Ausgabedateiname.
 	 */
 	public static void main(String[] args) {
 		if (args.length == 0) {
@@ -173,12 +173,12 @@ public class ArchimedesCodeWriter implements CodeFactory {
 			System.exit(0);
 		}
 		if (args.length < 2) {
-			System.out.println("\n\nKein ADS- oder Ausgabedateiname angegeben!");
+			log.info("\n\nKein ADS- oder Ausgabedateiname angegeben!");
 			System.exit(1);
 		}
 		File file = new File(args[0]);
 		if (!file.exists()) {
-			System.out.println("\n\nDie angegebene ADS-Datei (" + args[0] + ") existiert nicht!\n");
+			log.info("\n\nDie angegebene ADS-Datei (" + args[0] + ") existiert nicht!\n");
 			System.exit(1);
 		}
 		StructuredTextFile stf = new StructuredTextFile(args[0]);
