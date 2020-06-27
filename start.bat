@@ -1,4 +1,4 @@
-IF NOT EXISTS "java-engine-path.bat" GOTO PathSet
+IF NOT EXIST "java-engine-path.bat" GOTO PathSet
     CALL java-engine-path.bat
 :PathSet
 
