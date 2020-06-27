@@ -17,7 +17,6 @@ import java.util.Vector;
 
 import archimedes.legacy.metadata.SequenceMetaData;
 import archimedes.legacy.model.ColumnMetaData;
-import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TableMetaData;
 import archimedes.legacy.scheme.ComplexIndexDescriptionScriptAppender;
 import archimedes.legacy.scheme.ComplexIndexSQLScriptAppender;
@@ -47,6 +46,7 @@ import corent.dates.PDate;
 import corent.db.DBExecMode;
 import corent.db.DBType;
 import corentx.util.Str;
+import logging.Logger;
 
 /**
  * This class creates an update script for the changes between an Archimedes
@@ -59,13 +59,14 @@ import corentx.util.Str;
 
 public class UpdateScriptBuilder {
 
+	private static final Logger log = Logger.getLogger(UpdateScriptBuilder.class);
+
 	private Diagramm dataModel = null;
 
 	/**
 	 * Creates a new update script builder for the passed data model.
 	 * 
-	 * @param dataModel
-	 *            The data model to match the meta data against.
+	 * @param dataModel The data model to match the meta data against.
 	 * 
 	 * @changed OLI 24.10.2013 - Added.
 	 */
@@ -75,12 +76,11 @@ public class UpdateScriptBuilder {
 	}
 
 	/**
-	 * Creates an update script between the passed data model and the passed
-	 * meta data.
+	 * Creates an update script between the passed data model and the passed meta
+	 * data.
 	 * 
-	 * @param md
-	 *            The meta data of the data scheme which the data model is to
-	 *            match against.
+	 * @param md The meta data of the data scheme which the data model is to match
+	 *           against.
 	 */
 	public Vector buildUpdateScript(java.util.List md, boolean hasDomains, boolean fkNotNullBeachten,
 			boolean referenzenSetzen, DBExecMode dbmode, Vector html, java.util.List<SimpleIndexMetaData> indices,
@@ -148,7 +148,7 @@ public class UpdateScriptBuilder {
 				this.dataModel.addSQLScriptListener(sqlsl);
 				vsqlsl.addElement(sqlsl);
 			} catch (Exception e) {
-				System.out.println("SQLScriptListener " + n + " could not be added.");
+				log.error("SQLScriptListener " + n + " could not be added.", e);
 			}
 		}
 		this.dataModel.fireDataSchemeChanged(new SQLScriptEvent(SQLScriptEventType.STARTBUILDING, stmt, v, null, null,
@@ -163,10 +163,9 @@ public class UpdateScriptBuilder {
 		html.addElement("        <h1>" + StrUtil.ToHTML(this.dataModel.getName()) + " (Version "
 				+ StrUtil.ToHTML(this.dataModel.getVersion()) + ")</h1>");
 		html.addElement("        <hr SIZE=1 WIDTH=\"100%\">");
-		html
-				.addElement("        <p align=justify>"
-						+ (this.dataModel.getComment().length() > 0 ? StrUtil.ToHTML(this.dataModel.getComment()) : "")
-						+ "<p>");
+		html.addElement("        <p align=justify>"
+				+ (this.dataModel.getComment().length() > 0 ? StrUtil.ToHTML(this.dataModel.getComment()) : "")
+				+ "<p>");
 		html.addElement("        <hr SIZE=1 WIDTH=\"100%\">");
 		if (hasDomains) {
 			vdn = new Vector<String>();
@@ -204,10 +203,10 @@ public class UpdateScriptBuilder {
 			}
 		}
 		if (indices.size() > 0) {
-			System.out.println("database has indices: " + indices);
+			log.info("database has indices: " + indices);
 		}
 		for (int i = 0, len = t.size(); i < len; i++) {
-			tables.addElement((TabellenModel) t.get(i));
+			tables.addElement(t.get(i));
 		}
 		if (!fkNotNullBeachten) {
 			notnull = false;
@@ -271,8 +270,8 @@ public class UpdateScriptBuilder {
 						html.addElement("        <p>");
 						html.addElement("        <hr SIZE=1 WIDTH=\"100%\">");
 					}
-					html.addElement("        <h3>Tabelle: " + StrUtil.ToHTML(table.getName())
-							+ " (hinzuf&uuml;gen)</h3>");
+					html.addElement(
+							"        <h3>Tabelle: " + StrUtil.ToHTML(table.getName()) + " (hinzuf&uuml;gen)</h3>");
 					s = "";
 					for (StereotypeModel stm : table.getStereotypes()) {
 						if (s.length() != 0) {
@@ -299,40 +298,40 @@ public class UpdateScriptBuilder {
 						}
 					}
 					v.addExtendingStatement(stmt);
-					this.dataModel.fireDataSchemeChanged(new SQLScriptEvent(SQLScriptEventType.CREATETABLE, stmt, v,
-							table));
+					this.dataModel
+							.fireDataSchemeChanged(new SQLScriptEvent(SQLScriptEventType.CREATETABLE, stmt, v, table));
 					for (ColumnModel column : table.getColumns()) {
-						notnull = (column.isNotNull() && (column.isPrimaryKey() || ((column.getRelation() != null) && fkNotNullBeachten)));
-						html.addElement("    <p><b>"
-								+ StrUtil.ToHTML(column.getName())
-								+ "</b> :"
+						notnull = (column.isNotNull()
+								&& (column.isPrimaryKey() || ((column.getRelation() != null) && fkNotNullBeachten)));
+						html.addElement("    <p><b>" + StrUtil.ToHTML(column.getName()) + "</b> :"
 								+ (hasDomains ? column.getDomain().getName() : column.getDomain().getType(dbmode))
 								+ (column.isPrimaryKey() ? " <b>(PK)</b>" : "")
-								+ (column.getRelation() != null ? " <i>" + "(FK -&gt; " + column.getReferencedColumn()
-										+ ")</i>" : "") + (notnull ? " <b>NOT NULL</b>" : ""));
-						html.addElement("    <p align=justify>" + descriptionGetter.getDescription(column)
-								+ "<br>&nbsp;");
+								+ (column.getRelation() != null
+										? " <i>" + "(FK -&gt; " + column.getReferencedColumn() + ")</i>"
+										: "")
+								+ (notnull ? " <b>NOT NULL</b>" : ""));
+						html.addElement(
+								"    <p align=justify>" + descriptionGetter.getDescription(column) + "<br>&nbsp;");
 					}
 					for (ColumnModel column : table.getColumns()) {
-						notnull = (column.isNotNull() && (column.isPrimaryKey() || ((column.getRelation() != null) && fkNotNullBeachten)));
-						html.addElement("    <p><b>"
-								+ StrUtil.ToHTML(column.getName())
-								+ "</b>"
-								+ " :"
+						notnull = (column.isNotNull()
+								&& (column.isPrimaryKey() || ((column.getRelation() != null) && fkNotNullBeachten)));
+						html.addElement("    <p><b>" + StrUtil.ToHTML(column.getName()) + "</b>" + " :"
 								+ (hasDomains ? column.getDomain().getName() : column.getDomain().getType(dbmode))
 								+ (column.isPrimaryKey() ? " <b>(PK)</b>" : "")
-								+ (column.getRelation() != null ? " <i>" + "(FK -&gt; " + column.getReferencedColumn()
-										+ ")</i>" : "") + (notnull ? " <b>NOT NULL</b>" : ""));
-						html.addElement("    <p align=justify>" + descriptionGetter.getDescription(column)
-								+ "<br>&nbsp;");
+								+ (column.getRelation() != null
+										? " <i>" + "(FK -&gt; " + column.getReferencedColumn() + ")</i>"
+										: "")
+								+ (notnull ? " <b>NOT NULL</b>" : ""));
+						html.addElement(
+								"    <p align=justify>" + descriptionGetter.getDescription(column) + "<br>&nbsp;");
 					}
 				} else {
 					altered = false;
 					for (ColumnModel column : table.getColumns()) {
-						notnull = ((column.isNotNull() && fkNotNullBeachten) || (column.isPrimaryKey() || ((column
-								.getRelation() != null)
-								&& column.isNotNull() && fkNotNullBeachten)));
-						cmd = (ColumnMetaData) tmd.getColumn(column.getName());
+						notnull = ((column.isNotNull() && fkNotNullBeachten) || (column.isPrimaryKey()
+								|| ((column.getRelation() != null) && column.isNotNull() && fkNotNullBeachten)));
+						cmd = tmd.getColumn(column.getName());
 						if (cmd == null) {
 							if (!altered) {
 								v.addExtendingStatement("");
@@ -357,31 +356,30 @@ public class UpdateScriptBuilder {
 									html.addElement(s + "</i><br>");
 								}
 								html.addElement("        <hr SIZE=1 WIDTH=\"100%\">");
-								html
-										.addElement("        <p align=justify>"
-												+ (table.getComment().length() > 0 ? StrUtil.ToHTML(table.getComment())
-														: "-/-") + "<p>");
+								html.addElement("        <p align=justify>"
+										+ (table.getComment().length() > 0 ? StrUtil.ToHTML(table.getComment()) : "-/-")
+										+ "<p>");
 								html.addElement("        <hr SIZE=1 WIDTH=\"100%\">");
 								altered = true;
 							}
-							stmt = sqlScriptFactory
-									.alterTableAddColumnStatement(column, hasDomains, false /* fkNotNullBeachten */);
+							stmt = sqlScriptFactory.alterTableAddColumnStatement(column, hasDomains,
+									false /* fkNotNullBeachten */);
 							v.addExtendingStatement(stmt);
 							if (column.isNotNull()) {
 								v.addReducingStatement(sqlScriptFactory.alterTableModifyConstraintNotNull(column));
 							}
-							this.dataModel.fireDataSchemeChanged(new SQLScriptEvent(SQLScriptEventType.ADDCOLUMN, stmt,
-									v, table, column));
-							html.addElement("    <p><b>"
-									+ StrUtil.ToHTML(column.getName())
-									+ "</b> :"
+							this.dataModel.fireDataSchemeChanged(
+									new SQLScriptEvent(SQLScriptEventType.ADDCOLUMN, stmt, v, table, column));
+							html.addElement("    <p><b>" + StrUtil.ToHTML(column.getName()) + "</b> :"
 									+ (hasDomains ? column.getDomain().getName() : column.getDomain().getType(dbmode))
 									+ (column.isPrimaryKey() ? " <b>(PK)</b>" : "")
-									+ (column.getRelation() != null ? " <i>(FK -&gt; " + column.getReferencedColumn()
-											+ ")</i>" : "") + (notnull ? " <b>NOT NULL</b>" : "")
+									+ (column.getRelation() != null
+											? " <i>(FK -&gt; " + column.getReferencedColumn() + ")</i>"
+											: "")
+									+ (notnull ? " <b>NOT NULL</b>" : "")
 									+ (column.isDeprecated() ? " <b>AUFGEHOBEN!</b>" : ""));
-							html.addElement("    <p align=justify>" + descriptionGetter.getDescription(column)
-									+ "<br>&nbsp;");
+							html.addElement(
+									"    <p align=justify>" + descriptionGetter.getDescription(column) + "<br>&nbsp;");
 						} else {
 							dm = column.getDomain();
 							if (dbmode == DBExecMode.POSTGRESQL) {
@@ -400,9 +398,9 @@ public class UpdateScriptBuilder {
 								cmd.datatype = DBType.LONGVARCHAR; // 3
 							}
 							if (column.isPrimaryKey() != cmd.primaryKey) {
-								System.out.println("\nPrimaerschluesselaenderung fuer " + "Tabellenspalte "
-										+ column.getFullName() + " (" + dm.getName() + ")");
-								System.out.println("PK:       " + column.isPrimaryKey() + " - " + cmd.primaryKey);
+								log.info("\nPrimaerschluesselaenderung fuer " + "Tabellenspalte " + column.getFullName()
+										+ " (" + dm.getName() + ")");
+								log.info("PK:       " + column.isPrimaryKey() + " - " + cmd.primaryKey);
 								// TODO Gegen Factory-Methodenaufruf
 								// austauschen.
 								if (Boolean.getBoolean("archimedes.template." + dbmode.toString().toLowerCase()
@@ -419,32 +417,28 @@ public class UpdateScriptBuilder {
 								}
 							}
 							if (/*
-								 * (dm.getDatatype() !=
-								 * DBType.Convert(cmd.datatype))
+								 * (dm.getDatatype() != DBType.Convert(cmd.datatype))
 								 */
-							(!DBType.GetSQLType(DBType.Convert(dm.getDataType()), dbmode).equals(
-									DBType.GetSQLType(cmd.datatype, dbmode)))
+							(!DBType.GetSQLType(DBType.Convert(dm.getDataType()), dbmode)
+									.equals(DBType.GetSQLType(cmd.datatype, dbmode)))
 									|| ((dm.getLength() != cmd.colsize) && dm.getLength() > 0)
 									|| (dm.getDecimalPlace() != cmd.nks)
 									|| ((notnull != cmd.isNotNull() && fkNotNullBeachten))) {
 								if (debug) {
 									// TODO
-									System.out.println("\nUnterschiede Tabellenspalte " + column.getFullName() + " ("
+									log.debug("\nUnterschiede Tabellenspalte " + column.getFullName() + " ("
 											+ dm.getName() + ")");
-									System.out.println("cmd:      " + cmd.toString());
-									System.out.println("Datatype: " + ((short) dm.getDataType()) + " - "
+									log.debug("cmd:      " + cmd.toString());
+									log.debug("Datatype: " + ((short) dm.getDataType()) + " - "
 											+ DBType.Convert(cmd.datatype) + " - " + cmd.datatype);
-									System.out.println("SQL-Type: "
-											+ DBType.GetSQLType(DBType.Convert(dm.getDataType()), dbmode) + " - "
-											+ DBType.GetSQLType(cmd.datatype, dbmode));
-									System.out.println("Length:   " + dm.getLength() + " - " + cmd.colsize);
+									log.debug("SQL-Type: " + DBType.GetSQLType(DBType.Convert(dm.getDataType()), dbmode)
+											+ " - " + DBType.GetSQLType(cmd.datatype, dbmode));
+									log.debug("Length:   " + dm.getLength() + " - " + cmd.colsize);
 									/*
-									 * OLI 30.12.2008
-									 * System.out.println("PK:       " +
-									 * tsm.isPrimaryKey() + " - " +
+									 * OLI 30.12.2008 log.debug("PK:       " + tsm.isPrimaryKey() + " - " +
 									 * cmd.primaryKey);
 									 */
-									System.out.println("Not null: " + notnull + " - " + cmd.isNotNull());
+									log.debug("Not null: " + notnull + " - " + cmd.isNotNull());
 								}
 								if (!altered) {
 									v.addChangingStatement("");
@@ -471,7 +465,8 @@ public class UpdateScriptBuilder {
 									html.addElement("        <hr SIZE=1 WIDTH=\"100%\">");
 									html.addElement("        <p align=justify>"
 											+ (table.getComment().length() > 0 ? StrUtil.ToHTML(table.getComment())
-													: "-/-") + "<p>");
+													: "-/-")
+											+ "<p>");
 									html.addElement("        <hr SIZE=1 WIDTH=\"100%\">");
 									altered = true;
 								}
@@ -498,14 +493,14 @@ public class UpdateScriptBuilder {
 								// tsm.getDomain(
 								// ).getInitialwert() + "'" : tsm.getDomain(
 								// ).getInitialwert())) + ";";
-								if ((!DBType.GetSQLType(DBType.Convert(dm.getDataType()), dbmode).equals(
-										DBType.GetSQLType(cmd.datatype, dbmode)))
+								if ((!DBType.GetSQLType(DBType.Convert(dm.getDataType()), dbmode)
+										.equals(DBType.GetSQLType(cmd.datatype, dbmode)))
 										|| ((dm.getLength() != cmd.colsize) && dm.getLength() > 0)
 										|| (dm.getDecimalPlace() != cmd.nks)) {
-									v.addChangingStatement(sqlScriptFactory.alterTableAlterColumnSetDataTypeStatement(
-											column, hasDomains));
 									v.addChangingStatement(sqlScriptFactory
-											.alterTableAlterColumnSetDefaultStatement(column));
+											.alterTableAlterColumnSetDataTypeStatement(column, hasDomains));
+									v.addChangingStatement(
+											sqlScriptFactory.alterTableAlterColumnSetDefaultStatement(column));
 								}
 								if ((notnull != cmd.isNotNull()) && fkNotNullBeachten) {
 									String cnn = sqlScriptFactory.alterTableModifyConstraintNotNull(column);
@@ -515,15 +510,14 @@ public class UpdateScriptBuilder {
 										v.addExtendingStatement(cnn);
 									}
 								}
-								this.dataModel.fireDataSchemeChanged(new SQLScriptEvent(SQLScriptEventType.ALTERCOLUMN,
-										stmt, v, table, column));
-								html.addElement("    <p><b>"
-										+ StrUtil.ToHTML(column.getName())
-										+ "</b> :"
+								this.dataModel.fireDataSchemeChanged(
+										new SQLScriptEvent(SQLScriptEventType.ALTERCOLUMN, stmt, v, table, column));
+								html.addElement("    <p><b>" + StrUtil.ToHTML(column.getName()) + "</b> :"
 										+ (hasDomains ? column.getDomain().getName() : column.getDomain().getType())
 										+ (column.isPrimaryKey() ? " <b>(PK)</b>" : "")
-										+ (column.getRelation() != null ? " <i>(FK -&gt; "
-												+ column.getReferencedColumn() + ")</i>" : "")
+										+ (column.getRelation() != null
+												? " <i>(FK -&gt; " + column.getReferencedColumn() + ")</i>"
+												: "")
 										+ (notnull ? " <b>NOT NULL</b>" : "")
 										+ (column.isDeprecated() ? " <b>AUFGEHOBEN!</b>" : ""));
 								html.addElement("    <p align=justify>" + descriptionGetter.getDescription(column)
@@ -534,7 +528,7 @@ public class UpdateScriptBuilder {
 					deleted = false;
 					for (Iterator it = tmd.getColumns().keySet().iterator(); it.hasNext();) {
 						colname = (String) it.next();
-						cmd = (ColumnMetaData) tmd.getColumn(colname);
+						cmd = tmd.getColumn(colname);
 						if (cmd != null) {
 							ColumnModel column = this.findColumn(table.getColumns(), cmd.name);
 							if (column == null) {
@@ -550,7 +544,8 @@ public class UpdateScriptBuilder {
 									html.addElement("        <hr SIZE=1 WIDTH=\"100%\">");
 									html.addElement("        <p align=justify>"
 											+ (table.getComment().length() > 0 ? StrUtil.ToHTML(table.getComment())
-													: "-/-") + "<p>");
+													: "-/-")
+											+ "<p>");
 									html.addElement("        <hr SIZE=1 WIDTH=\"100%\">");
 									altered = true;
 								}
@@ -562,8 +557,8 @@ public class UpdateScriptBuilder {
 								// austauschen.
 								v.addReducingStatement("ALTER TABLE " + Str.quote(table.getName(), quoteCharacter)
 										+ " DROP COLUMN " + Str.quote(cmd.name, quoteCharacter) + ";");
-								this.dataModel.fireDataSchemeChanged(new SQLScriptEvent(SQLScriptEventType.DROPCOLUMN,
-										stmt, v, table, cmd.name));
+								this.dataModel.fireDataSchemeChanged(
+										new SQLScriptEvent(SQLScriptEventType.DROPCOLUMN, stmt, v, table, cmd.name));
 								html.addElement("    <p><strike><b>" + StrUtil.ToHTML(cmd.name) + "</b>: "
 										+ StrUtil.ToHTML(cmd.getSQLType()) + "</strike>");
 							}
@@ -580,13 +575,14 @@ public class UpdateScriptBuilder {
 					// vorkonfiguriert
 					// werden kann.
 					// TODO Gegen Factory-Methodenaufruf austauschen.
-					stmt = System.getProperty("archimedes.template." + dbmode.toToken().toLowerCase()
-							+ ".statement.pk.drop", System.getProperty("archimedes.template.statement.pk.drop",
-							"alter table " + Str.quote("$TABLENAME$", quoteCharacter) + " drop primary key;"));
+					stmt = System.getProperty(
+							"archimedes.template." + dbmode.toToken().toLowerCase() + ".statement.pk.drop",
+							System.getProperty("archimedes.template.statement.pk.drop",
+									"alter table " + Str.quote("$TABLENAME$", quoteCharacter) + " drop primary key;"));
 					stmt = wildCardChanged.change(stmt, table.getName(), null, null);
 					v.addExtendingStatement(stmt);
-					this.dataModel.fireDataSchemeChanged(new SQLScriptEvent(SQLScriptEventType.DROPPRIMARYKEY, stmt, v,
-							table));
+					this.dataModel.fireDataSchemeChanged(
+							new SQLScriptEvent(SQLScriptEventType.DROPPRIMARYKEY, stmt, v, table));
 					if (dbmode == DBExecMode.MSSQL) {
 						v.addExtendingStatement("go");
 					}
@@ -605,8 +601,8 @@ public class UpdateScriptBuilder {
 						// TODO Gegen Factory-Methodenaufruf austauschen.
 						v.addReducingStatement("ALTER TABLE " + Str.quote(table.getName(), quoteCharacter)
 								+ " ADD PRIMARY KEY(" + sb.toString() + ");");
-						this.dataModel.fireDataSchemeChanged(new SQLScriptEvent(SQLScriptEventType.ADDPRIMARYKEY, stmt,
-								v, table, svtsm));
+						this.dataModel.fireDataSchemeChanged(
+								new SQLScriptEvent(SQLScriptEventType.ADDPRIMARYKEY, stmt, v, table, svtsm));
 						if (dbmode == DBExecMode.MSSQL) {
 							v.addReducingStatement("go");
 						}
@@ -622,9 +618,9 @@ public class UpdateScriptBuilder {
 							}
 							v.addReducingStatement("");
 							// TODO Gegen Factory-Methodenaufruf austauschen.
-							v.addReducingStatement("CREATE INDEX " + indexname + " ON "
-									+ Str.quote(table.getName(), quoteCharacter) + " ("
-									+ Str.quote(column.getName(), quoteCharacter) + ");");
+							v.addReducingStatement(
+									"CREATE INDEX " + indexname + " ON " + Str.quote(table.getName(), quoteCharacter)
+											+ " (" + Str.quote(column.getName(), quoteCharacter) + ");");
 							this.dataModel.fireDataSchemeChanged(new SQLScriptEvent(SQLScriptEventType.ADDINDEX, stmt,
 									v, table, column, "", "", null, indexname, null));
 							if (dbmode == DBExecMode.MSSQL) {

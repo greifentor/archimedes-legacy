@@ -67,20 +67,27 @@ import corent.gui.PropertyRessourceManager;
 import logging.Logger;
 
 /**
- * Diese Klasse liefert die Musterimplementierung einer ArchimedesDescriptorFactory.
+ * Diese Klasse liefert die Musterimplementierung einer
+ * ArchimedesDescriptorFactory.
  * <P>
- * Die Property <B>archimedes.app.DefautlArchimedesDescriptorFactory.inherited.fields=true </B> (Boolean) aktiviert die
- * &Uuml;bernahme von ererbten Feldern in die PersistenceDescriptors.
+ * Die Property
+ * <B>archimedes.app.DefautlArchimedesDescriptorFactory.inherited.fields=true
+ * </B> (Boolean) aktiviert die &Uuml;bernahme von ererbten Feldern in die
+ * PersistenceDescriptors.
  * 
  * <P>
- * Wird die Property <I>archimedes.app.DefaultArchimedesDescriptorFactory.suppress .contextconcat</I> gesetzt, so kann
- * unterdr&uuml;ckt werden, da&szlig; dem Komponentennamen der Kontextname der Tabelle vorangestellt wird.
+ * Wird die Property
+ * <I>archimedes.app.DefaultArchimedesDescriptorFactory.suppress
+ * .contextconcat</I> gesetzt, so kann unterdr&uuml;ckt werden, da&szlig; dem
+ * Komponentennamen der Kontextname der Tabelle vorangestellt wird.
  * 
  * @author ollie
  *         <P>
  * 
- * @changed OLI 17.01.2008 - Erweiterung um die Option den Kontextnamen der Tabelle als Pr&auml;fix in den
- *          Komponentennamen einfliessen zu lassen in der Methode <TT>getEditorDescriptor(Attributed, String)</TT>.
+ * @changed OLI 17.01.2008 - Erweiterung um die Option den Kontextnamen der
+ *          Tabelle als Pr&auml;fix in den Komponentennamen einfliessen zu
+ *          lassen in der Methode
+ *          <TT>getEditorDescriptor(Attributed, String)</TT>.
  *          <P>
  *          OLI 01.05.2009 - Einbau erster log4j-Ausgaben.
  *          <P>
@@ -93,18 +100,22 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 	private static Logger log = Logger.getLogger(ArchimedesDescriptorFactory.class);
 
 	/*
-	 * Referenz auf die ArchimedesApplication, innerhalb derer die Factory arbeiten soll.
+	 * Referenz auf die ArchimedesApplication, innerhalb derer die Factory arbeiten
+	 * soll.
 	 */
 	private ArchimedesApplication app = null;
 	/*
-	 * Referenz auf das Archimedes-Datenmodell, aus dem die Descriptoren generiert werden sollen.
+	 * Referenz auf das Archimedes-Datenmodell, aus dem die Descriptoren generiert
+	 * werden sollen.
 	 */
 	private DiagrammModel dm = null;
 
 	/**
-	 * Generiert eine neue ArchimedesDescriptorFactory mit dem &uuml;bergebenen Archimedes-Datenmodell.
+	 * Generiert eine neue ArchimedesDescriptorFactory mit dem &uuml;bergebenen
+	 * Archimedes-Datenmodell.
 	 * 
-	 * @param dm Das Archimedes-Datenmodell, das als Grundlage der Descriptor-Generierungen genutzt werden soll.
+	 * @param dm Das Archimedes-Datenmodell, das als Grundlage der
+	 *           Descriptor-Generierungen genutzt werden soll.
 	 */
 	public DefaultArchimedesDescriptorFactory(DiagrammModel dm) {
 		super();
@@ -112,12 +123,17 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 	}
 
 	/**
-	 * Liefert den vollst&auml;ndige Spaltennamen zur angegebenen Klassen-Tabellennamen-Tupel.
+	 * Liefert den vollst&auml;ndige Spaltennamen zur angegebenen
+	 * Klassen-Tabellennamen-Tupel.
 	 * 
-	 * @param adf Die ArchimedesDescriptorFactory, auf der die Operation ausgef&uuml;hrt werden soll.
-	 * @param cls Die Klasse der Objekte, zu der die Schl&uuml;sselspalte gesucht werden soll.
-	 * @param tn  Der Name der Tabelle des Archimedes-Modells, zu dem die Schl&uuml;ssel geliefert werden soll.
-	 * @return Der vollst&auml;ndige Spaltenname der ersten Prim&auml;rschl&uuml;sselspalte.
+	 * @param adf Die ArchimedesDescriptorFactory, auf der die Operation
+	 *            ausgef&uuml;hrt werden soll.
+	 * @param cls Die Klasse der Objekte, zu der die Schl&uuml;sselspalte gesucht
+	 *            werden soll.
+	 * @param tn  Der Name der Tabelle des Archimedes-Modells, zu dem die
+	 *            Schl&uuml;ssel geliefert werden soll.
+	 * @return Der vollst&auml;ndige Spaltenname der ersten
+	 *         Prim&auml;rschl&uuml;sselspalte.
 	 */
 	public static String GetFirstPKColName(ArchimedesDescriptorFactory adf, Class cls, String tn) {
 		try {
@@ -133,19 +149,22 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 
 	/* Implementierung des Interfaces ArchimedesDescriptorFactory. */
 
+	@Override
 	public void setApplication(ArchimedesApplication app) {
 		this.app = app;
 	}
 
+	@Override
 	public ArchimedesApplication getApplication() {
 		return this.app;
 	}
 
+	@Override
 	public Hashtable<String, AttributeDescriptor> getDynamicDescriptor(String tn) {
 		Hashtable<String, AttributeDescriptor> ht = new Hashtable<String, AttributeDescriptor>();
 		TabellenModel tm = this.dm.getTabelle(tn);
 		if (tm == null) {
-			System.out.println("\nERROR: table " + tn + " not found in model!\n");
+			log.info("\nERROR: table " + tn + " not found in model!\n");
 		}
 		for (int i = 0, len = tm.getTabellenspaltenCount(); i < len; i++) {
 			TabellenspaltenModel tsm = tm.getTabellenspalteAt(i);
@@ -215,6 +234,7 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 		return ht;
 	}
 
+	@Override
 	public PersistenceDescriptor getPersistenceDescriptor(Class cls, String tn) {
 		DefaultPersistenceDescriptor pd = null;
 		TabellenModel tm = this.dm.getTabelle(tn);
@@ -254,7 +274,7 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 				if (!tsm.getTabelle().getName().equals(tm.getName())) {
 					cn = cn.concat(" (").concat(tsm.getTabelle().getName()).concat(")");
 				}
-				// System.out.println("archimedes.app.DefaultArchimedesDescriptorFactory."
+				// log.info("archimedes.app.DefaultArchimedesDescriptorFactory."
 				// + cls.getName()
 				// + ".table.view.header." + tsm.getFullName());
 				if (Utl.GetProperty("archimedes.app.DefaultArchimedesDescriptorFactory." + cls.getName()
@@ -315,10 +335,12 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 	}
 
 	/**
-	 * @changed OLI 17.01.2008 - Erweiterung um die Option den Kontextnamen der Tabelle als Pr&auml;fix in den
-	 *          Komponentennamen einfliessen zu lassen.<BR>
+	 * @changed OLI 17.01.2008 - Erweiterung um die Option den Kontextnamen der
+	 *          Tabelle als Pr&auml;fix in den Komponentennamen einfliessen zu
+	 *          lassen.<BR>
 	 * 
 	 */
+	@Override
 	public EditorDescriptorList getEditorDescriptor(Attributed attr, String tn) {
 		boolean contextconcat = !Boolean
 				.getBoolean("archimedes.app.DefaultArchimedesDescriptorFactory.suppress.contextconcat");
@@ -331,8 +353,8 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 		if (tm != null) {
 			int panel = 0;
 			/*
-			 * for (int i = 0, len = tm.getTabellenspaltenCount(); i < len; i++) { TabellenspaltenModel tsm =
-			 * tm.getTabellenspalteAt(i);
+			 * for (int i = 0, len = tm.getTabellenspaltenCount(); i < len; i++) {
+			 * TabellenspaltenModel tsm = tm.getTabellenspalteAt(i);
 			 */
 			java.util.List<TabellenspaltenModel> ltsm = null;
 			if (tm.isInherited()
@@ -442,7 +464,7 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 				sv.addElement(new SortedDED(id, ased, nrm.getTabellenspalte()));
 			}
 			for (int i = 0, len = tm.getPanelCount(); i < len; i++) {
-				PanelModel pm = (PanelModel) tm.getPanelAt(i);
+				PanelModel pm = tm.getPanelAt(i);
 				if ((pm.getPanelClass() != null) && (pm.getPanelClass().length() > 0)) {
 					try {
 						id++;
@@ -459,15 +481,17 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 			}
 			if (tm.isInherited()) {
 				/*
-				 * for (int i = 0, len = dedl.size(); i < len; i++) { DefaultEditorDescriptor ded =
-				 * (DefaultEditorDescriptor) dedl.elementAt(i); if (ded.getTab() > 0) {
+				 * for (int i = 0, len = dedl.size(); i < len; i++) { DefaultEditorDescriptor
+				 * ded = (DefaultEditorDescriptor) dedl.elementAt(i); if (ded.getTab() > 0) {
 				 * ded.setTab(tm.getPanelCount()+ded.getTab()-2); } } for (int i = 0, len =
-				 * tm.getTabellenspaltenCount(); i < len; i++) { TabellenspaltenModel tsm = tm.getTabellenspalteAt(i);
-				 * String name = tsm.getName(); if (tsm.isPrimarykey() && (tsm.getRelation() != null)) {
-				 * EditorDescriptorList edl = this.getEditorDescriptor(attr,
-				 * tsm.getRelation().getReferenced().getTabelle().getName()); for (int j = 0, lenj = edl.size(); j <
-				 * lenj; j++) { ArchimedesEditorDescriptor aed = (ArchimedesEditorDescriptor) edl.elementAt(j);
-				 * aed.setAttributeId(len + aed.getAttributeId()); sv.addElement(new SortedDED(tsm.getEditorPosition(),
+				 * tm.getTabellenspaltenCount(); i < len; i++) { TabellenspaltenModel tsm =
+				 * tm.getTabellenspalteAt(i); String name = tsm.getName(); if
+				 * (tsm.isPrimarykey() && (tsm.getRelation() != null)) { EditorDescriptorList
+				 * edl = this.getEditorDescriptor(attr,
+				 * tsm.getRelation().getReferenced().getTabelle().getName()); for (int j = 0,
+				 * lenj = edl.size(); j < lenj; j++) { ArchimedesEditorDescriptor aed =
+				 * (ArchimedesEditorDescriptor) edl.elementAt(j); aed.setAttributeId(len +
+				 * aed.getAttributeId()); sv.addElement(new SortedDED(tsm.getEditorPosition(),
 				 * aed, tsm)); } } }
 				 */
 			}
@@ -478,6 +502,7 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 		return dedl;
 	}
 
+	@Override
 	public Vector<String> getAttributenames(String tn) {
 		Vector<String> v = new Vector<String>();
 		TabellenModel tm = this.dm.getTabelle(tn);
@@ -494,12 +519,15 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 				v.addElement(tsm.getName());
 			}
 			/*
-			 * for (int i = 0, len = tm.getTabellenspaltenCount(); i < len; i++) { TabellenspaltenModel tsm =
-			 * tm.getTabellenspalteAt(i); v.addElement(tsm.getName()); } if (tm.isInherited()) { for (int i = 0, len =
-			 * tm.getTabellenspaltenCount(); i < len; i++) { TabellenspaltenModel tsm = tm.getTabellenspalteAt(i);
-			 * String name = tsm.getName(); if (tsm.isPrimarykey() && (tsm.getRelation() != null)) { Vector<String> v0 =
-			 * this.getAttributenames(tsm.getRelation( ).getReferenced().getTabelle().getName()); for (int j = 0, lenj =
-			 * v0.size(); j < lenj; j++) { v.addElement(v0.elementAt(j)); } } } }
+			 * for (int i = 0, len = tm.getTabellenspaltenCount(); i < len; i++) {
+			 * TabellenspaltenModel tsm = tm.getTabellenspalteAt(i);
+			 * v.addElement(tsm.getName()); } if (tm.isInherited()) { for (int i = 0, len =
+			 * tm.getTabellenspaltenCount(); i < len; i++) { TabellenspaltenModel tsm =
+			 * tm.getTabellenspalteAt(i); String name = tsm.getName(); if
+			 * (tsm.isPrimarykey() && (tsm.getRelation() != null)) { Vector<String> v0 =
+			 * this.getAttributenames(tsm.getRelation(
+			 * ).getReferenced().getTabelle().getName()); for (int j = 0, lenj = v0.size();
+			 * j < lenj; j++) { v.addElement(v0.elementAt(j)); } } } }
 			 */
 		}
 		return v;
@@ -510,6 +538,7 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 	 *          <P>
 	 * 
 	 */
+	@Override
 	public boolean equalsTo(ArchimedesDynamic ad0, ArchimedesDynamic ad1) {
 		if (!ad0.getClass().isInstance(ad1)) {
 			return false;
@@ -530,6 +559,7 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 		return true;
 	}
 
+	@Override
 	public String generateString(ArchimedesDynamic ad) {
 		StringBuffer sb = new StringBuffer();
 		TableModel tm = this.dm.getTableByName(ad.getTablename());
@@ -543,6 +573,7 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 		return sb.toString();
 	}
 
+	@Override
 	public TabbedPaneFactory getTabbedPaneFactory(String tn) {
 		TabellenModel tm = this.dm.getTabelle(tn);
 		TabbedPaneFactory tpf = null;
@@ -565,7 +596,7 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 			String cn = "tab.resource.for.table." + tm.getName();
 			TabDescriptor[] tda = new TabDescriptor[panels.length];
 			for (int i = 0, len = panels.length; i < len; i++) {
-				PanelModel panel = (PanelModel) panels[i];
+				PanelModel panel = panels[i];
 				String t = panel.getTabTitle();
 				char m = (t != null ? panel.getTabMnemonic() : "" + i).charAt(0);
 				String ttt = panel.getTabToolTipText();
@@ -630,25 +661,31 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 			tpf = new DefaultTabbedPaneFactory(tda);
 		}
 		/*
-		 * if (panelowner) { Vector panels = tm.getPanels(); TabDescriptor[] tda = new TabDescriptor[panels.size()]; for
-		 * (int i = 0, len = panels.size(); i < len; i++) { PanelModel panel = (PanelModel) panels.elementAt(i); String
-		 * t = panel.getTabTitle(); char m = (t != null ? panel.getTabMnemonic() : "" + i).charAt(0); String ttt =
-		 * panel.getTabToolTipText(); tda[i] = new DefaultTabDescriptor((t != null ? t : "" + i + ".Reiter"), m, null );
-		 * } if (tm.isInherited()) { for (int i = 0, len = tm.getTabellenspaltenCount(); i < len; i++) {
-		 * TabellenspaltenModel tsm = tm.getTabellenspalteAt(i); String name = tsm.getName(); if (tsm.isPrimarykey() &&
-		 * (tsm.getRelation() != null)) { TabellenModel tm0 = tsm.getRelation().getReferenced().getTabelle();
-		 * TabbedPaneFactory tpf0 = this.getTabbedPaneFactory(tm0.getName()); Vector<TabDescriptor> vtd =
-		 * tpf0.getTabDescriptors(); if (vtd.size() > 0) { TabDescriptor[] tda0 = new TabDescriptor[/*tda.length +
+		 * if (panelowner) { Vector panels = tm.getPanels(); TabDescriptor[] tda = new
+		 * TabDescriptor[panels.size()]; for (int i = 0, len = panels.size(); i < len;
+		 * i++) { PanelModel panel = (PanelModel) panels.elementAt(i); String t =
+		 * panel.getTabTitle(); char m = (t != null ? panel.getTabMnemonic() : "" +
+		 * i).charAt(0); String ttt = panel.getTabToolTipText(); tda[i] = new
+		 * DefaultTabDescriptor((t != null ? t : "" + i + ".Reiter"), m, null ); } if
+		 * (tm.isInherited()) { for (int i = 0, len = tm.getTabellenspaltenCount(); i <
+		 * len; i++) { TabellenspaltenModel tsm = tm.getTabellenspalteAt(i); String name
+		 * = tsm.getName(); if (tsm.isPrimarykey() && (tsm.getRelation() != null)) {
+		 * TabellenModel tm0 = tsm.getRelation().getReferenced().getTabelle();
+		 * TabbedPaneFactory tpf0 = this.getTabbedPaneFactory(tm0.getName());
+		 * Vector<TabDescriptor> vtd = tpf0.getTabDescriptors(); if (vtd.size() > 0) {
+		 * TabDescriptor[] tda0 = new TabDescriptor[/*tda.length +
 		 *//*
 			 * vtd.size()]; /* for (int j = 0; j < tda.length; j++) { tda0[j] = tda[j]; }
 			 *//*
 				 * for (int j = 0, lenj = vtd.size(); j < lenj; j++) { tda0[/*tda.length+
 				 *//*
-					 * j] = vtd.elementAt(j); } tda = tda0; } } } } tpf = new DefaultTabbedPaneFactory(tda); }
+					 * j] = vtd.elementAt(j); } tda = tda0; } } } } tpf = new
+					 * DefaultTabbedPaneFactory(tda); }
 					 */
 		return tpf;
 	}
 
+	@Override
 	public OrderByDescriptor getOrderByDescriptor(PersistenceDescriptor pd, String tn) {
 		DefaultOrderByDescriptor dobd = new DefaultOrderByDescriptor();
 		TabellenModel tm = this.dm.getTabelle(tn);
@@ -667,9 +704,11 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 	}
 
 	/**
-	 * Im Gegensatz zur Standarddefinition der Methode sei hier angemerkt, da&szlig; die Spaltennamen einen
-	 * vorangestellten Asterix erhalten, wenn es sich um kodierte Spalten handelt.
+	 * Im Gegensatz zur Standarddefinition der Methode sei hier angemerkt, da&szlig;
+	 * die Spaltennamen einen vorangestellten Asterix erhalten, wenn es sich um
+	 * kodierte Spalten handelt.
 	 */
+	@Override
 	public String[] createFilter(String tn) {
 		TabellenModel tm = this.dm.getTabelle(tn);
 		Vector v = tm.getAuswahlMembers();
@@ -682,6 +721,7 @@ public class DefaultArchimedesDescriptorFactory implements ArchimedesDescriptorF
 		return sarr;
 	}
 
+	@Override
 	public DiagrammModel getDiagrammModel() {
 		return this.dm;
 	}
@@ -703,6 +743,7 @@ class SortedDED implements Comparable {
 
 	/* Implementierung des Interfaces Comparable. */
 
+	@Override
 	public int compareTo(Object o) {
 		SortedDED sded = (SortedDED) o;
 		int erg = new Integer(this.sort).compareTo(new Integer(sded.sort));

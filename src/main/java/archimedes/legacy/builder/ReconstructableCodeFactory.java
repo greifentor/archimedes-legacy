@@ -31,6 +31,7 @@ import archimedes.model.ToStringContainerModel;
 import corent.base.SortedVector;
 import corent.base.StrUtil;
 import corent.dates.PDate;
+import logging.Logger;
 
 /**
  * Diese Variante der CodeFactory dient der Generierung von
@@ -47,6 +48,8 @@ import corent.dates.PDate;
 
 public class ReconstructableCodeFactory extends DefaultCodeFactory {
 
+	private static final Logger log = Logger.getLogger(ReconstructableCodeFactory.class);
+
 	/* Liste der zu importierenden Packages. */
 	private Hashtable imports = new Hashtable();
 
@@ -58,9 +61,10 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 	/* Implementierung des Interfaces CodeFactory. */
 
 	/**
-	 * @changed OLI 28.03.2008 - Erweiterung um die F&auml;higkeit Ressourcen zu
-	 *          den Tabellen zu produzieren.
+	 * @changed OLI 28.03.2008 - Erweiterung um die F&auml;higkeit Ressourcen zu den
+	 *          Tabellen zu produzieren.
 	 */
+	@Override
 	protected void codeTable(TabellenModel tm, DiagrammModel dm, String out) throws Exception {
 		SortedVector res = new SortedVector();
 		String classname = null;
@@ -289,16 +293,16 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 					+ "ReconstructableDBFactory<" + tm.getName() + "> implements " + "GenerateExpander {");
 		}
 		// Konstantensammlung f&uuml;r das Attributed-Interface herstellen.
-		// zeilen.addElement("    /* Einfacher Zugriff auf die Klassen-Daten. */");
-		// zeilen.addElement("    public static final Class CLASS = new " +
+		// zeilen.addElement(" /* Einfacher Zugriff auf die Klassen-Daten. */");
+		// zeilen.addElement(" public static final Class CLASS = new " +
 		// tm.getName()
 		// + (tm.isDynamicCode() ? "Udschebti" : "") + "().getClass();");
 		if (!tm.isDynamicCode()) {
 			zeilen.addElement("");
 			for (int i = 0, len = tm.getTabellenspaltenCount(); i < len; i++) {
 				TabellenspaltenModel tsm = tm.getTabellenspalteAt(i);
-				zeilen.addElement("    /** Bezeichner f&uuml;r den Zugriff auf die Eigenschaft " + tsm.getName()
-						+ ". */");
+				zeilen.addElement(
+						"    /** Bezeichner f&uuml;r den Zugriff auf die Eigenschaft " + tsm.getName() + ". */");
 				zeilen.addElement("    public static final int ID_" + tsm.getName().toUpperCase() + " = " + i + ";");
 			}
 			zeilen.addElement("");
@@ -317,9 +321,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 				if (deaktivierbar && tsm.getName().equalsIgnoreCase("geloescht")) {
 					s = s.concat("StatusColumn");
 				} else {
-					s = s.concat("new ColumnRecord(ID_" + tsm.getName().toUpperCase() + ", \"" + tm.getName()
-							+ "\", \"" + tsm.getName())
-							+ "\"";
+					s = s.concat("new ColumnRecord(ID_" + tsm.getName().toUpperCase() + ", \"" + tm.getName() + "\", \""
+							+ tsm.getName()) + "\"";
 					if (tsm.isPrimarykey()) {
 						s = s.concat(", true");
 					}
@@ -338,9 +341,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 			for (int i = 0, len = tm.getTabellenspaltenCount(); i < len; i++) {
 				TabellenspaltenModel tsm = tm.getTabellenspalteAt(i);
 				// if (!tsm.isPrimarykey()) {
-				tsms
-						.addElement(new TSMSortContainer(GetType(tsm.getDomain()) + " " + tsm.getName().toLowerCase(),
-								tsm));
+				tsms.addElement(
+						new TSMSortContainer(GetType(tsm.getDomain()) + " " + tsm.getName().toLowerCase(), tsm));
 				// }
 			}
 			// Attribute definieren.
@@ -353,8 +355,9 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 			}
 			zeilen.addElement("");
 		} else {
-			// zeilenSkeleton.addElement("    /** Einfacher Zugriff auf die Klassen-Daten. */");
-			// zeilenSkeleton.addElement("    public static final Class CLASS = new "
+			// zeilenSkeleton.addElement(" /** Einfacher Zugriff auf die Klassen-Daten.
+			// */");
+			// zeilenSkeleton.addElement(" public static final Class CLASS = new "
 			// + tm.getName() + "().getClass();");
 			if (cached) {
 				zeilenSkeleton.addElement("");
@@ -384,21 +387,21 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 			zeilen.addElement("    /**");
 			zeilen.addElement("     * Generiert eine Instanz der Klasse mit Defaultwerten.");
 			zeilen.addElement("     *");
-			zeilen.addElement("     * @param adf Die ArchimedesDescriptorFactory, aus der die "
-					+ "Instanz ihre Konfiguration ");
+			zeilen.addElement(
+					"     * @param adf Die ArchimedesDescriptorFactory, aus der die " + "Instanz ihre Konfiguration ");
 			zeilen.addElement("     *     beziehen soll.");
 			zeilen.addElement("     * @param tn Der Name der Tabelle, auf die sich die Klasse " + "beziehen soll.");
 			zeilen.addElement("     */");
-			zeilen.addElement("    protected " + tm.getName() + "Udschebti("
-					+ "ArchimedesDescriptorFactory adf, String tn) {");
+			zeilen.addElement(
+					"    protected " + tm.getName() + "Udschebti(" + "ArchimedesDescriptorFactory adf, String tn) {");
 			zeilen.addElement("        super(adf, tn);");
 			zeilen.addElement("    }");
 			zeilen.addElement("");
 			zeilen.addElement("    /**");
 			zeilen.addElement("     * Generiert eine Instanz der Klasse mit Defaultwerten.");
 			zeilen.addElement("     *");
-			zeilen.addElement("     * @param adf Die ArchimedesDescriptorFactory, aus der die "
-					+ "Instanz ihre Konfiguration ");
+			zeilen.addElement(
+					"     * @param adf Die ArchimedesDescriptorFactory, aus der die " + "Instanz ihre Konfiguration ");
 			zeilen.addElement("     *     beziehen soll.");
 			zeilen.addElement("     */");
 			zeilen.addElement("    public " + tm.getName() + "Udschebti(" + "ArchimedesDescriptorFactory adf) {");
@@ -414,22 +417,22 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 			zeilenSkeleton.addElement("    /**");
 			zeilenSkeleton.addElement("     * Generiert eine Instanz der Klasse mit " + "Defaultwerten.");
 			zeilenSkeleton.addElement("     *");
-			zeilenSkeleton.addElement("     * @param adf Die ArchimedesDescriptorFactory, "
-					+ "aus der die Instanz ihre Konfiguration ");
+			zeilenSkeleton.addElement(
+					"     * @param adf Die ArchimedesDescriptorFactory, " + "aus der die Instanz ihre Konfiguration ");
 			zeilenSkeleton.addElement("     *     beziehen soll.");
-			zeilenSkeleton.addElement("     * @param tn Der Name der Tabelle, auf die sich "
-					+ "die Klasse beziehen soll.");
+			zeilenSkeleton
+					.addElement("     * @param tn Der Name der Tabelle, auf die sich " + "die Klasse beziehen soll.");
 			zeilenSkeleton.addElement("     */");
-			zeilenSkeleton.addElement("    protected " + tm.getName() + "("
-					+ "ArchimedesDescriptorFactory adf, String tn) {");
+			zeilenSkeleton.addElement(
+					"    protected " + tm.getName() + "(" + "ArchimedesDescriptorFactory adf, String tn) {");
 			zeilenSkeleton.addElement("        super(adf, tn);");
 			zeilenSkeleton.addElement("    }");
 			zeilenSkeleton.addElement("");
 			zeilenSkeleton.addElement("    /**");
 			zeilenSkeleton.addElement("     * Generiert eine Instanz der Klasse mit " + "Defaultwerten.");
 			zeilenSkeleton.addElement("     *");
-			zeilenSkeleton.addElement("     * @param adf Die ArchimedesDescriptorFactory, "
-					+ "aus der die Instanz ihre Konfiguration ");
+			zeilenSkeleton.addElement(
+					"     * @param adf Die ArchimedesDescriptorFactory, " + "aus der die Instanz ihre Konfiguration ");
 			zeilenSkeleton.addElement("     *     beziehen soll.");
 			zeilenSkeleton.addElement("     */");
 			zeilenSkeleton.addElement("    public " + tm.getName() + "(" + "ArchimedesDescriptorFactory adf) {");
@@ -441,8 +444,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 			zeilenDBFactory.addElement("    /**");
 			zeilenDBFactory.addElement("     * Generiert eine Instanz der Klasse mit " + "Defaultwerten.");
 			zeilenDBFactory.addElement("     *");
-			zeilenDBFactory.addElement("     * @param adf Die ArchimedesDescriptorFactory, "
-					+ "aus der die Instanz ihre Konfiguration ");
+			zeilenDBFactory.addElement(
+					"     * @param adf Die ArchimedesDescriptorFactory, " + "aus der die Instanz ihre Konfiguration ");
 			zeilenDBFactory.addElement("     *     beziehen soll.");
 			zeilenDBFactory.addElement("     */");
 			zeilenDBFactory.addElement("    public DBFactory" + tm.getName() + "(ArchimedesDescriptorFactory adf) {");
@@ -495,118 +498,93 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 			zeilenDBFactory.addElement("    }");
 			zeilenDBFactory.addElement("");
 			/*
-			 * Vector vnr = tm.getNReferenzen(); if (vnr.size() > 0) {
-			 * NReferenzModel nr = (NReferenzModel) vnr.elementAt(0);
-			 * TabellenspaltenModel tsm = nr.getTabellenspalte(); TabellenModel
-			 * tmr = tsm.getTabelle(); String tmn = tm.getName(); String tmnr =
-			 * tmr.getName(); zeilenDBFactory.addElement("    public Vector<" +
-			 * tm + "> read(String w, " + "Connection c, OrderByDescriptor o)");
+			 * Vector vnr = tm.getNReferenzen(); if (vnr.size() > 0) { NReferenzModel nr =
+			 * (NReferenzModel) vnr.elementAt(0); TabellenspaltenModel tsm =
+			 * nr.getTabellenspalte(); TabellenModel tmr = tsm.getTabelle(); String tmn =
+			 * tm.getName(); String tmnr = tmr.getName();
+			 * zeilenDBFactory.addElement("    public Vector<" + tm + "> read(String w, " +
+			 * "Connection c, OrderByDescriptor o)");
 			 * zeilenDBFactory.addElement("            throws SQLException {");
 			 * zeilenDBFactory.addElement("        return this.read(w, c);");
-			 * zeilenDBFactory.addElement("    }");
-			 * zeilenDBFactory.addElement("");
-			 * zeilenDBFactory.addElement("    public Vector<" + tmn +
-			 * "> read(String w, " + "Connection c) throws SQLException {");
-			 * zeilenDBFactory.addElement("        " + tmn + " o = new " + tmn +
-			 * "(this.adf);"); zeilenDBFactory.addElement("        " + tmnr +
-			 * " r = new " + tmnr + "(this.adf);");
-			 * zeilenDBFactory.addElement("        Vector<" + tmn +
+			 * zeilenDBFactory.addElement("    }"); zeilenDBFactory.addElement("");
+			 * zeilenDBFactory.addElement("    public Vector<" + tmn + "> read(String w, " +
+			 * "Connection c) throws SQLException {"); zeilenDBFactory.addElement("        "
+			 * + tmn + " o = new " + tmn + "(this.adf);");
+			 * zeilenDBFactory.addElement("        " + tmnr + " r = new " + tmnr +
+			 * "(this.adf);"); zeilenDBFactory.addElement("        Vector<" + tmn +
 			 * "> v = new Vector<" + tmn + ">();");
-			 * zeilenDBFactory.addElement("        int ofieldcount = DBFactoryUtil."
-			 * + "GetSelectionFieldCount(o.getPersistenceDescriptor());");
-			 * zeilenDBFactory
+			 * zeilenDBFactory.addElement("        int ofieldcount = DBFactoryUtil." +
+			 * "GetSelectionFieldCount(o.getPersistenceDescriptor());"); zeilenDBFactory
 			 * .addElement("        int rfieldcount = DBFactoryUtil." +
-			 * "GetSelectionFieldCount(r.getPersistenceDescriptor());");
-			 * zeilenDBFactory
+			 * "GetSelectionFieldCount(r.getPersistenceDescriptor());"); zeilenDBFactory
 			 * .addElement("        String select = DBFactoryUtil." +
-			 * "GetSelectionFields(o.getPersistenceDescriptor());");
-			 * zeilenDBFactory
+			 * "GetSelectionFields(o.getPersistenceDescriptor());"); zeilenDBFactory
 			 * .addElement("        select = select.concat(\", \").concat(" +
 			 * "DBFactoryUtil.GetSelectionFields(");zeilenDBFactory.addElement(
-			 * "                r.getPersistenceDescriptor()));" );
-			 * zeilenDBFactory
+			 * "                r.getPersistenceDescriptor()));" ); zeilenDBFactory
 			 * .addElement("        select = \"select \".concat(select)." +
 			 * "concat(\" from " + tmn + "\\n\"");
-			 * zeilenDBFactory.addElement("                + \"left outer join "
-			 * + tmnr + " on" + " " + tsm.getFullName() + "=" + tmn + "." +
-			 * tm.getPrimaryKeyName() + "\\n\");");zeilenDBFactory.addElement(
-			 * "        if ((w != null) && !w.equals(\"\")) {");
-			 * zeilenDBFactory.
+			 * zeilenDBFactory.addElement("                + \"left outer join " + tmnr +
+			 * " on" + " " + tsm.getFullName() + "=" + tmn + "." + tm.getPrimaryKeyName() +
+			 * "\\n\");");zeilenDBFactory.addElement(
+			 * "        if ((w != null) && !w.equals(\"\")) {"); zeilenDBFactory.
 			 * addElement("            select = select.concat(\"where \" " +
-			 * "+ w + \"\\n\");"); zeilenDBFactory.addElement("        }");
-			 * zeilenDBFactory
-			 * .addElement("        select = select.concat(\"order by " + tmn +
-			 * "." + tm.getPrimaryKeyName() + ", " + tmnr + "." +
-			 * tmr.getPrimaryKeyName() + "\\n\");");zeilenDBFactory.addElement(
-			 * "        ResultSet rs = DBExec.Query(c, select);" );
-			 * zeilenDBFactory
+			 * "+ w + \"\\n\");"); zeilenDBFactory.addElement("        }"); zeilenDBFactory
+			 * .addElement("        select = select.concat(\"order by " + tmn + "." +
+			 * tm.getPrimaryKeyName() + ", " + tmnr + "." + tmr.getPrimaryKeyName() +
+			 * "\\n\");");zeilenDBFactory.addElement(
+			 * "        ResultSet rs = DBExec.Query(c, select);" ); zeilenDBFactory
 			 * .addElement("            int oid = rs.getInt(1);");
-			 * zeilenDBFactory.addElement("            if (oid != o.get" + tmn +
-			 * "()) {"); zeilenDBFactory.addElement("                o = (" +
-			 * tmn +
-			 * ") DBFactoryUtil.GetFromRS(rs, o.getPersistenceDescriptor(), o, "
-			 * + "1, 1);"); zeilenDBFactory.addElement("                o.set" +
-			 * tmn + "(oid);");
-			 * zeilenDBFactory.addElement("                v.addElement(o);");
-			 * zeilenDBFactory.addElement("            }");
-			 * zeilenDBFactory.addElement
+			 * zeilenDBFactory.addElement("            if (oid != o.get" + tmn + "()) {");
+			 * zeilenDBFactory.addElement("                o = (" + tmn +
+			 * ") DBFactoryUtil.GetFromRS(rs, o.getPersistenceDescriptor(), o, " +
+			 * "1, 1);"); zeilenDBFactory.addElement("                o.set" + tmn +
+			 * "(oid);"); zeilenDBFactory.addElement("                v.addElement(o);");
+			 * zeilenDBFactory.addElement("            }"); zeilenDBFactory.addElement
 			 * ("            int rid = rs.getInt(ofieldcount+1);" );
-			 * zeilenDBFactory.addElement("            if (rid != r.get" + tmnr
-			 * + "()) {"); zeilenDBFactory.addElement("                r = (" +
-			 * tmnr +
+			 * zeilenDBFactory.addElement("            if (rid != r.get" + tmnr + "()) {");
+			 * zeilenDBFactory.addElement("                r = (" + tmnr +
 			 * ") DBFactoryUtil.GetFromRS(rs, r.getPersistenceDescriptor(), r,"
-			 * );zeilenDBFactory.addElement(
-			 * "                        ofieldcount+1, 1);");
-			 * zeilenDBFactory.addElement("                r.set" + tmnr +
-			 * "(rid);"); zeilenDBFactory.addElement("                o.get" +
-			 * tmnr + "().addElement(r);");
-			 * zeilenDBFactory.addElement("            }");
+			 * );zeilenDBFactory.addElement( "                        ofieldcount+1, 1);");
+			 * zeilenDBFactory.addElement("                r.set" + tmnr + "(rid);");
+			 * zeilenDBFactory.addElement("                o.get" + tmnr +
+			 * "().addElement(r);"); zeilenDBFactory.addElement("            }");
 			 * zeilenDBFactory.addElement("        }");
 			 * zeilenDBFactory.addElement("        DBExec.CloseQuery(rs);");
 			 * zeilenDBFactory.addElement("        return v;");
-			 * zeilenDBFactory.addElement("    }");
-			 * zeilenDBFactory.addElement("");
-			 * zeilenDBFactory.addElement("    public void write(" + tmn +
-			 * " o, " + "Connection c) throws SQLException {");
-			 * zeilenDBFactory.addElement("        super.write(o, c);");
-			 * zeilenDBFactory
-			 * .addElement("        DBExec.Update(c, \"delete from " + tmnr +
-			 * "where " + tmn + "=\" + o.get" + tmn + "());");
-			 * zeilenDBFactory.addElement("        DBFactory" + tmnr +
-			 * " dbfr = new " + "DBFactory" + tmnr + "(this.adf);");
-			 * zeilenDBFactory.addElement("        for (int i = 0, len = o.get"
-			 * + tmnr + "().size(); i < len; i++) {");
-			 * zeilenDBFactory.addElement("            " + tmnr + " r = (" +
-			 * tmnr + ") o.get" + tmnr + "().get(i);");
+			 * zeilenDBFactory.addElement("    }"); zeilenDBFactory.addElement("");
+			 * zeilenDBFactory.addElement("    public void write(" + tmn + " o, " +
+			 * "Connection c) throws SQLException {");
+			 * zeilenDBFactory.addElement("        super.write(o, c);"); zeilenDBFactory
+			 * .addElement("        DBExec.Update(c, \"delete from " + tmnr + "where " + tmn
+			 * + "=\" + o.get" + tmn + "());");
+			 * zeilenDBFactory.addElement("        DBFactory" + tmnr + " dbfr = new " +
+			 * "DBFactory" + tmnr + "(this.adf);");
+			 * zeilenDBFactory.addElement("        for (int i = 0, len = o.get" + tmnr +
+			 * "().size(); i < len; i++) {"); zeilenDBFactory.addElement("            " +
+			 * tmnr + " r = (" + tmnr + ") o.get" + tmnr + "().get(i);");
 			 * zeilenDBFactory.addElement("            r.setADF(this.adf);");
-			 * zeilenDBFactory.addElement("            r.set" + tmnr + "(k.get"
-			 * + tmn + "() * 1000 + i+1);");
+			 * zeilenDBFactory.addElement("            r.set" + tmnr + "(k.get" + tmn +
+			 * "() * 1000 + i+1);");
 			 * zeilenDBFactory.addElement("            dbfk.write(k, c);");
-			 * zeilenDBFactory.addElement("        }");
-			 * zeilenDBFactory.addElement("    }");
+			 * zeilenDBFactory.addElement("        }"); zeilenDBFactory.addElement("    }");
 			 * zeilenDBFactory.addElement("");
-			 * zeilenDBFactory.addElement("    public void remove(" + tmn +
-			 * " o, boolean " + "forced, Connection c) throws SQLException {");
-			 * zeilenDBFactory
-			 * .addElement("        super.remove(o, forced, c);"); boolean
-			 * rdeact = false; for (int i = 0, len = tmr.getStereotypenCount();
-			 * i < len; i++) { StereotypeModel stm = tmr.getStereotypeAt(i); if
+			 * zeilenDBFactory.addElement("    public void remove(" + tmn + " o, boolean " +
+			 * "forced, Connection c) throws SQLException {"); zeilenDBFactory
+			 * .addElement("        super.remove(o, forced, c);"); boolean rdeact = false;
+			 * for (int i = 0, len = tmr.getStereotypenCount(); i < len; i++) {
+			 * StereotypeModel stm = tmr.getStereotypeAt(i); if
 			 * (stm.getName().equalsIgnoreCase("deaktivierbar") ||
-			 * stm.getName().equalsIgnoreCase("deactivatable")) { rdeact = true;
-			 * break; } } if (rdeact) {
-			 * zeilenDBFactory.addElement("        if (forced) {");
-			 * zeilenDBFactory
-			 * .addElement("            DBExec.Update(c, \"delete from " + tmnr
-			 * + " where " + tmn + "=\" + o.get" + tmn + "());");
-			 * zeilenDBFactory.addElement("        } else {");
-			 * zeilenDBFactory.addElement
-			 * ("            DBExec.Update(c, \"update " + tmnr +
-			 * " set Geloescht=1 where " + tmn + "=\" + o.get" + tmn + "());");
-			 * zeilenDBFactory.addElement("        }"); } else {
-			 * zeilenDBFactory.
-			 * addElement("        DBExec.Update(c, \"delete from " + tmnr +
-			 * " where " + tmn + "=\" + o.get" + tmn + "());"); }
-			 * zeilenDBFactory.addElement("    }");
+			 * stm.getName().equalsIgnoreCase("deactivatable")) { rdeact = true; break; } }
+			 * if (rdeact) { zeilenDBFactory.addElement("        if (forced) {");
+			 * zeilenDBFactory .addElement("            DBExec.Update(c, \"delete from " +
+			 * tmnr + " where " + tmn + "=\" + o.get" + tmn + "());");
+			 * zeilenDBFactory.addElement("        } else {"); zeilenDBFactory.addElement
+			 * ("            DBExec.Update(c, \"update " + tmnr + " set Geloescht=1 where "
+			 * + tmn + "=\" + o.get" + tmn + "());");
+			 * zeilenDBFactory.addElement("        }"); } else { zeilenDBFactory.
+			 * addElement("        DBExec.Update(c, \"delete from " + tmnr + " where " + tmn
+			 * + "=\" + o.get" + tmn + "());"); } zeilenDBFactory.addElement("    }");
 			 * zeilenDBFactory.addElement(""); }
 			 */
 			zeilenDBFactory.addElement("}");
@@ -627,18 +605,17 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 				zeilen.addElement("    }");
 				zeilen.addElement("");
 				zeilen.addElement("    /**");
-				zeilen.addElement("     * Setzt den &uuml;bergebenen Wert als neuen Wert "
-						+ "f&uuml;r die Eigenschaft " + n + ".");
+				zeilen.addElement("     * Setzt den &uuml;bergebenen Wert als neuen Wert " + "f&uuml;r die Eigenschaft "
+						+ n + ".");
 				zeilen.addElement("     *");
-				zeilen
-						.addElement("     * @param " + n.toLowerCase() + " Der neue Wert der " + "Eigenschaft " + n
-								+ ".");
+				zeilen.addElement(
+						"     * @param " + n.toLowerCase() + " Der neue Wert der " + "Eigenschaft " + n + ".");
 				zeilen.addElement("     */");
 				zeilen.addElement("    public void set" + n + "(" + t + " " + n.toLowerCase() + ") {");
 				if (IsReference(tsm.getDomain())) {
 					zeilen.addElement("        if (" + n.toLowerCase() + " == null) {");
-					zeilen.addElement("            this." + n.toLowerCase() + " = " + GetInitializer(tsm.getDomain())
-							+ ";");
+					zeilen.addElement(
+							"            this." + n.toLowerCase() + " = " + GetInitializer(tsm.getDomain()) + ";");
 					zeilen.addElement("        }");
 				}
 				zeilen.addElement("        this." + n.toLowerCase() + " = " + n.toLowerCase() + ";");
@@ -767,11 +744,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 				zeilen.addElement("        case ID_" + tsm.getName().toUpperCase() + ":");
 				String n = tsm.getName();
 				String t = GetType(tsm.getDomain());
-				String s = "this.set"
-						+ n
-						+ "("
-						+ (IsReference(tsm.getDomain()) ? "(" + t + ") value" : "((" + GetWrapper(t) + ") value)." + t
-								+ "Value()") + ")";
+				String s = "this.set" + n + "(" + (IsReference(tsm.getDomain()) ? "(" + t + ") value"
+						: "((" + GetWrapper(t) + ") value)." + t + "Value()") + ")";
 				zeilen.addElement("            " + s + ";");
 				zeilen.addElement("            return;");
 			}
@@ -825,11 +799,11 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 				TabellenspaltenModel tsm = tm.getTabellenspalteAt(i);
 				if (tsm.isEditormember()) {
 					String n = tsm.getName();
-					zeilen.addElement("        dedl.addElement(new DefaultEditorDescriptor("
-							+ tsm.getPanel().getPanelNumber() + ", this, ID_" + n.toUpperCase() + ", dlf, dcf, \""
-							+ tsm.getLabelText() + "\", '"
-							+ (tsm.getMnemonic().length() > 0 ? tsm.getMnemonic().charAt(0) : "\0") + "', null, \""
-							+ tsm.getToolTipText() + "\"));");
+					zeilen.addElement(
+							"        dedl.addElement(new DefaultEditorDescriptor(" + tsm.getPanel().getPanelNumber()
+									+ ", this, ID_" + n.toUpperCase() + ", dlf, dcf, \"" + tsm.getLabelText() + "\", '"
+									+ (tsm.getMnemonic().length() > 0 ? tsm.getMnemonic().charAt(0) : "\0")
+									+ "', null, \"" + tsm.getToolTipText() + "\"));");
 				}
 			}
 			zeilen.addElement("        return dedl;");
@@ -841,8 +815,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 			zeilen.addElement("");
 			zeilen.addElement("    public Object createObject(Object blueprint) throws " + "ClassCastException {");
 			zeilen.addElement("        if (!(blueprint instanceof " + tm.getName() + ")) {");
-			zeilen.addElement("            throw new ClassCastException(\"Instance of " + tm.getName()
-					+ " required!\");");
+			zeilen.addElement(
+					"            throw new ClassCastException(\"Instance of " + tm.getName() + " required!\");");
 			zeilen.addElement("        }");
 			zeilen.addElement("        " + tm.getName() + " newone = (" + tm.getName() + ") this.createObject();");
 			zeilen.addElement("        " + tm.getName() + " bp = (" + tm.getName() + ") blueprint;");
@@ -891,8 +865,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 				if (IsNumber(tsm.getDomain())) {
 					zeilen.addElement("        " + t + " " + sf + " = " + GetInitializerValue(tsm.getDomain()) + ";");
 					zeilen.addElement("        if (" + n.toLowerCase() + " != null) {");
-					zeilen.addElement("            " + sf + " = ((" + (t.equals("boolean") ? "Boolean" : "Number")
-							+ ")" + " " + n.toLowerCase() + ")." + t + "Value();");
+					zeilen.addElement("            " + sf + " = ((" + (t.equals("boolean") ? "Boolean" : "Number") + ")"
+							+ " " + n.toLowerCase() + ")." + t + "Value();");
 					zeilen.addElement("        }");
 					zeilen.addElement("        return " + sf + ";");
 				} else {
@@ -907,12 +881,11 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 				zeilen.addElement("    }");
 				zeilen.addElement("");
 				zeilen.addElement("    /**");
-				zeilen.addElement("     * Setzt den &uuml;bergebenen Wert als neuen Wert "
-						+ "f&uuml;r die Eigenschaft " + n + ".");
+				zeilen.addElement("     * Setzt den &uuml;bergebenen Wert als neuen Wert " + "f&uuml;r die Eigenschaft "
+						+ n + ".");
 				zeilen.addElement("     *");
-				zeilen
-						.addElement("     * @param " + n.toLowerCase() + " Der neue Wert der " + "Eigenschaft " + n
-								+ ".");
+				zeilen.addElement(
+						"     * @param " + n.toLowerCase() + " Der neue Wert der " + "Eigenschaft " + n + ".");
 				zeilen.addElement("     */");
 				zeilen.addElement("    public void set" + n + "(" + t + " " + n.toLowerCase() + ") {");
 				if (IsReference(tsm.getDomain()) && !t.equals("int")) {
@@ -945,8 +918,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 			zeilen.addElement("    /* Implementierung der abstrakten Methoden der Superklasse. " + "*/");
 			zeilen.addElement("");
 			zeilen.addElement("    public Object createObject() {");
-			zeilen.addElement("        return new " + tm.getName() + (tm.isDynamicCode() ? "Udschebti" : "")
-					+ "(this.adf);");
+			zeilen.addElement(
+					"        return new " + tm.getName() + (tm.isDynamicCode() ? "Udschebti" : "") + "(this.adf);");
 			zeilen.addElement("    }");
 			zeilen.addElement("");
 			if (tm.isDynamicCode()) {
@@ -957,8 +930,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 				zeilenSkeleton.addElement("    }");
 				zeilenSkeleton.addElement("");
 				zeilenSkeleton.addElement("");
-				zeilenSkeleton.addElement("    /* Implementation (completion) of the abstract "
-						+ "methods of the super class. */");
+				zeilenSkeleton.addElement(
+						"    /* Implementation (completion) of the abstract " + "methods of the super class. */");
 				zeilenSkeleton.addElement("");
 				zeilenSkeleton.addElement("    public long getObjectnumber() {");
 				zeilenSkeleton.addElement("        return this.getObjectNo();");
@@ -987,31 +960,26 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 				zeilen.addElement("");
 			}
 			/*
-			 * SortedVector svi = new SortedVector(); if (tabbed) {
-			 * zeilen.addElement("");
-			 * zeilen.addElement("    /* Implementierung des Interfaces Tabbed. * /"
-			 * ); zeilen.addElement(""); int panel = 0; for (int i = 0, len =
-			 * tm.getTabellenspaltenCount(); i < len; i++) {
-			 * TabellenspaltenModel tsm = tm.getTabellenspalteAt(i); if
-			 * (!svi.contains(new Integer(tsm.getPanelNumber()))) {
-			 * svi.addElement(new Integer(tsm.getPanelNumber())); if (panel <
-			 * tsm.getPanelNumber()) { panel = tsm.getPanelNumber(); } } } for
-			 * (int i = 0, len = tm.getNReferenzModelCount(); i < len; i++) {
-			 * NReferenzModel nrm = tm.getNReferenzModelAt(i); panel++; if
-			 * (!svi.contains(new Integer(panel))) { svi.addElement(new
-			 * Integer(panel)); } }zeilen.addElement(
-			 * "    public TabbedPaneFactory getTabbedPaneFactory() {"); String
-			 * std =
-			 * "        return new DefaultTabbedPaneFactory(new TabDescriptor[] "
-			 * + "{"; for (int i = 0, len = svi.size(); i < len; i++) { int id =
-			 * ((Integer) svi.elementAt(i)).intValue() + 1; if (i > 0) { std +=
-			 * ", "; } String t = tm.getTabTitle(id); String ttt =
-			 * tm.getTabToolTipText(id); std += "new DefaultTabDescriptor(\"" +
-			 * (t != null ? t : "" + id + ".Reiter" )+ "\", '" + (t != null ?
-			 * tm.getTabMnemonic(id) : "" + id) + "', " + (ttt != null ? "\"" +
-			 * ttt + "\"" : "null") + ")"; } std += "});";
-			 * zeilen.addElement(std); zeilen.addElement("    }");
-			 * zeilen.addElement(""); }
+			 * SortedVector svi = new SortedVector(); if (tabbed) { zeilen.addElement("");
+			 * zeilen.addElement("    /* Implementierung des Interfaces Tabbed. * /" );
+			 * zeilen.addElement(""); int panel = 0; for (int i = 0, len =
+			 * tm.getTabellenspaltenCount(); i < len; i++) { TabellenspaltenModel tsm =
+			 * tm.getTabellenspalteAt(i); if (!svi.contains(new
+			 * Integer(tsm.getPanelNumber()))) { svi.addElement(new
+			 * Integer(tsm.getPanelNumber())); if (panel < tsm.getPanelNumber()) { panel =
+			 * tsm.getPanelNumber(); } } } for (int i = 0, len =
+			 * tm.getNReferenzModelCount(); i < len; i++) { NReferenzModel nrm =
+			 * tm.getNReferenzModelAt(i); panel++; if (!svi.contains(new Integer(panel))) {
+			 * svi.addElement(new Integer(panel)); } }zeilen.addElement(
+			 * "    public TabbedPaneFactory getTabbedPaneFactory() {"); String std =
+			 * "        return new DefaultTabbedPaneFactory(new TabDescriptor[] " + "{"; for
+			 * (int i = 0, len = svi.size(); i < len; i++) { int id = ((Integer)
+			 * svi.elementAt(i)).intValue() + 1; if (i > 0) { std += ", "; } String t =
+			 * tm.getTabTitle(id); String ttt = tm.getTabToolTipText(id); std +=
+			 * "new DefaultTabDescriptor(\"" + (t != null ? t : "" + id + ".Reiter" )+
+			 * "\", '" + (t != null ? tm.getTabMnemonic(id) : "" + id) + "', " + (ttt !=
+			 * null ? "\"" + ttt + "\"" : "null") + ")"; } std += "});";
+			 * zeilen.addElement(std); zeilen.addElement("    }"); zeilen.addElement(""); }
 			 */
 		}
 		zeilen.addElement("}");
@@ -1049,8 +1017,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 				zeilenSkeleton.addElement("");
 				zeilenSkeleton.addElement("    /* Implementierung des Interfaces " + "EditorDjinnMaster. */");
 				zeilenSkeleton.addElement("");
-				zeilenSkeleton.addElement("    public boolean doAfterCleanUp(Hashtable<String, "
-						+ "java.awt.Component> comps) {");
+				zeilenSkeleton.addElement(
+						"    public boolean doAfterCleanUp(Hashtable<String, " + "java.awt.Component> comps) {");
 				zeilenSkeleton.addElement("        return true;");
 				zeilenSkeleton.addElement("    }");
 				zeilenSkeleton.addElement("");
@@ -1063,8 +1031,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 				zeilenSkeleton.addElement("        return true;");
 				zeilenSkeleton.addElement("    }");
 				zeilenSkeleton.addElement("");
-				zeilenSkeleton.addElement("    public boolean doBeforeDelete(Hashtable<String, "
-						+ "java.awt.Component> comps) {");
+				zeilenSkeleton.addElement(
+						"    public boolean doBeforeDelete(Hashtable<String, " + "java.awt.Component> comps) {");
 				zeilenSkeleton.addElement("        return true;");
 				zeilenSkeleton.addElement("    }");
 				zeilenSkeleton.addElement("");
@@ -1095,8 +1063,8 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 					String tmnr = c.getTable().getName();
 					String tmn = tm.getName();
 					zeilenSkeleton.addElement("        case " + nr.getId() + ":");
-					zeilenSkeleton.addElement("            " + tmnr + " r" + nr.getId() + " = new " + tmnr
-							+ "(this.adf);");
+					zeilenSkeleton
+							.addElement("            " + tmnr + " r" + nr.getId() + " = new " + tmnr + "(this.adf);");
 					zeilenSkeleton.addElement("            r" + nr.getId() + ".set" + tmn + "(this.get" + tmn + "());");
 					zeilenSkeleton.addElement("            return r" + nr.getId() + ";");
 				}
@@ -1187,7 +1155,7 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 			new File(out0).mkdirs();
 			new File(out + "db/").mkdirs();
 		}
-		System.out.println("writing " + out0 + tm.getName() + (tm.isDynamicCode() ? "Udschebti" : "") + ".java");
+		log.info("writing " + out0 + tm.getName() + (tm.isDynamicCode() ? "Udschebti" : "") + ".java");
 		FileWriter fw = new FileWriter(out0 + tm.getName() + (tm.isDynamicCode() ? "Udschebti" : "") + ".java", false);
 		BufferedWriter writer = new BufferedWriter(fw);
 		for (int i = 0, len = zeilen.size(); i < len; i++) {
@@ -1197,7 +1165,7 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 		writer.close();
 		fw.close();
 		if (tm.isDynamicCode() && !tm.isFirstGenerationDone()) {
-			System.out.println("writing " + out + tm.getName() + ".java");
+			log.info("writing " + out + tm.getName() + ".java");
 			fw = new FileWriter(out + tm.getName() + ".java", false);
 			writer = new BufferedWriter(fw);
 			for (int i = 0, len = zeilenSkeleton.size(); i < len; i++) {
@@ -1206,7 +1174,7 @@ public class ReconstructableCodeFactory extends DefaultCodeFactory {
 			writer.flush();
 			writer.close();
 			fw.close();
-			System.out.println("writing " + out + "db/DBFactory" + tm.getName() + ".java");
+			log.info("writing " + out + "db/DBFactory" + tm.getName() + ".java");
 			fw = new FileWriter(out + "db/DBFactory" + tm.getName() + ".java", false);
 			writer = new BufferedWriter(fw);
 			for (int i = 0, len = zeilenDBFactory.size(); i < len; i++) {

@@ -9,9 +9,6 @@
 
 package archimedes.legacy.gui.indices;
 
-import gengen.metadata.AttributeMetaData;
-import gengen.metadata.ClassMetaData;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -41,8 +38,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import logging.Logger;
-
 import archimedes.legacy.scheme.DefaultIndexMetaData;
 import archimedes.model.ChangeObserver;
 import archimedes.model.ComplexIndexListProvider;
@@ -53,6 +48,9 @@ import corent.gui.COLabel;
 import corent.gui.JFrameWithInifile;
 import corent.gui.PropertyRessourceManager;
 import corent.gui.RessourceManager;
+import gengen.metadata.AttributeMetaData;
+import gengen.metadata.ClassMetaData;
+import logging.Logger;
 
 /**
  * Dieses Fenster erm&ouml;glicht die Wartung und Bearbeitung von komplexen
@@ -63,8 +61,8 @@ import corent.gui.RessourceManager;
  * @changed OLI 14.12.2011 - Hinzugef&uuml;gt.
  */
 
-public class ComplexIndicesAdministrationFrame extends JFrameWithInifile implements ActionListener, ItemListener,
-		ListSelectionListener, WindowListener {
+public class ComplexIndicesAdministrationFrame extends JFrameWithInifile
+		implements ActionListener, ItemListener, ListSelectionListener, WindowListener {
 
 	private static final int ETCH = EtchedBorder.RAISED;
 	private static final int HGAP = 3;
@@ -91,26 +89,20 @@ public class ComplexIndicesAdministrationFrame extends JFrameWithInifile impleme
 	private RessourceManager rm = new PropertyRessourceManager();
 
 	/**
-	 * Erzeugt einen neuen Frame zur Anzeige und Bearbeitung von komplexen
-	 * Indices.
+	 * Erzeugt einen neuen Frame zur Anzeige und Bearbeitung von komplexen Indices.
 	 * 
-	 * @param title
-	 *            Der Titel des Fensters, der in der Kopfzeile angezeigt werden
-	 *            soll.
-	 * @param ini
-	 *            Eine Inidatei, aus der die Gestalt des Frames gegebenenfalls
-	 *            rekonstruiert werden kann.
-	 * @param indices
-	 *            Die Liste der komplexen Indices, die durch den Frame
-	 *            bearbeitet werden soll.
-	 * @param tables
-	 *            Eine Liste mit den Tabellen, die in der Auswahlbox angezeigt
-	 *            werden sollen.
-	 * @param model
-	 *            Das Datenmodell, zu dem die Indices definiert werden als
-	 *            <CODE>ChangeObserver</CODE> zur Bekanntgabe von
-	 *            &Auml;nderungen an den Indices (damit das Datenmodell
-	 *            ebenfalls als ge&auml;ndert markiert wird).
+	 * @param title   Der Titel des Fensters, der in der Kopfzeile angezeigt werden
+	 *                soll.
+	 * @param ini     Eine Inidatei, aus der die Gestalt des Frames gegebenenfalls
+	 *                rekonstruiert werden kann.
+	 * @param indices Die Liste der komplexen Indices, die durch den Frame
+	 *                bearbeitet werden soll.
+	 * @param tables  Eine Liste mit den Tabellen, die in der Auswahlbox angezeigt
+	 *                werden sollen.
+	 * @param model   Das Datenmodell, zu dem die Indices definiert werden als
+	 *                <CODE>ChangeObserver</CODE> zur Bekanntgabe von
+	 *                &Auml;nderungen an den Indices (damit das Datenmodell
+	 *                ebenfalls als ge&auml;ndert markiert wird).
 	 * 
 	 * @changed OLI 14.12.2011 - Hinzugef&uuml;gt.
 	 */
@@ -148,8 +140,8 @@ public class ComplexIndicesAdministrationFrame extends JFrameWithInifile impleme
 	}
 
 	private JSplitPane createSplitPanel() {
-		JSplitPane panel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.createSelectionPanel(), this
-				.createIndexDetailsPanel());
+		JSplitPane panel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.createSelectionPanel(),
+				this.createIndexDetailsPanel());
 		panel.setBorder(new CompoundBorder(new EmptyBorder(VGAP, HGAP, VGAP, HGAP), new EtchedBorder(ETCH)));
 		return panel;
 	}
@@ -286,8 +278,8 @@ public class ComplexIndicesAdministrationFrame extends JFrameWithInifile impleme
 			this.setVisible(false);
 			this.dispose();
 		} else if (e.getSource() == this.newButton) {
-			this.currentShownObject = new DefaultIndexMetaData("Neu", ((ClassMetaData) this.tableComboBox
-					.getSelectedItem()));
+			this.currentShownObject = new DefaultIndexMetaData("Neu",
+					((ClassMetaData) this.tableComboBox.getSelectedItem()));
 			this.indexNameTextField.setText("Neu");
 			this.tableComboBox.setSelectedIndex(0);
 		} else if (e.getSource() == this.removeButton) {
@@ -309,8 +301,8 @@ public class ComplexIndicesAdministrationFrame extends JFrameWithInifile impleme
 			this.model.raiseAltered();
 		} else if (e.getSource() == this.tableComboBox) {
 			if (this.columnTable != null) {
-				this.columnTable.setModel(new ColumnSelectionTableModel((ClassMetaData) this.tableComboBox
-						.getSelectedItem()));
+				this.columnTable
+						.setModel(new ColumnSelectionTableModel((ClassMetaData) this.tableComboBox.getSelectedItem()));
 			}
 		}
 		this.checkEnabled();
@@ -393,9 +385,9 @@ public class ComplexIndicesAdministrationFrame extends JFrameWithInifile impleme
 	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		System.out.println(e);
+		LOG.info("event caught: " + e);
 		if ((e.getSource() == this.indicesViewList) && (!this.indicesViewList.isSelectionEmpty())) {
-			this.currentShownObject = (IndexMetaData) this.indicesViewList.getSelectedValue();
+			this.currentShownObject = this.indicesViewList.getSelectedValue();
 			this.fillIndexNameTextField();
 			this.fillTablesComboBoxAndSelectTable();
 			this.fillColumnNameTableAndSelectIndexFields();

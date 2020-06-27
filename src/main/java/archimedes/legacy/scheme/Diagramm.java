@@ -10,7 +10,6 @@
 package archimedes.legacy.scheme;
 
 import static corentx.util.Checks.ensure;
-import gengen.metadata.ClassMetaData;
 
 import java.awt.Color;
 import java.io.File;
@@ -23,8 +22,6 @@ import java.util.NoSuchElementException;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
-
-import logging.Logger;
 
 import archimedes.connections.ArchimedesImportJDBCDataSourceRecord;
 import archimedes.connections.DatabaseConnection;
@@ -114,6 +111,8 @@ import corent.files.StructuredTextFile;
 import corent.gui.ExtendedColor;
 import corent.xml.ToXMLAttributes;
 import corentx.util.Str;
+import gengen.metadata.ClassMetaData;
+import logging.Logger;
 
 /**
  * Diese Klasse stellt eine konkrete Auspr&auml;gung des DiagrammModels dar, die
@@ -259,18 +258,16 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	 */
 	public static final int ID_SCHRIFTGROESSE_UNTERTITEL = 8;
 	/**
-	 * Ein Bezeichner zum Zugriff auf Flagge zu Druck und Anzeige von
-	 * aufgehobenen Objekten.
+	 * Ein Bezeichner zum Zugriff auf Flagge zu Druck und Anzeige von aufgehobenen
+	 * Objekten.
 	 */
 	public static final int ID_HIDE_DEPRECATED = 9;
 	/**
-	 * Ein Bezeichner zum Zugriff auf den Zielpfad f&uuml;r die
-	 * Code-Generierung.
+	 * Ein Bezeichner zum Zugriff auf den Zielpfad f&uuml;r die Code-Generierung.
 	 */
 	public static final int ID_CODEPFAD = 10;
 	/**
-	 * Ein Bezeichner zum Zugriff auf den Namen der zu generierenden
-	 * Applikation.
+	 * Ein Bezeichner zum Zugriff auf den Namen der zu generierenden Applikation.
 	 */
 	public static final int ID_APPLICATIONNAME = 11;
 	/**
@@ -357,14 +354,14 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	/* Die Liste mit den komplexen Indices des Modells. */
 	private SortedVector<IndexMetaData> complexIndices = new SortedVector<IndexMetaData>();
 	/*
-	 * Die Klassennamen der zusaetzlich zum Standard-SQL-Scriptgenerator fuer
-	 * den Bau eines SQL-Aktualisierungsscripts an das Diagramm anzubindenden
+	 * Die Klassennamen der zusaetzlich zum Standard-SQL-Scriptgenerator fuer den
+	 * Bau eines SQL-Aktualisierungsscripts an das Diagramm anzubindenden
 	 * SQLScriptListener.
 	 */
 	private String additionalSQLScriptListener = "";
 	/*
-	 * Ein Script fuer den ArchimedesCommandProcessor, das nach dem Speichern
-	 * eines Modells ausgefuehrt wird.
+	 * Ein Script fuer den ArchimedesCommandProcessor, das nach dem Speichern eines
+	 * Modells ausgefuehrt wird.
 	 */
 	private String afterwritescript = "";
 	/* Der Name der Application, f&uuml;r die Code generiert werden soll. */
@@ -397,6 +394,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 
 	/* Implementierung des Interfaces DiagrammModel. */
 
+	@Override
 	public Object get(int id) throws IllegalArgumentException {
 		switch (id) {
 		case ID_NAME:
@@ -465,6 +463,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		throw new IllegalArgumentException("Klasse Domain verfuegt nicht ueber ein Attribut " + id + " (get)!");
 	}
 
+	@Override
 	public void set(int id, Object value) throws ClassCastException, IllegalArgumentException {
 		switch (id) {
 		case ID_NAME:
@@ -558,6 +557,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		throw new IllegalArgumentException("Klasse Domain verfuegt nicht ueber ein Attribut " + id + " (set)!");
 	}
 
+	@Override
 	public int compareTo(Object o) {
 		Diagramm d = (Diagramm) o;
 		int erg = this.getName().compareTo(d.getName());
@@ -567,13 +567,14 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return erg;
 	}
 
+	@Override
 	public EditorDescriptorList getEditorDescriptorList() {
 		DefaultComponentFactory dcf = DefaultComponentFactory.INSTANZ;
 		DefaultComponentFactory dcfcol = new DefaultComponentFactory(Archimedes.PALETTE.getColors());
 		DefaultEditorDescriptorList dedl = new DefaultEditorDescriptorList();
 		DefaultLabelFactory dlf = DefaultLabelFactory.INSTANZ;
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_NAME, dlf, dcf, "Name", 'N', null,
-				"Der Name des Diagramms"));
+		dedl.addElement(
+				new DefaultEditorDescriptor(0, this, ID_NAME, dlf, dcf, "Name", 'N', null, "Der Name des Diagramms"));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_AUTOR, dlf, dcf, "Autor", 'A', null,
 				"Der Autor des Diagramms"));
 		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_OWNER, dlf, dcf, StrUtil.FromHTML("Eigent&uuml;mer"),
@@ -584,41 +585,41 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				"Das Datum, an dem die aktuelle Version erstellt wurde.", true));
 		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_VERSIONSKOMMENTAR, dlf, dcf, "Kommentar", 'K', null,
 				"Ein kurzer Versionskommentar zur Aufnahme in die " + "Datenbank"));
-		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_HIDE_DEPRECATED, dlf, dcf, "Aufgehoben ausblenden",
-				'A', null, "Setzen Sie diese Flagge, um " + "aufgehobene Objekte aus Anzeige und Druck auszublenden"));
+		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_HIDE_DEPRECATED, dlf, dcf, "Aufgehoben ausblenden", 'A',
+				null, "Setzen Sie diese Flagge, um " + "aufgehobene Objekte aus Anzeige und Druck auszublenden"));
 		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_PAINTTECHNICALFIELDSINGRAY, dlf, dcf,
-				"Technische Felder ausgrauen", 'A', null, "Setzen Sie diese Flagge, um "
-						+ "technische Felder abzugrauen."));
+				"Technische Felder ausgrauen", 'A', null,
+				"Setzen Sie diese Flagge, um " + "technische Felder abzugrauen."));
 		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_PAINTTRANSIENTFIELDSINGRAY, dlf, dcf,
-				"Transiente Felder ausgrauen", 'T', null, "Setzen Sie diese Flagge, um "
-						+ "transiente Felder abzugrauen."));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SCHRIFTGROESSE_TABELLEN, dlf, dcf, StrUtil
-				.FromHTML("Schriftgr&ouml;&szlig;e Tabelleninhalte"), 'T', null, StrUtil
-				.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die Tabelleninhalte des " + "Diagramms")));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SCHRIFTGROESSE_UEBERSCHRIFT, dlf, dcf, StrUtil
-				.FromHTML("Schriftgr&ouml;&szlig;e &Uuml;berschrift"), 'F', null, StrUtil
-				.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die &Uuml;berschrift " + "des Diagramms")));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SCHRIFTGROESSE_UNTERTITEL, dlf, dcf, StrUtil
-				.FromHTML("Schriftgr&ouml;&szlig;e Untertitel"), 'U', null, StrUtil
-				.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die Untertitel des Diagramms")));
+				"Transiente Felder ausgrauen", 'T', null,
+				"Setzen Sie diese Flagge, um " + "transiente Felder abzugrauen."));
+		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SCHRIFTGROESSE_TABELLEN, dlf, dcf,
+				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e Tabelleninhalte"), 'T', null,
+				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die Tabelleninhalte des " + "Diagramms")));
+		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SCHRIFTGROESSE_UEBERSCHRIFT, dlf, dcf,
+				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e &Uuml;berschrift"), 'F', null,
+				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die &Uuml;berschrift " + "des Diagramms")));
+		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SCHRIFTGROESSE_UNTERTITEL, dlf, dcf,
+				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e Untertitel"), 'U', null,
+				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die Untertitel des Diagramms")));
 		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SHOWREFERENCEDCOLUMNAMES, dlf, dcf,
-				"Referenzierte Spalten anzeigen (Default)", 'R', null, "Setzen Sie diese "
-						+ "Flagge, um die Namen der durch Foreignkeys referenzierten Spalten\nim "
+				"Referenzierte Spalten anzeigen (Default)", 'R', null,
+				"Setzen Sie diese " + "Flagge, um die Namen der durch Foreignkeys referenzierten Spalten\nim "
 						+ "Diagramm angezeigt zu bekommen (Defaultwert)"));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_MARKUPWRITEABLEMEMBER, dlf, dcf,
-				"Pflichtfelder markieren", 'P', null, "Setzen Sie diese Flagge, um die "
-						+ "Plichtfelder im Diagramm zu kennzeichnen."));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_RELATION_COLOR_EXTERNAL_TABLES, dlf, dcfcol, Str
-				.fromHTML("Farbe externe Relationen"), '\0', null, Str
-				.fromHTML("Setzen sie hier die Farbe f&uuml;r externe Relationen.")));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_RELATION_COLOR_REGULAR, dlf, dcfcol, Str
-				.fromHTML("Farbe regul&auml;re Relationen"), '\0', null, Str
-				.fromHTML("Setzen sie hier die Farbe f&uuml;r regul&auml;re Relationen.")));
+		dedl.addElement(
+				new DefaultEditorDescriptor(2, this, ID_MARKUPWRITEABLEMEMBER, dlf, dcf, "Pflichtfelder markieren", 'P',
+						null, "Setzen Sie diese Flagge, um die " + "Plichtfelder im Diagramm zu kennzeichnen."));
+		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_RELATION_COLOR_EXTERNAL_TABLES, dlf, dcfcol,
+				Str.fromHTML("Farbe externe Relationen"), '\0', null,
+				Str.fromHTML("Setzen sie hier die Farbe f&uuml;r externe Relationen.")));
+		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_RELATION_COLOR_REGULAR, dlf, dcfcol,
+				Str.fromHTML("Farbe regul&auml;re Relationen"), '\0', null,
+				Str.fromHTML("Setzen sie hier die Farbe f&uuml;r regul&auml;re Relationen.")));
 		dedl.addElement(new DefaultSubEditorDescriptor(3, this, new CommentSubEditorFactory()));
 		dedl.addElement(new DefaultSubEditorDescriptor(4, this, new HistoryOwnerSubEditorFactory()));
-		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_CODEFACTORYCLASSNAME, dlf, dcf,
-				"CodeFactory-Klassenname", 'C', null, "Der (qualifizierte) Name der "
-						+ "CodeFactory-Klasse zum Diagramm."));
+		dedl.addElement(
+				new DefaultEditorDescriptor(5, this, ID_CODEFACTORYCLASSNAME, dlf, dcf, "CodeFactory-Klassenname", 'C',
+						null, "Der (qualifizierte) Name der " + "CodeFactory-Klasse zum Diagramm."));
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_CODEPFAD, dlf, dcf, "Code-Basis-Pfad", 'B', null,
 				StrUtil.FromHTML("Basispfad f&uuml;r den " + "Codegenerator")));
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_APPLICATIONNAME, dlf, dcf, "Applikationsname", 'N',
@@ -626,36 +627,38 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_BASEPACKAGENAME, dlf, dcf, "Basis-Packagename", 'B',
 				null, "Der Name des Basis-Packages der Applikation"));
 		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_UDSCHEBTIBASECLASSNAME, dlf, dcf,
-				"Udschebti-Basisklasse", 'U', null, StrUtil.FromHTML("Der Name der "
-						+ "Basisklasse f&uuml;r die Datenobjekte der Applikation.")));
-		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_DBVERSIONTABLENAME, dlf, dcf,
-				"DB-Versionen-Tabellenname", 'D', null, "Der Name der DB-Versionen-Tabelle, "
-						+ "falls eine solche existiert."));
+				"Udschebti-Basisklasse", 'U', null,
+				StrUtil.FromHTML("Der Name der " + "Basisklasse f&uuml;r die Datenobjekte der Applikation.")));
+		dedl.addElement(
+				new DefaultEditorDescriptor(6, this, ID_DBVERSIONTABLENAME, dlf, dcf, "DB-Versionen-Tabellenname", 'D',
+						null, "Der Name der DB-Versionen-Tabelle, " + "falls eine solche existiert."));
 		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_DBVERSIONDBVERSIONCOLUMN, dlf, dcf,
-				"DB-Versionen-Versionsspalte", 'V', null, "Der Name der Versionsspalte in "
-						+ "der DB-Versionen-Tabelle, falls eine solche existiert."));
+				"DB-Versionen-Versionsspalte", 'V', null,
+				"Der Name der Versionsspalte in " + "der DB-Versionen-Tabelle, falls eine solche existiert."));
 		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_DBVERSIONDESCRIPTIONCOLUMN, dlf, dcf,
 				"DB-Versionen-Beschreibungsspalte", 'B', null, "Der Name der "
 						+ "Beschreibungsspalte in der DB-Versionen-Tabelle, falls eine solche " + "existiert."));
-		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_ADDITIONALSCRIPTLISTENER, dlf, dcf, StrUtil
-				.FromHTML("Zus&auml;tzliche SQLScriptListener"), 'Q', null, StrUtil
-				.FromHTML("Der Name der Klasse, die als SQLScripListener &uuml;ber "
+		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_ADDITIONALSCRIPTLISTENER, dlf, dcf,
+				StrUtil.FromHTML("Zus&auml;tzliche SQLScriptListener"), 'Q', null,
+				StrUtil.FromHTML("Der Name der Klasse, die als SQLScripListener &uuml;ber "
 						+ "&Auml;nderungen bei Bau von SQL-Aktualisierungscripten benachrichtigt werden" + "sollen.")));
-		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_SCHEMA_NAME, dlf, dcf, StrUtil
-				.FromHTML("Schemaname (falls erforderlich)"), 'S', null, StrUtil
-				.FromHTML("Ein Schemaname, falls das Modell f&uuml;r ein Schema "
+		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_SCHEMA_NAME, dlf, dcf,
+				StrUtil.FromHTML("Schemaname (falls erforderlich)"), 'S', null,
+				StrUtil.FromHTML("Ein Schemaname, falls das Modell f&uuml;r ein Schema "
 						+ "innerhalb der Datenbank gedacht ist.")));
-		dedl.addElement(new DefaultSubEditorDescriptor(7, this, new OptionListSubEditorFactory(
-				DefaultVectorPanelButtonFactory.INSTANCE, Archimedes.guiBundle, this.getPredeterminedOptionProvider(),
-				OptionType.MODEL)));
+		dedl.addElement(new DefaultSubEditorDescriptor(7, this,
+				new OptionListSubEditorFactory(DefaultVectorPanelButtonFactory.INSTANCE, Archimedes.guiBundle,
+						this.getPredeterminedOptionProvider(), OptionType.MODEL)));
 		return dedl;
 	}
 
+	@Override
 	public Object createObject() {
 		// return new Diagramm();
 		return Archimedes.Factory.createDiagramm();
 	}
 
+	@Override
 	public Object createObject(Object blueprint) throws ClassCastException {
 		if (!(blueprint instanceof Diagramm)) {
 			throw new ClassCastException("Instance of Diagramm required!");
@@ -673,42 +676,51 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return d;
 	}
 
+	@Override
 	public TabbedPaneFactory getTabbedPaneFactory() {
 		return new DefaultTabbedPaneFactory(new TabDescriptor[] { new DefaultTabDescriptor("Allgemeines", 'A', null),
 				new DefaultTabDescriptor("Version", 'V', null), new DefaultTabDescriptor("Schrift", 'S', null),
 				new DefaultTabDescriptor("Beschreibung", 'B', null), new DefaultTabDescriptor("Historie", 'H', null),
 				new DefaultTabDescriptor("Codegenerator", 'C', null),
-				new DefaultTabDescriptor("SQL-Generator", 'Q', null), new DefaultTabDescriptor("Optionen", 'O', null) });
+				new DefaultTabDescriptor("SQL-Generator", 'Q', null),
+				new DefaultTabDescriptor("Optionen", 'O', null) });
 	}
 
+	@Override
 	public boolean isTabEnabled(int no) {
 		return true;
 	}
 
+	@Override
 	public DiagrammModel createDiagramm() {
 		// return new Diagramm();
 		return Archimedes.Factory.createDiagramm();
 	}
 
+	@Override
 	public DomainModel createDomain() {
 		return Archimedes.Factory.createDomain();
 	}
 
+	@Override
 	public void removeDomain(DomainModel dom) {
 		this.domains.removeElement(dom);
 	}
 
+	@Override
 	public Vector getDomains() {
 		return new Vector(this.domains);
 	}
 
+	@Override
 	public Vector getDomainsReference() {
 		return this.domains;
 	}
 
+	@Override
 	public DomainModel getDomain(String n) {
 		for (int i = 0, len = this.domains.size(); i < len; i++) {
-			DomainModel dm = (DomainModel) this.domains.elementAt(i);
+			DomainModel dm = this.domains.elementAt(i);
 			if (dm.getName().equals(n)) {
 				return dm;
 			}
@@ -716,9 +728,10 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		throw new NoSuchElementException("Domain mit Namen \"" + n + "\" existiert nicht!");
 	}
 
+	@Override
 	public DomainModel getDomainByType(String sqltype) {
 		for (int i = 0, len = this.domains.size(); i < len; i++) {
-			DomainModel dm = (DomainModel) this.domains.elementAt(i);
+			DomainModel dm = this.domains.elementAt(i);
 			if (dm.getType().equals(sqltype)) {
 				return dm;
 			}
@@ -726,24 +739,29 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return null;
 	}
 
+	@Override
 	public void addTabelle(TabellenModel t) {
 		this.tables.addElement(t);
 	}
 
+	@Override
 	public void removeTabelle(TabellenModel t) {
 		this.tables.removeElement(t);
 	}
 
+	@Override
 	@Deprecated
 	public Vector getTabellen() {
 		return new Vector(this.tables);
 	}
 
+	@Override
 	@Deprecated
 	public Vector getAlleFelder() {
 		return getAllFields();
 	}
 
+	@Override
 	@Deprecated
 	public Vector getAllFields() {
 		int i = 0;
@@ -754,33 +772,37 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		TabellenModel tm = null;
 		Vector<TabellenspaltenModel> v = null;
 		for (i = 0, len = this.tables.size(); i < len; i++) {
-			tm = (TabellenModel) this.tables.elementAt(i);
+			tm = this.tables.elementAt(i);
 			if (!tm.isDeprecated()) {
 				v = tm.getTabellenspalten();
 				for (j = 0, lenj = v.size(); j < lenj; j++) {
-					fields.addElement((TabellenspaltenModel) v.elementAt(j));
+					fields.addElement(v.elementAt(j));
 				}
 			}
 		}
 		return fields;
 	}
 
+	@Override
 	public Vector getFieldCache() {
 		return this.cacheFieldModel;
 	}
 
+	@Override
 	public void addToFieldCache(TabellenspaltenModel tsm) {
 		this.cacheFieldModel.addElement(tsm);
 	}
 
+	@Override
 	public void removeFromFieldCache(TabellenspaltenModel tsm) {
 		this.cacheFieldModel.removeElement(tsm);
 	}
 
+	@Override
 	@Deprecated
 	public TabellenModel getTabelle(String n) {
 		for (int i = 0, len = this.tables.size(); i < len; i++) {
-			TabellenModel tm = (TabellenModel) this.tables.elementAt(i);
+			TabellenModel tm = this.tables.elementAt(i);
 			if (tm.getName().equals(n)) {
 				return tm;
 			}
@@ -790,6 +812,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		// "\" existiert nicht!");
 	}
 
+	@Override
 	public SortedVector getKeyColumns(TabellenModel t) {
 		int i = 0;
 		int j = 0;
@@ -799,10 +822,10 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		TabellenModel tm = null;
 		TabellenspaltenModel tsm = null;
 		for (i = 0, leni = this.tables.size(); i < leni; i++) {
-			tm = (TabellenModel) this.tables.elementAt(i);
+			tm = this.tables.elementAt(i);
 			if (tm != t) {
 				for (j = 0, lenj = tm.getTabellenspaltenCount(); j < lenj; j++) {
-					tsm = (TabellenspaltenModel) tm.getTabellenspalteAt(j);
+					tsm = tm.getTabellenspalteAt(j);
 					if (tsm.isPrimarykey()) {
 						sv.addElement(tsm);
 					}
@@ -812,17 +835,19 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return sv;
 	}
 
+	@Override
 	public SortedVector getKeycolumns(TabellenModel t) {
 		return this.getKeyColumns(t);
 	}
 
+	@Override
 	public SortedVector getColumnsToBeReferenced(TabellenModel t) {
 		SortedVector sv = new SortedVector();
 		TabellenModel tm = null;
 		TabellenspaltenModel tsm = null;
 		Vector v = null;
 		for (int i = 0, len = this.tables.size(); i < len; i++) {
-			tm = (TabellenModel) this.tables.elementAt(i);
+			tm = this.tables.elementAt(i);
 			if (tm != t) {
 				v = tm.getTabellenspalten();
 				for (int j = 0, lenj = v.size(); j < lenj; j++) {
@@ -845,17 +870,18 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	}
 
 	/**
-	 * @changed OLI 29.08.2007 - Erweiterung um Konsolenausgaben zwecks
-	 *          Zuordnung von Fehlermeldungen beim Speichern von Diagrammen.
-	 *          Diese werden allerdings nur dann angezeigt, wenn die Property
+	 * @changed OLI 29.08.2007 - Erweiterung um Konsolenausgaben zwecks Zuordnung
+	 *          von Fehlermeldungen beim Speichern von Diagrammen. Diese werden
+	 *          allerdings nur dann angezeigt, wenn die Property
 	 *          <TT>archimedes.scheme.Diagramm</TT> (Boolean) gesetzt wird.
 	 * @changed OLI 21.05.2010 - Die Daten zur Versionstabelle werden immer
 	 *          geschrieben.
 	 */
+	@Override
 	public StructuredTextFile toSTF(DiagramSaveMode dsm) throws Exception {
 		boolean cout = Boolean.getBoolean("archimedes.scheme.Diagramm.cout");
 		if (cout) {
-			System.out.println("storing diagram to stf");
+			LOG.info("storing diagram to stf");
 		}
 		java.util.List<ViewModel> tvms = null;
 		StructuredTextFile stf = new StructuredTextFile("");
@@ -865,13 +891,13 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			if (this.importDSR != null) {
 				this.importDSR.toSTF(stf, new String[] { "Diagramm", "DataSource", "Import" });
 				if (cout) {
-					System.out.println("    import dsr written.");
+					LOG.info("    import dsr written.");
 				}
 			}
 			/*
-			 * if (this.updateDSR != null) { this.updateDSR.toSTF(stf, new
-			 * String[] {"Diagramm", "DataSource", "Update"}); if (cout) {
-			 * System.out.println("    update dsr written."); } }
+			 * if (this.updateDSR != null) { this.updateDSR.toSTF(stf, new String[]
+			 * {"Diagramm", "DataSource", "Update"}); if (cout) {
+			 * LOG.info("    update dsr written."); } }
 			 */
 			new STFColorWriter().write(stf, Archimedes.PALETTE.getColors().toArray(new ExtendedColor[0]));
 			for (int i = 0, len = this.getViews().size(); i < len; i++) {
@@ -894,16 +920,16 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		if (dsm == DiagramSaveMode.REGULAR) {
 			stf.writeLong(new String[] { "Diagramm", "DefaultComment", "Anzahl" }, len);
 			if (cout) {
-				System.out.println("    default comments");
+				LOG.info("    default comments");
 			}
 			for (int i = 0; i < len; i++) {
 				DefaultCommentModel dcm = (DefaultCommentModel) this.defaultComments.elementAt(i);
-				stf.writeStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Muster" }, this
-						.toHTML(dcm.getPattern()));
-				stf.writeStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Kommentar" }, this
-						.toHTML(dcm.getDefaultComment()));
+				stf.writeStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Muster" },
+						this.toHTML(dcm.getPattern()));
+				stf.writeStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Kommentar" },
+						this.toHTML(dcm.getDefaultComment()));
 				if (cout) {
-					System.out.println("        " + dcm.getPattern() + " written.");
+					LOG.info("        " + dcm.getPattern() + " written.");
 				}
 			}
 		}
@@ -911,77 +937,78 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		len = this.tables.size();
 		stf.writeLong(new String[] { "Diagramm", "Tabellen", "Anzahl" }, len);
 		if (cout) {
-			System.out.println("    tables:");
+			LOG.info("    tables:");
 		}
 		for (int i = 0; i < len; i++) {
-			TabellenModel tm = (TabellenModel) this.tables.elementAt(i);
+			TabellenModel tm = this.tables.elementAt(i);
 			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Name" }, this.toHTML(tm.getName()));
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Aufgehoben" }, new Boolean(tm
-					.isDeprecated()).toString());
+			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Aufgehoben" },
+					new Boolean(tm.isDeprecated()).toString());
 			if (dsm == DiagramSaveMode.REGULAR) {
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Kommentar" }, this.toHTML(tm
-						.getComment()));
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Schrift" }, this
-						.toHTML(tm.getSchriftfarbe().toString()));
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Hintergrund" }, this
-						.toHTML((tm.getHintergrundfarbe() != null ? tm.getHintergrundfarbe().toString() : "null")));
+				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Kommentar" },
+						this.toHTML(tm.getComment()));
+				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Schrift" },
+						this.toHTML(tm.getSchriftfarbe().toString()));
+				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Hintergrund" },
+						this.toHTML((tm.getHintergrundfarbe() != null ? tm.getHintergrundfarbe().toString() : "null")));
 			}
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "NMRelation" }, new Boolean(tm
-					.isNMRelation()).toString());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "InDevelopment" }, new Boolean(tm
-					.isDraft()).toString());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "ExternalTable" }, new Boolean(tm
-					.isExternalTable()).toString());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "FirstGenerationDone" }, new Boolean(tm
-					.isFirstGenerationDone()).toString());
+			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "NMRelation" },
+					new Boolean(tm.isNMRelation()).toString());
+			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "InDevelopment" },
+					new Boolean(tm.isDraft()).toString());
+			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "ExternalTable" },
+					new Boolean(tm.isExternalTable()).toString());
+			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "FirstGenerationDone" },
+					new Boolean(tm.isFirstGenerationDone()).toString());
 			/*
-			 * stf.writeLong(new String[] {"Diagramm", "Tabellen", "Tabelle" +
-			 * i, "X"}, tm.getX( this.getViews().get(0))); stf.writeLong(new
-			 * String[] {"Diagramm", "Tabellen", "Tabelle" + i, "Y"}, tm.getY(
-			 * this.getViews().get(0)));
+			 * stf.writeLong(new String[] {"Diagramm", "Tabellen", "Tabelle" + i, "X"},
+			 * tm.getX( this.getViews().get(0))); stf.writeLong(new String[] {"Diagramm",
+			 * "Tabellen", "Tabelle" + i, "Y"}, tm.getY( this.getViews().get(0)));
 			 */
 			if (dsm == DiagramSaveMode.REGULAR) {
 				tvms = tm.getViews();
 				stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "Anzahl" }, tvms.size());
 				if (cout) {
-					System.out.println("        views for table:");
+					LOG.info("        views for table:");
 				}
 				for (int j = 0, lenj = tvms.size(); j < lenj; j++) {
 					ViewModel vm = tvms.get(j);
 					stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Name" },
 							this.toHTML(vm.getName()));
-					stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "X" }, tm
-							.getX(vm));
-					stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Y" }, tm
-							.getY(vm));
+					stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "X" },
+							tm.getX(vm));
+					stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Y" },
+							tm.getY(vm));
 					if (cout) {
-						System.out.println("            " + vm.getName() + " written.");
+						LOG.info("            " + vm.getName() + " written.");
 					}
 				}
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "History" }, this.toHTML(tm
-						.getHistory()));
+				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "History" },
+						this.toHTML(tm.getHistory()));
 			}
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype", "Anzahl" }, tm
-					.getStereotypenCount());
+			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype", "Anzahl" },
+					tm.getStereotypenCount());
 			for (int j = 0, lenj = tm.getStereotypenCount(); j < lenj; j++) {
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype" + j }, this.toHTML(tm
-						.getStereotypeAt(j).toString()));
+				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype" + j },
+						this.toHTML(tm.getStereotypeAt(j).toString()));
 			}
-			stf.writeStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Codieren" },
+			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Codieren" },
 					new Boolean(tm.isGenerateCode()).toString());
 			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
 					"Codegeneratoroptionen" }, tm.getGenerateCodeOptions());
 			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
 					"Codeverzeichnis" }, tm.getCodeVerzeichnis());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
-					"Kontextname" }, tm.getContextName());
+			stf.writeStr(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Kontextname" },
+					tm.getContextName());
 			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
 					"ComplexForeignKey" }, tm.getComplexForeignKeyDefinition());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
-					"UniqueFormula" }, tm.getComplexUniqueSpecification());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
-					"DynamicCode" }, new Boolean(tm.isDynamicCode()).toString());
+			stf.writeStr(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "UniqueFormula" },
+					tm.getComplexUniqueSpecification());
+			stf.writeStr(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "DynamicCode" },
+					new Boolean(tm.isDynamicCode()).toString());
 			stf.writeStr(
 					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Inherited" },
 					new Boolean(tm.isInherited()).toString());
@@ -989,10 +1016,10 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 					"ActiveInApplication" }, new Boolean(tm.isActiveInApplication()).toString());
 			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
 					"AdditionalCreateConstraints" }, tm.getAdditionalCreateConstraints());
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" }, tm
-					.getTabellenspaltenCount());
+			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" },
+					tm.getTabellenspaltenCount());
 			if (cout) {
-				System.out.println("        columns of the table:");
+				LOG.info("        columns of the table:");
 			}
 			for (int j = 0, lenj = tm.getTabellenspaltenCount(); j < lenj; j++) {
 				TabellenspaltenModel tsm = tm.getTabellenspalteAt(j);
@@ -1004,15 +1031,17 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			}
 			ColumnModel[] equalsMembers = tm.getEqualsMembers();
 			int lenj = equalsMembers.length;
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "Equalsmembers",
-					"Anzahl" }, lenj);
+			stf.writeLong(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "Equalsmembers", "Anzahl" },
+					lenj);
 			for (int j = 0; j < lenj; j++) {
 				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "Equalsmembers",
 						"Member" + j, "Spalte" }, equalsMembers[j].getName());
 			}
 			ColumnModel[] cs = ((TableModel) tm).getCompareMembers();
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "CompareMembers",
-					"Anzahl" }, cs.length);
+			stf.writeLong(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "CompareMembers", "Anzahl" },
+					cs.length);
 			for (int j = 0; j < cs.length; j++) {
 				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "CompareMembers",
 						"Member" + j, "Spalte" }, cs[j].getName());
@@ -1039,8 +1068,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			}
 			tscs = (ToStringContainer[]) tm.getComboStringMembers();
 			lenj = tscs.length;
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-					"ToComboStringMembers", "Anzahl" }, lenj);
+			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "ToComboStringMembers",
+					"Anzahl" }, lenj);
 			for (int j = 0; j < lenj; j++) {
 				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
 						"ToComboStringMembers", "Member" + j, "Spalte" }, tscs[j].getTabellenspalte().getName());
@@ -1051,8 +1080,9 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			}
 			Vector v = tm.getAuswahlMembers();
 			lenj = v.size();
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers",
-					"Anzahl" }, lenj);
+			stf.writeLong(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers", "Anzahl" },
+					lenj);
 			for (int j = 0; j < lenj; j++) {
 				// TabellenspaltenModel tsm0 = (TabellenspaltenModel)
 				// v.elementAt(j);
@@ -1063,53 +1093,58 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 						"Member" + j, "Tabelle" }, smm.getColumn().getTable().getName());
 				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers",
 						"Member" + j, "Attribute" }, smm.getAttribute().toString());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers",
-						"Member" + j, "PrintExpression" }, (smm.getPrintExpression() == null ? "" : smm
-						.getPrintExpression()));
+				stf.writeStr(
+						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers",
+								"Member" + j, "PrintExpression" },
+						(smm.getPrintExpression() == null ? "" : smm.getPrintExpression()));
 			}
 			OrderMemberModel[] oms = tm.getSelectionViewOrderMembers();
 			lenj = oms.length;
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers",
-					"Anzahl" }, lenj);
+			stf.writeLong(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers", "Anzahl" },
+					lenj);
 			if (cout) {
-				System.out.println("        order members:");
+				LOG.info("        order members:");
 			}
 			for (int j = 0; j < lenj; j++) {
 				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers",
 						"Member" + j, "Spalte" }, oms[j].getOrderColumn().getName());
 				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers",
 						"Member" + j, "Tabelle" }, oms[j].getOrderColumn().getTable().getName());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers",
-						"Member" + j, "Richtung" }, (oms[j].getOrderDirection() != null ? oms[j].getOrderDirection()
-						.toString() : "ASC"));
+				stf.writeStr(
+						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers",
+								"Member" + j, "Richtung" },
+						(oms[j].getOrderDirection() != null ? oms[j].getOrderDirection().toString() : "ASC"));
 				if (cout) {
-					System.out.println("            " + oms[j].toString() + " written.");
+					LOG.info("            " + oms[j].toString() + " written.");
 				}
 			}
 			new STFNReferenceWriter().write(stf, i, tm);
 			new STFOptionWriter().write(stf, tm, i);
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Anzahl" }, tm
-					.getPanelCount());
+			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Anzahl" },
+					tm.getPanelCount());
 			lenj = tm.getPanelCount();
 			if (cout) {
-				System.out.println("        panels:");
+				LOG.info("        panels:");
 			}
 			for (int j = 0; j < lenj; j++) {
 				PanelModel pm = tm.getPanelAt(j);
-				stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j,
-						"PanelNumber" }, pm.getPanelNumber());
+				stf.writeLong(
+						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "PanelNumber" },
+						pm.getPanelNumber());
 				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "TabTitle" },
 						pm.getTabTitle());
 				stf.writeStr(
 						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "TabMnemonic" },
 						pm.getTabMnemonic());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j,
-						"TabToolTipText" }, pm.getTabToolTipText());
 				stf.writeStr(
-						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "PanelClass" }, pm
-								.getPanelClass());
+						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "TabToolTipText" },
+						pm.getTabToolTipText());
+				stf.writeStr(
+						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "PanelClass" },
+						pm.getPanelClass());
 				if (cout) {
-					System.out.println("        " + pm.getPanelNumber() + " written.");
+					LOG.info("        " + pm.getPanelNumber() + " written.");
 				}
 			}
 		}
@@ -1118,6 +1153,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return stf;
 	}
 
+	@Override
 	public String toXML() {
 		// Hier l&ouml;schen, wenn fertig ...
 		StructuredTextFile stf = new StructuredTextFile("");
@@ -1138,9 +1174,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		// gleich mal
 		// pruefen, ob das MainViewModel irgendwo gebraucht wird.
 		/*
-		 * for (int i = 0, len = this.getViews().size(); i < len; i++) {
-		 * ViewModel vm = this.getViews().get(i); if (vm instanceof
-		 * MainViewModel) { break; } }
+		 * for (int i = 0, len = this.getViews().size(); i < len; i++) { ViewModel vm =
+		 * this.getViews().get(i); if (vm instanceof MainViewModel) { break; } }
 		 */
 		int len = this.domains.size();
 		sb.append("    <domains count=\"").append(len).append(" >").append("\n");
@@ -1154,27 +1189,29 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		len = this.stereotypes.size();
 		stf.writeLong(new String[] { "Diagramm", "Stereotype", "Anzahl" }, len);
 		for (int i = 0; i < len; i++) {
-			StereotypeModel stm = (StereotypeModel) this.stereotypes.elementAt(i);
-			stf.writeStr(new String[] { "Diagramm", "Stereotype", "Stereotype" + i, "Name" }, this
-					.toHTML(stm.getName()));
-			stf.writeStr(new String[] { "Diagramm", "Stereotype", "Stereotype" + i, "Kommentar" }, this.toHTML(stm
-					.getComment()));
+			StereotypeModel stm = this.stereotypes.elementAt(i);
+			stf.writeStr(new String[] { "Diagramm", "Stereotype", "Stereotype" + i, "Name" },
+					this.toHTML(stm.getName()));
+			stf.writeStr(new String[] { "Diagramm", "Stereotype", "Stereotype" + i, "Kommentar" },
+					this.toHTML(stm.getComment()));
 		}
 		len = this.defaultComments.size();
 		return sb.toString();
 	}
 
+	@Override
 	public DiagrammModel createDiagramm(StructuredTextFile stf) {
 		String history = null;
 		boolean debug = Boolean.getBoolean("archimedes.debug") || Boolean.getBoolean("archimedes.scheme.debug")
 				|| Boolean.getBoolean("archimedes.scheme.Diagramm.debug");
 		boolean suppressDots = Boolean.getBoolean("archimedes.scheme.Diagramm.suppress.dots");
-		String ofn = stf.readStr(new String[] { "Diagramm", "Factories", "Object" }, Archimedes.Factory.getClass()
-				.getName());
+		String ofn = stf.readStr(new String[] { "Diagramm", "Factories", "Object" },
+				Archimedes.Factory.getClass().getName());
 		if (!Archimedes.Factory.getClass().getName().equals(ofn)) {
-			JOptionPane.showMessageDialog(null, "Die aktuelle ObjectFactory ("
-					+ Archimedes.Factory.getClass().getName() + ") unterscheidet sich von\n"
-					+ "der ObjectFactory, unter das Modell zuletzt bearbeitet wurde (" + ofn + ")!",
+			JOptionPane.showMessageDialog(null,
+					"Die aktuelle ObjectFactory (" + Archimedes.Factory.getClass().getName()
+							+ ") unterscheidet sich von\n"
+							+ "der ObjectFactory, unter das Modell zuletzt bearbeitet wurde (" + ofn + ")!",
 					"ObjectFactory unterschiedlich", JOptionPane.WARNING_MESSAGE);
 		}
 		boolean output = Boolean.getBoolean("archimedes.scheme.Diagramm.output");
@@ -1189,8 +1226,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		ArchimedesJDBCDataSourceRecord dsr = new ArchimedesJDBCDataSourceRecord();
 		dsr.fromSTF(stf, new String[] { "Diagramm", "DataSource", "Update" });
 		if (dsr.getDBName().length() > 0) {
-			d.addDatabaseConnection(new DatabaseConnection("Productive database", dsr.getDriver(), dsr.getDBName(), dsr
-					.getUser(), dsr.getMode(), dsr.hasDomains(), dsr.isFkNotNullBeachten(), dsr.isReferenzenSetzen(),
+			d.addDatabaseConnection(new DatabaseConnection("Productive database", dsr.getDriver(), dsr.getDBName(),
+					dsr.getUser(), dsr.getMode(), dsr.hasDomains(), dsr.isFkNotNullBeachten(), dsr.isReferenzenSetzen(),
 					dsr.getQuoteCharacter()));
 		}
 		int len = (int) stf.readLong(new String[] { "Diagramm", "Colors", "Anzahl" }, 0);
@@ -1206,57 +1243,64 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		new STFAdditionalSQLCodeReader().read(stf, d);
 		int pp = (int) stf.readLong(new String[] { "Diagramm", "Pages", "PerColumn" }, 0);
 		if (pp > ComponentDiagramm.PAGESPERCOLUMN) {
-			System.out.println("\n\n**************************************************");
-			System.out.println("\nZuwenig Seiten pro Spalte " + pp + " (" + ComponentDiagramm.PAGESPERCOLUMN + ")");
-			System.out.println("\n\n**************************************************");
+			LOG.error("\n\n**************************************************");
+			LOG.error("\nZuwenig Seiten pro Spalte " + pp + " (" + ComponentDiagramm.PAGESPERCOLUMN + ")");
+			LOG.error("\n\n**************************************************");
 			System.exit(1);
 		}
 		pp = (int) stf.readLong(new String[] { "Diagramm", "Pages", "PerRow" }, 0);
 		if (pp > ComponentDiagramm.PAGESPERROW) {
-			System.out.println("\n\n**************************************************");
-			System.out.println("\nZuwenig Seiten pro Zeile" + pp + " (" + ComponentDiagramm.PAGESPERROW + ")");
-			System.out.println("\n\n**************************************************");
+			LOG.error("\n\n**************************************************");
+			LOG.error("\nZuwenig Seiten pro Zeile" + pp + " (" + ComponentDiagramm.PAGESPERROW + ")");
+			LOG.error("\n\n**************************************************");
 			System.exit(1);
 		}
 		ComponentDiagramm.MAXPAGECOUNT = ComponentDiagramm.PAGESPERROW * ComponentDiagramm.PAGESPERCOLUMN;
 		new STFStereotypeReader().read(stf, d);
 		len = (int) stf.readLong(new String[] { "Diagramm", "DefaultComment", "Anzahl" }, 0);
 		for (int i = 0; i < len; i++) {
-			String n = this.fromHTML(stf.readStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i,
-					"Muster" }, null));
-			String k = this.fromHTML(stf.readStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i,
-					"Kommentar" }, ""));
+			String n = this.fromHTML(
+					stf.readStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Muster" }, null));
+			String k = this.fromHTML(
+					stf.readStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Kommentar" }, ""));
 			DefaultCommentModel dcm = Archimedes.Factory.createDefaultComment(n, k);
 			d.addDefaultComment(dcm);
 		}
-		d.setShowReferencedColumns(new Boolean(stf.readStr(new String[] { "Diagramm", "Parameter",
-				"ReferenzierteSpaltenAnzeigen" }, "TRUE")).booleanValue());
+		d.setShowReferencedColumns(new Boolean(
+				stf.readStr(new String[] { "Diagramm", "Parameter", "ReferenzierteSpaltenAnzeigen" }, "TRUE"))
+						.booleanValue());
 		GUIViewModel vm = null;
 		GUIViewModel mvm = (GUIViewModel) new STFViewReader().read(stf, d);
 		new STFDiagrammParameterReader().read(stf, d);
 		len = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Anzahl" }, 0);
 		if (!suppressDots) {
-			System.out.println("found " + len + " tables.");
+			LOG.info("found " + len + " tables.");
 		}
 		for (int i = 0; i < len; i++) {
 			String n = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Name" }, null));
-			String k = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Kommentar" },
-					""));
+			String k = this
+					.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Kommentar" }, ""));
 			history = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "History" }, ""));
-			boolean aufgh = new Boolean(stf.readStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Aufgehoben" }, "FALSE")).booleanValue();
-			String fs = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben",
-					"Schrift" }, "schwarz"));
-			String fhg = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben",
-					"Hintergrund" }, StrUtil.FromHTML("wei&szlig;")));
-			boolean nmrelation = new Boolean(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-					"NMRelation" }, "FALSE")).booleanValue();
-			boolean indevelopmentprocess = new Boolean(stf.readStr(new String[] { "Diagramm", "Tabellen",
-					"Tabelle" + i, "InDevelopment" }, "FALSE")).booleanValue();
-			boolean externalTable = new Boolean(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-					"ExternalTable" }, "FALSE")).booleanValue();
-			boolean firstGenerationDone = new Boolean(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-					"FirstGenerationDone" }, "FALSE")).booleanValue();
+			boolean aufgh = new Boolean(
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Aufgehoben" }, "FALSE"))
+							.booleanValue();
+			String fs = this.fromHTML(stf
+					.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Schrift" }, "schwarz"));
+			String fhg = this.fromHTML(
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Hintergrund" },
+							StrUtil.FromHTML("wei&szlig;")));
+			boolean nmrelation = new Boolean(
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "NMRelation" }, "FALSE"))
+							.booleanValue();
+			boolean indevelopmentprocess = new Boolean(
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "InDevelopment" }, "FALSE"))
+							.booleanValue();
+			boolean externalTable = new Boolean(
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "ExternalTable" }, "FALSE"))
+							.booleanValue();
+			boolean firstGenerationDone = new Boolean(
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "FirstGenerationDone" }, "FALSE"))
+							.booleanValue();
 			int x = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "X" }, 0);
 			int y = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Y" }, 0);
 			vm = mvm;
@@ -1269,22 +1313,24 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.setHistory(history);
 			tm.setExternalTable(externalTable);
 			vm.addObject(tm);
-			int lenj = (int) stf
-					.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Anzahl" }, 0);
+			int lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Anzahl" },
+					0);
 			if (lenj > 0) {
 				tm.clearPanels();
 				for (int j = 0; j < lenj; j++) {
 					PanelModel pm = Archimedes.Factory.createPanel();
-					pm.setPanelNumber((int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-							"Panels", "Panel" + j, "PanelNumber" }, 0));
-					pm.setTabTitle(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels",
-							"Panel" + j, "TabTitle" }, "" + (j + 1) + ".Tab"));
+					pm.setPanelNumber((int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels",
+							"Panel" + j, "PanelNumber" }, 0));
+					pm.setTabTitle(stf.readStr(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "TabTitle" },
+							"" + (j + 1) + ".Tab"));
 					pm.setTabMnemonic(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels",
 							"Panel" + j, "TabMnemonic" }, "" + (j + 1)));
 					pm.setTabToolTipText(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels",
 							"Panel" + j, "TabToolTipText" }, ""));
-					pm.setPanelClass(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels",
-							"Panel" + j, "PanelClass" }, ""));
+					pm.setPanelClass(stf.readStr(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "PanelClass" },
+							""));
 					tm.addPanel(pm);
 				}
 			} else {
@@ -1296,52 +1342,56 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			}
 			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "Anzahl" }, 0);
 			for (int j = 0; j < lenj; j++) {
-				String viewname = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-						"Views", "View" + j, "Name" }, ""));
+				String viewname = this.fromHTML(stf.readStr(
+						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Name" }, ""));
 				vm = d.getView(viewname);
 				if (vm != null) {
-					x = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j,
-							"X" }, 0);
-					y = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j,
-							"Y" }, 0);
-					tm.setXY((GUIViewModel) vm, x, y);
+					x = (int) stf.readLong(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "X" }, 0);
+					y = (int) stf.readLong(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Y" }, 0);
+					tm.setXY(vm, x, y);
 					vm.addObject(tm);
 				} else {
-					System.out.println("Warnung: View-Informationen fuer Tabelle " + n + " View " + viewname
-							+ " nicht laenger gueltig!");
+					LOG.warn("View-Informationen fuer Tabelle " + n + " View " + viewname + " nicht laenger gueltig!");
 				}
 			}
 			tm.setName(n);
 			tm.setComment(k);
 			tm.setDeprecated(aufgh);
-			lenj = (int) stf
-					.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype", "Anzahl" }, 0);
+			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype", "Anzahl" },
+					0);
 			for (int j = 0; j < lenj; j++) {
-				String st = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-						"Stereotype" + j }, ""));
+				String st = this.fromHTML(
+						stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype" + j }, ""));
 				try {
 					tm.addStereotype(d.getStereotype(st));
 				} catch (NoSuchElementException nsee) {
 				}
 			}
-			boolean codieren = new Boolean(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten",
-					"Codegenerator", "Codieren" }, "FALSE")).booleanValue();
+			boolean codieren = new Boolean(stf.readStr(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Codieren" },
+					"FALSE")).booleanValue();
 			tm.setGenerateCode(codieren);
 			tm.setGenerateCodeOptions(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten",
 					"Codegenerator", "Codegeneratoroptionen" }, ""));
 			tm.setCodeVerzeichnis(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten",
 					"Codegenerator", "Codeverzeichnis" }, ""));
-			tm.setContextName(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten",
-					"Codegenerator", "Kontextname" }, ""));
+			tm.setContextName(stf.readStr(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Kontextname" },
+					""));
 			tm.setComplexForeignKeyDefinition(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
 					"Spalten", "Codegenerator", "ComplexForeignKey" }, ""));
-			tm.setComplexUniqueSpecification(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-					"Spalten", "Codegenerator", "UniqueFormula" }, ""));
-			boolean dynamicCode = new Boolean(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-					"Spalten", "Codegenerator", "DynamicCode" }, "FALSE")).booleanValue();
+			tm.setComplexUniqueSpecification(stf.readStr(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "UniqueFormula" },
+					""));
+			boolean dynamicCode = new Boolean(stf.readStr(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "DynamicCode" },
+					"FALSE")).booleanValue();
 			tm.setDynamicCode(dynamicCode);
-			boolean inherited = new Boolean(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-					"Spalten", "Codegenerator", "Inherited" }, "FALSE")).booleanValue();
+			boolean inherited = new Boolean(stf.readStr(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Inherited" },
+					"FALSE")).booleanValue();
 			tm.setInherited(inherited);
 			boolean activeInApplication = new Boolean(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
 					"Spalten", "Codegenerator", "ActiveInApplication" }, "FALSE")).booleanValue();
@@ -1354,7 +1404,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			}
 			d.addTabelle(tm);
 			if (output) {
-				System.out.println(tm.toString() + " added");
+				LOG.info(tm.toString() + " added");
 			} else if (!suppressDots) {
 				System.out.print(".");
 			}
@@ -1369,18 +1419,20 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			int lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" },
 					0);
 			for (int j = 0; j < lenj; j++) {
-				n = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten",
-						"Spalte" + j, "Name" }, null));
+				n = this.fromHTML(stf.readStr(
+						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Spalte" + j, "Name" }, null));
 				TabellenspaltenModel tsm = tm.getTabellenspalte(n);
-				boolean fk = new Boolean(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten",
-						"Spalte" + j, "ForeignKey" }, "false")).booleanValue();
+				boolean fk = new Boolean(stf.readStr(
+						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Spalte" + j, "ForeignKey" },
+						"false")).booleanValue();
 				if (fk) {
 					new STFRelationReader().read(stf, d, tsm, i, j, (ViewModel) mvm);
 				}
 			}
 			tm.clearEqualsMembers();
-			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-					"Equalsmembers", "Anzahl" }, 0);
+			lenj = (int) stf.readLong(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "Equalsmembers", "Anzahl" },
+					0);
 			for (int j = 0; j < lenj; j++) {
 				String spaltenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
 						"Equalsmembers", "Member" + j, "Spalte" }, "");
@@ -1388,8 +1440,9 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				tm.addEqualsMember(c);
 			}
 			((TableModel) tm).clearCompareToMembers();
-			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-					"CompareMembers", "Anzahl" }, 0);
+			lenj = (int) stf.readLong(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "CompareMembers", "Anzahl" },
+					0);
 			for (int j = 0; j < lenj; j++) {
 				String columnName = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
 						"CompareMembers", "Member" + j, "Spalte" }, "");
@@ -1438,13 +1491,14 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				tm.addComboStringMember(tsc);
 			}
 			tm.getAuswahlMembers().removeAllElements();
-			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-					"AuswahlMembers", "Anzahl" }, 0);
+			lenj = (int) stf.readLong(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers", "Anzahl" },
+					0);
 			for (int j = 0; j < lenj; j++) {
 				String spaltenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
 						"AuswahlMembers", "Member" + j, "Spalte" }, "");
-				String tabellenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-						"Codegenerator", "AuswahlMembers", "Member" + j, "Tabelle" }, tm.getName());
+				String tabellenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
+						"AuswahlMembers", "Member" + j, "Tabelle" }, tm.getName());
 				String attribute = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
 						"AuswahlMembers", "Member" + j, "Attribute" }, "OPTIONAL");
 				String printExpression = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
@@ -1456,13 +1510,14 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				tm.getAuswahlMembers().addElement(smm);
 			}
 			tm.clearSelectionViewOrderMembers();
-			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-					"OrderMembers", "Anzahl" }, 0);
+			lenj = (int) stf.readLong(
+					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers", "Anzahl" },
+					0);
 			for (int j = 0; j < lenj; j++) {
 				String spaltenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
 						"OrderMembers", "Member" + j, "Spalte" }, "");
-				String tabellenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-						"Codegenerator", "OrderMembers", "Member" + j, "Tabelle" }, tm.getName());
+				String tabellenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
+						"OrderMembers", "Member" + j, "Tabelle" }, tm.getName());
 				String richtung = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
 						"OrderMembers", "Member" + j, "Richtung" }, OrderClauseDirection.ASC.toString());
 				TabellenModel tm0 = d.getTabelle(tabellenname);
@@ -1478,13 +1533,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			new STFOptionReader().read(stf, tm, i);
 		}
 		/*
-		 * ViewModel vm = null; for (int i = 0, len = this.getViews().size(); i
-		 * < len; i++) { int lenj = (int) stf.readLong(new String[] {"Diagramm",
-		 * "Views", "View" + i, "Tabellenanzahl"}, 0); for (int j = 0; j < lenj;
-		 * j++) { String tabellenname = stf.readStr(new String[] {"Diagramm",
-		 * "Views", "View" + i, "Tabelle" + j}, ""); TabellenModel tm =
-		 * d.getTabelle(tabellenname); if (tm != null) {
-		 * vm.getTabellen().add(tm); } } }
+		 * ViewModel vm = null; for (int i = 0, len = this.getViews().size(); i < len;
+		 * i++) { int lenj = (int) stf.readLong(new String[] {"Diagramm", "Views",
+		 * "View" + i, "Tabellenanzahl"}, 0); for (int j = 0; j < lenj; j++) { String
+		 * tabellenname = stf.readStr(new String[] {"Diagramm", "Views", "View" + i,
+		 * "Tabelle" + j}, ""); TabellenModel tm = d.getTabelle(tabellenname); if (tm !=
+		 * null) { vm.getTabellen().add(tm); } } }
 		 */
 		new DefaultComplexIndicesFromSTFReader().read(stf, d.getComplexIndicesReference(), d);
 		return d;
@@ -1503,6 +1557,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return null;
 	}
 
+	@Override
 	public SortedVector getMetadaten() {
 		Vector tabellen = this.getTabellen();
 		SortedVector sv = new SortedVector();
@@ -1510,9 +1565,9 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			TabellenModel tm = (TabellenModel) tabellen.elementAt(i);
 			TableMetaData tmd = new TableMetaData(tm.getName());
 			for (int j = 0, lenj = tm.getTabellenspaltenCount(); j < lenj; j++) {
-				TabellenspaltenModel tsm = (TabellenspaltenModel) tm.getTabellenspalteAt(j);
-				ColumnMetaData cmd = new ColumnMetaData(tsm.getName(), tsm.getDomain().getName(), tsm.getDomain()
-						.getType(), tsm.isPrimarykey(), tsm.isNotNull());
+				TabellenspaltenModel tsm = tm.getTabellenspalteAt(j);
+				ColumnMetaData cmd = new ColumnMetaData(tsm.getName(), tsm.getDomain().getName(),
+						tsm.getDomain().getType(), tsm.isPrimarykey(), tsm.isNotNull());
 				tmd.addColumn(cmd);
 			}
 			sv.addElement(tmd);
@@ -1520,6 +1575,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return sv;
 	}
 
+	@Override
 	@Deprecated
 	public Vector getReferencers(TabellenModel t) {
 		Vector erg = new Vector();
@@ -1542,6 +1598,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return new DescriptionGetter(this.getDefaultComments()).getDescription(tsm);
 	}
 
+	@Override
 	public void setAuthor(String author) {
 		if (author == null) {
 			author = "";
@@ -1549,16 +1606,19 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.author = author;
 	}
 
+	@Override
 	@Deprecated
 	public PDate getDate() {
 		return this.getVersionDate();
 	}
 
+	@Override
 	@Deprecated
 	public void setDate(PDate date) {
 		this.setVersionDate(date);
 	}
 
+	@Override
 	public void setVersion(String version) {
 		if (version == null) {
 			version = "";
@@ -1566,10 +1626,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.version = version;
 	}
 
+	@Override
 	public String getVersionComment() {
 		return this.versionskommentar;
 	}
 
+	@Override
 	public void setVersionComment(String comment) {
 		if (comment == null) {
 			comment = "";
@@ -1577,33 +1639,40 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.versionskommentar = comment;
 	}
 
+	@Override
 	public int getFontSizeTableContents() {
 		return this.fontsizeTableContents;
 	}
 
+	@Override
 	public void setFontSizeTableContents(int fontsize) {
 		this.fontsizeTableContents = fontsize;
 	}
 
+	@Override
 	public void setFontSizeDiagramHeadline(int fontsize) {
 		this.fontsizeHeadline = fontsize;
 	}
 
+	@Override
 	public void setFontSizeSubtitles(int fontsize) {
 		this.fontsizeSubtitles = fontsize;
 	}
 
+	@Override
 	public void removeStereotype(StereotypeModel st) {
 		this.stereotypes.removeElement(st);
 	}
 
+	@Override
 	public Vector getStereotypen() {
 		return new Vector(this.stereotypes);
 	}
 
+	@Override
 	public StereotypeModel getStereotype(String n) {
 		for (int i = 0, len = this.stereotypes.size(); i < len; i++) {
-			StereotypeModel stm = (StereotypeModel) this.stereotypes.elementAt(i);
+			StereotypeModel stm = this.stereotypes.elementAt(i);
 			if (stm.getName().equals(n)) {
 				return stm;
 			}
@@ -1611,26 +1680,32 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		throw new NoSuchElementException("Stereotype mit Namen \"" + n + "\" existiert nicht!");
 	}
 
+	@Override
 	public StereotypeModel createStereotype() {
 		return Archimedes.Factory.createStereotype();
 	}
 
+	@Override
 	public Vector getStereotypeReference() {
 		return this.stereotypes;
 	}
 
+	@Override
 	public void addDefaultComment(DefaultCommentModel t) {
 		this.defaultComments.addElement(t);
 	}
 
+	@Override
 	public void removeDefaultComment(DefaultCommentModel t) {
 		this.defaultComments.removeElement(t);
 	}
 
+	@Override
 	public Vector getDefaultComments() {
 		return new Vector(this.defaultComments);
 	}
 
+	@Override
 	public DefaultCommentModel getDefaultComment(String n) {
 		for (int i = 0, len = this.defaultComments.size(); i < len; i++) {
 			DefaultCommentModel dcm = (DefaultCommentModel) this.defaultComments.elementAt(i);
@@ -1641,19 +1716,23 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		throw new NoSuchElementException("DefaultComment mit Namen \"" + n + "\" existiert " + "nicht!");
 	}
 
+	@Override
 	public DefaultCommentModel createDefaultComment() {
 		return Archimedes.Factory.createDefaultComment();
 	}
 
+	@Override
 	public Vector getDefaultCommentsReference() {
 		return this.defaultComments;
 	}
 
+	@Override
 	@Deprecated
 	public boolean isAufgehobeneAusblenden() {
 		return this.hideDeprecatedTables;
 	}
 
+	@Override
 	@Deprecated
 	public void setAufgehobeneAusblenden(boolean aufgehobeneAusblenden) {
 		this.hideDeprecatedTables = aufgehobeneAusblenden;
@@ -1675,10 +1754,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.history = newHistory;
 	}
 
+	@Override
 	public JDBCDataSourceRecord getImportDataSourceRecord() {
 		return this.importDSR;
 	}
 
+	@Override
 	public void setImportDataSourceRecord(JDBCDataSourceRecord dsr) {
 		if (!(dsr instanceof ArchimedesImportJDBCDataSourceRecord)) {
 			throw new IllegalArgumentException("ArchimedesImportJDBCDataSourceRecord required " + "for Diagramm!");
@@ -1686,10 +1767,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.importDSR = (ArchimedesImportJDBCDataSourceRecord) dsr;
 	}
 
+	@Override
 	public String getCodePfad() {
 		return this.codepfad;
 	}
 
+	@Override
 	public void setCodePfad(String pfad) {
 		if (pfad == null) {
 			pfad = "." + File.separator;
@@ -1697,10 +1780,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.codepfad = pfad;
 	}
 
+	@Override
 	public String getApplicationName() {
 		return this.applicationname;
 	}
 
+	@Override
 	public String getDBVersionTablename() {
 		return this.dbVersionTableName;
 	}
@@ -1710,6 +1795,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.setDBVersionTableName(name);
 	}
 
+	@Override
 	public String getDBVersionDBVersionColumn() {
 		return this.dbVersionVersionColumnName;
 	}
@@ -1719,6 +1805,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.setDBVersionVersionColumnName(name);
 	}
 
+	@Override
 	public String getDBVersionDescriptionColumn() {
 		return this.dbVersionDescriptionColumnName;
 	}
@@ -1728,10 +1815,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.setDBVersionDescriptionColumnName(name);
 	}
 
+	@Override
 	public boolean isShowReferencedColumns() {
 		return this.showReferencedColumns;
 	}
 
+	@Override
 	public void setShowReferencedColumns(boolean b) {
 		this.showReferencedColumns = b;
 	}
@@ -1755,18 +1844,17 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	/*
 	 * public java.util.List<ViewModel> getViews() { return this.views; }
 	 * 
-	 * public java.util.List<ViewModel> getViews(TabellenModel tm) {
-	 * java.util.List l = new Vector(); for (int i = 0, len =
-	 * this.getViews().size(); i < len; i++) { ViewModel vm =
-	 * this.getViews().get(i); if (vm.getTabellen().contains(tm)) { l.add(vm); }
-	 * } return l; }
+	 * public java.util.List<ViewModel> getViews(TabellenModel tm) { java.util.List
+	 * l = new Vector(); for (int i = 0, len = this.getViews().size(); i < len; i++)
+	 * { ViewModel vm = this.getViews().get(i); if (vm.getTabellen().contains(tm)) {
+	 * l.add(vm); } } return l; }
 	 * 
-	 * public ViewModel getView(String name) { ViewModel vm = null; for (int i =
-	 * 0, len = this.getViews().size(); i < len; i++) { vm =
-	 * this.getViews().get(i); if (vm.getName().equals(name)) { break; } }
-	 * return vm; }
+	 * public ViewModel getView(String name) { ViewModel vm = null; for (int i = 0,
+	 * len = this.getViews().size(); i < len; i++) { vm = this.getViews().get(i); if
+	 * (vm.getName().equals(name)) { break; } } return vm; }
 	 */
 
+	@Override
 	public boolean containsTablenames(String[] tablenamesarray) {
 		Vector<String> tablenames = new Vector<String>();
 		Vector tables = this.getTabellen();
@@ -1777,10 +1865,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return (tablenames.containsAll(Arrays.asList(tablenamesarray)));
 	}
 
+	@Override
 	public boolean containsTablename(String tablename) {
 		return this.containsTablenames(new String[] { tablename });
 	}
 
+	@Override
 	@Deprecated
 	public boolean markWriteablemembers() {
 		return this.markUpRequiredFieldNames;
@@ -1791,10 +1881,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.markUpRequiredFieldNames = b;
 	}
 
+	@Override
 	public String getBasePackageName() {
 		return this.basepackagename;
 	}
 
+	@Override
 	public void setBasePackageName(String bpn) {
 		if (bpn == null) {
 			bpn = "";
@@ -1802,22 +1894,27 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		this.basepackagename = bpn;
 	}
 
+	@Override
 	public String getCodeFactoryClassName() {
 		return this.codefactoryclassname;
 	}
 
+	@Override
 	public void setCodeFactoryClassName(String cfcn) {
 		this.codefactoryclassname = cfcn;
 	}
 
+	@Override
 	public void addDiagrammModelListener(DiagrammModelListener dml) {
 		this.diagrammmodellistener.addElement(dml);
 	}
 
+	@Override
 	public void removeDiagrammModelListener(DiagrammModelListener dml) {
 		this.diagrammmodellistener.removeElement(dml);
 	}
 
+	@Override
 	public void fireDiagrammAltered() {
 		for (int i = 0, len = this.diagrammmodellistener.size(); i < len; i++) {
 			try {
@@ -1829,14 +1926,17 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		super.fireGUIDiagramModelListenerStateChanged();
 	}
 
+	@Override
 	public String getUdschebtiBaseClassName() {
 		return this.ubcn;
 	}
 
+	@Override
 	public void setUdschebtiBaseClassName(String ubcn) {
 		this.ubcn = ubcn;
 	}
 
+	@Override
 	public boolean isPaintTechnicalFieldsInGray() {
 		return this.paintTechnicalFieldsInGray;
 	}
@@ -1849,22 +1949,27 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return this.paintTransientFieldsInGray;
 	}
 
+	@Override
 	public void setPaintTechnicalFieldsInGray(boolean b) {
 		this.paintTechnicalFieldsInGray = b;
 	}
 
+	@Override
 	public void setPaintTransientFieldsInGray(boolean b) {
 		this.paintTransientFieldsInGray = b;
 	}
 
+	@Override
 	public String getAfterWriteScript() {
 		return this.afterwritescript;
 	}
 
+	@Override
 	public void setAfterWriteScript(String script) {
 		this.afterwritescript = script;
 	}
 
+	@Override
 	public Map<String, java.util.List<String>> getCodegeneratorOptionsListTag(String tagName, String delimiter) {
 		Hashtable<String, java.util.List<String>> m = new Hashtable<String, java.util.List<String>>();
 		int i = 0;
@@ -1879,11 +1984,10 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				m.put(tm.getName(), l);
 			}
 			/*
-			 * s = tm.getCodeGeneratorOptions(); start = s.indexOf(tagStart);
-			 * end = s.indexOf(tagEnd); if ((start >= 0) && (end >= 0)) { s =
-			 * s.substring(start + tagStart.length(), end); //
-			 * m.put(tm.getName(), StrUtil.SplitToList(s, delimiter));
-			 * m.put(tm.getName(), tm.getCodegeneratorOptionsListTag(tagName,
+			 * s = tm.getCodeGeneratorOptions(); start = s.indexOf(tagStart); end =
+			 * s.indexOf(tagEnd); if ((start >= 0) && (end >= 0)) { s = s.substring(start +
+			 * tagStart.length(), end); // m.put(tm.getName(), StrUtil.SplitToList(s,
+			 * delimiter)); m.put(tm.getName(), tm.getCodegeneratorOptionsListTag(tagName,
 			 * delimiter)); }
 			 */
 		}
@@ -1895,6 +1999,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	 *          <P>
 	 * 
 	 */
+	@Override
 	public boolean generateCode(CodeFactory dcf, String path, GUIBundle guiBundle) {
 		boolean ok = false;
 		CodeFactory cf = null;
@@ -1928,18 +2033,22 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		return ok;
 	}
 
+	@Override
 	public void addSQLScriptListener(SQLScriptListener l) {
 		this.listAdditionalSQLScriptListener.add(l);
 	}
 
+	@Override
 	public String getAdditionalSQLScriptListener() {
 		return this.additionalSQLScriptListener;
 	}
 
+	@Override
 	public void removeSQLScriptListener(SQLScriptListener l) {
 		this.listAdditionalSQLScriptListener.remove(l);
 	}
 
+	@Override
 	public void setAdditionalSQLScriptListener(String clsn) {
 		this.additionalSQLScriptListener = clsn;
 	}
@@ -1958,10 +2067,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 
 	// public String getBasePackageName(); // Implementierung: siehe oben.
 
+	@Override
 	public ClassMetaData getClass(int i) throws IndexOutOfBoundsException {
 		return this.getClasses().get(i);
 	}
 
+	@Override
 	public java.util.List<ClassMetaData> getClasses() {
 		return this.getTabellen();
 	}
@@ -1975,10 +2086,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	 * 
 	 * @changed OLI 30.09.2009 - Hinzugef&uuml;gt.
 	 */
+	@Override
 	public String getProjectToken() {
 		return this.getApplicationName().replace(" ", "").replace(".", "").replace("-", "").replace("!", "");
 	}
 
+	@Override
 	public String getVendor() {
 		return this.getAuthor();
 	}
@@ -2063,12 +2176,11 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	private String dbVersionTableName = "";
 	private SortedVector<DomainModel> domains = new SortedVector<DomainModel>();
 	/*
-	 * If this flag is set the required fields of the table in das diagram will
-	 * be marked up. The characters which are set to mark the fields can be
-	 * defined by the properties:
-	 * "archimedes.scheme.Tabellenspalte.diagramm.writeable.prefix"
-	 * "archimedes.scheme.Tabellenspalte.diagramm.writeable.suffix" The content
-	 * of the first property will be displayed before the field name, the second
+	 * If this flag is set the required fields of the table in das diagram will be
+	 * marked up. The characters which are set to mark the fields can be defined by
+	 * the properties: "archimedes.scheme.Tabellenspalte.diagramm.writeable.prefix"
+	 * "archimedes.scheme.Tabellenspalte.diagramm.writeable.suffix" The content of
+	 * the first property will be displayed before the field name, the second
 	 * thereafter.
 	 */
 	private boolean markUpRequiredFieldNames = false;
@@ -2172,7 +2284,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	public ColumnModel[] getAllColumns() {
 		corentx.util.SortedVector<ColumnModel> columns = new corentx.util.SortedVector<ColumnModel>();
 		for (int i = 0, len = this.tables.size(); i < len; i++) {
-			TableModel tm = (TableModel) this.tables.elementAt(i);
+			TableModel tm = this.tables.elementAt(i);
 			if (!tm.isDeprecated()) {
 				for (ColumnModel c : tm.getColumns()) {
 					columns.add(c);
@@ -2382,8 +2494,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	/**
 	 * Call this method to fire a table changed event.
 	 * 
-	 * @param e
-	 *            The table which has been changed.
+	 * @param e The table which has been changed.
 	 * 
 	 * @changed OLI 23.10.2013 - Added.
 	 */
@@ -2572,6 +2683,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	/**
 	 * @changed OLI 11.06.2013 - Approved.
 	 */
+	@Override
 	public void setName(String name) {
 		if (name == null) {
 			name = "<null>";
@@ -2671,6 +2783,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	/**
 	 * @changed OLI 19.02.2015 - Added.
 	 */
+	@Override
 	public DatabaseConnection getDatabaseConnection(String name) {
 		for (DatabaseConnection dc : this.connections) {
 			if (dc.getName().equals(name)) {

@@ -9,332 +9,357 @@
 
 package corent.gui;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.io.IOException;
 
-import java.awt.*;
-import java.io.*;
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
 
-import corent.base.*;
-import corent.files.*;
-
+import corent.base.Constants;
+import corent.files.Inifile;
+import logging.Logger;
 
 /**
- * Erweitert den JInternalFrame um die F&auml;higkeit seine Fenstereinstellungen automatisch in
- * einer Ini-Datei unterzubringen.
+ * Erweitert den JInternalFrame um die F&auml;higkeit seine Fenstereinstellungen
+ * automatisch in einer Ini-Datei unterzubringen.
  *
- * @author
- *     O.Lieshoff
+ * @author O.Lieshoff
  *
- * @changed 
- *     OLI 03.10.2007 - Beseitigung des "Fensterbugs". Wenn die Position von Fenster beim 
- *             &Ouml;ffnen versperrt ist und sie zu gro&szlig; sind, um verschoben zu werden, 
- *             werden sie einfach zentriert ge&ouml;ffnet.<BR>
- *     OLI 10.10.2007 - Erweiterung der Implementierung des Interfaces <TT>ContextOwner</TT>
- *             um die Implementierung des Interfaces <TT>Ressourced</TT>.<BR>
+ * @changed OLI 03.10.2007 - Beseitigung des "Fensterbugs". Wenn die Position
+ *          von Fenster beim &Ouml;ffnen versperrt ist und sie zu gro&szlig;
+ *          sind, um verschoben zu werden, werden sie einfach zentriert
+ *          ge&ouml;ffnet.<BR>
+ *          OLI 10.10.2007 - Erweiterung der Implementierung des Interfaces
+ *          <TT>ContextOwner</TT> um die Implementierung des Interfaces
+ *          <TT>Ressourced</TT>.<BR>
  *
  */
- 
-public class JInternalFrameWithInifile extends JInternalFrame implements ComponentWithInifile,
-        Ressourced {
 
-    /**
-     * Wird diese Konstante auf true gesetzt, zentriert die Klasse Fenster ohne Eintr&auml;ge.
-     */
-    public static boolean CENTER_NEW = false;
+public class JInternalFrameWithInifile extends JInternalFrame implements ComponentWithInifile, Ressourced {
 
-    /**
-     * Referenz auf die Ini-Datei, in die die Fensterdaten gespeichert werden sollen <I>(Default
-     * null)</I>.
-     */
-    protected Inifile ini = null;
-    /**
-     * Der Name, unter dem der Dialog seine Daten aus der Inidatei bezieht <I>(Default null</I>.
-     */
-    protected String identifier = null;
+	private static final Logger log = Logger.getLogger(JInternalFrameWithInifile.class);
+	/**
+	 * Wird diese Konstante auf true gesetzt, zentriert die Klasse Fenster ohne
+	 * Eintr&auml;ge.
+	 */
+	public static boolean CENTER_NEW = false;
 
-    /*
-     * Ist diese Flagge gesetzt, so wird das Fenster ohne R&uuml;cksicht auf Verluste aus den 
-     * Angaben der Ini-Datei restauriert <I>(Default Constants.BRUTERESTORE)</I>.
-     */
-    private boolean bruteRestore = Constants.BRUTERESTORE;
-    /*
-     * Ist diese Flagge gesetzt, so werden nur die Koordinaten, nicht aber die Ausdehnungsdaten
-     * aus der Inidatei rekonstruiert <I>(Default false)</I>.
-     */
-    private boolean coordinatesOnly = false;
-    /* Flagge f&uuml;r die harte Abblendung. */
-    private boolean strongdisabled = false;
-    /* Der Context zur Komponente. */
-    private String context = null;
+	/**
+	 * Referenz auf die Ini-Datei, in die die Fensterdaten gespeichert werden sollen
+	 * <I>(Default null)</I>.
+	 */
+	protected Inifile ini = null;
+	/**
+	 * Der Name, unter dem der Dialog seine Daten aus der Inidatei bezieht
+	 * <I>(Default null</I>.
+	 */
+	protected String identifier = null;
 
+	/*
+	 * Ist diese Flagge gesetzt, so wird das Fenster ohne R&uuml;cksicht auf
+	 * Verluste aus den Angaben der Ini-Datei restauriert <I>(Default
+	 * Constants.BRUTERESTORE)</I>.
+	 */
+	private boolean bruteRestore = Constants.BRUTERESTORE;
+	/*
+	 * Ist diese Flagge gesetzt, so werden nur die Koordinaten, nicht aber die
+	 * Ausdehnungsdaten aus der Inidatei rekonstruiert <I>(Default false)</I>.
+	 */
+	private boolean coordinatesOnly = false;
+	/* Flagge f&uuml;r die harte Abblendung. */
+	private boolean strongdisabled = false;
+	/* Der Context zur Komponente. */
+	private String context = null;
 
-    public JInternalFrameWithInifile(String titel) {
-        this(titel, null);
-    }
+	public JInternalFrameWithInifile(String titel) {
+		this(titel, null);
+	}
 
-    public JInternalFrameWithInifile(Inifile ini) {
-        this("", ini);
-    }
+	public JInternalFrameWithInifile(Inifile ini) {
+		this("", ini);
+	}
 
-    public JInternalFrameWithInifile(String titel, Inifile ini) {
-        super(titel, true, true, true, true);
-        this.setInifile(ini);
-    }
+	public JInternalFrameWithInifile(String titel, Inifile ini) {
+		super(titel, true, true, true, true);
+		this.setInifile(ini);
+	}
 
-    public void setEnabled(boolean b) {
-        if (b && this.strongdisabled) {
-            return;
-        }
-        super.setEnabled(b);
-    }
+	@Override
+	public void setEnabled(boolean b) {
+		if (b && this.strongdisabled) {
+			return;
+		}
+		super.setEnabled(b);
+	}
 
-    /**
-     * Setzt die &uuml;bergebene IniDatei als neue IniDatei f&uuml;r die Komponente ein.
-     *
-     * @param ini Die neue IniDatei.
-     */
-    public void setInifile(Inifile ini) {
-        this.ini = ini;
-    }
+	/**
+	 * Setzt die &uuml;bergebene IniDatei als neue IniDatei f&uuml;r die Komponente
+	 * ein.
+	 *
+	 * @param ini Die neue IniDatei.
+	 */
+	@Override
+	public void setInifile(Inifile ini) {
+		this.ini = ini;
+	}
 
-    /** @return Eine Referenz auf die IniDatei der Komponente. */
-    public Inifile getInifile() {
-        return this.ini;
-    }
+	/** @return Eine Referenz auf die IniDatei der Komponente. */
+	@Override
+	public Inifile getInifile() {
+		return this.ini;
+	}
 
-    /**
-     * Setzt den &uuml;bergebenen Wert als neuen Namen, unter dem die Daten der Komponente in
-     * der IniDatei gespeichert werden.
-     *
-     * @param identifier Der neue Name, unter dem die Daten der Komponente in der IniDatei
-     *     gespeichert werden sollen.
-     */
-    public void setIdentifier(String identifier) {
-        if (identifier == null) {
-            this.identifier = null;
-        } else {
-            this.identifier = new String(identifier);
-        }
-    }
+	/**
+	 * Setzt den &uuml;bergebenen Wert als neuen Namen, unter dem die Daten der
+	 * Komponente in der IniDatei gespeichert werden.
+	 *
+	 * @param identifier Der neue Name, unter dem die Daten der Komponente in der
+	 *                   IniDatei gespeichert werden sollen.
+	 */
+	@Override
+	public void setIdentifier(String identifier) {
+		if (identifier == null) {
+			this.identifier = null;
+		} else {
+			this.identifier = new String(identifier);
+		}
+	}
 
-    /**
-     * @return Der Name, unter dem die Daten der Komponente in der IniDatei gespeichert werden.
-     *     Ist kein expliziter Name gesetzt, wird der Klassenname der Componente
-     *     zur&uuml;ckgeliefert.
-     */
-    public String getIdentifier() {
-        if (this.identifier == null) {
-            return this.getClass().getName();
-        }
-        return new String(this.identifier);
-    }
+	/**
+	 * @return Der Name, unter dem die Daten der Komponente in der IniDatei
+	 *         gespeichert werden. Ist kein expliziter Name gesetzt, wird der
+	 *         Klassenname der Componente zur&uuml;ckgeliefert.
+	 */
+	@Override
+	public String getIdentifier() {
+		if (this.identifier == null) {
+			return this.getClass().getName();
+		}
+		return new String(this.identifier);
+	}
 
-    /**
-     * Wird diese Flagge im Rahmen der gesetzten Option "CoordinatesOnly" gesetzt, so wird das 
-     * Fenster anhand der in der Ini-Datei gespeicherten Daten wiederhergestellt. Andernfalls 
-     * wird eine bevorzugte Minimalgr&oum;&szlig;e gew&auml;hlt, falls das Fenster zu klein ist,
-     * um alle Inhalte anzuzeigen.
-     *
-     * @param b Wird hier der Wert <TT>true</TT> &uuml;bergeben, wird das Fenster ohne 
-     *     R&uuml;cksicht auf Verluste wiederhergestellt.
-     */
-    public void setBruteRestore(boolean b) {
-        this.bruteRestore = b;
-    }
+	/**
+	 * Wird diese Flagge im Rahmen der gesetzten Option "CoordinatesOnly" gesetzt,
+	 * so wird das Fenster anhand der in der Ini-Datei gespeicherten Daten
+	 * wiederhergestellt. Andernfalls wird eine bevorzugte Minimalgr&oum;&szlig;e
+	 * gew&auml;hlt, falls das Fenster zu klein ist, um alle Inhalte anzuzeigen.
+	 *
+	 * @param b Wird hier der Wert <TT>true</TT> &uuml;bergeben, wird das Fenster
+	 *          ohne R&uuml;cksicht auf Verluste wiederhergestellt.
+	 */
+	@Override
+	public void setBruteRestore(boolean b) {
+		this.bruteRestore = b;
+	}
 
-    /**
-     * @return <TT>true</TT>, wenn das Fenster vollst&auml;ndig aus den Daten der Ini-Datei
-     *     wiederhergestellt werden soll,<BR><TT>false</TT> sonst.
-     */
-    public boolean isBruteRestore() {
-        return this.bruteRestore;
-    }
-    
-    /**
-     * Mit Hilfe dieser Methode kann entschieden werden, ob die Komponente nur &uuml;ber ihre
-     * Koordinaten restauriert werden soll (die Ausdehnung wird durch ein Aufruf der <TT>pack()
-     * </TT>-Methode realisiert), oder komplett anhand der Daten der IniDatei.
-     *
-     * @param b Wird dieser Parameter mit dem Wert <TT>true</TT> &uuml;bergeben, so werden die
-     *     Koordinaten aus der IniDatei gelesen. Die Ausdehnung wird automatisch geregelt.
-     *     Andernfalls werden die kompletten Fensterdaten &uuml;bernommen.
-     */
-    public void setCoordinatesOnly(boolean b) {
-        this.coordinatesOnly = b;
-    }
+	/**
+	 * @return <TT>true</TT>, wenn das Fenster vollst&auml;ndig aus den Daten der
+	 *         Ini-Datei wiederhergestellt werden soll,<BR>
+	 *         <TT>false</TT> sonst.
+	 */
+	@Override
+	public boolean isBruteRestore() {
+		return this.bruteRestore;
+	}
 
-    /**
-     * @return <TT>true</TT>, wenn nur die Koordinaten aus der Datei restauriert werden,<BR>
-     *     <TT>false</TT> sonst.
-     */
-    public boolean isCoordinatesOnly() {
-        return this.coordinatesOnly;
-    }
+	/**
+	 * Mit Hilfe dieser Methode kann entschieden werden, ob die Komponente nur
+	 * &uuml;ber ihre Koordinaten restauriert werden soll (die Ausdehnung wird durch
+	 * ein Aufruf der <TT>pack()
+	 * </TT>-Methode realisiert), oder komplett anhand der Daten der IniDatei.
+	 *
+	 * @param b Wird dieser Parameter mit dem Wert <TT>true</TT> &uuml;bergeben, so
+	 *          werden die Koordinaten aus der IniDatei gelesen. Die Ausdehnung wird
+	 *          automatisch geregelt. Andernfalls werden die kompletten Fensterdaten
+	 *          &uuml;bernommen.
+	 */
+	@Override
+	public void setCoordinatesOnly(boolean b) {
+		this.coordinatesOnly = b;
+	}
 
-    private static final int MAX_TRIES = 3;
-    private int tries = 0;
-    /**
-     * Zeigt bzw. versteckt die Komponente.
-     *
-     * @param b Wird dieser Parameter mit dem Wert <TT>true</TT> &uuml;bergeben, so wird die
-     *     Komponente zur Anzeige gebracht, andernfalls wird sie versteckt.
-     *
-     * @changed
-     *     OLI 03.10.2007 - Erweiterung um die Konstante <TT>MAX_TRIES</TT> und Korrektur des
-     *             Verhaltens im Falle, da&szlig; an der gespeicherten Position bereits ein
-     *             Fenster angezeigt wird. Die Routine kann sich nun nicht mehr totlaufen und
-     *             bricht nach maximal MAX_TRIES Versuchen (derzeit 3) ab.<BR>
-     *
-     */
-    public void setVisible(boolean b) {
-        if (b) {
-            if (this.ini != null) {
-                int h = 0;
-                int w = 0;
-                Rectangle r = null;
-                this.pack();
-                r = new Rectangle(this.getBounds());
-                r.x = this.ini.readInt(this.getIdentifier(), "X", r.x);
-                r.y = this.ini.readInt(this.getIdentifier(), "Y", r.y);
-                if (!this.isCoordinatesOnly()) {
-                    if (this.isBruteRestore()) {
-                        r.width = this.ini.readInt(this.getIdentifier(), "Width", r.width);
-                        r.height = this.ini.readInt(this.getIdentifier(), "Height", r.height);
-                    } else {
-                        w = r.width;
-                        h = r.height;
-                        r.width = this.ini.readInt(this.getIdentifier(), "Width", r.width);
-                        r.height = this.ini.readInt(this.getIdentifier(), "Height", r.height);
-                        if (w > r.width) {
-                           r.width = w;
-                        }
-                        if (h > r.height) {
-                           r.height = h;
-                        }
-                    }
-                }
-                JDesktopPane jdp = getDesktopPane();
-                if (jdp != null) {
-                    Dimension  screen = jdp.getSize();
-                    if (screen.width < r.width) {
-                        r.width = screen.width;
-                    }
-                    if (screen.height < r.height) {
-                        r.height = screen.height;
-                    }
-                    if (r.x > screen.width-r.width) {
-                        if (screen.width-r.width >= 0) {
-                            r.x = screen.width-r.width;
-                        } else {
-                            r.x = 0;
-                        }
-                    } else if (r.x < 0) {
-                        r.x = 0;
-                    }
-                    if (r.y > screen.height-r.height) {
-                        if (screen.height-r.height >= 0) {
-                            r.y = screen.height-r.height;
-                        } else {
-                            r.y = 0;
-                        }
-                    } else if (r.y < 0) {
-                        r.y = 0;
-                    }
-                } else {
-                    r.x = 0;
-                    r.y = 0;
-                }
-                this.setBounds(r);
-                if ((this.getDesktopPane() != null) && (this.tries < MAX_TRIES)) {
-                    int x0 = 0;
-                    int y0 = 0;
-                    JInternalFrame[] frame = this.getDesktopPane().getAllFrames();
-                    Rectangle bounds = this.getBounds();
-                    for (int i = 0; i < frame.length; i++) {
-                        x0 = frame[i].getBounds().x;
-                        y0 = frame[i].getBounds().y;
-                        if ((frame[i] != this) && (bounds.x == x0) && (bounds.y == y0)) {
-                            this.setBounds(bounds.x + 25, bounds.y + 25, bounds.width, 
-                                    bounds.height);
-                            this.tries++;
-                            this.setVisible(false);
-                            this.setVisible(true);
-                        }
-                    }
-                } else if (this.tries < MAX_TRIES) {
-                    this.pack();
-                    r = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-                    this.setBounds((r.width / 2) - (this.getWidth() / 2) + r.x, (r.height / 2)
-                            - (this.getHeight() / 2) + r.y, this.getWidth(), this.getHeight());
-                    this.tries = 0;
-                }
-            } else {
-                this.pack();
-                if (CENTER_NEW) {
-                    Rectangle r = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-                    this.setBounds((r.width / 2) - (this.getWidth() / 2) + r.x, (r.height / 2)
-                            - (this.getHeight() / 2) + r.y, this.getWidth(), this.getHeight());
-                }
-                this.tries = 0;
-            }
-            if (Constants.StandardRessourceManager != null) {
-                COUtil.Update(this, this.getContext(), Constants.StandardRessourceManager);
-            }
-        } else {
-            if (this.ini != null) {
-                Rectangle r = this.getBounds();
-                try {
-                    this.ini.writeInt(this.getIdentifier(), "X", r.x);
-                    this.ini.writeInt(this.getIdentifier(), "Y", r.y);
-                    this.ini.writeInt(this.getIdentifier(), "Width", r.width);
-                    this.ini.writeInt(this.getIdentifier(), "Height", r.height);
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-            }
-        }
-        super.setVisible(b);
-    }
-    
-    
-    /* Implementierung des Interfaces Ressourced. */
+	/**
+	 * @return <TT>true</TT>, wenn nur die Koordinaten aus der Datei restauriert
+	 *         werden,<BR>
+	 *         <TT>false</TT> sonst.
+	 */
+	@Override
+	public boolean isCoordinatesOnly() {
+		return this.coordinatesOnly;
+	}
 
-    public String getContext() {
-        if (this.context != null) {
-            return this.context;
-        }
-        return this.getIdentifier();
-    }
-    
-    public boolean isStrongDisabled() {
-        return this.strongdisabled;
-    }
-    
-    public void setContext(String c) {
-        this.context = c;
-    }
-    
-    public synchronized void setStrongDisabled(boolean b) {
-        this.setEnabled(false);
-        this.strongdisabled = b;
-    }
+	private static final int MAX_TRIES = 3;
+	private int tries = 0;
 
-    /**
-     * @changed
-     *     OLI 10.10.2007 - Hinzugef&uuml;gt.<BR>
-     *
-     */
-    public void update(RessourceManager rm) {
-        String c = COUtil.GetFullContext(this);
-System.out.println("---- " + c);
-        String s = rm.getTitle(c);
-        if (s.length() > 0) {
-            this.setTitle(s);
-        }
-        Icon icon = rm.getIcon(c);
-        if (icon != null) {
-            this.setFrameIcon(icon);
-        }
-    }
+	/**
+	 * Zeigt bzw. versteckt die Komponente.
+	 *
+	 * @param b Wird dieser Parameter mit dem Wert <TT>true</TT> &uuml;bergeben, so
+	 *          wird die Komponente zur Anzeige gebracht, andernfalls wird sie
+	 *          versteckt.
+	 *
+	 * @changed OLI 03.10.2007 - Erweiterung um die Konstante <TT>MAX_TRIES</TT> und
+	 *          Korrektur des Verhaltens im Falle, da&szlig; an der gespeicherten
+	 *          Position bereits ein Fenster angezeigt wird. Die Routine kann sich
+	 *          nun nicht mehr totlaufen und bricht nach maximal MAX_TRIES Versuchen
+	 *          (derzeit 3) ab.<BR>
+	 *
+	 */
+	@Override
+	public void setVisible(boolean b) {
+		if (b) {
+			if (this.ini != null) {
+				int h = 0;
+				int w = 0;
+				Rectangle r = null;
+				this.pack();
+				r = new Rectangle(this.getBounds());
+				r.x = this.ini.readInt(this.getIdentifier(), "X", r.x);
+				r.y = this.ini.readInt(this.getIdentifier(), "Y", r.y);
+				if (!this.isCoordinatesOnly()) {
+					if (this.isBruteRestore()) {
+						r.width = this.ini.readInt(this.getIdentifier(), "Width", r.width);
+						r.height = this.ini.readInt(this.getIdentifier(), "Height", r.height);
+					} else {
+						w = r.width;
+						h = r.height;
+						r.width = this.ini.readInt(this.getIdentifier(), "Width", r.width);
+						r.height = this.ini.readInt(this.getIdentifier(), "Height", r.height);
+						if (w > r.width) {
+							r.width = w;
+						}
+						if (h > r.height) {
+							r.height = h;
+						}
+					}
+				}
+				JDesktopPane jdp = getDesktopPane();
+				if (jdp != null) {
+					Dimension screen = jdp.getSize();
+					if (screen.width < r.width) {
+						r.width = screen.width;
+					}
+					if (screen.height < r.height) {
+						r.height = screen.height;
+					}
+					if (r.x > screen.width - r.width) {
+						if (screen.width - r.width >= 0) {
+							r.x = screen.width - r.width;
+						} else {
+							r.x = 0;
+						}
+					} else if (r.x < 0) {
+						r.x = 0;
+					}
+					if (r.y > screen.height - r.height) {
+						if (screen.height - r.height >= 0) {
+							r.y = screen.height - r.height;
+						} else {
+							r.y = 0;
+						}
+					} else if (r.y < 0) {
+						r.y = 0;
+					}
+				} else {
+					r.x = 0;
+					r.y = 0;
+				}
+				this.setBounds(r);
+				if ((this.getDesktopPane() != null) && (this.tries < MAX_TRIES)) {
+					int x0 = 0;
+					int y0 = 0;
+					JInternalFrame[] frame = this.getDesktopPane().getAllFrames();
+					Rectangle bounds = this.getBounds();
+					for (int i = 0; i < frame.length; i++) {
+						x0 = frame[i].getBounds().x;
+						y0 = frame[i].getBounds().y;
+						if ((frame[i] != this) && (bounds.x == x0) && (bounds.y == y0)) {
+							this.setBounds(bounds.x + 25, bounds.y + 25, bounds.width, bounds.height);
+							this.tries++;
+							this.setVisible(false);
+							this.setVisible(true);
+						}
+					}
+				} else if (this.tries < MAX_TRIES) {
+					this.pack();
+					r = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+					this.setBounds((r.width / 2) - (this.getWidth() / 2) + r.x,
+							(r.height / 2) - (this.getHeight() / 2) + r.y, this.getWidth(), this.getHeight());
+					this.tries = 0;
+				}
+			} else {
+				this.pack();
+				if (CENTER_NEW) {
+					Rectangle r = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+					this.setBounds((r.width / 2) - (this.getWidth() / 2) + r.x,
+							(r.height / 2) - (this.getHeight() / 2) + r.y, this.getWidth(), this.getHeight());
+				}
+				this.tries = 0;
+			}
+			if (Constants.StandardRessourceManager != null) {
+				COUtil.Update(this, this.getContext(), Constants.StandardRessourceManager);
+			}
+		} else {
+			if (this.ini != null) {
+				Rectangle r = this.getBounds();
+				try {
+					this.ini.writeInt(this.getIdentifier(), "X", r.x);
+					this.ini.writeInt(this.getIdentifier(), "Y", r.y);
+					this.ini.writeInt(this.getIdentifier(), "Width", r.width);
+					this.ini.writeInt(this.getIdentifier(), "Height", r.height);
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+			}
+		}
+		super.setVisible(b);
+	}
+
+	/* Implementierung des Interfaces Ressourced. */
+
+	@Override
+	public String getContext() {
+		if (this.context != null) {
+			return this.context;
+		}
+		return this.getIdentifier();
+	}
+
+	@Override
+	public boolean isStrongDisabled() {
+		return this.strongdisabled;
+	}
+
+	@Override
+	public void setContext(String c) {
+		this.context = c;
+	}
+
+	@Override
+	public synchronized void setStrongDisabled(boolean b) {
+		this.setEnabled(false);
+		this.strongdisabled = b;
+	}
+
+	/**
+	 * @changed OLI 10.10.2007 - Hinzugef&uuml;gt.<BR>
+	 *
+	 */
+	@Override
+	public void update(RessourceManager rm) {
+		String c = COUtil.GetFullContext(this);
+		log.info("---- " + c);
+		String s = rm.getTitle(c);
+		if (s.length() > 0) {
+			this.setTitle(s);
+		}
+		Icon icon = rm.getIcon(c);
+		if (icon != null) {
+			this.setFrameIcon(icon);
+		}
+	}
 
 }

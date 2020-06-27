@@ -45,6 +45,7 @@ import corent.base.StrUtil;
 import corent.djinn.FrameEditorDjinn;
 import corent.djinn.SubEditor;
 import corent.djinn.VectorPanelButtonFactory;
+import logging.Logger;
 
 /**
  * Ein in einen EditorDjinn einbindbarer SubEditor zur Bearbeitung von
@@ -60,6 +61,8 @@ import corent.djinn.VectorPanelButtonFactory;
  */
 
 public class TabellenspaltenSubEditor implements SubEditor {
+
+	private static final Logger log = Logger.getLogger(TabellenspaltenSubEditor.class);
 
 	/* Der Bearbeiten-Button des Panels. */
 	private JButton buttonBearbeiten = null;
@@ -78,8 +81,8 @@ public class TabellenspaltenSubEditor implements SubEditor {
 	/* Das Panel, auf dem der SubEditor abgebildet wird. */
 	private JPanel panel = null;
 	/*
-	 * Liste der JPanels, auf denen die zugreifbaren Components untergebracht
-	 * werden sollen.
+	 * Liste der JPanels, auf denen die zugreifbaren Components untergebracht werden
+	 * sollen.
 	 */
 	private JPanel[] panels = null;
 	/* Die Tabellenansicht zur Auswahl der Tabellenspalten. */
@@ -89,16 +92,12 @@ public class TabellenspaltenSubEditor implements SubEditor {
 	private TabellenModel tabelle = null;
 
 	/**
-	 * Generiert einen TabellenspaltenSubEditor mit den &uuml;bergebenen
-	 * Parametern.
+	 * Generiert einen TabellenspaltenSubEditor mit den &uuml;bergebenen Parametern.
 	 * 
-	 * @param tm
-	 *            Das TabellenModel, dessen Spalten manipuliert werden sollen.
-	 * @param vpbf
-	 *            Eine VectorPanelButtonFactory zum Erzeugen der Buttons des
-	 *            Panels.
-	 * @param guiBundle
-	 *            A bundle with GUI information.
+	 * @param tm        Das TabellenModel, dessen Spalten manipuliert werden sollen.
+	 * @param vpbf      Eine VectorPanelButtonFactory zum Erzeugen der Buttons des
+	 *                  Panels.
+	 * @param guiBundle A bundle with GUI information.
 	 */
 	public TabellenspaltenSubEditor(TabellenModel tm, VectorPanelButtonFactory vpbf, GUIBundle guiBundle) {
 		super();
@@ -106,18 +105,21 @@ public class TabellenspaltenSubEditor implements SubEditor {
 		this.tabelle = tm;
 		this.buttonBearbeiten = vpbf.createButtonBearbeiten();
 		this.buttonBearbeiten.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				doButtonBearbeiten();
 			}
 		});
 		this.buttonEinfuegen = vpbf.createButtonEinfuegen();
 		this.buttonEinfuegen.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				doButtonEinfuegen();
 			}
 		});
 		this.buttonEntfernen = vpbf.createButtonEntfernen();
 		this.buttonEntfernen.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				doButtonEntfernen();
 			}
@@ -152,8 +154,7 @@ public class TabellenspaltenSubEditor implements SubEditor {
 	 */
 	public void doButtonBearbeiten() {
 		if (this.anzeige.getSelectedRow() >= 0) {
-			final TabellenspaltenModel ts = (TabellenspaltenModel) this.tabelle.getTabellenspalteAt(this.anzeige
-					.getSelectedRow());
+			final TabellenspaltenModel ts = this.tabelle.getTabellenspalteAt(this.anzeige.getSelectedRow());
 			new FrameEditorDjinn(StrUtil.FromHTML("&Auml;ndern " + "Tabellenspalte ") + ts.getName(), ts, false, null) {
 				@Override
 				public void doClosed() {
@@ -192,9 +193,9 @@ public class TabellenspaltenSubEditor implements SubEditor {
 					HistoryOwnerUtil.addChangedTag(ts, "Added");
 					HistoryOwnerUtil.addChangedTag(tabelle, "Added column: " + ts.getName());
 				} else {
-					JOptionPane.showMessageDialog(null, StrUtil.FromHTML("Es existiert bereits "
-							+ " eine Tabellenspalte mit dem Namen " + ts.getName() + "!"), "DoppelteTabellenspalte",
-							JOptionPane.OK_OPTION);
+					JOptionPane.showMessageDialog(null, StrUtil.FromHTML(
+							"Es existiert bereits " + " eine Tabellenspalte mit dem Namen " + ts.getName() + "!"),
+							"DoppelteTabellenspalte", JOptionPane.OK_OPTION);
 				}
 			}
 
@@ -211,36 +212,38 @@ public class TabellenspaltenSubEditor implements SubEditor {
 	 */
 	public void doButtonEntfernen() {
 		if (this.anzeige.getSelectedRow() >= 0) {
-			TabellenspaltenModel ts = (TabellenspaltenModel) this.tabelle.getTabellenspalteAt(this.anzeige
-					.getSelectedRow());
+			TabellenspaltenModel ts = this.tabelle.getTabellenspalteAt(this.anzeige.getSelectedRow());
 			for (TableModel tm : this.tabelle.getDiagramm().getTables()) {
 				for (ColumnModel c : tm.getColumns()) {
 					if ((c.getRelation() != null) && (c.getRelation().getReferenced() == ts)) {
 						JOptionPane.showMessageDialog(null, this.guiBundle.getResourceText(
 								"archimedes.TableDialog.error.column.is.referenced.by.another." + "column.label")
-								.replace("{0}", c.toString()), this.guiBundle
-								.getResourceText("archimedes.TableDialog.error."
-										+ "column.is.referenced.by.another.column.title"), JOptionPane.YES_OPTION);
-						System.out.println("Is referenced by column: " + c.getFullName());
+								.replace("{0}", c.toString()),
+								this.guiBundle.getResourceText("archimedes.TableDialog.error."
+										+ "column.is.referenced.by.another.column.title"),
+								JOptionPane.YES_OPTION);
+						log.warn("Is referenced by column: " + c.getFullName());
 						return;
 					}
 				}
 				for (NReferenceModel nrm : tm.getNReferences()) {
 					if (nrm.getColumn() == ts) {
-						JOptionPane.showMessageDialog(null, this.guiBundle.getResourceText(
-								"archimedes.TableDialog.error.column.is.referenced.by." + "nReference.label").replace(
-								"{0}", tm.getName()), this.guiBundle.getResourceText("archimedes.TableDialog.error."
-								+ "column.is.referenced.by.nReference.title"), JOptionPane.YES_OPTION);
-						System.out.println("Is referenced by n-reference of table: " + tm.getName());
+						JOptionPane.showMessageDialog(null,
+								this.guiBundle.getResourceText(
+										"archimedes.TableDialog.error.column.is.referenced.by." + "nReference.label")
+										.replace("{0}", tm.getName()),
+								this.guiBundle.getResourceText(
+										"archimedes.TableDialog.error." + "column.is.referenced.by.nReference.title"),
+								JOptionPane.YES_OPTION);
+						log.warn("Is referenced by n-reference of table: " + tm.getName());
 						return;
 					}
 				}
 			}
-			if (ts.isPrimaryKey()
-					&& (JOptionPane.showConfirmDialog(null, this.guiBundle
-							.getResourceText("archimedes.TableDialog.warning.column.is." + "primary.key.label"),
-							this.guiBundle.getResourceText("archimedes."
-									+ "TableDialog.warning.column.is.primary.key.title"), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)) {
+			if (ts.isPrimaryKey() && (JOptionPane.showConfirmDialog(null,
+					this.guiBundle.getResourceText("archimedes.TableDialog.warning.column.is." + "primary.key.label"),
+					this.guiBundle.getResourceText("archimedes." + "TableDialog.warning.column.is.primary.key.title"),
+					JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)) {
 				return;
 			}
 			this.tabelle.getAuswahlMembers().removeElement(ts);
@@ -281,25 +284,31 @@ public class TabellenspaltenSubEditor implements SubEditor {
 
 	/* Implementierung des Interfaces SubEditorDesriptor. */
 
+	@Override
 	public void cleanupData() {
 	}
 
+	@Override
 	public JComponent getComponent(int n) {
 		return this.components[n];
 	}
 
+	@Override
 	public int getComponentCount() {
 		return this.components.length;
 	}
 
+	@Override
 	public JPanel getComponentPanel(int n) {
 		return this.panels[n];
 	}
 
+	@Override
 	public JLabel getLabel(int n) {
 		return this.labels[n];
 	}
 
+	@Override
 	public JPanel getPanel() {
 		return this.panel;
 	}
@@ -308,6 +317,7 @@ public class TabellenspaltenSubEditor implements SubEditor {
 		this.tabelle = (TabellenModel) attr;
 	}
 
+	@Override
 	public void transferData() {
 	}
 
@@ -342,15 +352,17 @@ class TabellenspaltenTableModel extends AbstractTableModel {
 	@Override
 	public String getColumnName(int column) {
 		if ((columnname != null) && (column >= 0) && (column < columnname.length) && (columnname[column] != null)) {
-			return (String) columnname[column];
+			return columnname[column];
 		}
 		return "";
 	}
 
+	@Override
 	public int getRowCount() {
 		return tm.getTabellenspaltenCount();
 	}
 
+	@Override
 	public int getColumnCount() {
 		if (columnname != null) {
 			return columnname.length;
@@ -358,8 +370,9 @@ class TabellenspaltenTableModel extends AbstractTableModel {
 		return 1;
 	}
 
+	@Override
 	public Object getValueAt(int row, int column) {
-		TabellenspaltenModel tsm = (TabellenspaltenModel) tm.getTabellenspalteAt(row);
+		TabellenspaltenModel tsm = tm.getTabellenspalteAt(row);
 		switch (column) {
 		case 0:
 			String n = tsm.getName();
@@ -404,8 +417,8 @@ class TabellenspaltenTableModel extends AbstractTableModel {
 				if (tsm.getPanel().getPanelNumber() > 0) {
 					panel = "-P" + tsm.getPanel().getPanelNumber();
 				}
-				erg = erg.concat((tsm.isWriteablemember() ? "*" : "") + tsm.getEditorPosition()).concat(panel).concat(
-						", \"").concat(tsm.getLabelText()).concat("\"");
+				erg = erg.concat((tsm.isWriteablemember() ? "*" : "") + tsm.getEditorPosition()).concat(panel)
+						.concat(", \"").concat(tsm.getLabelText()).concat("\"");
 				if (tsm.getMnemonic().length() > 0) {
 					erg = erg.concat("(").concat(tsm.getMnemonic()).concat(")");
 				}

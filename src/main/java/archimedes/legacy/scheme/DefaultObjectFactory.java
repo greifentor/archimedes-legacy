@@ -15,8 +15,6 @@ import java.sql.Types;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-import logging.Logger;
-
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.app.ApplicationUtil;
 import archimedes.legacy.app.ArchimedesDescriptorFactory;
@@ -45,24 +43,30 @@ import archimedes.scheme.SelectionMember;
 import corent.base.Direction;
 import corent.base.StrUtil;
 import corent.db.DBType;
+import logging.Logger;
 
 /**
- * Diese Implementierung der ObjectFactory liefert Objekte der mitgelieferten Klassen des Archimedes-Systems.
+ * Diese Implementierung der ObjectFactory liefert Objekte der mitgelieferten
+ * Klassen des Archimedes-Systems.
  * 
  * @author ollie
  *         <P>
  * 
- * @changed OLI 06.10.2007 - Anpassung der Methoden zur Generierung von DefaultComments an die
- *          Archimedes-Applikationslogik. Erweiterung der ObjectFactory um das Attribut <TT>adf</TT>. Erweiterung der
- *          Implementierung des Interfaces ObjectFactory um die Methoden <TT>setADF(ArchimedesDescriptorFactory)</TT>
- *          und <TT>getADF()</TT>.
+ * @changed OLI 06.10.2007 - Anpassung der Methoden zur Generierung von
+ *          DefaultComments an die Archimedes-Applikationslogik. Erweiterung der
+ *          ObjectFactory um das Attribut <TT>adf</TT>. Erweiterung der
+ *          Implementierung des Interfaces ObjectFactory um die Methoden
+ *          <TT>setADF(ArchimedesDescriptorFactory)</TT> und <TT>getADF()</TT>.
  *          <P>
- *          OLI 06.11.2007 - Erweiterung der Methode <TT>createTabelle(ViewModel, int, int, 
- *             DiagrammModel, boolean)</TT> um die F&auml;higkeit in Templatedateien Referenzen zu verarzten.
+ *          OLI 06.11.2007 - Erweiterung der Methode
+ *          <TT>createTabelle(ViewModel, int, int, 
+ *             DiagrammModel, boolean)</TT> um die F&auml;higkeit in
+ *          Templatedateien Referenzen zu verarzten.
  *          <P>
  *          OLI 27.07.2008 - Verenglischung der eingebauten Standard-Tabelle.
  *          <P>
- *          OLI 11.08.2008 - &Uuml;bernahme der technischen Felder in den Copy-&amp;-Paste-Mechanismus.
+ *          OLI 11.08.2008 - &Uuml;bernahme der technischen Felder in den
+ *          Copy-&amp;-Paste-Mechanismus.
  * 
  */
 
@@ -74,7 +78,8 @@ public class DefaultObjectFactory implements ObjectFactory {
 	private static final Logger LOG = Logger.getLogger(DefaultObjectFactory.class);
 
 	/*
-	 * Referenz auf die ArchimedesDescriptorFactory mit der die ObjectFactory arbeiten soll.
+	 * Referenz auf die ArchimedesDescriptorFactory mit der die ObjectFactory
+	 * arbeiten soll.
 	 */
 	private ArchimedesDescriptorFactory adf = null;
 	/* Der Name der Template-Datei. */
@@ -93,18 +98,22 @@ public class DefaultObjectFactory implements ObjectFactory {
 
 	/* Implementierung des Interfaces ObjectFactory. */
 
+	@Override
 	public DiagrammModel createDiagramm() {
 		return new Diagramm();
 	}
 
+	@Override
 	public DomainModel createDomain() {
 		return new Domain();
 	}
 
+	@Override
 	public DomainModel createDomain(String name, int dt, int len, int nks) {
 		return new Domain(name, dt, len, nks);
 	}
 
+	@Override
 	@Deprecated
 	public RelationModel createRelation(ViewModel view, TabellenspaltenModel t1, Direction direction1, int offset1,
 			TabellenspaltenModel t2, Direction direction2, int offset2) {
@@ -120,10 +129,12 @@ public class DefaultObjectFactory implements ObjectFactory {
 		return new Relation(view, t1, direction1, offset1, t2, direction2, offset2);
 	}
 
+	@Override
 	public StereotypeModel createStereotype() {
 		return new Stereotype();
 	}
 
+	@Override
 	public StereotypeModel createStereotype(String name, String kommentar) {
 		return new Stereotype(name, kommentar);
 	}
@@ -133,6 +144,7 @@ public class DefaultObjectFactory implements ObjectFactory {
 	 *          <P>
 	 * 
 	 */
+	@Override
 	public TabellenModel createTabelle(ViewModel view, int x, int y, DiagrammModel d, String s) {
 		TabellenModel tm = new Tabelle(view, x, y, d);
 		try {
@@ -199,13 +211,16 @@ public class DefaultObjectFactory implements ObjectFactory {
 		}
 		PanelModel[] panels = tm.getPanels();
 		/*
-		 * len = this.getInteger(p, "template.stereotype.count", 0); for (int i = 0; i < len; i++) { String name =
-		 * p.getProperty("template.stereotype." + i + ".name", ""); if (name.length() > 0) { StereotypeModel stm = null;
-		 * try { stm = d.getStereotype(p.getProperty("template.stereotype." + i + ".name", "" )); } catch
-		 * (NoSuchElementException nsee) { } if (stm == null) { String description =
-		 * p.getProperty("template.stereotype." + i + ".description", "-").replace("$BR$", "\n"); stm =
-		 * this.createStereotype(name, description); if (Boolean.parseBoolean(p.getProperty("template.stereotype." + i +
-		 * ".ishidetable"))) { ((Stereotype) stm).setHideTable(true); } } tm.addStereotype(stm); } }
+		 * len = this.getInteger(p, "template.stereotype.count", 0); for (int i = 0; i <
+		 * len; i++) { String name = p.getProperty("template.stereotype." + i + ".name",
+		 * ""); if (name.length() > 0) { StereotypeModel stm = null; try { stm =
+		 * d.getStereotype(p.getProperty("template.stereotype." + i + ".name", "" )); }
+		 * catch (NoSuchElementException nsee) { } if (stm == null) { String description
+		 * = p.getProperty("template.stereotype." + i + ".description",
+		 * "-").replace("$BR$", "\n"); stm = this.createStereotype(name, description);
+		 * if (Boolean.parseBoolean(p.getProperty("template.stereotype." + i +
+		 * ".ishidetable"))) { ((Stereotype) stm).setHideTable(true); } }
+		 * tm.addStereotype(stm); } }
 		 */
 		len = this.getInteger(p, "template.domain.count", 0);
 		for (int i = 0; i < len; i++) {
@@ -250,7 +265,7 @@ public class DefaultObjectFactory implements ObjectFactory {
 				tsm.setToolTipText(p.getProperty("template.column." + i + ".tooltiptext", "-"));
 				tsm.setWriteablemember(
 						Boolean.parseBoolean(p.getProperty("template.column." + i + ".writeablemember")));
-				tsm.setPanel((PanelModel) panels[this.getInteger(p, "template.column." + i + ".panel", 0)]);
+				tsm.setPanel(panels[this.getInteger(p, "template.column." + i + ".panel", 0)]);
 				tsm.setRessourceIdentifier(p.getProperty("template.column." + i + ".ressourceidentifier", ""));
 				tsm.setTechnicalField(Boolean.parseBoolean(p.getProperty("template.column." + i + ".technicalfield")));
 				if (Boolean.parseBoolean(p.getProperty("template.column." + i + ".comparetomember"))) {
@@ -329,14 +344,15 @@ public class DefaultObjectFactory implements ObjectFactory {
 	}
 
 	/**
-	 * @changed OLI 06.11.2007 - Erweiterung um die M&ouml;glichkeit &uuml;ber Templatedateien auch Referenzen zu
-	 *          definieren.<BR>
+	 * @changed OLI 06.11.2007 - Erweiterung um die M&ouml;glichkeit &uuml;ber
+	 *          Templatedateien auch Referenzen zu definieren.<BR>
 	 * 
 	 */
+	@Override
 	public TabellenModel createTabelle(ViewModel view, int x, int y, DiagrammModel d,
 			boolean filled /*
-						    * , boolean template
-						    */) {
+							 * , boolean template
+							 */) {
 		TabellenModel tm = new Tabelle(view, x, y, d);
 		if (!filled) {
 			PanelModel pm = this.createPanel();
@@ -364,7 +380,7 @@ public class DefaultObjectFactory implements ObjectFactory {
 				tsmIdent.setToolTipText("");
 				tsmIdent.setMnemonic("");
 				tsmIdent.setWriteablemember(false);
-				tsmIdent.setPanel((PanelModel) tm.getPanels()[0]);
+				tsmIdent.setPanel(tm.getPanels()[0]);
 				tm.addTabellenspalte(tsmIdent);
 				TabellenspaltenModel tsmAktiv = this.createTabellenspalte("Deleted", domainBoolean, false);
 				tsmAktiv.setEditormember(false);
@@ -372,7 +388,7 @@ public class DefaultObjectFactory implements ObjectFactory {
 				tsmAktiv.setToolTipText("");
 				tsmAktiv.setMnemonic("");
 				tsmAktiv.setWriteablemember(false);
-				tsmAktiv.setPanel((PanelModel) tm.getPanels()[0]);
+				tsmAktiv.setPanel(tm.getPanels()[0]);
 				tm.addTabellenspalte(tsmAktiv);
 				TabellenspaltenModel tsmBezeichnung = this.createTabellenspalte("Description", domainBezeichnung,
 						false);
@@ -384,7 +400,7 @@ public class DefaultObjectFactory implements ObjectFactory {
 						StrUtil.FromHTML("Geben Sie hier eine eindeutige," + "aussagekr&auml;ftige Bezeichnung ein."));
 				tsmBezeichnung.setMnemonic("B");
 				tsmBezeichnung.setWriteablemember(true);
-				tsmBezeichnung.setPanel((PanelModel) tm.getPanels()[0]);
+				tsmBezeichnung.setPanel(tm.getPanels()[0]);
 				tm.addTabellenspalte(tsmBezeichnung);
 				TabellenspaltenModel tsmKuerzel = this.createTabellenspalte("Token", domainKuerzel, false);
 				tsmKuerzel.setLabelText(StrUtil.FromHTML("K&uuml;rzel"));
@@ -394,7 +410,7 @@ public class DefaultObjectFactory implements ObjectFactory {
 				tsmKuerzel.setWriteablemember(true);
 				tsmKuerzel.setEditorPosition(2);
 				tsmKuerzel.setRessourceIdentifier("TextFieldToken");
-				tsmKuerzel.setPanel((PanelModel) tm.getPanels()[0]);
+				tsmKuerzel.setPanel(tm.getPanels()[0]);
 				tm.addTabellenspalte(tsmKuerzel);
 				tm.setGenerateCode(true);
 				tm.addEqualsMember(tsmIdent);
@@ -483,7 +499,7 @@ public class DefaultObjectFactory implements ObjectFactory {
 					tsm.setMnemonic(System.getProperty("template.column." + i + ".mnemonic", ""));
 					tsm.setToolTipText(System.getProperty("template.column." + i + ".tooltiptext", "-"));
 					tsm.setWriteablemember(Boolean.getBoolean("template.column." + i + ".writeablemember"));
-					tsm.setPanel((PanelModel) panels[Integer.getInteger("template.column." + i + ".panel", 0)]);
+					tsm.setPanel(panels[Integer.getInteger("template.column." + i + ".panel", 0)]);
 					tsm.setRessourceIdentifier(System.getProperty("template.column." + i + ".ressourceidentifier", ""));
 					if (Boolean.getBoolean("template.column." + i + ".comparetomember")) {
 						tm.addCompareMember(tsm);
@@ -540,18 +556,22 @@ public class DefaultObjectFactory implements ObjectFactory {
 		return tm;
 	}
 
+	@Override
 	public TabellenspaltenModel createTabellenspalte(String n, DomainModel dom) {
 		return new Tabellenspalte(n, dom);
 	}
 
+	@Override
 	public TabellenspaltenModel createTabellenspalte(String n, DomainModel dom, boolean pk) {
 		return new Tabellenspalte(n, dom, pk);
 	}
 
+	@Override
 	public DefaultCommentModel createDefaultComment() {
 		return new DefaultComment(this.getADF());
 	}
 
+	@Override
 	public DefaultCommentModel createDefaultComment(String name, String kommentar) {
 		DefaultComment dc = new DefaultComment(this.getADF());
 		dc.setComment(kommentar);
@@ -559,20 +579,13 @@ public class DefaultObjectFactory implements ObjectFactory {
 		return dc;
 	}
 
+	@Override
 	public CodeFactory createCodeFactory(String cls) {
 		CodeFactory cf = new DefaultCodeFactory();
 		if ((cls != null) && !cls.isEmpty()) {
 			try {
 				cf = (CodeFactory) Class.forName(cls).newInstance();
 			} catch (Exception e) {
-				/*
-				 * System.out.println("\n\n*******************************************************" +
-				 * "********************"); System.out.println("\nInstanzierung der CodeFactory " + cls +
-				 * " fehlgeschlagen!"); System.out.println("\nexception: " + e.getMessage());
-				 * e.printStackTrace();System.out.println( "\nArbeit wird mit DefaultCodeFactory fortgesetzt.\n");
-				 * System.out.println( "***********************************************************" +
-				 * "****************");
-				 */
 				LOG.error("error while code factory instantiation: " + cls + ", exception: "
 						+ e.getClass().getSimpleName() + " - " + e.getMessage());
 			}
@@ -583,22 +596,27 @@ public class DefaultObjectFactory implements ObjectFactory {
 		return cf;
 	}
 
+	@Override
 	public NReferenzModel createNReferenz() {
 		return new NReferenz();
 	}
 
+	@Override
 	public NReferenzModel createNReferenz(TabellenModel tm) {
 		return new NReferenz(tm);
 	}
 
+	@Override
 	public ViewModel createView() {
 		return new View();
 	}
 
+	@Override
 	public ViewModel createMainView(String name, String beschreibung, boolean isShowReferencedColumns) {
 		return new MainView(name, beschreibung, isShowReferencedColumns);
 	}
 
+	@Override
 	public PanelModel createPanel() {
 		return new Panel();
 	}
@@ -611,18 +629,22 @@ public class DefaultObjectFactory implements ObjectFactory {
 		return new Option("option");
 	}
 
+	@Override
 	public OrderMemberModel createOrderMember() {
 		return new OrderMember();
 	}
 
+	@Override
 	public OrderMemberModel createOrderMember(TabellenspaltenModel tsm) {
 		return new OrderMember(tsm);
 	}
 
+	@Override
 	public ArchimedesDescriptorFactory getADF() {
 		return this.adf;
 	}
 
+	@Override
 	public void setADF(ArchimedesDescriptorFactory adf) {
 		this.adf = adf;
 	}
@@ -635,16 +657,18 @@ public class DefaultObjectFactory implements ObjectFactory {
 	/* Hilfsmethoden. */
 
 	/**
-	 * Pr&uumL;ft, ob das angegebene Diagramm &uuml;ber eine Domain mit dem angegebenen Namen verf&uuml;gt und legt
-	 * diese gegebenenfalls an.
+	 * Pr&uumL;ft, ob das angegebene Diagramm &uuml;ber eine Domain mit dem
+	 * angegebenen Namen verf&uuml;gt und legt diese gegebenenfalls an.
 	 * 
 	 * @param name Der Name der gesuchten Domain.
-	 * @param dt   Der Types-Datentyp f&uuml;r den Fall, da&szlig; die Domain angelegt werden mu&szlig;.
+	 * @param dt   Der Types-Datentyp f&uuml;r den Fall, da&szlig; die Domain
+	 *             angelegt werden mu&szlig;.
 	 * @param len  Die L&auml;nge des Datenfeldes, falls erforderlich.
 	 * @param nks  Eine Angabe zu den Nachkommastellen der Domain.
 	 * @param dm   Eine Referenz auf das DiagrammModel, in dem Gesucht werden soll.
-	 * @return Eine bereits vorhandene Domain mit dem angegebenen Namen bzw. eine neuerzeugte, falls keine mit dem Namen
-	 *         im DiagrammModel gefunden worden ist.
+	 * @return Eine bereits vorhandene Domain mit dem angegebenen Namen bzw. eine
+	 *         neuerzeugte, falls keine mit dem Namen im DiagrammModel gefunden
+	 *         worden ist.
 	 */
 	protected DomainModel getDomain(String name, int dt, int len, int nks, DiagrammModel dm) {
 		DomainModel dom = null;
