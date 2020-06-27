@@ -245,7 +245,7 @@ public class ApplicationUtil {
 							+ "\nComponent-Classname: " + c.getClass().getName(),
 					"Komponentenname", JOptionPane.INFORMATION_MESSAGE);
 		} else {
-			System.out.println("context-name=" + s + (c instanceof ContextOwner ? " (ContextOwner)" : ""));
+			log.info("context-name=" + s + (c instanceof ContextOwner ? " (ContextOwner)" : ""));
 		}
 	}
 
@@ -297,7 +297,7 @@ public class ApplicationUtil {
 				menu.add(menuItem);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("while creating UI menu: " + e.getMessage(), e);
 		}
 		return menu;
 	}
@@ -499,10 +499,10 @@ public class ApplicationUtil {
 			d = new Diagramm();
 			d = (Diagramm) d.createDiagramm(stf);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("while reading diagram file: " + dn + ", message: " + e.getMessage(), e);
 		}
 		if (show) {
-			System.out.println("ads file red in " + (System.currentTimeMillis() - millis) + "ms");
+			log.info("ads file red in " + (System.currentTimeMillis() - millis) + "ms");
 		}
 		return d;
 	}
@@ -521,7 +521,7 @@ public class ApplicationUtil {
 			sb.append("Archimedes version " + Archimedes.GetVersion() + "\n");
 		}
 		if (sb.length() > 0) {
-			System.out.println("\n" + sb.toString() + "\n");
+			log.info("\n" + sb.toString() + "\n");
 		}
 	}
 
@@ -691,7 +691,7 @@ public class ApplicationUtil {
 				}
 				DBExec.CloseQuery(rs);
 			} catch (java.sql.SQLException sqle) {
-				sqle.printStackTrace();
+				log.error("while reading primary keys: " + sqle.getMessage(), sqle);
 				log.info("HINWEIS: Diese Exception ist nicht problematisch!");
 			}
 			// c.close();
@@ -699,7 +699,7 @@ public class ApplicationUtil {
 		for (i = 0, len = svt.size(); i < len; i++) {
 			tmd = (TableMetaData) svt.elementAt(i);
 			if (Boolean.getBoolean("archimedes.app.ApplicationUtil.GetMetaData.output")) {
-				System.out.println(tmd + "\n");
+				log.info(tmd + "\n");
 			}
 		}
 		DBExec.CloseQuery(rs);
@@ -731,8 +731,8 @@ public class ApplicationUtil {
 				if (cmd != null) {
 					cmd.setForeignKeyConstraintName(fkName);
 					cmd.setReferencedTableName(pkTableName);
-					System.out.println("setting reference " + tmd.name + "." + cmd.name + " -> "
-							+ cmd.getReferencedTableName() + " (" + fkName + ")");
+					log.info("setting reference " + tmd.name + "." + cmd.name + " -> " + cmd.getReferencedTableName()
+							+ " (" + fkName + ")");
 				}
 			}
 		}
