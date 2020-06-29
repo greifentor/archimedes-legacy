@@ -22,6 +22,8 @@ To change the JVM to another as is configured as default, create a file named `j
 SET PATH=C:\JVMs\java11\bin;%PATH%
 ```
 
+into the file.
+
 This working with Window only in the moment.
 
 
