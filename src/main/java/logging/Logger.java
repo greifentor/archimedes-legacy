@@ -2,8 +2,6 @@ package logging;
 
 import org.apache.logging.log4j.LogManager;
 
-import de.ollie.dbtools.modelreader.liquibase.LiquibaseFileModelReader;
-
 /**
  * A logger wrapper.
  *
@@ -12,7 +10,6 @@ import de.ollie.dbtools.modelreader.liquibase.LiquibaseFileModelReader;
 public class Logger {
 
 	public static Logger getLogger(Class<?> cls) {
-		LiquibaseFileModelReader lfmr = null;
 		return new Logger(cls);
 	}
 
