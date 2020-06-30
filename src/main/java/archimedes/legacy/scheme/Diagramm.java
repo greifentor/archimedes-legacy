@@ -14,6 +14,7 @@ import static corentx.util.Checks.ensure;
 import java.awt.Color;
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -115,13 +116,12 @@ import gengen.metadata.ClassMetaData;
 import logging.Logger;
 
 /**
- * Diese Klasse stellt eine konkrete Auspr&auml;gung des DiagrammModels dar, die
- * ein Diagramm innerhalb der Archimedes-Applikation repr&auml;sentiert.
+ * Diese Klasse stellt eine konkrete Auspr&auml;gung des DiagrammModels dar, die ein Diagramm innerhalb der
+ * Archimedes-Applikation repr&auml;sentiert.
  * <P>
- * Die Property <B>archimedes.scheme.Diagramm.output</B> schaltet eine
- * pr&auml;zise Angabe zu den gelesenen Tabellen zu. Sonst wird lediglich die
- * Anzahl der einzulesenden Tabellen nach System.out geschrieben und ein Punkt
- * f&uuml;r jede eingelesene Tabelle gesetzt.
+ * Die Property <B>archimedes.scheme.Diagramm.output</B> schaltet eine pr&auml;zise Angabe zu den gelesenen Tabellen zu.
+ * Sonst wird lediglich die Anzahl der einzulesenden Tabellen nach System.out geschrieben und ein Punkt f&uuml;r jede
+ * eingelesene Tabelle gesetzt.
  * 
  * <B>Properies:</B>
  * <TABLE BORDER=1>
@@ -135,96 +135,67 @@ import logging.Logger;
  * <TD>archimedes.scheme.Diagramm.cout</TD>
  * <TD>Boolean</TD>
  * <TD>false</TD>
- * <TD>Wird diese Property gesetzt, so wird eine zus&auml;tzliche
- * Konsolenausgabe zwecks Debugging bzw. Fehlerzuordnung. Derzeit funktioniert
- * das nur in der Methode <TT>toSTF()</TT>.</TD>
+ * <TD>Wird diese Property gesetzt, so wird eine zus&auml;tzliche Konsolenausgabe zwecks Debugging bzw. Fehlerzuordnung.
+ * Derzeit funktioniert das nur in der Methode <TT>toSTF()</TT>.</TD>
  * </TR>
  * </TABLE>
  * 
  * @author ollie
  * 
- * @changed OLI 29.08.2007 - Erweiterung der Methode <TT>toSTF()</TT> um
- *          zus&auml;tzliche Konsolenausgaben.
- * @changed OLI 19.12.2007 - Anpassung der alter-table-Statements an PostgreSQL
- *          in der Methode
+ * @changed OLI 29.08.2007 - Erweiterung der Methode <TT>toSTF()</TT> um zus&auml;tzliche Konsolenausgaben.
+ * @changed OLI 19.12.2007 - Anpassung der alter-table-Statements an PostgreSQL in der Methode
  *          <TT>(buildUpdateScript(SortedVector, boolean, boolean, boolean, DBExecMode, Vector,
  *         Vector)</TT>.
- * @changed OLI 09.01.2008 - Einbau einer Debugausgabe (&uuml;ber die Properties
- *          <I>archimedes.scheme.Diagramm.debug</I> oder
- *          <I>archimedes.Archimedes.debug</I> zuschaltbar). Dabei Korrektur des
- *          Abgleiches mit der Datenbank (Text-Felder, Indices) f&uuml;r
- *          PostgreSQL. Alles in der Methode <TT>buildUpdateScript(...)</TT>
- *          erfolgt.
- * @changed OLI 11.01.2008 - Arbeiten am Debugging des Abgleiches mit
- *          HSQL-Datenbanken (numeric-Problem) (ebenfalls in der Methode
- *          <TT>buildUpdateScript(...)</TT>).
- * @changed OLI 20.01.2008 - Arbeiten am Debugging des Abgleiches der Indices
- *          zwischen Modell und Datenbank f&uuml;r mySQL und PostgreSQL in der
- *          Methode <TT>buildUpdateScript(...)</TT>.
- * @changed OLI 11.02.2008 - Erweiterung um das Attribut
- *          <TT>UdschebtiBaseClassName</TT>.
- * @changed OLI 16.02.2008 - Korrektur des Drop-Index-Statements f&uuml;r
- *          PostgreSQL beim Bau von Update-Scripts.
- * @changed OLI 17.02.2008 - Umbau Feldtypenvergleich beim Bau eines
- *          Updatescriptes auf einen Namensvergleich. Die Zahlenwerte f&uuml;r
- *          die SQL-Datentypen f&uuml;hrten zu Problemen.
- * @changed OLI 11.05.2008 - Erweiterung der Implementierung des Interfaces
- *          <TT>TabbedEditable</TT> um die Methode <TT>isTabEnabled(int)</TT>.
- * @changed OLI 09.08.2008 - Erweiterung um die Implementierung der Methoden
- *          <TT>isPaintTechnicalFieldsInGray()</TT> und
- *          <TT>setPaintTechnicalFieldsInGray(boolean)</TT>. Hierdurch
- *          k&ouml;nnen als technisch gekennzeichnete Felder in den Diagrammen
- *          ausgegraut dargestellt werden.
- * @changed OLI 10.08.2008 - Erweiterung der Schreib- und Leseroutine nach
- *          Erweiterung des ViewModels um die M&ouml;glichkeit eine Ausblendung
- *          technischer Felder anzugeben.
- * @changed OLI 16.08.2008 - Erweiterung der Schreibroutine um die
- *          M&ouml;glichkeit ein abgespeckte Version der ads-Datei zu erzeugen,
- *          die nur die f&uuml;r die Applikation notwendigen Daten enth&auml;lt
- *          und auf den grafischen Overhead verzichtet.
- * @changed OLI 04.09.2008 - Erweiterung um die Implementierung der Methoden
- *          <TT>getWriteChangeScript()</TT> und
+ * @changed OLI 09.01.2008 - Einbau einer Debugausgabe (&uuml;ber die Properties <I>archimedes.scheme.Diagramm.debug</I>
+ *          oder <I>archimedes.Archimedes.debug</I> zuschaltbar). Dabei Korrektur des Abgleiches mit der Datenbank
+ *          (Text-Felder, Indices) f&uuml;r PostgreSQL. Alles in der Methode <TT>buildUpdateScript(...)</TT> erfolgt.
+ * @changed OLI 11.01.2008 - Arbeiten am Debugging des Abgleiches mit HSQL-Datenbanken (numeric-Problem) (ebenfalls in
+ *          der Methode <TT>buildUpdateScript(...)</TT>).
+ * @changed OLI 20.01.2008 - Arbeiten am Debugging des Abgleiches der Indices zwischen Modell und Datenbank f&uuml;r
+ *          mySQL und PostgreSQL in der Methode <TT>buildUpdateScript(...)</TT>.
+ * @changed OLI 11.02.2008 - Erweiterung um das Attribut <TT>UdschebtiBaseClassName</TT>.
+ * @changed OLI 16.02.2008 - Korrektur des Drop-Index-Statements f&uuml;r PostgreSQL beim Bau von Update-Scripts.
+ * @changed OLI 17.02.2008 - Umbau Feldtypenvergleich beim Bau eines Updatescriptes auf einen Namensvergleich. Die
+ *          Zahlenwerte f&uuml;r die SQL-Datentypen f&uuml;hrten zu Problemen.
+ * @changed OLI 11.05.2008 - Erweiterung der Implementierung des Interfaces <TT>TabbedEditable</TT> um die Methode
+ *          <TT>isTabEnabled(int)</TT>.
+ * @changed OLI 09.08.2008 - Erweiterung um die Implementierung der Methoden <TT>isPaintTechnicalFieldsInGray()</TT> und
+ *          <TT>setPaintTechnicalFieldsInGray(boolean)</TT>. Hierdurch k&ouml;nnen als technisch gekennzeichnete Felder
+ *          in den Diagrammen ausgegraut dargestellt werden.
+ * @changed OLI 10.08.2008 - Erweiterung der Schreib- und Leseroutine nach Erweiterung des ViewModels um die
+ *          M&ouml;glichkeit eine Ausblendung technischer Felder anzugeben.
+ * @changed OLI 16.08.2008 - Erweiterung der Schreibroutine um die M&ouml;glichkeit ein abgespeckte Version der
+ *          ads-Datei zu erzeugen, die nur die f&uuml;r die Applikation notwendigen Daten enth&auml;lt und auf den
+ *          grafischen Overhead verzichtet.
+ * @changed OLI 04.09.2008 - Erweiterung um die Implementierung der Methoden <TT>getWriteChangeScript()</TT> und
  *          <TT>setAfterWriteScript(String)</TT>.
- * @changed OLI 15.09.2008 - Einbau der Lese- und Schreibroutine f&uuml;r die
- *          Codegeneratoroptionen.
+ * @changed OLI 15.09.2008 - Einbau der Lese- und Schreibroutine f&uuml;r die Codegeneratoroptionen.
  * @changed OLI 16.09.2008 - Erweiterung der Debugausgaben.
- * @changed OLI 22.09.2008 - Erweiterung um das Schreiben und Lesen des
- *          Tabellenspaltenattributs <TT>listItemField</TT>.
- * @changed OLI 15.12.2008 - Erweiterung um die Ber&uuml;cksichtigung der
- *          Referenzdaten beim Import von Datenmodellen.
+ * @changed OLI 22.09.2008 - Erweiterung um das Schreiben und Lesen des Tabellenspaltenattributs <TT>listItemField</TT>.
+ * @changed OLI 15.12.2008 - Erweiterung um die Ber&uuml;cksichtigung der Referenzdaten beim Import von Datenmodellen.
  * @changed OLI 08.03.2009 - Erweiterung um die Implementierung der Methode
  *          <TT>getCodegeneratorOptionsListTag(String, String)</TT>.
- * @changed OLI 09.03.2009 - Erweiterung der Schreib- und Leseroutine f&uuml;r
- *          die Attribute Parameter und Unique.
- * @changed OLI 21.03.2009 - Erweiterung um die Implementierung der Methode
- *          <TT>generateCode(CodeFactory, String)</TT>.
- * @changed OLI 22.03.2009 - Einbindung der im Datenmodell definierten
- *          SQLScriptListener in der Methode
+ * @changed OLI 09.03.2009 - Erweiterung der Schreib- und Leseroutine f&uuml;r die Attribute Parameter und Unique.
+ * @changed OLI 21.03.2009 - Erweiterung um die Implementierung der Methode <TT>generateCode(CodeFactory, String)</TT>.
+ * @changed OLI 22.03.2009 - Einbindung der im Datenmodell definierten SQLScriptListener in der Methode
  *          <TT>buildUpdateScript(SortedVector, boolean, boolean, boolean, DBExecMode,
  *         Vector, Vector)</TT>. Erweiterung um die Implementierung der Methoden
- *          <TT>getAdditionalSQLScriptListener()</TT> und
- *          <TT>setAdditionalSQLScriptListener(String)</TT>, sowie der Logik zur
- *          Anbindung der Listener an das Datenmodell durch die Methoden
- *          <TT>addSQLScriptListener(SQLScriptListener)</TT> and
- *          <TT>removeSQLScriptListener(SQLScriptListener)</TT>.
- * @changed OLI 25.03.2009 - Erweiterung der SQLScriptEvent-Konstruktoraufrufe
- *          um eine Referenz auf das aktuelle SQL-Update-Script.
- * @changed OLI 26.03.2009 - Erweiterung des Event-Handlings beim Bau von
- *          SQL-Update-Script's auf ein Event, das vor dem Einf&uuml;gen des
- *          DBVersion-Statements geworfen wird.
- * @changed OLI 01.06.2009 - Anpassung an die &Auml;nderungen des
- *          DiagrammModel-Interfaces (<TT>isDifferentToScheme(List, List)</TT>
- *          und <TT>getKeyColumns()</TT>).
- * @changed OLI 30.09.2009 - Erweiterung um die Implementierung der Methode
- *          <TT>getProjectToken()</TT>.
- * @changed OLI 21.05.2010 - Die Angaben zur Version-Tabelle werden nun
- *          unabh&uml;ngig vom Modus geschrieben.
+ *          <TT>getAdditionalSQLScriptListener()</TT> und <TT>setAdditionalSQLScriptListener(String)</TT>, sowie der
+ *          Logik zur Anbindung der Listener an das Datenmodell durch die Methoden
+ *          <TT>addSQLScriptListener(SQLScriptListener)</TT> and <TT>removeSQLScriptListener(SQLScriptListener)</TT>.
+ * @changed OLI 25.03.2009 - Erweiterung der SQLScriptEvent-Konstruktoraufrufe um eine Referenz auf das aktuelle
+ *          SQL-Update-Script.
+ * @changed OLI 26.03.2009 - Erweiterung des Event-Handlings beim Bau von SQL-Update-Script's auf ein Event, das vor dem
+ *          Einf&uuml;gen des DBVersion-Statements geworfen wird.
+ * @changed OLI 01.06.2009 - Anpassung an die &Auml;nderungen des DiagrammModel-Interfaces
+ *          (<TT>isDifferentToScheme(List, List)</TT> und <TT>getKeyColumns()</TT>).
+ * @changed OLI 30.09.2009 - Erweiterung um die Implementierung der Methode <TT>getProjectToken()</TT>.
+ * @changed OLI 21.05.2010 - Die Angaben zur Version-Tabelle werden nun unabh&uml;ngig vom Modus geschrieben.
  * @changed OLI 01.11.2011 - Erweiterung um den <TT>HistoryOwner</TT>.
- * @changed OLI 16.12.2011 - Erweiterung um die Implementierung der Liste mit
- *          den komplexen Indices.
- * @changed OLI 20.12.2011 - Erweiterung um die Implementierung der Methode
- *          <CODE>getClass(String)</CODE>.
+ * @changed OLI 16.12.2011 - Erweiterung um die Implementierung der Liste mit den komplexen Indices.
+ * @changed OLI 20.12.2011 - Erweiterung um die Implementierung der Methode <CODE>getClass(String)</CODE>.
  * @changed OLI 23.04.2013 - Erweiterung um die Sequenzen.
+ * @changed OLI 29.06.2020 - Erweiterung um das Feld mit den zus&auml;tzlichen Diagramminformationen.
  */
 
 public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
@@ -243,23 +214,19 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	/** Ein Bezeichner zum Zugriff auf den Versionskommentar des Diagramms. */
 	public static final int ID_VERSIONSKOMMENTAR = 5;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Schriftg&ouml;&szlig;e f&uuml;r die
-	 * Tabelleninhalte.
+	 * Ein Bezeichner zum Zugriff auf die Schriftg&ouml;&szlig;e f&uuml;r die Tabelleninhalte.
 	 */
 	public static final int ID_SCHRIFTGROESSE_TABELLEN = 6;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Schriftg&ouml;&szlig;e f&uuml;r die
-	 * &Uuml;berschrift.
+	 * Ein Bezeichner zum Zugriff auf die Schriftg&ouml;&szlig;e f&uuml;r die &Uuml;berschrift.
 	 */
 	public static final int ID_SCHRIFTGROESSE_UEBERSCHRIFT = 7;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Schriftg&ouml;&szlig;e f&uuml;r die
-	 * Untertitel.
+	 * Ein Bezeichner zum Zugriff auf die Schriftg&ouml;&szlig;e f&uuml;r die Untertitel.
 	 */
 	public static final int ID_SCHRIFTGROESSE_UNTERTITEL = 8;
 	/**
-	 * Ein Bezeichner zum Zugriff auf Flagge zu Druck und Anzeige von aufgehobenen
-	 * Objekten.
+	 * Ein Bezeichner zum Zugriff auf Flagge zu Druck und Anzeige von aufgehobenen Objekten.
 	 */
 	public static final int ID_HIDE_DEPRECATED = 9;
 	/**
@@ -271,23 +238,21 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	 */
 	public static final int ID_APPLICATIONNAME = 11;
 	/**
-	 * Ein Bezeichner zum Zugriff auf den Namen DB-Versionen-Tabelle, falls eine
-	 * solche existiert.
+	 * Ein Bezeichner zum Zugriff auf den Namen DB-Versionen-Tabelle, falls eine solche existiert.
 	 */
 	public static final int ID_DBVERSIONTABLENAME = 12;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Flagge zur Anzeige von referenzierten
-	 * Spaltennamen im Diagramm.
+	 * Ein Bezeichner zum Zugriff auf die Flagge zur Anzeige von referenzierten Spaltennamen im Diagramm.
 	 */
 	public static final int ID_SHOWREFERENCEDCOLUMNAMES = 13;
 	/**
-	 * Ein Bezeichner zum Zugriff auf den Namen der Versionsspalte in der
-	 * DB-Versionen-Tabelle, falls eine solche existiert.
+	 * Ein Bezeichner zum Zugriff auf den Namen der Versionsspalte in der DB-Versionen-Tabelle, falls eine solche
+	 * existiert.
 	 */
 	public static final int ID_DBVERSIONDBVERSIONCOLUMN = 14;
 	/**
-	 * Ein Bezeichner zum Zugriff auf den Namen der Beschreibungsspalte der
-	 * DB-Versionen-Tabelle, falls eine solche existiert.
+	 * Ein Bezeichner zum Zugriff auf den Namen der Beschreibungsspalte der DB-Versionen-Tabelle, falls eine solche
+	 * existiert.
 	 */
 	public static final int ID_DBVERSIONDESCRIPTIONCOLUMN = 15;
 	/** Ein Bezeichner zum Zugriff auf die View-Liste. */
@@ -315,32 +280,31 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	/** Ein Bezeichner zum Zugriff auf die Farbe fuer regul&auml;re Relationen. */
 	public static final int ID_RELATION_COLOR_REGULAR = 27;
 	/**
-	 * Ein Bezeichner zum Zugriff auf die Farbe fuer Relationen auf externe
-	 * Tabellen.
+	 * Ein Bezeichner zum Zugriff auf die Farbe fuer Relationen auf externe Tabellen.
 	 */
 	public static final int ID_RELATION_COLOR_EXTERNAL_TABLES = 28;
 	/** Ein Bezeichner zum Zugriff auf das Attribut PaintTransientFieldsInGray. */
 	public static final int ID_PAINTTRANSIENTFIELDSINGRAY = 29;
 	/** Ein Bezeichner zum Zugriff auf das Attribut Owner. */
 	public static final int ID_OWNER = 30;
+	/** Ein Bezeichner zum Zugriff auf das Attribut AdditionalDiagramInfo. */
+	public static final int ID_ADDITIONAL_DIAGRAM_INFO = 31;
 
 	/* Der JDBCDataSourceRecord mit den Daten f&uuml;r den Datanschema-Import. */
 	private ArchimedesImportJDBCDataSourceRecord importDSR = null;
 	/* Der JDBCDataSourceRecord mit den Daten f&uuml;r den Datanschema-Update. */
 	private ArchimedesJDBCDataSourceRecord updateDSR = null;
 	/*
-	 * Diese Flagge muss gesetzt werden, wenn technische Felder abgegraut
-	 * dargestellt werden sollen.
+	 * Diese Flagge muss gesetzt werden, wenn technische Felder abgegraut dargestellt werden sollen.
 	 */
 	private boolean paintTechnicalFieldsInGray = false;
 	/*
-	 * Diese Flagge muss gesetzt werden, wenn transiente Felder abgegraut
-	 * dargestellt werden sollen.
+	 * Diese Flagge muss gesetzt werden, wenn transiente Felder abgegraut dargestellt werden sollen.
 	 */
 	private boolean paintTransientFieldsInGray = false;
 	/*
-	 * Wird diese Flagge gesetzt, so werden die Namen der durch Foreignkeys
-	 * referenzierten Spalten im Diagramm angezeigt.
+	 * Wird diese Flagge gesetzt, so werden die Namen der durch Foreignkeys referenzierten Spalten im Diagramm
+	 * angezeigt.
 	 */
 	private boolean showReferencedColumns = true;
 	/* Die Schriftgr&ouml;&szlig;e f&uuml;r die Tabelleninhalte. */
@@ -354,14 +318,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	/* Die Liste mit den komplexen Indices des Modells. */
 	private SortedVector<IndexMetaData> complexIndices = new SortedVector<IndexMetaData>();
 	/*
-	 * Die Klassennamen der zusaetzlich zum Standard-SQL-Scriptgenerator fuer den
-	 * Bau eines SQL-Aktualisierungsscripts an das Diagramm anzubindenden
-	 * SQLScriptListener.
+	 * Die Klassennamen der zusaetzlich zum Standard-SQL-Scriptgenerator fuer den Bau eines SQL-Aktualisierungsscripts
+	 * an das Diagramm anzubindenden SQLScriptListener.
 	 */
 	private String additionalSQLScriptListener = "";
 	/*
-	 * Ein Script fuer den ArchimedesCommandProcessor, das nach dem Speichern eines
-	 * Modells ausgefuehrt wird.
+	 * Ein Script fuer den ArchimedesCommandProcessor, das nach dem Speichern eines Modells ausgefuehrt wird.
 	 */
 	private String afterwritescript = "";
 	/* Der Name der Application, f&uuml;r die Code generiert werden soll. */
@@ -386,6 +348,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	private SortedVector<DatabaseConnection> connections = new SortedVector<DatabaseConnection>();
 	private PredeterminedOptionProvider pop = null;
 	private String owner = "";
+	private String additionalDiagramInfo = "";
 
 	/** Generiert ein leeres Diagramm. */
 	public Diagramm() {
@@ -459,6 +422,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			return this.isPaintTransientFieldsInGray();
 		case ID_OWNER:
 			return this.getOwner();
+		case ID_ADDITIONAL_DIAGRAM_INFO:
+			return this.getAdditionalDiagramInfo();
 		}
 		throw new IllegalArgumentException("Klasse Domain verfuegt nicht ueber ein Attribut " + id + " (get)!");
 	}
@@ -553,6 +518,9 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		case ID_OWNER:
 			this.setOwner((String) value);
 			return;
+		case ID_ADDITIONAL_DIAGRAM_INFO:
+			this.setAdditionalDiagramInfo((String) value);
+			return;
 		}
 		throw new IllegalArgumentException("Klasse Domain verfuegt nicht ueber ein Attribut " + id + " (set)!");
 	}
@@ -593,6 +561,9 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_PAINTTRANSIENTFIELDSINGRAY, dlf, dcf,
 				"Transiente Felder ausgrauen", 'T', null,
 				"Setzen Sie diese Flagge, um " + "transiente Felder abzugrauen."));
+		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_ADDITIONAL_DIAGRAM_INFO, dlf, dcf,
+				StrUtil.FromHTML("Zus&auml;tzliche Diagramminfo"), 'Z', null,
+				"Hier k&ouml;nnen Sie zus&auml;tzliche Informationen zur Ausgabe auf dem Arbeitsblatt angeben."));
 		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SCHRIFTGROESSE_TABELLEN, dlf, dcf,
 				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e Tabelleninhalte"), 'T', null,
 				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die Tabelleninhalte des " + "Diagramms")));
@@ -870,12 +841,10 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	}
 
 	/**
-	 * @changed OLI 29.08.2007 - Erweiterung um Konsolenausgaben zwecks Zuordnung
-	 *          von Fehlermeldungen beim Speichern von Diagrammen. Diese werden
-	 *          allerdings nur dann angezeigt, wenn die Property
+	 * @changed OLI 29.08.2007 - Erweiterung um Konsolenausgaben zwecks Zuordnung von Fehlermeldungen beim Speichern von
+	 *          Diagrammen. Diese werden allerdings nur dann angezeigt, wenn die Property
 	 *          <TT>archimedes.scheme.Diagramm</TT> (Boolean) gesetzt wird.
-	 * @changed OLI 21.05.2010 - Die Daten zur Versionstabelle werden immer
-	 *          geschrieben.
+	 * @changed OLI 21.05.2010 - Die Daten zur Versionstabelle werden immer geschrieben.
 	 */
 	@Override
 	public StructuredTextFile toSTF(DiagramSaveMode dsm) throws Exception {
@@ -895,9 +864,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				}
 			}
 			/*
-			 * if (this.updateDSR != null) { this.updateDSR.toSTF(stf, new String[]
-			 * {"Diagramm", "DataSource", "Update"}); if (cout) {
-			 * LOG.info("    update dsr written."); } }
+			 * if (this.updateDSR != null) { this.updateDSR.toSTF(stf, new String[] {"Diagramm", "DataSource",
+			 * "Update"}); if (cout) { LOG.info("    update dsr written."); } }
 			 */
 			new STFColorWriter().write(stf, Archimedes.PALETTE.getColors().toArray(new ExtendedColor[0]));
 			for (int i = 0, len = this.getViews().size(); i < len; i++) {
@@ -961,9 +929,9 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "FirstGenerationDone" },
 					new Boolean(tm.isFirstGenerationDone()).toString());
 			/*
-			 * stf.writeLong(new String[] {"Diagramm", "Tabellen", "Tabelle" + i, "X"},
-			 * tm.getX( this.getViews().get(0))); stf.writeLong(new String[] {"Diagramm",
-			 * "Tabellen", "Tabelle" + i, "Y"}, tm.getY( this.getViews().get(0)));
+			 * stf.writeLong(new String[] {"Diagramm", "Tabellen", "Tabelle" + i, "X"}, tm.getX(
+			 * this.getViews().get(0))); stf.writeLong(new String[] {"Diagramm", "Tabellen", "Tabelle" + i, "Y"},
+			 * tm.getY( this.getViews().get(0)));
 			 */
 			if (dsm == DiagramSaveMode.REGULAR) {
 				tvms = tm.getViews();
@@ -1174,8 +1142,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		// gleich mal
 		// pruefen, ob das MainViewModel irgendwo gebraucht wird.
 		/*
-		 * for (int i = 0, len = this.getViews().size(); i < len; i++) { ViewModel vm =
-		 * this.getViews().get(i); if (vm instanceof MainViewModel) { break; } }
+		 * for (int i = 0, len = this.getViews().size(); i < len; i++) { ViewModel vm = this.getViews().get(i); if (vm
+		 * instanceof MainViewModel) { break; } }
 		 */
 		int len = this.domains.size();
 		sb.append("    <domains count=\"").append(len).append(" >").append("\n");
@@ -1533,12 +1501,10 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			new STFOptionReader().read(stf, tm, i);
 		}
 		/*
-		 * ViewModel vm = null; for (int i = 0, len = this.getViews().size(); i < len;
-		 * i++) { int lenj = (int) stf.readLong(new String[] {"Diagramm", "Views",
-		 * "View" + i, "Tabellenanzahl"}, 0); for (int j = 0; j < lenj; j++) { String
-		 * tabellenname = stf.readStr(new String[] {"Diagramm", "Views", "View" + i,
-		 * "Tabelle" + j}, ""); TabellenModel tm = d.getTabelle(tabellenname); if (tm !=
-		 * null) { vm.getTabellen().add(tm); } } }
+		 * ViewModel vm = null; for (int i = 0, len = this.getViews().size(); i < len; i++) { int lenj = (int)
+		 * stf.readLong(new String[] {"Diagramm", "Views", "View" + i, "Tabellenanzahl"}, 0); for (int j = 0; j < lenj;
+		 * j++) { String tabellenname = stf.readStr(new String[] {"Diagramm", "Views", "View" + i, "Tabelle" + j}, "");
+		 * TabellenModel tm = d.getTabelle(tabellenname); if (tm != null) { vm.getTabellen().add(tm); } } }
 		 */
 		new DefaultComplexIndicesFromSTFReader().read(stf, d.getComplexIndicesReference(), d);
 		return d;
@@ -1844,14 +1810,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	/*
 	 * public java.util.List<ViewModel> getViews() { return this.views; }
 	 * 
-	 * public java.util.List<ViewModel> getViews(TabellenModel tm) { java.util.List
-	 * l = new Vector(); for (int i = 0, len = this.getViews().size(); i < len; i++)
-	 * { ViewModel vm = this.getViews().get(i); if (vm.getTabellen().contains(tm)) {
-	 * l.add(vm); } } return l; }
+	 * public java.util.List<ViewModel> getViews(TabellenModel tm) { java.util.List l = new Vector(); for (int i = 0,
+	 * len = this.getViews().size(); i < len; i++) { ViewModel vm = this.getViews().get(i); if
+	 * (vm.getTabellen().contains(tm)) { l.add(vm); } } return l; }
 	 * 
-	 * public ViewModel getView(String name) { ViewModel vm = null; for (int i = 0,
-	 * len = this.getViews().size(); i < len; i++) { vm = this.getViews().get(i); if
-	 * (vm.getName().equals(name)) { break; } } return vm; }
+	 * public ViewModel getView(String name) { ViewModel vm = null; for (int i = 0, len = this.getViews().size(); i <
+	 * len; i++) { vm = this.getViews().get(i); if (vm.getName().equals(name)) { break; } } return vm; }
 	 */
 
 	@Override
@@ -1984,10 +1948,9 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				m.put(tm.getName(), l);
 			}
 			/*
-			 * s = tm.getCodeGeneratorOptions(); start = s.indexOf(tagStart); end =
-			 * s.indexOf(tagEnd); if ((start >= 0) && (end >= 0)) { s = s.substring(start +
-			 * tagStart.length(), end); // m.put(tm.getName(), StrUtil.SplitToList(s,
-			 * delimiter)); m.put(tm.getName(), tm.getCodegeneratorOptionsListTag(tagName,
+			 * s = tm.getCodeGeneratorOptions(); start = s.indexOf(tagStart); end = s.indexOf(tagEnd); if ((start >= 0)
+			 * && (end >= 0)) { s = s.substring(start + tagStart.length(), end); // m.put(tm.getName(),
+			 * StrUtil.SplitToList(s, delimiter)); m.put(tm.getName(), tm.getCodegeneratorOptionsListTag(tagName,
 			 * delimiter)); }
 			 */
 		}
@@ -2080,9 +2043,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	// public String getAuthor(); // Implementierung: siehe oben.
 
 	/**
-	 * Die Methode liefert im Prinzip den Applikationsnamen (
-	 * <TT>getApplicationName()</TT> zur&uuml;ck. Allerdings werden Leerzeichen,
-	 * Punkte, Minus-Zeichen und Ausrufezeichen entfernt.
+	 * Die Methode liefert im Prinzip den Applikationsnamen ( <TT>getApplicationName()</TT> zur&uuml;ck. Allerdings
+	 * werden Leerzeichen, Punkte, Minus-Zeichen und Ausrufezeichen entfernt.
 	 * 
 	 * @changed OLI 30.09.2009 - Hinzugef&uuml;gt.
 	 */
@@ -2111,8 +2073,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 
 	/**
 	 * @changed OLI 16.12.2011 - Hinzugef&uuml;gt. /
-	 * @Override public List<IndexMetaData> getComplexIndices() { return
-	 *           this.complexIndices; }
+	 * @Override public List<IndexMetaData> getComplexIndices() { return this.complexIndices; }
 	 * 
 	 * 
 	 *           /**
@@ -2162,8 +2123,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	}
 
 	/*
-	 * The following methods are approved by the current model interface
-	 * (TableModel).
+	 * The following methods are approved by the current model interface (TableModel).
 	 */
 
 	private String additionalPostChangingSQLCode = "";
@@ -2176,12 +2136,11 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	private String dbVersionTableName = "";
 	private SortedVector<DomainModel> domains = new SortedVector<DomainModel>();
 	/*
-	 * If this flag is set the required fields of the table in das diagram will be
-	 * marked up. The characters which are set to mark the fields can be defined by
-	 * the properties: "archimedes.scheme.Tabellenspalte.diagramm.writeable.prefix"
-	 * "archimedes.scheme.Tabellenspalte.diagramm.writeable.suffix" The content of
-	 * the first property will be displayed before the field name, the second
-	 * thereafter.
+	 * If this flag is set the required fields of the table in das diagram will be marked up. The characters which are
+	 * set to mark the fields can be defined by the properties:
+	 * "archimedes.scheme.Tabellenspalte.diagramm.writeable.prefix"
+	 * "archimedes.scheme.Tabellenspalte.diagramm.writeable.suffix" The content of the first property will be displayed
+	 * before the field name, the second thereafter.
 	 */
 	private boolean markUpRequiredFieldNames = false;
 	private SortedVector<OptionModel> options = new SortedVector<OptionModel>();
@@ -2243,6 +2202,14 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	@Override
 	public SequenceModel createSequence() {
 		return Archimedes.Factory.createSequence("Sequenz", 100, 100);
+	}
+
+	/**
+	 * @changed OLI 29.06.2020 - Added.
+	 */
+	@Override
+	public String getAdditionalDiagramInfo() {
+		return this.additionalDiagramInfo;
 	}
 
 	/**
@@ -2681,6 +2648,14 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	}
 
 	/**
+	 * @changed OLI 29.06.2020 - Added.
+	 */
+	@Override
+	public void setAdditionalDiagramInfo(String additionalDiagramInfo) {
+		this.additionalDiagramInfo = additionalDiagramInfo;
+	}
+
+	/**
 	 * @changed OLI 11.06.2013 - Approved.
 	 */
 	@Override
@@ -3047,6 +3022,18 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	@Override
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+
+	/**
+	 * @changed OLI 30.06.2020 - Added.
+	 */
+	@Override
+	public Map<String, String> getProperties() {
+		Map<String, String> m = new HashMap<>();
+		for (OptionModel o : this.getOptions()) {
+			m.put(o.getName(), o.getParameter());
+		}
+		return m;
 	}
 
 } // 3875
