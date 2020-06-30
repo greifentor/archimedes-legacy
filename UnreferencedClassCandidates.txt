@@ -1,0 +1,846 @@
+corent.base.ReleaseUtil
+
+archimedes.legacy.scheme.DefaultObjectFactory
+
+archimedes.legacy.checkers.ModelCheckerDomainNotInuse
+
+corent.ext.Directive
+    corent.ext.Row
+    corent.ext.TableSorter
+
+archimedes.legacy.gui.StereotypenSubEditorFactory
+    archimedes.legacy.scheme.Tabelle
+
+archimedes.legacy.gui.codepath.CodePathProvider
+    archimedes.legacy.gui.ZoomActionListener
+
+baccara.gui.ButtonFactory
+
+corent.djinn.DefaultEditorDjinnCell
+    corent.djinn.DefaultEditorDjinnPanel
+    corent.djinn.ComponentTable
+
+corent.djinn.ComponentTable
+    corent.djinn.DefaultEditorDjinnPanel
+
+archimedes.legacy.scheme.SetSchemeVersionAppender
+    archimedes.legacy.sql.UpdateScriptBuilder
+
+corent.djinn.FrameSelectionEditorDjinn
+    archimedes.legacy.gui.ZoomActionListener
+
+corentx.util.Str
+
+archimedes.legacy.scheme.stf.AbstractSTFColumnHandler
+
+archimedes.legacy.gui.comparision.DataModelComparison
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.sql.ForeignKeyAddConstraintBuilder
+    archimedes.legacy.sql.UpdateScriptBuilder
+
+archimedes.legacy.scheme.stf.handler.STFAdditionalSQLCodeHandler
+
+corent.dates.VariablerFeiertag
+    corent.dates.Feiertag
+
+archimedes.legacy.gui.ArchimedesStatusBarRenderer
+    archimedes.legacy.gui.FrameArchimedes
+
+archimedes.scheme.xml.AdditionalSQLXMLBuilder
+    archimedes.scheme.xml.DiagramXMLBuilder
+
+corent.djinn.DBFListViewComponent
+    corent.djinn.DBFListViewComponentFactory
+
+archimedes.legacy.app.ReconstructableDBFactory
+
+archimedes.meta.MetaDataUniqueWithNullableConstraintReader
+    archimedes.meta.MetaDataReader
+
+corent.files.Group
+    corent.files.Inifile
+
+
+corentx.xml.AbstractXMLElement
+
+archimedes.legacy.gui.TabellenspaltenlistenSubEditor
+    archimedes.legacy.gui.TabellenspaltenlistenSubEditorFactory
+
+corent.gui.COTextField
+    corent.djinn.DefaultComponentFactory
+
+corent.db.DefaultJoinDescriptor
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+archimedes.legacy.scheme.stf.AbstractSTFOptionHandler
+
+corent.util.FileUtil
+
+archimedes.legacy.scheme.stf.writer.STFDatabaseConnectionWriter
+    archimedes.legacy.scheme.Diagramm
+
+corent.ext.Arrow
+    corent.ext.TableSorter
+
+corent.dates.DateFormatException
+    corent.dates.PDate
+
+baccara.gui.generics.BaccaraEditorPanel
+
+corentx.xml.XMLAttribute
+    corentx.xml.XMLNode
+
+archimedes.gui.FontConfigurator
+    archimedes.legacy.Archimedes
+
+baccara.gui.generics.SelectionDialog
+    archimedes.legacy.gui.connections.ConnectionsMainFrame
+
+archimedes.legacy.app.ApplicationUtil
+
+archimedes.meta.MetaDataComplexForeignKeyFactory
+    archimedes.meta.DataModelToMetaDataConverter
+
+archimedes.legacy.importer.jdbc.JDBCImportManagerConfigurationDialog
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.scheme.xml.DatabaseConnectionsXMLBuilder
+    archimedes.scheme.xml.DiagramXMLBuilder
+
+archimedes.meta.MetaUtil
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.meta.MetaDataModelComparator
+
+archimedes.scheme.xml.SequenceXMLBuilder
+    archimedes.scheme.xml.DiagramXMLBuilder
+
+archimedes.legacy.scheme.ComplexIndexDescriptionScriptAppender
+    archimedes.legacy.sql.UpdateScriptBuilder
+
+archimedes.acf.checker.ModelCheckerThread
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.gui.OptionListTableModel
+    archimedes.legacy.gui.OptionListSubEditor
+
+corent.print.PrintPreview
+    corent.print.CorePrintJob
+
+archimedes.legacy.app.GenericApplicationObject
+    archimedes.legacy.app.GenericDBFactory
+
+corent.djinn.KeyListenerDjinn
+
+archimedes.legacy.gui.OptionListSubEditor
+    archimedes.legacy.gui.OptionListSubEditorFactory
+
+archimedes.legacy.scheme.TSMSortContainer
+    archimedes.legacy.builder.ReconstructableCodeFactory
+    archimedes.legacy.scheme.DefaultCodeFactory
+
+archimedes.legacy.gui.StereotypenTableModel
+    archimedes.legacy.gui.StereotypenSubEditor
+
+archimedes.meta.MetaDataSequenceReader
+    archimedes.meta.MetaDataReader
+
+archimedes.legacy.scripting.DialogScriptExecuter
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.scheme.stf.writer.STFOptionWriter
+    archimedes.legacy.scheme.Diagramm
+
+archimedes.print.CPJDiagramm
+    archimedes.gui.DiagramPrinter
+
+archimedes.legacy.Version
+    archimedes.Version
+
+corent.djinn.VectorTableModel
+
+archimedes.grammar.cfk.ComplexForeignKeyExpressionContext
+    archimedes.grammar.cfk.ComplexForeignKeyFactory
+    archimedes.grammar.cfk.ComplexForeignKeyExpressionsContext
+
+corent.djinn.InternalFrameEditorDjinn
+
+archimedes.acf.checker.ModelCheckerDomainSetForAllColumns
+
+archimedes.legacy.gui.HistoryOwnerSubEditorFactory
+    archimedes.legacy.scheme.Tabelle
+    archimedes.legacy.scheme.Tabellenspalte
+    archimedes.legacy.scheme.Diagramm
+    archimedes.legacy.scheme.Domain
+    archimedes.legacy.scheme.Sequence
+    archimedes.legacy.scheme.Stereotype
+
+archimedes.legacy.scheme.stf.reader.STFRelationReader
+    archimedes.legacy.scheme.Diagramm
+
+archimedes.legacy.gui.configuration.BaseConfigurationFrame
+    archimedes.legacy.gui.configuration.BaseConfigurationFrameEvent
+    archimedes.legacy.gui.ZoomActionListener
+
+corent.dates.LongPTimestamp
+    archimedes.legacy.app.ReconstructableDBFactory
+    corent.db.xs.DBFactoryUtil
+    corent.db.xs.AccesstimeRecord
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+archimedes.legacy.checkers.ModelCheckerNoComplexPrimaryKey
+
+archimedes.meta.chops.primarykeys.DropPrimaryKeyConstraint
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.meta.MetaDataModelComparator
+
+archimedes.meta.chops.foreignkeys.AbstractForeignKeyConstraintChangeOperation
+
+corentx.xml.XMLNode
+    corentx.xml.XMLNodeFactory
+
+archimedes.scheme.xml.ModelXMLReader
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.gui.OptionsPopupMenu
+    archimedes.legacy.gui.OptionMaintenanceFrame
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.scheme.MainView
+    archimedes.legacy.importer.jdbc.DatabaseSOToDiagramConverter
+    archimedes.legacy.scheme.TestDiagramm
+    archimedes.legacy.scheme.ArchimedesObjectFactory
+    archimedes.legacy.scheme.DefaultObjectFactory
+
+archimedes.legacy.scheme.SchemaChangeStatementAppender
+    archimedes.legacy.sql.UpdateScriptBuilder
+
+archimedes.meta.chops.columns.AlterColumnDropConstraint
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.meta.MetaDataModelComparator
+
+corent.print.ActionAbbruch
+    corent.print.PrintPreview
+
+corent.print.ActionPageMinus
+    corent.print.PrintPreview
+
+baccara.files.InifileManager
+
+archimedes.legacy.scheme.ReferenceImportRecord
+    archimedes.legacy.gui.ZoomActionListener
+
+corent.base.Constants
+
+archimedes.scheme.xml.StereotypeXMLBuilder
+    archimedes.scheme.xml.DiagramXMLBuilder
+
+corent.gui.AbstractExtendedColorPalette
+    archimedes.legacy.Archimedes
+    archimedes.legacy.scheme.ArchimedesObjectFactory
+
+corent.db.DefaultPersistenceDescriptor
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+archimedes.scheme.xml.ComplexIndexXMLBuilder
+    archimedes.scheme.xml.DiagramXMLBuilder
+
+baccara.events.AbstractEvent
+
+corent.dates.TimeFormatException
+    corent.dates.PTime
+
+archimedes.legacy.gui.CommentSubEditorFactory
+    archimedes.legacy.scheme.Tabelle
+    archimedes.legacy.scheme.Tabellenspalte
+    archimedes.legacy.scheme.Diagramm
+    archimedes.legacy.scheme.View
+    archimedes.legacy.scheme.Domain
+    archimedes.legacy.scheme.Sequence
+    archimedes.legacy.scheme.Stereotype
+
+archimedes.legacy.app.ArchimedesEditorDescriptorList
+
+archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.builder.ReconstructableCodeFactory
+
+corent.djinn.FrameSelectionDjinn
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.scheme.ComplexIndicesUtil
+
+archimedes.legacy.gui.connections.ConnectionsTableModel
+    archimedes.legacy.gui.connections.ConnectionsMainFrame
+
+corent.gui.COCheckBox
+    corent.djinn.DefaultComponentFactory
+
+archimedes.grammar.cfk.ComplexFKBaseListener
+
+archimedes.legacy.acf.event.CodeFactoryProgressionEvent
+    
+    archimedes.legacy.acf.gui.CodeFactoryProgressionFrame
+
+archimedes.gui.diagram.ComponentDiagramm
+    archimedes.gui.DiagramComponentPanel
+    archimedes.legacy.gui.FrameOverview
+    archimedes.legacy.gui.ZoomActionListener
+
+corentx.CoreNTX
+
+archimedes.legacy.util.UniqueFormulaUtil
+    archimedes.legacy.sql.factories.PostgreSQLScriptFactory
+    archimedes.legacy.sql.CreateStatementGenerator
+
+archimedes.sql.generator.ScriptGenerator
+    archimedes.legacy.gui.ZoomActionListener
+
+corent.gui.SpinField
+    corent.gui.TimeDialog
+
+archimedes.legacy.acf.gui.CodeFactoryProgressionFrame
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.gui.Counter
+    archimedes.legacy.gui.ZoomActionListener
+
+corent.gui.TextDocument
+    corent.gui.SizedTextField
+
+archimedes.legacy.scheme.stf.reader.STFColumnReader
+    archimedes.legacy.scheme.Diagramm
+
+corent.djinn.DialogSelectionEditorDjinnDBF
+
+archimedes.meta.chops.columns.AlterColumnSetDefaultValue
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.meta.MetaDataModelComparator
+
+archimedes.meta.chops.AbstractTableChangeOperation
+
+archimedes.scheme.xml.DiagramParameterXMLBuilder
+    archimedes.scheme.xml.DiagramXMLBuilder
+
+archimedes.meta.chops.columns.AlterColumnAddConstraint
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.meta.MetaDataModelComparator
+
+corent.gui.GUIUtil
+
+corent.gui.COPasswordField
+
+corent.ext.Row
+    corent.ext.TableSorter
+
+archimedes.legacy.script.sql.SQLScriptEvent
+    
+    archimedes.legacy.sql.UpdateScriptBuilder
+    archimedes.legacy.scheme.Diagramm
+
+archimedes.acf.checker.ModelCheckerDefaultValueForStringInvalid
+
+archimedes.meta.MetaDataUniqueWithNullableConstraint
+    archimedes.meta.DataModelToMetaDataConverter
+    archimedes.meta.MetaDataUniqueWithNullableConstraintReader
+    archimedes.sql.generator.StandardSQLScriptGenerator
+
+archimedes.legacy.scheme.stf.writer.STFNReferenceWriter
+    archimedes.legacy.scheme.Diagramm
+
+archimedes.acf.checker.ModelCheckerNReferencesAreSetProperly
+
+archimedes.meta.MetaDataSequence
+    archimedes.meta.DataModelToMetaDataConverter
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.meta.MetaDataModelComparator
+    archimedes.meta.MetaDataModel
+    archimedes.meta.MetaDataSequenceReader
+
+corent.dates.Ostersonntag
+    corent.dates.Feiertag
+
+corent.djinn.DefaultVectorPanelButtonFactory
+
+corent.gui.COTimestampField
+    corent.djinn.DefaultComponentFactory
+
+corent.ext.TableModelHandler
+    corent.ext.TableSorter
+
+archimedes.meta.chops.sequences.AlterSequence
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.meta.MetaDataModelComparator
+
+archimedes.legacy.scheme.DefaultComplexIndicesToSTFWriter
+    archimedes.legacy.scheme.Diagramm
+
+archimedes.legacy.scheme.stf.handler.STFOptionHandler
+
+archimedes.legacy.sql.factories.HSQLScriptFactory
+    archimedes.legacy.sql.factories.GenericSQLScriptFactory
+
+archimedes.legacy.sql.factories.PostgreSQLScriptFactory
+    archimedes.legacy.sql.UpdateScriptBuilder
+    archimedes.legacy.sql.factories.GenericSQLScriptFactory
+
+archimedes.model.SimpleIndexMetaData
+    
+    archimedes.legacy.sql.UpdateScriptBuilder
+    archimedes.legacy.scheme.ComplexIndexDescriptionScriptAppender
+    archimedes.legacy.scheme.DefaultComplexIndexUpdateGenerator
+    archimedes.legacy.scheme.ComplexIndexSQLScriptAppender
+    archimedes.legacy.app.ApplicationUtil
+
+de.ollie.archimedes.alexandrian.service.so.OptionSO
+    archimedes.model.converter.DataModelToSOConverter
+    archimedes.legacy.importer.jdbc.DatabaseSOToDiagramConverter
+    de.ollie.archimedes.alexandrian.service.so.TypeSO
+    de.ollie.archimedes.alexandrian.service.so.ColumnSO
+    de.ollie.archimedes.alexandrian.service.so.TableSO
+    de.ollie.archimedes.alexandrian.service.so.DatabaseSO
+
+archimedes.meta.chops.addscripts.AddAdditionalScript
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.meta.MetaDataModelComparator
+
+archimedes.gui.DiagramComponentPanel
+    archimedes.legacy.gui.FrameArchimedes
+    archimedes.gui.GraphicExporter
+    archimedes.gui.DiagramPrinter
+
+corent.djinn.DefaultEditorDjinnPanel
+    corent.djinn.FrameEditorDjinn
+    corent.djinn.InternalFrameEditorDjinn
+    corent.djinn.DialogEditorDjinn
+
+corent.db.DBUtil
+
+baccara.gui.KeyListenerUtil
+    archimedes.legacy.gui.table.TableModelFrame
+
+archimedes.legacy.acf.DomainParamId
+
+corentx.dates.SystemPDateFactory
+    corentx.dates.PDate
+
+archimedes.legacy.scheme.ArchimedesOrderMetaData
+    archimedes.legacy.scheme.Tabelle
+
+archimedes.legacy.scheme.View
+    archimedes.legacy.scheme.TestDiagramm
+    archimedes.legacy.scheme.ArchimedesObjectFactory
+    archimedes.legacy.scheme.DefaultObjectFactory
+
+corent.gui.TextAreaDialog
+    
+    corent.gui.LineTextEditor
+
+baccara.gui.generics.ComponentData
+    archimedes.legacy.gui.codepath.CodePathEditorPanel
+    archimedes.legacy.importer.jdbc.JDBCImportManagerConfigurationDialog
+    archimedes.legacy.gui.configuration.BaseConfigurationFrame
+    archimedes.legacy.gui.OptionMaintenanceFrame
+    archimedes.legacy.gui.connections.ConnectFrame
+    archimedes.legacy.gui.table.TableModelGeneralPanel
+    archimedes.legacy.gui.connections.ConnectionEditorFrame
+
+corent.djinn.DefaultFilenameSelectorDefaultComponentFactory
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+corent.files.PathFinderEvent
+    
+    corent.files.PathFinder
+
+corent.ext.SortableHeaderRenderer
+    corent.ext.TableSorter
+
+baccara.gui.GUIBundle
+    
+    archimedes.legacy.gui.DialogTableGeneratorOptions
+    archimedes.legacy.gui.connections.ConnectionsMainFrame
+    archimedes.legacy.gui.CommentSubEditor
+    archimedes.legacy.gui.connections.ConnectFrame
+    archimedes.legacy.scheme.DefaultCodeFactory
+    archimedes.legacy.gui.codepath.CodePathEditorPanel
+    archimedes.legacy.importer.jdbc.JDBCImportManagerConfigurationDialog
+    archimedes.legacy.gui.OptionListSubEditorFactory
+    archimedes.legacy.gui.configuration.BaseConfigurationFrame
+    archimedes.legacy.gui.OptionMaintenanceFrame
+    archimedes.legacy.acf.gui.CodeFactoryProgressionFrame
+    archimedes.legacy.checkers.ModelCheckerDomainNotInuse
+    baccara.gui.ResourceId
+    archimedes.legacy.checkers.ModelCheckerNoComplexPrimaryKey
+    archimedes.legacy.gui.codepath.CodePathProvider
+    baccara.gui.ButtonFactory
+    archimedes.legacy.gui.table.TableModelColumns
+    archimedes.legacy.gui.connections.ConnectionEditorFrame
+    archimedes.legacy.gui.TabellenspaltenSubEditor
+    archimedes.legacy.gui.FrameArchimedes
+    archimedes.legacy.scheme.Diagramm
+    archimedes.legacy.builder.ArchimedesCodeWriter
+    archimedes.legacy.gui.codepath.CodePathDialog
+    archimedes.legacy.gui.ModelReaderProgressMonitor
+    archimedes.legacy.gui.table.TableModelFrame
+    archimedes.legacy.gui.ExceptionDialog
+    archimedes.legacy.Archimedes
+    archimedes.legacy.importer.jdbc.AdjustmentListCellRenderer
+    archimedes.legacy.gui.OptionListSubEditor
+    archimedes.legacy.gui.table.TableModelGeneralPanel
+    archimedes.legacy.gui.ZoomActionListener
+    archimedes.legacy.gui.table.TableModelColumnsPanel
+
+archimedes.legacy.scheme.DefaultIndexMetaData
+    archimedes.legacy.scheme.DefaultComplexIndicesFromSTFReader
+    archimedes.legacy.gui.indices.ComplexIndicesAdministrationFrame
+    archimedes.legacy.scheme.ArchimedesObjectFactory
+
+archimedes.model.gui.AbstractGUIDiagramModel
+
+archimedes.grammar.cfk.ColumnNameListContext
+    archimedes.grammar.cfk.ComplexForeignKeyFactory
+    archimedes.grammar.cfk.ComplexForeignKeyExpressionContext
+
+archimedes.legacy.gui.PanellistenSubEditorFactory
+    archimedes.legacy.scheme.Tabelle
+
+archimedes.legacy.sql.AbstractSQLScriptBuilder
+
+corent.djinn.DefaultSelectionEditorDjinnButtonFactory
+    corent.djinn.DialogSelectionDjinn
+    corent.djinn.FrameSelectionEditorDjinn
+    corent.djinn.DialogSelectionEditorDjinnDBF
+
+archimedes.legacy.scheme.stf.handler.STFDomainHandler
+
+archimedes.legacy.scheme.stf.writer.STFSequenceWriter
+    archimedes.legacy.scheme.Diagramm
+
+archimedes.meta.MetaDataUniqueConstraint
+    archimedes.meta.DataModelToMetaDataConverter
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.meta.MetaDataUniqueConstraintReader
+    archimedes.meta.MetaDataModelComparator
+    archimedes.meta.MetaDataTable
+
+archimedes.legacy.scheme.DomainDataChecker
+
+corent.ext.MouseHandler
+    corent.ext.TableSorter
+
+corent.djinn.ListViewSelectableContainer
+    corent.djinn.DefaultListViewListModel
+
+corent.gui.DefaultTimestampFieldComponentFactory
+    corent.djinn.DefaultComponentFactory
+
+corentx.script.JScriptRunner
+    archimedes.legacy.scripting.DialogScriptExecuter
+
+archimedes.legacy.transfer.DefaultCopyAndPasteController
+    archimedes.legacy.gui.FrameArchimedes
+    archimedes.legacy.scheme.Tabelle
+    archimedes.legacy.gui.FrameOverview
+
+archimedes.legacy.scheme.DefaultUserInformation
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.meta.MetaDataNamedObject
+    archimedes.meta.MetaUtil
+
+archimedes.legacy.gui.codepath.CodePath
+    archimedes.legacy.gui.codepath.CodePathEditorPanel
+    archimedes.legacy.gui.codepath.CodePathDialog
+
+corent.gui.FrameTextViewer
+    archimedes.legacy.gui.comparision.DataModelComparison
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.gui.OptionsPopupMenuItem
+    archimedes.legacy.gui.OptionsPopupMenu
+
+archimedes.model.converter.DataModelToSOConverter
+
+corent.dates.FesterFeiertag
+    corent.dates.Feiertag
+
+archimedes.legacy.sql.SequenceScriptBuilder
+    archimedes.legacy.sql.UpdateScriptBuilder
+
+archimedes.legacy.scheme.DefaultCodeFactory
+    archimedes.legacy.scheme.DefaultObjectFactory
+
+corent.util.SysUtil
+
+archimedes.scheme.xml.DiagramXMLBuilder
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.grammar.cfk.ComplexFKLexer
+    archimedes.grammar.cfk.ComplexForeignKeyFactory
+
+archimedes.legacy.gui.OptionListSubEditorFactory
+    archimedes.legacy.scheme.Tabelle
+    archimedes.legacy.scheme.Diagramm
+
+archimedes.sql.generator.ScriptHeaderBuilder
+    archimedes.sql.generator.SQLScriptGeneratorFactory
+    archimedes.sql.generator.ScriptGenerator
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.sql.generator.PostgreSQLScriptGenerator
+
+archimedes.legacy.app.GenericDBFactory
+
+archimedes.legacy.scheme.DefaultComment
+    archimedes.legacy.scheme.DefaultObjectFactory
+
+archimedes.grammar.cfk.ComplexForeignKeyModel
+    archimedes.meta.DataModelToMetaDataConverter
+    archimedes.grammar.cfk.ComplexForeignKeyFactory
+
+corent.djinn.DBFTableViewComponent
+    corent.djinn.DBFListViewComponentFactory
+
+archimedes.meta.chops.uniques.AbstractComplexUniqueConstraintChangeOperation
+
+corent.db.xs.DefaultSelectionTableModel
+    corent.db.xs.DBFactoryUtil
+
+archimedes.legacy.scheme.Stereotype
+    archimedes.legacy.scheme.ArchimedesObjectFactory
+    archimedes.legacy.scheme.DefaultObjectFactory
+
+corent.gui.ProgressMonitorScreen
+
+corent.db.xs.UniqueProcessor
+    corent.db.xs.DBFactoryUtil
+
+archimedes.legacy.gui.configuration.BaseConfigurationFrameEvent
+    archimedes.legacy.gui.configuration.BaseConfigurationFrame
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.transfer.CopyAndPasteController
+    archimedes.gui.DiagramComponentPanel
+
+corent.db.xs.AccesstimeRecord
+
+archimedes.legacy.sql.factories.AbstractSQLScriptFactory
+
+corent.djinn.DefaultListViewComponent
+    corent.djinn.DefaultListViewComponentFactory
+
+corent.djinn.DefaultSelectionDjinnPanel
+    corent.djinn.DialogSelectionDjinn
+    corent.djinn.FrameSelectionEditorDjinn
+    corent.djinn.FrameSelectionDjinn
+    corent.djinn.DialogSelectionEditorDjinnDBF
+
+archimedes.legacy.scheme.stf.writer.STFDiagrammParameterWriter
+    archimedes.legacy.scheme.Diagramm
+
+archimedes.legacy.gui.table.TableModelFrame
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.app.ArchimedesComponentFactory
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+corent.util.MonitorComponent2
+    corent.util.MemoryMonitor
+
+corent.util.MonitorComponent1
+    corent.util.MemoryMonitor
+
+archimedes.util.NameGenerator
+    archimedes.meta.DataModelToMetaDataConverter
+    archimedes.legacy.sql.factories.PostgreSQLScriptFactory
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.legacy.gui.comparision.DataModelComparison
+    archimedes.legacy.sql.factories.PostgreSQLConstraintNameGenerator
+
+corent.djinn.DefaultLineTextEditorComponentFactory
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+corent.db.xs.DBFactoryUtil
+
+archimedes.legacy.app.ArchimedesEditorDescriptor
+    archimedes.legacy.scheme.Panel
+    archimedes.legacy.app.ArchimedesComponentFactory
+    archimedes.legacy.scheme.Tabellenspalte
+    archimedes.legacy.scheme.Domain
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+corent.gui.AbstractCOMassiveListSelector
+
+archimedes.meta.chops.indices.DropIndex
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.meta.MetaDataModelComparator
+
+archimedes.legacy.util.DescriptionGetter
+    archimedes.legacy.sql.UpdateScriptBuilder
+    archimedes.legacy.scheme.Diagramm
+
+corent.print.PreviewComponent
+    corent.print.CorePrintJob
+    corent.print.PrintPreview
+
+logging.LoggerFactory
+
+corent.db.JDBCDataSourceRecord
+    
+    corent.db.xs.DefaultDBFactoryController
+    archimedes.meta.MetaDataUniqueWithNullableConstraintReader
+    archimedes.legacy.scheme.Diagramm
+    archimedes.legacy.importer.jdbc.JDBCImportManager
+    corent.db.ConnectionManager
+    archimedes.legacy.gui.ZoomActionListener
+    archimedes.legacy.app.ApplicationUtil
+
+corent.djinn.DefaultEditorDescriptorList
+    archimedes.legacy.scheme.Tabelle
+    archimedes.legacy.scheme.Tabellenspalte
+    archimedes.legacy.scheme.Diagramm
+    archimedes.legacy.scheme.Domain
+    archimedes.legacy.scheme.Sequence
+    archimedes.legacy.scheme.OrderMember
+    archimedes.legacy.scheme.Panel
+    archimedes.legacy.gui.ToStringContainer
+    archimedes.legacy.scheme.View
+    archimedes.legacy.scheme.NReferenz
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+    archimedes.legacy.scheme.Stereotype
+
+corentx.dates.TimestampUtil
+
+archimedes.legacy.scheme.DefaultSchemaChangeStatementGenerator
+
+archimedes.legacy.scheme.Domain
+    archimedes.legacy.importer.jdbc.DatabaseSOToDiagramConverter
+    archimedes.legacy.importer.jdbc.DomainAdder
+    archimedes.legacy.scheme.TestDiagramm
+    archimedes.legacy.scheme.ArchimedesObjectFactory
+    archimedes.legacy.scheme.DefaultObjectFactory
+
+archimedes.legacy.app.ArchimedesMassiveListSelectorComponentFactory
+    archimedes.legacy.app.ArchimedesComponentFactory
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+corent.base.dynamic.DefaultAttributeDescriptor
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+corent.db.DBExecEvent
+    
+    corent.db.DBExec
+
+corent.db.DBExec
+
+corent.files.PathFinder
+
+corentx.util.SortedVector
+    archimedes.meta.DataModelToMetaDataConverter
+    archimedes.legacy.gui.connections.ConnectionsMainFrame
+    archimedes.legacy.sql.factories.PostgreSQLScriptFactory
+    archimedes.acf.DoubleClassesChecker
+    archimedes.legacy.scheme.Tabelle
+    archimedes.sql.generator.StandardSQLScriptGenerator
+    archimedes.legacy.sql.ForeignKeyAddConstraintBuilder
+    gengen.generator.AbstractCodeGenerator
+    archimedes.legacy.gui.table.TableModelColumns
+    archimedes.legacy.gui.table.TableModelColumnsPanel
+
+archimedes.gui.checker.ModelCheckerMessageListFrame
+    archimedes.legacy.gui.FrameArchimedes
+    archimedes.legacy.gui.ZoomActionListener
+
+archimedes.legacy.scheme.stf.handler.STFColumnHandler
+
+corent.djinn.SimpleSelector
+    corent.djinn.DefaultSelectionDjinnPanel
+
+corent.gui.COLabel
+    archimedes.legacy.scripting.DialogScriptExecuter
+    corent.djinn.DefaultComponentFactory
+    archimedes.legacy.gui.indices.ComplexIndicesAdministrationFrame
+
+archimedes.acf.report.CodeGeneratorReportTableEntry
+    archimedes.acf.report.CodeGeneratorReport
+    archimedes.acf.report.GenerationProcessReport
+
+archimedes.legacy.gui.indices.ColumnSelectionTableModel
+    archimedes.legacy.gui.indices.ComplexIndicesAdministrationFrame
+
+corent.dates.Wochentag
+    corent.dates.PTimestamp
+    corent.dates.PDate
+
+archimedes.scheme.xml.DomainsXMLBuilder
+    archimedes.scheme.xml.DiagramXMLBuilder
+
+corent.db.xs.AbstractDBFactory
+
+archimedes.scheme.SelectionMember
+    archimedes.legacy.scheme.Diagramm
+    archimedes.legacy.scheme.DefaultObjectFactory
+    archimedes.legacy.gui.TabellenspaltenlistenSubEditor
+
+archimedes.legacy.scheme.stf.writer.STFAdditionalSQLCodeWriter
+    archimedes.legacy.scheme.Diagramm
+
+corent.base.SortedVector
+    
+    archimedes.legacy.gui.DialogTableGeneratorOptions
+    archimedes.legacy.builder.ReconstructableCodeFactory
+    archimedes.legacy.sql.UpdateScriptBuilder
+    archimedes.legacy.scheme.Diagramm
+    archimedes.legacy.scheme.DefaultCodeFactory
+    archimedes.meta.UniqueIndexData
+    archimedes.legacy.app.ApplicationUtil
+    corent.db.DBUtil
+    archimedes.legacy.app.ReconstructableDBFactory
+    corent.util.PropertyEntry
+    corent.db.xs.DBFactoryUtil
+    archimedes.legacy.gui.ZoomActionListener
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+archimedes.legacy.app.EditableSortedListSubEditorFactory
+    archimedes.legacy.app.DefaultArchimedesDescriptorFactory
+
+de.ollie.archimedes.alexandrian.service.exception.TableNotFoundException
+    archimedes.legacy.importer.jdbc.JDBCModelReader
+
+archimedes.legacy.app.SelectableSortedListSubEditor
+    archimedes.legacy.app.SelectableSortedListSubEditorFactory
+
+corent.gui.COButton
+    archimedes.legacy.scripting.DialogScriptExecuter
+    corent.gui.DefaultFilenameSelectorComponentFactory
+    corent.gui.DefaultMassiveListSelectorComponentFactory
+    corent.gui.DefaultTimestampFieldComponentFactory
+    archimedes.legacy.gui.indices.ComplexIndicesAdministrationFrame
+    corent.gui.JDialogThrowable
+
+archimedes.acf.DoubleClassesCheckerContainer
+    archimedes.acf.DoubleClassesChecker
+
+corent.print.ActionPagePlus
+    corent.print.PrintPreview
+
+archimedes.gui.checker.ModelCheckerMessageTableModel
+    archimedes.gui.checker.ModelCheckerMessageListPanel
+
+archimedes.scheme.xml.AbstractXMLBuilder
+
+corent.djinn.ChainKeyAdapter
+    corent.djinn.KeyListenerDjinn
+
+archimedes.acf.report.GenerationProcessReport
+    
+
+archimedes.meta.MetaDataIndexReader
+    archimedes.meta.MetaDataReader
+
+archimedes.sql.generator.PostgreSQLScriptGenerator
+    archimedes.sql.generator.SQLScriptGeneratorFactory
+    
+-----
+    
+archimedes.legacy.scheme.DomainDataChecker
+

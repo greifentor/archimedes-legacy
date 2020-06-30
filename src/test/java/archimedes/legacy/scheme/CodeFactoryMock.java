@@ -19,7 +19,7 @@ import archimedes.legacy.model.DiagrammModel;
 import archimedes.model.CodeFactory;
 import archimedes.model.DataModel;
 import baccara.gui.GUIBundle;
-import corent.util.FileUtil;
+import corentx.io.FileUtil;
 
 /**
  * Ein Mock zum Test des Archimedes-Diagramms.
@@ -39,8 +39,7 @@ public class CodeFactoryMock implements CodeFactory {
 	/**
 	 * Generiert ein CodeFactoryMock mit dem angegebenen Code.
 	 * 
-	 * @param code
-	 *            Der Code, den das CodeFactoryMock erzeugen soll.
+	 * @param code Der Code, den das CodeFactoryMock erzeugen soll.
 	 */
 	public CodeFactoryMock(String code) {
 		super();
@@ -51,9 +50,9 @@ public class CodeFactoryMock implements CodeFactory {
 
 	public boolean generate(DiagrammModel dm, String out) {
 		try {
-			out = FileUtil.CompletePath(out);
+			out = FileUtil.completePath(out);
 			new File(out).mkdirs();
-			FileUtil.WriteTextToFile(out + this.code + ".tmp", false, this.code);
+			FileUtil.writeTextToFile(out + this.code + ".tmp", false, this.code);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -89,9 +88,9 @@ public class CodeFactoryMock implements CodeFactory {
 	@Override
 	public boolean generate(String out) {
 		try {
-			out = FileUtil.CompletePath(out);
+			out = FileUtil.completePath(out);
 			new File(out).mkdirs();
-			FileUtil.WriteTextToFile(out + this.code + ".tmp", false, this.code);
+			FileUtil.writeTextToFile(out + this.code + ".tmp", false, this.code);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
