@@ -14,6 +14,7 @@ import static corentx.util.Checks.ensure;
 import java.awt.Color;
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -3021,6 +3022,18 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	@Override
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+
+	/**
+	 * @changed OLI 30.06.2020 - Added.
+	 */
+	@Override
+	public Map<String, String> getProperties() {
+		Map<String, String> m = new HashMap<>();
+		for (OptionModel o : this.getOptions()) {
+			m.put(o.getName(), o.getParameter());
+		}
+		return m;
 	}
 
 } // 3875
