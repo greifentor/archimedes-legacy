@@ -17,7 +17,8 @@ The good old archimedes (cleaned up).
 
 Call `start` script for your operation system.
 
-To change the JVM to another as is configured as default, create a file named `java-engine-path.bat` and type something like:
+To change the JVM to another as is configured as default, create a file named `java-engine-path.bat` and type 
+something like:
 ```
 SET PATH=C:\JVMs\java11\bin;%PATH%
 ```
@@ -27,10 +28,18 @@ into the file.
 This working with Window only in the moment.
 
 
-## Ideas
+## News
 
-### More than One Code Factory
+### 1.91.1 (30.06.2020)
 
-- Archimedes should be able to process mor than one code factory for a single code generation run.
-- The code factory monitor dialog should be extended by an additional progress bar for the code factories.
-- A specific listener (not this which is managed by the code factories) should implemented and used to update the new progress bar.
+There is a new field for additional diagram info ("Zusätzliche Diagramminfo"). It could be filled with a string or 
+identifiers for diagram options. The option identifiers have this format: 
+
+```
+${Option."OptionName"} e. g. for option VERSION_TAG (value "4711") it would be: ${Option.VERSION_TAG}
+
+For the option above the string "Version Tag is: ${Option."OptionName"}" leads to "Version Tag is: 4711". 
+```
+
+The new field is printed in the header block of the diagram view directly following the version date. It has been added
+to allow printing option values to the diagram.
