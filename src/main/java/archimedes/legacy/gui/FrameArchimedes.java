@@ -1527,6 +1527,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 	private void setPredeterminedOptionProviderForDiagram() {
 		// TODO OLI: Does not work correctly anyway!
+		//
+		// 1. Build a new PredeterminedOptionProvider implementation which is able to keep options for each type.
+		// 2. Add the option for all factories from "getCodeFactories(String)".
+		// 3. Set the predetermined option provider to the diagram.
+		//
 //		final Object cf = this.getCodeFactory("");
 //
 //		if (cf instanceof PredeterminedOptionProvider) {
