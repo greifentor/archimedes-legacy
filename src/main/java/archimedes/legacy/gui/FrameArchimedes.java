@@ -120,9 +120,11 @@ import archimedes.legacy.util.VersionIncrementer;
 import archimedes.legacy.util.VersionStringBuilder;
 import archimedes.model.CodeFactory;
 import archimedes.model.ColumnModel;
+import archimedes.model.CompoundPredeterminedOptionProvider;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
 import archimedes.model.OptionType;
+import archimedes.model.PredeterminedOptionProvider;
 import archimedes.model.SequenceModel;
 import archimedes.model.SimpleIndexMetaData;
 import archimedes.model.StereotypeModel;
@@ -1526,19 +1528,18 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	private void setPredeterminedOptionProviderForDiagram() {
-		// TODO OLI: Does not work correctly anyway!
-		//
-		// 1. Build a new PredeterminedOptionProvider implementation which is able to keep options for each type.
-		// 2. Add the option for all factories from "getCodeFactories(String)".
-		// 3. Set the predetermined option provider to the diagram.
-		//
-//		final Object cf = this.getCodeFactory("");
-//
-//		if (cf instanceof PredeterminedOptionProvider) {
-//			this.diagramm.setPredeterminedOptionProvider((PredeterminedOptionProvider) cf);
-//		} else {
-//			this.diagramm.setPredeterminedOptionProvider(null);
-//		}
+		CompoundPredeterminedOptionProvider compoundOptionProvider = new CompoundPredeterminedOptionProvider();
+		for (Object cf : getCodeFactories("")) {
+			if (cf instanceof PredeterminedOptionProvider) {
+				for (OptionType optionType : OptionType.values()) {
+					String[] options = ((PredeterminedOptionProvider) cf).getSelectableOptions(optionType);
+					if (options != null) {
+						compoundOptionProvider.addOptions(optionType, options);
+					}
+				}
+			}
+		}
+		this.diagramm.setPredeterminedOptionProvider(compoundOptionProvider);
 	}
 
 	/**
