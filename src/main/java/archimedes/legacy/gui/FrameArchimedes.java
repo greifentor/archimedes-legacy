@@ -1707,7 +1707,12 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 								}
 							});
 						}
-						progressionFrame.updateFactory(null, null, cf.getClass().getSimpleName(), null);
+						if (progressionFrame != null) {
+							progressionFrame.updateFactory(null, null, cf.getClass().getSimpleName(), null);
+						} else {
+							((CodeFactory) cf)
+									.setGUIBundle(getGUIBundle(guiBundle, ((CodeFactory) cf).getResourceBundleNames()));
+						}
 						((CodeFactory) cf).generate(path);
 						try {
 							codePathProvider.storePath(path);
