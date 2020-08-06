@@ -1708,7 +1708,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 							});
 						}
 						if (progressionFrame != null) {
-							progressionFrame.updateFactory(null, null, cf.getClass().getSimpleName(), null);
+							progressionFrame.updateFactory(null, null, getFactoryName(cf), null);
 						} else {
 							((CodeFactory) cf)
 									.setGUIBundle(getGUIBundle(guiBundle, ((CodeFactory) cf).getResourceBundleNames()));
@@ -1741,7 +1741,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		if (cf instanceof CodeFactory) {
 			return ((CodeFactory) cf).getName() + " (" + ((CodeFactory) cf).getVersion() + ")";
 		}
-		return cf.getClass().getSimpleName();
+		return "Class - " + cf.getClass().getSimpleName();
 	}
 
 	private List<Object> getCodeFactories(String path) {
