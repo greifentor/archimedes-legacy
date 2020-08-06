@@ -1,6 +1,6 @@
 LIB=./lib
 
-CP=./target/archimedes-legacy-1.92.2-executable.jar
+CP=./target/archimedes-legacy-1.93.2-executable.jar
 
 CP=$CP:$LIB/baccaraacf.jar
 CP=$CP:$LIB/commons-lang3-3.1.jar

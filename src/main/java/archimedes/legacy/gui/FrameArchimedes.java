@@ -1721,7 +1721,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						}
 						factoryCount.inc();
 						if (progressionFrame != null) {
-							progressionFrame.updateFactory(factoryCount.getValue(), null, cf.getClass().getSimpleName(),
+							progressionFrame.updateFactory(factoryCount.getValue(), null, getFactoryName(cf),
 									factoryCount.getValue() <= codeFactories.size() //
 											? "\n\n" + cf.getClass().getSimpleName() + " finished.\n"
 													+ "--------------------------------------------------------------------------------\n\n\n"
@@ -1735,6 +1735,13 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				progressionFrame.enableCloseButton();
 			}
 		}
+	}
+
+	private String getFactoryName(Object cf) {
+		if (cf instanceof CodeFactory) {
+			return ((CodeFactory) cf).getName() + " (" + ((CodeFactory) cf).getVersion() + ")";
+		}
+		return cf.getClass().getSimpleName();
 	}
 
 	private List<Object> getCodeFactories(String path) {
