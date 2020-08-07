@@ -1684,7 +1684,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			final Counter factoryCount = new Counter(0);
 			if (progressionFrame != null) {
 				new Thread(() -> {
-					progressionFrame.updateFactory(factoryCount.getValue(), codeFactories.size(), "-", null);
+					progressionFrame.updateFactory(factoryCount.getValue(), codeFactories.size(), null, null);
 				}).start();
 			}
 			for (Object cf : codeFactories) {
