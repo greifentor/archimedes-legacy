@@ -12,8 +12,8 @@ package archimedes.legacy.scheme.stf.writer;
 import logging.Logger;
 
 import archimedes.legacy.model.DiagramSaveMode;
+import archimedes.legacy.model.StereotypeModel;
 import archimedes.legacy.scheme.stf.handler.STFStereotypeHandler;
-import archimedes.model.StereotypeModel;
 import corent.files.StructuredTextFile;
 
 /**

@@ -13,11 +13,11 @@ import java.io.File;
 
 import archimedes.acf.checker.ModelChecker;
 import archimedes.acf.event.CodeFactoryListener;
-import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
 import archimedes.legacy.Archimedes;
+import archimedes.legacy.gui.checker.ModelCheckerMessageListFrameListener;
+import archimedes.legacy.model.CodeFactory;
+import archimedes.legacy.model.DataModel;
 import archimedes.legacy.model.DiagrammModel;
-import archimedes.model.CodeFactory;
-import archimedes.model.DataModel;
 import baccara.gui.GUIBundle;
 import corentx.io.FileUtil;
 

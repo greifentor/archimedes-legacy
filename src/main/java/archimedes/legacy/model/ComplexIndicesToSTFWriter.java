@@ -9,7 +9,6 @@
 
 package archimedes.legacy.model;
 
-import archimedes.model.IndexMetaData;
 import corent.files.StructuredTextFile;
 
 /**

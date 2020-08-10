@@ -11,9 +11,9 @@ package archimedes.legacy.scheme;
 
 import java.util.Vector;
 
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.OrderMemberModel;
 import archimedes.legacy.model.TabellenspaltenModel;
-import archimedes.model.ColumnModel;
-import archimedes.model.OrderMemberModel;
 import corent.base.Attributed;
 import corent.base.StrUtil;
 import corent.db.OrderClauseDirection;

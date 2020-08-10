@@ -13,7 +13,7 @@ import java.awt.Component;
 import java.util.Hashtable;
 
 import archimedes.legacy.Archimedes;
-import archimedes.model.CommentOwner;
+import archimedes.legacy.model.CommentOwner;
 import corent.base.Attributed;
 import corent.djinn.SubEditor;
 import corent.djinn.SubEditorFactory;

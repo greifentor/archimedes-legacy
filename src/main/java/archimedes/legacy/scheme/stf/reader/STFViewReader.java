@@ -11,9 +11,9 @@ package archimedes.legacy.scheme.stf.reader;
 
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.ViewModel;
+import archimedes.legacy.model.gui.GUIViewModel;
 import archimedes.legacy.scheme.stf.handler.STFViewHandler;
-import archimedes.model.ViewModel;
-import archimedes.model.gui.GUIViewModel;
 import corent.files.StructuredTextFile;
 
 /**

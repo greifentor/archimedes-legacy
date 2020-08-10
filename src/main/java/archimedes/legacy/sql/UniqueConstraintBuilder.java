@@ -11,11 +11,11 @@ package archimedes.legacy.sql;
 
 import java.util.List;
 
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.UniqueMetaData;
 import archimedes.legacy.script.sql.SQLScript;
-import archimedes.model.ColumnModel;
-import archimedes.model.TableModel;
-import archimedes.model.UniqueMetaData;
 import corent.db.DBExecMode;
 
 /**

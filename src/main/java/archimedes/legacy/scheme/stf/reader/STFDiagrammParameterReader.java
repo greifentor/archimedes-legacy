@@ -14,8 +14,8 @@ import java.io.File;
 
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.scheme.Option;
 import archimedes.legacy.scheme.stf.handler.STFDiagrammParameterHandler;
-import archimedes.scheme.Option;
 import corent.dates.DateFormatException;
 import corent.dates.PDate;
 import corent.files.StructuredTextFile;

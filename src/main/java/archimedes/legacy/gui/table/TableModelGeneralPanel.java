@@ -14,7 +14,7 @@ import java.awt.Container;
 import java.awt.event.ActionListener;
 
 import archimedes.legacy.Archimedes;
-import archimedes.model.TableModel;
+import archimedes.legacy.model.TableModel;
 import baccara.gui.GUIBundle;
 import baccara.gui.generics.BaccaraEditorPanel;
 import baccara.gui.generics.ComponentData;

@@ -24,10 +24,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import archimedes.model.DomainModel;
-import archimedes.model.OptionModel;
-import archimedes.model.ReferenceWeight;
-import archimedes.scheme.Option;
+import archimedes.legacy.model.DomainModel;
+import archimedes.legacy.model.OptionModel;
+import archimedes.legacy.model.ReferenceWeight;
 import corent.base.Direction;
 
 /**

@@ -9,7 +9,6 @@
 
 package archimedes.legacy.model;
 
-import archimedes.model.CommentOwner;
 import corent.base.Attributed;
 import corent.djinn.Selectable;
 import corent.djinn.TabbedEditable;

@@ -29,12 +29,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import archimedes.legacy.Archimedes;
+import archimedes.legacy.model.OrderMemberModel;
+import archimedes.legacy.model.SelectionMemberModel;
 import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TabellenspaltenModel;
 import archimedes.legacy.scheme.OrderMember;
-import archimedes.model.OrderMemberModel;
-import archimedes.model.SelectionMemberModel;
-import archimedes.scheme.SelectionMember;
+import archimedes.legacy.scheme.SelectionMember;
 import corent.base.Attributed;
 import corent.base.Constants;
 import corent.base.StrUtil;

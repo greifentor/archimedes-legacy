@@ -10,8 +10,7 @@
 package archimedes.legacy.scheme.stf.reader;
 
 import logging.Logger;
-
-import archimedes.connections.DatabaseConnection;
+import archimedes.legacy.connections.DatabaseConnection;
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.legacy.scheme.stf.handler.STFDatabaseConnectionHandler;
 import corent.db.DBExecMode;

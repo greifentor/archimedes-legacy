@@ -12,9 +12,9 @@ package archimedes.legacy.scheme;
 import java.util.LinkedList;
 import java.util.List;
 
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.UserInformation;
 import archimedes.legacy.script.sql.SQLScript;
-import archimedes.model.DataModel;
-import archimedes.model.UserInformation;
 import corent.db.DBExecMode;
 import corentx.dates.PTimestamp;
 

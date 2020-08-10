@@ -29,9 +29,9 @@ import org.netbeans.jemmy.operators.JButtonOperator;
 import org.netbeans.jemmy.operators.JDialogOperator;
 
 import archimedes.legacy.Archimedes;
+import archimedes.legacy.model.CodeFactory;
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.legacy.model.TabellenModel;
-import archimedes.model.CodeFactory;
 import corent.base.SortedVector;
 import corent.base.StrUtil;
 import corent.db.ConnectionManager;

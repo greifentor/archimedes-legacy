@@ -12,9 +12,9 @@ package archimedes.legacy.gui;
 import java.awt.Component;
 import java.util.Hashtable;
 
-import archimedes.model.OptionListProvider;
-import archimedes.model.OptionType;
-import archimedes.model.PredeterminedOptionProvider;
+import archimedes.legacy.model.OptionListProvider;
+import archimedes.legacy.model.OptionType;
+import archimedes.legacy.model.PredeterminedOptionProvider;
 import baccara.gui.GUIBundle;
 import corent.base.Attributed;
 import corent.djinn.SubEditor;

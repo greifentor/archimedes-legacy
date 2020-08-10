@@ -27,9 +27,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import archimedes.legacy.Archimedes;
+import archimedes.legacy.model.PanelModel;
 import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TabellenspaltenModel;
-import archimedes.model.PanelModel;
 import corent.base.Attributed;
 import corent.base.Constants;
 import corent.base.StrUtil;

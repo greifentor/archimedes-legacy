@@ -16,8 +16,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import archimedes.legacy.model.IndexMetaData;
 import archimedes.legacy.scheme.Diagramm;
-import archimedes.model.IndexMetaData;
 
 /**
  * Dieser Test &Ouml;ffnet das Fenster zur Wartung komplexer Indices, erzeugt einen neuen komplexen Index und speichert

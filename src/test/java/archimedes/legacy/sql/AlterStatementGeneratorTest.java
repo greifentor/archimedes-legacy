@@ -22,14 +22,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import archimedes.legacy.Archimedes;
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.DomainModel;
+import archimedes.legacy.model.TableModel;
 import archimedes.legacy.scheme.Diagramm;
 import archimedes.legacy.scheme.Domain;
 import archimedes.legacy.scheme.Tabelle;
 import archimedes.legacy.scheme.Tabellenspalte;
-import archimedes.model.ColumnModel;
-import archimedes.model.DomainModel;
-import archimedes.model.TableModel;
 import corent.db.DBExecMode;
 import corent.files.StructuredTextFile;
 

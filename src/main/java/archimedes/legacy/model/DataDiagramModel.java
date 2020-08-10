@@ -12,9 +12,6 @@ package archimedes.legacy.model;
 import java.util.List;
 import java.util.Vector;
 
-import archimedes.model.DomainModel;
-import archimedes.model.StereotypeModel;
-import archimedes.model.ViewModel;
 import corent.base.SortedVector;
 import corent.dates.PDate;
 import corent.db.DBExecMode;

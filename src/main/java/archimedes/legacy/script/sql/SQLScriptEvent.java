@@ -12,10 +12,10 @@ package archimedes.legacy.script.sql;
 import java.util.List;
 import java.util.Vector;
 
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TabellenspaltenModel;
-import archimedes.model.ColumnModel;
-import archimedes.model.TableModel;
+import archimedes.legacy.model.TableModel;
 
 /**
  * Diese Klasse definiert ein Ereignis, das die an ein DiagrammModel

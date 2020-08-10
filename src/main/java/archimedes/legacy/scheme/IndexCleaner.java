@@ -9,8 +9,8 @@
 
 package archimedes.legacy.scheme;
 
+import archimedes.legacy.model.IndexMetaData;
 import archimedes.legacy.model.TabellenModel;
-import archimedes.model.IndexMetaData;
 
 /**
  * Diese Klasse bereinigt eine Liste von komplexen Indices von Referenzen auf

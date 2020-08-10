@@ -18,9 +18,9 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JTextField;
 
-import archimedes.model.OptionModel;
-import archimedes.model.OptionType;
-import archimedes.model.PredeterminedOptionProvider;
+import archimedes.legacy.model.OptionModel;
+import archimedes.legacy.model.OptionType;
+import archimedes.legacy.model.PredeterminedOptionProvider;
 import baccara.gui.GUIBundle;
 import baccara.gui.generics.AbstractEditorFrame;
 import baccara.gui.generics.ComponentData;

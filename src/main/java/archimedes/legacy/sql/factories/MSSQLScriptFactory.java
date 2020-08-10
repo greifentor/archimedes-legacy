@@ -9,7 +9,7 @@
 
 package archimedes.legacy.sql.factories;
 
-import archimedes.model.DataModel;
+import archimedes.legacy.model.DataModel;
 import corent.db.DBExecMode;
 
 /**

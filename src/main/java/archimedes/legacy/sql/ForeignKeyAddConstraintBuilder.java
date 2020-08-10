@@ -15,10 +15,10 @@ import java.util.Enumeration;
 import java.util.List;
 
 import archimedes.legacy.model.ColumnMetaData;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.DataModel;
 import archimedes.legacy.model.TableMetaData;
 import archimedes.legacy.script.sql.SQLScript;
-import archimedes.model.ColumnModel;
-import archimedes.model.DataModel;
 import corent.db.DBExecMode;
 import corentx.util.SortedVector;
 

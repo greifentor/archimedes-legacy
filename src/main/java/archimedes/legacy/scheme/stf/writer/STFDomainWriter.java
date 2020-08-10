@@ -12,8 +12,8 @@ package archimedes.legacy.scheme.stf.writer;
 import logging.Logger;
 
 import archimedes.legacy.model.DiagramSaveMode;
+import archimedes.legacy.model.DomainModel;
 import archimedes.legacy.scheme.stf.handler.STFDomainHandler;
-import archimedes.model.DomainModel;
 import corent.files.StructuredTextFile;
 
 /**

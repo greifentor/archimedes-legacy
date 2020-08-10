@@ -13,7 +13,6 @@ import gengen.metadata.ModelMetaData;
 
 import java.util.List;
 
-import archimedes.model.IndexMetaData;
 import corent.files.StructuredTextFile;
 
 /**

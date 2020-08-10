@@ -22,9 +22,9 @@ import org.junit.jupiter.api.Test;
 
 import archimedes.acf.checker.ModelCheckerCodeGeneratorOptionFieldNotEmpty;
 import archimedes.acf.checker.ModelCheckerMessage;
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.TableModel;
 import archimedes.legacy.scheme.Diagramm;
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
 import baccara.gui.FileImageProvider;
 import baccara.gui.GUIBundle;
 import baccara.gui.PropertyResourceManager;

@@ -11,7 +11,9 @@ package baccara.acf.util;
 
 import java.util.*;
 
-import archimedes.model.*;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.SelectionMemberModel;
+import archimedes.legacy.model.*;
 import corentx.util.*;
 
 /**

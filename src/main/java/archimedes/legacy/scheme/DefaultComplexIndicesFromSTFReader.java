@@ -19,7 +19,7 @@ import gengen.metadata.ModelMetaData;
 import java.util.List;
 
 import archimedes.legacy.model.ComplexIndicesFromSTFReader;
-import archimedes.model.IndexMetaData;
+import archimedes.legacy.model.IndexMetaData;
 import corent.files.StructuredTextFile;
 
 /**

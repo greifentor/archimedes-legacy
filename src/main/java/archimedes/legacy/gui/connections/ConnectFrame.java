@@ -18,8 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import archimedes.connections.DatabaseConnection;
-import archimedes.gui.DatabaseConnectionRecord;
+import archimedes.legacy.connections.DatabaseConnection;
+import archimedes.legacy.gui.DatabaseConnectionRecord;
 import baccara.gui.GUIBundle;
 import baccara.gui.generics.AbstractEditorFrame;
 import baccara.gui.generics.ComponentData;

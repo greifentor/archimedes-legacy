@@ -9,9 +9,9 @@
 
 package archimedes.legacy.scheme.stf.reader;
 
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.scheme.Option;
 import archimedes.legacy.scheme.stf.handler.STFOptionHandler;
-import archimedes.model.TableModel;
-import archimedes.scheme.Option;
 import corent.files.StructuredTextFile;
 
 /**

@@ -13,7 +13,11 @@ import java.util.*;
 
 import archimedes.acf.*;
 import archimedes.acf.report.*;
-import archimedes.model.*;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.PanelModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.*;
 import baccara.acf.*;
 import baccara.acf.ColParamIds;
 import baccara.acf.TableParamIds;

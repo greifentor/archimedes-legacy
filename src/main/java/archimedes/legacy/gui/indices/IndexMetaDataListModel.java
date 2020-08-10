@@ -12,7 +12,7 @@ package archimedes.legacy.gui.indices;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
-import archimedes.model.IndexMetaData;
+import archimedes.legacy.model.IndexMetaData;
 
 /**
  * Eine <CODE>ListModel</CODE>-Implementierung zur Darstellung von

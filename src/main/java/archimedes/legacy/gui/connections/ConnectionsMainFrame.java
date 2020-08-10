@@ -37,9 +37,8 @@ import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 
 import logging.Logger;
-
-import archimedes.connections.DatabaseConnection;
 import archimedes.legacy.Archimedes;
+import archimedes.legacy.connections.DatabaseConnection;
 import archimedes.legacy.model.DiagrammModel;
 import baccara.gui.GUIBundle;
 import baccara.gui.generics.EditorFrameEvent;

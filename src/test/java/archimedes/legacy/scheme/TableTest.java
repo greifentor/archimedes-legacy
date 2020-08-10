@@ -19,8 +19,8 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.TableModel;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.TableModel;
 
 /**
  * Tests of the <CODE>TableModel</CODE> methods in the class <CODE>Tabellen</CODE>:

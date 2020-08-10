@@ -13,11 +13,10 @@ import static corentx.util.Checks.ensure;
 import gengen.metadata.AttributeMetaData;
 
 import logging.Logger;
-
+import archimedes.legacy.model.DataModel;
 import archimedes.legacy.model.IndexListCleaner;
-import archimedes.model.DataModel;
-import archimedes.model.IndexMetaData;
-import archimedes.model.TableModel;
+import archimedes.legacy.model.IndexMetaData;
+import archimedes.legacy.model.TableModel;
 
 /**
  * Eine Implementierung des Interfaces zur Nutzung in der

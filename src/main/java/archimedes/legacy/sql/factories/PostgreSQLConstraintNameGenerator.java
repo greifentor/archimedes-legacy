@@ -9,9 +9,9 @@
 
 package archimedes.legacy.sql.factories;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.TableModel;
-import archimedes.util.NameGenerator;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.util.NameGenerator;
 import corent.db.DBExecMode;
 
 /**

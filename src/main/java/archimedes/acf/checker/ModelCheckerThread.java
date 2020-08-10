@@ -14,7 +14,7 @@ import static corentx.util.Checks.ensure;
 import java.util.LinkedList;
 import java.util.List;
 
-import archimedes.model.DataModel;
+import archimedes.legacy.model.DataModel;
 
 /**
  * A thread which starts a checking process for the passed model.

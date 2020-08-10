@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import archimedes.model.DomainModel;
+import archimedes.legacy.model.DomainModel;
 
 /**
  * Tests zur Klasse <TT>DomainStringBuilder</TT>.

@@ -13,16 +13,15 @@ import java.awt.Point;
 import java.util.List;
 
 import logging.Logger;
-
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.DiagramSaveMode;
+import archimedes.legacy.model.RelationModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.ViewModel;
+import archimedes.legacy.model.gui.GUIRelationModel;
+import archimedes.legacy.model.gui.GUIViewModel;
 import archimedes.legacy.scheme.Relation;
 import archimedes.legacy.scheme.stf.handler.STFRelationHandler;
-import archimedes.model.ColumnModel;
-import archimedes.model.RelationModel;
-import archimedes.model.TableModel;
-import archimedes.model.ViewModel;
-import archimedes.model.gui.GUIRelationModel;
-import archimedes.model.gui.GUIViewModel;
 import corent.files.StructuredTextFile;
 
 /**

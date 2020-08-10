@@ -13,15 +13,15 @@ import java.util.List;
 
 import archimedes.legacy.metadata.SequenceMetaData;
 import archimedes.legacy.model.ColumnMetaData;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.DomainModel;
+import archimedes.legacy.model.SequenceModel;
 import archimedes.legacy.model.TableMetaData;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.UniqueMetaData;
 import archimedes.legacy.sql.CreateStatementGenerator;
 import archimedes.legacy.sql.SQLGeneratorUtil;
-import archimedes.model.ColumnModel;
-import archimedes.model.DataModel;
-import archimedes.model.DomainModel;
-import archimedes.model.SequenceModel;
-import archimedes.model.TableModel;
-import archimedes.model.UniqueMetaData;
 import corent.db.DBExecMode;
 
 /**

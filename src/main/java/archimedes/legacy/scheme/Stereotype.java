@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.gui.CommentSubEditorFactory;
 import archimedes.legacy.gui.HistoryOwnerSubEditorFactory;
-import archimedes.model.StereotypeModel;
+import archimedes.legacy.model.StereotypeModel;
 import corent.base.Attributed;
 import corent.djinn.DefaultComponentFactory;
 import corent.djinn.DefaultEditorDescriptor;

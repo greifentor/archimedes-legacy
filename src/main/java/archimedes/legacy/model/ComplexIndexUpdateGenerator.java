@@ -11,9 +11,6 @@ package archimedes.legacy.model;
 
 import java.util.List;
 
-import archimedes.model.IndexMetaData;
-import archimedes.model.SimpleIndexMetaData;
-
 /**
  * Klassen, die diese Interface implementieren, sind in der Lage eine Liste mit
  * Index-Metadaten aus der Datenbank mit denen eines Datenmodells zu vergleichen

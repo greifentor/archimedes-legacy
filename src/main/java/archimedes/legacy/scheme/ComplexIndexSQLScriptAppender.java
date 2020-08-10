@@ -12,9 +12,9 @@ package archimedes.legacy.scheme;
 import static corentx.util.Checks.ensure;
 import gengen.metadata.AttributeMetaData;
 import archimedes.legacy.model.ComplexIndexScriptAppender;
+import archimedes.legacy.model.IndexMetaData;
+import archimedes.legacy.model.SimpleIndexMetaData;
 import archimedes.legacy.script.sql.SQLScript;
-import archimedes.model.IndexMetaData;
-import archimedes.model.SimpleIndexMetaData;
 
 /**
  * Diese Implementierung des <CODE>ComplexIndexScriptAppender</CODE>-Interfaces

@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.TableModel;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.TableModel;
 
 /**
  * Tests of the class <CODE>ForeignConstraintNameCreator</CODE>.

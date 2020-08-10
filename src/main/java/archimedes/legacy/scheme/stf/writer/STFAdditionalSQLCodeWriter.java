@@ -10,9 +10,8 @@
 package archimedes.legacy.scheme.stf.writer;
 
 import logging.Logger;
-
+import archimedes.legacy.model.DataModel;
 import archimedes.legacy.scheme.stf.handler.STFAdditionalSQLCodeHandler;
-import archimedes.model.DataModel;
 import corent.files.StructuredTextFile;
 
 /**

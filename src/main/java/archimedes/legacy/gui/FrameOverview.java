@@ -11,11 +11,11 @@ package archimedes.legacy.gui;
 
 import javax.swing.JScrollPane;
 
-import archimedes.gui.diagram.ComponentDiagramm;
+import archimedes.legacy.gui.diagram.ComponentDiagramm;
 import archimedes.legacy.gui.diagram.DiagramGUIObjectCreator;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.gui.GUIViewModel;
 import archimedes.legacy.transfer.DefaultCopyAndPasteController;
-import archimedes.model.gui.GUIViewModel;
 import corent.files.Inifile;
 import corent.gui.JFrameWithInifile;
 

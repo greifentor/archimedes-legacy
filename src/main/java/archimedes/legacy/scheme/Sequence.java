@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.gui.CommentSubEditorFactory;
 import archimedes.legacy.gui.HistoryOwnerSubEditorFactory;
-import archimedes.model.SequenceModel;
+import archimedes.legacy.model.SequenceModel;
 import corent.base.Attributed;
 import corent.base.Direction;
 import corent.base.StrUtil;

@@ -9,7 +9,7 @@
 
 package archimedes.legacy.gui;
 
-import archimedes.model.OptionModel;
+import archimedes.legacy.model.OptionModel;
 import baccara.gui.generics.EditorFrameEvent;
 import baccara.gui.generics.EditorFrameEventType;
 

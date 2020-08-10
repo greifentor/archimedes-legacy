@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import archimedes.acf.checker.ModelChecker;
 import archimedes.acf.checker.ModelCheckerMessage;
 import archimedes.acf.checker.ModelCheckerMessage.Level;
-import archimedes.model.DataModel;
+import archimedes.legacy.model.DataModel;
 import baccara.gui.GUIBundle;
 
 /**

@@ -16,7 +16,7 @@ import gengen.metadata.AttributeMetaData;
 import java.util.Vector;
 
 import archimedes.legacy.model.ComplexIndicesToSTFWriter;
-import archimedes.model.IndexMetaData;
+import archimedes.legacy.model.IndexMetaData;
 import corent.files.StructuredTextFile;
 
 /**

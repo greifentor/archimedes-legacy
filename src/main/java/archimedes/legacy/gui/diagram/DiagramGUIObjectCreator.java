@@ -9,16 +9,14 @@
 
 package archimedes.legacy.gui.diagram;
 
-import archimedes.gui.diagram.GUIObjectCreator;
-import archimedes.gui.diagram.GUIObjectTypes;
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.HistoryOwner;
 import archimedes.legacy.model.HistoryOwnerUtil;
 import archimedes.legacy.model.TabellenModel;
-import archimedes.model.HistoryOwner;
-import archimedes.model.ViewModel;
-import archimedes.model.gui.GUIObjectModel;
-import archimedes.model.gui.GUIViewModel;
+import archimedes.legacy.model.ViewModel;
+import archimedes.legacy.model.gui.GUIObjectModel;
+import archimedes.legacy.model.gui.GUIViewModel;
 
 /**
  * An implementation of the <CODE>GUIObjectCreator</CODE> interface.

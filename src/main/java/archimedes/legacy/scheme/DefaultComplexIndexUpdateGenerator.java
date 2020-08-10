@@ -15,8 +15,8 @@ import logging.Logger;
 
 import archimedes.legacy.model.ComplexIndexScriptAppender;
 import archimedes.legacy.model.ComplexIndexUpdateGenerator;
-import archimedes.model.IndexMetaData;
-import archimedes.model.SimpleIndexMetaData;
+import archimedes.legacy.model.IndexMetaData;
+import archimedes.legacy.model.SimpleIndexMetaData;
 
 /**
  * Implementierung des Interfaces <CODE>ComplexIndexUpdateGenerator</CODE> zur

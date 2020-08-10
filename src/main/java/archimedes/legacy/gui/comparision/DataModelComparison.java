@@ -17,14 +17,14 @@ import java.util.Vector;
 
 import javax.swing.JFileChooser;
 
+import archimedes.legacy.meta.MetaDataModel;
+import archimedes.legacy.meta.MetaDataModelComparator;
+import archimedes.legacy.meta.MetaDataReader;
+import archimedes.legacy.meta.chops.AbstractChangeOperation;
+import archimedes.legacy.model.DataModel;
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.legacy.scheme.Diagramm;
-import archimedes.meta.MetaDataModel;
-import archimedes.meta.MetaDataModelComparator;
-import archimedes.meta.MetaDataReader;
-import archimedes.meta.chops.AbstractChangeOperation;
-import archimedes.model.DataModel;
-import archimedes.util.NameGenerator;
+import archimedes.legacy.util.NameGenerator;
 import corent.db.DBExecMode;
 import corent.files.ExtensionFileFilter;
 import corent.files.Inifile;

@@ -18,14 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import archimedes.gui.PaintMode;
-import archimedes.gui.diagram.CoordinateConverter;
-import archimedes.gui.diagram.ShapeContainer;
-import archimedes.model.CommentOwner;
-import archimedes.model.HistoryOwner;
-import archimedes.model.TableModel;
-import archimedes.model.ViewModel;
-import archimedes.model.gui.GUIObjectModel;
+import archimedes.legacy.gui.PaintMode;
+import archimedes.legacy.gui.diagram.CoordinateConverter;
+import archimedes.legacy.gui.diagram.ShapeContainer;
+import archimedes.legacy.model.gui.GUIObjectModel;
 import corent.base.Attributed;
 import corent.djinn.TabbedEditable;
 

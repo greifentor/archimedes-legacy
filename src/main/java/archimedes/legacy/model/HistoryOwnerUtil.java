@@ -9,8 +9,6 @@
 
 package archimedes.legacy.model;
 
-import archimedes.model.HistoryOwner;
-
 /**
  * Utility class for history owners.
  * 

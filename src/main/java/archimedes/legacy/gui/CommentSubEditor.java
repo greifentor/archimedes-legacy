@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import archimedes.model.CommentOwner;
+import archimedes.legacy.model.CommentOwner;
 import baccara.gui.GUIBundle;
 import corent.base.Attributed;
 import corent.djinn.SubEditor;

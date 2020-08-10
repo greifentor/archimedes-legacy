@@ -15,7 +15,7 @@ import java.util.Formatter;
 import java.util.Properties;
 
 import archimedes.acf.report.ResourceData;
-import archimedes.model.DataModel;
+import archimedes.legacy.model.DataModel;
 import corentx.dates.PTimestamp;
 import corentx.io.FileUtil;
 import gengen.IndividualPreferences;

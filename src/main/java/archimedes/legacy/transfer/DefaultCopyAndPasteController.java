@@ -11,10 +11,9 @@ package archimedes.legacy.transfer;
 
 import java.awt.datatransfer.Transferable;
 
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.TableModel;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import archimedes.transfer.CopyAndPasteController;
 import corentx.xml.XMLNodeFactory;
 
 /**

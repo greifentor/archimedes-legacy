@@ -9,11 +9,6 @@
 
 package archimedes.legacy.model;
 
-import archimedes.model.DomainModel;
-import archimedes.model.PanelModel;
-import archimedes.model.ReferenceWeight;
-import archimedes.model.RelationModel;
-
 /**
  * Dieses Interface definiert die Funktionen eines DataColumnModels im Rahmen
  * des Archimedesumfeldes.

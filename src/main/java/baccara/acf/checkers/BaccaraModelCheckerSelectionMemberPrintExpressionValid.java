@@ -12,7 +12,11 @@ package baccara.acf.checkers;
 import java.util.*;
 
 import archimedes.acf.checker.*;
-import archimedes.model.*;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.SelectionMemberModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.*;
 import baccara.acf.util.*;
 import baccara.gui.*;
 import corentx.util.*;

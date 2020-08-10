@@ -16,9 +16,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import archimedes.legacy.Utils;
+import archimedes.legacy.model.IndexMetaData;
+import archimedes.legacy.model.SimpleIndexMetaData;
 import archimedes.legacy.script.sql.SQLScript;
-import archimedes.model.IndexMetaData;
-import archimedes.model.SimpleIndexMetaData;
 import gengen.metadata.AttributeMetaData;
 import gengen.metadata.ClassMetaData;
 

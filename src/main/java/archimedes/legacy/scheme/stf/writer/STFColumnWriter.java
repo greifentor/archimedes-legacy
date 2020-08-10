@@ -10,12 +10,11 @@
 package archimedes.legacy.scheme.stf.writer;
 
 import logging.Logger;
-
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.DiagramSaveMode;
+import archimedes.legacy.model.SequenceModel;
+import archimedes.legacy.model.ViewModel;
 import archimedes.legacy.scheme.stf.handler.STFColumnHandler;
-import archimedes.model.ColumnModel;
-import archimedes.model.SequenceModel;
-import archimedes.model.ViewModel;
 import corent.files.StructuredTextFile;
 
 /**

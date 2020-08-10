@@ -13,8 +13,8 @@ import logging.Logger;
 
 import archimedes.legacy.model.DiagramSaveMode;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.OptionModel;
 import archimedes.legacy.scheme.stf.handler.STFDiagrammParameterHandler;
-import archimedes.model.OptionModel;
 import corent.files.StructuredTextFile;
 
 /**

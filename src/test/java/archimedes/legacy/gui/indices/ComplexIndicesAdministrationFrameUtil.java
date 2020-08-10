@@ -24,9 +24,9 @@ import org.netbeans.jemmy.operators.JTableOperator;
 import org.netbeans.jemmy.operators.JTextFieldOperator;
 
 import archimedes.legacy.Utils;
-import archimedes.model.ChangeObserver;
-import archimedes.model.DataModel;
-import archimedes.model.IndexMetaData;
+import archimedes.legacy.model.ChangeObserver;
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.IndexMetaData;
 
 /**
  * Utilities zum Test der Klasse <CODE>ComplexIndicesAdministrationFrame</CODE>.

@@ -12,13 +12,13 @@ package archimedes.legacy.scheme.stf.reader;
 import java.awt.Point;
 
 import archimedes.legacy.Archimedes;
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.RelationModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.ViewModel;
 import archimedes.legacy.scheme.Relation;
 import archimedes.legacy.scheme.stf.handler.STFRelationHandler;
-import archimedes.model.ColumnModel;
-import archimedes.model.RelationModel;
-import archimedes.model.TableModel;
-import archimedes.model.ViewModel;
 import corent.base.Direction;
 import corent.files.StructuredTextFile;
 

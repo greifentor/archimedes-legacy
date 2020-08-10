@@ -14,7 +14,7 @@ import java.util.Arrays;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
-import archimedes.connections.DatabaseConnection;
+import archimedes.legacy.connections.DatabaseConnection;
 import baccara.gui.GUIBundle;
 import baccara.gui.generics.AbstractEditorFrame;
 import baccara.gui.generics.ComponentData;

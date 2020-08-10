@@ -10,8 +10,9 @@
 package archimedes.legacy.scheme;
 
 import static corentx.util.Checks.ensure;
+
+import archimedes.legacy.model.DomainModel;
 import archimedes.legacy.model.TabellenspaltenModel;
-import archimedes.model.DomainModel;
 
 /**
  * Klasse zur Erzeugung eines individualisierten Domain-String zu einer

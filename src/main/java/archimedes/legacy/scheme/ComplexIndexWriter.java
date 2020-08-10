@@ -11,8 +11,8 @@ package archimedes.legacy.scheme;
 
 import static corentx.util.Checks.ensure;
 import archimedes.legacy.model.ComplexIndicesToSTFWriter;
+import archimedes.legacy.model.DataModel;
 import archimedes.legacy.model.IndexListCleaner;
-import archimedes.model.DataModel;
 import corent.files.StructuredTextFile;
 
 /**

@@ -27,8 +27,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import archimedes.legacy.model.HistoryOwnerUtil;
+import archimedes.legacy.model.StereotypeModel;
 import archimedes.legacy.model.TabellenModel;
-import archimedes.model.StereotypeModel;
 import corent.base.Attributed;
 import corent.base.Constants;
 import corent.djinn.DefaultListViewComponentFactory;

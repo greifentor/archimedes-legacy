@@ -10,7 +10,8 @@
 package archimedes.legacy.scheme;
 
 import static corentx.util.Checks.ensure;
-import archimedes.model.UserInformation;
+
+import archimedes.legacy.model.UserInformation;
 
 /**
  * Eine Defaultimplementierung des Interfaces zur Nutzung in der

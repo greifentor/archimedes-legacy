@@ -9,8 +9,6 @@
 
 package archimedes.legacy.model;
 
-import archimedes.model.DataModel;
-
 /**
  * Definition der Methoden, die eine Klasse braucht, um als IndexListCleaner
  * genutzt werden zu k&ouml;nnen. Der IndexListCleaner entfernt ung&uuml;ltige

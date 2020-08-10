@@ -27,11 +27,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import archimedes.legacy.Archimedes;
-import archimedes.model.OptionListProvider;
-import archimedes.model.OptionModel;
-import archimedes.model.OptionType;
-import archimedes.model.PredeterminedOptionProvider;
-import archimedes.scheme.Option;
+import archimedes.legacy.model.OptionListProvider;
+import archimedes.legacy.model.OptionModel;
+import archimedes.legacy.model.OptionType;
+import archimedes.legacy.model.PredeterminedOptionProvider;
+import archimedes.legacy.scheme.Option;
 import baccara.gui.GUIBundle;
 import baccara.gui.generics.EditorFrameEvent;
 import baccara.gui.generics.EditorFrameEventType;
@@ -245,7 +245,7 @@ public class OptionListSubEditor implements ActionListener, EditorFrameListener<
 	 * @changed OLI 15.10.2013 - Added.
 	 */
 	public void setObject(Attributed attr) {
-		this.optionListProvider = (archimedes.model.TableModel) attr;
+		this.optionListProvider = (archimedes.legacy.model.TableModel) attr;
 	}
 
 	/**

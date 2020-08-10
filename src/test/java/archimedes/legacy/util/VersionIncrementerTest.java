@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import archimedes.model.DataModel;
+import archimedes.legacy.model.DataModel;
 import corent.dates.PDate;
 
 /**

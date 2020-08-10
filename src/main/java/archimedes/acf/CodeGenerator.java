@@ -14,7 +14,7 @@ import java.util.List;
 import archimedes.acf.io.SourceFileReader;
 import archimedes.acf.io.SourceFileWriter;
 import archimedes.acf.report.GenerationProcessReport;
-import archimedes.model.DataModel;
+import archimedes.legacy.model.DataModel;
 import gengen.IndividualPreferences;
 
 /**

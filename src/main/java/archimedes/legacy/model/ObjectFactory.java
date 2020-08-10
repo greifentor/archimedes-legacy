@@ -10,17 +10,6 @@
 package archimedes.legacy.model;
 
 import archimedes.legacy.app.ArchimedesDescriptorFactory;
-import archimedes.model.CodeFactory;
-import archimedes.model.ColumnModel;
-import archimedes.model.DomainModel;
-import archimedes.model.OptionModel;
-import archimedes.model.OrderMemberModel;
-import archimedes.model.PanelModel;
-import archimedes.model.RelationModel;
-import archimedes.model.SelectionMemberModel;
-import archimedes.model.SequenceModel;
-import archimedes.model.StereotypeModel;
-import archimedes.model.ViewModel;
 import corent.base.Direction;
 
 /**

@@ -16,11 +16,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import archimedes.legacy.model.DataModel;
 import archimedes.legacy.script.sql.SQLScript;
 import archimedes.legacy.sql.SQLScriptFactory;
 import archimedes.legacy.sql.factories.GenericSQLScriptFactory;
 import archimedes.legacy.sql.factories.PostgreSQLScriptFactory;
-import archimedes.model.DataModel;
 import corent.db.DBExecMode;
 
 /**

@@ -12,7 +12,7 @@ package archimedes.legacy.gui;
 import java.awt.Component;
 import java.util.Hashtable;
 
-import archimedes.model.HistoryOwner;
+import archimedes.legacy.model.HistoryOwner;
 import corent.base.Attributed;
 import corent.djinn.SubEditor;
 import corent.djinn.SubEditorFactory;

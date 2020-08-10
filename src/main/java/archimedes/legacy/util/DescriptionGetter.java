@@ -11,8 +11,8 @@ package archimedes.legacy.util;
 
 import java.util.List;
 
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.DefaultCommentModel;
-import archimedes.model.ColumnModel;
 
 /**
  * 

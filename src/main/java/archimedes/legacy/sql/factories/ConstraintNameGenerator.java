@@ -9,8 +9,8 @@
 
 package archimedes.legacy.sql.factories;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.TableModel;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.TableModel;
 
 /**
  * Implementations of this interface are able to create constraint names by

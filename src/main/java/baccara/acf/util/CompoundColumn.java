@@ -9,8 +9,8 @@
 
 package baccara.acf.util;
 
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.scheme.Tabellenspalte;
-import archimedes.model.ColumnModel;
 
 /**
  * 

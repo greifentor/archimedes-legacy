@@ -20,12 +20,12 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import archimedes.gui.FontConfigurator;
 import archimedes.legacy.app.ApplicationObject;
 import archimedes.legacy.app.ApplicationUtil;
 import archimedes.legacy.app.ArchimedesApplication;
 import archimedes.legacy.app.ArchimedesDescriptorFactory;
 import archimedes.legacy.app.DefaultArchimedesDescriptorFactory;
+import archimedes.legacy.gui.FontConfigurator;
 import archimedes.legacy.gui.FrameArchimedes;
 import archimedes.legacy.model.ObjectFactory;
 import archimedes.legacy.scheme.DefaultObjectFactory;

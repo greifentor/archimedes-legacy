@@ -22,7 +22,7 @@ import org.easymock.EasyMock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import archimedes.model.SimpleIndexMetaData;
+import archimedes.legacy.model.SimpleIndexMetaData;
 
 /**
  * Testf&auml;lle f&uuml;r die ApplicationUtil-Klasse.

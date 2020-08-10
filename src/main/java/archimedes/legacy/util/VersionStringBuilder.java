@@ -10,7 +10,7 @@
 package archimedes.legacy.util;
 
 import archimedes.legacy.Archimedes;
-import archimedes.model.CodeFactory;
+import archimedes.legacy.model.CodeFactory;
 import corent.Corent;
 import corentx.CoreNTX;
 

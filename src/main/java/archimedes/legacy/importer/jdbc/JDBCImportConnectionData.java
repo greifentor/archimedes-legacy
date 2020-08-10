@@ -1,6 +1,6 @@
 package archimedes.legacy.importer.jdbc;
 
-import archimedes.connections.DatabaseConnection;
+import archimedes.legacy.connections.DatabaseConnection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;

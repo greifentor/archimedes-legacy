@@ -15,10 +15,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.TableModel;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import archimedes.scheme.xml.ModelXMLReader;
+import archimedes.legacy.scheme.xml.ModelXMLReader;
 
 /**
  * Test of the class <CODE>DefaultCopyAndPasteController</CODE>.

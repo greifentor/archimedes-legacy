@@ -13,7 +13,9 @@ package baccara.acf.checkers;
 import static corentx.util.Checks.*;
 
 import archimedes.acf.checker.*;
-import archimedes.model.*;
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.*;
 
 import baccara.gui.*;
 

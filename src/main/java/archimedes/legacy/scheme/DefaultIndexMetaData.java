@@ -17,7 +17,7 @@ import gengen.metadata.ClassMetaData;
 import java.util.List;
 import java.util.Vector;
 
-import archimedes.model.IndexMetaData;
+import archimedes.legacy.model.IndexMetaData;
 
 /**
  * Standardimplementierung des <CODE>IndexMetaData</CODE> Interfaces zur Nutzung

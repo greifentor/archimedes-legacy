@@ -12,11 +12,11 @@ package archimedes.legacy.scheme.stf.reader;
 import logging.Logger;
 
 import archimedes.legacy.Archimedes;
+import archimedes.legacy.model.NReferencePanelType;
 import archimedes.legacy.model.NReferenzModel;
 import archimedes.legacy.model.TabellenModel;
+import archimedes.legacy.model.TableModel;
 import archimedes.legacy.scheme.stf.handler.STFNReferenceHandler;
-import archimedes.model.NReferencePanelType;
-import archimedes.model.TableModel;
 import corent.files.StructuredTextFile;
 
 /**

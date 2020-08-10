@@ -13,15 +13,15 @@ import java.awt.Point;
 import java.util.Arrays;
 import java.util.Vector;
 
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.RelationModel;
 import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TabellenspaltenModel;
-import archimedes.model.ColumnModel;
-import archimedes.model.RelationModel;
-import archimedes.model.TableModel;
-import archimedes.model.ViewModel;
-import archimedes.model.gui.AbstractGUIRelation;
-import archimedes.model.gui.GUIObjectModel;
-import archimedes.model.gui.GUIViewModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.ViewModel;
+import archimedes.legacy.model.gui.AbstractGUIRelation;
+import archimedes.legacy.model.gui.GUIObjectModel;
+import archimedes.legacy.model.gui.GUIViewModel;
 import corent.base.Direction;
 
 /**

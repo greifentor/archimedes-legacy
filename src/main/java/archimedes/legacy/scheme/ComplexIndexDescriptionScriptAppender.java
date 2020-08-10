@@ -15,8 +15,8 @@ import gengen.metadata.AttributeMetaData;
 import java.util.List;
 
 import archimedes.legacy.model.ComplexIndexScriptAppender;
-import archimedes.model.IndexMetaData;
-import archimedes.model.SimpleIndexMetaData;
+import archimedes.legacy.model.IndexMetaData;
+import archimedes.legacy.model.SimpleIndexMetaData;
 
 /**
  * Diese Implementierung des <CODE>ComplexIndexScriptAppender</CODE>-Interfaces

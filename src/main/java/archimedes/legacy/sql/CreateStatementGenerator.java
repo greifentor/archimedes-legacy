@@ -10,10 +10,11 @@
 package archimedes.legacy.sql;
 
 import static corentx.util.Checks.ensure;
+
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.TabellenModel;
+import archimedes.legacy.model.TableModel;
 import archimedes.legacy.util.UniqueFormulaUtil;
-import archimedes.model.ColumnModel;
-import archimedes.model.TableModel;
 import corent.db.DBExecMode;
 import corentx.util.Str;
 

@@ -18,8 +18,8 @@ import java.util.Vector;
 
 import org.easymock.EasyMock;
 
+import archimedes.legacy.model.IndexMetaData;
 import archimedes.legacy.scheme.DefaultIndexMetaData;
-import archimedes.model.IndexMetaData;
 
 /**
  * Eine Sammlung von Utility-Methoden, die in mehreren Packages Anwendung

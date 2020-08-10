@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.DomainModel;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.DomainModel;
 import corent.db.DBExecMode;
 
 /**

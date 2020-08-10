@@ -9,7 +9,6 @@
 
 package archimedes.legacy.model;
 
-import archimedes.model.NReferenceModel;
 import corent.base.Attributed;
 import corent.djinn.Editable;
 

@@ -15,9 +15,8 @@ import java.util.List;
 
 import archimedes.acf.util.ParameterUtil;
 import archimedes.legacy.app.ArchimedesEditorDescriptor;
-import archimedes.model.OptionModel;
-import archimedes.model.PanelModel;
-import archimedes.scheme.Option;
+import archimedes.legacy.model.OptionModel;
+import archimedes.legacy.model.PanelModel;
 import corent.base.Attributed;
 import corent.base.StrUtil;
 import corent.djinn.DefaultComponentFactory;

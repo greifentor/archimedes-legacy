@@ -13,8 +13,8 @@ import java.sql.Types;
 
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.DomainModel;
 import archimedes.legacy.scheme.stf.handler.STFDomainHandler;
-import archimedes.model.DomainModel;
 import corent.files.StructuredTextFile;
 
 /**

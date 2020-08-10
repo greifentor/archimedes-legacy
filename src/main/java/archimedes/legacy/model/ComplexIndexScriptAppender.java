@@ -9,9 +9,6 @@
 
 package archimedes.legacy.model;
 
-import archimedes.model.IndexMetaData;
-import archimedes.model.SimpleIndexMetaData;
-
 /**
  * Implementierungen dieses Interfaces sind in der Lage bestehende Scripte um
  * &Auml;nderungsinformationen zu erweitern, die sich auf die Unterschiede

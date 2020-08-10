@@ -11,8 +11,8 @@ package archimedes.legacy.scheme.stf.reader;
 
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.StereotypeModel;
 import archimedes.legacy.scheme.stf.handler.STFStereotypeHandler;
-import archimedes.model.StereotypeModel;
 import corent.files.StructuredTextFile;
 
 /**

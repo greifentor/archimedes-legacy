@@ -14,9 +14,9 @@ import static corentx.util.Checks.ensure;
 import java.util.Vector;
 
 import archimedes.legacy.metadata.SequenceMetaData;
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.SequenceModel;
 import archimedes.legacy.script.sql.SQLScript;
-import archimedes.model.DataModel;
-import archimedes.model.SequenceModel;
 
 /**
  * A class which add the changes in the sequences to the SQL script an the HTML

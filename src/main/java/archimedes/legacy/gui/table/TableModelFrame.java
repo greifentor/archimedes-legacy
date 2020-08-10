@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import archimedes.legacy.gui.FrameArchimedes;
-import archimedes.model.TableModel;
+import archimedes.legacy.model.TableModel;
 import baccara.gui.BorderToRedWrapper;
 import baccara.gui.GUIBundle;
 import baccara.gui.KeyListenerUtil;

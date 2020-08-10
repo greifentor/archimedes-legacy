@@ -16,7 +16,12 @@ import corentx.util.*;
 import gengen.*;
 import archimedes.acf.*;
 import archimedes.acf.param.*;
-import archimedes.model.*;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.DomainModel;
+import archimedes.legacy.model.OptionModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.*;
 import baccara.acf.TableParamIds;
 import baccara.acf.entities.*;
 

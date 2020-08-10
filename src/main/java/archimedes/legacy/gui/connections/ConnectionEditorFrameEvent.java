@@ -9,7 +9,7 @@
 
 package archimedes.legacy.gui.connections;
 
-import archimedes.connections.DatabaseConnection;
+import archimedes.legacy.connections.DatabaseConnection;
 import baccara.gui.generics.EditorFrameEvent;
 import baccara.gui.generics.EditorFrameEventType;
 

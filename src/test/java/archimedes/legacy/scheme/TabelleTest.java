@@ -20,10 +20,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import archimedes.acf.util.ParameterUtil;
-import archimedes.model.ColumnModel;
-import archimedes.model.DomainModel;
-import archimedes.model.OptionModel;
-import archimedes.scheme.Option;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.DomainModel;
+import archimedes.legacy.model.OptionModel;
 
 /**
  * Tests of the class <CODE>Tabelle</CODE>.

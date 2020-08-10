@@ -10,7 +10,8 @@
 package archimedes.legacy.sql;
 
 import static corentx.util.Checks.ensure;
-import archimedes.model.ColumnModel;
+
+import archimedes.legacy.model.ColumnModel;
 
 /**
  * A creator for foreignn key constraint names.

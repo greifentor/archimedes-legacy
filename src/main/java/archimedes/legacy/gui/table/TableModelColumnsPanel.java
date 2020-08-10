@@ -19,8 +19,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.TableModel;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.TableModel;
 import baccara.gui.GUIBundle;
 import corent.gui.JTableWithInifile;
 import corentx.util.SortedVector;

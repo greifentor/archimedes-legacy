@@ -9,12 +9,11 @@
 
 package archimedes.legacy.gui;
 
-import archimedes.gui.StatusBarRenderer;
 import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TabellenspaltenModel;
+import archimedes.legacy.model.gui.GUIObjectModel;
+import archimedes.legacy.model.gui.GUIRelationModel;
 import archimedes.legacy.scheme.Relation;
-import archimedes.model.gui.GUIObjectModel;
-import archimedes.model.gui.GUIRelationModel;
 
 /**
  * An implementation for a status bar renderer for Archimedes data scheme

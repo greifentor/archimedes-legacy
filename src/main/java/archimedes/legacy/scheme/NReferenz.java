@@ -12,13 +12,13 @@ package archimedes.legacy.scheme;
 import java.util.Arrays;
 import java.util.Vector;
 
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.NReferenceModel;
+import archimedes.legacy.model.NReferencePanelType;
 import archimedes.legacy.model.NReferenzModel;
+import archimedes.legacy.model.PanelModel;
 import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TabellenspaltenModel;
-import archimedes.model.ColumnModel;
-import archimedes.model.NReferenceModel;
-import archimedes.model.NReferencePanelType;
-import archimedes.model.PanelModel;
 import corent.base.StrUtil;
 import corent.djinn.DefaultComponentFactory;
 import corent.djinn.DefaultEditorDescriptor;

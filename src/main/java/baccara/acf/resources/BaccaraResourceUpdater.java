@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 import archimedes.acf.AbstractResourceUpdater;
-import archimedes.model.DataModel;
+import archimedes.legacy.model.DataModel;
 import corentx.dates.PTimestamp;
 import corentx.io.FileUtil;
 import gengen.IndividualPreferences;

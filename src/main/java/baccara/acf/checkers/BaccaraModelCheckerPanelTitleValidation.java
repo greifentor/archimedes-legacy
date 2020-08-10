@@ -14,7 +14,10 @@ import static corentx.util.Checks.*;
 import java.util.*;
 
 import archimedes.acf.checker.*;
-import archimedes.model.*;
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.PanelModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.*;
 import baccara.acf.*;
 import baccara.gui.*;
 

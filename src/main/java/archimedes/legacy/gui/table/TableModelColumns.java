@@ -11,8 +11,8 @@ package archimedes.legacy.gui.table;
 
 import java.util.List;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.OptionModel;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.OptionModel;
 import baccara.gui.BasicTableModel;
 import baccara.gui.GUIBundle;
 import corentx.util.SortedVector;

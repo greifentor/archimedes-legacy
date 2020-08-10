@@ -9,11 +9,11 @@
 
 package archimedes.legacy.gui;
 
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TabellenspaltenModel;
+import archimedes.legacy.model.ToStringContainerModel;
 import archimedes.legacy.scheme.Tabellenspalte;
-import archimedes.model.ColumnModel;
-import archimedes.model.ToStringContainerModel;
 import corent.base.Attributed;
 import corent.base.StrUtil;
 import corent.djinn.DefaultComponentFactory;

@@ -15,7 +15,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import archimedes.model.IndexMetaData;
+import archimedes.legacy.model.IndexMetaData;
 
 /**
  * Ein CellRenderer zur Anzeige der <CODE>IndexMetaData</CODE>-Datens&auml;tze.

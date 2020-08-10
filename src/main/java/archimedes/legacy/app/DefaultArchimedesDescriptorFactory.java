@@ -16,18 +16,18 @@ import java.util.Vector;
 
 import javax.swing.Icon;
 
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.NReferencePanelType;
 import archimedes.legacy.model.NReferenzModel;
+import archimedes.legacy.model.OrderMemberModel;
+import archimedes.legacy.model.PanelModel;
+import archimedes.legacy.model.ReferenceWeight;
 import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TabellenspaltenModel;
+import archimedes.legacy.model.TableModel;
+import archimedes.legacy.model.ToStringContainerModel;
 import archimedes.legacy.scheme.DefaultCodeFactory;
-import archimedes.model.ColumnModel;
-import archimedes.model.NReferencePanelType;
-import archimedes.model.OrderMemberModel;
-import archimedes.model.PanelModel;
-import archimedes.model.ReferenceWeight;
-import archimedes.model.TableModel;
-import archimedes.model.ToStringContainerModel;
 import corent.base.Attributed;
 import corent.base.SortedVector;
 import corent.base.StrUtil;

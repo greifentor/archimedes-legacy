@@ -17,14 +17,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.acf.checker.ModelCheckerMessage;
 import archimedes.acf.checker.ModelCheckerMessage.Level;
+import archimedes.legacy.model.ColumnModel;
+import archimedes.legacy.model.DataModel;
+import archimedes.legacy.model.TableModel;
 import archimedes.legacy.scheme.Diagramm;
 import archimedes.legacy.scheme.Domain;
 import archimedes.legacy.scheme.Tabelle;
 import archimedes.legacy.scheme.Tabellenspalte;
 import archimedes.legacy.scheme.View;
-import archimedes.model.ColumnModel;
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
 import baccara.gui.GUIBundle;
 
 /**

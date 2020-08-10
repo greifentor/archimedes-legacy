@@ -10,9 +10,6 @@
 package archimedes.legacy.model;
 
 import gengen.metadata.AttributeMetaData;
-import archimedes.model.ColumnModel;
-import archimedes.model.HistoryOwner;
-import archimedes.model.ReferenceWeight;
 import corent.base.Attributed;
 import corent.djinn.TabbedEditable;
 

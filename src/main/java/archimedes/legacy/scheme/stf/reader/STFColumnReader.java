@@ -10,14 +10,14 @@
 package archimedes.legacy.scheme.stf.reader;
 
 import archimedes.legacy.Archimedes;
+import archimedes.legacy.model.ColumnModel;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.PanelModel;
+import archimedes.legacy.model.ReferenceWeight;
+import archimedes.legacy.model.SequenceModel;
+import archimedes.legacy.model.TableModel;
 import archimedes.legacy.scheme.Domain;
 import archimedes.legacy.scheme.stf.handler.STFColumnHandler;
-import archimedes.model.ColumnModel;
-import archimedes.model.PanelModel;
-import archimedes.model.ReferenceWeight;
-import archimedes.model.SequenceModel;
-import archimedes.model.TableModel;
 import corent.files.StructuredTextFile;
 
 /**

@@ -1,8 +1,8 @@
 package archimedes.legacy.importer.jdbc;
 
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.DomainModel;
 import archimedes.legacy.scheme.Domain;
-import archimedes.model.DomainModel;
 import de.ollie.archimedes.alexandrian.service.so.ColumnSO;
 
 /**

@@ -10,7 +10,8 @@
 package archimedes.legacy.sql;
 
 import static corentx.util.Checks.ensure;
-import archimedes.model.DataModel;
+
+import archimedes.legacy.model.DataModel;
 import corent.db.DBExecMode;
 
 /**

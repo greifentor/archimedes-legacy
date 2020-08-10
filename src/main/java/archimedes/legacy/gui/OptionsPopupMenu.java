@@ -15,8 +15,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
-import archimedes.model.OptionType;
-import archimedes.model.PredeterminedOptionProvider;
+import archimedes.legacy.model.OptionType;
+import archimedes.legacy.model.PredeterminedOptionProvider;
 
 /**
  * A popup menu for options.

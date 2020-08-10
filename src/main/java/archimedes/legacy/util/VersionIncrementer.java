@@ -9,7 +9,7 @@
 
 package archimedes.legacy.util;
 
-import archimedes.model.DataModel;
+import archimedes.legacy.model.DataModel;
 import corent.dates.PDate;
 
 /**
