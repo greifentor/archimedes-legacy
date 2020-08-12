@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import archimedes.legacy.model.DataModel;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -32,9 +33,10 @@ public interface SnippetGenerator {
 	 * Generates the snippet code with the passed parameters.
 	 * 
 	 * @param parameters A map (key - value) with parameters for the snippet generator.
+	 * @param dataModel  An access to the current data model.
 	 * @returns The code for the snippet.
 	 */
-	String generate(Map<String, Object> parameters);
+	String generate(Map<String, Object> parameters, DataModel dataModel);
 
 	/**
 	 * A name for the snippet generator.

@@ -2,7 +2,9 @@ package archimedes.legacy.gui;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -11,6 +13,7 @@ import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.commons.util.ClassFilter;
 import org.junit.platform.commons.util.ReflectionUtils;
 
+import archimedes.legacy.model.DataModel;
 import archimedes.snippets.SnippetGenerator;
 import archimedes.snippets.SnippetGeneratorProvider;
 import baccara.gui.GUIBundle;
@@ -22,25 +25,31 @@ import baccara.gui.GUIBundle;
  */
 public class SnippetGeneratorMenuBuilder {
 
-	public static final String RES_SNIPPET_GENERATOR_MENU_TITLE = "menu.snippetgenerator.title";
+	public static final String RES_SNIPPET_GENERATOR_MENU_TITLE = "menu.snippetgenerator";
 
 	static String packageName = "archimedes.snippets";
 
-	JMenu createSnippetGeneratorMenu(List<Object> possibleSnippetGeneratorProviders, GUIBundle guiBundle) {
+	public JMenu createSnippetGeneratorMenu(List<Object> possibleSnippetGeneratorProviders, GUIBundle guiBundle,
+			Supplier<DataModel> dataModelSupplier) {
+		JMenu menu = new JMenu(guiBundle.getResourceText(RES_SNIPPET_GENERATOR_MENU_TITLE + ".title"));
+		updateSnippetGeneratorMenu(menu, possibleSnippetGeneratorProviders, dataModelSupplier);
+		return menu;
+	}
+
+	public void updateSnippetGeneratorMenu(JMenu menu, List<Object> possibleSnippetGeneratorProviders,
+			Supplier<DataModel> dataModelSupplier) {
 		List<SnippetGenerator> generatorsByClassPath = getSnippetGeneratorsByClassPath();
 		List<SnippetGenerator> generatorsByProviders = getSnippetGeneratorsByProviders(
 				possibleSnippetGeneratorProviders);
-		JMenu menu = new JMenu(guiBundle.getResourceText(RES_SNIPPET_GENERATOR_MENU_TITLE));
 		for (SnippetGenerator sg : generatorsByClassPath) {
-			addMenuItem(menu, sg);
+			addMenuItem(menu, sg, dataModelSupplier);
 		}
 		if (!generatorsByClassPath.isEmpty() && !generatorsByProviders.isEmpty()) {
 			menu.addSeparator();
 		}
 		for (SnippetGenerator sg : generatorsByProviders) {
-			addMenuItem(menu, sg);
+			addMenuItem(menu, sg, dataModelSupplier);
 		}
-		return menu;
 	}
 
 	private List<SnippetGenerator> getSnippetGeneratorsByClassPath() {
@@ -87,10 +96,12 @@ public class SnippetGeneratorMenuBuilder {
 		return l;
 	}
 
-	private void addMenuItem(JMenu menu, SnippetGenerator sg) {
+	private void addMenuItem(JMenu menu, SnippetGenerator sg, Supplier<DataModel> dataModelSupplier) {
 		JMenuItem item = new JMenuItem(sg.getName() + " (" + sg.getVersion() + ")");
-		// TODO: Start code generation Process here.
-		item.addItemListener(event -> System.out.println(((JMenuItem) event.getSource()).getText() + " clicked!"));
+		item.addActionListener(event -> {
+			// TODO: implement input of parameters here.
+			System.out.println(sg.generate(new HashMap<>(), dataModelSupplier.get()));
+		});
 		menu.add(item);
 	}
 

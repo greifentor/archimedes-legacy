@@ -198,7 +198,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	private static final String RES_WARNING_MESSAGES_NO_WARNINGS = "warning.messages.no.warning.label";
 	private static final String RES_WARNING_MESSAGES_WARNINGS_DETECTED = "warning.messages.warnings.detected.label";
 
+	private static SnippetGeneratorMenuBuilder snippetGeneratorMenuBuilder = new SnippetGeneratorMenuBuilder();
+
 	private boolean serverMode = false;
+	private JMenu menuSnippetGenerators;
 
 	/* Der ActionListener f&uuml;r das Laden durch DateiCaches. */
 	private ActionListener actionListenerDateiCache = null;
@@ -578,6 +581,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			}
 		}));
 		menuBar.add(menu);
+
 		this.menuGenerate = this.createMenu("menu.generate", "generate");
 		this.menuGenerate.add(this.createMenuItem("menu.generate.item.generate", "generate", new ActionListener() {
 			@Override
@@ -592,6 +596,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			}
 		}));
 		menuBar.add(this.menuGenerate);
+		this.menuSnippetGenerators = this.createMenu(SnippetGeneratorMenuBuilder.RES_SNIPPET_GENERATOR_MENU_TITLE,
+				"snippets");
+		updateSnippetGeneratorsMenu(new ArrayList<>());
+		menuBar.add(this.menuSnippetGenerators);
 		menu = this.createMenu("menu.exports", "exports");
 		menu.add(this.createMenuItem("menu.exports.item.domains", null, new ActionListener() {
 			@Override
@@ -725,6 +733,12 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				System.getProperty("archimedes.user.company", "UNKNOWN"));
 	}
 
+	private void updateSnippetGeneratorsMenu(List<Object> possibleSnippetGeneratorProviders) {
+		menuSnippetGenerators.removeAll();
+		snippetGeneratorMenuBuilder.updateSnippetGeneratorMenu(menuSnippetGenerators, possibleSnippetGeneratorProviders,
+				() -> this.diagramm);
+	}
+
 	/**
 	 * Diese Methode wird ausgef&uuml;hrt, wenn der Benutzer den Men&uuml;punkt &Ouml;ffnen w&auml;hlt.
 	 */
@@ -854,11 +868,13 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	private void startChecker() {
 		final String path = this.diagramm.getCodePfad().replace("~", System.getProperty("user.home"));
 		List<ModelChecker> modelCheckers = new ArrayList<>();
+		List<Object> factories = this.getCodeFactories(path);
 		for (Object cf : this.getCodeFactories(path)) {
 			if (cf instanceof CodeFactory) {
 				modelCheckers.addAll(Arrays.asList(((CodeFactory) cf).getModelCheckers()));
 			}
 		}
+		updateSnippetGeneratorsMenu(factories);
 		new ModelCheckerThread(this, this.diagramm, modelCheckers);
 	}
 

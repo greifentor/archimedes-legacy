@@ -2,6 +2,7 @@ package archimedes.snippets.impl;
 
 import java.util.Map;
 
+import archimedes.legacy.model.DataModel;
 import archimedes.snippets.SnippetGenerator;
 
 /**
@@ -12,21 +13,19 @@ import archimedes.snippets.SnippetGenerator;
 public class ExceptionClassSnippetGenerator implements SnippetGenerator {
 
 	@Override
-	public String generate(Map<String, Object> parameters) {
+	public String generate(Map<String, Object> parameters, DataModel dataModel) {
 		// TODO Auto-generated method stub
-		return null;
+		return "data model is: " + dataModel.getName();
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Exception Generator";
 	}
 
 	@Override
 	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
+		return "0.0.1";
 	}
 
 }

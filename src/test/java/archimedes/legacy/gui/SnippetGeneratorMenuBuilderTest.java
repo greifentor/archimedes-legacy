@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -22,6 +23,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import archimedes.legacy.model.DataModel;
 import archimedes.snippets.SnippetGenerator;
 import archimedes.snippets.SnippetGeneratorProvider;
 import baccara.gui.GUIBundle;
@@ -35,6 +37,8 @@ public class SnippetGeneratorMenuBuilderTest {
 
 	@Mock
 	private GUIBundle guiBundle;
+	@Mock
+	private Supplier<DataModel> dataModelSupplier;
 
 	@InjectMocks
 	private SnippetGeneratorMenuBuilder unitUnderTest;
@@ -60,11 +64,11 @@ public class SnippetGeneratorMenuBuilderTest {
 		@Test
 		void noSnippetGeneratorsFound_ReturnsAnEmptyMenuWithTitle() throws Exception {
 			// Prepare
-			when(guiBundle.getResourceText(SnippetGeneratorMenuBuilder.RES_SNIPPET_GENERATOR_MENU_TITLE))
+			when(guiBundle.getResourceText(SnippetGeneratorMenuBuilder.RES_SNIPPET_GENERATOR_MENU_TITLE + ".title"))
 					.thenReturn(MENU_TEXT);
 			SnippetGeneratorMenuBuilder.packageName = "fantasy.package.name";
 			// Run
-			JMenu returned = unitUnderTest.createSnippetGeneratorMenu(new ArrayList<>(), guiBundle);
+			JMenu returned = unitUnderTest.createSnippetGeneratorMenu(new ArrayList<>(), guiBundle, dataModelSupplier);
 			// Check
 			assertEquals(MENU_TEXT, returned.getText());
 			assertEquals(0, returned.getMenuComponentCount());
@@ -76,10 +80,10 @@ public class SnippetGeneratorMenuBuilderTest {
 		@Test
 		void snippetGeneratorsInArchimedesFound_ReturnsAMenuWithTitleAndRelatedMenuItems() throws Exception {
 			// Prepare
-			when(guiBundle.getResourceText(SnippetGeneratorMenuBuilder.RES_SNIPPET_GENERATOR_MENU_TITLE))
+			when(guiBundle.getResourceText(SnippetGeneratorMenuBuilder.RES_SNIPPET_GENERATOR_MENU_TITLE + ".title"))
 					.thenReturn(MENU_TEXT);
 			// Run
-			JMenu returned = unitUnderTest.createSnippetGeneratorMenu(new ArrayList<>(), guiBundle);
+			JMenu returned = unitUnderTest.createSnippetGeneratorMenu(new ArrayList<>(), guiBundle, dataModelSupplier);
 			// Check
 			assertEquals(MENU_TEXT, returned.getText());
 			assertEquals(1, returned.getMenuComponentCount());
@@ -90,7 +94,7 @@ public class SnippetGeneratorMenuBuilderTest {
 		@Test
 		void snippetGeneratorsOfThePassedProvidersFound_ReturnsAMenuWithTitleAndRelatedMenuItems() throws Exception {
 			// Prepare
-			when(guiBundle.getResourceText(SnippetGeneratorMenuBuilder.RES_SNIPPET_GENERATOR_MENU_TITLE))
+			when(guiBundle.getResourceText(SnippetGeneratorMenuBuilder.RES_SNIPPET_GENERATOR_MENU_TITLE + ".title"))
 					.thenReturn(MENU_TEXT);
 			SnippetGeneratorMenuBuilder.packageName = "fantasy.package.name";
 
@@ -107,7 +111,7 @@ public class SnippetGeneratorMenuBuilderTest {
 
 			// Run
 			JMenu returned = unitUnderTest.createSnippetGeneratorMenu(Arrays.asList(sgp1, new Object(), sgp2),
-					guiBundle);
+					guiBundle, dataModelSupplier);
 			// Check
 			assertEquals(MENU_TEXT, returned.getText());
 			assertEquals(3, returned.getMenuComponentCount());
@@ -121,7 +125,7 @@ public class SnippetGeneratorMenuBuilderTest {
 		void bothTypesOfSnippetGeneratorsFound_ReturnsAMenuWithTitleAndSeparatorBetweenTypesOfSnippetGenerators()
 				throws Exception {
 			// Prepare
-			when(guiBundle.getResourceText(SnippetGeneratorMenuBuilder.RES_SNIPPET_GENERATOR_MENU_TITLE))
+			when(guiBundle.getResourceText(SnippetGeneratorMenuBuilder.RES_SNIPPET_GENERATOR_MENU_TITLE + ".title"))
 					.thenReturn(MENU_TEXT);
 
 			SnippetGenerator sg1 = mock(SnippetGenerator.class);
@@ -137,7 +141,7 @@ public class SnippetGeneratorMenuBuilderTest {
 
 			// Run
 			JMenu returned = unitUnderTest.createSnippetGeneratorMenu(Arrays.asList(sgp1, new Object(), sgp2),
-					guiBundle);
+					guiBundle, dataModelSupplier);
 			// Check
 			assertEquals(MENU_TEXT, returned.getText());
 			assertEquals(5, returned.getMenuComponentCount());
