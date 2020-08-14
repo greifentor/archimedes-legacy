@@ -134,6 +134,7 @@ import archimedes.legacy.sql.generator.ScriptGenerator;
 import archimedes.legacy.transfer.DefaultCopyAndPasteController;
 import archimedes.legacy.util.VersionIncrementer;
 import archimedes.legacy.util.VersionStringBuilder;
+import archimedes.snippets.gui.SnippetGeneratorMenuBuilder;
 import baccara.files.PropertyFileManager;
 import baccara.gui.GUIBundle;
 import baccara.gui.PropertyResourceManager;
@@ -596,10 +597,12 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			}
 		}));
 		menuBar.add(this.menuGenerate);
+
 		this.menuSnippetGenerators = this.createMenu(SnippetGeneratorMenuBuilder.RES_SNIPPET_GENERATOR_MENU_TITLE,
 				"snippets");
 		updateSnippetGeneratorsMenu(new ArrayList<>());
 		menuBar.add(this.menuSnippetGenerators);
+
 		menu = this.createMenu("menu.exports", "exports");
 		menu.add(this.createMenuItem("menu.exports.item.domains", null, new ActionListener() {
 			@Override
@@ -736,7 +739,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	private void updateSnippetGeneratorsMenu(List<Object> possibleSnippetGeneratorProviders) {
 		menuSnippetGenerators.removeAll();
 		snippetGeneratorMenuBuilder.updateSnippetGeneratorMenu(menuSnippetGenerators, possibleSnippetGeneratorProviders,
-				() -> this.diagramm);
+				() -> this.diagramm, guiBundle);
 	}
 
 	/**

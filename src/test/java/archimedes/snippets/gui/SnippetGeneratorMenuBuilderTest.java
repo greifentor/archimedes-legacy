@@ -1,4 +1,4 @@
-package archimedes.legacy.gui;
+package archimedes.snippets.gui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.legacy.model.DataModel;
 import archimedes.snippets.SnippetGenerator;
 import archimedes.snippets.SnippetGeneratorProvider;
+import archimedes.snippets.gui.SnippetGeneratorMenuBuilder;
 import baccara.gui.GUIBundle;
 
 @ExtendWith(MockitoExtension.class)

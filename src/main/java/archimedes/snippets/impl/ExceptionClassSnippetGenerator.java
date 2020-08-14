@@ -1,5 +1,7 @@
 package archimedes.snippets.impl;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import archimedes.legacy.model.DataModel;
@@ -14,13 +16,32 @@ public class ExceptionClassSnippetGenerator implements SnippetGenerator {
 
 	@Override
 	public String generate(Map<String, Object> parameters, DataModel dataModel) {
-		// TODO Auto-generated method stub
-		return "data model is: " + dataModel.getName();
+		return "package ${packageName}\n\n" + //
+				"public ${className}() extends Exception {\n\n" + //
+				"}" //
+		;
 	}
 
 	@Override
 	public String getName() {
 		return "Exception Generator";
+	}
+
+	@Override
+	public List<ParameterDescription> getParameterDescriptions() {
+		return Arrays.asList( //
+				new ParameterDescription() //
+						.setName("className") //
+						.setType(ParameterType.STRING), //
+				new ParameterDescription() //
+						.setName("packageName") //
+						.setType(ParameterType.STRING) //
+		);
+	}
+
+	@Override
+	public String getResourcePrefix() {
+		return "exceptionClassSnippetGenerator";
 	}
 
 	@Override

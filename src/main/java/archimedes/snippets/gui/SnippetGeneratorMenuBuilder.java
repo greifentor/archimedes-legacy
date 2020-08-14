@@ -1,4 +1,4 @@
-package archimedes.legacy.gui;
+package archimedes.snippets.gui;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -32,23 +32,23 @@ public class SnippetGeneratorMenuBuilder {
 	public JMenu createSnippetGeneratorMenu(List<Object> possibleSnippetGeneratorProviders, GUIBundle guiBundle,
 			Supplier<DataModel> dataModelSupplier) {
 		JMenu menu = new JMenu(guiBundle.getResourceText(RES_SNIPPET_GENERATOR_MENU_TITLE + ".title"));
-		updateSnippetGeneratorMenu(menu, possibleSnippetGeneratorProviders, dataModelSupplier);
+		updateSnippetGeneratorMenu(menu, possibleSnippetGeneratorProviders, dataModelSupplier, guiBundle);
 		return menu;
 	}
 
 	public void updateSnippetGeneratorMenu(JMenu menu, List<Object> possibleSnippetGeneratorProviders,
-			Supplier<DataModel> dataModelSupplier) {
+			Supplier<DataModel> dataModelSupplier, GUIBundle guiBundle) {
 		List<SnippetGenerator> generatorsByClassPath = getSnippetGeneratorsByClassPath();
 		List<SnippetGenerator> generatorsByProviders = getSnippetGeneratorsByProviders(
 				possibleSnippetGeneratorProviders);
 		for (SnippetGenerator sg : generatorsByClassPath) {
-			addMenuItem(menu, sg, dataModelSupplier);
+			addMenuItem(menu, sg, dataModelSupplier, guiBundle);
 		}
 		if (!generatorsByClassPath.isEmpty() && !generatorsByProviders.isEmpty()) {
 			menu.addSeparator();
 		}
 		for (SnippetGenerator sg : generatorsByProviders) {
-			addMenuItem(menu, sg, dataModelSupplier);
+			addMenuItem(menu, sg, dataModelSupplier, guiBundle);
 		}
 	}
 
@@ -96,9 +96,11 @@ public class SnippetGeneratorMenuBuilder {
 		return l;
 	}
 
-	private void addMenuItem(JMenu menu, SnippetGenerator sg, Supplier<DataModel> dataModelSupplier) {
+	private void addMenuItem(JMenu menu, SnippetGenerator sg, Supplier<DataModel> dataModelSupplier,
+			GUIBundle guiBundle) {
 		JMenuItem item = new JMenuItem(sg.getName() + " (" + sg.getVersion() + ")");
 		item.addActionListener(event -> {
+			SnippetGeneratorDialog sdg = new SnippetGeneratorDialog(guiBundle, sg, dataModelSupplier.get());
 			// TODO: implement input of parameters here.
 			System.out.println(sg.generate(new HashMap<>(), dataModelSupplier.get()));
 		});

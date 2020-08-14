@@ -56,6 +56,13 @@ public interface SnippetGenerator {
 	}
 
 	/**
+	 * A resource prefix for the dialog of the snippet generator.
+	 * 
+	 * @returns A resource prefix for the dialog of the snippet generator.
+	 */
+	String getResourcePrefix();
+
+	/**
 	 * The current version of the snippet generator.
 	 * 
 	 * @return The version of the snippet generator.
