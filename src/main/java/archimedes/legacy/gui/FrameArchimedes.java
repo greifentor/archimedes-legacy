@@ -1168,6 +1168,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 										}
 										updateViewMenu(viewmenu, diagramm.getViews());
 										diagramm.clearAltered();
+										mrpm.enableCloseButton();
 									}
 								} catch (Exception e) {
 									mrpm.setVisible(false);
