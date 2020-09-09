@@ -50,22 +50,16 @@ public class JDBCModelReader implements ModelReader {
 	/**
 	 * Creates a new model reader with the passed parameters.
 	 *
-	 * @param factory                 An object factory implementation to create the
-	 *                                DB objects.
+	 * @param factory                 An object factory implementation to create the DB objects.
 	 * @param typeConverter           A converter for database types.
-	 * @param connection              The connection whose data model should be
-	 *                                read.
-	 * @param schemeName              The name of the scheme whose data are to read
-	 *                                (pass "null" to ignore scheme and load all
-	 *                                tables).
+	 * @param connection              The connection whose data model should be read.
+	 * @param schemeName              The name of the scheme whose data are to read (pass "null" to ignore scheme and
+	 *                                load all tables).
 	 * @param ignoreIndices           Set this flag to ignore indices while import.
-	 * @param ignoreTablePatterns     Patterns of table names which should be
-	 *                                returned.
-	 * @param importOnlyTablePatterns Patterns of table names which are to import if
-	 *                                the table name matches the at least one
-	 *                                pattern. The patterns to import only are
-	 *                                checked before ignore table patterns (set "*"
-	 *                                if all tables are to import).
+	 * @param ignoreTablePatterns     Patterns of table names which should be returned.
+	 * @param importOnlyTablePatterns Patterns of table names which are to import if the table name matches the at least
+	 *                                one pattern. The patterns to import only are checked before ignore table patterns
+	 *                                (set "*" if all tables are to import).
 	 * @throws IllegalArgumentException Passing null value.
 	 */
 	public JDBCModelReader(DBObjectFactory factory, DBTypeConverter typeConverter, Connection connection,
@@ -121,6 +115,8 @@ public class JDBCModelReader implements ModelReader {
 		loadForeignKeys(dbmd, scheme);
 		if (!this.ignoreIndices) {
 			loadIndices(dbmd, scheme.getTables());
+		} else {
+			fireModelReaderEvent(new ModelReaderEvent(1, 1, 5, ModelReaderEventType.INDEX_IMPORT_IGNORED, ""));
 		}
 	}
 

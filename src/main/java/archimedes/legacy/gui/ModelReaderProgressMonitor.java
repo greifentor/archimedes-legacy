@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
 import archimedes.legacy.importer.jdbc.ModelReaderEvent;
 import baccara.gui.GUIBundle;
@@ -50,6 +51,7 @@ public class ModelReaderProgressMonitor extends JFrameWithInifile {
 
 	private JPanel createMainPanel() {
 		JPanel p = new JPanel(new BorderLayout(HGAP, VGAP));
+		p.setBorder(guiBundle.createEmptyBorder());
 		p.add(createProgressPanel(), BorderLayout.NORTH);
 		p.add(createMessagesPanel(), BorderLayout.CENTER);
 		p.add(createButtonPanel(), BorderLayout.SOUTH);
@@ -69,6 +71,9 @@ public class ModelReaderProgressMonitor extends JFrameWithInifile {
 		JPanel p = new JPanel(new BorderLayout(HGAP, VGAP));
 		this.textAreaMessages.setFont(new Font("monospaced", Font.PLAIN, 12));
 		p.add(this.labelMessages, BorderLayout.NORTH);
+		this.textAreaMessages.setEditable(false);
+		DefaultCaret caret = (DefaultCaret) this.textAreaMessages.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		p.add(new JScrollPane(this.textAreaMessages), BorderLayout.CENTER);
 		return p;
 	}
@@ -77,6 +82,7 @@ public class ModelReaderProgressMonitor extends JFrameWithInifile {
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, HGAP, VGAP));
 		this.buttonClose = this.guiBundle.createButton(RES_BASE + ".buttons.close", "close",
 				event -> this.setVisible(false), p);
+		this.buttonClose.setEnabled(false);
 		p.add(this.buttonClose);
 		return p;
 	}
@@ -96,6 +102,10 @@ public class ModelReaderProgressMonitor extends JFrameWithInifile {
 				+ String.format("%-30s - %s", event.getObjectName(), event.getType().name()) //
 				+ "\n" //
 		);
+	}
+
+	public void enableCloseButton() {
+		buttonClose.setEnabled(true);
 	}
 
 }

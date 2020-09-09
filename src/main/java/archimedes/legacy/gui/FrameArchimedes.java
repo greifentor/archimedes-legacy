@@ -1181,6 +1181,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 										}
 										updateViewMenu(viewmenu, diagramm.getViews());
 										diagramm.clearAltered();
+										mrpm.enableCloseButton();
 									}
 								} catch (Exception e) {
 									mrpm.setVisible(false);
@@ -1697,7 +1698,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			final Counter factoryCount = new Counter(0);
 			if (progressionFrame != null) {
 				new Thread(() -> {
-					progressionFrame.updateFactory(factoryCount.getValue(), codeFactories.size(), "-", null);
+					progressionFrame.updateFactory(factoryCount.getValue(), codeFactories.size(), null, null);
 				}).start();
 			}
 			for (Object cf : codeFactories) {
