@@ -29,7 +29,6 @@ public class DataModelToCMOConverterTest {
 		// Prepare
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		DataModel dataModel = reader.read("src/test/resources/dm/DataModel2DataModelCMO-Test.xml");
-		System.out.println(dataModel.getTables().length);
 		ColumnCMO idColumn = ColumnCMO.of("Id", TypeCMO.of(Types.BIGINT, 0, 0), false, false);
 		DataModelCMO expected =
 				DataModelCMO
