@@ -1,4 +1,4 @@
-/target/
+target/
 /.tmp
 /.project
 /.classpath
@@ -6,7 +6,7 @@
 /.start.sh.kate-swp
 /.factorypath
 /lib/ojdbc6-11.2.0.3.jar
-/bin/
+bin/
 /archimedes-legacy-additions.bat
 /archimedes-legacy-additions.sh
 /velocity.log

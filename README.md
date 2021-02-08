@@ -6,6 +6,14 @@ The good old archimedes (cleaned up).
 
 * Java 11
 * Maven 3.5
+* Project "dm-comp" from github "Greifentor" in the same super folder than this project.
+
+
+### Project structure
+
+* [your work-space folder]
+** archimedes-legacy
+** dm-comp
 
 
 ## Build
