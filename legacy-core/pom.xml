@@ -3,16 +3,16 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-    
-    <parent>
-        <groupId>de.ollie</groupId>
-        <artifactId>archimedes-legacy</artifactId>
-        <version>1.93.2</version>
-    </parent>
 
-    <groupId>de.ollie</groupId>
+	<parent>
+		<groupId>de.ollie</groupId>
+		<artifactId>archimedes-legacy</artifactId>
+		<version>1.93.2</version>
+	</parent>
+
+	<groupId>de.ollie</groupId>
 	<artifactId>archimedes-legacy-core</artifactId>
-    <version>1.93.2</version>
+	<version>1.93.2</version>
 	<packaging>jar</packaging>
 
 	<name>Archimedes (Legacy-Core)</name>
@@ -138,6 +138,12 @@
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>2.4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>de.ollie</groupId>
+			<artifactId>dm-comp-model</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 
