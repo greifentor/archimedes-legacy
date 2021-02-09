@@ -1312,6 +1312,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 														.update()
 														.getActions()
 														.forEach(System.out::println);
+												// TODO: Simple report output to a window.
 												component.doRepaint();
 											}
 										} catch (Exception e) {
