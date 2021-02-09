@@ -9,6 +9,7 @@ import de.ollie.dbcomp.model.ColumnCMO;
 import de.ollie.dbcomp.model.DataModelCMO;
 import de.ollie.dbcomp.model.SchemaCMO;
 import de.ollie.dbcomp.model.TableCMO;
+import de.ollie.dbcomp.model.TypeCMO;
 
 /**
  * A converter which converts a DataModel object into a CMO.
@@ -31,7 +32,26 @@ public class DataModelToCMOConverter {
 	}
 
 	private ColumnCMO[] getColumns(TableModel table) {
-		return new ColumnCMO[0];
+		return Arrays
+				.asList(table.getColumns())
+				.stream()
+				.map(
+						column -> ColumnCMO
+								.of(
+										column.getName(),
+										TypeCMO
+												.of(
+														column.getDomain().getDataType(),
+														(column.getDomain().getLength() < 0
+																? 0
+																: column.getDomain().getLength()),
+														(column.getDomain().getDecimalPlace() < 0
+																? 0
+																: column.getDomain().getDecimalPlace())),
+										false,
+										!column.isNotNull()))
+				.collect(Collectors.toList())
+				.toArray(new ColumnCMO[0]);
 	}
 
 }

@@ -116,6 +116,7 @@ import archimedes.legacy.scheme.Tabelle;
 import archimedes.legacy.scheme.View;
 import archimedes.legacy.scripting.DialogScriptExecuter;
 import archimedes.legacy.transfer.DefaultCopyAndPasteController;
+import archimedes.legacy.updater.ModelUpdater;
 import archimedes.legacy.util.VersionIncrementer;
 import archimedes.legacy.util.VersionStringBuilder;
 import archimedes.model.CodeFactory;
@@ -363,6 +364,12 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				doImportFromJDBC();
+			}
+		}));
+		menu.add(this.createMenuItem("menu.file.item.update", "update", new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				doUpdateFromJDBC();
 			}
 		}));
 		this.menuItemFileSave = this.createMenuItem("menu.file.item.save", "filesave", this);
@@ -1250,6 +1257,62 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 												updateViewMenu(viewmenu, diagramm.getViews());
 												diagramm.clearAltered();
 												mrpm.enableCloseButton();
+											}
+										} catch (Exception e) {
+											mrpm.setVisible(false);
+											LOG
+													.error(
+															"error detected while importing from JDBC connection: "
+																	+ e.getMessage());
+											new ExceptionDialog(
+													e,
+													guiBundle
+															.getResourceText(
+																	"Exception.ImportModel.text",
+																	e.getMessage()),
+													guiBundle);
+										}
+									});
+									t.start();
+								}
+							}
+						});
+	}
+
+	/**
+	 * Updates the current diagram by a selected JDBC source.
+	 * 
+	 * @changed OLI 09.02.2021 - Added.
+	 */
+	public void doUpdateFromJDBC() {
+		JDBCImportConnectionData connectionData =
+				new JDBCImportConnectionData() //
+						.setConnections(this.diagramm.getDatabaseConnections());
+		JDBCImportManagerConfigurationDialog connectionDialog =
+				new JDBCImportManagerConfigurationDialog(connectionData, this.guiBundle);
+		final FrameArchimedes frameArchimedes = this;
+		connectionDialog.setVisible(true);
+		connectionDialog
+				.addEditorFrameListener(
+						new EditorFrameListener<EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame>>() {
+							@Override
+							public void eventFired(
+									final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
+								if (event.getEventType() == EditorFrameEventType.OK) {
+									final Thread t = new Thread(() -> {
+										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle);
+										try {
+											Diagramm d =
+													(Diagramm) new JDBCImportManager()
+															.importDiagram(connectionData, mrpm::update);
+											if (d != null) {
+												mrpm.enableCloseButton();
+												mrpm.setVisible(false);
+												new ModelUpdater(diagramm, d)
+														.update()
+														.getActions()
+														.forEach(System.out::println);
+												component.doRepaint();
 											}
 										} catch (Exception e) {
 											mrpm.setVisible(false);
