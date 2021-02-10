@@ -99,6 +99,8 @@ import archimedes.legacy.gui.table.TableModelFrame;
 import archimedes.legacy.importer.jdbc.JDBCImportConnectionData;
 import archimedes.legacy.importer.jdbc.JDBCImportManager;
 import archimedes.legacy.importer.jdbc.JDBCImportManagerConfigurationDialog;
+import archimedes.legacy.importer.jdbc.ModelReaderEvent;
+import archimedes.legacy.importer.jdbc.ModelReaderEventType;
 import archimedes.legacy.model.DiagramSaveMode;
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.legacy.model.DiagrammModelListener;
@@ -117,6 +119,8 @@ import archimedes.legacy.scheme.View;
 import archimedes.legacy.scripting.DialogScriptExecuter;
 import archimedes.legacy.transfer.DefaultCopyAndPasteController;
 import archimedes.legacy.updater.ModelUpdater;
+import archimedes.legacy.updater.UpdateReport;
+import archimedes.legacy.updater.UpdateReportAction;
 import archimedes.legacy.util.VersionIncrementer;
 import archimedes.legacy.util.VersionStringBuilder;
 import archimedes.model.CodeFactory;
@@ -1238,7 +1242,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 									final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
 								if (event.getEventType() == EditorFrameEventType.OK) {
 									final Thread t = new Thread(() -> {
-										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle);
+										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 6);
 										try {
 											Diagramm d =
 													(Diagramm) new JDBCImportManager()
@@ -1300,19 +1304,36 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 									final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
 								if (event.getEventType() == EditorFrameEventType.OK) {
 									final Thread t = new Thread(() -> {
-										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle);
+										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 6);
 										try {
 											Diagramm d =
 													(Diagramm) new JDBCImportManager()
 															.importDiagram(connectionData, mrpm::update);
 											if (d != null) {
-												mrpm.enableCloseButton();
-												mrpm.setVisible(false);
-												new ModelUpdater(diagramm, d)
-														.update()
+												UpdateReport report = new ModelUpdater(diagramm, d).update();
+												Counter counter = new Counter(0);
+												int max = report.getActions().size();
+												report
 														.getActions()
-														.forEach(System.out::println);
-												// TODO: Simple report output to a window.
+														.forEach(
+																action -> mrpm
+																		.update(
+																				new ModelReaderEvent(
+																						counter.inc(),
+																						max,
+																						5,
+																						ModelReaderEventType.MESSAGE,
+																						getActionString(action))));
+												mrpm.update(new ModelReaderEvent(max, max, 6, null, null));
+												mrpm.enableCloseButton();
+												if (report
+														.getActions()
+														.stream()
+														.anyMatch(
+																action -> action
+																		.getStatus() == UpdateReportAction.Status.DONE)) {
+													diagramm.raiseAltered();
+												}
 												component.doRepaint();
 											}
 										} catch (Exception e) {
@@ -1334,6 +1355,28 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 								}
 							}
 						});
+	}
+
+	private String getActionString(UpdateReportAction action) {
+		return String
+				.format(
+						"%3s - %s",
+						getStatusString(action.getStatus()),
+						guiBundle
+								.getResourceText(
+										"ModelUpdater.message." + action.getType() + ".text",
+										(Object[]) action.getValues()));
+	}
+
+	private String getStatusString(UpdateReportAction.Status status) {
+		switch (status) {
+		case MANUAL:
+			return "(*)";
+		case DONE:
+			return "   ";
+		default:
+			return "!!!";
+		}
 	}
 
 	/**

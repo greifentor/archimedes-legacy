@@ -12,8 +12,8 @@ public class Counter {
 		this.count = value;
 	}
 
-	public void inc() {
-		count++;
+	public int inc() {
+		return count++;
 	}
 
 	public int getValue() {

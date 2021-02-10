@@ -1,6 +1,7 @@
 package archimedes.legacy.updater;
 
 import archimedes.legacy.updater.UpdateReportAction.Status;
+import archimedes.legacy.updater.UpdateReportAction.Type;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -8,6 +9,7 @@ import de.ollie.dbcomp.comparator.DataModelComparator;
 import de.ollie.dbcomp.comparator.model.ChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropColumnChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropTableChangeActionCRO;
+import de.ollie.dbcomp.comparator.model.actions.ModifyDataTypeCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyNullableCRO;
 
 /**
@@ -37,23 +39,42 @@ public class ModelUpdater {
 	}
 
 	private UpdateReportAction process(DataModel toUpdate, ChangeActionCRO cro) {
+		UpdateReportAction action = new UpdateReportAction().setMessage(cro.toString());
 		try {
 			if (cro instanceof DropTableChangeActionCRO) {
 				toUpdate.removeTable(toUpdate.getTableByName(((DropTableChangeActionCRO) cro).getTableName()));
+				action.setType(Type.DROP_TABLE).setValues(((DropTableChangeActionCRO) cro).getTableName());
 			} else if (cro instanceof DropColumnChangeActionCRO) {
 				TableModel table = toUpdate.getTableByName(((DropColumnChangeActionCRO) cro).getTableName());
 				table.removeColumn(table.getColumnByName(((DropColumnChangeActionCRO) cro).getColumnName()));
+				action
+						.setType(Type.DROP_COLUMN)
+						.setValues(
+								((DropColumnChangeActionCRO) cro).getTableName(),
+								((DropColumnChangeActionCRO) cro).getColumnName());
 			} else if (cro instanceof ModifyNullableCRO) {
 				TableModel table = toUpdate.getTableByName(((ModifyNullableCRO) cro).getTableName());
 				ColumnModel column = table.getColumnByName(((ModifyNullableCRO) cro).getColumnName());
 				column.setNotNull(!((ModifyNullableCRO) cro).isNewNullable());
-			} else {
-				return new UpdateReportAction().setMessage(cro.toString()).setStatus(Status.MANUAL);
+				action
+						.setType(Type.MODIFY_COLUMN_CONSTRAIN_NOT_NULL)
+						.setValues(
+								((ModifyNullableCRO) cro).getTableName(),
+								((ModifyNullableCRO) cro).getColumnName(),
+								!((ModifyNullableCRO) cro).isNewNullable());
+			} else if (cro instanceof ModifyDataTypeCRO) {
+				return action
+						.setStatus(Status.MANUAL)
+						.setType(Type.MODIFY_COLUMN_DATATYPE)
+						.setValues(
+								((ModifyDataTypeCRO) cro).getTableName(),
+								((ModifyDataTypeCRO) cro).getColumnName(),
+								((ModifyDataTypeCRO) cro).getNewDataType());
 			}
 		} catch (Exception e) {
-			return new UpdateReportAction().setMessage(cro.toString()).setStatus(Status.FAILED);
+			return action.setStatus(Status.FAILED);
 		}
-		return new UpdateReportAction().setMessage(cro.toString()).setStatus(Status.DONE);
+		return action.setStatus(Status.DONE);
 	}
 
 }

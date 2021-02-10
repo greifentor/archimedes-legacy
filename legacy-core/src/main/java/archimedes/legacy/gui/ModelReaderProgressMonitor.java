@@ -36,13 +36,14 @@ public class ModelReaderProgressMonitor extends JFrameWithInifile {
 	private JLabel labelProgressAll = new JLabel("Progress of Model Read Process");
 	private JLabel labelProgressThread = new JLabel("Progress of Thread");
 	private JLabel labelMessages = new JLabel("Messages");
-	private JProgressBar progressBarAll = new JProgressBar(1, 5);
+	private JProgressBar progressBarAll = null;
 	private JProgressBar progressBarThread = new JProgressBar(0, 100);
 	private JTextArea textAreaMessages = new JTextArea(10, 80);
 
-	public ModelReaderProgressMonitor(GUIBundle guiBundle) {
+	public ModelReaderProgressMonitor(GUIBundle guiBundle, int maxProcesses) {
 		super("Model Reader Progress", guiBundle.getInifile());
 		this.guiBundle = guiBundle;
+		this.progressBarAll = new JProgressBar(1, maxProcesses);
 		this.setContentPane(createMainPanel());
 		this.pack();
 		this.setVisible(true);
@@ -80,8 +81,8 @@ public class ModelReaderProgressMonitor extends JFrameWithInifile {
 
 	private JPanel createButtonPanel() {
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, HGAP, VGAP));
-		this.buttonClose = this.guiBundle.createButton(RES_BASE + ".buttons.close", "close",
-				event -> this.setVisible(false), p);
+		this.buttonClose =
+				this.guiBundle.createButton(RES_BASE + ".buttons.close", "close", event -> this.setVisible(false), p);
 		this.buttonClose.setEnabled(false);
 		p.add(this.buttonClose);
 		return p;
@@ -98,10 +99,14 @@ public class ModelReaderProgressMonitor extends JFrameWithInifile {
 		this.progressBarThread.setMaximum(event.getMaximumProgress() - 1);
 		this.progressBarThread.setValue(event.getCurrentProgress());
 		this.progressBarThread.setString("" + event.getCurrentProgress());
-		this.textAreaMessages.setText(this.textAreaMessages.getText() //
-				+ String.format("%-30s - %s", event.getObjectName(), event.getType().name()) //
-				+ "\n" //
-		);
+		if (event.getObjectName() != null) {
+			this.textAreaMessages
+					.setText(
+							this.textAreaMessages.getText() //
+									+ String.format("%-30s - %s", event.getObjectName(), event.getType().name()) //
+									+ "\n" //
+					);
+		}
 	}
 
 	public void enableCloseButton() {
