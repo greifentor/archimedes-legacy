@@ -1294,7 +1294,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						.setConnections(this.diagramm.getDatabaseConnections());
 		JDBCImportManagerConfigurationDialog connectionDialog =
 				new JDBCImportManagerConfigurationDialog(connectionData, this.guiBundle);
-		final FrameArchimedes frameArchimedes = this;
 		connectionDialog.setVisible(true);
 		connectionDialog
 				.addEditorFrameListener(
@@ -1364,7 +1363,9 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						getStatusString(action.getStatus()),
 						guiBundle
 								.getResourceText(
-										"ModelUpdater.message." + action.getType() + ".text",
+										action.getType() == null
+												? action.getMessage()
+												: "ModelUpdater.message." + action.getType() + ".text",
 										(Object[]) action.getValues()));
 	}
 
