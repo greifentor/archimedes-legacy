@@ -31,25 +31,39 @@ public class TypeConverter {
 		return getType(type).map(TypeInfo::getSqlType).orElse(Types.OTHER);
 	}
 
-	private Optional<TypeInfo> getType(String type) {
-		return TYPES
-				.stream()
-				.filter(typeInfo -> type.toUpperCase().contains(typeInfo.getName()))
-				.findFirst();
+	private Optional<TypeInfo> getType(String s) {
+		return TYPES.stream().filter(typeInfo -> s.toUpperCase().contains(typeInfo.getName())).findFirst();
 	}
 
 	public Integer getLength(String type) {
 		return getType(type)
-				.filter(typeInfo -> type.toUpperCase().replace(typeInfo.getName(), "").startsWith("("))
-				.map(typeInfo -> 1)
-				.orElse(-1);
+				.map(typeInfo -> type.toUpperCase().replace(" ", "").replace(typeInfo.getName(), ""))
+				.filter(t -> t.startsWith("("))
+				.map(t -> Integer.valueOf(extractFirstNumber(t)))
+				.orElse(null);
+	}
+
+	private String extractFirstNumber(String s) {
+		s = s.replace("(", "");
+		int i = s.indexOf(',');
+		if (i > 0) {
+			return s.substring(0, i);
+		}
+		return s.replace(")", "");
 	}
 
 	public Integer getPrecision(String type) {
 		return getType(type)
-				.filter(typeInfo -> type.toUpperCase().replace(typeInfo.getName(), "").startsWith("("))
-				.map(typeInfo -> 1)
-				.orElse(-1);
+				.map(typeInfo -> type.toUpperCase().replace(" ", "").replace(typeInfo.getName(), ""))
+				.filter(t -> t.startsWith("(") && t.contains(","))
+				.map(t -> Integer.valueOf(extractSecondNumber(t)))
+				.orElse(null);
+	}
+
+	private String extractSecondNumber(String s) {
+		s = s.replace("(", "");
+		int i = s.indexOf(',');
+		return s.substring(i + 1, s.length() - 1);
 	}
 
 }

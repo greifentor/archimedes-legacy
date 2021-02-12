@@ -4,6 +4,10 @@ import java.sql.Types;
 
 import archimedes.legacy.scheme.Domain;
 import archimedes.legacy.scheme.Tabellenspalte;
+import archimedes.legacy.updater.DataModelToCMOConverter;
+import archimedes.legacy.updater.TypeConverter;
+import archimedes.legacy.updater.UpdateReport;
+import archimedes.legacy.updater.UpdateReportAction;
 import archimedes.legacy.updater.UpdateReportAction.Status;
 import archimedes.legacy.updater.UpdateReportAction.Type;
 import archimedes.model.ColumnModel;
@@ -24,6 +28,8 @@ import de.ollie.dbcomp.comparator.model.actions.ModifyNullableCRO;
  * @author ollie (08.02.2021)
  */
 public class ModelUpdater {
+
+	private static final TypeConverter TYPE_CONVERTER = new TypeConverter();
 
 	private DataModel toUpdate;
 	private DataModel source;
@@ -49,7 +55,13 @@ public class ModelUpdater {
 		try {
 			if (cro instanceof AddColumnChangeActionCRO) {
 				TableModel table = toUpdate.getTableByName(((AddColumnChangeActionCRO) cro).getTableName());
-				DomainModel domain = getDomain(((AddColumnChangeActionCRO) cro).getSqlType(), -1, -1, toUpdate);
+				String sqlType = ((AddColumnChangeActionCRO) cro).getSqlType();
+				DomainModel domain =
+						getDomain(
+								TYPE_CONVERTER.getSQLType(sqlType),
+								TYPE_CONVERTER.getLength(sqlType),
+								TYPE_CONVERTER.getPrecision(sqlType),
+								toUpdate);
 				table.addColumn(new Tabellenspalte(((AddColumnChangeActionCRO) cro).getColumnName(), domain));
 				action
 						.setType(Type.ADD_COLUMN)
