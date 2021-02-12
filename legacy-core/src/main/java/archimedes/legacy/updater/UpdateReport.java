@@ -17,8 +17,9 @@ public class UpdateReport {
 
 	private List<UpdateReportAction> actions = new ArrayList<>();
 
-	public void addUpdateReportAction(UpdateReportAction action) {
+	public UpdateReport addUpdateReportAction(UpdateReportAction action) {
 		actions.add(action);
+		return this;
 	}
 
 }

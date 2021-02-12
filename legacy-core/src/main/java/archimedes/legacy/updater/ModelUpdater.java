@@ -4,10 +4,6 @@ import java.sql.Types;
 
 import archimedes.legacy.scheme.Domain;
 import archimedes.legacy.scheme.Tabellenspalte;
-import archimedes.legacy.updater.DataModelToCMOConverter;
-import archimedes.legacy.updater.TypeConverter;
-import archimedes.legacy.updater.UpdateReport;
-import archimedes.legacy.updater.UpdateReportAction;
 import archimedes.legacy.updater.UpdateReportAction.Status;
 import archimedes.legacy.updater.UpdateReportAction.Type;
 import archimedes.model.ColumnModel;
@@ -67,7 +63,8 @@ public class ModelUpdater {
 						.setType(Type.ADD_COLUMN)
 						.setValues(
 								((AddColumnChangeActionCRO) cro).getTableName(),
-								((AddColumnChangeActionCRO) cro).getColumnName());
+								((AddColumnChangeActionCRO) cro).getColumnName(),
+								sqlType);
 			} else if (cro instanceof DropTableChangeActionCRO) {
 				toUpdate.removeTable(toUpdate.getTableByName(((DropTableChangeActionCRO) cro).getTableName()));
 				action.setType(Type.DROP_TABLE).setValues(((DropTableChangeActionCRO) cro).getTableName());
@@ -84,14 +81,22 @@ public class ModelUpdater {
 				ColumnModel column = table.getColumnByName(((ModifyNullableCRO) cro).getColumnName());
 				column.setNotNull(!((ModifyNullableCRO) cro).isNewNullable());
 				action
-						.setType(Type.MODIFY_COLUMN_CONSTRAIN_NOT_NULL)
+						.setType(Type.MODIFY_COLUMN_CONSTRAINT_NOT_NULL)
 						.setValues(
 								((ModifyNullableCRO) cro).getTableName(),
 								((ModifyNullableCRO) cro).getColumnName(),
 								!((ModifyNullableCRO) cro).isNewNullable());
 			} else if (cro instanceof ModifyDataTypeCRO) {
-				return action
-						.setStatus(Status.MANUAL)
+				TableModel table = toUpdate.getTableByName(((ModifyDataTypeCRO) cro).getTableName());
+				String sqlType = ((ModifyDataTypeCRO) cro).getNewDataType();
+				DomainModel domain =
+						getDomain(
+								TYPE_CONVERTER.getSQLType(sqlType),
+								TYPE_CONVERTER.getLength(sqlType),
+								TYPE_CONVERTER.getPrecision(sqlType),
+								toUpdate);
+				table.getColumnByName(((ModifyDataTypeCRO) cro).getColumnName()).setDomain(domain);
+				action
 						.setType(Type.MODIFY_COLUMN_DATATYPE)
 						.setValues(
 								((ModifyDataTypeCRO) cro).getTableName(),
@@ -101,6 +106,7 @@ public class ModelUpdater {
 				return action.setStatus(Status.MANUAL);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return action.setStatus(Status.FAILED);
 		}
 		return action.setStatus(Status.DONE);

@@ -23,6 +23,7 @@ public class TypeConverter {
 							new TypeInfo(Types.BIGINT, "BIGINT"),
 							new TypeInfo(Types.BIT, "BIT"),
 							new TypeInfo(Types.BOOLEAN, "BOOLEAN"),
+							new TypeInfo(Types.LONGVARCHAR, "LONGVARCHAR"),
 							new TypeInfo(Types.NUMERIC, "NUMERIC"),
 							new TypeInfo(Types.OTHER, "OTHER"),
 							new TypeInfo(Types.VARCHAR, "VARCHAR"));

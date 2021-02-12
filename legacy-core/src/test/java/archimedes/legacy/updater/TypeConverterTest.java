@@ -25,6 +25,7 @@ public class TypeConverterTest {
 	private static final String BIGINT_SQL_TYPE = "BIGINT";
 	private static final String BIT_SQL_TYPE = "BIT";
 	private static final String BOOLEAN_SQL_TYPE = "BOOLEAN";
+	private static final String LONGVARCHAR_SQL_TYPE = "LONGVARCHAR";
 	private static final String NUMERIC_SQL_TYPE = "NUMERIC(" + LENGTH + ", " + PRECISION + ")";
 	private static final String VARCHAR_SQL_TYPE = "VARCHAR(" + LENGTH + ")";
 
@@ -39,6 +40,7 @@ public class TypeConverterTest {
 				BIGINT_SQL_TYPE + DELIMITER + Types.BIGINT,
 				BIT_SQL_TYPE + DELIMITER + Types.BIT,
 				BOOLEAN_SQL_TYPE + DELIMITER + Types.BOOLEAN,
+				LONGVARCHAR_SQL_TYPE + DELIMITER + Types.LONGVARCHAR,
 				NUMERIC_SQL_TYPE + DELIMITER + Types.NUMERIC,
 				VARCHAR_SQL_TYPE + DELIMITER + Types.VARCHAR })
 		void passAValidTypeName_ReturnsTheMatchingTypesValue(String typeName, int expected) {
@@ -55,6 +57,7 @@ public class TypeConverterTest {
 				BIGINT_SQL_TYPE + DELIMITER + "null",
 				BIT_SQL_TYPE + DELIMITER + "null",
 				BOOLEAN_SQL_TYPE + DELIMITER + "null",
+				LONGVARCHAR_SQL_TYPE + DELIMITER + "null",
 				NUMERIC_SQL_TYPE + DELIMITER + LENGTH,
 				VARCHAR_SQL_TYPE + DELIMITER + LENGTH })
 		void passAValidTypeName_ReturnsTheMatchingTypesValue(String typeName,
@@ -72,6 +75,7 @@ public class TypeConverterTest {
 				BIGINT_SQL_TYPE + DELIMITER + "null",
 				BIT_SQL_TYPE + DELIMITER + "null",
 				BOOLEAN_SQL_TYPE + DELIMITER + "null",
+				LONGVARCHAR_SQL_TYPE + DELIMITER + "null",
 				NUMERIC_SQL_TYPE + DELIMITER + PRECISION,
 				VARCHAR_SQL_TYPE + DELIMITER + "null" })
 		void passAValidTypeName_ReturnsTheMatchingTypesValue(String typeName,
