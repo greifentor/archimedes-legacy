@@ -1974,7 +1974,7 @@ import logging.Logger;
 
 public class Archimedes {
 
-	public static final String CONF_PATH = "./src/main/resources/conf/";
+	public static String CONF_PATH = "./src/main/resources/conf/";
 
 	private static Logger log = Logger.getLogger(Archimedes.class);
 
@@ -2109,6 +2109,7 @@ public class Archimedes {
 		} catch (Exception e) {
 			log.error("\nProblem beim Lesen der Ini-Datei (" + inifilename + ")\n", e);
 		}
+		CONF_PATH = System.getProperty("conf_path", CONF_PATH);
 		String propfn = System.getProperty("archimedes.Archimedes.properties", CONF_PATH + "archimedes.properties");
 		try {
 			corentx.io.FileUtil.readProperties(System.getProperties(), propfn);
