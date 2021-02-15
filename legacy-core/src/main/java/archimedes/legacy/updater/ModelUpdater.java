@@ -3,6 +3,7 @@ package archimedes.legacy.updater;
 import java.sql.Types;
 
 import archimedes.legacy.scheme.Domain;
+import archimedes.legacy.scheme.Relation;
 import archimedes.legacy.scheme.Tabellenspalte;
 import archimedes.legacy.updater.UpdateReportAction.Status;
 import archimedes.legacy.updater.UpdateReportAction.Type;
@@ -10,9 +11,12 @@ import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
 import archimedes.model.TableModel;
+import archimedes.model.ViewModel;
+import corent.base.Direction;
 import de.ollie.dbcomp.comparator.DataModelComparator;
 import de.ollie.dbcomp.comparator.model.ChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.AddColumnChangeActionCRO;
+import de.ollie.dbcomp.comparator.model.actions.AddForeignKeyCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropColumnChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropTableChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyDataTypeCRO;
@@ -65,6 +69,18 @@ public class ModelUpdater {
 								((AddColumnChangeActionCRO) cro).getTableName(),
 								((AddColumnChangeActionCRO) cro).getColumnName(),
 								sqlType);
+			} else if (cro instanceof AddForeignKeyCRO) {
+				TableModel table = toUpdate.getTableByName(((AddForeignKeyCRO) cro).getTableName());
+				((AddForeignKeyCRO) cro).getMembers().forEach(member -> {
+					TableModel refTable = toUpdate.getTableByName(member.getReferencedTableName());
+					ColumnModel refColumn = refTable.getColumnByName(member.getReferencedColumnName());
+					ColumnModel column = table.getColumnByName(member.getBaseColumnName());
+					ViewModel view = toUpdate.getViewByName(toUpdate.getViews().get(0).getName());
+					column.setRelation(new Relation(view, column, Direction.LEFT, 0, refColumn, Direction.RIGHT, 0));
+				});
+				action
+						.setType(Type.ADD_FOREIGN_KEY)
+						.setValues(((AddForeignKeyCRO) cro).getTableName(), ((AddForeignKeyCRO) cro).getMembers());
 			} else if (cro instanceof DropTableChangeActionCRO) {
 				toUpdate.removeTable(toUpdate.getTableByName(((DropTableChangeActionCRO) cro).getTableName()));
 				action.setType(Type.DROP_TABLE).setValues(((DropTableChangeActionCRO) cro).getTableName());

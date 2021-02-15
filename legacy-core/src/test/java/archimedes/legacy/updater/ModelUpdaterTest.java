@@ -159,4 +159,52 @@ public class ModelUpdaterTest {
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}
 
+	@Test
+	void passedModelWithAForeignKeyMore_ReturnsAnUpdateReportWithMessageToDrop() {
+		// Prepare
+		UpdateReport expected =
+				new UpdateReport()
+						.addUpdateReportAction(
+								new UpdateReportAction()
+										.setMessage(
+												"DropForeignKeyCRO(baseTableName=Account, baseColumnName=Owner, schemaName=, referencedTableName=Customer, referencedColumnName=Id")
+										.setStatus(Status.DONE)
+										.setType(Type.DROP_FOREIGN_KEY)
+										.setValues("Account", "Owner", "Customer", "Id"));
+		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
+		DataModel dataModel1 =
+				reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-Customer-FK-Dropped.xml");
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
+		// Run
+		UpdateReport returned = unitUnderTest.update();
+		// Check
+		assertEquals(expected, returned);
+		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
+	}
+
+	@Test
+	void passedModelWithAForeignKeyLess_ReturnsAnUpdateReportWithMessageToAdd() {
+		// Prepare
+		UpdateReport expected =
+				new UpdateReport()
+						.addUpdateReportAction(
+								new UpdateReportAction()
+										.setMessage(
+												"AddForeignKeyCRO(baseTableName=Account, baseColumnName=Owner, schemaName=, referencedTableName=Customer, referencedColumnName=Id")
+										.setStatus(Status.DONE)
+										.setType(Type.ADD_FOREIGN_KEY)
+										.setValues("Account", "Owner", "Customer", "Id"));
+		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
+		DataModel dataModel1 =
+				reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-Customer-FK-Dropped.xml");
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
+		// Run
+		UpdateReport returned = unitUnderTest.update();
+		// Check
+		assertEquals(expected, returned);
+		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
+	}
+
 }
