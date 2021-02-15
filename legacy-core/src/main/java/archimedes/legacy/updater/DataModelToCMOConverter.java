@@ -31,6 +31,7 @@ public class DataModelToCMOConverter {
 				.toArray(new TableCMO[0]);
 	}
 
+	// OLI: Add Foreign Keys.
 	private ColumnCMO[] getColumns(TableModel table) {
 		return Arrays
 				.asList(table.getColumns())
