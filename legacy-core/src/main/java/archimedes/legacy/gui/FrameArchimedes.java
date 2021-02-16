@@ -1242,7 +1242,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 									final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
 								if (event.getEventType() == EditorFrameEventType.OK) {
 									final Thread t = new Thread(() -> {
-										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 6);
+										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 5);
 										try {
 											Diagramm d =
 													(Diagramm) new JDBCImportManager()
@@ -1309,7 +1309,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 													(Diagramm) new JDBCImportManager()
 															.importDiagram(connectionData, mrpm::update);
 											if (d != null) {
-												UpdateReport report = new ModelUpdater(diagramm, d).update();
+												UpdateReport report =
+														new ModelUpdater(diagramm, d, Archimedes.Factory).update();
 												Counter counter = new Counter(0);
 												int max = report.getActions().size();
 												report

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import archimedes.legacy.Archimedes;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.legacy.updater.UpdateReportAction.Status;
 import archimedes.legacy.updater.UpdateReportAction.Type;
@@ -23,7 +24,7 @@ public class ModelUpdaterTest {
 		UpdateReport expected = new UpdateReport();
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		DataModel dataModel = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
-		ModelUpdater unitUnderTest = new ModelUpdater(dataModel, dataModel);
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel, dataModel, Archimedes.Factory);
 		// Run
 		UpdateReport returned = unitUnderTest.update();
 		// Check
@@ -37,7 +38,7 @@ public class ModelUpdaterTest {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
 		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
-		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
 		// Run
 		UpdateReport returned = unitUnderTest.update();
 		// Check
@@ -60,7 +61,7 @@ public class ModelUpdaterTest {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-Note-Dropped.xml");
 		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
-		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
 		// Run
 		UpdateReport returned = unitUnderTest.update();
 		// Check
@@ -83,7 +84,7 @@ public class ModelUpdaterTest {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
 		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-Note-Dropped.xml");
-		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
 		// Run
 		UpdateReport returned = unitUnderTest.update();
 		// Check
@@ -105,7 +106,7 @@ public class ModelUpdaterTest {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
 		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-Dropped.xml");
-		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
 		// Run
 		UpdateReport returned = unitUnderTest.update();
 		// Check
@@ -129,7 +130,7 @@ public class ModelUpdaterTest {
 		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
 		DataModel dataModel1 =
 				reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-AccountNumber-Nullable.xml");
-		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
 		// Run
 		UpdateReport returned = unitUnderTest.update();
 		// Check
@@ -153,7 +154,7 @@ public class ModelUpdaterTest {
 		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
 		DataModel dataModel1 =
 				reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-AccountNumber-Varchar42.xml");
-		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
 		// Run
 		UpdateReport returned = unitUnderTest.update();
 		// Check
@@ -182,7 +183,7 @@ public class ModelUpdaterTest {
 		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
 		DataModel dataModel1 =
 				reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-Customer-FK-Dropped.xml");
-		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
 		// Run
 		UpdateReport returned = unitUnderTest.update();
 		// Check
@@ -192,32 +193,27 @@ public class ModelUpdaterTest {
 	}
 
 	@Test
-	void passedModelWithAForeignKeyLess_ReturnsAnUpdateReportWithMessageToAdd() {
+	void passedModelWithOneTableLessMoreThanSource_ReturnsAnUpdateReportWithMessageToCreate() {
 		// Prepare
 		UpdateReport expected =
 				new UpdateReport()
 						.addUpdateReportAction(
 								new UpdateReportAction()
 										.setMessage(
-												"AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
+												"CreateTableChangeActionCRO(columns=[ColumnDataCRO(name=Id, sqlType=BIGINT, nullable=false), ColumnDataCRO(name=Name, sqlType=VARCHAR(255), nullable=false)], tableName=Bank, schemaName=)")
 										.setStatus(Status.DONE)
-										.setType(Type.ADD_FOREIGN_KEY)
-										.setValues(
-												"Account",
-												"[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)]"));
+										.setType(Type.CREATE_TABLE)
+										.setValues("Bank"));
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		DataModel dataModel0 =
-				reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-Customer-FK-Dropped.xml");
-		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
-		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
+		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
+		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Bank-Added.xml");
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
 		// Run
 		UpdateReport returned = unitUnderTest.update();
 		// Check
 		assertEquals(expected, returned);
-		assertNotNull(dataModel0.getTableByName("Account").getColumnByName("Owner").getReferencedColumn());
-		assertEquals(
-				"Customer.Id",
-				dataModel0.getTableByName("Account").getColumnByName("Owner").getReferencedColumn().getQualifiedName());
+		assertNotNull(dataModel0.getTableByName("Bank"));
+		assertNotNull(dataModel0.getTableByName("Bank").getColumnByName("Name"));
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}
 

@@ -3,8 +3,8 @@ package archimedes.legacy.updater;
 import java.sql.Types;
 import java.util.Arrays;
 
-import archimedes.legacy.scheme.Domain;
-import archimedes.legacy.scheme.Relation;
+import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.model.ObjectFactory;
 import archimedes.legacy.scheme.Tabellenspalte;
 import archimedes.legacy.updater.UpdateReportAction.Status;
 import archimedes.legacy.updater.UpdateReportAction.Type;
@@ -18,6 +18,7 @@ import de.ollie.dbcomp.comparator.DataModelComparator;
 import de.ollie.dbcomp.comparator.model.ChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.AddColumnChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.AddForeignKeyCRO;
+import de.ollie.dbcomp.comparator.model.actions.CreateTableChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropColumnChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropForeignKeyCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropTableChangeActionCRO;
@@ -35,8 +36,10 @@ public class ModelUpdater {
 
 	private DataModel toUpdate;
 	private DataModel source;
+	private ObjectFactory objectFactory;
 
-	public ModelUpdater(DataModel toUpdate, DataModel source) {
+	public ModelUpdater(DataModel toUpdate, DataModel source, ObjectFactory objectFactory) {
+		this.objectFactory = objectFactory;
 		this.source = source;
 		this.toUpdate = toUpdate;
 	}
@@ -77,12 +80,42 @@ public class ModelUpdater {
 					TableModel refTable = toUpdate.getTableByName(member.getReferencedTableName());
 					ColumnModel refColumn = refTable.getColumnByName(member.getReferencedColumnName());
 					ColumnModel column = table.getColumnByName(member.getBaseColumnName());
-					ViewModel view = toUpdate.getViewByName(toUpdate.getViews().get(0).getName());
-					column.setRelation(new Relation(view, column, Direction.LEFT, 0, refColumn, Direction.RIGHT, 0));
+					ViewModel view = getPrimaryView();
+					column
+							.setRelation(
+									objectFactory
+											.createRelation(
+													view,
+													column,
+													Direction.LEFT,
+													0,
+													refColumn,
+													Direction.RIGHT,
+													0));
 				});
 				action
 						.setType(Type.ADD_FOREIGN_KEY)
 						.setValues(((AddForeignKeyCRO) cro).getTableName(), ((AddForeignKeyCRO) cro).getMembers());
+			} else if (cro instanceof CreateTableChangeActionCRO) {
+				CreateTableChangeActionCRO createCRO = (CreateTableChangeActionCRO) cro;
+				TableModel table = objectFactory.createTabelle(getPrimaryView(), 0, 0, (DiagrammModel) toUpdate, false);
+				createCRO.getColumns().forEach(column -> {
+					ColumnModel cm =
+							objectFactory
+									.createTabellenspalte(
+											column.getName(),
+											getDomain(
+													TYPE_CONVERTER.getSQLType(column.getSqlType()),
+													TYPE_CONVERTER.getLength(column.getSqlType()),
+													TYPE_CONVERTER.getPrecision(column.getSqlType()),
+													toUpdate),
+											false);
+					cm.setNotNull(!column.isNullable());
+					table.addColumn(cm);
+				});
+				table.setName(createCRO.getTableName());
+				toUpdate.addTable(table);
+				action.setType(Type.CREATE_TABLE).setValues(createCRO.getTableName());
 			} else if (cro instanceof DropTableChangeActionCRO) {
 				toUpdate.removeTable(toUpdate.getTableByName(((DropTableChangeActionCRO) cro).getTableName()));
 				action.setType(Type.DROP_TABLE).setValues(((DropTableChangeActionCRO) cro).getTableName());
@@ -139,17 +172,28 @@ public class ModelUpdater {
 		return action.setStatus(Status.DONE);
 	}
 
+	private ViewModel getPrimaryView() {
+		return toUpdate.getViewByName(toUpdate.getViews().get(0).getName());
+	}
+
 	private DomainModel getDomain(int sqlType, Integer length, Integer precision, DataModel dataModel) {
 		if (sqlType == 16) { // Boolean
 			sqlType = Types.INTEGER;
 		}
-		Domain dom = new Domain("*", sqlType, length == null ? -1 : length, precision == null ? -1 : precision);
+		DomainModel dom =
+				objectFactory
+						.createDomain("*", sqlType, length == null ? -1 : length, precision == null ? -1 : precision);
 		String typeName = dom.getType().replace("(", "").replace(")", "").replace(" ", "");
 		typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1);
 		DomainModel domain = getDomainByNameCaseInsensitive(dataModel, typeName);
-		System.out.println(domain);
 		if (domain == null) {
-			domain = new Domain(typeName, sqlType, length == null ? -1 : length, precision == null ? -1 : precision);
+			domain =
+					objectFactory
+							.createDomain(
+									typeName,
+									sqlType,
+									length == null ? -1 : length,
+									precision == null ? -1 : precision);
 			dataModel.addDomain(domain);
 		}
 		return domain;

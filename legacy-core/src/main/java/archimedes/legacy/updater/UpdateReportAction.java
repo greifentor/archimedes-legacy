@@ -25,6 +25,7 @@ public class UpdateReportAction {
 		ADD_COLUMN,
 		ADD_FOREIGN_KEY,
 		ADD_TABLE,
+		CREATE_TABLE,
 		DROP_COLUMN,
 		DROP_FOREIGN_KEY,
 		DROP_TABLE,
