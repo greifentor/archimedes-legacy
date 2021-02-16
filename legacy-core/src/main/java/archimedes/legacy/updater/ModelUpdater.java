@@ -1,6 +1,7 @@
 package archimedes.legacy.updater;
 
 import java.sql.Types;
+import java.util.Arrays;
 
 import archimedes.legacy.scheme.Domain;
 import archimedes.legacy.scheme.Relation;
@@ -18,6 +19,7 @@ import de.ollie.dbcomp.comparator.model.ChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.AddColumnChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.AddForeignKeyCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropColumnChangeActionCRO;
+import de.ollie.dbcomp.comparator.model.actions.DropForeignKeyCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropTableChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyDataTypeCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyNullableCRO;
@@ -92,6 +94,15 @@ public class ModelUpdater {
 						.setValues(
 								((DropColumnChangeActionCRO) cro).getTableName(),
 								((DropColumnChangeActionCRO) cro).getColumnName());
+			} else if (cro instanceof DropForeignKeyCRO) {
+				TableModel table = toUpdate.getTableByName(((DropForeignKeyCRO) cro).getTableName());
+				((DropForeignKeyCRO) cro).getMembers().forEach(member -> {
+					ColumnModel column = table.getColumnByName(member.getBaseColumnName());
+					column.setRelation(null);
+				});
+				action
+						.setType(Type.DROP_FOREIGN_KEY)
+						.setValues(((DropForeignKeyCRO) cro).getTableName(), ((DropForeignKeyCRO) cro).getMembers());
 			} else if (cro instanceof ModifyNullableCRO) {
 				TableModel table = toUpdate.getTableByName(((ModifyNullableCRO) cro).getTableName());
 				ColumnModel column = table.getColumnByName(((ModifyNullableCRO) cro).getColumnName());
@@ -135,12 +146,22 @@ public class ModelUpdater {
 		Domain dom = new Domain("*", sqlType, length == null ? -1 : length, precision == null ? -1 : precision);
 		String typeName = dom.getType().replace("(", "").replace(")", "").replace(" ", "");
 		typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1);
-		DomainModel domain = dataModel.getDomainByName(typeName);
+		DomainModel domain = getDomainByNameCaseInsensitive(dataModel, typeName);
+		System.out.println(domain);
 		if (domain == null) {
 			domain = new Domain(typeName, sqlType, length == null ? -1 : length, precision == null ? -1 : precision);
 			dataModel.addDomain(domain);
 		}
 		return domain;
+	}
+
+	private DomainModel getDomainByNameCaseInsensitive(DataModel dataModel, String typeName) {
+		return Arrays
+				.asList(dataModel.getAllDomains())
+				.stream()
+				.filter(domain -> domain.getName().equalsIgnoreCase(typeName))
+				.findFirst()
+				.orElse(null);
 	}
 
 }

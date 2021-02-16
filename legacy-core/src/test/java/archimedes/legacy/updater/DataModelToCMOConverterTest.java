@@ -14,6 +14,8 @@ import archimedes.model.DataModel;
 import archimedes.scheme.xml.ModelXMLReader;
 import de.ollie.dbcomp.model.ColumnCMO;
 import de.ollie.dbcomp.model.DataModelCMO;
+import de.ollie.dbcomp.model.ForeignKeyCMO;
+import de.ollie.dbcomp.model.ForeignKeyMemberCMO;
 import de.ollie.dbcomp.model.SchemaCMO;
 import de.ollie.dbcomp.model.TableCMO;
 import de.ollie.dbcomp.model.TypeCMO;
@@ -30,22 +32,30 @@ public class DataModelToCMOConverterTest {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		DataModel dataModel = reader.read("src/test/resources/dm/DataModel2DataModelCMO-Test.xml");
 		ColumnCMO idColumn = ColumnCMO.of("Id", TypeCMO.of(Types.BIGINT, 0, 0), false, false);
-		DataModelCMO expected =
-				DataModelCMO
+		ColumnCMO idColumnAnotherTable = ColumnCMO.of("Id", TypeCMO.of(Types.BIGINT, 0, 0), false, false);
+		ColumnCMO refAnotherTableId = ColumnCMO.of("AnotherTableId", TypeCMO.of(Types.BIGINT, 0, 0), false, true);
+		TableCMO aTable =
+				TableCMO
 						.of(
-								SchemaCMO
-										.of(
-												"",
-												TableCMO
-														.of(
-																"ATable",
-																idColumn,
-																ColumnCMO
-																		.of(
-																				"Name",
-																				TypeCMO.of(Types.VARCHAR, 100, 0),
-																				false,
-																				false))));
+								"ATable",
+								idColumn,
+								ColumnCMO.of("Name", TypeCMO.of(Types.VARCHAR, 100, 0), false, false),
+								refAnotherTableId,
+								ColumnCMO.of("ADate", TypeCMO.of(Types.DATE, 0, 0), false, true));
+		TableCMO anotherTable =
+				TableCMO
+						.of(
+								"AnotherTable",
+								idColumnAnotherTable,
+								ColumnCMO.of("Name", TypeCMO.of(Types.VARCHAR, 100, 0), false, true));
+		aTable
+				.addForeignKeys(
+						ForeignKeyCMO
+								.of(
+										"",
+										ForeignKeyMemberCMO
+												.of(aTable, refAnotherTableId, anotherTable, idColumnAnotherTable)));
+		DataModelCMO expected = DataModelCMO.of(SchemaCMO.of("", anotherTable, aTable));
 		// Run
 		DataModelCMO returned = unitUnderTest.convert(dataModel);
 		// Check

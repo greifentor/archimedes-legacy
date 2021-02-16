@@ -22,11 +22,25 @@ public class TypeConverter {
 					.asList(
 							new TypeInfo(Types.BIGINT, "BIGINT"),
 							new TypeInfo(Types.BIT, "BIT"),
+							new TypeInfo(Types.BLOB, "BLOB"),
 							new TypeInfo(Types.BOOLEAN, "BOOLEAN"),
+							new TypeInfo(Types.DATE, "DATE"),
+							new TypeInfo(Types.DECIMAL, "DECIMAL"),
+							new TypeInfo(Types.DOUBLE, "DOUBLE"),
+							new TypeInfo(Types.FLOAT, "FLOAT"),
+							new TypeInfo(Types.INTEGER, "INTEGER"),
+							new TypeInfo(Types.LONGVARBINARY, "LONGVARBINARY"),
 							new TypeInfo(Types.LONGVARCHAR, "LONGVARCHAR"),
 							new TypeInfo(Types.NUMERIC, "NUMERIC"),
 							new TypeInfo(Types.OTHER, "OTHER"),
-							new TypeInfo(Types.VARCHAR, "VARCHAR"));
+							new TypeInfo(Types.REAL, "REAL"),
+							new TypeInfo(Types.SMALLINT, "SMALLINT"),
+							new TypeInfo(Types.TIMESTAMP, "TIMESTAMP"),
+							new TypeInfo(Types.TIME, "TIME"),
+							new TypeInfo(Types.TINYINT, "TINYINT"),
+							new TypeInfo(Types.VARBINARY, "VARBINARY"),
+							new TypeInfo(Types.VARCHAR, "VARCHAR"),
+							new TypeInfo(Types.CHAR, "CHAR"));
 
 	public int getSQLType(String type) {
 		return getType(type).map(TypeInfo::getSqlType).orElse(Types.OTHER);

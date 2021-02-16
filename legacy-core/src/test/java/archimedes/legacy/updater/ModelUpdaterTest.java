@@ -1,6 +1,8 @@
 package archimedes.legacy.updater;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -156,6 +158,9 @@ public class ModelUpdaterTest {
 		UpdateReport returned = unitUnderTest.update();
 		// Check
 		assertEquals(expected, returned);
+		assertEquals(
+				"Varchar42",
+				dataModel0.getTableByName("Account").getColumnByName("AccountNumber").getDomain().getName());
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}
 
@@ -167,10 +172,12 @@ public class ModelUpdaterTest {
 						.addUpdateReportAction(
 								new UpdateReportAction()
 										.setMessage(
-												"DropForeignKeyCRO(baseTableName=Account, baseColumnName=Owner, schemaName=, referencedTableName=Customer, referencedColumnName=Id")
+												"DropForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
 										.setStatus(Status.DONE)
 										.setType(Type.DROP_FOREIGN_KEY)
-										.setValues("Account", "Owner", "Customer", "Id"));
+										.setValues(
+												"Account",
+												"[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)]"));
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
 		DataModel dataModel1 =
@@ -180,6 +187,7 @@ public class ModelUpdaterTest {
 		UpdateReport returned = unitUnderTest.update();
 		// Check
 		assertEquals(expected, returned);
+		assertNull(dataModel0.getTableByName("Account").getColumnByName("Owner").getReferencedColumn());
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}
 
@@ -191,19 +199,25 @@ public class ModelUpdaterTest {
 						.addUpdateReportAction(
 								new UpdateReportAction()
 										.setMessage(
-												"AddForeignKeyCRO(baseTableName=Account, baseColumnName=Owner, schemaName=, referencedTableName=Customer, referencedColumnName=Id")
+												"AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
 										.setStatus(Status.DONE)
 										.setType(Type.ADD_FOREIGN_KEY)
-										.setValues("Account", "Owner", "Customer", "Id"));
+										.setValues(
+												"Account",
+												"[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)]"));
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
-		DataModel dataModel1 =
+		DataModel dataModel0 =
 				reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-Customer-FK-Dropped.xml");
+		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
 		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1);
 		// Run
 		UpdateReport returned = unitUnderTest.update();
 		// Check
 		assertEquals(expected, returned);
+		assertNotNull(dataModel0.getTableByName("Account").getColumnByName("Owner").getReferencedColumn());
+		assertEquals(
+				"Customer.Id",
+				dataModel0.getTableByName("Account").getColumnByName("Owner").getReferencedColumn().getQualifiedName());
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}
 
