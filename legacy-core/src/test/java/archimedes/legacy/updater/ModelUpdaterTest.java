@@ -1,6 +1,7 @@
 package archimedes.legacy.updater;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -214,6 +215,7 @@ public class ModelUpdaterTest {
 		assertEquals(expected, returned);
 		assertNotNull(dataModel0.getTableByName("Bank"));
 		assertNotNull(dataModel0.getTableByName("Bank").getColumnByName("Name"));
+		assertFalse(dataModel0.getTableByName("Bank").isDraft());
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}
 

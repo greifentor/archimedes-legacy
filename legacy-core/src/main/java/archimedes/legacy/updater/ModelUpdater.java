@@ -113,6 +113,7 @@ public class ModelUpdater {
 					cm.setNotNull(!column.isNullable());
 					table.addColumn(cm);
 				});
+				table.setDraft(false);
 				table.setName(createCRO.getTableName());
 				toUpdate.addTable(table);
 				action.setType(Type.CREATE_TABLE).setValues(createCRO.getTableName());
