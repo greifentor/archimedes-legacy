@@ -9,12 +9,24 @@
 
 package archimedes.scheme.xml;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.List;
 
-import archimedes.model.*;
-import archimedes.model.gui.*;
-import corentx.xml.*;
+import archimedes.model.ColumnModel;
+import archimedes.model.NReferenceModel;
+import archimedes.model.OrderMemberModel;
+import archimedes.model.PanelModel;
+import archimedes.model.RelationModel;
+import archimedes.model.SelectionMemberModel;
+import archimedes.model.StereotypeModel;
+import archimedes.model.TableModel;
+import archimedes.model.ToStringContainerModel;
+import archimedes.model.ViewModel;
+import archimedes.model.gui.GUIObjectModel;
+import archimedes.model.gui.GUIRelationModel;
+import archimedes.model.gui.GUIViewModel;
+import corentx.xml.XMLNode;
+import corentx.xml.XMLNodeFactory;
 
 
 /**

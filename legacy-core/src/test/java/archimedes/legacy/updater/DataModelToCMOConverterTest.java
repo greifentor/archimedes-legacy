@@ -32,8 +32,10 @@ public class DataModelToCMOConverterTest {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		DataModel dataModel = reader.read("src/test/resources/dm/DataModel2DataModelCMO-Test.xml");
 		ColumnCMO idColumn = ColumnCMO.of("Id", TypeCMO.of(Types.BIGINT, 0, 0), false, false);
+		ColumnCMO idColumnB = ColumnCMO.of("Id", TypeCMO.of(Types.BIGINT, 0, 0), false, false);
 		ColumnCMO idColumnAnotherTable = ColumnCMO.of("Id", TypeCMO.of(Types.BIGINT, 0, 0), false, false);
 		ColumnCMO refAnotherTableId = ColumnCMO.of("AnotherTableId", TypeCMO.of(Types.BIGINT, 0, 0), false, true);
+		ColumnCMO refTableB = ColumnCMO.of("TableB", TypeCMO.of(Types.BIGINT, 0, 0), false, true);
 		TableCMO aTable =
 				TableCMO
 						.of(
@@ -41,7 +43,9 @@ public class DataModelToCMOConverterTest {
 								idColumn,
 								ColumnCMO.of("Name", TypeCMO.of(Types.VARCHAR, 100, 0), false, false),
 								refAnotherTableId,
+								refTableB,
 								ColumnCMO.of("ADate", TypeCMO.of(Types.DATE, 0, 0), false, true));
+		TableCMO tableB = TableCMO.of("TableB", idColumnB);
 		TableCMO anotherTable =
 				TableCMO
 						.of(
@@ -52,10 +56,14 @@ public class DataModelToCMOConverterTest {
 				.addForeignKeys(
 						ForeignKeyCMO
 								.of(
-										"",
+										"FK_TO_" + anotherTable.getName() + "_" + idColumnAnotherTable.getName(),
 										ForeignKeyMemberCMO
-												.of(aTable, refAnotherTableId, anotherTable, idColumnAnotherTable)));
-		DataModelCMO expected = DataModelCMO.of(SchemaCMO.of("", anotherTable, aTable));
+												.of(aTable, refAnotherTableId, anotherTable, idColumnAnotherTable)),
+						ForeignKeyCMO
+								.of(
+										"FK_TO_" + tableB.getName() + "_" + idColumnB.getName(),
+										ForeignKeyMemberCMO.of(aTable, refTableB, tableB, idColumnB)));
+		DataModelCMO expected = DataModelCMO.of(SchemaCMO.of("", anotherTable, aTable, tableB));
 		// Run
 		DataModelCMO returned = unitUnderTest.convert(dataModel);
 		// Check

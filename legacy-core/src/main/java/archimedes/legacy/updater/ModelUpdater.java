@@ -67,7 +67,9 @@ public class ModelUpdater {
 								TYPE_CONVERTER.getLength(sqlType),
 								TYPE_CONVERTER.getPrecision(sqlType),
 								toUpdate);
-				table.addColumn(new Tabellenspalte(((AddColumnChangeActionCRO) cro).getColumnName(), domain));
+				ColumnModel newColumn = new Tabellenspalte(((AddColumnChangeActionCRO) cro).getColumnName(), domain);
+				newColumn.setPanel(table.getPanels()[0]);
+				table.addColumn(newColumn);
 				action
 						.setType(Type.ADD_COLUMN)
 						.setValues(
@@ -100,7 +102,7 @@ public class ModelUpdater {
 				CreateTableChangeActionCRO createCRO = (CreateTableChangeActionCRO) cro;
 				TableModel table = objectFactory.createTabelle(getPrimaryView(), 0, 0, (DiagrammModel) toUpdate, false);
 				createCRO.getColumns().forEach(column -> {
-					ColumnModel cm =
+					ColumnModel newColumn =
 							objectFactory
 									.createTabellenspalte(
 											column.getName(),
@@ -110,8 +112,9 @@ public class ModelUpdater {
 													TYPE_CONVERTER.getPrecision(column.getSqlType()),
 													toUpdate),
 											false);
-					cm.setNotNull(!column.isNullable());
-					table.addColumn(cm);
+					newColumn.setNotNull(!column.isNullable());
+					newColumn.setPanel(table.getPanels()[0]);
+					table.addColumn(newColumn);
 				});
 				table.setDraft(false);
 				table.setName(createCRO.getTableName());

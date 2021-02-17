@@ -2,6 +2,11 @@
 The good old archimedes (cleaned up).
 
 
+## Ideas
+
+* Read in Liquibase via a memory database (Liquibase -> memory database -> JDBC -> Archimedes model).
+
+
 ## Requirements
 
 * Java 11

@@ -67,6 +67,7 @@ public class ModelUpdaterTest {
 		UpdateReport returned = unitUnderTest.update();
 		// Check
 		assertEquals(expected, returned);
+		assertEquals(0, dataModel0.getTableByName("Account").getColumnByName("Note").getPanel().getPanelNumber());
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}
 
@@ -194,6 +195,69 @@ public class ModelUpdaterTest {
 	}
 
 	@Test
+	void passedModelWithAForeignKeyLess_ReturnsAnUpdateReportWithMessageToAdd() {
+		// Prepare
+		UpdateReport expected =
+				new UpdateReport()
+						.addUpdateReportAction(
+								new UpdateReportAction()
+										.setMessage(
+												"AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
+										.setStatus(Status.DONE)
+										.setType(Type.ADD_FOREIGN_KEY)
+										.setValues(
+												"Account",
+												"[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)]"));
+		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+		DataModel dataModel0 =
+				reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-Customer-FK-Dropped.xml");
+		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
+		// Run
+		UpdateReport returned = unitUnderTest.update();
+		// Check
+		assertEquals(expected, returned);
+		assertNotNull(dataModel0.getTableByName("Account").getColumnByName("Owner").getReferencedColumn());
+		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
+	}
+
+	@Test
+	void passedModelWithTwoForeignKeysLess_ReturnsAnUpdateReportWithMessagesToAdd() {
+		// Prepare
+		UpdateReport expected =
+				new UpdateReport()
+						.addUpdateReportAction(
+								new UpdateReportAction()
+										.setMessage(
+												"AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Bank, baseTableName=Account, referencedColumnName=Id, referencedTableName=Bank)])")
+										.setStatus(Status.DONE)
+										.setType(Type.ADD_FOREIGN_KEY)
+										.setValues(
+												"Account",
+												"[ForeignKeyMemberCRO(baseColumnName=Bank, baseTableName=Account, referencedColumnName=Id, referencedTableName=Bank)]"))
+						.addUpdateReportAction(
+								new UpdateReportAction()
+										.setMessage(
+												"AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
+										.setStatus(Status.DONE)
+										.setType(Type.ADD_FOREIGN_KEY)
+										.setValues(
+												"Account",
+												"[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)]"));
+		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+		DataModel dataModel0 =
+				reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Two-FKs-Dropped.xml");
+		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Two-FKs.xml");
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
+		// Run
+		UpdateReport returned = unitUnderTest.update();
+		// Check
+		assertEquals(expected, returned);
+		assertNotNull(dataModel0.getTableByName("Account").getColumnByName("Owner").getReferencedColumn());
+		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
+	}
+
+	@Test
 	void passedModelWithOneTableLessMoreThanSource_ReturnsAnUpdateReportWithMessageToCreate() {
 		// Prepare
 		UpdateReport expected =
@@ -215,6 +279,7 @@ public class ModelUpdaterTest {
 		assertEquals(expected, returned);
 		assertNotNull(dataModel0.getTableByName("Bank"));
 		assertNotNull(dataModel0.getTableByName("Bank").getColumnByName("Name"));
+		assertNotNull(dataModel0.getTableByName("Bank").getColumnByName("Name").getPanel());
 		assertFalse(dataModel0.getTableByName("Bank").isDraft());
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}

@@ -90,7 +90,9 @@ public class DataModelToCMOConverter {
 								.addForeignKeys(
 										ForeignKeyCMO
 												.of(
-														"",
+														"FK_TO_" + column.getReferencedTable().getName()
+																+ "_"
+																+ column.getReferencedColumn().getName(),
 														ForeignKeyMemberCMO
 																.of(
 																		table,

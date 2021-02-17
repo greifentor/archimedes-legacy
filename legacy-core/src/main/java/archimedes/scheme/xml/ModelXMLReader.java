@@ -468,6 +468,7 @@ public class ModelXMLReader {
 							String rcn = this.getString(child0, "referenceColumnName");
 							TableModel rt = dataModel.getTableByName(rtn);
 							if (rt != null) {
+								System.out.println("FK TABLE FOUND: " + rtn);
 								ColumnModel rc = rt.getColumnByName(rcn);
 								NodeList children1 = child0.getChildNodes();
 								for (int l = 0, lenl = children1.getLength(); l < lenl; l++) {
@@ -500,6 +501,8 @@ public class ModelXMLReader {
 										}
 									}
 								}
+							} else {
+								System.out.println("REFERENCED TABLE NOT FOUND: " + rtn);
 							}
 							table.removeColumn(c);
 							table.addColumn(c);
