@@ -1,6 +1,8 @@
 package archimedes.legacy.updater;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import archimedes.model.ColumnModel;
@@ -26,6 +28,7 @@ public class DataModelToCMOConverter {
 	public DataModelCMO convert(DataModel dataModel) {
 		DataModelCMO cmo = DataModelCMO.of(SchemaCMO.of(DEFAULT_SCHEMA_NAME, getTables(dataModel)));
 		addForeignKeys(cmo, dataModel);
+		addPrimaryKeys(cmo, dataModel);
 		return cmo;
 	}
 
@@ -42,21 +45,18 @@ public class DataModelToCMOConverter {
 		return Arrays
 				.asList(table.getColumns())
 				.stream()
-				.map(
-						column -> ColumnCMO
-								.of(
-										column.getName(),
-										TypeCMO
-												.of(
-														column.getDomain().getDataType(),
-														(column.getDomain().getLength() < 0
-																? 0
-																: column.getDomain().getLength()),
-														(column.getDomain().getDecimalPlace() < 0
-																? 0
-																: column.getDomain().getDecimalPlace())),
-										false,
-										!column.isNotNull()))
+				.map(column -> ColumnCMO
+						.of(column.getName(),
+								TypeCMO
+										.of(column.getDomain().getDataType(),
+												(column.getDomain().getLength() < 0
+														? 0
+														: column.getDomain().getLength()),
+												(column.getDomain().getDecimalPlace() < 0
+														? 0
+														: column.getDomain().getDecimalPlace())),
+								false,
+								!column.isNotNull()))
 				.collect(Collectors.toList())
 				.toArray(new ColumnCMO[0]);
 	}
@@ -66,17 +66,12 @@ public class DataModelToCMOConverter {
 				.getSchemata()
 				.entrySet()
 				.stream()
-				.forEach(
-						schemaValue -> schemaValue
-								.getValue()
-								.getTables()
-								.entrySet()
-								.stream()
-								.forEach(
-										tableValue -> addForeignKeys(
-												tableValue.getValue(),
-												cmo,
-												dataModel)));
+				.forEach(schemaValue -> schemaValue
+						.getValue()
+						.getTables()
+						.entrySet()
+						.stream()
+						.forEach(tableValue -> addForeignKeys(tableValue.getValue(), cmo, dataModel)));
 	}
 
 	private void addForeignKeys(TableCMO table, DataModelCMO cmo, DataModel dataModel) {
@@ -85,22 +80,15 @@ public class DataModelToCMOConverter {
 				.asList(dataModel.getTableByName(table.getName()).getColumns())
 				.stream()
 				.filter(column -> column.getReferencedTable() != null)
-				.forEach(
-						column -> table
-								.addForeignKeys(
-										ForeignKeyCMO
-												.of(
-														"FK_TO_" + column.getReferencedTable().getName()
-																+ "_"
-																+ column.getReferencedColumn().getName(),
-														ForeignKeyMemberCMO
-																.of(
-																		table,
-																		getColumn(schema, column),
-																		getTable(schema, column.getReferencedTable()),
-																		getColumn(
-																				schema,
-																				column.getReferencedColumn())))));
+				.forEach(column -> table
+						.addForeignKeys(ForeignKeyCMO
+								.of("FK_TO_" + column.getReferencedTable().getName() + "_"
+										+ column.getReferencedColumn().getName(),
+										ForeignKeyMemberCMO
+												.of(table,
+														getColumn(schema, column),
+														getTable(schema, column.getReferencedTable()),
+														getColumn(schema, column.getReferencedColumn())))));
 	}
 
 	private ColumnCMO getColumn(SchemaCMO schema, ColumnModel column) {
@@ -112,6 +100,32 @@ public class DataModelToCMOConverter {
 
 	private TableCMO getTable(SchemaCMO schema, TableModel table) {
 		return schema.getTableByName(table.getName()).orElse(null);
+	}
+
+	private void addPrimaryKeys(DataModelCMO cmo, DataModel dataModel) {
+		cmo
+				.getSchemata()
+				.entrySet()
+				.stream()
+				.forEach(schemaValue -> schemaValue
+						.getValue()
+						.getTables()
+						.entrySet()
+						.stream()
+						.forEach(tableValue -> addPrimaryKeys(tableValue.getValue(), dataModel)));
+	}
+
+	private void addPrimaryKeys(TableCMO table, DataModel dataModel) {
+		List<String> pkMemberNames = new ArrayList<>();
+		Arrays
+				.asList(dataModel.getTableByName(table.getName()).getColumns())
+				.stream()
+				.filter(ColumnModel::isPrimaryKey)
+				.map(column -> table.getColumnByName(column.getName()))
+				.forEach(column -> column.ifPresent(c -> pkMemberNames.add(c.getName())));
+		if (!pkMemberNames.isEmpty()) {
+			table.addPrimaryKeys(pkMemberNames.toArray(new String[pkMemberNames.size()]));
+		}
 	}
 
 }
