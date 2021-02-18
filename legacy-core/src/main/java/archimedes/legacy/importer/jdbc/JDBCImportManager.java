@@ -26,15 +26,24 @@ public class JDBCImportManager {
 		DBObjectFactory factory = new DefaultDBObjectFactory();
 		DBTypeConverter typeConverter = new DBTypeConverter();
 		Class.forName(connectionData.getConnection().getDriver());
-		JDBCDataSourceRecord dsr = new JDBCDataSourceRecord(connectionData.getConnection().getDriver(),
-				connectionData.getConnection().getUrl(), connectionData.getConnection().getUserName(),
+		JDBCDataSourceRecord dsr = new JDBCDataSourceRecord(
+				connectionData.getConnection().getDriver(),
+				connectionData.getConnection().getUrl(),
+				connectionData.getConnection().getUserName(),
 				connectionData.getPassword());
 		Connection connection = ConnectionManager.GetConnection(dsr);
 		String schemeName = ("".equals(connectionData.getSchema()) ? null : connectionData.getSchema());
-		DatabaseSO database = new JDBCModelReader(factory, typeConverter, connection, schemeName,
-				connectionData.isIgnoreIndices(), connectionData.getIgnoreTablePatterns(),
+		DatabaseSO database = new JDBCModelReader(
+				factory,
+				typeConverter,
+				connection,
+				schemeName,
+				connectionData.isIgnoreIndices(),
+				connectionData.getIgnoreTablePatterns(),
 				connectionData.getImportOnlyTablePatterns()).addModelReaderListener(listener).readModel();
-		return new DatabaseSOToDiagramConverter(connectionData.getAdjustment()).convert(database);
+		DiagrammModel model = new DatabaseSOToDiagramConverter(connectionData.getAdjustment()).convert(database);
+		connection.close();
+		return model;
 	}
 
 }
