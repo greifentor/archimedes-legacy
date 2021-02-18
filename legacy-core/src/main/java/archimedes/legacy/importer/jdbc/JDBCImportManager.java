@@ -23,8 +23,10 @@ public class JDBCImportManager {
 	 */
 	public DiagrammModel importDiagram(JDBCImportConnectionData connectionData, ModelReaderListener listener)
 			throws Exception {
-		DBObjectFactory factory = new DefaultDBObjectFactory();
-		DBTypeConverter typeConverter = new DBTypeConverter();
+		return importDiagram(getImportData(connectionData), listener);
+	}
+
+	private JDBCImportData getImportData(JDBCImportConnectionData connectionData) throws Exception {
 		Class.forName(connectionData.getConnection().getDriver());
 		JDBCDataSourceRecord dsr = new JDBCDataSourceRecord(
 				connectionData.getConnection().getDriver(),
@@ -32,18 +34,35 @@ public class JDBCImportManager {
 				connectionData.getConnection().getUserName(),
 				connectionData.getPassword());
 		Connection connection = ConnectionManager.GetConnection(dsr);
-		String schemeName = ("".equals(connectionData.getSchema()) ? null : connectionData.getSchema());
+		return new JDBCImportData().setAdjustment(connectionData.getAdjustment())
+				.setConnection(connection)
+				.setIgnoreIndices(connectionData.isIgnoreIndices())
+				.setIgnoreTablePatterns(connectionData.getIgnoreTablePatterns())
+				.setImportOnlyTablePatterns(connectionData.getImportOnlyTablePatterns())
+				.setPassword(connectionData.getPassword())
+				.setSchema(connectionData.getSchema());
+	}
+
+	/**
+	 * Starts the import process.
+	 * 
+	 * @param importData A container with the necessary data for the database connection.
+	 * @param listener   A listener to the model reader.
+	 * @return A diagram from a selected JDBC connection.
+	 */
+	public DiagrammModel importDiagram(JDBCImportData importData, ModelReaderListener listener) throws Exception {
+		DBObjectFactory factory = new DefaultDBObjectFactory();
+		DBTypeConverter typeConverter = new DBTypeConverter();
+		String schemeName = ("".equals(importData.getSchema()) ? null : importData.getSchema());
 		DatabaseSO database = new JDBCModelReader(
 				factory,
 				typeConverter,
-				connection,
+				importData.getConnection(),
 				schemeName,
-				connectionData.isIgnoreIndices(),
-				connectionData.getIgnoreTablePatterns(),
-				connectionData.getImportOnlyTablePatterns()).addModelReaderListener(listener).readModel();
-		DiagrammModel model = new DatabaseSOToDiagramConverter(connectionData.getAdjustment()).convert(database);
-		connection.close();
-		return model;
+				importData.isIgnoreIndices(),
+				importData.getIgnoreTablePatterns(),
+				importData.getImportOnlyTablePatterns()).addModelReaderListener(listener).readModel();
+		return new DatabaseSOToDiagramConverter(importData.getAdjustment()).convert(database);
 	}
 
 }

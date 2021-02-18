@@ -98,6 +98,7 @@ import archimedes.legacy.gui.indices.ComplexIndicesAdministrationFrame;
 import archimedes.legacy.gui.table.TableModelFrame;
 import archimedes.legacy.importer.jdbc.JDBCImportConnectionData;
 import archimedes.legacy.importer.jdbc.JDBCImportConnectionData.Adjustment;
+import archimedes.legacy.importer.jdbc.JDBCImportData;
 import archimedes.legacy.importer.jdbc.JDBCImportManager;
 import archimedes.legacy.importer.jdbc.JDBCImportManagerConfigurationDialog;
 import archimedes.legacy.importer.jdbc.ModelReaderEvent;
@@ -160,7 +161,6 @@ import corent.base.SortedVector;
 import corent.base.StrUtil;
 import corent.db.ConnectionManager;
 import corent.db.DBExec;
-import corent.db.DBExecMode;
 import corent.db.JDBCDataSourceRecord;
 import corent.djinn.FrameEditorDjinn;
 import corent.djinn.FrameSelectionDjinn;
@@ -330,10 +330,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		this.diagramm.addDataModelListener(this);
 		this.diagramm.addDiagrammModelListener(this);
 		this.diagramm.addGUIDiagramModelListener(this);
-		this.diagramm
-				.getViews()
-				.add((GUIViewModel) Archimedes.Factory
-						.createMainView("Main", "Diese Sicht beinhaltet alle Tabellen des Schemas", true));
+		this.diagramm.getViews()
+				.add(
+						(GUIViewModel) Archimedes.Factory
+								.createMainView("Main", "Diese Sicht beinhaltet alle Tabellen des Schemas", true));
 		this.guiObjectCreator = new DiagramGUIObjectCreator(this.diagramm);
 		this.component = new DiagramComponentPanel<GUIObjectTypes>(
 				this.diagramm.getViews().get(0),
@@ -531,14 +531,14 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				final VersionIncrementer.State rc = new VersionIncrementer().increment(diagramm);
 
 				if (rc == VersionIncrementer.State.SCRIPTS_CLEANED_ONLY) {
-					final Object version = JOptionPane
-							.showInputDialog(null,
-									StrUtil.ToHTML("Version konnte nicht erh&ouml;ht werden!"),
-									StrUtil.ToHTML("Problem: Versionserh&ouml;hung"),
-									JOptionPane.QUESTION_MESSAGE,
-									null,
-									null,
-									diagramm.getVersion());
+					final Object version = JOptionPane.showInputDialog(
+							null,
+							StrUtil.ToHTML("Version konnte nicht erh&ouml;ht werden!"),
+							StrUtil.ToHTML("Problem: Versionserh&ouml;hung"),
+							JOptionPane.QUESTION_MESSAGE,
+							null,
+							null,
+							diagramm.getVersion());
 
 					if (version != null) {
 						diagramm.setVersion(String.valueOf(version));
@@ -724,11 +724,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		this.setContentPane(panel);
 		this.setVisible(true);
 		this.createUserInformations(ini);
-		this
-				.setBounds(ini.readInt("MainWindow", "x", 100),
-						ini.readInt("MainWindow", "y", 100),
-						ini.readInt("MainWindow", "width", 600),
-						ini.readInt("MainWindow", "height", 480));
+		this.setBounds(
+				ini.readInt("MainWindow", "x", 100),
+				ini.readInt("MainWindow", "y", 100),
+				ini.readInt("MainWindow", "width", 600),
+				ini.readInt("MainWindow", "height", 480));
 	}
 
 	private boolean isViewLogicEnabled() {
@@ -785,13 +785,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void doDateiOeffnen() {
 		if (this.diagramm.isAltered()) {
-			final int option = JOptionPane
-					.showConfirmDialog(null,
-							StrUtil
-									.FromHTML("Das Diagramm "
-											+ "ist ge&auml;ndert worden!\nM&ouml;chten Sie es speichern?"),
-							"Diagramm nicht" + " gespeichert",
-							JOptionPane.YES_NO_CANCEL_OPTION);
+			final int option = JOptionPane.showConfirmDialog(
+					null,
+					StrUtil.FromHTML("Das Diagramm " + "ist ge&auml;ndert worden!\nM&ouml;chten Sie es speichern?"),
+					"Diagramm nicht" + " gespeichert",
+					JOptionPane.YES_NO_CANCEL_OPTION);
 
 			if (option == JOptionPane.YES_OPTION) {
 				if ((this.dateiname.length() == 0) || (this.dateiname.equalsIgnoreCase("unbenannt.ads"))) {
@@ -845,14 +843,14 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 		if (ask && this.diagramm.isAltered()) {
 			final boolean errors = this.isErrorsFound(this.diagramm, false);
-			final int option = JOptionPane
-					.showConfirmDialog(null,
-							this.guiBundle
-									.getResourceText((errors
-											? "archimedes.open.file.altered.warning.with.errors.text"
-											: "archimedes.open.file.altered.warning.text")),
-							this.guiBundle.getResourceText("archimedes.open.file.altered.warning.title"),
-							JOptionPane.YES_NO_CANCEL_OPTION);
+			final int option = JOptionPane.showConfirmDialog(
+					null,
+					this.guiBundle.getResourceText(
+							(errors
+									? "archimedes.open.file.altered.warning.with.errors.text"
+									: "archimedes.open.file.altered.warning.text")),
+					this.guiBundle.getResourceText("archimedes.open.file.altered.warning.title"),
+					JOptionPane.YES_NO_CANCEL_OPTION);
 
 			if (option == JOptionPane.YES_OPTION) {
 				if ((this.dateiname.length() == 0) || (this.dateiname.equalsIgnoreCase("unbenannt.ads"))) {
@@ -966,11 +964,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 			try {
 				if (name.endsWith("ads")) {
-					final int option = JOptionPane
-							.showConfirmDialog(null,
-									this.guiBundle.getResourceText("archimedes.save.file.old.format.warning.text"),
-									this.guiBundle.getResourceText("archimedes.save.file.old.format.warning.title"),
-									JOptionPane.YES_NO_OPTION);
+					final int option = JOptionPane.showConfirmDialog(
+							null,
+							this.guiBundle.getResourceText("archimedes.save.file.old.format.warning.text"),
+							this.guiBundle.getResourceText("archimedes.save.file.old.format.warning.title"),
+							JOptionPane.YES_NO_OPTION);
 
 					if (option == JOptionPane.YES_OPTION) {
 						StructuredTextFile stf = this.diagramm.toSTF(DiagramSaveMode.REGULAR);
@@ -985,10 +983,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				} else {
 					final FileWriter fw = new FileWriter(name, false);
 					final BufferedWriter writer = new BufferedWriter(fw);
-					writer
-							.write(new DiagramXMLBuilder()
-									.buildXMLContentForDiagram(this.diagramm,
-											Archimedes.PALETTE.getColors().toArray(new ExtendedColor[0])));
+					writer.write(
+							new DiagramXMLBuilder().buildXMLContentForDiagram(
+									this.diagramm,
+									Archimedes.PALETTE.getColors().toArray(new ExtendedColor[0])));
 					writer.close();
 					fw.close();
 					this.dateiname = name;
@@ -998,11 +996,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			} catch (Exception e) {
 				e.printStackTrace();
 				LOG.error("Error while writing date model to file: " + name);
-				JOptionPane
-						.showMessageDialog(null,
-								this.guiBundle.getResourceText("archimedes.save.file.error.text"),
-								this.guiBundle.getResourceText("archimedes.save.file.error.title"),
-								JOptionPane.YES_OPTION);
+				JOptionPane.showMessageDialog(
+						null,
+						this.guiBundle.getResourceText("archimedes.save.file.error.text"),
+						this.guiBundle.getResourceText("archimedes.save.file.error.title"),
+						JOptionPane.YES_OPTION);
 			}
 
 			this.updateHeadline();
@@ -1110,13 +1108,13 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Datei / Drucken bet&auml;tigt hat.
 	 */
 	public void doDateiDrucken() {
-		new DiagramPrinter()
-				.print(this,
-						this.getInifile(),
-						this.component,
-						this.getInifile().readBool("Print", "PDF", false),
-						this.getInifile().readStr("Print", "Printername", "normal_gray"),
-						this.getInifile().readStr("Print", "Printfilename", "archimedes"));
+		new DiagramPrinter().print(
+				this,
+				this.getInifile(),
+				this.component,
+				this.getInifile().readBool("Print", "PDF", false),
+				this.getInifile().readStr("Print", "Printername", "normal_gray"),
+				this.getInifile().readStr("Print", "Printfilename", "archimedes"));
 	}
 
 	/**
@@ -1141,15 +1139,16 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			final boolean errorsFound = this.isErrorsFound(this.diagramm, false);
 
 			if (this.diagramm.isAltered()) {
-				final int answer = JOptionPane
-						.showConfirmDialog(null,
-								StrUtil
-										.FromHTML("Das Diagramm ist ge&auml;ndert worden!\n"
-												+ (errorsFound ? "DAS MODELL ENTH&Auml;LT FEHLER!\n" : "")
-												+ "M&ouml;chten Sie es " + (errorsFound ? "trotzdem " : "")
-												+ "speichern?"),
-								"Diagramm nicht gespeichert",
-								JOptionPane.YES_NO_CANCEL_OPTION);
+				final int answer = JOptionPane.showConfirmDialog(
+						null,
+						StrUtil.FromHTML(
+								"Das Diagramm ist ge&auml;ndert worden!\n"
+										+ (errorsFound ? "DAS MODELL ENTH&Auml;LT FEHLER!\n" : "")
+										+ "M&ouml;chten Sie es "
+										+ (errorsFound ? "trotzdem " : "")
+										+ "speichern?"),
+						"Diagramm nicht gespeichert",
+						JOptionPane.YES_NO_CANCEL_OPTION);
 
 				if (answer == JOptionPane.YES_OPTION) {
 					this.semSpeichern.V();
@@ -1217,50 +1216,44 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				new JDBCImportManagerConfigurationDialog(connectionData, this.guiBundle);
 		final FrameArchimedes frameArchimedes = this;
 		connectionDialog.setVisible(true);
-		connectionDialog
-				.addEditorFrameListener(
-						new EditorFrameListener<EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame>>() {
-							@Override
-							public void eventFired(
-									final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
-								if (event.getEventType() == EditorFrameEventType.OK) {
-									final Thread t = new Thread(() -> {
-										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 5);
-										try {
-											Diagramm d = (Diagramm) new JDBCImportManager()
-													.importDiagram(connectionData, mrpm::update);
-											if (d != null) {
-												diagramm = d;
-												diagramm.addDataModelListener(frameArchimedes);
-												diagramm.addDiagrammModelListener(frameArchimedes);
-												diagramm.addGUIDiagramModelListener(frameArchimedes);
-												guiObjectCreator.setDiagram(diagramm);
-												component.setView(diagramm.getViews().get(0));
-												component.setDiagram(diagramm);
-												if (fov != null) {
-													fov.setDiagramm(diagramm);
-												}
-												updateViewMenu(viewmenu, diagramm.getViews());
-												diagramm.clearAltered();
-												mrpm.enableCloseButton();
-											}
-										} catch (Exception e) {
-											mrpm.setVisible(false);
-											LOG
-													.error("error detected while importing from JDBC connection: "
-															+ e.getMessage());
-											new ExceptionDialog(
-													e,
-													guiBundle
-															.getResourceText("Exception.ImportModel.text",
-																	e.getMessage()),
-													guiBundle);
+		connectionDialog.addEditorFrameListener(
+				new EditorFrameListener<EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame>>() {
+					@Override
+					public void eventFired(final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
+						if (event.getEventType() == EditorFrameEventType.OK) {
+							final Thread t = new Thread(() -> {
+								ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 5);
+								try {
+									Diagramm d = (Diagramm) new JDBCImportManager()
+											.importDiagram(connectionData, mrpm::update);
+									if (d != null) {
+										diagramm = d;
+										diagramm.addDataModelListener(frameArchimedes);
+										diagramm.addDiagrammModelListener(frameArchimedes);
+										diagramm.addGUIDiagramModelListener(frameArchimedes);
+										guiObjectCreator.setDiagram(diagramm);
+										component.setView(diagramm.getViews().get(0));
+										component.setDiagram(diagramm);
+										if (fov != null) {
+											fov.setDiagramm(diagramm);
 										}
-									});
-									t.start();
+										updateViewMenu(viewmenu, diagramm.getViews());
+										diagramm.clearAltered();
+										mrpm.enableCloseButton();
+									}
+								} catch (Exception e) {
+									mrpm.setVisible(false);
+									LOG.error("error detected while importing from JDBC connection: " + e.getMessage());
+									new ExceptionDialog(
+											e,
+											guiBundle.getResourceText("Exception.ImportModel.text", e.getMessage()),
+											guiBundle);
 								}
-							}
-						});
+							});
+							t.start();
+						}
+					}
+				});
 	}
 
 	/**
@@ -1273,36 +1266,18 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				return;
 			}
 			new File("tmp-db").mkdir();
-			Connection connection = ConnectionManager
-					.GetConnection(new JDBCDataSourceRecord(
-							"org.hsqldb.jdbcDriver",
-							"jdbc:hsqldb:file:tmp-db/updatedb",
-							"sa",
-							""));
+			final Connection connection = ConnectionManager.GetConnection(
+					new JDBCDataSourceRecord("org.h2.Driver", "jdbc:h2:mem:updatedb;MODE=PostgreSQL", "", ""));
 			Database database =
 					DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
 			Liquibase liquibase = new liquibase.Liquibase(
 					fileName,
-					new FileSystemResourceAccessor(
-							new File("/home/ollie/eclipse-workspace/library/src/main/resources/db/change-log")),
+					new FileSystemResourceAccessor(new File("/home/ollie/eclipse-workspace/library/src/main/resources/db/change-log")),
 					database);
 			liquibase.update(new Contexts(), new LabelExpression());
 			liquibase.close();
-			// Der connectionData muss was anderes mit den für den Import hinreichenden Daten werden.
-			// Am besten mit einem Converter damit's kompatibel bleibt.
-			// Da muss dann auch die Connection mit rein (dann klappt's auch mit In-Memory-Datenbank).
-			JDBCImportConnectionData connectionData = new JDBCImportConnectionData()
-					.setAdjustment(Adjustment.LEFT_BY_NAME)
-					.setConnection(new DatabaseConnection(
-							"IN-MEMORY",
-							"org.hsqldb.jdbcDriver",
-							"jdbc:hsqldb:file:tmp-db/updatedb",
-							"sa",
-							DBExecMode.HSQL,
-							false,
-							false,
-							false,
-							""))
+			JDBCImportData importData = new JDBCImportData().setAdjustment(Adjustment.LEFT_BY_NAME)
+					.setConnection(connection)
 					.setIgnoreIndices(false)
 					.setImportOnlyTablePatterns("*")
 					.setPassword("")
@@ -1311,7 +1286,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			final Thread t = new Thread(() -> {
 				ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 5);
 				try {
-					Diagramm d = (Diagramm) new JDBCImportManager().importDiagram(connectionData, mrpm::update);
+					Diagramm d = (Diagramm) new JDBCImportManager().importDiagram(importData, mrpm::update);
 					if (d != null) {
 						diagramm = d;
 						diagramm.addDataModelListener(frameArchimedes);
@@ -1334,17 +1309,22 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 							e,
 							guiBundle.getResourceText("Exception.ImportModel.text", e.getMessage()),
 							guiBundle);
+				} finally {
+					if (connection != null) {
+						try {
+							connection.close();
+						} catch (SQLException e) {
+							new ExceptionDialog(
+									e,
+									guiBundle.getResourceText("Exception.ImportModel.text", e.getMessage()),
+									guiBundle);
+						}
+					}
 				}
 			});
 			t.start();
 		} catch (Exception e) {
 			new ExceptionDialog(e, guiBundle.getResourceText("Exception.ImportModel.text", e.getMessage()), guiBundle);
-		} finally {
-			new File("tmp-db/updatedb.tmp").delete();
-			new File("tmp-db/updatedb.log").delete();
-			new File("tmp-db/updatedb.properties").delete();
-			new File("tmp-db/updatedb.script").delete();
-			new File("tmp-db").delete();
 		}
 	}
 
@@ -1371,72 +1351,65 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		JDBCImportManagerConfigurationDialog connectionDialog =
 				new JDBCImportManagerConfigurationDialog(connectionData, this.guiBundle);
 		connectionDialog.setVisible(true);
-		connectionDialog
-				.addEditorFrameListener(
-						new EditorFrameListener<EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame>>() {
-							@Override
-							public void eventFired(
-									final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
-								if (event.getEventType() == EditorFrameEventType.OK) {
-									final Thread t = new Thread(() -> {
-										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 6);
-										try {
-											Diagramm d = (Diagramm) new JDBCImportManager()
-													.importDiagram(connectionData, mrpm::update);
-											if (d != null) {
-												UpdateReport report =
-														new ModelUpdater(diagramm, d, Archimedes.Factory).update();
-												Counter counter = new Counter(0);
-												int max = report.getActions().size();
-												report
-														.getActions()
-														.forEach(action -> mrpm
-																.update(new ModelReaderEvent(
+		connectionDialog.addEditorFrameListener(
+				new EditorFrameListener<EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame>>() {
+					@Override
+					public void eventFired(final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
+						if (event.getEventType() == EditorFrameEventType.OK) {
+							final Thread t = new Thread(() -> {
+								ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 6);
+								try {
+									Diagramm d = (Diagramm) new JDBCImportManager()
+											.importDiagram(connectionData, mrpm::update);
+									if (d != null) {
+										UpdateReport report =
+												new ModelUpdater(diagramm, d, Archimedes.Factory).update();
+										Counter counter = new Counter(0);
+										int max = report.getActions().size();
+										report.getActions()
+												.forEach(
+														action -> mrpm.update(
+																new ModelReaderEvent(
 																		counter.inc(),
 																		max,
 																		5,
 																		ModelReaderEventType.MESSAGE,
 																		getActionString(action))));
-												mrpm.update(new ModelReaderEvent(max, max, 6, null, null));
-												mrpm.enableCloseButton();
-												if (report
-														.getActions()
-														.stream()
-														.anyMatch(action -> action
+										mrpm.update(new ModelReaderEvent(max, max, 6, null, null));
+										mrpm.enableCloseButton();
+										if (report.getActions()
+												.stream()
+												.anyMatch(
+														action -> action
 																.getStatus() == UpdateReportAction.Status.DONE)) {
-													diagramm.raiseAltered();
-												}
-												component.doRepaint();
-											}
-										} catch (Exception e) {
-											mrpm.setVisible(false);
-											LOG
-													.error("error detected while importing from JDBC connection: "
-															+ e.getMessage());
-											new ExceptionDialog(
-													e,
-													guiBundle
-															.getResourceText("Exception.ImportModel.text",
-																	e.getMessage()),
-													guiBundle);
+											diagramm.raiseAltered();
 										}
-									});
-									t.start();
+										component.doRepaint();
+									}
+								} catch (Exception e) {
+									mrpm.setVisible(false);
+									LOG.error("error detected while importing from JDBC connection: " + e.getMessage());
+									new ExceptionDialog(
+											e,
+											guiBundle.getResourceText("Exception.ImportModel.text", e.getMessage()),
+											guiBundle);
 								}
-							}
-						});
+							});
+							t.start();
+						}
+					}
+				});
 	}
 
 	private String getActionString(UpdateReportAction action) {
-		return String
-				.format("%3s - %s",
-						getStatusString(action.getStatus()),
-						guiBundle
-								.getResourceText(
-										action.getType() == null
-												? action.getMessage()
-												: "ModelUpdater.message." + action.getType() + ".text",
-										(Object[]) action.getValues()));
+		return String.format(
+				"%3s - %s",
+				getStatusString(action.getStatus()),
+				guiBundle.getResourceText(
+						action.getType() == null
+								? action.getMessage()
+								: "ModelUpdater.message." + action.getType() + ".text",
+						(Object[]) action.getValues()));
 	}
 
 	private String getStatusString(UpdateReportAction.Status status) {
@@ -1464,11 +1437,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		final Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
 		cb.setContents(new StringSelection(versions), null);
 		LOG.info("sent versions to clipboard");
-		JOptionPane
-				.showMessageDialog(this,
-						this.guiBundle.getResourceText("versions.copiedToClipboard.message"),
-						this.guiBundle.getResourceText("versions.copiedToClipboard.title"),
-						JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(
+				this,
+				this.guiBundle.getResourceText("versions.copiedToClipboard.message"),
+				this.guiBundle.getResourceText("versions.copiedToClipboard.title"),
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	/**
@@ -1643,13 +1616,15 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				for (final TableModel tm : tables) {
 					for (final ColumnModel cm : tm.getColumns()) {
 						if (cm.getDomain() == obj) {
-							JOptionPane
-									.showMessageDialog(null,
-											StrUtil
-													.FromHTML("Die Domain " + "wird durch " + cm.getFullName()
-															+ " genutzt!\n" + "L&ouml;schen nicht m&ouml;glich!"),
-											"Referenzproblem!",
-											JOptionPane.YES_OPTION);
+							JOptionPane.showMessageDialog(
+									null,
+									StrUtil.FromHTML(
+											"Die Domain " + "wird durch "
+													+ cm.getFullName()
+													+ " genutzt!\n"
+													+ "L&ouml;schen nicht m&ouml;glich!"),
+									"Referenzproblem!",
+									JOptionPane.YES_OPTION);
 							LOG.warn("Domain wird benutzt durch " + cm.getFullName());
 
 							return false;
@@ -1685,14 +1660,13 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				for (final TableModel tm : dm.getTables()) {
 					for (final ColumnModel cm : tm.getColumns()) {
 						if (cm.getSequenceForKeyGeneration() == obj) {
-							JOptionPane
-									.showMessageDialog(null,
-											guiBundle
-													.getResourceText("sequences.maintenance.permit.delete.text")
-													.replace("$NAME$", ((SequenceModel) obj).getName())
-													.replace("$COLUMNNAME$", cm.getFullName()),
-											guiBundle.getResourceText("sequences.maintenance.permit.delete.title"),
-											JOptionPane.YES_OPTION);
+							JOptionPane.showMessageDialog(
+									null,
+									guiBundle.getResourceText("sequences.maintenance.permit.delete.text")
+											.replace("$NAME$", ((SequenceModel) obj).getName())
+											.replace("$COLUMNNAME$", cm.getFullName()),
+									guiBundle.getResourceText("sequences.maintenance.permit.delete.title"),
+									JOptionPane.YES_OPTION);
 
 							return false;
 						}
@@ -1738,13 +1712,15 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				for (final TableModel tm : dm.getTables()) {
 					for (final StereotypeModel stm : tm.getStereotypes()) {
 						if (stm == obj) {
-							JOptionPane
-									.showMessageDialog(null,
-											StrUtil
-													.FromHTML("Die " + "Stereotype wird durch " + tm.getName()
-															+ " genutzt!\n" + "L&ouml;schen nicht m&ouml;glich!"),
-											"Referenzproblem!",
-											JOptionPane.YES_OPTION);
+							JOptionPane.showMessageDialog(
+									null,
+									StrUtil.FromHTML(
+											"Die " + "Stereotype wird durch "
+													+ tm.getName()
+													+ " genutzt!\n"
+													+ "L&ouml;schen nicht m&ouml;glich!"),
+									"Referenzproblem!",
+									JOptionPane.YES_OPTION);
 							LOG.warn("Stereotype wird benutzt durch " + tm.getName());
 
 							return false;
@@ -1876,9 +1852,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * @changed OLI 16.12.2015 - Added.
 	 */
 	public void doBearbeitenUpdateScriptErstellenNeu() {
-		final DatabaseConnection dc = this.diagramm
-				.getDatabaseConnection(this
-						.getInifile()
+		final DatabaseConnection dc = this.diagramm.getDatabaseConnection(
+				this.getInifile()
 						.readStr("Database-Connections", "Update-Preselection-" + this.diagramm.getName(), null));
 		final DatabaseConnectionRecord dcr =
 				new DatabaseConnectionRecord(dc, this.diagramm.getDatabaseConnections(), "");
@@ -1890,10 +1865,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					try {
 						final DatabaseConnectionRecord dcr = event.getEditedObject();
 						if ((dcr != null) && (dcr.getDatabaseConnection() != null)) {
-							getInifile()
-									.writeStr("Database-Connections",
-											"Update-Preselection-" + diagramm.getName(),
-											dcr.getDatabaseConnection().getName());
+							getInifile().writeStr(
+									"Database-Connections",
+									"Update-Preselection-" + diagramm.getName(),
+									dcr.getDatabaseConnection().getName());
 						}
 						createSQLUpdateScript(dcr);
 					} catch (Exception e) {
@@ -2036,14 +2011,15 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						}
 						factoryCount.inc();
 						if (progressionFrame != null) {
-							progressionFrame
-									.updateFactory(factoryCount.getValue(),
-											null,
-											getFactoryName(cf),
-											factoryCount.getValue() <= codeFactories.size() //
-													? "\n\n" + cf.getClass().getSimpleName() + " finished.\n"
-															+ "--------------------------------------------------------------------------------\n\n\n"
-													: null);
+							progressionFrame.updateFactory(
+									factoryCount.getValue(),
+									null,
+									getFactoryName(cf),
+									factoryCount.getValue() <= codeFactories.size() //
+											? "\n\n" + cf.getClass().getSimpleName()
+													+ " finished.\n"
+													+ "--------------------------------------------------------------------------------\n\n\n"
+											: null);
 						}
 					});
 					t.start();
@@ -2084,10 +2060,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		CodeGenerator cg = null;
 		try {
 			if ((cfcn == null) || (cfcn.length() == 0)) {
-				cfcn = this.ini
-						.readStr("CodeGenerator",
-								"Class",
-								System.getProperty("archimedes.default.codefactory.class", "CODEFACTORYCLASS"));
+				cfcn = this.ini.readStr(
+						"CodeGenerator",
+						"Class",
+						System.getProperty("archimedes.default.codefactory.class", "CODEFACTORYCLASS"));
 			}
 			if (cfcn.startsWith("gengen:")) {
 				try {
@@ -2110,8 +2086,9 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			cf.setGUIBundle(getGUIBundle(this.guiBundle, cf.getResourceBundleNames()));
 			cf.setModelCheckerMessageListFrameListeners(this);
 		} catch (Exception e) {
-			LOG
-					.error("Error while creating code generator/factory for class: " + cfcn + ", exception: "
+			LOG.error(
+					"Error while creating code generator/factory for class: " + cfcn
+							+ ", exception: "
 							+ e.getMessage());
 			e.printStackTrace();
 		}
@@ -2153,8 +2130,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * Generiert eine neue Kopfzeile f&uuml;r das Hauptfenster der Anwendung.
 	 */
 	public void updateHeadline() {
-		this
-				.setTitle("Archimedes (Version " + Archimedes.GetVersion() + ")  -  " + this.dateiname
+		this.setTitle(
+				"Archimedes (Version " + Archimedes.GetVersion()
+						+ ")  -  "
+						+ this.dateiname
 						+ (((this.diagramm != null) && this.diagramm.isAltered())
 								? StrUtil.FromHTML(" (Ge&auml;ndert)")
 								: ""));
@@ -2261,15 +2240,19 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			}
 
 			for (int i = 0, leni = svtn0.size(); i < leni; i++) {
-				LOG
-						.info("\n" + svtn0.elementAt(i) + " (mem " + Runtime.getRuntime().freeMemory() + " of "
-								+ Runtime.getRuntime().totalMemory() + ")");
+				LOG.info(
+						"\n" + svtn0.elementAt(i)
+								+ " (mem "
+								+ Runtime.getRuntime().freeMemory()
+								+ " of "
+								+ Runtime.getRuntime().totalMemory()
+								+ ")");
 
 				for (int j = 0, lenj = svtn0.size(); j < lenj; j++) {
 					try {
-						rs = c
-								.getMetaData()
-								.getCrossReference(null,
+						rs = c.getMetaData()
+								.getCrossReference(
+										null,
 										null,
 										svtn0.elementAt(i).toString(),
 										null,
@@ -2286,9 +2269,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						}
 
 						DBExec.CloseQuery(rs);
-						LOG
-								.info("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
-										+ StrUtil.PumpUp("" + --max, " ", 10, Direction.LEFT)
+						LOG.info(
+								"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" + StrUtil.PumpUp("" + --max, " ", 10, Direction.LEFT)
 										+ StrUtil.PumpUp("" + j, " ", 5, Direction.LEFT));
 
 						if (Long.getLong("archimedes.gui.FrameArchimedes.import.delay", 250) > 0) {
@@ -2424,10 +2406,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					final TabellenModel tm = (TabellenModel) values.elementAt(i);
 
 					if (!tm.getViews().contains(component.getView())) {
-						tm
-								.setXY(component.getView(),
-										tm.getX(diagramm.getViews().get(0)),
-										tm.getY(diagramm.getViews().get(0)));
+						tm.setXY(
+								component.getView(),
+								tm.getX(diagramm.getViews().get(0)),
+								tm.getY(diagramm.getViews().get(0)));
 					}
 
 					diagramm.raiseAltered();
@@ -2461,8 +2443,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 			if (bcfe.getEventType() == EditorFrameEventType.OK) {
 				final BaseConfiguration bc = bcfe.getEditedObject();
-				final String propfn = corentx.io.FileUtil
-						.completePath(System.getProperty("user.home"))
+				final String propfn = corentx.io.FileUtil.completePath(System.getProperty("user.home"))
 						.concat(".archimedes.properties");
 				System.setProperty("archimedes.user.company", bc.getCompany());
 				System.getProperty("archimedes.user.database.name", bc.getDBName());
@@ -2550,18 +2531,16 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		if (!(component.getView() instanceof MainViewModel)) {
 			final String[] options = new String[] { "View", "Modell" };
 
-			if (options[JOptionPane
-					.showOptionDialog(null,
-							StrUtil
-									.FromHTML(
-											"Soll die " + "Tabelle nur aus dem View\noder aus dem Modell gel&ouml;scht "
-													+ "werden?"),
-							StrUtil.FromHTML("R&uuml;ckfrage L&ouml;schen"),
-							JOptionPane.DEFAULT_OPTION,
-							JOptionPane.QUESTION_MESSAGE,
-							null,
-							options,
-							options[0])].equals("View")) {
+			if (options[JOptionPane.showOptionDialog(
+					null,
+					StrUtil.FromHTML(
+							"Soll die " + "Tabelle nur aus dem View\noder aus dem Modell gel&ouml;scht " + "werden?"),
+					StrUtil.FromHTML("R&uuml;ckfrage L&ouml;schen"),
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.QUESTION_MESSAGE,
+					null,
+					options,
+					options[0])].equals("View")) {
 				tab.removeFromView((ViewModel) component.getView());
 				component.doRepaint();
 
@@ -2570,13 +2549,15 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		}
 
 		if (rcms.length > 0) {
-			JOptionPane
-					.showMessageDialog(null,
-							StrUtil
-									.FromHTML("Die Tabellen wird " + "durch " + rcms[0].getFullName()
-											+ " referenziert!\n" + "L&ouml;schen nicht m&ouml;glich!"),
-							"Referenzproblem!",
-							JOptionPane.YES_OPTION);
+			JOptionPane.showMessageDialog(
+					null,
+					StrUtil.FromHTML(
+							"Die Tabellen wird " + "durch "
+									+ rcms[0].getFullName()
+									+ " referenziert!\n"
+									+ "L&ouml;schen nicht m&ouml;glich!"),
+					"Referenzproblem!",
+					JOptionPane.YES_OPTION);
 			LOG.warn("Wird Referenziert durch " + rcms[0].getFullName());
 
 			return;
