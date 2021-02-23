@@ -22,6 +22,7 @@ import de.ollie.dbcomp.comparator.model.actions.AddPrimaryKeyCRO;
 import de.ollie.dbcomp.comparator.model.actions.CreateTableChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropColumnChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropForeignKeyCRO;
+import de.ollie.dbcomp.comparator.model.actions.DropPrimaryKeyCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropTableChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyDataTypeCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyNullableCRO;
@@ -101,9 +102,26 @@ public class ModelUpdater {
 			} else if (cro instanceof AddPrimaryKeyCRO) {
 				AddPrimaryKeyCRO addCRO = (AddPrimaryKeyCRO) cro;
 				TableModel table = toUpdate.getTableByName(addCRO.getTableName());
+				System.out.print("ADD Before: " + table + " - ");
 				Arrays
 						.asList(table.getColumns())
-						.forEach(column -> column.setPrimaryKey(addCRO.getPkMemberNames().contains(column.getName())));
+						.forEach(
+								column -> System.out
+										.println(
+												column.getFullName() + "(" + column.isPrimaryKey() + ") -> "
+														+ addCRO.getPkMemberNames().contains(column.getName())));
+				Arrays.asList(table.getColumns()).forEach(column -> {
+					System.out.println("#" + addCRO.getPkMemberNames().contains(column.getName()));
+					column.setPrimaryKey(addCRO.getPkMemberNames().contains(column.getName()));
+					if (addCRO.getPkMemberNames().contains(column.getName())) {
+						column.setNotNull(false);
+					}
+				});
+				System.out.print("After: " + table + " - ");
+				Arrays
+						.asList(table.getColumns())
+						.forEach(
+								column -> System.out.println(column.getFullName() + "(" + column.isPrimaryKey() + ")"));
 				action.setType(Type.ADD_PRIMARY_KEY).setValues(addCRO.getTableName(), addCRO.getPkMemberNames());
 			} else if (cro instanceof CreateTableChangeActionCRO) {
 				CreateTableChangeActionCRO createCRO = (CreateTableChangeActionCRO) cro;
@@ -118,7 +136,7 @@ public class ModelUpdater {
 											TYPE_CONVERTER.getPrecision(column.getSqlType()),
 											toUpdate),
 									createCRO.isPrimaryKeyMember(column.getName()));
-					newColumn.setNotNull(!column.isNullable());
+					newColumn.setNotNull(createCRO.isPrimaryKeyMember(column.getName()) ? true : !column.isNullable());
 					newColumn.setPanel(table.getPanels()[0]);
 					table.addColumn(newColumn);
 				});
@@ -146,6 +164,31 @@ public class ModelUpdater {
 				action
 						.setType(Type.DROP_FOREIGN_KEY)
 						.setValues(((DropForeignKeyCRO) cro).getTableName(), ((DropForeignKeyCRO) cro).getMembers());
+			} else if (cro instanceof DropPrimaryKeyCRO) {
+				DropPrimaryKeyCRO dropCRO = (DropPrimaryKeyCRO) cro;
+				TableModel table = toUpdate.getTableByName(dropCRO.getTableName());
+				System.out.print("DROP Before: " + table + " - ");
+				Arrays
+						.asList(table.getColumns())
+						.forEach(
+								column -> System.out
+										.println(
+												column.getFullName() + "(" + column.isPrimaryKey() + ") -> "
+														+ dropCRO.getPkMemberNames().contains(column.getName())));
+				Arrays.asList(table.getColumns()).forEach(column -> {
+					System.out.println("#" + dropCRO.getPkMemberNames().contains(column.getName()));
+					column
+							.setPrimaryKey(
+									dropCRO.getPkMemberNames().contains(column.getName())
+											? false
+											: column.isPrimaryKey());
+				});
+				System.out.print("After: " + table + " - ");
+				Arrays
+						.asList(table.getColumns())
+						.forEach(
+								column -> System.out.println(column.getFullName() + "(" + column.isPrimaryKey() + ")"));
+				action.setType(Type.DROP_PRIMARY_KEY).setValues(dropCRO.getTableName(), dropCRO.getPkMemberNames());
 			} else if (cro instanceof ModifyNullableCRO) {
 				TableModel table = toUpdate.getTableByName(((ModifyNullableCRO) cro).getTableName());
 				ColumnModel column = table.getColumnByName(((ModifyNullableCRO) cro).getColumnName());

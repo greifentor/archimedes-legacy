@@ -276,7 +276,7 @@ public class ModelUpdaterTest {
 	}
 
 	@Test
-	void passedModelWithOnePrimaryKeyMoreThanSource_ReturnsAnUpdateReportWithMessageToAdd() {
+	void passedModelWithOnePrimaryKeyMoreThanSource_ReturnsAnUpdateReportWithMessageToDrop() {
 		// Prepare
 		UpdateReport expected = new UpdateReport()
 				.addUpdateReportAction(
@@ -286,16 +286,18 @@ public class ModelUpdaterTest {
 								.setType(Type.ADD_PRIMARY_KEY)
 								.setValues("Account", "[Id]"));
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
-		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-PK-Dropped.xml");
+		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
+		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-PK-Dropped.xml");
 		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
 		// Run
+		assertFalse(dataModel0.getTableByName("Account").getColumnByName("Id").isPrimaryKey());
 		UpdateReport returned = unitUnderTest.update();
 		// Check
 		assertEquals(expected, returned);
 		assertNotNull(dataModel0.getTableByName("Account"));
 		assertNotNull(dataModel0.getTableByName("Account").getColumnByName("Id"));
 		assertTrue(dataModel0.getTableByName("Account").getColumnByName("Id").isPrimaryKey());
+		System.out.println("-----");
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}
 
