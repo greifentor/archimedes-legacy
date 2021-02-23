@@ -297,7 +297,6 @@ public class ModelUpdaterTest {
 		assertNotNull(dataModel0.getTableByName("Account"));
 		assertNotNull(dataModel0.getTableByName("Account").getColumnByName("Id"));
 		assertTrue(dataModel0.getTableByName("Account").getColumnByName("Id").isPrimaryKey());
-		System.out.println("-----");
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}
 
