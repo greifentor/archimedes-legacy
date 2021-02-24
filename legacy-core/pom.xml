@@ -154,6 +154,11 @@
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
+			<groupId>de.ollie</groupId>
+			<artifactId>dm-comp-liquibase</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 			<version>4.3.1</version>

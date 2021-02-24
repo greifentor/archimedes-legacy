@@ -86,6 +86,7 @@ import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.CodeFactoryProgressionFrame;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.legacy.app.ApplicationUtil;
+import archimedes.legacy.exporter.LiquibaseScriptCreator;
 import archimedes.legacy.gui.codepath.CodePathProvider;
 import archimedes.legacy.gui.comparision.DataModelComparison;
 import archimedes.legacy.gui.configuration.BaseConfiguration;
@@ -394,6 +395,9 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		menu.add(this.createMenuItem("menu.import.item.import.liquibase", "xml-file", e -> doImportFromLiquibase()));
 		menu.add(new JSeparator());
 		menu.add(this.createMenuItem("menu.import.item.update.jdbc", "database", e -> doUpdateFromJDBC()));
+		menuBar.add(menu);
+		menu = this.createMenu("menu.export", "export");
+		menu.add(this.createMenuItem("menu.export.item.export.liquibase", "xml-file", e -> doExportToLiquibase()));
 		menuBar.add(menu);
 		menu = this.createMenu("menu.new", "filenew");
 		this.menuitemneutabelle = this.createMenuItem("menu.new.item.table", "tablenew", e -> doNeuTabelle(false));
@@ -1156,6 +1160,15 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void doUpdateFromJDBC() {
 		new JDBCModelUpdater().updateModel(diagramm, guiBundle, this, component);
+	}
+
+	/**
+	 * Creates a Liquibase script to update a database based on the current diagram.
+	 * 
+	 * @changed OLI 24.02.2021 - Added.
+	 */
+	public void doExportToLiquibase() {
+		new LiquibaseScriptCreator().createScript(diagramm, guiBundle);
 	}
 
 	/**
