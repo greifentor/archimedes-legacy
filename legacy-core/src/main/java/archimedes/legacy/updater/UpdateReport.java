@@ -22,4 +22,8 @@ public class UpdateReport {
 		return this;
 	}
 
+	public boolean hasAtLeastOneActionInStatus(UpdateReportAction.Status status) {
+		return actions.stream().anyMatch(action -> action.getStatus() == status);
+	}
+
 }

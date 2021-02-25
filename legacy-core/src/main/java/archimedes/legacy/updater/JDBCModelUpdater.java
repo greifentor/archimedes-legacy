@@ -47,53 +47,53 @@ public class JDBCModelUpdater {
 								if (event.getEventType() == EditorFrameEventType.OK) {
 									final Thread t = new Thread(() -> {
 										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 6);
-										try {
-											Diagramm d = (Diagramm) new JDBCImportManager()
-													.importDiagram(connectionData, mrpm::update);
-											if (d != null) {
-												UpdateReport report =
-														new ModelUpdater(diagramm, d, Archimedes.Factory).update();
-												Counter counter = new Counter(0);
-												int max = report.getActions().size();
-												report
-														.getActions()
-														.forEach(
-																action -> mrpm
-																		.update(
-																				new ModelReaderEvent(
-																						counter.inc(),
-																						max,
-																						5,
-																						ModelReaderEventType.MESSAGE,
-																						getActionString(
-																								action,
-																								guiBundle))));
-												mrpm.update(new ModelReaderEvent(max, max, 6, null, null));
-												mrpm.enableCloseButton();
-												if (report
-														.getActions()
-														.stream()
-														.anyMatch(
-																action -> action
-																		.getStatus() == UpdateReportAction.Status.DONE)) {
-													diagramm.raiseAltered();
+										UpdateReport report = null;
+										do {
+											try {
+												Diagramm d = (Diagramm) new JDBCImportManager()
+														.importDiagram(connectionData, mrpm::update);
+												if (d != null) {
+													report = new ModelUpdater(diagramm, d, Archimedes.Factory).update();
+													Counter counter = new Counter(0);
+													int max = report.getActions().size();
+													report
+															.getActions()
+															.forEach(
+																	action -> mrpm
+																			.update(
+																					new ModelReaderEvent(
+																							counter.inc(),
+																							max,
+																							5,
+																							ModelReaderEventType.MESSAGE,
+																							getActionString(
+																									action,
+																									guiBundle))));
+													mrpm.update(new ModelReaderEvent(max, max, 6, null, null));
+													mrpm.enableCloseButton();
+													if (report
+															.hasAtLeastOneActionInStatus(
+																	UpdateReportAction.Status.DONE)) {
+														diagramm.raiseAltered();
+													}
+													component.doRepaint();
 												}
-												component.doRepaint();
+											} catch (Exception e) {
+												mrpm.setVisible(false);
+												LOG
+														.error(
+																"error detected while importing from JDBC connection: "
+																		+ e.getMessage());
+												new ExceptionDialog(
+														e,
+														guiBundle
+																.getResourceText(
+																		"Exception.ImportModel.text",
+																		e.getMessage()),
+														guiBundle);
 											}
-										} catch (Exception e) {
-											mrpm.setVisible(false);
-											LOG
-													.error(
-															"error detected while importing from JDBC connection: "
-																	+ e.getMessage());
-											new ExceptionDialog(
-													e,
-													guiBundle
-															.getResourceText(
-																	"Exception.ImportModel.text",
-																	e.getMessage()),
-													guiBundle);
-										}
+										} while ((report != null)
+												&& report.hasAtLeastOneActionInStatus(UpdateReportAction.Status.DONE));
 									});
 									t.start();
 								}

@@ -23,7 +23,12 @@ public class JDBCImportManager {
 	 */
 	public DiagrammModel importDiagram(JDBCImportConnectionData connectionData, ModelReaderListener listener)
 			throws Exception {
-		return importDiagram(getImportData(connectionData), listener);
+		JDBCImportData importData = getImportData(connectionData);
+		DiagrammModel model = importDiagram(importData, listener);
+		if (importData.getConnection() != null) {
+			importData.getConnection().close();
+		}
+		return model;
 	}
 
 	private JDBCImportData getImportData(JDBCImportConnectionData connectionData) throws Exception {
@@ -34,7 +39,8 @@ public class JDBCImportManager {
 				connectionData.getConnection().getUserName(),
 				connectionData.getPassword());
 		Connection connection = ConnectionManager.GetConnection(dsr);
-		return new JDBCImportData().setAdjustment(connectionData.getAdjustment())
+		return new JDBCImportData()
+				.setAdjustment(connectionData.getAdjustment())
 				.setConnection(connection)
 				.setIgnoreIndices(connectionData.isIgnoreIndices())
 				.setIgnoreTablePatterns(connectionData.getIgnoreTablePatterns())
