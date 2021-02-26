@@ -41,7 +41,7 @@ public class JDBCModelReader implements ModelReader {
 	private DBObjectFactory factory;
 	private DBTypeConverter typeConverter;
 	private Connection connection;
-	private String schemeName;
+	private String schemePattern;
 	private boolean ignoreIndices;
 	private String[] ignoreTablePatterns;
 	private String[] importOnlyTablePatterns;
@@ -53,8 +53,8 @@ public class JDBCModelReader implements ModelReader {
 	 * @param factory                 An object factory implementation to create the DB objects.
 	 * @param typeConverter           A converter for database types.
 	 * @param connection              The connection whose data model should be read.
-	 * @param schemeName              The name of the scheme whose data are to read (pass "null" to ignore scheme and
-	 *                                load all tables).
+	 * @param schemePattern           The pattern of the scheme names whose data are to read (pass "null" to ignore
+	 *                                scheme and load all tables).
 	 * @param ignoreIndices           Set this flag to ignore indices while import.
 	 * @param ignoreTablePatterns     Patterns of table names which should be returned.
 	 * @param importOnlyTablePatterns Patterns of table names which are to import if the table name matches the at least
@@ -62,15 +62,21 @@ public class JDBCModelReader implements ModelReader {
 	 *                                (set "*" if all tables are to import).
 	 * @throws IllegalArgumentException Passing null value.
 	 */
-	public JDBCModelReader(DBObjectFactory factory, DBTypeConverter typeConverter, Connection connection,
-			String schemeName, boolean ignoreIndices, String ignoreTablePatterns, String importOnlyTablePatterns) {
+	public JDBCModelReader(
+			DBObjectFactory factory,
+			DBTypeConverter typeConverter,
+			Connection connection,
+			String schemePattern,
+			boolean ignoreIndices,
+			String ignoreTablePatterns,
+			String importOnlyTablePatterns) {
 		super();
 		this.connection = connection;
 		this.factory = factory;
 		this.ignoreIndices = ignoreIndices;
 		this.ignoreTablePatterns = getPatterns(ignoreTablePatterns);
 		this.importOnlyTablePatterns = getPatterns(importOnlyTablePatterns);
-		this.schemeName = schemeName;
+		this.schemePattern = schemePattern;
 		this.typeConverter = typeConverter;
 	}
 
@@ -101,11 +107,24 @@ public class JDBCModelReader implements ModelReader {
 
 	@Override
 	public DatabaseSO readModel() throws Exception {
-		SchemeSO scheme = this.factory.createScheme(this.schemeName, new ArrayList<>());
 		DatabaseMetaData dbmd = this.connection.getMetaData();
-		addTables(dbmd, scheme);
-		List<SequenceSO> sequences = getSequences(dbmd);
-		return new DatabaseSO().setName("database").addSchemes(scheme);
+		SchemeSO[] schemes = getSchemes(dbmd, this.schemePattern);
+		for (SchemeSO scheme : schemes) {
+			addTables(dbmd, scheme);
+			List<SequenceSO> sequences = getSequences(dbmd);
+		}
+		return new DatabaseSO().setName("database").addSchemes(schemes);
+	}
+
+	private SchemeSO[] getSchemes(DatabaseMetaData dbmd, String schemePattern) throws SQLException {
+		List<SchemeSO> schemes = new ArrayList<>();
+		ResultSet rs = dbmd.getSchemas(null, schemePattern);
+		while (rs.next()) {
+			String schemeName = rs.getString("TABLE_SCHEM");
+			schemes.add(this.factory.createScheme(schemeName, new ArrayList<>()));
+		}
+		rs.close();
+		return schemes.toArray(new SchemeSO[schemes.size()]);
 	}
 
 	private void addTables(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {
@@ -114,14 +133,14 @@ public class JDBCModelReader implements ModelReader {
 		loadPrimaryKeys(dbmd, scheme);
 		loadForeignKeys(dbmd, scheme);
 		if (!this.ignoreIndices) {
-			loadIndices(dbmd, scheme.getTables());
+			loadIndices(dbmd, scheme.getTables(), scheme);
 		} else {
 			fireModelReaderEvent(new ModelReaderEvent(1, 1, 5, ModelReaderEventType.INDEX_IMPORT_IGNORED, ""));
 		}
 	}
 
 	private void loadTables(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {
-		ResultSet rs = dbmd.getTables(null, this.schemeName, "%", new String[] { "TABLE" });
+		ResultSet rs = dbmd.getTables(null, scheme.getName(), "%", new String[] { "TABLE" });
 		List<String> tableNames = new ArrayList<>();
 		while (rs.next()) {
 			String tableName = rs.getString("TABLE_NAME");
@@ -131,8 +150,13 @@ public class JDBCModelReader implements ModelReader {
 		int current = 0;
 		for (String tableName : tableNames) {
 			if (!isMatchingImportOnlyPattern(tableName)) {
-				fireModelReaderEvent(new ModelReaderEvent(current, max, 1,
-						ModelReaderEventType.IMPORT_ONLY_PATTERN_NOT_MATCHING, tableName));
+				fireModelReaderEvent(
+						new ModelReaderEvent(
+								current,
+								max,
+								1,
+								ModelReaderEventType.IMPORT_ONLY_PATTERN_NOT_MATCHING,
+								tableName));
 				continue;
 			}
 			if (isMatchingIgnorePattern(tableName)) {
@@ -177,7 +201,7 @@ public class JDBCModelReader implements ModelReader {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			ResultSet rs = dbmd.getColumns(null, this.schemeName, table.getName(), "%");
+			ResultSet rs = dbmd.getColumns(null, scheme.getName(), table.getName(), "%");
 			while (rs.next()) {
 				String columnName = rs.getString("COLUMN_NAME");
 				String typeName = rs.getString("TYPE_NAME");
@@ -194,13 +218,20 @@ public class JDBCModelReader implements ModelReader {
 					decimalDigits = rs.getInt("DECIMAL_DIGITS");
 				}
 				try {
-					table.addColumns(this.factory.createColumn(columnName,
-							this.typeConverter.convert(dataType, columnSize, decimalDigits), nullable));
+					table
+							.addColumns(
+									this.factory
+											.createColumn(
+													columnName,
+													this.typeConverter.convert(dataType, columnSize, decimalDigits),
+													nullable));
 				} catch (Exception e) {
-					log.error(
-							"Problems while reading column '" + rs.getString("TABLE_SCHEM") + "." + table.getName()
-									+ "." + columnName + "' (" + typeName + " {" + dataType + "}): " + e.getMessage(),
-							e);
+					log
+							.error(
+									"Problems while reading column '" + rs.getString("TABLE_SCHEM") + "."
+											+ table.getName() + "." + columnName + "' (" + typeName + " {" + dataType
+											+ "}): " + e.getMessage(),
+									e);
 				}
 			}
 			rs.close();
@@ -214,7 +245,7 @@ public class JDBCModelReader implements ModelReader {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			ResultSet rs = dbmd.getPrimaryKeys(null, this.schemeName, table.getName());
+			ResultSet rs = dbmd.getPrimaryKeys(null, scheme.getName(), table.getName());
 			while (rs.next()) {
 				String columnName = rs.getString("COLUMN_NAME");
 				try {
@@ -236,7 +267,7 @@ public class JDBCModelReader implements ModelReader {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			ResultSet rs = dbmd.getImportedKeys(null, this.schemeName, table.getName());
+			ResultSet rs = dbmd.getImportedKeys(null, scheme.getName(), table.getName());
 			while (rs.next()) {
 				try {
 					String fkName = rs.getString("FK_NAME");
@@ -248,15 +279,29 @@ public class JDBCModelReader implements ModelReader {
 						log.info("FK: " + fk);
 					}, () -> {
 						ForeignKeySO fk = new ForeignKeySO().setName(fkName);
-						TableSO referencedTable = scheme.getTableByName(pkTableName)
+						TableSO referencedTable = scheme
+								.getTableByName(pkTableName)
 								.orElseThrow(() -> new TableNotFoundException(pkTableName));
-						TableSO referencingTable = scheme.getTableByName(fkTableName)
+						TableSO referencingTable = scheme
+								.getTableByName(fkTableName)
 								.orElseThrow(() -> new TableNotFoundException(fkTableName));
-						fk.addReferences(new ReferenceSO()
-								.setReferencedColumn(referencedTable.getColumnByName(pkColumnName)
-										.orElseThrow(() -> new ColumnNotFoundException(pkTableName, pkColumnName)))
-								.setReferencingColumn(referencingTable.getColumnByName(fkColumnName)
-										.orElseThrow(() -> new ColumnNotFoundException(fkTableName, fkColumnName))));
+						fk
+								.addReferences(
+										new ReferenceSO()
+												.setReferencedColumn(
+														referencedTable
+																.getColumnByName(pkColumnName)
+																.orElseThrow(
+																		() -> new ColumnNotFoundException(
+																				pkTableName,
+																				pkColumnName)))
+												.setReferencingColumn(
+														referencingTable
+																.getColumnByName(fkColumnName)
+																.orElseThrow(
+																		() -> new ColumnNotFoundException(
+																				fkTableName,
+																				fkColumnName))));
 						table.addForeignKeys(fk);
 						log.info("FK created: " + fk);
 					});
@@ -271,12 +316,12 @@ public class JDBCModelReader implements ModelReader {
 		}
 	}
 
-	private void loadIndices(DatabaseMetaData dbmd, List<TableSO> tables) throws SQLException {
+	private void loadIndices(DatabaseMetaData dbmd, List<TableSO> tables, SchemeSO scheme) throws SQLException {
 		int max = tables.size();
 		int current = 0;
 		for (TableSO table : tables) {
 			// TODO: Set "false, false" to "true, true" for large oracle tables.
-			ResultSet rs = dbmd.getIndexInfo(null, this.schemeName, table.getName(), false, false);
+			ResultSet rs = dbmd.getIndexInfo(null, scheme.getName(), table.getName(), false, false);
 			while (rs.next()) {
 				boolean nonUniqueIndex = rs.getBoolean("NON_UNIQUE");
 				if (nonUniqueIndex) {
@@ -288,9 +333,11 @@ public class JDBCModelReader implements ModelReader {
 							ColumnSO column = getColumnByName(columnName, table);
 							index.getColumns().add(column);
 						} catch (IllegalArgumentException iae) {
-							log.error(
-									LocalDateTime.now() + " - Index '" + indexName + "'not added: " + iae.getMessage(),
-									iae);
+							log
+									.error(
+											LocalDateTime.now() + " - Index '" + indexName + "'not added: "
+													+ iae.getMessage(),
+											iae);
 						}
 					}
 				}

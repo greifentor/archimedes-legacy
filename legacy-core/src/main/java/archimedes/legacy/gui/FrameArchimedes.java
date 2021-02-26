@@ -97,6 +97,7 @@ import archimedes.legacy.gui.connections.ConnectionsMainFrame;
 import archimedes.legacy.gui.diagram.DiagramGUIObjectCreator;
 import archimedes.legacy.gui.indices.ComplexIndicesAdministrationFrame;
 import archimedes.legacy.gui.table.TableModelFrame;
+import archimedes.legacy.importer.JDBCModelExplorer;
 import archimedes.legacy.importer.JDBCModelImporter;
 import archimedes.legacy.importer.jdbc.JDBCImportConnectionData.Adjustment;
 import archimedes.legacy.importer.jdbc.JDBCImportData;
@@ -398,6 +399,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		menuBar.add(menu);
 		menu = this.createMenu("menu.export", "export");
 		menu.add(this.createMenuItem("menu.export.item.export.liquibase", "xml-file", e -> doExportToLiquibase()));
+		menu.add(new JSeparator());
+		menu.add(this.createMenuItem("menu.export.item.explore.jdbc", "search", e -> doExploreJDBC()));
 		menuBar.add(menu);
 		menu = this.createMenu("menu.new", "filenew");
 		this.menuitemneutabelle = this.createMenuItem("menu.new.item.table", "tablenew", e -> doNeuTabelle(false));
@@ -1169,6 +1172,15 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void doExportToLiquibase() {
 		new LiquibaseScriptCreator().createScript(diagramm, guiBundle);
+	}
+
+	/**
+	 * Creates a report with the structure of a selected JDBC data source.
+	 * 
+	 * @changed OLI 26.02.2021 - Added.
+	 */
+	public void doExploreJDBC() {
+		new JDBCModelExplorer().createStructureReport(diagramm.getDatabaseConnections(), guiBundle);
 	}
 
 	/**
