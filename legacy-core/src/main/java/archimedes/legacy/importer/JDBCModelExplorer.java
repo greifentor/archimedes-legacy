@@ -1,6 +1,8 @@
 package archimedes.legacy.importer;
 
 import java.sql.Connection;
+import java.util.Arrays;
+import java.util.Vector;
 
 import archimedes.connections.DatabaseConnection;
 import archimedes.gui.DatabaseConnectionRecord;
@@ -19,6 +21,8 @@ import baccara.gui.generics.EditorFrameEventType;
 import baccara.gui.generics.EditorFrameListener;
 import corent.db.ConnectionManager;
 import corent.db.JDBCDataSourceRecord;
+import corent.gui.DefaultFrameTextViewerComponentFactory;
+import corent.gui.FrameTextViewer;
 import de.ollie.archimedes.alexandrian.service.so.ColumnSO;
 import de.ollie.archimedes.alexandrian.service.so.DatabaseSO;
 import de.ollie.archimedes.alexandrian.service.so.SchemeSO;
@@ -70,11 +74,19 @@ public class JDBCModelExplorer {
 															importData.getImportOnlyTablePatterns())
 																	// .addModelReaderListener(mrpm::update)
 																	.readModel();
-													System.out
-															.println(
-																	"\n\n" + createReport(
-																			importData.getSchema(),
-																			database) + "\n\n");
+													new FrameTextViewer(
+															new Vector<String>(
+																	Arrays
+																			.asList(
+																					createReport(
+																							importData.getSchema(),
+																							database))),
+															DefaultFrameTextViewerComponentFactory.INSTANCE,
+															guiBundle.getInifile(),
+															guiBundle
+																	.getResourceText(
+																			"JDBCModelExplorer.resultViewer.title"),
+															"");
 												} catch (Exception e) {
 													// mrpm.setVisible(false);
 													LOG

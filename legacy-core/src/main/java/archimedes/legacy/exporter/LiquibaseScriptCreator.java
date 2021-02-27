@@ -3,6 +3,7 @@ package archimedes.legacy.exporter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -66,10 +67,12 @@ public class LiquibaseScriptCreator {
 												DatabaseChangeLog databaseChangeLog =
 														new ChangeActionToDatabaseChangeLogConverter()
 																.convert(changeActions);
-												Vector<String> v = new Vector<>();
-												v.addElement(exportDatabaseChangeLog(databaseChangeLog).toString());
 												new FrameTextViewer(
-														v,
+														new Vector<String>(
+																Arrays
+																		.asList(
+																				exportDatabaseChangeLog(
+																						databaseChangeLog).toString())),
 														DefaultFrameTextViewerComponentFactory.INSTANCE,
 														guiBundle.getInifile(),
 														"Liquibase Update Script",
