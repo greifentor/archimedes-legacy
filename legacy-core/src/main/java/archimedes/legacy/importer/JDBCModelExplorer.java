@@ -23,12 +23,7 @@ import corent.db.ConnectionManager;
 import corent.db.JDBCDataSourceRecord;
 import corent.gui.DefaultFrameTextViewerComponentFactory;
 import corent.gui.FrameTextViewer;
-import de.ollie.archimedes.alexandrian.service.so.ColumnSO;
 import de.ollie.archimedes.alexandrian.service.so.DatabaseSO;
-import de.ollie.archimedes.alexandrian.service.so.SchemeSO;
-import de.ollie.archimedes.alexandrian.service.so.TableSO;
-import de.ollie.archimedes.alexandrian.service.so.TypeSO;
-import de.ollie.dbcomp.util.TypeConverter;
 import logging.Logger;
 
 /**
@@ -39,7 +34,6 @@ import logging.Logger;
 public class JDBCModelExplorer {
 
 	private static final Logger LOG = Logger.getLogger(JDBCModelExplorer.class);
-	private static final TypeConverter TYPE_CONVERTER = new TypeConverter();
 
 	public void createStructureReport(DatabaseConnection[] connections, GUIBundle guiBundle) {
 		JDBCImportConnectionData connectionData = new JDBCImportConnectionData().setConnections(connections);
@@ -78,9 +72,12 @@ public class JDBCModelExplorer {
 															new Vector<String>(
 																	Arrays
 																			.asList(
-																					createReport(
+																					new JDBCModelExplorerReportGenerator(
 																							importData.getSchema(),
-																							database))),
+																							database,
+																							importData.getOptions())
+																							.createReport(
+																									))),
 															DefaultFrameTextViewerComponentFactory.INSTANCE,
 															guiBundle.getInifile(),
 															guiBundle
@@ -122,61 +119,9 @@ public class JDBCModelExplorer {
 				.setIgnoreIndices(connectionData.isIgnoreIndices())
 				.setIgnoreTablePatterns(connectionData.getIgnoreTablePatterns())
 				.setImportOnlyTablePatterns(connectionData.getImportOnlyTablePatterns())
+				.setOptions(connectionData.getOptions())
 				.setPassword(connectionData.getPassword())
 				.setSchema(connectionData.getSchema());
-	}
-
-	private String createReport(String schemePattern, DatabaseSO database) {
-		return (schemePattern != null
-				? "Scheme Pattern: " + (schemePattern.isEmpty() ? "%" : schemePattern) + "\n\n"
-				: "")
-				+ database
-						.getSchemes()
-						.stream()
-						.map(this::getString)
-						.reduce((s0, s1) -> s0 + "\n" + s1)
-						.orElse("No Schemes");
-	}
-
-	private String getString(SchemeSO scheme) {
-		return scheme.getName() + "\n"
-				+ scheme
-						.getTables()
-						.stream()
-						.map(this::getString)
-						.reduce((s0, s1) -> s0 + "\n" + s1)
-						.orElse("No Tables")
-				+ "\n";
-	}
-
-	private String getString(TableSO table) {
-		return "- " + table.getName() + "\n"
-				+ table
-						.getColumns()
-						.stream()
-						.map(this::getString)
-						.reduce((s0, s1) -> s0 + "\n" + s1)
-						.orElse("No Tables");
-	}
-
-	private String getString(ColumnSO column) {
-		return "  + " + column.getName() + " (" + getString(column.getType()) + ")"
-				+ (column.isPkMember() ? " PRIMARY KEY" : "") + (!column.isNullable() ? " NOT NULL" : "")
-				+ (column.isUnique() ? " UNIQUE" : "");
-	}
-
-	private String getString(TypeSO type) {
-		return TYPE_CONVERTER.convert(type.getSqlType()) + getLengthAndPrecisionString(type);
-	}
-
-	private String getLengthAndPrecisionString(TypeSO type) {
-		return (type.getLength() != null) && (type.getLength() > 0)
-				? " (" + type.getLength() + getPrecisionString(type) + ")"
-				: "";
-	}
-
-	private String getPrecisionString(TypeSO type) {
-		return (type.getPrecision() != null) && (type.getPrecision() > 0) ? ", " + type.getPrecision() : "";
 	}
 
 }
