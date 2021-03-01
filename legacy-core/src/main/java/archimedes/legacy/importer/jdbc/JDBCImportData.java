@@ -22,5 +22,6 @@ public class JDBCImportData {
 	private String schema;
 	private String ignoreTablePatterns;
 	private String importOnlyTablePatterns = "*";
+	private String options = "";
 
 }

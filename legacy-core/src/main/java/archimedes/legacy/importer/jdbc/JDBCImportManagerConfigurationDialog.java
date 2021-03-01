@@ -43,40 +43,43 @@ public class JDBCImportManagerConfigurationDialog extends
 
 	@Override
 	protected ComponentData<?>[] getComponentData(JDBCImportConnectionData data) {
-		return new ComponentData<?>[] { //
-				new ComponentData<Object>( //
-						JDBCImportConnectionData.FIELD_CONNECTION, //
-						Arrays.asList(data.getConnections()), //
-						data.getConnection(), //
-						new ConnectListCellRenderer(), //
+		return new ComponentData<?>[] {
+				new ComponentData<Object>(
+						JDBCImportConnectionData.FIELD_CONNECTION,
+						Arrays.asList(data.getConnections()),
+						data.getConnection(),
+						new ConnectListCellRenderer(),
 						false),
-				new ComponentData<String>( //
-						JDBCImportConnectionData.FIELD_PASSWORD, //
-						baccara.gui.generics.Type.STRING, //
-						data.getPassword()), //
-				new ComponentData<String>( //
-						JDBCImportConnectionData.FIELD_IGNORE_INDICES, //
-						baccara.gui.generics.Type.BOOLEAN, //
-						data.isIgnoreIndices()), //
-				new ComponentData<String>( //
-						JDBCImportConnectionData.FIELD_SCHEMA, //
-						baccara.gui.generics.Type.STRING, //
-						data.getSchema()), //
-				new ComponentData<String>( //
-						JDBCImportConnectionData.FIELD_IGNORE_TABLES_PATTERNS, //
-						baccara.gui.generics.Type.STRING, //
-						data.getIgnoreTablePatterns()), //
-				new ComponentData<String>( //
-						JDBCImportConnectionData.FIELD_IMPORT_ONLY_TABLES_PATTERNS, //
-						baccara.gui.generics.Type.STRING, //
-						data.getImportOnlyTablePatterns()), //
-				new ComponentData<String>( //
-						JDBCImportConnectionData.FIELD_ADJUSTMENT, //
-						Arrays.asList(Adjustment.values()), //
-						data.getAdjustment(), //
-						new AdjustmentListCellRenderer(null), //
-						false) //
-		};
+				new ComponentData<String>(
+						JDBCImportConnectionData.FIELD_PASSWORD,
+						baccara.gui.generics.Type.STRING,
+						data.getPassword()),
+				new ComponentData<String>(
+						JDBCImportConnectionData.FIELD_IGNORE_INDICES,
+						baccara.gui.generics.Type.BOOLEAN,
+						data.isIgnoreIndices()),
+				new ComponentData<String>(
+						JDBCImportConnectionData.FIELD_SCHEMA,
+						baccara.gui.generics.Type.STRING,
+						data.getSchema()),
+				new ComponentData<String>(
+						JDBCImportConnectionData.FIELD_IGNORE_TABLES_PATTERNS,
+						baccara.gui.generics.Type.STRING,
+						data.getIgnoreTablePatterns()),
+				new ComponentData<String>(
+						JDBCImportConnectionData.FIELD_IMPORT_ONLY_TABLES_PATTERNS,
+						baccara.gui.generics.Type.STRING,
+						data.getImportOnlyTablePatterns()),
+				new ComponentData<String>(
+						JDBCImportConnectionData.FIELD_ADJUSTMENT,
+						Arrays.asList(Adjustment.values()),
+						data.getAdjustment(),
+						new AdjustmentListCellRenderer(null),
+						false),
+				new ComponentData<String>(
+						JDBCImportConnectionData.FIELD_OPTIONS,
+						baccara.gui.generics.Type.STRING,
+						data.getOptions()) };
 	}
 
 	@Override
@@ -89,10 +92,13 @@ public class JDBCImportManagerConfigurationDialog extends
 		this.object.setAdjustment(this.getAdjustmentFromComponent(JDBCImportConnectionData.FIELD_ADJUSTMENT));
 		this.object.setConnection(this.getConnectionFromComponent(JDBCImportConnectionData.FIELD_CONNECTION));
 		this.object.setIgnoreIndices(this.getBooleanFromComponent(JDBCImportConnectionData.FIELD_IGNORE_INDICES));
-		this.object.setIgnoreTablePatterns(
-				this.getTextFromComponent(JDBCImportConnectionData.FIELD_IGNORE_TABLES_PATTERNS));
-		this.object.setImportOnlyTablePatterns(
-				this.getTextFromComponent(JDBCImportConnectionData.FIELD_IMPORT_ONLY_TABLES_PATTERNS));
+		this.object
+				.setIgnoreTablePatterns(
+						this.getTextFromComponent(JDBCImportConnectionData.FIELD_IGNORE_TABLES_PATTERNS));
+		this.object
+				.setImportOnlyTablePatterns(
+						this.getTextFromComponent(JDBCImportConnectionData.FIELD_IMPORT_ONLY_TABLES_PATTERNS));
+		this.object.setOptions(this.getTextFromComponent(JDBCImportConnectionData.FIELD_OPTIONS));
 		this.object.setPassword(this.getTextFromComponent(JDBCImportConnectionData.FIELD_PASSWORD));
 		this.object.setSchema(this.getTextFromComponent(JDBCImportConnectionData.FIELD_SCHEMA));
 	}
@@ -147,8 +153,12 @@ class AdjustmentListCellRenderer implements ListCellRenderer<Object> {
 		if (value instanceof Adjustment) {
 			Adjustment a = (Adjustment) value;
 			if (this.guiBundle != null) {
-				l.setText(this.guiBundle
-						.getResourceText("JDBCImportManagerConfigurationDialog.Adjustment." + a.name() + ".label"));
+				l
+						.setText(
+								this.guiBundle
+										.getResourceText(
+												"JDBCImportManagerConfigurationDialog.Adjustment." + a.name()
+														+ ".label"));
 			} else {
 				l.setText(a.name());
 			}
