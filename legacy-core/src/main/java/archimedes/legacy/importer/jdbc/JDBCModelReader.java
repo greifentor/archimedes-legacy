@@ -157,16 +157,15 @@ public class JDBCModelReader implements ModelReader {
 								1,
 								ModelReaderEventType.IMPORT_ONLY_PATTERN_NOT_MATCHING,
 								tableName));
-				continue;
-			}
-			if (isMatchingIgnorePattern(tableName)) {
+			} else if (isMatchingIgnorePattern(tableName)) {
 				fireModelReaderEvent(
 						new ModelReaderEvent(current, max, 1, ModelReaderEventType.IGNORED_BY_PATTERN, tableName));
-				continue;
+			} else {
+				scheme.addTables(this.factory.createTable(tableName, new ArrayList<>()));
+				fireModelReaderEvent(
+						new ModelReaderEvent(current, max, 1, ModelReaderEventType.TABLE_ADDED, tableName));
+				current++;
 			}
-			scheme.addTables(this.factory.createTable(tableName, new ArrayList<>()));
-			fireModelReaderEvent(new ModelReaderEvent(current, max, 1, ModelReaderEventType.TABLE_ADDED, tableName));
-			current++;
 		}
 		rs.close();
 	}

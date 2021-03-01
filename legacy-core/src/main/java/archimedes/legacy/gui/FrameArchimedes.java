@@ -400,7 +400,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		menu = this.createMenu("menu.export", "export");
 		menu.add(this.createMenuItem("menu.export.item.export.liquibase", "xml-file", e -> doExportToLiquibase()));
 		menu.add(new JSeparator());
-		menu.add(this.createMenuItem("menu.export.item.explore.jdbc", "search", e -> doExploreJDBC()));
+		menu.add(this.createMenuItem("menu.export.item.explore.jdbc", "explore", e -> doExploreJDBC()));
 		menuBar.add(menu);
 		menu = this.createMenu("menu.new", "filenew");
 		this.menuitemneutabelle = this.createMenuItem("menu.new.item.table", "tablenew", e -> doNeuTabelle(false));
@@ -463,9 +463,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						e -> doBearbeitenUpdateScriptErstellenNeu());
 		menuItemUpdateScript.setEnabled(isSQLLogicEnabled());
 		menu.add(menuItemUpdateScript);
-		JMenuItem menuItemUpdateModel =
-				this.createMenuItem("menu.edit.item.create.update.model", "generate", e -> doBearbeitenUpdateModel());
-		menu.add(menuItemUpdateModel);
 		menu.addSeparator();
 		JMenuItem menuItemCompareModels = this
 				.createMenuItem("menu.edit.item.compare.models", "compare", e -> doBearbeitenDatenmodellVergleichen());
@@ -512,9 +509,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		this.menuGenerate
 				.add(this.createMenuItem("menu.generate.item.generator.options", null, e -> doGeneratorOptionen()));
 		menuBar.add(this.menuGenerate);
-		menu = this.createMenu("menu.exports", "exports");
-		menu.add(this.createMenuItem("menu.exports.item.domains", null, e -> doExportDomainsIni()));
-		menuBar.add(menu);
 		this.viewmenu = this.createMenu("menu.views", "views");
 		this.viewmenu.setEnabled(isViewLogicEnabled());
 		this.menuitemtabletoview =
@@ -1318,48 +1312,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	/**
-	 * Diese Methode exportiert die Domains des Modells in eine Ini-Datei.
-	 */
-	public void doExportDomainsIni() {
-		String dn = "";
-		final JFileChooser fc = new JFileChooser(datenpfad);
-		fc.setAcceptAllFileFilterUsed(false);
-
-		final ExtensionFileFilter eff = new ExtensionFileFilter(new String[] { "ini" });
-		fc.setFileFilter(eff);
-		fc.setCurrentDirectory(new File(this.datenpfad));
-		fc.setSelectedFile(new File("Archimedes-Domain-Export.ini"));
-
-		final int returnVal = fc.showSaveDialog(this);
-
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			dn = fc.getSelectedFile().getAbsolutePath();
-
-			try {
-				final Inifile ini = new Inifile(dn);
-				final Vector<?> vd = this.diagramm.getDomains();
-				ini.writeInt("Domains", "Number", vd.size());
-
-				for (int i = 0, len = vd.size(); i < len; i++) {
-					final DomainModel dom = (DomainModel) vd.elementAt(i);
-					ini.writeStr("Domains", "Name" + i, dom.getName());
-					ini.writeInt("Domains", "Type" + i, dom.getDataType());
-					ini.writeInt("Domains", "Length" + i, dom.getLength());
-					ini.writeInt("Domains", "Precision" + i, dom.getDecimalPlace());
-					ini.writeStr("Domains", "Description" + i, dom.getComment());
-					ini.writeStr("Domains", "Parameter" + i, dom.getParameters());
-					ini.writeStr("Domains", "InitialValue" + i, dom.getInitialValue());
-				}
-
-				ini.save();
-			} catch (Exception e) {
-				e.printStackTrace();
-				LOG.error("\n\nFehler beim Schreiben der Domain-Export-Datei -> " + dn + "!", e);
-			}
-		}
-	}
-
-	/**
 	 * Diese Methode wird aufgerufen, wenn der Benutzer den Men&uuml;punkt Bearbeiten / Domains bet&auml;tigt.
 	 */
 	public void doBearbeitenDomains() {
@@ -1667,13 +1619,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					"SQL Update Script (new)",
 					datenpfad);
 		}
-	}
-
-	/**
-	 * Updates the model in the work sheet with the relevant information of a selected source.
-	 */
-	private void doBearbeitenUpdateModel() {
-		// Hier muss jetzt irgendwie der dm-comp mit rein ...
 	}
 
 	/**
