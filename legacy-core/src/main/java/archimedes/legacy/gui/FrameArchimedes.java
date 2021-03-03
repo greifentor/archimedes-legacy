@@ -29,14 +29,11 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventObject;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -112,7 +109,6 @@ import archimedes.legacy.scheme.DefaultIndexListCleaner;
 import archimedes.legacy.scheme.DefaultUserInformation;
 import archimedes.legacy.scheme.Diagramm;
 import archimedes.legacy.scheme.Domain;
-import archimedes.legacy.scheme.ReferenceImportRecord;
 import archimedes.legacy.scheme.Sequence;
 import archimedes.legacy.scheme.Stereotype;
 import archimedes.legacy.scheme.Tabelle;
@@ -152,12 +148,10 @@ import baccara.gui.generics.EditorFrameEvent;
 import baccara.gui.generics.EditorFrameEventType;
 import baccara.gui.generics.EditorFrameListener;
 import corent.base.Constants;
-import corent.base.Direction;
 import corent.base.Semaphore;
 import corent.base.SortedVector;
 import corent.base.StrUtil;
 import corent.db.ConnectionManager;
-import corent.db.DBExec;
 import corent.db.JDBCDataSourceRecord;
 import corent.djinn.FrameEditorDjinn;
 import corent.djinn.FrameSelectionDjinn;
@@ -221,7 +215,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	private ActionListener actionListenerDateiCache = null;
 
 	/* Referenz auf die das Diagramm anzeigende Komponente. */
-	// private ComponentDiagramm component = null;
 	private DiagramComponentPanel<GUIObjectTypes> component = null;
 
 	/*
@@ -248,10 +241,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	private JCheckBoxMenuItem menuitemswitchtransientfieldstoview = null;
 
-	/*
-	 * Dieser Label zeigt die aktuelle Position der Maus &uuml;ber der Diagramm-Komponente an.
-	 */
-	// private JLabel labelPosition = new JLabel("(0,0)");
 	/* Referenz auf das Datei-Men&uuml; zwecks Dateinamencache-Erweiterung. */
 	private JMenu dateimenu = null;
 
@@ -291,7 +280,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	private UserInformation userInformation = null;
 	private DiagramGUIObjectCreator guiObjectCreator = null;
 
-	// private UserPing userPing = null;
 	private ModelCheckerMessage[] lastModelCheckerMessages = null;
 
 	private JMenuItem menuItemFileSave = null;
@@ -555,7 +543,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		final JPanel panelStatus = new JPanel(new GridLayout(1, 5, Constants.HGAP, Constants.VGAP));
 		panelStatus.setBorder(new EmptyBorder(Constants.HGAP, Constants.VGAP, Constants.HGAP, Constants.VGAP));
 
-		// TODO panelStatus.add(this.labelPosition);
 		final JPanel panel = new JPanel(new BorderLayout());
 		panel.add(this.component);
 		this.setContentPane(panel);
@@ -680,9 +667,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * @changed OLI 18.03.2016 - Comment to English. Introduced XML files.
 	 */
 	public void doDateiOeffnen(final String fileName, final boolean ask) {
-		final int i = 0;
-		final int leni = 0;
-
 		if (ask && this.diagramm.isAltered()) {
 			final boolean errors = this.isErrorsFound(this.diagramm, false);
 			final int option = JOptionPane
@@ -695,7 +679,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 													: "archimedes.open.file.altered.warning.text")),
 							this.guiBundle.getResourceText("archimedes.open.file.altered.warning.title"),
 							JOptionPane.YES_NO_CANCEL_OPTION);
-
 			if (option == JOptionPane.YES_OPTION) {
 				if ((this.dateiname.length() == 0) || (this.dateiname.equalsIgnoreCase("unbenannt.ads"))) {
 					this.doDateiSpeichernUnter();
@@ -734,7 +717,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 			this.updateViewMenu(this.viewmenu, this.diagramm.getViews());
 			this.diagramm.clearAltered();
-			// this.updateUserPingModelName();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -905,35 +887,27 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	private void doDateinamenCacheAktualisieren(final String name) {
 		int index = -1;
 		int len = 0;
-
 		for (len = 0; len < this.dateinamencache.length; len++) {
 			if (this.dateinamencache[len] == null) {
 				break;
 			}
 		}
-
 		for (int i = 0; i < len; i++) {
 			final String s = this.dateinamencache[i].getText();
-
-			// s = s.substring(2, s.length());
 			if (s.equalsIgnoreCase(name)) {
 				index = i;
 
 				break;
 			}
 		}
-
 		if (index > -1) {
 			for (int i = index; i > 0; i--) {
 				final String s = this.dateinamencache[i - 1].getText();
 				this.dateinamencache[i].setText( /* "" + (i+1) + " " + */s);
 			}
-
 			this.dateinamencache[0].setText( /* "1 " + */name);
-
 			return;
 		}
-
 		if (len < this.dateinamencache.length) {
 			this.dateinamencache[len] = new JMenuItem("");
 			this.dateinamencache[len].addActionListener(this.actionListenerDateiCache);
@@ -941,14 +915,12 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		} else {
 			len--;
 		}
-
 		if (len > 0) {
 			for (int i = len; i > 0; i--) {
 				final String s = this.dateinamencache[i - 1].getText();
 				this.dateinamencache[i].setText( /* "" + (i+1) + " " + */s);
 			}
 		}
-
 		this.dateinamencache[0].setText( /* "" + 1 + " " + */name);
 	}
 
@@ -1658,8 +1630,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					final TabellenModel tm = (TabellenModel) values.elementAt(0);
 					component.setDiagramViewToObject(tm.getName());
 				}
-				// OLI 27.02.2009 - Herausnahme wegen Sinnlosigkeit.
-				// diagramm.raiseAltered();
 			}
 		};
 	}
@@ -1882,12 +1852,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		return svt;
 	}
 
-	/* Holt die Index-Metadaten aus der angegebenen Datenbank. */
-	private SortedVector<SimpleIndexMetaData> getIndexMetadata(final JDBCDataSourceRecord dsr,
-			final String schemaName) {
-		return GetIndexMetaData(dsr, schemaName);
-	}
-
 	/**
 	 * Liefert eine Liste mit den Unique-Metadaten aus der angegebenen Datenbank.
 	 *
@@ -1906,139 +1870,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		try {
 			final Connection c = ConnectionManager.GetConnection(dsr);
 			svt = ApplicationUtil.GetUniqueMetaData(c, schemaName);
-			c.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return svt;
-	}
-
-	/* Holt die Referenz-Metadaten aus der angegebenen Datenbank. */
-	private SortedVector getReferenzMetadata(final JDBCDataSourceRecord dsr) {
-		final SortedVector svt = new SortedVector();
-
-		try {
-			Connection c = ConnectionManager.GetConnection(dsr);
-			final Hashtable psparam = new Hashtable();
-			int max = 0;
-			ResultSet rs = null;
-			final SortedVector svtn0 = new SortedVector();
-			final SortedVector svtn1 = new SortedVector();
-			String pktn = null;
-			String pkcn = null;
-			String fktn = null;
-			String fkcn = null;
-			String s = null;
-			psparam.put("max", 100);
-			psparam.put("now", 1);
-			rs = c.getMetaData().getTables(null, null, "%", new String[] { "TABLE" });
-
-			while (rs.next()) {
-				s = rs.getString("TABLE_NAME");
-
-				if (s != null) {
-					svtn0.addElement(s);
-					svtn1.addElement(s);
-				}
-			}
-
-			DBExec.CloseQuery(rs);
-			c.close();
-			max = svtn0.size() * svtn0.size();
-			psparam.put("max", max);
-
-			try {
-				Class.forName(dsr.getDriver());
-				c = DriverManager.getConnection(dsr.getDBName(), dsr.getUser(), dsr.getPassword());
-			} catch (ClassNotFoundException cnf) {
-				cnf.printStackTrace();
-			}
-
-			for (int i = 0, leni = svtn0.size(); i < leni; i++) {
-				LOG
-						.info(
-								"\n" + svtn0.elementAt(i) + " (mem " + Runtime.getRuntime().freeMemory() + " of "
-										+ Runtime.getRuntime().totalMemory() + ")");
-
-				for (int j = 0, lenj = svtn0.size(); j < lenj; j++) {
-					try {
-						rs = c
-								.getMetaData()
-								.getCrossReference(
-										null,
-										null,
-										svtn0.elementAt(i).toString(),
-										null,
-										null,
-										svtn1.elementAt(j).toString());
-
-						while (rs.next()) {
-							pktn = rs.getString("PKTABLE_NAME");
-							pkcn = rs.getString("PKCOLUMN_NAME");
-							fktn = rs.getString("FKTABLE_NAME");
-							fkcn = rs.getString("FKCOLUMN_NAME");
-							LOG.info("    " + fktn + "." + fkcn + " > " + pktn + "." + pkcn);
-							svt.addElement(new ReferenceImportRecord(fktn, fkcn, pktn, pkcn));
-						}
-
-						DBExec.CloseQuery(rs);
-						LOG
-								.info(
-										"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
-												+ StrUtil.PumpUp("" + --max, " ", 10, Direction.LEFT)
-												+ StrUtil.PumpUp("" + j, " ", 5, Direction.LEFT));
-
-						if (Long.getLong("archimedes.gui.FrameArchimedes.import.delay", 250) > 0) {
-							final Thread th = new Thread() {
-								@Override
-								public void run() {
-									try {
-										Thread.sleep(Long.getLong("archimedes.gui.FrameArchimedes.import.delay", 250));
-									} catch (Exception e) {
-									}
-								}
-							};
-							th.start();
-							th.join();
-						}
-					} catch (SQLException sqle) {
-						try {
-							c.close();
-						} catch (Exception e1) {
-						}
-
-						LOG.info("\nwaiting (" + j + ")");
-
-						final Thread th = new Thread() {
-
-							@Override
-							public void run() {
-								try {
-									Thread.sleep(Long.getLong("archimedes.gui.FrameArchimedes.import.timeout", 90000));
-								} catch (Exception e) {
-								}
-							}
-						};
-						th.start();
-						th.join();
-						LOG.info("restarting");
-						j--;
-
-						try {
-							Class.forName(dsr.getDriver());
-							c = DriverManager.getConnection(dsr.getDBName(), dsr.getUser(), dsr.getPassword());
-						} catch (
-
-						Exception e1) {
-							e1.printStackTrace();
-						}
-					}
-				}
-
-				System.gc();
-			}
-
 			c.close();
 		} catch (Exception e) {
 			e.printStackTrace();

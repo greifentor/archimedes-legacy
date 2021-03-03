@@ -1,0 +1,20 @@
+package ${BasePackageName}.service.so;
+
+import lombok.Data;
+import lombok.Generated;
+import lombok.experimental.Accessors;
+
+/**
+ * A DBO for $PluralName.
+ *
+ * ${Generated}
+ */
+@Accessors(chain = true)
+@Data
+@Generated
+public class $ClassName {
+
+	private long id;
+	private String description;
+
+}
