@@ -716,6 +716,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			}
 
 			this.updateViewMenu(this.viewmenu, this.diagramm.getViews());
+			menuitemneustandardtabelle.setEnabled(true);
+			menuitemneutabelle.setEnabled(true);
 			this.diagramm.clearAltered();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
