@@ -62,7 +62,14 @@ public class LiquibaseScriptCreator {
 												DataModelToCMOConverter converter = new DataModelToCMOConverter();
 												DataModelComparator comparator = new DataModelComparator();
 												List<ChangeActionCRO> changeActions = comparator
-														.compare(converter.convert(diagramm), converter.convert(d))
+														.compare(
+																converter
+																		.convert(
+																				diagramm,
+																				table -> table
+																						.getOptionByName(
+																								"NO_DB") != null),
+																converter.convert(d))
 														.getChangeActions();
 												DatabaseChangeLog databaseChangeLog =
 														new ChangeActionToDatabaseChangeLogConverter()

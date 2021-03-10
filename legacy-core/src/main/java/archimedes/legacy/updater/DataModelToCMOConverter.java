@@ -26,16 +26,21 @@ public class DataModelToCMOConverter {
 	private static final String DEFAULT_SCHEMA_NAME = "";
 
 	public DataModelCMO convert(DataModel dataModel) {
-		DataModelCMO cmo = DataModelCMO.of(SchemaCMO.of(DEFAULT_SCHEMA_NAME, getTables(dataModel)));
+		return convert(dataModel, null);
+	}
+
+	public DataModelCMO convert(DataModel dataModel, TableIgnore tableIgnore) {
+		DataModelCMO cmo = DataModelCMO.of(SchemaCMO.of(DEFAULT_SCHEMA_NAME, getTables(dataModel, tableIgnore)));
 		addForeignKeys(cmo, dataModel);
 		addPrimaryKeys(cmo, dataModel);
 		return cmo;
 	}
 
-	private TableCMO[] getTables(DataModel dataModel) {
+	private TableCMO[] getTables(DataModel dataModel, TableIgnore tableIgnore) {
 		return Arrays
 				.asList(dataModel.getTables())
 				.stream()
+				.filter(table -> (tableIgnore == null) || !tableIgnore.ignore(table))
 				.map(table -> TableCMO.of(table.getName(), getColumns(table)))
 				.collect(Collectors.toList())
 				.toArray(new TableCMO[0]);
@@ -45,18 +50,21 @@ public class DataModelToCMOConverter {
 		return Arrays
 				.asList(table.getColumns())
 				.stream()
-				.map(column -> ColumnCMO
-						.of(column.getName(),
-								TypeCMO
-										.of(column.getDomain().getDataType(),
-												(column.getDomain().getLength() < 0
-														? 0
-														: column.getDomain().getLength()),
-												(column.getDomain().getDecimalPlace() < 0
-														? 0
-														: column.getDomain().getDecimalPlace())),
-								false,
-								!column.isNotNull()))
+				.map(
+						column -> ColumnCMO
+								.of(
+										column.getName(),
+										TypeCMO
+												.of(
+														column.getDomain().getDataType(),
+														(column.getDomain().getLength() < 0
+																? 0
+																: column.getDomain().getLength()),
+														(column.getDomain().getDecimalPlace() < 0
+																? 0
+																: column.getDomain().getDecimalPlace())),
+										false,
+										!column.isNotNull()))
 				.collect(Collectors.toList())
 				.toArray(new ColumnCMO[0]);
 	}
@@ -66,12 +74,13 @@ public class DataModelToCMOConverter {
 				.getSchemata()
 				.entrySet()
 				.stream()
-				.forEach(schemaValue -> schemaValue
-						.getValue()
-						.getTables()
-						.entrySet()
-						.stream()
-						.forEach(tableValue -> addForeignKeys(tableValue.getValue(), cmo, dataModel)));
+				.forEach(
+						schemaValue -> schemaValue
+								.getValue()
+								.getTables()
+								.entrySet()
+								.stream()
+								.forEach(tableValue -> addForeignKeys(tableValue.getValue(), cmo, dataModel)));
 	}
 
 	private void addForeignKeys(TableCMO table, DataModelCMO cmo, DataModel dataModel) {
@@ -80,15 +89,21 @@ public class DataModelToCMOConverter {
 				.asList(dataModel.getTableByName(table.getName()).getColumns())
 				.stream()
 				.filter(column -> column.getReferencedTable() != null)
-				.forEach(column -> table
-						.addForeignKeys(ForeignKeyCMO
-								.of("FK_TO_" + column.getReferencedTable().getName() + "_"
-										+ column.getReferencedColumn().getName(),
-										ForeignKeyMemberCMO
-												.of(table,
-														getColumn(schema, column),
-														getTable(schema, column.getReferencedTable()),
-														getColumn(schema, column.getReferencedColumn())))));
+				.forEach(
+						column -> table
+								.addForeignKeys(
+										ForeignKeyCMO
+												.of(
+														"FK_TO_" + column.getReferencedTable().getName() + "_"
+																+ column.getReferencedColumn().getName(),
+														ForeignKeyMemberCMO
+																.of(
+																		table,
+																		getColumn(schema, column),
+																		getTable(schema, column.getReferencedTable()),
+																		getColumn(
+																				schema,
+																				column.getReferencedColumn())))));
 	}
 
 	private ColumnCMO getColumn(SchemaCMO schema, ColumnModel column) {
@@ -107,12 +122,13 @@ public class DataModelToCMOConverter {
 				.getSchemata()
 				.entrySet()
 				.stream()
-				.forEach(schemaValue -> schemaValue
-						.getValue()
-						.getTables()
-						.entrySet()
-						.stream()
-						.forEach(tableValue -> addPrimaryKeys(tableValue.getValue(), dataModel)));
+				.forEach(
+						schemaValue -> schemaValue
+								.getValue()
+								.getTables()
+								.entrySet()
+								.stream()
+								.forEach(tableValue -> addPrimaryKeys(tableValue.getValue(), dataModel)));
 	}
 
 	private void addPrimaryKeys(TableCMO table, DataModel dataModel) {
