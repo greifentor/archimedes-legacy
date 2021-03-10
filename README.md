@@ -56,3 +56,14 @@ For the option above the string "Version Tag is: ${Option."OptionName"}" leads t
 
 The new field is printed in the header block of the diagram view directly following the version date. It has been added
 to allow printing option values to the diagram.
+
+
+## Compare Data Models
+
+Select "Export / Explore" (Export / Untersuchen) for each data model to compare with options
+
+```
+TO_UPPER_CASE|SUPPRESS_LENGTH|FK_BY_COLUMNNAME
+```
+
+Save the results and compare the files via a diff tool.
