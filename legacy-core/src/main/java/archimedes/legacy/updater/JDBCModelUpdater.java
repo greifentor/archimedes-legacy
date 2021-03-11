@@ -48,11 +48,13 @@ public class JDBCModelUpdater {
 									final Thread t = new Thread(() -> {
 										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 6);
 										UpdateReport report = null;
+										UpdateReport previousReport = null;
 										do {
 											try {
 												Diagramm d = (Diagramm) new JDBCImportManager()
 														.importDiagram(connectionData, mrpm::update);
 												if (d != null) {
+													previousReport = report;
 													report = new ModelUpdater(diagramm, d, Archimedes.Factory).update();
 													Counter counter = new Counter(0);
 													int max = report.getActions().size();
@@ -92,7 +94,7 @@ public class JDBCModelUpdater {
 																		e.getMessage()),
 														guiBundle);
 											}
-										} while ((report != null)
+										} while ((report != null) && !report.equals(previousReport)
 												&& report.hasAtLeastOneActionInStatus(UpdateReportAction.Status.DONE));
 									});
 									t.start();
