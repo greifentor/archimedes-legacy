@@ -1,5 +1,7 @@
 package archimedes.legacy.updater;
 
+import java.util.Vector;
+
 import archimedes.gui.DatabaseConnectionRecord;
 import archimedes.gui.DiagramComponentPanel;
 import archimedes.gui.diagram.GUIObjectTypes;
@@ -20,6 +22,8 @@ import baccara.gui.GUIBundle;
 import baccara.gui.generics.EditorFrameEvent;
 import baccara.gui.generics.EditorFrameEventType;
 import baccara.gui.generics.EditorFrameListener;
+import corent.gui.DefaultFrameTextViewerComponentFactory;
+import corent.gui.FrameTextViewer;
 import logging.Logger;
 
 /**
@@ -49,6 +53,7 @@ public class JDBCModelUpdater {
 										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 6);
 										UpdateReport report = null;
 										UpdateReport previousReport = null;
+										Vector<String> reportSummary = new Vector<>();
 										do {
 											try {
 												Diagramm d = (Diagramm) new JDBCImportManager()
@@ -58,19 +63,17 @@ public class JDBCModelUpdater {
 													report = new ModelUpdater(diagramm, d, Archimedes.Factory).update();
 													Counter counter = new Counter(0);
 													int max = report.getActions().size();
-													report
-															.getActions()
-															.forEach(
-																	action -> mrpm
-																			.update(
-																					new ModelReaderEvent(
-																							counter.inc(),
-																							max,
-																							5,
-																							ModelReaderEventType.MESSAGE,
-																							getActionString(
-																									action,
-																									guiBundle))));
+													report.getActions().forEach(action -> {
+														mrpm
+																.update(
+																		new ModelReaderEvent(
+																				counter.inc(),
+																				max,
+																				5,
+																				ModelReaderEventType.MESSAGE,
+																				getActionString(action, guiBundle)));
+														reportSummary.add(getActionString(action, guiBundle));
+													});
 													mrpm.update(new ModelReaderEvent(max, max, 6, null, null));
 													mrpm.enableCloseButton();
 													if (report
@@ -96,6 +99,14 @@ public class JDBCModelUpdater {
 											}
 										} while ((report != null) && !report.equals(previousReport)
 												&& report.hasAtLeastOneActionInStatus(UpdateReportAction.Status.DONE));
+										if (!reportSummary.isEmpty()) {
+											new FrameTextViewer(
+													reportSummary,
+													DefaultFrameTextViewerComponentFactory.INSTANCE,
+													guiBundle.getInifile(),
+													"Model Update Summary",
+													"");
+										}
 									});
 									t.start();
 								}
