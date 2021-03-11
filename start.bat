@@ -14,7 +14,7 @@ IF "%1"=="NO_DEBUG" GOTO NoDebug
     SET DEBUG_OPTIONS=-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n
 :NoDebug
 
-SET ADDITIONAL_OPTIONS=-Darchimedes.maximum.strlen.table.header=50 -Darchimedes.diagram.view.logic.enabled=true -Dconf_path=./legacy-core/src/main/resources/conf/
+SET ADDITIONAL_OPTIONS=-Darchimedes.maximum.strlen.table.header=50 -Darchimedes.diagram.view.logic.enabled=true -Dconf_path=./legacy-core/src/main/resources/conf/ -DRestControllerCodeFactory.templates.path=/home/ollie/eclipse-workspace/legacy-core/src/main/resources/templates/restcontroller
 
 SET FILE=archimedes-legacy-additions.bat
 IF NOT EXIST %FILE% GOTO StartArchimedes

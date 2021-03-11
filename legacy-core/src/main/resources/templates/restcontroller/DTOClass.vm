@@ -1,0 +1,20 @@
+package ${BasePackageName}.rest.dto;
+
+import lombok.Data;
+import lombok.Generated;
+import lombok.experimental.Accessors;
+
+/**
+ * A DTO for $PluralName.
+ *
+ * ${Generated}
+ */
+@Accessors(chain = true)
+@Data
+@Generated
+public class $ClassName {
+
+	private long id;
+	private String description;
+
+}

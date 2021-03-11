@@ -1,4 +1,4 @@
-package archimedes.codegenerators.persistence.jpa;
+package archimedes.codegenerators.restcontroller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,11 +13,11 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * A class code generator for JPA database objects (DBO's).
+ * A class code generator for DTO's.
  *
- * @author ollie (03.03.2021)
+ * @author ollie (10.03.2021)
  */
-public class DBOClassCodeGenerator extends AbstractCodeGenerator {
+public class DTOClassCodeGenerator extends AbstractCodeGenerator {
 
 	@Accessors(chain = true)
 	@Data
@@ -26,13 +26,13 @@ public class DBOClassCodeGenerator extends AbstractCodeGenerator {
 		private String fieldType;
 	}
 
-	public DBOClassCodeGenerator() {
-		super("DBOClass.vm", PersistenceJPACodeFactory.TEMPLATE_PATH);
+	public DTOClassCodeGenerator() {
+		super("DTOClass.vm", RestControllerCodeFactory.TEMPLATE_PATH);
 	}
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, TableModel table) {
-		context.put("ClassName", table.getName() + "DBO");
+		context.put("ClassName", table.getName() + "DTO");
 		context.put("ColumnData", getColumnData(table.getColumns()));
 	}
 

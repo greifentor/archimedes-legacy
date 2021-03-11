@@ -1,6 +1,7 @@
-package archimedes.codegenerators.persistence.jpa;
+package archimedes.codegenerators.restcontroller;
 
 import java.io.File;
+import java.io.FileWriter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,12 +18,13 @@ import archimedes.model.TableModel;
  *
  * @author ollie (03.03.2021)
  */
-public class PersistenceJPACodeFactory extends AbstractCodeFactory
+public class RestControllerCodeFactory extends AbstractCodeFactory
 		implements CodeFactoryProgressionEventProvider, StandardCodeFactoryProgressionFrameUser {
 
-	public static final String TEMPLATE_PATH = "src/main/resources/templates/persistence-jpa";
+	public static final String TEMPLATE_PATH = System
+			.getProperty("RestControllerCodeFactory.templates.path", "src/main/resources/templates/restcontroller");
 
-	private static final Logger LOG = LogManager.getLogger(PersistenceJPACodeFactory.class);
+	private static final Logger LOG = LogManager.getLogger(RestControllerCodeFactory.class);
 
 	@Override
 	public boolean generate(String path) {
@@ -31,7 +33,14 @@ public class PersistenceJPACodeFactory extends AbstractCodeFactory
 		String basePackageName = this.dataModel.getBasePackageName();
 		for (TableModel tableModel : dataModel.getTables()) {
 			if (tableModel.isGenerateCode()) {
-				new DBOClassCodeGenerator().generate(basePackageName, tableModel);
+				String code = new DTOClassCodeGenerator().generate(basePackageName, tableModel);
+				String fileName = path + "/" + tableModel.getName() + "DTO";
+				try (FileWriter writer = new FileWriter(fileName)) {
+					writer.write(code);
+					LOG.info("wrote file: " + fileName);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return false;
@@ -44,12 +53,12 @@ public class PersistenceJPACodeFactory extends AbstractCodeFactory
 
 	@Override
 	public String getName() {
-		return "Persistence JPA Code Factory";
+		return "REST Controller Code Factory";
 	}
 
 	@Override
 	public String[] getResourceBundleNames() {
-		return new String[] { "persistence-jpa-code-factory" };
+		return new String[] { "restcontroller-code-factory" };
 	}
 
 	@Override
