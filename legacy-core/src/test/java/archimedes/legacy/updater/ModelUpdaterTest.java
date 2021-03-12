@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,6 +20,12 @@ import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
 public class ModelUpdaterTest {
+
+	@BeforeAll
+	static void setUpAll() {
+		System.setProperty("corentx.util.Str.suppress.html.note", "true");
+		System.setProperty("corent.base.StrUtil.suppress.html.note", "true");
+	}
 
 	@Test
 	void passedSameModelTwice_ReturnsAnEmptyUpdateReport() {

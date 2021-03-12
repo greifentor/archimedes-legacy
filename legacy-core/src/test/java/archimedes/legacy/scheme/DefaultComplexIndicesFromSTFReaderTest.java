@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -54,6 +55,12 @@ public class DefaultComplexIndicesFromSTFReaderTest {
 	private List<IndexMetaData> indices = null;
 	private ModelMetaData model = null;
 	private StructuredTextFile stf = null;
+
+	@BeforeAll
+	static void setUpAll() {
+		System.setProperty("corentx.util.Str.suppress.html.note", "true");
+		System.setProperty("corent.base.StrUtil.suppress.html.note", "true");
+	}
 
 	/**
 	 * @changed OLI 21.11.2011 - Hinzugef&uuml;gt.

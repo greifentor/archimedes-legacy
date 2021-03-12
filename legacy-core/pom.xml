@@ -23,6 +23,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<start-class>archimedes.legacy.Archimedes</start-class>
+		<corentx.util.Str.suppress.html.note>true</corentx.util.Str.suppress.html.note>
 	</properties>
 
 	<dependencies>
@@ -194,7 +195,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.0.0-M1</version>
 				<configuration>
-					<skipTests>true</skipTests>
+					<skipTests>false</skipTests>
 				</configuration>
 			</plugin>
 			<plugin>
