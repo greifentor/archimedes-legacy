@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.NameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.TableModel;
 import lombok.Data;
@@ -27,12 +28,12 @@ public class DTOClassCodeGenerator extends AbstractCodeGenerator {
 	}
 
 	public DTOClassCodeGenerator() {
-		super("DTOClass.vm", RestControllerCodeFactory.TEMPLATE_PATH);
+		super("DTOClass.vm", RestControllerCodeFactory.TEMPLATE_PATH, new NameGenerator());
 	}
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, TableModel table) {
-		context.put("ClassName", table.getName() + "DTO");
+		context.put("ClassName", nameGenerator.getDTOClassName(table));
 		context.put("ColumnData", getColumnData(table.getColumns()));
 	}
 

@@ -24,11 +24,14 @@ public abstract class AbstractCodeGenerator {
 
 	private static final Logger LOG = LogManager.getLogger(AbstractCodeGenerator.class);
 
+	protected NameGenerator nameGenerator;
+
 	private String templateFileName;
 	private String templatePathName;
 
-	public AbstractCodeGenerator(String templateFileName, String templatePathName) {
+	public AbstractCodeGenerator(String templateFileName, String templatePathName, NameGenerator nameGenerator) {
 		super();
+		this.nameGenerator = nameGenerator;
 		this.templateFileName = changeSeparators(templateFileName);
 		this.templatePathName = changeSeparators(templatePathName);
 //		this.templatePathName = this.templatePathName + (!this.templatePathName.endsWith("/") ? "/" : "");

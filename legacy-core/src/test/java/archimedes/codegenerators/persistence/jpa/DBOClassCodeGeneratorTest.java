@@ -40,14 +40,14 @@ public class DBOClassCodeGeneratorTest {
 					"import lombok.experimental.Accessors;\n" + //
 					"\n" + //
 					"/**\n" + //
-					" * A DBO for " + TABLE_NAME.toLowerCase() + "s.\n" + //
+					" * A DBO for a_tables.\n" + //
 					" *\n" + //
 					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 					" */\n" + //
 					"@Accessors(chain = true)\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
-					"public class " + TABLE_NAME + "DBO {\n" + //
+					"public class ATableDBO {\n" + //
 					"\n" + //
 					"	private long id;\n" + //
 					"	private String description;\n" + //
@@ -55,7 +55,7 @@ public class DBOClassCodeGeneratorTest {
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel.getTableByName(TABLE_NAME));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
 		}

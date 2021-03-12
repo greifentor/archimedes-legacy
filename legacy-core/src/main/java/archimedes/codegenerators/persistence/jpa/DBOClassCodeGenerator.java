@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.NameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.TableModel;
 import lombok.Data;
@@ -27,12 +28,12 @@ public class DBOClassCodeGenerator extends AbstractCodeGenerator {
 	}
 
 	public DBOClassCodeGenerator() {
-		super("DBOClass.vm", PersistenceJPACodeFactory.TEMPLATE_PATH);
+		super("DBOClass.vm", PersistenceJPACodeFactory.TEMPLATE_PATH, new NameGenerator());
 	}
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, TableModel table) {
-		context.put("ClassName", table.getName() + "DBO");
+		context.put("ClassName", nameGenerator.getClassName(table) + "DBO");
 		context.put("ColumnData", getColumnData(table.getColumns()));
 	}
 

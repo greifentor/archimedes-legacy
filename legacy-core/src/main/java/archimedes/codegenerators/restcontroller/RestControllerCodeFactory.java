@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import archimedes.acf.checker.ModelChecker;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.NameGenerator;
 import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
@@ -26,6 +27,8 @@ public class RestControllerCodeFactory extends AbstractCodeFactory
 
 	private static final Logger LOG = LogManager.getLogger(RestControllerCodeFactory.class);
 
+	private NameGenerator nameGenerator = new NameGenerator();
+
 	@Override
 	public boolean generate(String path) {
 		LOG.info("Started code generation");
@@ -34,7 +37,7 @@ public class RestControllerCodeFactory extends AbstractCodeFactory
 		for (TableModel tableModel : dataModel.getTables()) {
 			if (tableModel.isGenerateCode()) {
 				String code = new DTOClassCodeGenerator().generate(basePackageName, tableModel);
-				String fileName = path + "/" + tableModel.getName() + "DTO";
+				String fileName = path + "/" + nameGenerator.getDTOClassName(tableModel);
 				try (FileWriter writer = new FileWriter(fileName)) {
 					writer.write(code);
 					LOG.info("wrote file: " + fileName);

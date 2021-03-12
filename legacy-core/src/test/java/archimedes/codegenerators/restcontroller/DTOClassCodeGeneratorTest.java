@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.NameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.scheme.xml.ModelXMLReader;
@@ -18,6 +20,9 @@ public class DTOClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 	private static final String TABLE_NAME = "ATable";
+
+	@Spy
+	private NameGenerator nameGenerator = new NameGenerator();
 
 	@InjectMocks
 	private DTOClassCodeGenerator unitUnderTest;
@@ -40,14 +45,14 @@ public class DTOClassCodeGeneratorTest {
 					"import lombok.experimental.Accessors;\n" + //
 					"\n" + //
 					"/**\n" + //
-					" * A DTO for " + TABLE_NAME.toLowerCase() + "s.\n" + //
+					" * A DTO for a_tables.\n" + //
 					" *\n" + //
 					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 					" */\n" + //
 					"@Accessors(chain = true)\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
-					"public class " + TABLE_NAME + "DTO {\n" + //
+					"public class ATableDTO {\n" + //
 					"\n" + //
 					"	private long id;\n" + //
 					"	private String description;\n" + //
@@ -55,7 +60,7 @@ public class DTOClassCodeGeneratorTest {
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel.getTableByName(TABLE_NAME));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
 		}
