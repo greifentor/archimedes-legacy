@@ -40,6 +40,8 @@ public class DTOClassCodeGeneratorTest {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".rest.dto;\n" + //
 					"\n" + //
+					"import java.time.LocalDate;\n" + //
+					"\n" + //
 					"import lombok.Data;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.experimental.Accessors;\n" + //
@@ -55,6 +57,7 @@ public class DTOClassCodeGeneratorTest {
 					"public class ATableDTO {\n" + //
 					"\n" + //
 					"	private long id;\n" + //
+					"	private LocalDate aDate;\n" + //
 					"	private String description;\n" + //
 					"\n" + //
 					"}";

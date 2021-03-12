@@ -4,6 +4,7 @@ import static de.ollie.dbcomp.util.Check.ensure;
 
 import org.apache.commons.lang3.StringUtils;
 
+import archimedes.model.ColumnModel;
 import archimedes.model.TableModel;
 
 /**
@@ -13,8 +14,34 @@ import archimedes.model.TableModel;
  */
 public class NameGenerator {
 
-	public String getDTOClassName(TableModel table) {
-		return table != null ? getClassName(table) + "DTO" : null;
+	public String getAttributeName(ColumnModel column) {
+		return getAttributeName(column, false);
+	}
+
+	public String getAttributeName(ColumnModel column, boolean useQualifiedColumnName) {
+		if (column == null) {
+			return null;
+		}
+		String columnName = (useQualifiedColumnName ? column.getTable().getName() + "_" : "") + column.getName();
+		ensure(!columnName.isEmpty(), "column name cannot be empty.");
+		if (containsUnderScores(columnName)) {
+			columnName = buildTableNameFromUnderScoreString(columnName);
+		} else if (allCharactersAreUpperCase(columnName)) {
+			columnName = columnName.toLowerCase();
+		}
+		if (startsWithUpperCaseCharacter(columnName)) {
+			columnName = firstCharToLowerCase(columnName);
+		}
+		return columnName;
+	}
+
+	private boolean startsWithUpperCaseCharacter(String s) {
+		String firstChar = StringUtils.left(s, 1);
+		return firstChar.equals(firstChar.toUpperCase());
+	}
+
+	private String firstCharToLowerCase(String s) {
+		return StringUtils.left(s, 1).toLowerCase() + (s.length() > 1 ? s.substring(1) : "");
 	}
 
 	public String getClassName(TableModel tableSO) {
@@ -59,6 +86,14 @@ public class NameGenerator {
 
 	private String firstCharToUpperCase(String s) {
 		return StringUtils.left(s, 1).toUpperCase() + (s.length() > 1 ? s.substring(1) : "");
+	}
+
+	public String getDBOClassName(TableModel table) {
+		return table != null ? getClassName(table) + "DBO" : null;
+	}
+
+	public String getDTOClassName(TableModel table) {
+		return table != null ? getClassName(table) + "DTO" : null;
 	}
 
 }

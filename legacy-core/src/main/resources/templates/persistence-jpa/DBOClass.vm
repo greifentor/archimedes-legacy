@@ -1,20 +1,25 @@
 package ${BasePackageName}.service.so;
 
+#if ($ImportLocalDate)
+import ${ImportLocalDate};
+
+#end
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
 
 /**
- * A DBO for $PluralName.
+ * A DBO for ${PluralName}.
  *
  * ${Generated}
  */
 @Accessors(chain = true)
 @Data
 @Generated
-public class $ClassName {
+public class ${ClassName} {
 
-	private long id;
-	private String description;
+#foreach($Column in $ColumnData)
+	private ${Column.getFieldType()} ${Column.getFieldName()};
+#end
 
 }

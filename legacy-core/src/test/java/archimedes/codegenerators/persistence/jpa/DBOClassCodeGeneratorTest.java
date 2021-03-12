@@ -35,6 +35,8 @@ public class DBOClassCodeGeneratorTest {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".service.so;\n" + //
 					"\n" + //
+					"import java.time.LocalDate;\n" + //
+					"\n" + //
 					"import lombok.Data;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.experimental.Accessors;\n" + //
@@ -50,6 +52,7 @@ public class DBOClassCodeGeneratorTest {
 					"public class ATableDBO {\n" + //
 					"\n" + //
 					"	private long id;\n" + //
+					"	private LocalDate aDate;\n" + //
 					"	private String description;\n" + //
 					"\n" + //
 					"}";
