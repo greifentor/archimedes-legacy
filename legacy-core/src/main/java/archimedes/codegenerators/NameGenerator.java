@@ -89,10 +89,6 @@ public class NameGenerator {
 		return StringUtils.left(s, 1).toUpperCase() + (s.length() > 1 ? s.substring(1) : "");
 	}
 
-	public String getDBOClassName(TableModel table) {
-		return table != null ? getClassName(table) + "DBO" : null;
-	}
-
 	protected String getBasePackageNameWithDotExtension(DataModel model) {
 		return (model.getBasePackageName() == null) || model.getBasePackageName().isEmpty()
 				? ""

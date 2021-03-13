@@ -9,7 +9,6 @@ import org.apache.velocity.VelocityContext;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
-import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.TableModel;
@@ -19,10 +18,14 @@ import archimedes.model.TableModel;
  *
  * @author ollie (03.03.2021)
  */
-public class DBOClassCodeGenerator extends AbstractCodeGenerator {
+public class DBOClassCodeGenerator extends AbstractCodeGenerator<PersistenceJPANameGenerator> {
 
 	public DBOClassCodeGenerator() {
-		super("DBOClass.vm", PersistenceJPACodeFactory.TEMPLATE_PATH, new NameGenerator(), new TypeGenerator());
+		super(
+				"DBOClass.vm",
+				PersistenceJPACodeFactory.TEMPLATE_PATH,
+				new PersistenceJPANameGenerator(),
+				new TypeGenerator());
 	}
 
 	@Override
