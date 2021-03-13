@@ -37,7 +37,8 @@ public class RestControllerCodeFactory extends AbstractCodeFactory
 		for (TableModel tableModel : dataModel.getTables()) {
 			if (tableModel.isGenerateCode()) {
 				String code = new DTOClassCodeGenerator().generate(basePackageName, tableModel);
-				String fileName = path + "/" + nameGenerator.getDTOClassName(tableModel);
+				String fileName = path + "/" + nameGenerator.getDTOPackageName(dataModel).replace(".", "/") + "/"
+						+ nameGenerator.getDTOClassName(tableModel);
 				try (FileWriter writer = new FileWriter(fileName)) {
 					writer.write(code);
 					LOG.info("wrote file: " + fileName);

@@ -14,13 +14,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 @ExtendWith(MockitoExtension.class)
 public class NameGeneratorTest {
 
+	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
+
 	@Mock
 	private ColumnModel column;
+	@Mock
+	private DataModel model;
 	@Mock
 	private TableModel table;
 
@@ -32,7 +37,7 @@ public class NameGeneratorTest {
 	class AttributeNameTests {
 
 		@Test
-		public void getAttributeName_PassColumnModelWithEmptyName_ThrowsException() {
+		void getAttributeName_PassColumnModelWithEmptyName_ThrowsException() {
 			// Prepare
 			when(column.getName()).thenReturn("");
 			// Run
@@ -42,12 +47,12 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getAttributeName_PassANullValue_ReturnsANullValue() {
+		void getAttributeName_PassANullValue_ReturnsANullValue() {
 			assertNull(unitUnderTest.getAttributeName(null));
 		}
 
 		@Test
-		public void getAttributeName_PassAColumnNameStartsWithLowerCase_ReturnsACorrectAttributeName() {
+		void getAttributeName_PassAColumnNameStartsWithLowerCase_ReturnsACorrectAttributeName() {
 			// Prepare
 			String expected = "column";
 			when(column.getName()).thenReturn("column");
@@ -58,7 +63,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getAttributeName_PassAColumnNameStartsWithUpperCase_ReturnsACorrectAttributeName() {
+		void getAttributeName_PassAColumnNameStartsWithUpperCase_ReturnsACorrectAttributeName() {
 			// Prepare
 			String expected = "column";
 			when(column.getName()).thenReturn("Column");
@@ -69,7 +74,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getAttributeName_PassAColumnNameCompleteUpperCase_ReturnsACorrectAttributeName() {
+		void getAttributeName_PassAColumnNameCompleteUpperCase_ReturnsACorrectAttributeName() {
 			// Prepare
 			String expected = "column";
 			when(column.getName()).thenReturn("COLUMN");
@@ -80,7 +85,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getAttributeName_PassAColumnNameSingleUpperCase_ReturnsACorrectAttributeName() {
+		void getAttributeName_PassAColumnNameSingleUpperCase_ReturnsACorrectAttributeName() {
 			// Prepare
 			String expected = "c";
 			when(column.getName()).thenReturn("C");
@@ -91,7 +96,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getAttributeName_PassAColumnNameSingleLowerCase_ReturnsACorrectAttributeName() {
+		void getAttributeName_PassAColumnNameSingleLowerCase_ReturnsACorrectAttributeName() {
 			// Prepare
 			String expected = "c";
 			when(column.getName()).thenReturn("c");
@@ -102,7 +107,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getAttributeName_PassAColumnNameOnlyUpperCaseWithUnderScore_ReturnsACorrectAttributeName() {
+		void getAttributeName_PassAColumnNameOnlyUpperCaseWithUnderScore_ReturnsACorrectAttributeName() {
 			// Prepare
 			String expected = "columnName";
 			when(column.getName()).thenReturn("COLUMN_NAME");
@@ -113,7 +118,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getAttributeName_PassAColumnNameOnlyMixedCaseWithUnderScore_ReturnsACorrectAttributeName() {
+		void getAttributeName_PassAColumnNameOnlyMixedCaseWithUnderScore_ReturnsACorrectAttributeName() {
 			// Prepare
 			String expected = "columnName";
 			when(column.getName()).thenReturn("Column_Name");
@@ -124,7 +129,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getAttributeName_PassAColumnNameOnlyLowercaseWithUnderScore_ReturnsACorrectAttributeName() {
+		void getAttributeName_PassAColumnNameOnlyLowercaseWithUnderScore_ReturnsACorrectAttributeName() {
 			// Prepare
 			String expected = "columnName";
 			when(column.getName()).thenReturn("column_name");
@@ -135,7 +140,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getAttributeName_SetUseQualifiedColumnName_ReturnsACorrectAttributeName() {
+		void getAttributeName_SetUseQualifiedColumnName_ReturnsACorrectAttributeName() {
 			// Prepare
 			String expected = "tableNameColumnName";
 			when(table.getName()).thenReturn("TableName");
@@ -154,7 +159,7 @@ public class NameGeneratorTest {
 	class DBOClassNameTests {
 
 		@Test
-		public void getDBOClassName_PassTableModelWithEmptyName_ThrowsException() {
+		void getDBOClassName_PassTableModelWithEmptyName_ThrowsException() {
 			// Prepare
 			when(table.getName()).thenReturn("");
 			// Run
@@ -164,12 +169,12 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDBOClassName_PassNullValue_ReturnsNullValue() {
+		void getDBOClassName_PassNullValue_ReturnsNullValue() {
 			assertNull(unitUnderTest.getDBOClassName(null));
 		}
 
 		@Test
-		public void getDBOClassName_PassTableModelWithNameCamelCase_ReturnsACorrectDBOName() {
+		void getDBOClassName_PassTableModelWithNameCamelCase_ReturnsACorrectDBOName() {
 			// Prepare
 			String expected = "TestTableDBO";
 			when(table.getName()).thenReturn("TestTable");
@@ -180,7 +185,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDBOClassName_PassTableModelWithNameUpperCase_ReturnsACorrectDBOName() {
+		void getDBOClassName_PassTableModelWithNameUpperCase_ReturnsACorrectDBOName() {
 			// Prepare
 			String expected = "TableDBO";
 			when(table.getName()).thenReturn("TABLE");
@@ -191,7 +196,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDBOClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectDBOName() {
+		void getDBOClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectDBOName() {
 			// Prepare
 			String expected = "TableNameDBO";
 			when(table.getName()).thenReturn("TABLE_NAME");
@@ -202,7 +207,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDBOClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectDBOName() {
+		void getDBOClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectDBOName() {
 			// Prepare
 			String expected = "TableNameDBO";
 			when(table.getName()).thenReturn("table_name");
@@ -213,7 +218,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDBOClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectDBOName() {
+		void getDBOClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectDBOName() {
 			// Prepare
 			String expected = "TableNameDBO";
 			when(table.getName()).thenReturn("Table_Name");
@@ -224,7 +229,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDBOClassName_PassTableModelWithNameLowerCase_ReturnsACorrectDBOName() {
+		void getDBOClassName_PassTableModelWithNameLowerCase_ReturnsACorrectDBOName() {
 			// Prepare
 			String expected = "TableDBO";
 			when(table.getName()).thenReturn("table");
@@ -235,7 +240,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDBOClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectDBOName() {
+		void getDBOClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectDBOName() {
 			// Prepare
 			String expected = "TDBO";
 			when(table.getName()).thenReturn("T");
@@ -246,7 +251,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDBOClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectDBOName() {
+		void getDBOClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectDBOName() {
 			// Prepare
 			String expected = "TDBO";
 			when(table.getName()).thenReturn("t");
@@ -263,7 +268,7 @@ public class NameGeneratorTest {
 	class DTOClassNameTests {
 
 		@Test
-		public void getDTOClassName_PassTableModelWithEmptyName_ThrowsException() {
+		void getDTOClassName_PassTableModelWithEmptyName_ThrowsException() {
 			// Prepare
 			when(table.getName()).thenReturn("");
 			// Run
@@ -273,12 +278,12 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDTOClassName_PassNullValue_ReturnsNullValue() {
+		void getDTOClassName_PassNullValue_ReturnsNullValue() {
 			assertNull(unitUnderTest.getDTOClassName(null));
 		}
 
 		@Test
-		public void getDTOClassName_PassTableModelWithNameCamelCase_ReturnsACorrectDTOName() {
+		void getDTOClassName_PassTableModelWithNameCamelCase_ReturnsACorrectDTOName() {
 			// Prepare
 			String expected = "TestTableDTO";
 			when(table.getName()).thenReturn("TestTable");
@@ -289,7 +294,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDTOClassName_PassTableModelWithNameUpperCase_ReturnsACorrectDTOName() {
+		void getDTOClassName_PassTableModelWithNameUpperCase_ReturnsACorrectDTOName() {
 			// Prepare
 			String expected = "TableDTO";
 			when(table.getName()).thenReturn("TABLE");
@@ -300,7 +305,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDTOClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectDTOName() {
+		void getDTOClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectDTOName() {
 			// Prepare
 			String expected = "TableNameDTO";
 			when(table.getName()).thenReturn("TABLE_NAME");
@@ -311,7 +316,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDTOClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectDTOName() {
+		void getDTOClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectDTOName() {
 			// Prepare
 			String expected = "TableNameDTO";
 			when(table.getName()).thenReturn("table_name");
@@ -322,7 +327,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDTOClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectDTOName() {
+		void getDTOClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectDTOName() {
 			// Prepare
 			String expected = "TableNameDTO";
 			when(table.getName()).thenReturn("Table_Name");
@@ -333,7 +338,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDTOClassName_PassTableModelWithNameLowerCase_ReturnsACorrectDTOName() {
+		void getDTOClassName_PassTableModelWithNameLowerCase_ReturnsACorrectDTOName() {
 			// Prepare
 			String expected = "TableDTO";
 			when(table.getName()).thenReturn("table");
@@ -344,7 +349,7 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDTOClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectDTOName() {
+		void getDTOClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectDTOName() {
 			// Prepare
 			String expected = "TDTO";
 			when(table.getName()).thenReturn("T");
@@ -355,12 +360,56 @@ public class NameGeneratorTest {
 		}
 
 		@Test
-		public void getDTOClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectDTOName() {
+		void getDTOClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectDTOName() {
 			// Prepare
 			String expected = "TDTO";
 			when(table.getName()).thenReturn("t");
 			// Run
 			String returned = unitUnderTest.getDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for DTO package names")
+	@Nested
+	class DTOPackageNameTests {
+
+		@Test
+		void getDTOPackageName_PassANullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getDTOPackageName(null));
+		}
+
+		@Test
+		void getDTOPackageName_PassAValidTableModel_ReturnsACorrecDTOName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".rest.dto";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getDTOPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecDTOName() {
+			// Prepare
+			String expected = "rest.dto";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getDTOPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecDTOName() {
+			// Prepare
+			String expected = "rest.dto";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getDTOPackageName(model);
 			// Check
 			assertEquals(expected, returned);
 		}

@@ -5,6 +5,7 @@ import static de.ollie.dbcomp.util.Check.ensure;
 import org.apache.commons.lang3.StringUtils;
 
 import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
@@ -94,6 +95,16 @@ public class NameGenerator {
 
 	public String getDTOClassName(TableModel table) {
 		return table != null ? getClassName(table) + "DTO" : null;
+	}
+
+	public String getDTOPackageName(DataModel model) {
+		return model != null ? getBasePackageNameWithDotExtension(model) + "rest.dto" : null;
+	}
+
+	private String getBasePackageNameWithDotExtension(DataModel model) {
+		return (model.getBasePackageName() == null) || model.getBasePackageName().isEmpty()
+				? ""
+				: model.getBasePackageName() + ".";
 	}
 
 }
