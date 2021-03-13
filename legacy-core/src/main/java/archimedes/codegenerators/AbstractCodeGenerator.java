@@ -18,13 +18,13 @@ import archimedes.model.TableModel;
  *
  * @author ollie (03.03.2021)
  */
-public abstract class AbstractCodeGenerator {
+public abstract class AbstractCodeGenerator<NG extends NameGenerator> {
 
 	public static final String GENERATED_CODE = "GENERATED CODE !!! DO NOT CHANGE !!!";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractCodeGenerator.class);
 
-	protected NameGenerator nameGenerator;
+	protected NG nameGenerator;
 	protected TypeGenerator typeGenerator;
 
 	private String templateFileName;
@@ -33,7 +33,7 @@ public abstract class AbstractCodeGenerator {
 	public AbstractCodeGenerator(
 			String templateFileName,
 			String templatePathName,
-			NameGenerator nameGenerator,
+			NG nameGenerator,
 			TypeGenerator typeGenerator) {
 		super();
 		this.nameGenerator = nameGenerator;

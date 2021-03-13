@@ -93,15 +93,7 @@ public class NameGenerator {
 		return table != null ? getClassName(table) + "DBO" : null;
 	}
 
-	public String getDTOClassName(TableModel table) {
-		return table != null ? getClassName(table) + "DTO" : null;
-	}
-
-	public String getDTOPackageName(DataModel model) {
-		return model != null ? getBasePackageNameWithDotExtension(model) + "rest.dto" : null;
-	}
-
-	private String getBasePackageNameWithDotExtension(DataModel model) {
+	protected String getBasePackageNameWithDotExtension(DataModel model) {
 		return (model.getBasePackageName() == null) || model.getBasePackageName().isEmpty()
 				? ""
 				: model.getBasePackageName() + ".";

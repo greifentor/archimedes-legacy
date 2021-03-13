@@ -9,7 +9,6 @@ import org.apache.velocity.VelocityContext;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
-import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.TableModel;
@@ -19,10 +18,14 @@ import archimedes.model.TableModel;
  *
  * @author ollie (10.03.2021)
  */
-public class DTOClassCodeGenerator extends AbstractCodeGenerator {
+public class DTOClassCodeGenerator extends AbstractCodeGenerator<RESTControllerNameGenerator> {
 
 	public DTOClassCodeGenerator() {
-		super("DTOClass.vm", RestControllerCodeFactory.TEMPLATE_PATH, new NameGenerator(), new TypeGenerator());
+		super(
+				"DTOClass.vm",
+				RESTControllerCodeFactory.TEMPLATE_PATH,
+				new RESTControllerNameGenerator(),
+				new TypeGenerator());
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 import archimedes.acf.checker.ModelChecker;
 import archimedes.codegenerators.AbstractCodeFactory;
-import archimedes.codegenerators.NameGenerator;
 import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
@@ -19,15 +18,15 @@ import archimedes.model.TableModel;
  *
  * @author ollie (03.03.2021)
  */
-public class RestControllerCodeFactory extends AbstractCodeFactory
+public class RESTControllerCodeFactory extends AbstractCodeFactory
 		implements CodeFactoryProgressionEventProvider, StandardCodeFactoryProgressionFrameUser {
 
 	public static final String TEMPLATE_PATH = System
 			.getProperty("RestControllerCodeFactory.templates.path", "src/main/resources/templates/restcontroller");
 
-	private static final Logger LOG = LogManager.getLogger(RestControllerCodeFactory.class);
+	private static final Logger LOG = LogManager.getLogger(RESTControllerCodeFactory.class);
 
-	private NameGenerator nameGenerator = new NameGenerator();
+	private RESTControllerNameGenerator nameGenerator = new RESTControllerNameGenerator();
 
 	@Override
 	public boolean generate(String path) {

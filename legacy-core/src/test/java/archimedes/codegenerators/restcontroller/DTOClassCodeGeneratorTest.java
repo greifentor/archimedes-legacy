@@ -10,7 +10,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractCodeGenerator;
-import archimedes.codegenerators.NameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.scheme.xml.ModelXMLReader;
@@ -22,7 +21,7 @@ public class DTOClassCodeGeneratorTest {
 	private static final String TABLE_NAME = "ATable";
 
 	@Spy
-	private NameGenerator nameGenerator = new NameGenerator();
+	private RESTControllerNameGenerator nameGenerator = new RESTControllerNameGenerator();
 
 	@InjectMocks
 	private DTOClassCodeGenerator unitUnderTest;
