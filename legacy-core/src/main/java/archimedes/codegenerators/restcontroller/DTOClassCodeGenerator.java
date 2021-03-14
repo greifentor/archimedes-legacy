@@ -39,11 +39,6 @@ public class DTOClassCodeGenerator extends AbstractCodeGenerator<RESTControllerN
 		}
 	}
 
-	@Override
-	public String getClassName(TableModel table) {
-		return nameGenerator.getDTOClassName(table);
-	}
-
 	private List<ColumnData> getColumnData(ColumnModel[] columns) {
 		return Arrays
 				.asList(columns)
@@ -53,6 +48,11 @@ public class DTOClassCodeGenerator extends AbstractCodeGenerator<RESTControllerN
 								.setFieldName(nameGenerator.getAttributeName(column))
 								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false)))
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public String getClassName(TableModel table) {
+		return nameGenerator.getDTOClassName(table);
 	}
 
 	@Override

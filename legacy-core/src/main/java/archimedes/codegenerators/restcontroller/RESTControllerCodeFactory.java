@@ -56,7 +56,7 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 				});
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override

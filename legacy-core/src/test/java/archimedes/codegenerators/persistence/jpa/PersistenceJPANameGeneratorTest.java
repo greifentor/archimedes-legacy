@@ -20,6 +20,8 @@ import archimedes.model.TableModel;
 @ExtendWith(MockitoExtension.class)
 public class PersistenceJPANameGeneratorTest {
 
+	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
+
 	@Mock
 	private ColumnModel column;
 	@Mock
@@ -133,6 +135,50 @@ public class PersistenceJPANameGeneratorTest {
 			when(table.getName()).thenReturn("t");
 			// Run
 			String returned = unitUnderTest.getDBOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for DBO package names")
+	@Nested
+	class DBOPackageNameTests {
+
+		@Test
+		void getDBOPackageName_PassANullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getDBOPackageName(null));
+		}
+
+		@Test
+		void getDBOPackageName_PassAValidTableModel_ReturnsACorrecDBOName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".persistence.entities";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getDBOPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDBOPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecDBOName() {
+			// Prepare
+			String expected = "persistence.entities";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getDBOPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDBOPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecDBOName() {
+			// Prepare
+			String expected = "persistence.entities";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getDBOPackageName(model);
 			// Check
 			assertEquals(expected, returned);
 		}

@@ -11,6 +11,7 @@ import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
@@ -31,7 +32,7 @@ public class DBOClassCodeGenerator extends AbstractCodeGenerator<PersistenceJPAN
 	@Override
 	protected void extendVelocityContext(VelocityContext context, TableModel table) {
 		List<ColumnData> columnData = getColumnData(table.getColumns());
-		context.put("ClassName", nameGenerator.getDBOClassName(table));
+		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
@@ -47,6 +48,16 @@ public class DBOClassCodeGenerator extends AbstractCodeGenerator<PersistenceJPAN
 								.setFieldName(nameGenerator.getAttributeName(column))
 								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false)))
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public String getClassName(TableModel table) {
+		return nameGenerator.getDBOClassName(table);
+	}
+
+	@Override
+	public String getPackageName(DataModel model) {
+		return nameGenerator.getDBOPackageName(model);
 	}
 
 }
