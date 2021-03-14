@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import archimedes.legacy.model.DomainShowMode;
 import archimedes.model.DomainModel;
 
 /**
@@ -38,9 +39,9 @@ public class DomainStringBuilderTest {
 	 */
 	@BeforeEach
 	public void setUp() throws Exception {
-		this.domain = new Domain("int", Types.INTEGER, 0, 0);
+		this.domain = new Domain("IntDomain", Types.INTEGER, 0, 0);
 		this.column = new Tabellenspalte("Id", this.domain);
-		this.unitUnderTest = new DomainStringBuilder(this.column);
+		this.unitUnderTest = new DomainStringBuilder(this.column, DomainShowMode.ALL);
 	}
 
 	/**
@@ -48,7 +49,7 @@ public class DomainStringBuilderTest {
 	 */
 	@Test
 	public void testBuildDomainDefaultAndAttributeDefaultUnset() {
-		assertEquals("int (int)", this.unitUnderTest.build());
+		assertEquals("IntDomain (int)", this.unitUnderTest.build());
 	}
 
 	/**
@@ -58,7 +59,7 @@ public class DomainStringBuilderTest {
 	public void testBuildDomainDefaultAndAttributeDefaultSet() {
 		this.domain.setInitialValue("4711");
 		this.column.setIndividualDefaultValue("815");
-		assertEquals("int (int) - 815", this.unitUnderTest.build(), "individual default value should be set.");
+		assertEquals("IntDomain (int) - 815", this.unitUnderTest.build(), "individual default value should be set.");
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class DomainStringBuilderTest {
 	@Test
 	public void testBuildOnlyAttributeDefaultSet() {
 		this.column.setIndividualDefaultValue("815");
-		assertEquals("int (int) - 815", this.unitUnderTest.build(), "individual default value should be set.");
+		assertEquals("IntDomain (int) - 815", this.unitUnderTest.build(), "individual default value should be set.");
 	}
 
 	/**
@@ -85,7 +86,7 @@ public class DomainStringBuilderTest {
 	@Test
 	public void testBuildOnlyDomainDefaultSet() {
 		this.domain.setInitialValue("4711");
-		assertEquals("int (int) - 4711", this.unitUnderTest.build(), "domain default value should be set.");
+		assertEquals("IntDomain (int) - 4711", this.unitUnderTest.build(), "domain default value should be set.");
 	}
 
 	/**
@@ -94,8 +95,20 @@ public class DomainStringBuilderTest {
 	@Test
 	public void testConstructorPassingANullPointerAsColumn() throws Exception {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			new DomainStringBuilder(null);
+			new DomainStringBuilder(null, null);
 		});
+	}
+
+	@Test
+	public void testBuildOnlyDomainWithDomainShowModeDOMAIN_NAME_ONLY() {
+		unitUnderTest = new DomainStringBuilder(this.column, DomainShowMode.DOMAIN_NAME_ONLY);
+		assertEquals("IntDomain", this.unitUnderTest.build(), "domain default value should be set.");
+	}
+
+	@Test
+	public void testBuildOnlyDomainWithDomainShowModeSQL_TYPE_ONLY() {
+		unitUnderTest = new DomainStringBuilder(this.column, DomainShowMode.SQL_TYPE_ONLY);
+		assertEquals("INT", this.unitUnderTest.build(), "domain default value should be set.");
 	}
 
 }

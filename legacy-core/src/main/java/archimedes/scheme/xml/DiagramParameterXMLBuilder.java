@@ -48,6 +48,7 @@ public class DiagramParameterXMLBuilder extends AbstractXMLBuilder {
 		this.addAttribute(parameters, "dbVersionTableName", diagram.getDBVersionTableName());
 		this.addAttribute(parameters, "disableTechnicalFields", String.valueOf(diagram.isPaintTechnicalFieldsInGray()));
 		this.addAttribute(parameters, "disableTransientFields", String.valueOf(diagram.isPaintTransientFieldsInGray()));
+		this.addAttribute(parameters, "domainShowMode", String.valueOf(diagram.getDomainShowMode()));
 		this.addAttribute(parameters, "fontSizeDiagramHeadlines", String.valueOf(diagram.getFontSizeDiagramHeadline()));
 		this.addAttribute(parameters, "fontSizeDiagramSubtitles", String.valueOf(diagram.getFontSizeSubtitles()));
 		this.addAttribute(parameters, "fontSizeTableContents", String.valueOf(diagram.getFontSizeTableContents()));
@@ -55,8 +56,11 @@ public class DiagramParameterXMLBuilder extends AbstractXMLBuilder {
 		this.addAttribute(parameters, "markUpRequiredFieldNames", String.valueOf(diagram.isMarkUpRequiredFieldNames()));
 		this.addAttribute(parameters, "name", diagram.getName());
 		this.addAttribute(parameters, "owner", diagram.getOwner());
-		this.addAttribute(parameters, "relationColorExternalTables",
-				String.valueOf(diagram.getRelationColorToExternalTables()));
+		this
+				.addAttribute(
+						parameters,
+						"relationColorExternalTables",
+						String.valueOf(diagram.getRelationColorToExternalTables()));
 		this.addAttribute(parameters, "relationColorRegular", String.valueOf(diagram.getRelationColorRegular()));
 		this.addAttribute(parameters, "schemeName", diagram.getSchemaName());
 		this.addAttribute(parameters, "scriptAfterWrite", diagram.getAfterWriteScript());

@@ -157,7 +157,7 @@ public interface DiagrammModel extends Attributed, ChangeObserver, Comparable, C
 	public String getAdditionalSQLScriptListener();
 
 	/**
-	 * Liefert eine Liste mit den FElder aller Tabellen des Diagramms.
+	 * Liefert eine Liste mit den Felder aller Tabellen des Diagramms.
 	 * 
 	 * @return Eine Liste mit den Feldern aller Tabellen des Diagramms.
 	 * 
@@ -228,6 +228,24 @@ public interface DiagrammModel extends Attributed, ChangeObserver, Comparable, C
 	 * @return Eine Liste mit den DomainModels des Diagramms.
 	 */
 	public Vector getDomains();
+
+	/**
+	 * Liefert einen Modus zur Anzeige der Datentypen von Feldern in der Anzeige.
+	 * 
+	 * @return Der Modus zur Anzeige der Datentypen von Feldern in der Anzeige.
+	 * 
+	 * @changed OLI 14.03.2021 - Hinzugef&uuml;gt.
+	 */
+	public DomainShowMode getDomainShowMode();
+
+	/**
+	 * Setzt einen Modus zur Anzeige der Datentypen von Feldern in der Anzeige.
+	 * 
+	 * @param Der neue Modus zur Anzeige der Datentypen von Feldern in der Anzeige.
+	 * 
+	 * @changed OLI 14.03.2021 - Hinzugef&uuml;gt.
+	 */
+	public void setDomainShowMode(DomainShowMode newMode);
 
 	/**
 	 * Liefert eine Liste mit den DomainModels des Diagramms.

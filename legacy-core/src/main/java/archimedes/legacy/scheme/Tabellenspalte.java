@@ -372,7 +372,7 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	}
 
 	private String getDomainAndDefaultValue() {
-		return new DomainStringBuilder(this).build();
+		return new DomainStringBuilder(this, getTable().getDataModel().getDomainShowMode()).build();
 	}
 
 	public RelationModel getRelation() {
@@ -521,8 +521,17 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 				this.getRelation().setReferenced((TabellenspaltenModel) value);
 			} else {
 				ViewModel view = (ViewModel) this.getTabelle().getDiagramm().getViews().get(0);
-				this.setRelation(Archimedes.Factory.createRelation(view, this, Direction.UP, 0,
-						(TabellenspaltenModel) value, Direction.UP, 0));
+				this
+						.setRelation(
+								Archimedes.Factory
+										.createRelation(
+												view,
+												this,
+												Direction.UP,
+												0,
+												(TabellenspaltenModel) value,
+												Direction.UP,
+												0));
 			}
 			return;
 		case ID_AUFGEHOBEN:
@@ -634,145 +643,550 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 		 * Alte Version. DefaultComponentFactory dcfkey = new DefaultComponentFactory(this.getTabelle(
 		 * ).getDiagramm().getKeycolumns(null));
 		 */
-		DefaultComponentFactory dcfkey = new DefaultComponentFactory(
-				this.getTabelle().getDiagramm().getColumnsToBeReferenced(null));
+		DefaultComponentFactory dcfkey =
+				new DefaultComponentFactory(this.getTabelle().getDiagramm().getColumnsToBeReferenced(null));
 		Vector refweights = new Vector();
 		for (int i = 0; i < ReferenceWeight.values().length; i++) {
 			refweights.addElement(ReferenceWeight.values()[i]);
 		}
 		DefaultComponentFactory dcfrws = new DefaultComponentFactory(refweights);
-		DefaultComponentFactory dcfseq = new DefaultComponentFactory(
-				Arrays.asList(this.getTable().getDataModel().getSequences()));
+		DefaultComponentFactory dcfseq =
+				new DefaultComponentFactory(Arrays.asList(this.getTable().getDataModel().getSequences()));
 		DefaultEditorDescriptorList dedl = new DefaultEditorDescriptorList();
-		DefaultComponentFactory dcfpanels = new DefaultComponentFactory(
-				((Tabelle) this.getTabelle()).getPanelsByReference());
+		DefaultComponentFactory dcfpanels =
+				new DefaultComponentFactory(((Tabelle) this.getTabelle()).getPanelsByReference());
 		if (this.get(ID_PANEL) == null) {
 			this.set(ID_PANEL, this.getTable().getPanels()[0]);
 		}
 		DefaultLabelFactory dlf = DefaultLabelFactory.INSTANZ;
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_NAME, dlf, dcf, "Name", 'N', null,
-				"Der Name der Tabellenspalte"));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_DOMAIN, dlf, dcfdom, "Domain", 'D', null,
-				"Die Domain zur Tabellenspalte"));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_INDIVIDUALDEFAULTVALUE, dlf, dcf,
-				"Individueller Defaultwert", '\0', null, "Ein individueller Defaultwert " + "zur Tabellenspalte"));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_PRIMARYKEY, dlf, dcf,
-				StrUtil.FromHTML("Prim&auml;rschl&uuml;ssel"), 'P', null, StrUtil.FromHTML(
-						"Setzen Sie diese Flagge um ein Prim&auml;rschl&uuml;sselmitglied zu " + "kennzeichnen.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_NOTNULL, dlf, dcf, "Not-Null", 'O', null,
-				StrUtil.FromHTML("Setzen Sie diese Flagge, wenn f&uuml;r"
-						+ " das Attribut ein Not-Null-Constraint gesetzt werden soll.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_REFERENZIERTESPALTE, dlf, dcfkey, "Referenziert", 'R',
-				null, "Eine durch die Tabellenspalte referenzierte" + " Tabellenspalte"));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_SEQUENCE_FOR_KEY_GENERATION, dlf, dcfseq,
-				"Key-Generator-Sequenz", 'Q', null, StrUtil.FromHTML("W&auuml;hlen"
-						+ " Sie hier eine Sequenz zur Schl&uuml;sselerzeugung, falls sie dies " + "w&uuml;nschen.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_CANBEREFERENCED, dlf, dcf, "Referenzierbar", 'Z', null,
-				"Setzen Sie diese Flagge, um die " + "Tabellenspalte in Referenzauswahldialogen anzuzeigen."));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_HIDEREFERENCE, dlf, dcf, "Referenzanzeige verstecken",
-				'\0', null, StrUtil.FromHTML("Setzen Sie "
-						+ "diese Flagge, um die Referenzanzeige f&uuml;r die Tabellenspalte zu " + "deaktivieren.")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_AUFGEHOBEN, dlf, dcf, "Aufgehoben", 'A', null,
-				"Die Aufgehoben-Flagge der Tabellenspalte"));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_KODIERT, dlf, dcf, "Kodiert", 'K', null,
-				StrUtil.FromHTML("Setzen Sie diese Flagge, um die "
-						+ "Kodierung f&uuml;r die Inhalte der Spalte zu initiieren (VORSICHT: Das kann "
-						+ "zu Problemen bei Suchanfragen auf die Spalte f&uuml;hren).")));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_UNIQUE, dlf, dcf, "Unique", 'U', null,
-				"Setzen Sie diese Flagge, um die Tabellenspalte als " + "einzigartig zu kennzeichnen."));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_INDEXED, dlf, dcf, "Indiziert", 'I', null,
-				"Setzen Sie diese Flagge, um die Tabellenspalte im " + "Datenmodell als indiziert zu kennzeichnen."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_NAME,
+								dlf,
+								dcf,
+								"Name",
+								'N',
+								null,
+								"Der Name der Tabellenspalte"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_DOMAIN,
+								dlf,
+								dcfdom,
+								"Domain",
+								'D',
+								null,
+								"Die Domain zur Tabellenspalte"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_INDIVIDUALDEFAULTVALUE,
+								dlf,
+								dcf,
+								"Individueller Defaultwert",
+								'\0',
+								null,
+								"Ein individueller Defaultwert " + "zur Tabellenspalte"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_PRIMARYKEY,
+								dlf,
+								dcf,
+								StrUtil.FromHTML("Prim&auml;rschl&uuml;ssel"),
+								'P',
+								null,
+								StrUtil
+										.FromHTML(
+												"Setzen Sie diese Flagge um ein Prim&auml;rschl&uuml;sselmitglied zu "
+														+ "kennzeichnen.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_NOTNULL,
+								dlf,
+								dcf,
+								"Not-Null",
+								'O',
+								null,
+								StrUtil
+										.FromHTML(
+												"Setzen Sie diese Flagge, wenn f&uuml;r"
+														+ " das Attribut ein Not-Null-Constraint gesetzt werden soll.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_REFERENZIERTESPALTE,
+								dlf,
+								dcfkey,
+								"Referenziert",
+								'R',
+								null,
+								"Eine durch die Tabellenspalte referenzierte" + " Tabellenspalte"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_SEQUENCE_FOR_KEY_GENERATION,
+								dlf,
+								dcfseq,
+								"Key-Generator-Sequenz",
+								'Q',
+								null,
+								StrUtil
+										.FromHTML(
+												"W&auuml;hlen"
+														+ " Sie hier eine Sequenz zur Schl&uuml;sselerzeugung, falls sie dies "
+														+ "w&uuml;nschen.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_CANBEREFERENCED,
+								dlf,
+								dcf,
+								"Referenzierbar",
+								'Z',
+								null,
+								"Setzen Sie diese Flagge, um die "
+										+ "Tabellenspalte in Referenzauswahldialogen anzuzeigen."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_HIDEREFERENCE,
+								dlf,
+								dcf,
+								"Referenzanzeige verstecken",
+								'\0',
+								null,
+								StrUtil
+										.FromHTML(
+												"Setzen Sie "
+														+ "diese Flagge, um die Referenzanzeige f&uuml;r die Tabellenspalte zu "
+														+ "deaktivieren.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_AUFGEHOBEN,
+								dlf,
+								dcf,
+								"Aufgehoben",
+								'A',
+								null,
+								"Die Aufgehoben-Flagge der Tabellenspalte"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_KODIERT,
+								dlf,
+								dcf,
+								"Kodiert",
+								'K',
+								null,
+								StrUtil
+										.FromHTML(
+												"Setzen Sie diese Flagge, um die "
+														+ "Kodierung f&uuml;r die Inhalte der Spalte zu initiieren (VORSICHT: Das kann "
+														+ "zu Problemen bei Suchanfragen auf die Spalte f&uuml;hren).")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_UNIQUE,
+								dlf,
+								dcf,
+								"Unique",
+								'U',
+								null,
+								"Setzen Sie diese Flagge, um die Tabellenspalte als "
+										+ "einzigartig zu kennzeichnen."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_INDEXED,
+								dlf,
+								dcf,
+								"Indiziert",
+								'I',
+								null,
+								"Setzen Sie diese Flagge, um die Tabellenspalte im "
+										+ "Datenmodell als indiziert zu kennzeichnen."));
 		if (isCompatibilityModeVersion1()) {
-			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_GLOBAL, dlf, dcf, "Global", 'G', null,
-					"Setzen Sie diese Flagge, um die Tabellenspalte als " + "globales Attribut zu kennzeichnen."));
-			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_GLOBALID, dlf, dcf, "Globale Id", 'L', null,
-					StrUtil.FromHTML("Setzen Sie diese Flagge, um die "
-							+ "Tabellenspalte als globales Schl&uuml;sselattribut zu kennzeichnen.")));
-			dedl.addElement(
-					new DefaultEditorDescriptor(0, this, ID_ALTERINBATCH, dlf, dcf,
-							StrUtil.FromHTML("Stapel&auml;nderung"), 'S', null,
-							StrUtil.FromHTML("Setzen "
-									+ "Sie diese Flagge, um die Tabellenspalte als &auml;nderbar im Stapel zu "
-									+ "kennzeichnen.")));
+			dedl
+					.addElement(
+							new DefaultEditorDescriptor(
+									0,
+									this,
+									ID_GLOBAL,
+									dlf,
+									dcf,
+									"Global",
+									'G',
+									null,
+									"Setzen Sie diese Flagge, um die Tabellenspalte als "
+											+ "globales Attribut zu kennzeichnen."));
+			dedl
+					.addElement(
+							new DefaultEditorDescriptor(
+									0,
+									this,
+									ID_GLOBALID,
+									dlf,
+									dcf,
+									"Globale Id",
+									'L',
+									null,
+									StrUtil
+											.FromHTML(
+													"Setzen Sie diese Flagge, um die "
+															+ "Tabellenspalte als globales Schl&uuml;sselattribut zu kennzeichnen.")));
+			dedl
+					.addElement(
+							new DefaultEditorDescriptor(
+									0,
+									this,
+									ID_ALTERINBATCH,
+									dlf,
+									dcf,
+									StrUtil.FromHTML("Stapel&auml;nderung"),
+									'S',
+									null,
+									StrUtil
+											.FromHTML(
+													"Setzen "
+															+ "Sie diese Flagge, um die Tabellenspalte als &auml;nderbar im Stapel zu "
+															+ "kennzeichnen.")));
 		}
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_LASTMODIFICATIONFIELD, dlf, dcf,
-				"Letzte-Modifikation-Feld", 'M', null,
-				StrUtil.FromHTML("Setzen Sie diese "
-						+ "Flagge, um die Tabellenspalte als Feld f&uuml;r die Aufnahme des letzten "
-						+ "Modifikationszeitpunktes zu kennzeichnen.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_LASTMODIFICATIONFIELD,
+								dlf,
+								dcf,
+								"Letzte-Modifikation-Feld",
+								'M',
+								null,
+								StrUtil
+										.FromHTML(
+												"Setzen Sie diese "
+														+ "Flagge, um die Tabellenspalte als Feld f&uuml;r die Aufnahme des letzten "
+														+ "Modifikationszeitpunktes zu kennzeichnen.")));
 		if (isCompatibilityModeVersion1()) {
-			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_REMOVEDSTATEFIELD, dlf, dcf,
-					StrUtil.FromHTML("Gel&ouml;scht-Status-Feld"), 'U', null,
-					StrUtil.FromHTML("Setzen Sie diese Flagge, um die Tabellenspalte als Feld f&uuml;r die Aufnahme "
-							+ "eines Gel&ouml;schtstatus zu kennzeichnen.")));
+			dedl
+					.addElement(
+							new DefaultEditorDescriptor(
+									0,
+									this,
+									ID_REMOVEDSTATEFIELD,
+									dlf,
+									dcf,
+									StrUtil.FromHTML("Gel&ouml;scht-Status-Feld"),
+									'U',
+									null,
+									StrUtil
+											.FromHTML(
+													"Setzen Sie diese Flagge, um die Tabellenspalte als Feld f&uuml;r die Aufnahme "
+															+ "eines Gel&ouml;schtstatus zu kennzeichnen.")));
 		}
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_TECHNICALFIELD, dlf, dcf,
-				StrUtil.FromHTML("Technisches Feld"), 'T', null,
-				StrUtil.FromHTML("Setzen Sie diese Flagge, um die Tabellenspalte als Feld mit rein technischem "
-						+ "Charakter zu kennzeichnen.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_TECHNICALFIELD,
+								dlf,
+								dcf,
+								StrUtil.FromHTML("Technisches Feld"),
+								'T',
+								null,
+								StrUtil
+										.FromHTML(
+												"Setzen Sie diese Flagge, um die Tabellenspalte als Feld mit rein technischem "
+														+ "Charakter zu kennzeichnen.")));
 		if (isCompatibilityModeVersion1()) {
-			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_LISTITEMFIELD, dlf, dcf,
-					StrUtil.FromHTML("Positionsattribut"), 'P', null,
-					StrUtil.FromHTML("Setzen Sie diese Flagge als Kennzeichen f&uuml;r ein Positionsattribut im "
-							+ "Falle einer \"flachgespeicherten\" Liste.")));
-			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_INDEXSEARCHMEMBER, dlf, dcf,
-					"Bei Indexsuche einbeziehen", 'X', null,
-					StrUtil.FromHTML("Setzen Sie diese "
-							+ "Flagge, um die Tabellenspalte in eine tabellen&uuml;bergreifende Indexsuche "
-							+ "aufzunehmen.")));
+			dedl
+					.addElement(
+							new DefaultEditorDescriptor(
+									0,
+									this,
+									ID_LISTITEMFIELD,
+									dlf,
+									dcf,
+									StrUtil.FromHTML("Positionsattribut"),
+									'P',
+									null,
+									StrUtil
+											.FromHTML(
+													"Setzen Sie diese Flagge als Kennzeichen f&uuml;r ein Positionsattribut im "
+															+ "Falle einer \"flachgespeicherten\" Liste.")));
+			dedl
+					.addElement(
+							new DefaultEditorDescriptor(
+									0,
+									this,
+									ID_INDEXSEARCHMEMBER,
+									dlf,
+									dcf,
+									"Bei Indexsuche einbeziehen",
+									'X',
+									null,
+									StrUtil
+											.FromHTML(
+													"Setzen Sie diese "
+															+ "Flagge, um die Tabellenspalte in eine tabellen&uuml;bergreifende Indexsuche "
+															+ "aufzunehmen.")));
 		}
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_TRANSIENT, dlf, dcf,
-				StrUtil.FromHTML("Transientes Feld"), '\0', null,
-				StrUtil.FromHTML("Setzen Sie diese Flagge, um die Tabellenspalte als transient zu kennzeichnen.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_TRANSIENT,
+								dlf,
+								dcf,
+								StrUtil.FromHTML("Transientes Feld"),
+								'\0',
+								null,
+								StrUtil
+										.FromHTML(
+												"Setzen Sie diese Flagge, um die Tabellenspalte als transient zu kennzeichnen.")));
 		if (isCompatibilityModeVersion1()) {
-			dedl.addElement(new DefaultEditorDescriptor(0, this, ID_SUPPRESS_FOREIGN_KEY_CONSTRAINT, dlf, dcf,
-					StrUtil.FromHTML("FOREIGN-KEY-Constraint unterdr&uuml;cken"), '\0', null,
-					StrUtil.FromHTML("Setzen Sie diese Flagge, um f&uuml;r die Tabellenspalte"
-							+ " die FOREIGN-KEY-Constraints zu deaktivieren.")));
+			dedl
+					.addElement(
+							new DefaultEditorDescriptor(
+									0,
+									this,
+									ID_SUPPRESS_FOREIGN_KEY_CONSTRAINT,
+									dlf,
+									dcf,
+									StrUtil.FromHTML("FOREIGN-KEY-Constraint unterdr&uuml;cken"),
+									'\0',
+									null,
+									StrUtil
+											.FromHTML(
+													"Setzen Sie diese Flagge, um f&uuml;r die Tabellenspalte"
+															+ " die FOREIGN-KEY-Constraints zu deaktivieren.")));
 		}
 		if (!isCompatibilityModeVersion1()) {
-			dedl.addElement(new ArchimedesEditorDescriptor("Parameter", 0, this, Tabellenspalte.ID_PARAMETER, dlf, dcf,
-					"Parameter", '\0', null, StrUtil.FromHTML(
-							"Hier k&ouml;nnen Sie einen freidefinierbaren Parameter zur " + "Tabellenspalte.")));
+			dedl
+					.addElement(
+							new ArchimedesEditorDescriptor(
+									"Parameter",
+									0,
+									this,
+									Tabellenspalte.ID_PARAMETER,
+									dlf,
+									dcf,
+									"Parameter",
+									'\0',
+									null,
+									StrUtil
+											.FromHTML(
+													"Hier k&ouml;nnen Sie einen freidefinierbaren Parameter zur "
+															+ "Tabellenspalte.")));
 		}
 		dedl.addElement(new DefaultSubEditorDescriptor(1, this, new CommentSubEditorFactory()));
 		dedl.addElement(new DefaultSubEditorDescriptor(2, this, new HistoryOwnerSubEditorFactory()));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_EDITORMEMBER, dlf, dcf, "Editormember", 'M', null,
-				StrUtil.FromHTML("Setzen Sie diese Flagge um Code " + "f&uuml;r den Editor zu produzieren")));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_DISABLED, dlf, dcf, "Abblenden", 'D', null,
-				"Setzen Sie diese Flagge, um die Tabellenspalte in der " + "Editorsicht abzublenden."));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_LABELTEXT, dlf, dcf, "Labeltext", 'T', null,
-				"Der Text des Labels im Editor"));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_MNEMONIC, dlf, dcf, "Mnemonic", 'C', null,
-				"Ein Mnemonic zum Label"));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_TOOLTIPTEXT, dlf, dcf, "ToolTipText", 'T', null,
-				"Ein ToolTip zum Editorfeld"));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_PANEL, dlf, dcfpanels, "Panel", 'P', null,
-				StrUtil.FromHTML("W&auml;hlen Sie hier das Panel aus, auf "
-						+ "dem das Control zur Tabellenspalte abgebildet werden soll")));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_EDITORPOSITION, dlf, dcf, "Editor-Position", 'E', null,
-				StrUtil.FromHTML(
-						"Hier m&uuml;ssen Sie die " + "Position des Editorfeldes innerhalb des Panels festlegen!")));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_REFERENCEWEIGHT, dlf, dcfrws, "Auswahl", 'A', null,
-				StrUtil.FromHTML("Legen Sie hier die Menge der "
-						+ "zuerwartenden Auswahlm&ouml;glichkeiten fest (nur bei Referenzfeldern)")));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, ID_RESSOURCENIDENTIFIER, dlf, dcf, "Ressourcebezeichner",
-				'R', null,
-				StrUtil.FromHTML("Hier k&ouml;nnen Sie einen "
-						+ "Bezeichner (z. B. zum Bezug von Ressourcen) f&uuml;r die Komponente zur "
-						+ "Tabellenspalte setzen.")));
-		dedl.addElement(new DefaultEditorDescriptor(3, this, Tabellenspalte.ID_MAXCHARACTERS, dlf, dcf,
-				"Maximalbreite (Eingabefeld)", 'M', null,
-				StrUtil.FromHTML("Hier k&ouml;nnen Sie eine maximale Breite f&uuml;r das mit der Tabellenspalte "
-						+ "zusammenh&auml;ngende Eingabefeld definieren.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								3,
+								this,
+								ID_EDITORMEMBER,
+								dlf,
+								dcf,
+								"Editormember",
+								'M',
+								null,
+								StrUtil
+										.FromHTML(
+												"Setzen Sie diese Flagge um Code "
+														+ "f&uuml;r den Editor zu produzieren")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								3,
+								this,
+								ID_DISABLED,
+								dlf,
+								dcf,
+								"Abblenden",
+								'D',
+								null,
+								"Setzen Sie diese Flagge, um die Tabellenspalte in der " + "Editorsicht abzublenden."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								3,
+								this,
+								ID_LABELTEXT,
+								dlf,
+								dcf,
+								"Labeltext",
+								'T',
+								null,
+								"Der Text des Labels im Editor"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								3,
+								this,
+								ID_MNEMONIC,
+								dlf,
+								dcf,
+								"Mnemonic",
+								'C',
+								null,
+								"Ein Mnemonic zum Label"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								3,
+								this,
+								ID_TOOLTIPTEXT,
+								dlf,
+								dcf,
+								"ToolTipText",
+								'T',
+								null,
+								"Ein ToolTip zum Editorfeld"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								3,
+								this,
+								ID_PANEL,
+								dlf,
+								dcfpanels,
+								"Panel",
+								'P',
+								null,
+								StrUtil
+										.FromHTML(
+												"W&auml;hlen Sie hier das Panel aus, auf "
+														+ "dem das Control zur Tabellenspalte abgebildet werden soll")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								3,
+								this,
+								ID_EDITORPOSITION,
+								dlf,
+								dcf,
+								"Editor-Position",
+								'E',
+								null,
+								StrUtil
+										.FromHTML(
+												"Hier m&uuml;ssen Sie die "
+														+ "Position des Editorfeldes innerhalb des Panels festlegen!")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								3,
+								this,
+								ID_REFERENCEWEIGHT,
+								dlf,
+								dcfrws,
+								"Auswahl",
+								'A',
+								null,
+								StrUtil
+										.FromHTML(
+												"Legen Sie hier die Menge der "
+														+ "zuerwartenden Auswahlm&ouml;glichkeiten fest (nur bei Referenzfeldern)")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								3,
+								this,
+								ID_RESSOURCENIDENTIFIER,
+								dlf,
+								dcf,
+								"Ressourcebezeichner",
+								'R',
+								null,
+								StrUtil
+										.FromHTML(
+												"Hier k&ouml;nnen Sie einen "
+														+ "Bezeichner (z. B. zum Bezug von Ressourcen) f&uuml;r die Komponente zur "
+														+ "Tabellenspalte setzen.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								3,
+								this,
+								Tabellenspalte.ID_MAXCHARACTERS,
+								dlf,
+								dcf,
+								"Maximalbreite (Eingabefeld)",
+								'M',
+								null,
+								StrUtil
+										.FromHTML(
+												"Hier k&ouml;nnen Sie eine maximale Breite f&uuml;r das mit der Tabellenspalte "
+														+ "zusammenh&auml;ngende Eingabefeld definieren.")));
 		if (isCompatibilityModeVersion1()) {
-			dedl.addElement(new ArchimedesEditorDescriptor("Parameter", 3, this, Tabellenspalte.ID_PARAMETER, dlf, dcf,
-					"Parameter", '\0', null, StrUtil.FromHTML(
-							"Hier k&ouml;nnen Sie einen freidefinierbaren Parameter zur " + "Tabellenspalte.")));
+			dedl
+					.addElement(
+							new ArchimedesEditorDescriptor(
+									"Parameter",
+									3,
+									this,
+									Tabellenspalte.ID_PARAMETER,
+									dlf,
+									dcf,
+									"Parameter",
+									'\0',
+									null,
+									StrUtil
+											.FromHTML(
+													"Hier k&ouml;nnen Sie einen freidefinierbaren Parameter zur "
+															+ "Tabellenspalte.")));
 		}
-		dedl.addElement(new DefaultEditorDescriptor(4, this, ID_WRITEABLEMEMBER, dlf, dcf, "Writeable", 'W', null,
-				StrUtil.FromHTML("Setzen Sie diese Flagge um die "
-						+ "Tabellenspalte im Code f&uuml;r die Schreibbarkeitspr&uuml;fung " + "wiederzufinden.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								4,
+								this,
+								ID_WRITEABLEMEMBER,
+								dlf,
+								dcf,
+								"Writeable",
+								'W',
+								null,
+								StrUtil
+										.FromHTML(
+												"Setzen Sie diese Flagge um die "
+														+ "Tabellenspalte im Code f&uuml;r die Schreibbarkeitspr&uuml;fung "
+														+ "wiederzufinden.")));
 		return dedl;
 	}
 
@@ -792,10 +1206,13 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 	}
 
 	public TabbedPaneFactory getTabbedPaneFactory() {
-		return new DefaultTabbedPaneFactory(new TabDescriptor[] { new DefaultTabDescriptor("1.Daten", '1', null),
-				new DefaultTabDescriptor("2.Beschreibung", '2', null),
-				new DefaultTabDescriptor("3.Historie", '3', null), new DefaultTabDescriptor("4.Editor", '4', null),
-				new DefaultTabDescriptor("5.Konsistenz", '5', null) });
+		return new DefaultTabbedPaneFactory(
+				new TabDescriptor[] {
+						new DefaultTabDescriptor("1.Daten", '1', null),
+						new DefaultTabDescriptor("2.Beschreibung", '2', null),
+						new DefaultTabDescriptor("3.Historie", '3', null),
+						new DefaultTabDescriptor("4.Editor", '4', null),
+						new DefaultTabDescriptor("5.Konsistenz", '5', null) });
 	}
 
 	public boolean isTabEnabled(int no) {
@@ -1818,9 +2235,13 @@ public class Tabellenspalte implements Selectable, TabellenspaltenModel {
 				return;
 			}
 		}
-		this.setParameters(this.getParameters() + (this.getParameters().length() > 0 ? "|" : "") + option.getName()
-				+ ((option.getParameter() != null) && !option.getParameter().isEmpty() ? ":" + option.getParameter()
-						: ""));
+		this
+				.setParameters(
+						this.getParameters() + (this.getParameters().length() > 0 ? "|" : "")
+								+ option.getName()
+								+ ((option.getParameter() != null) && !option.getParameter().isEmpty()
+										? ":" + option.getParameter()
+										: ""));
 	}
 
 	/**

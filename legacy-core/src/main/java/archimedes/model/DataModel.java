@@ -12,6 +12,7 @@ package archimedes.model;
 import java.util.Vector;
 
 import archimedes.connections.DatabaseConnectionProvider;
+import archimedes.legacy.model.DomainShowMode;
 import archimedes.model.events.DataModelEvent;
 import archimedes.model.events.DataModelListener;
 import archimedes.model.gui.GUIDiagramModel;
@@ -406,5 +407,9 @@ public interface DataModel extends CommentOwner, ComplexIndexListProvider, Datab
 	 * @changed OLI 28.04.2014 - Added.
 	 */
 	abstract public void setVersionDate(PDate date);
+
+	abstract public DomainShowMode getDomainShowMode();
+
+	abstract public void setDomainShowMode(DomainShowMode newMode);
 
 }

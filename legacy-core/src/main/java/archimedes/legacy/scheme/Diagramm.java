@@ -37,6 +37,7 @@ import archimedes.legacy.model.DefaultCommentModel;
 import archimedes.legacy.model.DiagramSaveMode;
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.legacy.model.DiagrammModelListener;
+import archimedes.legacy.model.DomainShowMode;
 import archimedes.legacy.model.MainViewModel;
 import archimedes.legacy.model.TabellenModel;
 import archimedes.legacy.model.TabellenspaltenModel;
@@ -289,6 +290,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	public static final int ID_OWNER = 30;
 	/** Ein Bezeichner zum Zugriff auf das Attribut AdditionalDiagramInfo. */
 	public static final int ID_ADDITIONAL_DIAGRAM_INFO = 31;
+	/** Ein Bezeichner zum Zugriff auf das Attribut DomainShowMode. */
+	public static final int ID_DOMAIN_SHOW_MODE = 32;
 
 	/* Der JDBCDataSourceRecord mit den Daten f&uuml;r den Datanschema-Import. */
 	private ArchimedesImportJDBCDataSourceRecord importDSR = null;
@@ -349,6 +352,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	private PredeterminedOptionProvider pop = null;
 	private String owner = "";
 	private String additionalDiagramInfo = "";
+	private DomainShowMode domainShowMode = DomainShowMode.ALL;
 
 	/** Generiert ein leeres Diagramm. */
 	public Diagramm() {
@@ -424,6 +428,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			return this.getOwner();
 		case ID_ADDITIONAL_DIAGRAM_INFO:
 			return this.getAdditionalDiagramInfo();
+		case ID_DOMAIN_SHOW_MODE:
+			return this.getDomainShowMode();
 		}
 		throw new IllegalArgumentException("Klasse Domain verfuegt nicht ueber ein Attribut " + id + " (get)!");
 	}
@@ -521,6 +527,9 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		case ID_ADDITIONAL_DIAGRAM_INFO:
 			this.setAdditionalDiagramInfo((String) value);
 			return;
+		case ID_DOMAIN_SHOW_MODE:
+			this.setDomainShowMode((DomainShowMode) value);
+			return;
 		}
 		throw new IllegalArgumentException("Klasse Domain verfuegt nicht ueber ein Attribut " + id + " (set)!");
 	}
@@ -539,87 +548,383 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	public EditorDescriptorList getEditorDescriptorList() {
 		DefaultComponentFactory dcf = DefaultComponentFactory.INSTANZ;
 		DefaultComponentFactory dcfcol = new DefaultComponentFactory(Archimedes.PALETTE.getColors());
+		DefaultComponentFactory dcfdsm = new DefaultComponentFactory(Arrays.asList(DomainShowMode.values()));
 		DefaultEditorDescriptorList dedl = new DefaultEditorDescriptorList();
 		DefaultLabelFactory dlf = DefaultLabelFactory.INSTANZ;
-		dedl.addElement(
-				new DefaultEditorDescriptor(0, this, ID_NAME, dlf, dcf, "Name", 'N', null, "Der Name des Diagramms"));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_AUTOR, dlf, dcf, "Autor", 'A', null,
-				"Der Autor des Diagramms"));
-		dedl.addElement(new DefaultEditorDescriptor(0, this, ID_OWNER, dlf, dcf, StrUtil.FromHTML("Eigent&uuml;mer"),
-				'E', null, StrUtil.FromHTML("Der Eigent&uuml;mer des Diagramms.")));
-		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_VERSION, dlf, dcf, "Versionsnummer", '\0', null,
-				"Die aktuelle Versionsnummer des Diagramms", true));
-		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_VERSIONSDATUM, dlf, dcf, "Datum", '\n', null,
-				"Das Datum, an dem die aktuelle Version erstellt wurde.", true));
-		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_VERSIONSKOMMENTAR, dlf, dcf, "Kommentar", 'K', null,
-				"Ein kurzer Versionskommentar zur Aufnahme in die " + "Datenbank"));
-		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_HIDE_DEPRECATED, dlf, dcf, "Aufgehoben ausblenden", 'A',
-				null, "Setzen Sie diese Flagge, um " + "aufgehobene Objekte aus Anzeige und Druck auszublenden"));
-		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_PAINTTECHNICALFIELDSINGRAY, dlf, dcf,
-				"Technische Felder ausgrauen", 'A', null,
-				"Setzen Sie diese Flagge, um " + "technische Felder abzugrauen."));
-		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_PAINTTRANSIENTFIELDSINGRAY, dlf, dcf,
-				"Transiente Felder ausgrauen", 'T', null,
-				"Setzen Sie diese Flagge, um " + "transiente Felder abzugrauen."));
-		dedl.addElement(new DefaultEditorDescriptor(1, this, ID_ADDITIONAL_DIAGRAM_INFO, dlf, dcf,
-				StrUtil.FromHTML("Zus&auml;tzliche Diagramminfo"), 'Z', null,
-				"Hier k&ouml;nnen Sie zus&auml;tzliche Informationen zur Ausgabe auf dem Arbeitsblatt angeben."));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SCHRIFTGROESSE_TABELLEN, dlf, dcf,
-				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e Tabelleninhalte"), 'T', null,
-				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die Tabelleninhalte des " + "Diagramms")));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SCHRIFTGROESSE_UEBERSCHRIFT, dlf, dcf,
-				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e &Uuml;berschrift"), 'F', null,
-				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die &Uuml;berschrift " + "des Diagramms")));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SCHRIFTGROESSE_UNTERTITEL, dlf, dcf,
-				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e Untertitel"), 'U', null,
-				StrUtil.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die Untertitel des Diagramms")));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_SHOWREFERENCEDCOLUMNAMES, dlf, dcf,
-				"Referenzierte Spalten anzeigen (Default)", 'R', null,
-				"Setzen Sie diese " + "Flagge, um die Namen der durch Foreignkeys referenzierten Spalten\nim "
-						+ "Diagramm angezeigt zu bekommen (Defaultwert)"));
-		dedl.addElement(
-				new DefaultEditorDescriptor(2, this, ID_MARKUPWRITEABLEMEMBER, dlf, dcf, "Pflichtfelder markieren", 'P',
-						null, "Setzen Sie diese Flagge, um die " + "Plichtfelder im Diagramm zu kennzeichnen."));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_RELATION_COLOR_EXTERNAL_TABLES, dlf, dcfcol,
-				Str.fromHTML("Farbe externe Relationen"), '\0', null,
-				Str.fromHTML("Setzen sie hier die Farbe f&uuml;r externe Relationen.")));
-		dedl.addElement(new DefaultEditorDescriptor(2, this, ID_RELATION_COLOR_REGULAR, dlf, dcfcol,
-				Str.fromHTML("Farbe regul&auml;re Relationen"), '\0', null,
-				Str.fromHTML("Setzen sie hier die Farbe f&uuml;r regul&auml;re Relationen.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_NAME,
+								dlf,
+								dcf,
+								"Name",
+								'N',
+								null,
+								"Der Name des Diagramms"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_AUTOR,
+								dlf,
+								dcf,
+								"Autor",
+								'A',
+								null,
+								"Der Autor des Diagramms"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								0,
+								this,
+								ID_OWNER,
+								dlf,
+								dcf,
+								StrUtil.FromHTML("Eigent&uuml;mer"),
+								'E',
+								null,
+								StrUtil.FromHTML("Der Eigent&uuml;mer des Diagramms.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								1,
+								this,
+								ID_VERSION,
+								dlf,
+								dcf,
+								"Versionsnummer",
+								'\0',
+								null,
+								"Die aktuelle Versionsnummer des Diagramms",
+								true));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								1,
+								this,
+								ID_VERSIONSDATUM,
+								dlf,
+								dcf,
+								"Datum",
+								'\n',
+								null,
+								"Das Datum, an dem die aktuelle Version erstellt wurde.",
+								true));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								1,
+								this,
+								ID_VERSIONSKOMMENTAR,
+								dlf,
+								dcf,
+								"Kommentar",
+								'K',
+								null,
+								"Ein kurzer Versionskommentar zur Aufnahme in die " + "Datenbank"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								1,
+								this,
+								ID_HIDE_DEPRECATED,
+								dlf,
+								dcf,
+								"Aufgehoben ausblenden",
+								'A',
+								null,
+								"Setzen Sie diese Flagge, um "
+										+ "aufgehobene Objekte aus Anzeige und Druck auszublenden"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								1,
+								this,
+								ID_PAINTTECHNICALFIELDSINGRAY,
+								dlf,
+								dcf,
+								"Technische Felder ausgrauen",
+								'A',
+								null,
+								"Setzen Sie diese Flagge, um " + "technische Felder abzugrauen."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								1,
+								this,
+								ID_PAINTTRANSIENTFIELDSINGRAY,
+								dlf,
+								dcf,
+								"Transiente Felder ausgrauen",
+								'T',
+								null,
+								"Setzen Sie diese Flagge, um " + "transiente Felder abzugrauen."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								1,
+								this,
+								ID_ADDITIONAL_DIAGRAM_INFO,
+								dlf,
+								dcf,
+								StrUtil.FromHTML("Zus&auml;tzliche Diagramminfo"),
+								'Z',
+								null,
+								"Hier k&ouml;nnen Sie zus&auml;tzliche Informationen zur Ausgabe auf dem Arbeitsblatt angeben."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								2,
+								this,
+								ID_SCHRIFTGROESSE_TABELLEN,
+								dlf,
+								dcf,
+								StrUtil.FromHTML("Schriftgr&ouml;&szlig;e Tabelleninhalte"),
+								'T',
+								null,
+								StrUtil
+										.FromHTML(
+												"Schriftgr&ouml;&szlig;e f&uuml;r die Tabelleninhalte des "
+														+ "Diagramms")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								2,
+								this,
+								ID_SCHRIFTGROESSE_UEBERSCHRIFT,
+								dlf,
+								dcf,
+								StrUtil.FromHTML("Schriftgr&ouml;&szlig;e &Uuml;berschrift"),
+								'F',
+								null,
+								StrUtil
+										.FromHTML(
+												"Schriftgr&ouml;&szlig;e f&uuml;r die &Uuml;berschrift "
+														+ "des Diagramms")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								2,
+								this,
+								ID_SCHRIFTGROESSE_UNTERTITEL,
+								dlf,
+								dcf,
+								StrUtil.FromHTML("Schriftgr&ouml;&szlig;e Untertitel"),
+								'U',
+								null,
+								StrUtil.FromHTML("Schriftgr&ouml;&szlig;e f&uuml;r die Untertitel des Diagramms")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								2,
+								this,
+								ID_SHOWREFERENCEDCOLUMNAMES,
+								dlf,
+								dcf,
+								"Referenzierte Spalten anzeigen (Default)",
+								'R',
+								null,
+								"Setzen Sie diese "
+										+ "Flagge, um die Namen der durch Foreignkeys referenzierten Spalten\nim "
+										+ "Diagramm angezeigt zu bekommen (Defaultwert)"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								2,
+								this,
+								ID_MARKUPWRITEABLEMEMBER,
+								dlf,
+								dcf,
+								"Pflichtfelder markieren",
+								'P',
+								null,
+								"Setzen Sie diese Flagge, um die " + "Plichtfelder im Diagramm zu kennzeichnen."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								2,
+								this,
+								ID_RELATION_COLOR_EXTERNAL_TABLES,
+								dlf,
+								dcfcol,
+								Str.fromHTML("Farbe externe Relationen"),
+								'\0',
+								null,
+								Str.fromHTML("Setzen sie hier die Farbe f&uuml;r externe Relationen.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								2,
+								this,
+								ID_RELATION_COLOR_REGULAR,
+								dlf,
+								dcfcol,
+								Str.fromHTML("Farbe regul&auml;re Relationen"),
+								'\0',
+								null,
+								Str.fromHTML("Setzen sie hier die Farbe f&uuml;r regul&auml;re Relationen.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								2,
+								this,
+								ID_DOMAIN_SHOW_MODE,
+								dlf,
+								dcfdsm,
+								Str.fromHTML("Farbe regul&auml;re Relationen"),
+								'\0',
+								null,
+								Str.fromHTML("Setzen sie hier die Farbe f&uuml;r regul&auml;re Relationen.")));
 		dedl.addElement(new DefaultSubEditorDescriptor(3, this, new CommentSubEditorFactory()));
 		dedl.addElement(new DefaultSubEditorDescriptor(4, this, new HistoryOwnerSubEditorFactory()));
-		dedl.addElement(
-				new DefaultEditorDescriptor(5, this, ID_CODEFACTORYCLASSNAME, dlf, dcf, "CodeFactory-Klassenname", 'C',
-						null, "Der (qualifizierte) Name der " + "CodeFactory-Klasse zum Diagramm."));
-		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_CODEPFAD, dlf, dcf, "Code-Basis-Pfad", 'B', null,
-				StrUtil.FromHTML("Basispfad f&uuml;r den " + "Codegenerator")));
-		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_APPLICATIONNAME, dlf, dcf, "Applikationsname", 'N',
-				null, StrUtil.FromHTML("Der Name der Applikation, " + "f&uuml;r die der Code generiert werden soll.")));
-		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_BASEPACKAGENAME, dlf, dcf, "Basis-Packagename", 'B',
-				null, "Der Name des Basis-Packages der Applikation"));
-		dedl.addElement(new DefaultEditorDescriptor(5, this, ID_UDSCHEBTIBASECLASSNAME, dlf, dcf,
-				"Udschebti-Basisklasse", 'U', null,
-				StrUtil.FromHTML("Der Name der " + "Basisklasse f&uuml;r die Datenobjekte der Applikation.")));
-		dedl.addElement(
-				new DefaultEditorDescriptor(6, this, ID_DBVERSIONTABLENAME, dlf, dcf, "DB-Versionen-Tabellenname", 'D',
-						null, "Der Name der DB-Versionen-Tabelle, " + "falls eine solche existiert."));
-		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_DBVERSIONDBVERSIONCOLUMN, dlf, dcf,
-				"DB-Versionen-Versionsspalte", 'V', null,
-				"Der Name der Versionsspalte in " + "der DB-Versionen-Tabelle, falls eine solche existiert."));
-		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_DBVERSIONDESCRIPTIONCOLUMN, dlf, dcf,
-				"DB-Versionen-Beschreibungsspalte", 'B', null, "Der Name der "
-						+ "Beschreibungsspalte in der DB-Versionen-Tabelle, falls eine solche " + "existiert."));
-		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_ADDITIONALSCRIPTLISTENER, dlf, dcf,
-				StrUtil.FromHTML("Zus&auml;tzliche SQLScriptListener"), 'Q', null,
-				StrUtil.FromHTML("Der Name der Klasse, die als SQLScripListener &uuml;ber "
-						+ "&Auml;nderungen bei Bau von SQL-Aktualisierungscripten benachrichtigt werden" + "sollen.")));
-		dedl.addElement(new DefaultEditorDescriptor(6, this, ID_SCHEMA_NAME, dlf, dcf,
-				StrUtil.FromHTML("Schemaname (falls erforderlich)"), 'S', null,
-				StrUtil.FromHTML("Ein Schemaname, falls das Modell f&uuml;r ein Schema "
-						+ "innerhalb der Datenbank gedacht ist.")));
-		dedl.addElement(new DefaultSubEditorDescriptor(7, this,
-				new OptionListSubEditorFactory(DefaultVectorPanelButtonFactory.INSTANCE, Archimedes.guiBundle,
-						this.getPredeterminedOptionProvider(), OptionType.MODEL)));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								5,
+								this,
+								ID_CODEFACTORYCLASSNAME,
+								dlf,
+								dcf,
+								"CodeFactory-Klassenname",
+								'C',
+								null,
+								"Der (qualifizierte) Name der " + "CodeFactory-Klasse zum Diagramm."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								5,
+								this,
+								ID_CODEPFAD,
+								dlf,
+								dcf,
+								"Code-Basis-Pfad",
+								'B',
+								null,
+								StrUtil.FromHTML("Basispfad f&uuml;r den " + "Codegenerator")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								5,
+								this,
+								ID_APPLICATIONNAME,
+								dlf,
+								dcf,
+								"Applikationsname",
+								'N',
+								null,
+								StrUtil
+										.FromHTML(
+												"Der Name der Applikation, "
+														+ "f&uuml;r die der Code generiert werden soll.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								5,
+								this,
+								ID_BASEPACKAGENAME,
+								dlf,
+								dcf,
+								"Basis-Packagename",
+								'B',
+								null,
+								"Der Name des Basis-Packages der Applikation"));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								5,
+								this,
+								ID_UDSCHEBTIBASECLASSNAME,
+								dlf,
+								dcf,
+								"Udschebti-Basisklasse",
+								'U',
+								null,
+								StrUtil
+										.FromHTML(
+												"Der Name der "
+														+ "Basisklasse f&uuml;r die Datenobjekte der Applikation.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								6,
+								this,
+								ID_DBVERSIONTABLENAME,
+								dlf,
+								dcf,
+								"DB-Versionen-Tabellenname",
+								'D',
+								null,
+								"Der Name der DB-Versionen-Tabelle, " + "falls eine solche existiert."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								6,
+								this,
+								ID_DBVERSIONDBVERSIONCOLUMN,
+								dlf,
+								dcf,
+								"DB-Versionen-Versionsspalte",
+								'V',
+								null,
+								"Der Name der Versionsspalte in "
+										+ "der DB-Versionen-Tabelle, falls eine solche existiert."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								6,
+								this,
+								ID_DBVERSIONDESCRIPTIONCOLUMN,
+								dlf,
+								dcf,
+								"DB-Versionen-Beschreibungsspalte",
+								'B',
+								null,
+								"Der Name der " + "Beschreibungsspalte in der DB-Versionen-Tabelle, falls eine solche "
+										+ "existiert."));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								6,
+								this,
+								ID_ADDITIONALSCRIPTLISTENER,
+								dlf,
+								dcf,
+								StrUtil.FromHTML("Zus&auml;tzliche SQLScriptListener"),
+								'Q',
+								null,
+								StrUtil
+										.FromHTML(
+												"Der Name der Klasse, die als SQLScripListener &uuml;ber "
+														+ "&Auml;nderungen bei Bau von SQL-Aktualisierungscripten benachrichtigt werden"
+														+ "sollen.")));
+		dedl
+				.addElement(
+						new DefaultEditorDescriptor(
+								6,
+								this,
+								ID_SCHEMA_NAME,
+								dlf,
+								dcf,
+								StrUtil.FromHTML("Schemaname (falls erforderlich)"),
+								'S',
+								null,
+								StrUtil
+										.FromHTML(
+												"Ein Schemaname, falls das Modell f&uuml;r ein Schema "
+														+ "innerhalb der Datenbank gedacht ist.")));
+		dedl
+				.addElement(
+						new DefaultSubEditorDescriptor(
+								7,
+								this,
+								new OptionListSubEditorFactory(
+										DefaultVectorPanelButtonFactory.INSTANCE,
+										Archimedes.guiBundle,
+										this.getPredeterminedOptionProvider(),
+										OptionType.MODEL)));
 		return dedl;
 	}
 
@@ -649,12 +954,16 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 
 	@Override
 	public TabbedPaneFactory getTabbedPaneFactory() {
-		return new DefaultTabbedPaneFactory(new TabDescriptor[] { new DefaultTabDescriptor("Allgemeines", 'A', null),
-				new DefaultTabDescriptor("Version", 'V', null), new DefaultTabDescriptor("Schrift", 'S', null),
-				new DefaultTabDescriptor("Beschreibung", 'B', null), new DefaultTabDescriptor("Historie", 'H', null),
-				new DefaultTabDescriptor("Codegenerator", 'C', null),
-				new DefaultTabDescriptor("SQL-Generator", 'Q', null),
-				new DefaultTabDescriptor("Optionen", 'O', null) });
+		return new DefaultTabbedPaneFactory(
+				new TabDescriptor[] {
+						new DefaultTabDescriptor("Allgemeines", 'A', null),
+						new DefaultTabDescriptor("Version", 'V', null),
+						new DefaultTabDescriptor("Schrift", 'S', null),
+						new DefaultTabDescriptor("Beschreibung", 'B', null),
+						new DefaultTabDescriptor("Historie", 'H', null),
+						new DefaultTabDescriptor("Codegenerator", 'C', null),
+						new DefaultTabDescriptor("SQL-Generator", 'Q', null),
+						new DefaultTabDescriptor("Optionen", 'O', null) });
 	}
 
 	@Override
@@ -892,10 +1201,14 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			}
 			for (int i = 0; i < len; i++) {
 				DefaultCommentModel dcm = (DefaultCommentModel) this.defaultComments.elementAt(i);
-				stf.writeStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Muster" },
-						this.toHTML(dcm.getPattern()));
-				stf.writeStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Kommentar" },
-						this.toHTML(dcm.getDefaultComment()));
+				stf
+						.writeStr(
+								new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Muster" },
+								this.toHTML(dcm.getPattern()));
+				stf
+						.writeStr(
+								new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Kommentar" },
+								this.toHTML(dcm.getDefaultComment()));
 				if (cout) {
 					LOG.info("        " + dcm.getPattern() + " written.");
 				}
@@ -910,24 +1223,44 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		for (int i = 0; i < len; i++) {
 			TabellenModel tm = this.tables.elementAt(i);
 			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Name" }, this.toHTML(tm.getName()));
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Aufgehoben" },
-					new Boolean(tm.isDeprecated()).toString());
+			stf
+					.writeStr(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Aufgehoben" },
+							new Boolean(tm.isDeprecated()).toString());
 			if (dsm == DiagramSaveMode.REGULAR) {
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Kommentar" },
-						this.toHTML(tm.getComment()));
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Schrift" },
-						this.toHTML(tm.getSchriftfarbe().toString()));
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Hintergrund" },
-						this.toHTML((tm.getHintergrundfarbe() != null ? tm.getHintergrundfarbe().toString() : "null")));
+				stf
+						.writeStr(
+								new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Kommentar" },
+								this.toHTML(tm.getComment()));
+				stf
+						.writeStr(
+								new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Schrift" },
+								this.toHTML(tm.getSchriftfarbe().toString()));
+				stf
+						.writeStr(
+								new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Hintergrund" },
+								this
+										.toHTML(
+												(tm.getHintergrundfarbe() != null
+														? tm.getHintergrundfarbe().toString()
+														: "null")));
 			}
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "NMRelation" },
-					new Boolean(tm.isNMRelation()).toString());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "InDevelopment" },
-					new Boolean(tm.isDraft()).toString());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "ExternalTable" },
-					new Boolean(tm.isExternalTable()).toString());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "FirstGenerationDone" },
-					new Boolean(tm.isFirstGenerationDone()).toString());
+			stf
+					.writeStr(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "NMRelation" },
+							new Boolean(tm.isNMRelation()).toString());
+			stf
+					.writeStr(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "InDevelopment" },
+							new Boolean(tm.isDraft()).toString());
+			stf
+					.writeStr(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "ExternalTable" },
+							new Boolean(tm.isExternalTable()).toString());
+			stf
+					.writeStr(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "FirstGenerationDone" },
+							new Boolean(tm.isFirstGenerationDone()).toString());
 			/*
 			 * stf.writeLong(new String[] {"Diagramm", "Tabellen", "Tabelle" + i, "X"}, tm.getX(
 			 * this.getViews().get(0))); stf.writeLong(new String[] {"Diagramm", "Tabellen", "Tabelle" + i, "Y"},
@@ -941,51 +1274,141 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				}
 				for (int j = 0, lenj = tvms.size(); j < lenj; j++) {
 					ViewModel vm = tvms.get(j);
-					stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Name" },
-							this.toHTML(vm.getName()));
-					stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "X" },
-							tm.getX(vm));
-					stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Y" },
-							tm.getY(vm));
+					stf
+							.writeStr(
+									new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Name" },
+									this.toHTML(vm.getName()));
+					stf
+							.writeLong(
+									new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "X" },
+									tm.getX(vm));
+					stf
+							.writeLong(
+									new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Y" },
+									tm.getY(vm));
 					if (cout) {
 						LOG.info("            " + vm.getName() + " written.");
 					}
 				}
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "History" },
-						this.toHTML(tm.getHistory()));
+				stf
+						.writeStr(
+								new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "History" },
+								this.toHTML(tm.getHistory()));
 			}
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype", "Anzahl" },
-					tm.getStereotypenCount());
+			stf
+					.writeLong(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype", "Anzahl" },
+							tm.getStereotypenCount());
 			for (int j = 0, lenj = tm.getStereotypenCount(); j < lenj; j++) {
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype" + j },
-						this.toHTML(tm.getStereotypeAt(j).toString()));
+				stf
+						.writeStr(
+								new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype" + j },
+								this.toHTML(tm.getStereotypeAt(j).toString()));
 			}
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Codieren" },
-					new Boolean(tm.isGenerateCode()).toString());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
-					"Codegeneratoroptionen" }, tm.getGenerateCodeOptions());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
-					"Codeverzeichnis" }, tm.getCodeVerzeichnis());
-			stf.writeStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Kontextname" },
-					tm.getContextName());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
-					"ComplexForeignKey" }, tm.getComplexForeignKeyDefinition());
-			stf.writeStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "UniqueFormula" },
-					tm.getComplexUniqueSpecification());
-			stf.writeStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "DynamicCode" },
-					new Boolean(tm.isDynamicCode()).toString());
-			stf.writeStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Inherited" },
-					new Boolean(tm.isInherited()).toString());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
-					"ActiveInApplication" }, new Boolean(tm.isActiveInApplication()).toString());
-			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator",
-					"AdditionalCreateConstraints" }, tm.getAdditionalCreateConstraints());
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" },
-					tm.getTabellenspaltenCount());
+			stf
+					.writeStr(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Spalten",
+									"Codegenerator",
+									"Codieren" },
+							new Boolean(tm.isGenerateCode()).toString());
+			stf
+					.writeStr(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Spalten",
+									"Codegenerator",
+									"Codegeneratoroptionen" },
+							tm.getGenerateCodeOptions());
+			stf
+					.writeStr(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Spalten",
+									"Codegenerator",
+									"Codeverzeichnis" },
+							tm.getCodeVerzeichnis());
+			stf
+					.writeStr(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Spalten",
+									"Codegenerator",
+									"Kontextname" },
+							tm.getContextName());
+			stf
+					.writeStr(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Spalten",
+									"Codegenerator",
+									"ComplexForeignKey" },
+							tm.getComplexForeignKeyDefinition());
+			stf
+					.writeStr(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Spalten",
+									"Codegenerator",
+									"UniqueFormula" },
+							tm.getComplexUniqueSpecification());
+			stf
+					.writeStr(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Spalten",
+									"Codegenerator",
+									"DynamicCode" },
+							new Boolean(tm.isDynamicCode()).toString());
+			stf
+					.writeStr(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Spalten",
+									"Codegenerator",
+									"Inherited" },
+							new Boolean(tm.isInherited()).toString());
+			stf
+					.writeStr(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Spalten",
+									"Codegenerator",
+									"ActiveInApplication" },
+							new Boolean(tm.isActiveInApplication()).toString());
+			stf
+					.writeStr(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Spalten",
+									"Codegenerator",
+									"AdditionalCreateConstraints" },
+							tm.getAdditionalCreateConstraints());
+			stf
+					.writeLong(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" },
+							tm.getTabellenspaltenCount());
 			if (cout) {
 				LOG.info("        columns of the table:");
 			}
@@ -999,118 +1422,348 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			}
 			ColumnModel[] equalsMembers = tm.getEqualsMembers();
 			int lenj = equalsMembers.length;
-			stf.writeLong(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "Equalsmembers", "Anzahl" },
-					lenj);
+			stf
+					.writeLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"Equalsmembers",
+									"Anzahl" },
+							lenj);
 			for (int j = 0; j < lenj; j++) {
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "Equalsmembers",
-						"Member" + j, "Spalte" }, equalsMembers[j].getName());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"Equalsmembers",
+										"Member" + j,
+										"Spalte" },
+								equalsMembers[j].getName());
 			}
 			ColumnModel[] cs = ((TableModel) tm).getCompareMembers();
-			stf.writeLong(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "CompareMembers", "Anzahl" },
-					cs.length);
+			stf
+					.writeLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"CompareMembers",
+									"Anzahl" },
+							cs.length);
 			for (int j = 0; j < cs.length; j++) {
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "CompareMembers",
-						"Member" + j, "Spalte" }, cs[j].getName());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"CompareMembers",
+										"Member" + j,
+										"Spalte" },
+								cs[j].getName());
 			}
 			ColumnModel[] hashCodeMembers = tm.getHashCodeMembers();
 			lenj = hashCodeMembers.length;
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "HashCodeMembers",
-					"Anzahl" }, lenj);
+			stf
+					.writeLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"HashCodeMembers",
+									"Anzahl" },
+							lenj);
 			for (int j = 0; j < lenj; j++) {
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "HashCodeMembers",
-						"Member" + j, "Spalte" }, hashCodeMembers[j].getName());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"HashCodeMembers",
+										"Member" + j,
+										"Spalte" },
+								hashCodeMembers[j].getName());
 			}
 			ToStringContainer[] tscs = (ToStringContainer[]) tm.getToStringMembers();
 			lenj = tscs.length;
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "ToStringMembers",
-					"Anzahl" }, lenj);
+			stf
+					.writeLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"ToStringMembers",
+									"Anzahl" },
+							lenj);
 			for (int j = 0; j < lenj; j++) {
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "ToStringMembers",
-						"Member" + j, "Spalte" }, tscs[j].getTabellenspalte().getName());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "ToStringMembers",
-						"Member" + j, "Prefix" }, tscs[j].getPrefix());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "ToStringMembers",
-						"Member" + j, "Suffix" }, tscs[j].getSuffix());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToStringMembers",
+										"Member" + j,
+										"Spalte" },
+								tscs[j].getTabellenspalte().getName());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToStringMembers",
+										"Member" + j,
+										"Prefix" },
+								tscs[j].getPrefix());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToStringMembers",
+										"Member" + j,
+										"Suffix" },
+								tscs[j].getSuffix());
 			}
 			tscs = (ToStringContainer[]) tm.getComboStringMembers();
 			lenj = tscs.length;
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "ToComboStringMembers",
-					"Anzahl" }, lenj);
+			stf
+					.writeLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"ToComboStringMembers",
+									"Anzahl" },
+							lenj);
 			for (int j = 0; j < lenj; j++) {
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"ToComboStringMembers", "Member" + j, "Spalte" }, tscs[j].getTabellenspalte().getName());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"ToComboStringMembers", "Member" + j, "Prefix" }, tscs[j].getPrefix());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"ToComboStringMembers", "Member" + j, "Suffix" }, tscs[j].getSuffix());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToComboStringMembers",
+										"Member" + j,
+										"Spalte" },
+								tscs[j].getTabellenspalte().getName());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToComboStringMembers",
+										"Member" + j,
+										"Prefix" },
+								tscs[j].getPrefix());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToComboStringMembers",
+										"Member" + j,
+										"Suffix" },
+								tscs[j].getSuffix());
 			}
 			Vector v = tm.getAuswahlMembers();
 			lenj = v.size();
-			stf.writeLong(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers", "Anzahl" },
-					lenj);
+			stf
+					.writeLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"AuswahlMembers",
+									"Anzahl" },
+							lenj);
 			for (int j = 0; j < lenj; j++) {
 				// TabellenspaltenModel tsm0 = (TabellenspaltenModel)
 				// v.elementAt(j);
 				SelectionMemberModel smm = (SelectionMemberModel) v.elementAt(j);
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers",
-						"Member" + j, "Spalte" }, smm.getColumn().getName());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers",
-						"Member" + j, "Tabelle" }, smm.getColumn().getTable().getName());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers",
-						"Member" + j, "Attribute" }, smm.getAttribute().toString());
-				stf.writeStr(
-						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers",
-								"Member" + j, "PrintExpression" },
-						(smm.getPrintExpression() == null ? "" : smm.getPrintExpression()));
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"AuswahlMembers",
+										"Member" + j,
+										"Spalte" },
+								smm.getColumn().getName());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"AuswahlMembers",
+										"Member" + j,
+										"Tabelle" },
+								smm.getColumn().getTable().getName());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"AuswahlMembers",
+										"Member" + j,
+										"Attribute" },
+								smm.getAttribute().toString());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"AuswahlMembers",
+										"Member" + j,
+										"PrintExpression" },
+								(smm.getPrintExpression() == null ? "" : smm.getPrintExpression()));
 			}
 			OrderMemberModel[] oms = tm.getSelectionViewOrderMembers();
 			lenj = oms.length;
-			stf.writeLong(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers", "Anzahl" },
-					lenj);
+			stf
+					.writeLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"OrderMembers",
+									"Anzahl" },
+							lenj);
 			if (cout) {
 				LOG.info("        order members:");
 			}
 			for (int j = 0; j < lenj; j++) {
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers",
-						"Member" + j, "Spalte" }, oms[j].getOrderColumn().getName());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers",
-						"Member" + j, "Tabelle" }, oms[j].getOrderColumn().getTable().getName());
-				stf.writeStr(
-						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers",
-								"Member" + j, "Richtung" },
-						(oms[j].getOrderDirection() != null ? oms[j].getOrderDirection().toString() : "ASC"));
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"OrderMembers",
+										"Member" + j,
+										"Spalte" },
+								oms[j].getOrderColumn().getName());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"OrderMembers",
+										"Member" + j,
+										"Tabelle" },
+								oms[j].getOrderColumn().getTable().getName());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"OrderMembers",
+										"Member" + j,
+										"Richtung" },
+								(oms[j].getOrderDirection() != null ? oms[j].getOrderDirection().toString() : "ASC"));
 				if (cout) {
 					LOG.info("            " + oms[j].toString() + " written.");
 				}
 			}
 			new STFNReferenceWriter().write(stf, i, tm);
 			new STFOptionWriter().write(stf, tm, i);
-			stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Anzahl" },
-					tm.getPanelCount());
+			stf
+					.writeLong(
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Anzahl" },
+							tm.getPanelCount());
 			lenj = tm.getPanelCount();
 			if (cout) {
 				LOG.info("        panels:");
 			}
 			for (int j = 0; j < lenj; j++) {
 				PanelModel pm = tm.getPanelAt(j);
-				stf.writeLong(
-						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "PanelNumber" },
-						pm.getPanelNumber());
-				stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "TabTitle" },
-						pm.getTabTitle());
-				stf.writeStr(
-						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "TabMnemonic" },
-						pm.getTabMnemonic());
-				stf.writeStr(
-						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "TabToolTipText" },
-						pm.getTabToolTipText());
-				stf.writeStr(
-						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "PanelClass" },
-						pm.getPanelClass());
+				stf
+						.writeLong(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Panels",
+										"Panel" + j,
+										"PanelNumber" },
+								pm.getPanelNumber());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Panels",
+										"Panel" + j,
+										"TabTitle" },
+								pm.getTabTitle());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Panels",
+										"Panel" + j,
+										"TabMnemonic" },
+								pm.getTabMnemonic());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Panels",
+										"Panel" + j,
+										"TabToolTipText" },
+								pm.getTabToolTipText());
+				stf
+						.writeStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Panels",
+										"Panel" + j,
+										"PanelClass" },
+								pm.getPanelClass());
 				if (cout) {
 					LOG.info("        " + pm.getPanelNumber() + " written.");
 				}
@@ -1158,10 +1811,14 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		stf.writeLong(new String[] { "Diagramm", "Stereotype", "Anzahl" }, len);
 		for (int i = 0; i < len; i++) {
 			StereotypeModel stm = this.stereotypes.elementAt(i);
-			stf.writeStr(new String[] { "Diagramm", "Stereotype", "Stereotype" + i, "Name" },
-					this.toHTML(stm.getName()));
-			stf.writeStr(new String[] { "Diagramm", "Stereotype", "Stereotype" + i, "Kommentar" },
-					this.toHTML(stm.getComment()));
+			stf
+					.writeStr(
+							new String[] { "Diagramm", "Stereotype", "Stereotype" + i, "Name" },
+							this.toHTML(stm.getName()));
+			stf
+					.writeStr(
+							new String[] { "Diagramm", "Stereotype", "Stereotype" + i, "Kommentar" },
+							this.toHTML(stm.getComment()));
 		}
 		len = this.defaultComments.size();
 		return sb.toString();
@@ -1173,14 +1830,17 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		boolean debug = Boolean.getBoolean("archimedes.debug") || Boolean.getBoolean("archimedes.scheme.debug")
 				|| Boolean.getBoolean("archimedes.scheme.Diagramm.debug");
 		boolean suppressDots = Boolean.getBoolean("archimedes.scheme.Diagramm.suppress.dots");
-		String ofn = stf.readStr(new String[] { "Diagramm", "Factories", "Object" },
-				Archimedes.Factory.getClass().getName());
+		String ofn = stf
+				.readStr(new String[] { "Diagramm", "Factories", "Object" }, Archimedes.Factory.getClass().getName());
 		if (!Archimedes.Factory.getClass().getName().equals(ofn)) {
-			JOptionPane.showMessageDialog(null,
-					"Die aktuelle ObjectFactory (" + Archimedes.Factory.getClass().getName()
-							+ ") unterscheidet sich von\n"
-							+ "der ObjectFactory, unter das Modell zuletzt bearbeitet wurde (" + ofn + ")!",
-					"ObjectFactory unterschiedlich", JOptionPane.WARNING_MESSAGE);
+			JOptionPane
+					.showMessageDialog(
+							null,
+							"Die aktuelle ObjectFactory (" + Archimedes.Factory.getClass().getName()
+									+ ") unterscheidet sich von\n"
+									+ "der ObjectFactory, unter das Modell zuletzt bearbeitet wurde (" + ofn + ")!",
+							"ObjectFactory unterschiedlich",
+							JOptionPane.WARNING_MESSAGE);
 		}
 		boolean output = Boolean.getBoolean("archimedes.scheme.Diagramm.output");
 		Diagramm d = (Diagramm) Archimedes.Factory.createDiagramm();
@@ -1194,9 +1854,18 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		ArchimedesJDBCDataSourceRecord dsr = new ArchimedesJDBCDataSourceRecord();
 		dsr.fromSTF(stf, new String[] { "Diagramm", "DataSource", "Update" });
 		if (dsr.getDBName().length() > 0) {
-			d.addDatabaseConnection(new DatabaseConnection("Productive database", dsr.getDriver(), dsr.getDBName(),
-					dsr.getUser(), dsr.getMode(), dsr.hasDomains(), dsr.isFkNotNullBeachten(), dsr.isReferenzenSetzen(),
-					dsr.getQuoteCharacter()));
+			d
+					.addDatabaseConnection(
+							new DatabaseConnection(
+									"Productive database",
+									dsr.getDriver(),
+									dsr.getDBName(),
+									dsr.getUser(),
+									dsr.getMode(),
+									dsr.hasDomains(),
+									dsr.isFkNotNullBeachten(),
+									dsr.isReferenzenSetzen(),
+									dsr.getQuoteCharacter()));
 		}
 		int len = (int) stf.readLong(new String[] { "Diagramm", "Colors", "Anzahl" }, 0);
 		if (len > 0) {
@@ -1227,16 +1896,39 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		new STFStereotypeReader().read(stf, d);
 		len = (int) stf.readLong(new String[] { "Diagramm", "DefaultComment", "Anzahl" }, 0);
 		for (int i = 0; i < len; i++) {
-			String n = this.fromHTML(
-					stf.readStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Muster" }, null));
-			String k = this.fromHTML(
-					stf.readStr(new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Kommentar" }, ""));
+			String n = this
+					.fromHTML(
+							stf
+									.readStr(
+											new String[] {
+													"Diagramm",
+													"DefaultComment",
+													"DefaultComment" + i,
+													"Muster" },
+											null));
+			String k = this
+					.fromHTML(
+							stf
+									.readStr(
+											new String[] {
+													"Diagramm",
+													"DefaultComment",
+													"DefaultComment" + i,
+													"Kommentar" },
+											""));
 			DefaultCommentModel dcm = Archimedes.Factory.createDefaultComment(n, k);
 			d.addDefaultComment(dcm);
 		}
-		d.setShowReferencedColumns(new Boolean(
-				stf.readStr(new String[] { "Diagramm", "Parameter", "ReferenzierteSpaltenAnzeigen" }, "TRUE"))
-						.booleanValue());
+		d
+				.setShowReferencedColumns(
+						new Boolean(
+								stf
+										.readStr(
+												new String[] {
+														"Diagramm",
+														"Parameter",
+														"ReferenzierteSpaltenAnzeigen" },
+												"TRUE")).booleanValue());
 		GUIViewModel vm = null;
 		GUIViewModel mvm = (GUIViewModel) new STFViewReader().read(stf, d);
 		new STFDiagrammParameterReader().read(stf, d);
@@ -1246,17 +1938,29 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		}
 		for (int i = 0; i < len; i++) {
 			String n = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Name" }, null));
-			String k = this
-					.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Kommentar" }, ""));
+			String k =
+					this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Kommentar" }, ""));
 			history = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "History" }, ""));
 			boolean aufgh = new Boolean(
 					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Aufgehoben" }, "FALSE"))
 							.booleanValue();
-			String fs = this.fromHTML(stf
-					.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Schrift" }, "schwarz"));
-			String fhg = this.fromHTML(
-					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Hintergrund" },
-							StrUtil.FromHTML("wei&szlig;")));
+			String fs = this
+					.fromHTML(
+							stf
+									.readStr(
+											new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Schrift" },
+											"schwarz"));
+			String fhg = this
+					.fromHTML(
+							stf
+									.readStr(
+											new String[] {
+													"Diagramm",
+													"Tabellen",
+													"Tabelle" + i,
+													"Farben",
+													"Hintergrund" },
+											StrUtil.FromHTML("wei&szlig;")));
 			boolean nmrelation = new Boolean(
 					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "NMRelation" }, "FALSE"))
 							.booleanValue();
@@ -1281,24 +1985,72 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.setHistory(history);
 			tm.setExternalTable(externalTable);
 			vm.addObject(tm);
-			int lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Anzahl" },
-					0);
+			int lenj =
+					(int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Anzahl" }, 0);
 			if (lenj > 0) {
 				tm.clearPanels();
 				for (int j = 0; j < lenj; j++) {
 					PanelModel pm = Archimedes.Factory.createPanel();
-					pm.setPanelNumber((int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels",
-							"Panel" + j, "PanelNumber" }, 0));
-					pm.setTabTitle(stf.readStr(
-							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "TabTitle" },
-							"" + (j + 1) + ".Tab"));
-					pm.setTabMnemonic(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels",
-							"Panel" + j, "TabMnemonic" }, "" + (j + 1)));
-					pm.setTabToolTipText(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels",
-							"Panel" + j, "TabToolTipText" }, ""));
-					pm.setPanelClass(stf.readStr(
-							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Panel" + j, "PanelClass" },
-							""));
+					pm
+							.setPanelNumber(
+									(int) stf
+											.readLong(
+													new String[] {
+															"Diagramm",
+															"Tabellen",
+															"Tabelle" + i,
+															"Panels",
+															"Panel" + j,
+															"PanelNumber" },
+													0));
+					pm
+							.setTabTitle(
+									stf
+											.readStr(
+													new String[] {
+															"Diagramm",
+															"Tabellen",
+															"Tabelle" + i,
+															"Panels",
+															"Panel" + j,
+															"TabTitle" },
+													"" + (j + 1) + ".Tab"));
+					pm
+							.setTabMnemonic(
+									stf
+											.readStr(
+													new String[] {
+															"Diagramm",
+															"Tabellen",
+															"Tabelle" + i,
+															"Panels",
+															"Panel" + j,
+															"TabMnemonic" },
+													"" + (j + 1)));
+					pm
+							.setTabToolTipText(
+									stf
+											.readStr(
+													new String[] {
+															"Diagramm",
+															"Tabellen",
+															"Tabelle" + i,
+															"Panels",
+															"Panel" + j,
+															"TabToolTipText" },
+													""));
+					pm
+							.setPanelClass(
+									stf
+											.readStr(
+													new String[] {
+															"Diagramm",
+															"Tabellen",
+															"Tabelle" + i,
+															"Panels",
+															"Panel" + j,
+															"PanelClass" },
+													""));
 					tm.addPanel(pm);
 				}
 			} else {
@@ -1310,14 +2062,28 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			}
 			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "Anzahl" }, 0);
 			for (int j = 0; j < lenj; j++) {
-				String viewname = this.fromHTML(stf.readStr(
-						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Name" }, ""));
+				String viewname = this
+						.fromHTML(
+								stf
+										.readStr(
+												new String[] {
+														"Diagramm",
+														"Tabellen",
+														"Tabelle" + i,
+														"Views",
+														"View" + j,
+														"Name" },
+												""));
 				vm = d.getView(viewname);
 				if (vm != null) {
-					x = (int) stf.readLong(
-							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "X" }, 0);
-					y = (int) stf.readLong(
-							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Y" }, 0);
+					x = (int) stf
+							.readLong(
+									new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "X" },
+									0);
+					y = (int) stf
+							.readLong(
+									new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Y" },
+									0);
 					tm.setXY(vm, x, y);
 					vm.addObject(tm);
 				} else {
@@ -1327,45 +2093,144 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.setName(n);
 			tm.setComment(k);
 			tm.setDeprecated(aufgh);
-			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype", "Anzahl" },
-					0);
+			lenj = (int) stf
+					.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype", "Anzahl" }, 0);
 			for (int j = 0; j < lenj; j++) {
-				String st = this.fromHTML(
-						stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype" + j }, ""));
+				String st = this
+						.fromHTML(
+								stf
+										.readStr(
+												new String[] {
+														"Diagramm",
+														"Tabellen",
+														"Tabelle" + i,
+														"Stereotype" + j },
+												""));
 				try {
 					tm.addStereotype(d.getStereotype(st));
 				} catch (NoSuchElementException nsee) {
 				}
 			}
-			boolean codieren = new Boolean(stf.readStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Codieren" },
-					"FALSE")).booleanValue();
+			boolean codieren = new Boolean(
+					stf
+							.readStr(
+									new String[] {
+											"Diagramm",
+											"Tabellen",
+											"Tabelle" + i,
+											"Spalten",
+											"Codegenerator",
+											"Codieren" },
+									"FALSE")).booleanValue();
 			tm.setGenerateCode(codieren);
-			tm.setGenerateCodeOptions(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten",
-					"Codegenerator", "Codegeneratoroptionen" }, ""));
-			tm.setCodeVerzeichnis(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten",
-					"Codegenerator", "Codeverzeichnis" }, ""));
-			tm.setContextName(stf.readStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Kontextname" },
-					""));
-			tm.setComplexForeignKeyDefinition(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-					"Spalten", "Codegenerator", "ComplexForeignKey" }, ""));
-			tm.setComplexUniqueSpecification(stf.readStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "UniqueFormula" },
-					""));
-			boolean dynamicCode = new Boolean(stf.readStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "DynamicCode" },
-					"FALSE")).booleanValue();
+			tm
+					.setGenerateCodeOptions(
+							stf
+									.readStr(
+											new String[] {
+													"Diagramm",
+													"Tabellen",
+													"Tabelle" + i,
+													"Spalten",
+													"Codegenerator",
+													"Codegeneratoroptionen" },
+											""));
+			tm
+					.setCodeVerzeichnis(
+							stf
+									.readStr(
+											new String[] {
+													"Diagramm",
+													"Tabellen",
+													"Tabelle" + i,
+													"Spalten",
+													"Codegenerator",
+													"Codeverzeichnis" },
+											""));
+			tm
+					.setContextName(
+							stf
+									.readStr(
+											new String[] {
+													"Diagramm",
+													"Tabellen",
+													"Tabelle" + i,
+													"Spalten",
+													"Codegenerator",
+													"Kontextname" },
+											""));
+			tm
+					.setComplexForeignKeyDefinition(
+							stf
+									.readStr(
+											new String[] {
+													"Diagramm",
+													"Tabellen",
+													"Tabelle" + i,
+													"Spalten",
+													"Codegenerator",
+													"ComplexForeignKey" },
+											""));
+			tm
+					.setComplexUniqueSpecification(
+							stf
+									.readStr(
+											new String[] {
+													"Diagramm",
+													"Tabellen",
+													"Tabelle" + i,
+													"Spalten",
+													"Codegenerator",
+													"UniqueFormula" },
+											""));
+			boolean dynamicCode = new Boolean(
+					stf
+							.readStr(
+									new String[] {
+											"Diagramm",
+											"Tabellen",
+											"Tabelle" + i,
+											"Spalten",
+											"Codegenerator",
+											"DynamicCode" },
+									"FALSE")).booleanValue();
 			tm.setDynamicCode(dynamicCode);
-			boolean inherited = new Boolean(stf.readStr(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Codegenerator", "Inherited" },
-					"FALSE")).booleanValue();
+			boolean inherited = new Boolean(
+					stf
+							.readStr(
+									new String[] {
+											"Diagramm",
+											"Tabellen",
+											"Tabelle" + i,
+											"Spalten",
+											"Codegenerator",
+											"Inherited" },
+									"FALSE")).booleanValue();
 			tm.setInherited(inherited);
-			boolean activeInApplication = new Boolean(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-					"Spalten", "Codegenerator", "ActiveInApplication" }, "FALSE")).booleanValue();
+			boolean activeInApplication = new Boolean(
+					stf
+							.readStr(
+									new String[] {
+											"Diagramm",
+											"Tabellen",
+											"Tabelle" + i,
+											"Spalten",
+											"Codegenerator",
+											"ActiveInApplication" },
+									"FALSE")).booleanValue();
 			tm.setActiveInApplication(activeInApplication);
-			tm.setAdditionalCreateConstraints(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-					"Spalten", "Codegenerator", "AdditionalCreateConstraints" }, ""));
+			tm
+					.setAdditionalCreateConstraints(
+							stf
+									.readStr(
+											new String[] {
+													"Diagramm",
+													"Tabellen",
+													"Tabelle" + i,
+													"Spalten",
+													"Codegenerator",
+													"AdditionalCreateConstraints" },
+											""));
 			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" }, 0);
 			for (int j = 0; j < lenj; j++) {
 				new STFColumnReader().read(stf, d, tm, i, j);
@@ -1384,58 +2249,160 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		for (int i = 0; i < len; i++) {
 			String n = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Name" }, null));
 			TabellenModel tm = d.getTabelle(n);
-			int lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" },
-					0);
+			int lenj =
+					(int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" }, 0);
 			for (int j = 0; j < lenj; j++) {
-				n = this.fromHTML(stf.readStr(
-						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Spalte" + j, "Name" }, null));
+				n = this
+						.fromHTML(
+								stf
+										.readStr(
+												new String[] {
+														"Diagramm",
+														"Tabellen",
+														"Tabelle" + i,
+														"Spalten",
+														"Spalte" + j,
+														"Name" },
+												null));
 				TabellenspaltenModel tsm = tm.getTabellenspalte(n);
-				boolean fk = new Boolean(stf.readStr(
-						new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Spalte" + j, "ForeignKey" },
-						"false")).booleanValue();
+				boolean fk = new Boolean(
+						stf
+								.readStr(
+										new String[] {
+												"Diagramm",
+												"Tabellen",
+												"Tabelle" + i,
+												"Spalten",
+												"Spalte" + j,
+												"ForeignKey" },
+										"false")).booleanValue();
 				if (fk) {
 					new STFRelationReader().read(stf, d, tsm, i, j, (ViewModel) mvm);
 				}
 			}
 			tm.clearEqualsMembers();
-			lenj = (int) stf.readLong(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "Equalsmembers", "Anzahl" },
-					0);
+			lenj = (int) stf
+					.readLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"Equalsmembers",
+									"Anzahl" },
+							0);
 			for (int j = 0; j < lenj; j++) {
-				String spaltenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"Equalsmembers", "Member" + j, "Spalte" }, "");
+				String spaltenname = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"Equalsmembers",
+										"Member" + j,
+										"Spalte" },
+								"");
 				ColumnModel c = tm.getColumnByName(spaltenname);
 				tm.addEqualsMember(c);
 			}
 			((TableModel) tm).clearCompareToMembers();
-			lenj = (int) stf.readLong(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "CompareMembers", "Anzahl" },
-					0);
+			lenj = (int) stf
+					.readLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"CompareMembers",
+									"Anzahl" },
+							0);
 			for (int j = 0; j < lenj; j++) {
-				String columnName = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"CompareMembers", "Member" + j, "Spalte" }, "");
+				String columnName = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"CompareMembers",
+										"Member" + j,
+										"Spalte" },
+								"");
 				ColumnModel c = tm.getColumnByName(columnName);
 				((TableModel) tm).addCompareMember(c);
 			}
 			tm.clearHashCodeMembers();
-			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-					"HashCodeMembers", "Anzahl" }, 0);
+			lenj = (int) stf
+					.readLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"HashCodeMembers",
+									"Anzahl" },
+							0);
 			for (int j = 0; j < lenj; j++) {
-				String spaltenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"HashCodeMembers", "Member" + j, "Spalte" }, "");
+				String spaltenname = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"HashCodeMembers",
+										"Member" + j,
+										"Spalte" },
+								"");
 				ColumnModel c0 = tm.getColumnByName(spaltenname);
 				tm.addHashCodeMember(c0);
 			}
 			tm.clearToStringMembers();
-			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-					"ToStringMembers", "Anzahl" }, 0);
+			lenj = (int) stf
+					.readLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"ToStringMembers",
+									"Anzahl" },
+							0);
 			for (int j = 0; j < lenj; j++) {
-				String spaltenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"ToStringMembers", "Member" + j, "Spalte" }, "");
-				String prefix = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"ToStringMembers", "Member" + j, "Prefix" }, "");
-				String suffix = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"ToStringMembers", "Member" + j, "Suffix" }, "");
+				String spaltenname = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToStringMembers",
+										"Member" + j,
+										"Spalte" },
+								"");
+				String prefix = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToStringMembers",
+										"Member" + j,
+										"Prefix" },
+								"");
+				String suffix = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToStringMembers",
+										"Member" + j,
+										"Suffix" },
+								"");
 				TabellenspaltenModel tsm0 = tm.getTabellenspalte(spaltenname);
 				ToStringContainer tsc = new ToStringContainer(tsm0, tm);
 				tsc.setPrefix(prefix);
@@ -1443,15 +2410,50 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				tm.addToStringMember(tsc);
 			}
 			tm.clearComboStringMembers();
-			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-					"ToComboStringMembers", "Anzahl" }, 0);
+			lenj = (int) stf
+					.readLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"ToComboStringMembers",
+									"Anzahl" },
+							0);
 			for (int j = 0; j < lenj; j++) {
-				String spaltenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"ToComboStringMembers", "Member" + j, "Spalte" }, "");
-				String prefix = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"ToComboStringMembers", "Member" + j, "Prefix" }, "");
-				String suffix = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"ToComboStringMembers", "Member" + j, "Suffix" }, "");
+				String spaltenname = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToComboStringMembers",
+										"Member" + j,
+										"Spalte" },
+								"");
+				String prefix = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToComboStringMembers",
+										"Member" + j,
+										"Prefix" },
+								"");
+				String suffix = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"ToComboStringMembers",
+										"Member" + j,
+										"Suffix" },
+								"");
 				TabellenspaltenModel tsm0 = tm.getTabellenspalte(spaltenname);
 				ToStringContainer tsc = new ToStringContainer(tsm0, tm);
 				tsc.setPrefix(prefix);
@@ -1459,35 +2461,112 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				tm.addComboStringMember(tsc);
 			}
 			tm.getAuswahlMembers().removeAllElements();
-			lenj = (int) stf.readLong(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "AuswahlMembers", "Anzahl" },
-					0);
+			lenj = (int) stf
+					.readLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"AuswahlMembers",
+									"Anzahl" },
+							0);
 			for (int j = 0; j < lenj; j++) {
-				String spaltenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"AuswahlMembers", "Member" + j, "Spalte" }, "");
-				String tabellenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"AuswahlMembers", "Member" + j, "Tabelle" }, tm.getName());
-				String attribute = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"AuswahlMembers", "Member" + j, "Attribute" }, "OPTIONAL");
-				String printExpression = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i,
-						"Codegenerator", "AuswahlMembers", "Member" + j, "PrintExpression" }, "");
+				String spaltenname = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"AuswahlMembers",
+										"Member" + j,
+										"Spalte" },
+								"");
+				String tabellenname = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"AuswahlMembers",
+										"Member" + j,
+										"Tabelle" },
+								tm.getName());
+				String attribute = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"AuswahlMembers",
+										"Member" + j,
+										"Attribute" },
+								"OPTIONAL");
+				String printExpression = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"AuswahlMembers",
+										"Member" + j,
+										"PrintExpression" },
+								"");
 				TableModel table = ((DataModel) d).getTableByName(tabellenname);
 				ColumnModel column = table.getColumnByName(spaltenname);
-				SelectionMemberModel smm = new SelectionMember(column, SelectionAttribute.valueOf(attribute),
-						printExpression);
+				SelectionMemberModel smm =
+						new SelectionMember(column, SelectionAttribute.valueOf(attribute), printExpression);
 				tm.getAuswahlMembers().addElement(smm);
 			}
 			tm.clearSelectionViewOrderMembers();
-			lenj = (int) stf.readLong(
-					new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator", "OrderMembers", "Anzahl" },
-					0);
+			lenj = (int) stf
+					.readLong(
+							new String[] {
+									"Diagramm",
+									"Tabellen",
+									"Tabelle" + i,
+									"Codegenerator",
+									"OrderMembers",
+									"Anzahl" },
+							0);
 			for (int j = 0; j < lenj; j++) {
-				String spaltenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"OrderMembers", "Member" + j, "Spalte" }, "");
-				String tabellenname = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"OrderMembers", "Member" + j, "Tabelle" }, tm.getName());
-				String richtung = stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Codegenerator",
-						"OrderMembers", "Member" + j, "Richtung" }, OrderClauseDirection.ASC.toString());
+				String spaltenname = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"OrderMembers",
+										"Member" + j,
+										"Spalte" },
+								"");
+				String tabellenname = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"OrderMembers",
+										"Member" + j,
+										"Tabelle" },
+								tm.getName());
+				String richtung = stf
+						.readStr(
+								new String[] {
+										"Diagramm",
+										"Tabellen",
+										"Tabelle" + i,
+										"Codegenerator",
+										"OrderMembers",
+										"Member" + j,
+										"Richtung" },
+								OrderClauseDirection.ASC.toString());
 				TabellenModel tm0 = d.getTabelle(tabellenname);
 				TabellenspaltenModel tsm0 = tm0.getTabellenspalte(spaltenname);
 				if (tsm0 != null) {
@@ -1532,8 +2611,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			TableMetaData tmd = new TableMetaData(tm.getName());
 			for (int j = 0, lenj = tm.getTabellenspaltenCount(); j < lenj; j++) {
 				TabellenspaltenModel tsm = tm.getTabellenspalteAt(j);
-				ColumnMetaData cmd = new ColumnMetaData(tsm.getName(), tsm.getDomain().getName(),
-						tsm.getDomain().getType(), tsm.isPrimarykey(), tsm.isNotNull());
+				ColumnMetaData cmd = new ColumnMetaData(
+						tsm.getName(),
+						tsm.getDomain().getName(),
+						tsm.getDomain().getType(),
+						tsm.isPrimarykey(),
+						tsm.isNotNull());
 				tmd.addColumn(cmd);
 			}
 			sv.addElement(tmd);
@@ -3034,6 +4117,16 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			m.put(o.getName(), o.getParameter());
 		}
 		return m;
+	}
+
+	@Override
+	public DomainShowMode getDomainShowMode() {
+		return this.domainShowMode;
+	}
+
+	@Override
+	public void setDomainShowMode(DomainShowMode newMode) {
+		this.domainShowMode = newMode;
 	}
 
 } // 3875

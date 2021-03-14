@@ -34,6 +34,7 @@ import org.xml.sax.InputSource;
 
 import archimedes.connections.ArchimedesImportJDBCDataSourceRecord;
 import archimedes.connections.DatabaseConnection;
+import archimedes.legacy.model.DomainShowMode;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
@@ -61,6 +62,7 @@ import corent.db.OrderClauseDirection;
 import corent.gui.ExtendedColor;
 import corentx.util.Str;
 import gengen.metadata.ClassMetaData;
+import logging.Logger;
 
 /**
  * This class reads a XML file with Archimedes data model information and creates a new diagram from this information.
@@ -71,6 +73,8 @@ import gengen.metadata.ClassMetaData;
  */
 
 public class ModelXMLReader {
+
+	private static final Logger LOG = Logger.getLogger(ModelXMLReader.class);
 
 	private ObjectFactory objectFactory = null;
 
@@ -130,25 +134,42 @@ public class ModelXMLReader {
 			Document doc = builder.parse(is);
 			this.readAdditionalSQLStatements(dataModel, doc.getElementsByTagName("AdditionalSQLStatements"));
 			this.readColors((NodeList) xpath.evaluate("/Diagram/Colors/*", doc, XPathConstants.NODESET));
-			this.readImportDataSources(dataModel,
-					(NodeList) xpath.evaluate("/Diagram/DataSources/Import", doc, XPathConstants.NODESET));
-			this.readDatabaseConnections(dataModel,
-					(NodeList) xpath.evaluate("/Diagram/DataSources/DatabaseConnection", doc, XPathConstants.NODESET));
+			this
+					.readImportDataSources(
+							dataModel,
+							(NodeList) xpath.evaluate("/Diagram/DataSources/Import", doc, XPathConstants.NODESET));
+			this
+					.readDatabaseConnections(
+							dataModel,
+							(NodeList) xpath
+									.evaluate("/Diagram/DataSources/DatabaseConnection", doc, XPathConstants.NODESET));
 			this.readDiagrammParameters(dataModel, doc.getElementsByTagName("Parameters"));
-			this.readDomains(dataModel,
-					(NodeList) xpath.evaluate("/Diagram/Domains/Domain", doc, XPathConstants.NODESET));
-			this.readOptions(dataModel,
-					(NodeList) xpath.evaluate("/Diagram/Options/Option", doc, XPathConstants.NODESET));
-			this.readSequences(dataModel,
-					(NodeList) xpath.evaluate("/Diagram/Sequences/Sequence", doc, XPathConstants.NODESET));
-			this.readStereotypes(dataModel,
-					(NodeList) xpath.evaluate("/Diagram/Stereotypes/Stereotype", doc, XPathConstants.NODESET));
+			this
+					.readDomains(
+							dataModel,
+							(NodeList) xpath.evaluate("/Diagram/Domains/Domain", doc, XPathConstants.NODESET));
+			this
+					.readOptions(
+							dataModel,
+							(NodeList) xpath.evaluate("/Diagram/Options/Option", doc, XPathConstants.NODESET));
+			this
+					.readSequences(
+							dataModel,
+							(NodeList) xpath.evaluate("/Diagram/Sequences/Sequence", doc, XPathConstants.NODESET));
+			this
+					.readStereotypes(
+							dataModel,
+							(NodeList) xpath.evaluate("/Diagram/Stereotypes/Stereotype", doc, XPathConstants.NODESET));
 			this.readViews(dataModel, (NodeList) xpath.evaluate("/Diagram/Views/View", doc, XPathConstants.NODESET));
 			this.readTables(dataModel, (NodeList) xpath.evaluate("/Diagram/Tables/Table", doc, XPathConstants.NODESET));
-			this.readComplexIndices(dataModel,
-					(NodeList) xpath.evaluate("/Diagram/ComplexIndices/Index", doc, XPathConstants.NODESET));
-			this.addTablesToViews(dataModel,
-					(NodeList) xpath.evaluate("/Diagram/Views/View", doc, XPathConstants.NODESET));
+			this
+					.readComplexIndices(
+							dataModel,
+							(NodeList) xpath.evaluate("/Diagram/ComplexIndices/Index", doc, XPathConstants.NODESET));
+			this
+					.addTablesToViews(
+							dataModel,
+							(NodeList) xpath.evaluate("/Diagram/Views/View", doc, XPathConstants.NODESET));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -198,8 +219,18 @@ public class ModelXMLReader {
 			boolean references = this.getBoolean(node, "setReferences");
 			String url = this.getString(node, "url");
 			String userName = this.getString(node, "userName");
-			dataModel.addDatabaseConnection(new DatabaseConnection(name, driver, url, userName,
-					DBExecMode.valueOf(dbExecMode), domains, notNull, references, quote));
+			dataModel
+					.addDatabaseConnection(
+							new DatabaseConnection(
+									name,
+									driver,
+									url,
+									userName,
+									DBExecMode.valueOf(dbExecMode),
+									domains,
+									notNull,
+									references,
+									quote));
 		}
 	}
 
@@ -217,6 +248,7 @@ public class ModelXMLReader {
 		dataModel.setDBVersionTableName(this.getString(node, "dbVersionTableName"));
 		dataModel.setDBVersionVersionColumnName(this.getString(node, "dbVersionColumnVersionName"));
 		dataModel.setDeprecatedTablesHidden(this.getBoolean(node, "deprecatedTablesHidden"));
+		dataModel.setDomainShowMode(this.getDomainShowMode(node, "domainShowMode"));
 		dataModel.setPaintTechnicalFieldsInGray(this.getBoolean(node, "disableTechnicalFields"));
 		dataModel.setPaintTransientFieldsInGray(this.getBoolean(node, "disableTransientFields"));
 		dataModel.setFontSizeDiagramHeadline(this.getInteger(node, "fontSizeDiagramHeadlines"));
@@ -247,8 +279,8 @@ public class ModelXMLReader {
 			boolean domains = this.getBoolean(node, "domains");
 			boolean references = this.getBoolean(node, "references");
 			String user = this.getString(node, "user");
-			ArchimedesImportJDBCDataSourceRecord dsr = new ArchimedesImportJDBCDataSourceRecord(driver, dbName, user,
-					"", domains, references);
+			ArchimedesImportJDBCDataSourceRecord dsr =
+					new ArchimedesImportJDBCDataSourceRecord(driver, dbName, user, "", domains, references);
 			dsr.setName(name);
 			dsr.setDescription(description);
 			dataModel.setImportDataSourceRecord(dsr);
@@ -420,8 +452,9 @@ public class ModelXMLReader {
 					c.setParameters(this.getString(child, "parameter"));
 					c.setRemovedStateField(this.getBoolean(child, "removedStateField"));
 					c.setRequired(this.getBoolean(child, "required"));
-					c.setSequenceForKeyGeneration(
-							dataModel.getSequenceByName(this.getString(child, "sequenceForKeyGeneration")));
+					c
+							.setSequenceForKeyGeneration(
+									dataModel.getSequenceByName(this.getString(child, "sequenceForKeyGeneration")));
 					c.setSuppressForeignKeyConstraint(this.getBoolean(child, "suppressForeignKeyConstraints"));
 					c.setTechnicalField(this.getBoolean(child, "technicalField"));
 					c.setTransient(this.getBoolean(child, "transient"));
@@ -545,8 +578,9 @@ public class ModelXMLReader {
 					nr.setDeleteConfirmationRequired(this.getBoolean(child, "deleteConfirmationRequired"));
 					nr.setExtensible(this.getBoolean(child, "extensible"));
 					nr.setId(this.getInteger(child, "id"));
-					nr.setNReferencePanelType(
-							NReferencePanelType.valueOf(this.getString(child, "nReferencePanelType")));
+					nr
+							.setNReferencePanelType(
+									NReferencePanelType.valueOf(this.getString(child, "nReferencePanelType")));
 					nr.setPanel(table.getPanelByNumber(this.getInteger(child, "panelNumber")));
 					nr.setPermitCreate(this.getBoolean(child, "permitCreate"));
 					table.addNReference(nr);
@@ -563,10 +597,12 @@ public class ModelXMLReader {
 					String tableName = this.getString(child, "tableName");
 					String printExpression = this.getString(child, "printExpression");
 					TableModel t = dataModel.getTableByName(tableName);
-					SelectionAttribute selectionAttribute = SelectionAttribute
-							.valueOf(this.getString(child, "selectionAttributeName"));
+					SelectionAttribute selectionAttribute =
+							SelectionAttribute.valueOf(this.getString(child, "selectionAttributeName"));
 					ColumnModel c = t.getColumnByName(columnName);
-					SelectionMemberModel smm = new SelectionMember(c, selectionAttribute,
+					SelectionMemberModel smm = new SelectionMember(
+							c,
+							selectionAttribute,
 							(printExpression == null ? "" : printExpression));
 					table.addSelectableColumn(smm);
 				} else if ("ToStringMember".equals(child.getNodeName())) {
@@ -626,6 +662,16 @@ public class ModelXMLReader {
 	private Color getColor(Node node, String name) {
 		String s = this.getString(node, name);
 		return this.objectFactory.getColor(s, Color.lightGray);
+	}
+
+	private DomainShowMode getDomainShowMode(Node node, String name) {
+		String s = this.getString(node, name);
+		try {
+			return DomainShowMode.valueOf(s);
+		} catch (Exception e) {
+			LOG.info("set domain show mode to: " + DomainShowMode.ALL);
+			return DomainShowMode.ALL;
+		}
 	}
 
 	private int getInteger(Node node, String name) {
