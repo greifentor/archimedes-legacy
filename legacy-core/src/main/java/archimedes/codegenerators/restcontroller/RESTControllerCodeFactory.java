@@ -2,6 +2,8 @@ package archimedes.codegenerators.restcontroller;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import archimedes.acf.checker.ModelChecker;
 import archimedes.acf.checker.ModelCheckerDomainSetForAllColumns;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.CodeGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.legacy.checkers.ModelCheckerDomainNotInuse;
@@ -27,7 +30,7 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 
 	private static final Logger LOG = LogManager.getLogger(RESTControllerCodeFactory.class);
 
-	private RESTControllerNameGenerator nameGenerator = new RESTControllerNameGenerator();
+	private List<CodeGenerator> codeGenerators = Arrays.asList(new DTOClassCodeGenerator());
 
 	@Override
 	public boolean generate(String path) {
@@ -36,19 +39,21 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 		String basePackageName = this.dataModel.getBasePackageName();
 		for (TableModel tableModel : dataModel.getTables()) {
 			if (tableModel.isGenerateCode()) {
-				String code = new DTOClassCodeGenerator().generate(basePackageName, tableModel);
-				String pathName = path + "/src/main/" + nameGenerator.getDTOPackageName(dataModel).replace(".", "/");
-				File packagePath = new File(pathName);
-				if (!packagePath.exists()) {
-					packagePath.mkdirs();
-				}
-				String fileName = pathName + "/" + nameGenerator.getDTOClassName(tableModel) + ".java";
-				try (FileWriter writer = new FileWriter(fileName)) {
-					writer.write(code);
-					LOG.info("wrote file: " + fileName);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				codeGenerators.forEach(codeGenerator -> {
+					String code = codeGenerator.generate(basePackageName, tableModel);
+					String pathName = path + "/src/main/" + codeGenerator.getPackageName(dataModel).replace(".", "/");
+					File packagePath = new File(pathName);
+					if (!packagePath.exists()) {
+						packagePath.mkdirs();
+					}
+					String fileName = pathName + "/" + codeGenerator.getClassName(tableModel) + ".java";
+					try (FileWriter writer = new FileWriter(fileName)) {
+						writer.write(code);
+						LOG.info("wrote file: " + fileName);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
 			}
 		}
 		return false;

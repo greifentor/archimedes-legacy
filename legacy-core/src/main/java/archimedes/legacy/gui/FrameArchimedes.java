@@ -846,7 +846,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 	private boolean isErrorsFound(final DataModel dm, final boolean showErrors) {
 		final String path = this.diagramm.getCodePfad().replace("~", System.getProperty("user.home"));
-		final List<ModelCheckerMessage> messages = new LinkedList<ModelCheckerMessage>();
+		final List<ModelCheckerMessage> messages = new LinkedList<>();
 		for (Object cfo : this.getCodeFactories(path)) {
 			if (cfo instanceof CodeFactory) {
 				try {
@@ -869,7 +869,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				}
 			}
 		}
-		if (messages.size() > 0) {
+		if (!messages.isEmpty()) {
 			if (showErrors) {
 				new ModelCheckerMessageListDialog(
 						this,

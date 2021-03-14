@@ -11,6 +11,7 @@ import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
@@ -31,11 +32,16 @@ public class DTOClassCodeGenerator extends AbstractCodeGenerator<RESTControllerN
 	@Override
 	protected void extendVelocityContext(VelocityContext context, TableModel table) {
 		List<ColumnData> columnData = getColumnData(table.getColumns());
-		context.put("ClassName", nameGenerator.getDTOClassName(table));
+		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
+	}
+
+	@Override
+	public String getClassName(TableModel table) {
+		return nameGenerator.getDTOClassName(table);
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns) {
@@ -47,6 +53,11 @@ public class DTOClassCodeGenerator extends AbstractCodeGenerator<RESTControllerN
 								.setFieldName(nameGenerator.getAttributeName(column))
 								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false)))
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public String getPackageName(DataModel model) {
+		return nameGenerator.getDTOPackageName(model);
 	}
 
 }
