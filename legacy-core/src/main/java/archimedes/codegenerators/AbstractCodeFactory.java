@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import archimedes.acf.event.CodeFactoryListener;
+import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEvent;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.event.CodeFactoryProgressionListener;
@@ -20,6 +21,8 @@ public abstract class AbstractCodeFactory implements CodeFactory, CodeFactoryPro
 
 	protected DataModel dataModel;
 	protected GUIBundle guiBundle;
+	protected ModelCheckerMessageListFrameListener[] modelCheckerMessagelisteners =
+			new ModelCheckerMessageListFrameListener[0];
 	private List<CodeFactoryListener> listeners = new ArrayList<>();
 	private List<CodeFactoryProgressionListener> progressListeners = new ArrayList<>();
 
@@ -70,6 +73,11 @@ public abstract class AbstractCodeFactory implements CodeFactory, CodeFactoryPro
 	@Override
 	public void setGUIBundle(GUIBundle guiBundle) {
 		this.guiBundle = guiBundle;
+	}
+
+	@Override
+	public void setModelCheckerMessageListFrameListeners(ModelCheckerMessageListFrameListener... listeners) {
+		this.modelCheckerMessagelisteners = listeners;
 	}
 
 }

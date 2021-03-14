@@ -7,10 +7,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import archimedes.acf.checker.ModelChecker;
+import archimedes.acf.checker.ModelCheckerDomainSetForAllColumns;
 import archimedes.codegenerators.AbstractCodeFactory;
-import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
+import archimedes.legacy.checkers.ModelCheckerDomainNotInuse;
 import archimedes.model.TableModel;
 
 /**
@@ -55,7 +56,9 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 
 	@Override
 	public ModelChecker[] getModelCheckers() {
-		return new ModelChecker[] {};
+		return new ModelChecker[] {
+				new ModelCheckerDomainNotInuse(guiBundle),
+				new ModelCheckerDomainSetForAllColumns(guiBundle) };
 	}
 
 	@Override
@@ -65,17 +68,12 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 
 	@Override
 	public String[] getResourceBundleNames() {
-		return new String[] { "restcontroller-code-factory" };
+		return new String[] { "archimedes", "restcontroller-code-factory" };
 	}
 
 	@Override
 	public String getVersion() {
 		return "1.0.0";
-	}
-
-	@Override
-	public void setModelCheckerMessageListFrameListeners(ModelCheckerMessageListFrameListener... listeners) {
-		// NOP
 	}
 
 }

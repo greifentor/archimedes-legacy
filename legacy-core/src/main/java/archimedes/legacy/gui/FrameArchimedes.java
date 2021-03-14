@@ -854,10 +854,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					cf.setDataModel(this.diagramm);
 					cf.setGUIBundle(getGUIBundle(this.guiBundle, cf.getResourceBundleNames()));
 					cf.setModelCheckerMessageListFrameListeners(this);
-
 					for (final ModelChecker mc : cf.getModelCheckers()) {
 						final ModelCheckerMessage[] mcms = mc.check(dm);
-
 						if (mcms.length > 0) {
 							for (final ModelCheckerMessage mcm : mcms) {
 								if (mcm.getLevel() == Level.ERROR) {
@@ -866,7 +864,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 							}
 						}
 					}
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -880,7 +877,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						messages.toArray(new ModelCheckerMessage[0]),
 						false);
 			}
-
 			return true;
 		}
 		return false;
@@ -898,7 +894,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			final String s = this.dateinamencache[i].getText();
 			if (s.equalsIgnoreCase(name)) {
 				index = i;
-
 				break;
 			}
 		}
