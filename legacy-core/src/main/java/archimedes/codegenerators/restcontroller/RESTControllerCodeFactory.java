@@ -40,7 +40,7 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 		for (TableModel tableModel : dataModel.getTables()) {
 			if (tableModel.isGenerateCode()) {
 				codeGenerators.forEach(codeGenerator -> {
-					String code = codeGenerator.generate(basePackageName, tableModel);
+					String code = codeGenerator.generate(basePackageName, dataModel, tableModel);
 					String pathName = path + "/src/main/" + codeGenerator.getPackageName(dataModel).replace(".", "/");
 					File packagePath = new File(pathName);
 					if (!packagePath.exists()) {

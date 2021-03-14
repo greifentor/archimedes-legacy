@@ -1,4 +1,4 @@
-package ${BasePackageName}.service.so;
+package ${PackageName};
 
 #if ($ImportLocalDate)
 import ${ImportLocalDate};

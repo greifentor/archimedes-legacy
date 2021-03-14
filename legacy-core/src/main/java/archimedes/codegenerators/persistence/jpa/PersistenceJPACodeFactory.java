@@ -31,7 +31,7 @@ public class PersistenceJPACodeFactory extends AbstractCodeFactory
 		String basePackageName = this.dataModel.getBasePackageName();
 		for (TableModel tableModel : dataModel.getTables()) {
 			if (tableModel.isGenerateCode()) {
-				new DBOClassCodeGenerator().generate(basePackageName, tableModel);
+				new DBOClassCodeGenerator().generate(basePackageName, dataModel, tableModel);
 			}
 		}
 		return false;

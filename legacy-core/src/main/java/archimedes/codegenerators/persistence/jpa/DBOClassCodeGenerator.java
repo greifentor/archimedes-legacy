@@ -30,13 +30,14 @@ public class DBOClassCodeGenerator extends AbstractCodeGenerator<PersistenceJPAN
 	}
 
 	@Override
-	protected void extendVelocityContext(VelocityContext context, TableModel table) {
+	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		List<ColumnData> columnData = getColumnData(table.getColumns());
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
+		context.put("PackageName", getPackageName(model));
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns) {

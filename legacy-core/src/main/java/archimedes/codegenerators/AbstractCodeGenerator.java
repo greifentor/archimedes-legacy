@@ -11,6 +11,7 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
 
+import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
@@ -48,7 +49,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 	}
 
 	@Override
-	public String generate(String basePackageName, TableModel table) {
+	public String generate(String basePackageName, DataModel model, TableModel table) {
 		Velocity.init();
 		VelocityEngine velocityEngine = new VelocityEngine();
 		velocityEngine.setProperty("resource.loaders", "file");
@@ -65,13 +66,13 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 		context.put("BasePackageName", basePackageName);
 		context.put("Generated", GENERATED_CODE);
 		context.put("PluralName", table.getName().toLowerCase() + "s");
-		extendVelocityContext(context, table);
+		extendVelocityContext(context, model, table);
 		StringWriter writer = new StringWriter();
 		t.merge(context, writer);
 		return writer.toString();
 	}
 
-	protected void extendVelocityContext(VelocityContext context, TableModel table) {
+	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 	}
 
 }

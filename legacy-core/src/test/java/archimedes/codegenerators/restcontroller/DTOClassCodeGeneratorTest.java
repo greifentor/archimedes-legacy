@@ -62,7 +62,7 @@ public class DTOClassCodeGeneratorTest {
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel.getTableByName("A_TABLE"));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
 		}

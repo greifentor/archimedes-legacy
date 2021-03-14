@@ -33,7 +33,7 @@ public class DBOClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectWithoutAnyFields() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".service.so;\n" + //
+			String expected = "package " + BASE_PACKAGE_NAME + ".persistence.entities;\n" + //
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
@@ -58,7 +58,7 @@ public class DBOClassCodeGeneratorTest {
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel.getTableByName("A_TABLE"));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
 		}
