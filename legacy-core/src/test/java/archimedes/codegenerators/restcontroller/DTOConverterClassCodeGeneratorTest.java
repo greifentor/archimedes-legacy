@@ -15,7 +15,7 @@ import archimedes.model.DataModel;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class DTOClassCodeGeneratorTest {
+public class DTOConverterClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
@@ -23,7 +23,7 @@ public class DTOClassCodeGeneratorTest {
 	private RESTControllerNameGenerator nameGenerator = new RESTControllerNameGenerator();
 
 	@InjectMocks
-	private DTOClassCodeGenerator unitUnderTest;
+	private DTOConverterClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -36,27 +36,29 @@ public class DTOClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectWithoutAnyFields() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest.dto;\n" + //
+			String expected = "package " + BASE_PACKAGE_NAME + ".rest.converter;\n" + //
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
-					"import lombok.Data;\n" + //
 					"import lombok.Generated;\n" + //
-					"import lombok.experimental.Accessors;\n" + //
 					"\n" + //
 					"/**\n" + //
-					" * A DTO for a_tables.\n" + //
+					" * A DTO converter for a_tables.\n" + //
 					" *\n" + //
 					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 					" */\n" + //
-					"@Accessors(chain = true)\n" + //
-					"@Data\n" + //
 					"@Generated\n" + //
-					"public class ATableDTO {\n" + //
+					"public class ATableDTOConverter {\n" + //
 					"\n" + //
-					"	private long id;\n" + //
-					"	private LocalDate aDate;\n" + //
-					"	private String description;\n" + //
+					"	public ATableDTO convert(ATableSO so) {\n" + //
+					"		if (so == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new ATableDTO()\n" + //
+					"				.setId(so.getId())\n" + //
+					"				.setADate(so.getADate())\n" + //
+					"				.setDescription(so.getDescription());\n" + //
+					"	}\n" + //
 					"\n" + //
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");

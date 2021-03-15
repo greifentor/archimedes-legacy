@@ -1,7 +1,6 @@
 package archimedes.codegenerators.restcontroller;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import archimedes.acf.checker.ModelChecker;
 import archimedes.acf.checker.ModelCheckerDomainSetForAllColumns;
+import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
@@ -40,18 +40,9 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 		for (TableModel tableModel : dataModel.getTables()) {
 			if (tableModel.isGenerateCode()) {
 				codeGenerators.forEach(codeGenerator -> {
-					String code = codeGenerator.generate(basePackageName, dataModel, tableModel);
-					String pathName = path + "/src/main/" + codeGenerator.getPackageName(dataModel).replace(".", "/");
-					File packagePath = new File(pathName);
-					if (!packagePath.exists()) {
-						packagePath.mkdirs();
-					}
-					String fileName = pathName + "/" + codeGenerator.getClassName(tableModel) + ".java";
-					try (FileWriter writer = new FileWriter(fileName)) {
-						writer.write(code);
-						LOG.info("wrote file: " + fileName);
-					} catch (Exception e) {
-						e.printStackTrace();
+					if (codeGenerator instanceof AbstractClassCodeGenerator<?>) {
+						((AbstractClassCodeGenerator<?>) codeGenerator)
+								.generate(path, basePackageName, dataModel, tableModel);
 					}
 				});
 			}

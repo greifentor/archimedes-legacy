@@ -10,20 +10,23 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
- * A class code generator for DTO's.
+ * A code generator for DTO converters.
  *
- * @author ollie (10.03.2021)
+ * @author ollie (15.03.2021)
  */
-public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTControllerNameGenerator> {
+public class DTOConverterClassCodeGenerator extends AbstractClassCodeGenerator<RESTControllerNameGenerator> {
 
-	public DTOClassCodeGenerator() {
+	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
+
+	public DTOConverterClassCodeGenerator() {
 		super(
-				"DTOClass.vm",
+				"DTOConverterClass.vm",
 				RESTControllerCodeFactory.TEMPLATE_PATH,
 				new RESTControllerNameGenerator(),
 				new TypeGenerator());
@@ -34,10 +37,12 @@ public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTContro
 		List<ColumnData> columnData = getColumnData(table.getColumns());
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
+		context.put("DTOClassName", nameGenerator.getDTOClassName(table));
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
 		context.put("PackageName", getPackageName(model));
+		context.put("SOClassName", serviceNameGenerator.getSOClassName(table));
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns) {
@@ -47,18 +52,20 @@ public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTContro
 				.map(
 						column -> new ColumnData()
 								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false)))
+								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false))
+								.setGetterName(getGetterName(column))
+								.setSetterName(getSetterName(column)))
 				.collect(Collectors.toList());
 	}
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getDTOClassName(table);
+		return nameGenerator.getDTOConverterClassName(table);
 	}
 
 	@Override
 	public String getPackageName(DataModel model) {
-		return nameGenerator.getDTOPackageName(model);
+		return nameGenerator.getDTOConverterPackageName(model);
 	}
 
 }

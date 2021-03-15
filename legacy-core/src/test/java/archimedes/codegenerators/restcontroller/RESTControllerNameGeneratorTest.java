@@ -185,4 +185,157 @@ public class RESTControllerNameGeneratorTest {
 
 	}
 
+	@DisplayName("tests for DTO converter class names")
+	@Nested
+	class DTOConverterClassNameTests {
+
+		@Test
+		void getDTOConverterClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getDTOConverterClassName(table);
+			});
+		}
+
+		@Test
+		void getDTOConverterClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getDTOConverterClassName(null));
+		}
+
+		@Test
+		void getDTOConverterClassName_PassTableModelWithNameCamelCase_ReturnsACorrectDTOName() {
+			// Prepare
+			String expected = "TestTableDTOConverter";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getDTOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterClassName_PassTableModelWithNameUpperCase_ReturnsACorrectDTOName() {
+			// Prepare
+			String expected = "TableDTOConverter";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getDTOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectDTOName() {
+			// Prepare
+			String expected = "TableNameDTOConverter";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getDTOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectDTOName() {
+			// Prepare
+			String expected = "TableNameDTOConverter";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getDTOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectDTOName() {
+			// Prepare
+			String expected = "TableNameDTOConverter";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getDTOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterClassName_PassTableModelWithNameLowerCase_ReturnsACorrectDTOName() {
+			// Prepare
+			String expected = "TableDTOConverter";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getDTOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectDTOName() {
+			// Prepare
+			String expected = "TDTOConverter";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getDTOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectDTOName() {
+			// Prepare
+			String expected = "TDTOConverter";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getDTOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for DTO converter package names")
+	@Nested
+	class DTOConverterPackageNameTests {
+
+		@Test
+		void getDTOConverterPackageName_PassANullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getDTOConverterPackageName(null));
+		}
+
+		@Test
+		void getDTOConverterPackageName_PassAValidTableModel_ReturnsACorrecDTOName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".rest.converter";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getDTOConverterPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecDTOName() {
+			// Prepare
+			String expected = "rest.converter";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getDTOConverterPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecDTOName() {
+			// Prepare
+			String expected = "rest.converter";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getDTOConverterPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 }

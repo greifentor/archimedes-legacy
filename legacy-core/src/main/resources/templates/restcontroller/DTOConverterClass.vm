@@ -4,22 +4,24 @@ package ${PackageName};
 import ${ImportLocalDate};
 
 #end
-import lombok.Data;
 import lombok.Generated;
-import lombok.experimental.Accessors;
 
 /**
- * A DTO for ${PluralName}.
+ * A DTO converter for ${PluralName}.
  *
  * ${Generated}
  */
-@Accessors(chain = true)
-@Data
 @Generated
 public class ${ClassName} {
 
+	public ${DTOClassName} convert(${SOClassName} so) {
+		if (so == null) {
+			return null;
+		}
+		return new ${DTOClassName}()
 #foreach($Column in $ColumnData)
-	private ${Column.getFieldType()} ${Column.getFieldName()};
+				.${Column.getSetterName()}(so.${Column.getGetterName()}())#if ( !$foreach.hasNext );#end
 #end
+	}
 
 }

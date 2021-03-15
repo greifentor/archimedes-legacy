@@ -17,6 +17,8 @@ public class Columns {
 	public static class ColumnData {
 		private String fieldName;
 		private String fieldType;
+		private String getterName;
+		private String setterName;
 	}
 
 	public static boolean containsFieldWithType(List<ColumnData> columnData, String typeName) {

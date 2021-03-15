@@ -23,6 +23,9 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 
 	public static final String GENERATED_CODE = "GENERATED CODE !!! DO NOT CHANGE !!!";
 
+	protected static final String PROPERTY_PREFIX = "archimdes.code.generators.";
+	protected static final String SLASH = "/";
+
 	private static final Logger LOG = LogManager.getLogger(AbstractCodeGenerator.class);
 
 	protected N nameGenerator;
@@ -59,8 +62,9 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 		velocityEngine.init();
 		LOG
 				.info(
-						"loading template: " + Paths.get(templatePathName).toAbsolutePath().toString() + " -> "
-								+ templateFileName);
+						"loading template: {} -> {}",
+						Paths.get(templatePathName).toAbsolutePath().toString(),
+						templateFileName);
 		Template t = velocityEngine.getTemplate(templateFileName);
 		VelocityContext context = new VelocityContext();
 		context.put("BasePackageName", basePackageName);
