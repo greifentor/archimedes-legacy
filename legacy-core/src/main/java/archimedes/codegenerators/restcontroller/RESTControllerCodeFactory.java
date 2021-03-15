@@ -30,7 +30,8 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 
 	private static final Logger LOG = LogManager.getLogger(RESTControllerCodeFactory.class);
 
-	private List<CodeGenerator> codeGenerators = Arrays.asList(new DTOClassCodeGenerator());
+	private List<CodeGenerator> codeGenerators =
+			Arrays.asList(new DTOClassCodeGenerator(), new DTOConverterClassCodeGenerator());
 
 	@Override
 	public boolean generate(String path) {
