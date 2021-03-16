@@ -2,6 +2,7 @@ package archimedes.legacy.updater;
 
 import java.sql.Types;
 import java.util.Arrays;
+import java.util.List;
 
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.legacy.model.ObjectFactory;
@@ -24,6 +25,7 @@ import de.ollie.dbcomp.comparator.model.actions.DropColumnChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropForeignKeyCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropPrimaryKeyCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropTableChangeActionCRO;
+import de.ollie.dbcomp.comparator.model.actions.ForeignKeyMemberCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyDataTypeCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyNullableCRO;
 
@@ -58,7 +60,7 @@ public class ModelUpdater {
 	}
 
 	private UpdateReportAction process(DataModel toUpdate, ChangeActionCRO cro) {
-		UpdateReportAction action = new UpdateReportAction().setMessage(cro.toString());
+		UpdateReportAction action = new UpdateReportAction().setMessage(getForeignKeyString(cro) + cro.toString());
 		try {
 			if (cro instanceof AddColumnChangeActionCRO) {
 				TableModel table = toUpdate.getTableByName(((AddColumnChangeActionCRO) cro).getTableName());
@@ -153,13 +155,14 @@ public class ModelUpdater {
 			} else if (cro instanceof DropPrimaryKeyCRO) {
 				DropPrimaryKeyCRO dropCRO = (DropPrimaryKeyCRO) cro;
 				TableModel table = toUpdate.getTableByName(dropCRO.getTableName());
-				Arrays.asList(table.getColumns()).forEach(column -> {
-					column
-							.setPrimaryKey(
-									dropCRO.getPkMemberNames().contains(column.getName())
-											? false
-											: column.isPrimaryKey());
-				});
+				Arrays
+						.asList(table.getColumns())
+						.forEach(
+								column -> column
+										.setPrimaryKey(
+												dropCRO.getPkMemberNames().contains(column.getName())
+														? false
+														: column.isPrimaryKey()));
 				action.setType(Type.DROP_PRIMARY_KEY).setValues(dropCRO.getTableName(), dropCRO.getPkMemberNames());
 			} else if (cro instanceof ModifyNullableCRO) {
 				TableModel table = toUpdate.getTableByName(((ModifyNullableCRO) cro).getTableName());
@@ -194,6 +197,29 @@ public class ModelUpdater {
 			return action.setStatus(Status.FAILED);
 		}
 		return action.setStatus(Status.DONE);
+	}
+
+	private String getForeignKeyString(ChangeActionCRO cro) {
+		if (cro instanceof AddForeignKeyCRO) {
+			AddForeignKeyCRO addCRO = (AddForeignKeyCRO) cro;
+			return getForeignKeyString(addCRO.getMembers()) + " - ";
+		} else if (cro instanceof DropForeignKeyCRO) {
+			DropForeignKeyCRO dropCRO = (DropForeignKeyCRO) cro;
+			return getForeignKeyString(dropCRO.getMembers()) + " - ";
+		}
+		return "";
+	}
+
+	private String getForeignKeyString(List<ForeignKeyMemberCRO> members) {
+		String s = "";
+		for (ForeignKeyMemberCRO member : members) {
+			if (!s.isEmpty()) {
+				s += ", ";
+			}
+			s += member.getBaseTableName() + "." + member.getBaseColumnName() + " -> " + member.getReferencedTableName()
+					+ "." + member.getReferencedColumnName();
+		}
+		return s;
 	}
 
 	private ViewModel getPrimaryView() {

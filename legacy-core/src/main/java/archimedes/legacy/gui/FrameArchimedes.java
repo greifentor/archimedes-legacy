@@ -58,6 +58,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import archimedes.acf.ReadyToGenerateChecker;
 import archimedes.acf.checker.ModelChecker;
+import archimedes.acf.checker.ModelCheckerDomainSetForAllColumns;
 import archimedes.acf.checker.ModelCheckerMessage;
 import archimedes.acf.checker.ModelCheckerMessage.Level;
 import archimedes.acf.checker.ModelCheckerThread;
@@ -83,6 +84,7 @@ import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.CodeFactoryProgressionFrame;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.legacy.app.ApplicationUtil;
+import archimedes.legacy.checkers.ModelCheckerDomainNotInuse;
 import archimedes.legacy.exporter.LiquibaseScriptCreator;
 import archimedes.legacy.gui.codepath.CodePathProvider;
 import archimedes.legacy.gui.comparision.DataModelComparison;
@@ -288,6 +290,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 	private VersionStringBuilder versionStringBuilder = new VersionStringBuilder();
 
+	private List<ModelChecker> buildInModelCheckers = null;
+
 	/**
 	 * Erzeugt einen neuen FrameArchimedes anhand der &uuml;bergebenen Parameter.
 	 *
@@ -302,7 +306,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		this.serverMode = serverMode;
 		GlobalEventManager.AddGlobalListener(this);
 		this.guiBundle = guiBundle;
-
+		buildInModelCheckers = Arrays
+				.asList(new ModelCheckerDomainNotInuse(guiBundle), new ModelCheckerDomainSetForAllColumns(guiBundle));
 		int i = 0;
 		JMenuItem menuItem = null;
 
@@ -741,7 +746,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 	private void startChecker() {
 		final String path = this.diagramm.getCodePfad().replace("~", System.getProperty("user.home"));
-		List<ModelChecker> modelCheckers = new ArrayList<>();
+		List<ModelChecker> modelCheckers = new ArrayList<>(buildInModelCheckers);
 		for (Object cf : this.getCodeFactories(path)) {
 			if (cf instanceof CodeFactory) {
 				modelCheckers.addAll(Arrays.asList(((CodeFactory) cf).getModelCheckers()));
@@ -847,6 +852,9 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	private boolean isErrorsFound(final DataModel dm, final boolean showErrors) {
 		final String path = this.diagramm.getCodePfad().replace("~", System.getProperty("user.home"));
 		final List<ModelCheckerMessage> messages = new LinkedList<>();
+		for (ModelChecker buildInModelChecker : buildInModelCheckers) {
+			processModelChecker(this.diagramm, buildInModelChecker, messages);
+		}
 		for (Object cfo : this.getCodeFactories(path)) {
 			if (cfo instanceof CodeFactory) {
 				try {
@@ -855,14 +863,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					cf.setGUIBundle(getGUIBundle(this.guiBundle, cf.getResourceBundleNames()));
 					cf.setModelCheckerMessageListFrameListeners(this);
 					for (final ModelChecker mc : cf.getModelCheckers()) {
-						final ModelCheckerMessage[] mcms = mc.check(dm);
-						if (mcms.length > 0) {
-							for (final ModelCheckerMessage mcm : mcms) {
-								if (mcm.getLevel() == Level.ERROR) {
-									messages.add(mcm);
-								}
-							}
-						}
+						processModelChecker(this.diagramm, mc, messages);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -880,6 +881,17 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			return true;
 		}
 		return false;
+	}
+
+	private void processModelChecker(DataModel dm, ModelChecker mc, List<ModelCheckerMessage> messages) {
+		final ModelCheckerMessage[] mcms = mc.check(dm);
+		if (mcms.length > 0) {
+			for (final ModelCheckerMessage mcm : mcms) {
+				if (mcm.getLevel() == Level.ERROR) {
+					messages.add(mcm);
+				}
+			}
+		}
 	}
 
 	private void doDateinamenCacheAktualisieren(final String name) {
@@ -1915,7 +1927,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void updateWarnings(final String message, final boolean warning) {
 		this.component.updateWarnings(message);
-
 		if (warning) {
 			this.component.setWarningLabelForeGround(Color.RED);
 		} else {
@@ -2258,26 +2269,21 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			final int warnCount = this.getMessageCount(mcms, ModelCheckerMessage.Level.WARNING);
 			String s = "";
 			boolean warning = false;
-
 			if (errorCount > 0) {
 				s += this.guiBundle.getResourceText(RES_WARNING_MESSAGES_ERRORS_DETECTED, errorCount);
 				warning = true;
 			}
-
 			if (warnCount > 0) {
 				s += ((s.length() > 0) ? ", " : "")
 						+ this.guiBundle.getResourceText(RES_WARNING_MESSAGES_WARNINGS_DETECTED, warnCount);
 				warning = true;
 			}
-
 			this.updateWarnings(s, warning);
 		} else {
 			this.updateWarnings(this.guiBundle.getResourceText(RES_WARNING_MESSAGES_NO_WARNINGS), false);
 		}
-
 		this.menuGenerate.setEnabled(isReadyToGenerate());
 		this.lastModelCheckerMessages = mcms;
-
 		if (this.modelCheckerMessageListFrame != null) {
 			this.modelCheckerMessageListFrame.updateMessages(mcms);
 		}
@@ -2296,13 +2302,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 	private int getMessageCount(final ModelCheckerMessage[] mcms, final ModelCheckerMessage.Level level) {
 		int c = 0;
-
 		for (final ModelCheckerMessage mcm : mcms) {
 			if (mcm.getLevel() == level) {
 				c++;
 			}
 		}
-
 		return c;
 	}
 

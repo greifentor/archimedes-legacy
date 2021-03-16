@@ -8,13 +8,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import archimedes.acf.checker.ModelChecker;
-import archimedes.acf.checker.ModelCheckerDomainSetForAllColumns;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
-import archimedes.legacy.checkers.ModelCheckerDomainNotInuse;
 import archimedes.model.TableModel;
 
 /**
@@ -53,9 +51,7 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 
 	@Override
 	public ModelChecker[] getModelCheckers() {
-		return new ModelChecker[] {
-				new ModelCheckerDomainNotInuse(guiBundle),
-				new ModelCheckerDomainSetForAllColumns(guiBundle) };
+		return new ModelChecker[] {};
 	}
 
 	@Override

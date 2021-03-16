@@ -177,7 +177,7 @@ public class ModelUpdaterTest {
 				.addUpdateReportAction(
 						new UpdateReportAction()
 								.setMessage(
-										"DropForeignKeyCRO(tableName=Account, schemaName=, constraintName=FK_TO_Customer_Id, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
+										"Account.Owner -> Customer.Id - DropForeignKeyCRO(tableName=Account, schemaName=, constraintName=FK_TO_Customer_Id, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
 								.setStatus(Status.DONE)
 								.setType(Type.DROP_FOREIGN_KEY)
 								.setValues(
@@ -203,7 +203,7 @@ public class ModelUpdaterTest {
 				.addUpdateReportAction(
 						new UpdateReportAction()
 								.setMessage(
-										"AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
+										"Account.Owner -> Customer.Id - AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
 								.setStatus(Status.DONE)
 								.setType(Type.ADD_FOREIGN_KEY)
 								.setValues(
@@ -229,7 +229,7 @@ public class ModelUpdaterTest {
 				.addUpdateReportAction(
 						new UpdateReportAction()
 								.setMessage(
-										"AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Bank, baseTableName=Account, referencedColumnName=Id, referencedTableName=Bank)])")
+										"Account.Bank -> Bank.Id - AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Bank, baseTableName=Account, referencedColumnName=Id, referencedTableName=Bank)])")
 								.setStatus(Status.DONE)
 								.setType(Type.ADD_FOREIGN_KEY)
 								.setValues(
@@ -238,7 +238,7 @@ public class ModelUpdaterTest {
 				.addUpdateReportAction(
 						new UpdateReportAction()
 								.setMessage(
-										"AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
+										"Account.Owner -> Customer.Id - AddForeignKeyCRO(tableName=Account, schemaName=, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
 								.setStatus(Status.DONE)
 								.setType(Type.ADD_FOREIGN_KEY)
 								.setValues(
