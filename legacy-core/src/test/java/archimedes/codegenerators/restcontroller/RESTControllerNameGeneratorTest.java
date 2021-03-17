@@ -338,4 +338,113 @@ public class RESTControllerNameGeneratorTest {
 
 	}
 
+	@DisplayName("tests for list DTO class names")
+	@Nested
+	class ListDTOClassNameTests {
+
+		@Test
+		void getListDTOClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getListDTOClassName(table);
+			});
+		}
+
+		@Test
+		void getListDTOClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getListDTOClassName(null));
+		}
+
+		@Test
+		void getListDTOClassName_PassTableModelWithNameCamelCase_ReturnsACorrectListDTOName() {
+			// Prepare
+			String expected = "TestTableListDTO";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getListDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDTOClassName_PassTableModelWithNameUpperCase_ReturnsACorrectListDTOName() {
+			// Prepare
+			String expected = "TableListDTO";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getListDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDTOClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectListDTOName() {
+			// Prepare
+			String expected = "TableNameListDTO";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getListDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDTOClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectListDTOName() {
+			// Prepare
+			String expected = "TableNameListDTO";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getListDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDTOClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectListDTOName() {
+			// Prepare
+			String expected = "TableNameListDTO";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getListDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDTOClassName_PassTableModelWithNameLowerCase_ReturnsACorrectListDTOName() {
+			// Prepare
+			String expected = "TableListDTO";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getListDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDTOClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectListDTOName() {
+			// Prepare
+			String expected = "TListDTO";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getListDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDTOClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectListDTOName() {
+			// Prepare
+			String expected = "TListDTO";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getListDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 }

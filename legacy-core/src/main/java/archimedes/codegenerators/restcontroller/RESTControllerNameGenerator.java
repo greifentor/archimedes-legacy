@@ -27,4 +27,8 @@ public class RESTControllerNameGenerator extends NameGenerator {
 		return model != null ? getBasePackageNameWithDotExtension(model) + "rest.converter" : null;
 	}
 
+	public String getListDTOClassName(TableModel table) {
+		return table != null ? getClassName(table) + "ListDTO" : null;
+	}
+
 }
