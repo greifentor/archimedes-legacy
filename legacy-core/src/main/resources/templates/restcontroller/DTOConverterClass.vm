@@ -1,5 +1,10 @@
 package ${PackageName};
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Named;
+
 #if ($ImportLocalDate)
 import ${ImportLocalDate};
 
@@ -12,6 +17,7 @@ import lombok.Generated;
  * ${Generated}
  */
 @Generated
+@Named
 public class ${ClassName} {
 
 	public ${DTOClassName} convert(${SOClassName} so) {
@@ -22,6 +28,13 @@ public class ${ClassName} {
 #foreach($Column in $ColumnData)
 				.${Column.getSetterName()}(so.${Column.getGetterName()}())#if ( !$foreach.hasNext );#end
 #end
+	}
+
+	public List<${DTOClassName}> convert(List<${SOClassName}> sos) {
+		if (sos == null) {
+			return null;
+		}
+		return sos.stream().map(this::convert).collect(Collectors.toList());
 	}
 
 }

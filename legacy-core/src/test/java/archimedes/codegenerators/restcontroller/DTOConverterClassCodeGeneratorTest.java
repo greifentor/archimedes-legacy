@@ -38,6 +38,11 @@ public class DTOConverterClassCodeGeneratorTest {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".rest.converter;\n" + //
 					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.stream.Collectors;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
 					"import lombok.Generated;\n" + //
@@ -48,6 +53,7 @@ public class DTOConverterClassCodeGeneratorTest {
 					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 					" */\n" + //
 					"@Generated\n" + //
+					"@Named\n" + //
 					"public class ATableDTOConverter {\n" + //
 					"\n" + //
 					"	public ATableDTO convert(ATableSO so) {\n" + //
@@ -58,6 +64,13 @@ public class DTOConverterClassCodeGeneratorTest {
 					"				.setId(so.getId())\n" + //
 					"				.setADate(so.getADate())\n" + //
 					"				.setDescription(so.getDescription());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public List<ATableDTO> convert(List<ATableSO> sos) {\n" + //
+					"		if (sos == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return sos.stream().map(this::convert).collect(Collectors.toList());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"}";
