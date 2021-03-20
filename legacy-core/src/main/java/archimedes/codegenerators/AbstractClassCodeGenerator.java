@@ -72,4 +72,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		return "set" + getAttributeNameFirstLetterUpperCase(column);
 	}
 
+	protected String getQualifiedName(String packageName, String className) {
+		return ((packageName != null) && !packageName.isEmpty() ? packageName + "." : "") + className;
+	}
+
 }

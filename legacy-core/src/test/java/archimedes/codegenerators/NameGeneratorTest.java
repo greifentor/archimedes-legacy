@@ -46,7 +46,7 @@ public class NameGeneratorTest {
 
 		@Test
 		void getAttributeName_PassANullValue_ReturnsANullValue() {
-			assertNull(unitUnderTest.getAttributeName(null));
+			assertNull(unitUnderTest.getAttributeName((ColumnModel) null));
 		}
 
 		@Test
@@ -148,6 +148,38 @@ public class NameGeneratorTest {
 			String returned = unitUnderTest.getAttributeName(column, true);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class PluralNameTests {
+
+		@Test
+		void getPluralName_ModelWithNoConfiguration_ReturnsPluralOfTableName() {
+			// Prepare
+			String expected = "TableNames";
+			when(table.getName()).thenReturn("TableName");
+			// Run
+			String returned = unitUnderTest.getPluralName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPluralName_ModelWithNoConfigurationTableNameEndWithY_ReturnsPluralOfTableNameEndingOnIes() {
+			// Prepare
+			String expected = "Bunnies";
+			when(table.getName()).thenReturn("Bunny");
+			// Run
+			String returned = unitUnderTest.getPluralName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPluralName_TableIsNull_ThrowsAnException() {
+			assertThrows(NullPointerException.class, () -> unitUnderTest.getPluralName((TableModel) null));
 		}
 
 	}

@@ -47,6 +47,9 @@ public class DTOConverterClassCodeGeneratorTest {
 					"\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
+					"import " + BASE_PACKAGE_NAME + ".rest.dto.ATableDTO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".service.model.ATableSO;\n" + //
+					"\n" + //
 					"/**\n" + //
 					" * A DTO converter for a_tables.\n" + //
 					" *\n" + //

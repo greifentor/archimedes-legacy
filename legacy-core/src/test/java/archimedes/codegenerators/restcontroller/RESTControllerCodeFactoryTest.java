@@ -45,8 +45,16 @@ public class RESTControllerCodeFactoryTest {
 			assertTrue(
 					new File(
 							tempDir.toAbsolutePath().toString()
+									+ "/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java").exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
 									+ "/src/main/java/base/pack/age/name/rest/converter/ATableDTOConverter.java")
 											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/src/main/java/base/pack/age/name/rest/ATableRESTController.java").exists());
 		}
 
 	}

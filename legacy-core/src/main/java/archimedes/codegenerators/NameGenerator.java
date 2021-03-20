@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -14,6 +15,8 @@ import archimedes.model.TableModel;
  * @author ollie (12.03.2021)
  */
 public class NameGenerator {
+
+	public static final String PLURAL_NAME = "PLURAL_NAME";
 
 	public String getAttributeName(ColumnModel column) {
 		return getAttributeName(column, false);
@@ -25,15 +28,19 @@ public class NameGenerator {
 		}
 		String columnName = (useQualifiedColumnName ? column.getTable().getName() + "_" : "") + column.getName();
 		ensure(!columnName.isEmpty(), "column name cannot be empty.");
-		if (containsUnderScores(columnName)) {
-			columnName = buildTableNameFromUnderScoreString(columnName);
-		} else if (allCharactersAreUpperCase(columnName)) {
-			columnName = columnName.toLowerCase();
+		return getAttributeName(columnName);
+	}
+
+	protected String getAttributeName(String s) {
+		if (containsUnderScores(s)) {
+			s = buildTableNameFromUnderScoreString(s);
+		} else if (allCharactersAreUpperCase(s)) {
+			s = s.toLowerCase();
 		}
-		if (startsWithUpperCaseCharacter(columnName)) {
-			columnName = firstCharToLowerCase(columnName);
+		if (startsWithUpperCaseCharacter(s)) {
+			s = firstCharToLowerCase(s);
 		}
-		return columnName;
+		return s;
 	}
 
 	private boolean startsWithUpperCaseCharacter(String s) {
@@ -93,6 +100,31 @@ public class NameGenerator {
 		return (model.getBasePackageName() == null) || model.getBasePackageName().isEmpty()
 				? ""
 				: model.getBasePackageName() + ".";
+	}
+
+	protected String getPluralName(TableModel table) {
+		OptionModel pluralName = table.getOptionByName(PLURAL_NAME);
+		if (pluralName != null) {
+			return pluralName.getParameter();
+		}
+		String tn = table.getName();
+		return getPluralName(tn);
+	}
+
+	protected String getPluralName(String tn) {
+		if (tn.length() < 1) {
+			return tn;
+		}
+		if (tn.toLowerCase().endsWith("y")) {
+			tn = tn.substring(0, tn.length() - 1) + "ies";
+		} else {
+			tn += "s";
+		}
+		return tn;
+	}
+
+	public String getSimpleName(TableModel table) {
+		return table.getName().replace("_", " ").toLowerCase();
 	}
 
 }

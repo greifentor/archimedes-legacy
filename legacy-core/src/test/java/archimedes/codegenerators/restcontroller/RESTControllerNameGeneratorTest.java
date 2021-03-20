@@ -3,6 +3,7 @@ package archimedes.codegenerators.restcontroller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 @ExtendWith(MockitoExtension.class)
@@ -441,6 +443,225 @@ public class RESTControllerNameGeneratorTest {
 			when(table.getName()).thenReturn("t");
 			// Run
 			String returned = unitUnderTest.getListDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for REST controller class names")
+	@Nested
+	class RESTControllerClassNameTests {
+
+		@Test
+		void getRESTControllerClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getRESTControllerClassName(table);
+			});
+		}
+
+		@Test
+		void getRESTControllerClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getRESTControllerClassName(null));
+		}
+
+		@Test
+		void getRESTControllerClassName_PassTableModelWithNameCamelCase_ReturnsACorrectRESTControllerName() {
+			// Prepare
+			String expected = "TestTableRESTController";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getRESTControllerClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRESTControllerClassName_PassTableModelWithNameUpperCase_ReturnsACorrectRESTControllerName() {
+			// Prepare
+			String expected = "TableRESTController";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getRESTControllerClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRESTControllerClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectRESTControllerName() {
+			// Prepare
+			String expected = "TableNameRESTController";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getRESTControllerClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRESTControllerClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectRESTControllerName() {
+			// Prepare
+			String expected = "TableNameRESTController";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getRESTControllerClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRESTControllerClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectRESTControllerName() {
+			// Prepare
+			String expected = "TableNameRESTController";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getRESTControllerClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRESTControllerClassName_PassTableModelWithNameLowerCase_ReturnsACorrectRESTControllerName() {
+			// Prepare
+			String expected = "TableRESTController";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getRESTControllerClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRESTControllerClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectRESTControllerName() {
+			// Prepare
+			String expected = "TRESTController";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getRESTControllerClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRESTControllerClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectRESTControllerName() {
+			// Prepare
+			String expected = "TRESTController";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getRESTControllerClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for REST controller package names")
+	@Nested
+	class RESTControllerPackageNameTests {
+
+		@Test
+		void getRESTControllerPackageName_PassANullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getRESTControllerPackageName(null));
+		}
+
+		@Test
+		void getRESTControllerPackageName_PassAValidTableModel_ReturnsACorrecRESTControllerName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".rest";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getRESTControllerPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRESTControllerPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecRESTControllerName() {
+			// Prepare
+			String expected = "rest";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getRESTControllerPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRESTControllerPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecRESTControllerName() {
+			// Prepare
+			String expected = "rest";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getRESTControllerPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for URL names")
+	@Nested
+	class URLNameTests {
+
+		@Test
+		void getURLName_PassValidModelAndTableWithEitherExtraConfigurationInTheModelNorViaProperties_ReturnsApiV1PrefixWithURL() {
+			// Prepare
+			String expected = "api/v1/tablenames";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getURLName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getURLName_PassValidModelAndTableWithAlternateConfigurationInTheModel_ReturnsAlternatePrefixWithURL() {
+			// Prepare
+			String alternatePrefix = "api/v2";
+			String expected = alternatePrefix + "/tablenames";
+			OptionModel option = mock(OptionModel.class);
+			when(option.getParameter()).thenReturn(alternatePrefix);
+			when(table.getName()).thenReturn("TABLE_NAME");
+			when(model.getOptionByName(RESTControllerNameGenerator.REST_URL_PREFIX)).thenReturn(option);
+			// Run
+			String returned = unitUnderTest.getURLName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getURLName_PassValidModelAndTableWithAlternateConfigurationInTheTable_ReturnsAlternatePrefixWithURL() {
+			// Prepare
+			String alternatePrefix = "api/v2";
+			String expected = alternatePrefix + "/tablenames";
+			OptionModel option = mock(OptionModel.class);
+			when(option.getParameter()).thenReturn(alternatePrefix);
+			when(table.getName()).thenReturn("TABLE_NAME");
+			when(table.getOptionByName(RESTControllerNameGenerator.REST_URL_PREFIX)).thenReturn(option);
+			// Run
+			String returned = unitUnderTest.getURLName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getURLName_PassValidModelAndTableWithAlternateConfigurationInTheTableAndModel_ReturnsAlternatePrefixForTableWithURL() {
+			// Prepare
+			String alternatePrefixModel = "api/v2";
+			String alternatePrefixTable = "api/v3";
+			String expected = alternatePrefixTable + "/tablenames";
+			OptionModel optionTable = mock(OptionModel.class);
+			when(optionTable.getParameter()).thenReturn(alternatePrefixTable);
+			OptionModel optionModel = mock(OptionModel.class);
+			when(optionModel.getParameter()).thenReturn(alternatePrefixModel);
+			when(table.getName()).thenReturn("TABLE_NAME");
+			when(table.getOptionByName(RESTControllerNameGenerator.REST_URL_PREFIX)).thenReturn(optionTable);
+			when(model.getOptionByName(RESTControllerNameGenerator.REST_URL_PREFIX)).thenReturn(optionModel);
+			// Run
+			String returned = unitUnderTest.getURLName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}

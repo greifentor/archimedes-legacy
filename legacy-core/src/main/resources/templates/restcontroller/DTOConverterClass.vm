@@ -11,6 +11,9 @@ import ${ImportLocalDate};
 #end
 import lombok.Generated;
 
+import ${DTOClassNameQualified};
+import ${SOClassNameQualified};
+
 /**
  * A DTO converter for ${PluralName}.
  *
