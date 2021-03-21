@@ -1,0 +1,1 @@
+${GetterName}()#if (${KeyFromIdClass} == true).getKey()#end

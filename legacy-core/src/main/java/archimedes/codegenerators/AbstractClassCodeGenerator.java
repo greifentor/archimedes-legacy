@@ -17,6 +17,8 @@ import archimedes.model.TableModel;
  */
 public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extends AbstractCodeGenerator<N> {
 
+	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
+
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
 	public AbstractClassCodeGenerator(
@@ -74,6 +76,11 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	protected String getQualifiedName(String packageName, String className) {
 		return ((packageName != null) && !packageName.isEmpty() ? packageName + "." : "") + className;
+	}
+
+	protected boolean isGenerateIdClass(DataModel model, TableModel table) {
+		return (model.getOptionByName(AbstractClassCodeGenerator.GENERATE_ID_CLASS) != null)
+				|| (table.getOptionByName(AbstractClassCodeGenerator.GENERATE_ID_CLASS) != null);
 	}
 
 }

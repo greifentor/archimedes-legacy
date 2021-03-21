@@ -34,7 +34,7 @@ public class DTOConverterClassCodeGenerator extends AbstractClassCodeGenerator<R
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		List<ColumnData> columnData = getColumnData(table.getColumns());
+		List<ColumnData> columnData = getColumnData(table.getColumns(), model);
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		context.put("DTOClassName", nameGenerator.getDTOClassName(table));
@@ -42,6 +42,7 @@ public class DTOConverterClassCodeGenerator extends AbstractClassCodeGenerator<R
 				.put(
 						"DTOClassNameQualified",
 						getQualifiedName(nameGenerator.getDTOPackageName(model), nameGenerator.getDTOClassName(table)));
+		context.put("GenerateIdClass", isGenerateIdClass(model, table));
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
@@ -55,7 +56,7 @@ public class DTOConverterClassCodeGenerator extends AbstractClassCodeGenerator<R
 								serviceNameGenerator.getSOClassName(table)));
 	}
 
-	private List<ColumnData> getColumnData(ColumnModel[] columns) {
+	private List<ColumnData> getColumnData(ColumnModel[] columns, DataModel model) {
 		return Arrays
 				.asList(columns)
 				.stream()
@@ -63,9 +64,22 @@ public class DTOConverterClassCodeGenerator extends AbstractClassCodeGenerator<R
 						column -> new ColumnData()
 								.setFieldName(nameGenerator.getAttributeName(column))
 								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false))
-								.setGetterName(getGetterName(column))
+								.setGetterCall(getGetterCall(column, model))
+								.setPkMember(column.isPrimaryKey())
 								.setSetterName(getSetterName(column)))
 				.collect(Collectors.toList());
+	}
+
+	private String getGetterCall(ColumnModel column, DataModel model) {
+		String getterName = super.getGetterName(column);
+		VelocityContext context = new VelocityContext();
+		context.put("GetterName", getterName);
+		if (isGenerateIdClass(model, column.getTable())) {
+			context.put("KeyFromIdClass", column.isPrimaryKey());
+		} else {
+			context.put("KeyFromIdClass", "false");
+		}
+		return processTemplate(context, "DTOKeyGetter.vm");
 	}
 
 	@Override

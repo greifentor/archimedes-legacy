@@ -29,7 +29,7 @@ public class ${ClassName} {
 		}
 		return new ${DTOClassName}()
 #foreach($Column in $ColumnData)
-				.${Column.getSetterName()}(so.${Column.getGetterName()}())#if ( !$foreach.hasNext );#end
+				.${Column.getSetterName()}(so.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
 #end
 	}
 

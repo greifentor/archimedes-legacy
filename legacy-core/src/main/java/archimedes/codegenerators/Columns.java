@@ -17,7 +17,9 @@ public class Columns {
 	public static class ColumnData {
 		private String fieldName;
 		private String fieldType;
+		private String getterCall;
 		private String getterName;
+		private boolean pkMember;
 		private String setterName;
 	}
 

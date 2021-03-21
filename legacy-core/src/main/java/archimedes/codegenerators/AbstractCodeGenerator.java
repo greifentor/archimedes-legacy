@@ -53,6 +53,15 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 
 	@Override
 	public String generate(String basePackageName, DataModel model, TableModel table) {
+		VelocityContext context = new VelocityContext();
+		context.put("BasePackageName", basePackageName);
+		context.put("Generated", GENERATED_CODE);
+		context.put("PluralName", table.getName().toLowerCase() + "s");
+		extendVelocityContext(context, model, table);
+		return processTemplate(context, templateFileName);
+	}
+
+	protected String processTemplate(VelocityContext context, String templateFileName) {
 		Velocity.init();
 		VelocityEngine velocityEngine = new VelocityEngine();
 		velocityEngine.setProperty("resource.loaders", "file");
@@ -66,11 +75,6 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 						Paths.get(templatePathName).toAbsolutePath().toString(),
 						templateFileName);
 		Template t = velocityEngine.getTemplate(templateFileName);
-		VelocityContext context = new VelocityContext();
-		context.put("BasePackageName", basePackageName);
-		context.put("Generated", GENERATED_CODE);
-		context.put("PluralName", table.getName().toLowerCase() + "s");
-		extendVelocityContext(context, model, table);
 		StringWriter writer = new StringWriter();
 		t.merge(context, writer);
 		return writer.toString();

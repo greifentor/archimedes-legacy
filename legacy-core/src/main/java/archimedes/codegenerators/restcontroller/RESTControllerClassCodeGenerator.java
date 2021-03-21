@@ -50,6 +50,20 @@ public class RESTControllerClassCodeGenerator extends AbstractClassCodeGenerator
 						"DTOClassNameQualified",
 						getQualifiedName(nameGenerator.getDTOPackageName(model), nameGenerator.getDTOClassName(table)));
 		context.put("ListDTOClassName", nameGenerator.getListDTOClassName(table));
+		context.put("GenerateIdClass", isGenerateIdClass(model, table));
+		context.put("IdCall", getIdCall(model, table));
+		context
+				.put(
+						"IdSOClassNameQualified",
+						getQualifiedName(
+								serviceNameGenerator.getSOPackageName(model),
+								serviceNameGenerator.getIdSOClassName(table)));
+		context
+				.put(
+						"ListDTOClassNameQualified",
+						getQualifiedName(
+								nameGenerator.getDTOPackageName(model),
+								nameGenerator.getListDTOClassName(table)));
 		context
 				.put(
 						"ListDTOClassNameQualified",
@@ -60,8 +74,14 @@ public class RESTControllerClassCodeGenerator extends AbstractClassCodeGenerator
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
 		context.put("PackageName", getPackageName(model));
+		context.put("ServiceClassName", serviceNameGenerator.getServiceClassName(table));
+		context
+				.put(
+						"ServiceClassNameQualified",
+						getQualifiedName(
+								serviceNameGenerator.getServicePackageName(model),
+								serviceNameGenerator.getServiceClassName(table)));
 		context.put("SimpleName", nameGenerator.getSimpleName(table));
-		context.put("SOClassName", serviceNameGenerator.getSOClassName(table));
 		context
 				.put(
 						"SOClassNameQualified",
@@ -69,6 +89,13 @@ public class RESTControllerClassCodeGenerator extends AbstractClassCodeGenerator
 								serviceNameGenerator.getSOPackageName(model),
 								serviceNameGenerator.getSOClassName(table)));
 		context.put("URL", nameGenerator.getURLName(model, table));
+	}
+
+	private String getIdCall(DataModel model, TableModel table) {
+		VelocityContext context = new VelocityContext();
+		context.put("GenerateIdClass", isGenerateIdClass(model, table));
+		context.put("IdSOClass", serviceNameGenerator.getIdSOClassName(table));
+		return processTemplate(context, "FindByIdCall.vm");
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns) {
