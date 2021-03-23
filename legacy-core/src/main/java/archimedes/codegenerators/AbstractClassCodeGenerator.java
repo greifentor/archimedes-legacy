@@ -18,7 +18,7 @@ import archimedes.model.TableModel;
 public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extends AbstractCodeGenerator<N> {
 
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
-	public static final String MODULE_MODE = "MODULA_MODE";
+	public static final String MODULE_MODE = "MODULE_MODE";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
