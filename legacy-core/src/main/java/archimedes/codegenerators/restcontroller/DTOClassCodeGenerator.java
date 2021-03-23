@@ -57,6 +57,11 @@ public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTContro
 	}
 
 	@Override
+	protected String getDefaultModuleName(DataModel dataModel) {
+		return "service";
+	}
+
+	@Override
 	public String getPackageName(DataModel model) {
 		return nameGenerator.getDTOPackageName(model);
 	}

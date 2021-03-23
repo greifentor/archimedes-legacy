@@ -13,6 +13,7 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
+import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
@@ -28,9 +29,13 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 
 	private static final Logger LOG = LogManager.getLogger(RESTControllerCodeFactory.class);
 
-	private List<CodeGenerator> codeGenerators = Arrays
-			.asList(
-					new DTOClassCodeGenerator(),
+	private List<CodeGenerator> codeGenerators =
+			Arrays.asList(new DTOClassCodeGenerator(), new DTOClassCodeGenerator() {
+				@Override
+				protected String getDefaultModuleName(DataModel dataModel) {
+					return "rest-client";
+				}
+			},
 					new DTOConverterClassCodeGenerator(),
 					new ListDTOClassCodeGenerator(),
 					new RESTControllerClassCodeGenerator());

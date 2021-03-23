@@ -18,6 +18,7 @@ import archimedes.model.TableModel;
 public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extends AbstractCodeGenerator<N> {
 
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
+	public static final String MODULE_MODE = "MODULA_MODE";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
@@ -47,11 +48,22 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected String getBaseCodeFolderName(DataModel dataModel) {
-		return System
-				.getProperty(
-						PROPERTY_PREFIX + getClass().getSimpleName() + ".base.code.folder.name",
-						System.getProperty(PROPERTY_PREFIX + "base.code.folder.name", "src/main/java"));
+		return (isModuleModeSet(dataModel) && (getModuleName(dataModel) != null) ? getModuleName(dataModel) + "/" : "")
+				+ System
+						.getProperty(
+								PROPERTY_PREFIX + getClass().getSimpleName() + ".base.code.folder.name",
+								System.getProperty(PROPERTY_PREFIX + "base.code.folder.name", "src/main/java"));
 	}
+
+	private boolean isModuleModeSet(DataModel dataModel) {
+		return dataModel.getOptionByName(MODULE_MODE) != null;
+	}
+
+	protected String getModuleName(DataModel dataModel) {
+		return dataModel.getApplicationName().toLowerCase() + "-" + getDefaultModuleName(dataModel);
+	}
+
+	protected abstract String getDefaultModuleName(DataModel dataModel);
 
 	protected String getClassFileExtension(DataModel dataModel) {
 		return System

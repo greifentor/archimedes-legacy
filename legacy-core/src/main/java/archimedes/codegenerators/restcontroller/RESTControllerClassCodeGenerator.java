@@ -115,6 +115,11 @@ public class RESTControllerClassCodeGenerator extends AbstractClassCodeGenerator
 	}
 
 	@Override
+	protected String getDefaultModuleName(DataModel dataModel) {
+		return "service";
+	}
+
+	@Override
 	public String getPackageName(DataModel model) {
 		return nameGenerator.getRESTControllerPackageName(model);
 	}
