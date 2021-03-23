@@ -965,9 +965,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	public void doBeenden() {
 		try {
 			this.semSpeichern.P();
-
 			final boolean errorsFound = this.isErrorsFound(this.diagramm, false);
-
 			if (this.diagramm.isAltered()) {
 				final int answer = JOptionPane
 						.showConfirmDialog(
@@ -980,10 +978,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 														+ "speichern?"),
 								"Diagramm nicht gespeichert",
 								JOptionPane.YES_NO_CANCEL_OPTION);
-
 				if (answer == JOptionPane.YES_OPTION) {
 					this.semSpeichern.V();
-
 					if ((this.dateiname.length() == 0) || (this.dateiname.equalsIgnoreCase("unbenannt.ads"))) {
 						this.doDateiSpeichernUnter();
 					} else {
@@ -991,25 +987,24 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					}
 				} else if (answer == JOptionPane.CANCEL_OPTION) {
 					this.semSpeichern.V();
-
 					return;
 				}
 			}
-
 			try {
 				int len = 0;
-
 				for (len = 0; len < this.dateinamencache.length; len++) {
 					if (this.dateinamencache[len] == null) {
 						break;
 					}
-
 					final String s = this.dateinamencache[len].getText();
-
 					// s = s.substring(2, s.length());
 					this.ini.writeStr("Dateicache", "Datei" + len, s);
 				}
-
+				this.setExtendedState(JFrame.NORMAL);
+				try {
+					Thread.sleep(100);
+				} catch (Exception e) {
+				}
 				this.ini.writeInt("Dateicache", "Anzahl", len);
 				this.ini.writeInt("MainWindow", "x", this.getX());
 				this.ini.writeInt("MainWindow", "y", this.getY());
@@ -1018,20 +1013,17 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			} catch (IOException ioe) {
 				LOG.error("\n\nDateinamencache konnte nicht gespeichert werden!\n\n", ioe);
 			}
-
 			try {
 				this.ini.save();
 			} catch (Exception e) {
 				LOG.error("\n\nInidatei konnte nicht gespeichert werden!\n\n", e);
 			}
-
 			this.setVisible(false);
 			this.dispose();
 			System.exit(0);
 		} catch (java.lang.InterruptedException ie) {
 			ie.printStackTrace();
 		}
-
 		this.semSpeichern.V();
 	}
 
