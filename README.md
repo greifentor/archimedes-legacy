@@ -43,19 +43,10 @@ This working with Window only in the moment.
 
 ## News
 
-### 1.91.1 (30.06.2020)
+### 2.0.1 (24.03.2021)
 
-There is a new field for additional diagram info ("Zusätzliche Diagramminfo"). It could be filled with a string or 
-identifiers for diagram options. The option identifiers have this format: 
-
-```
-${Option."OptionName"} e. g. for option VERSION_TAG (value "4711") it would be: ${Option.VERSION_TAG}
-
-For the option above the string "Version Tag is: ${Option."OptionName"}" leads to "Version Tag is: 4711". 
-```
-
-The new field is printed in the header block of the diagram view directly following the version date. It has been added
-to allow printing option values to the diagram.
+* Ticks on the work sheet raster are standard now. It could be disabled by holding the SHIFT key pressed on dragging a
+GUI object.
 
 
 ## Compare Data Models

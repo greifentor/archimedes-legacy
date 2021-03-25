@@ -108,10 +108,10 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 	 * entspricht dem gesetzten Wert. Ein Wert von <= 0 schaltet das Raster aus.
 	 */
 	private int rasterwidth = 25;
-	private int exposedRasterPointAnyXPointsHeight = Integer
-			.getInteger("archimedes.gui.ComponentDiagramm.exposed.raster.point.any.x.points.height", 5);
-	private int exposedRasterPointAnyXPointsWidth = Integer
-			.getInteger("archimedes.gui.ComponentDiagramm.exposed.raster.point.any.x.points.width", 10);
+	private int exposedRasterPointAnyXPointsHeight =
+			Integer.getInteger("archimedes.gui.ComponentDiagramm.exposed.raster.point.any.x.points.height", 5);
+	private int exposedRasterPointAnyXPointsWidth =
+			Integer.getInteger("archimedes.gui.ComponentDiagramm.exposed.raster.point.any.x.points.width", 10);
 	/* Radius des Smart-Positioners. */
 	private int smartposradius = 100;
 	/* Das geclickte Objekt. */
@@ -143,9 +143,15 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 	 * @changed OLI 18.12.2007 - Erweiterung um die Funktionen zur Copy-&amp;-Paste-Funktion f&uuml;r Tabellen.<BR>
 	 *
 	 */
-	public ComponentDiagramm(GUIViewModel vm, int width, int height, GUIDiagramModel diagram,
-			GUIObjectCreator<T> guiObjectCrtr, ComponentDiagramListener<T> componentDiagramListener,
-			StatusBarOwner statusBarOwner, CopyAndPasteController capc) {
+	public ComponentDiagramm(
+			GUIViewModel vm,
+			int width,
+			int height,
+			GUIDiagramModel diagram,
+			GUIObjectCreator<T> guiObjectCrtr,
+			ComponentDiagramListener<T> componentDiagramListener,
+			StatusBarOwner statusBarOwner,
+			CopyAndPasteController capc) {
 		super();
 		this.componentDiagramListener = componentDiagramListener;
 		this.copyAndPasteController = capc;
@@ -181,8 +187,11 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 						try {
 							TableModel[] tms = copyAndPasteController.transferableStringToTable((DataModel) dm, s);
 							for (TableModel tm : tms) {
-								((GUIObjectModel) tm).setXY(getView(), roundCoor(e.getX(), e.isShiftDown()),
-										roundCoor(e.getY(), e.isShiftDown()));
+								((GUIObjectModel) tm)
+										.setXY(
+												getView(),
+												roundCoor(e.getX(), e.isShiftDown()),
+												roundCoor(e.getY(), e.isShiftDown()));
 							}
 						} catch (Exception ex) {
 							ex.printStackTrace();
@@ -197,8 +206,11 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 					for (int i = 0; i < len; i++) {
 						if (v.elementAt(i) instanceof GUIRelationModel) {
 							GUIRelationModel r = (GUIRelationModel) v.elementAt(i);
-							Point p = r.getPoint(getView(), roundCoor(convertReverse(e.getX()), e.isShiftDown()),
-									roundCoor(convertReverse(e.getY()), e.isShiftDown()));
+							Point p = r
+									.getPoint(
+											getView(),
+											roundCoor(convertReverse(e.getX()), e.isShiftDown()),
+											roundCoor(convertReverse(e.getY()), e.isShiftDown()));
 							r.removePoint(getView(), p);
 							dm.raiseAltered();
 							repaint();
@@ -215,8 +227,13 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 				if (insertmode) {
 					insertmode = false;
 					if (!e.isPopupTrigger()) {
-						GUIObjectModel om = guiObjectCreator.create(getView(), roundCoor(e.getX(), e.isShiftDown()),
-								roundCoor(e.getY(), e.isShiftDown()), guiObjectToCreateIdentifier, isStandardMode());
+						GUIObjectModel om = guiObjectCreator
+								.create(
+										getView(),
+										roundCoor(e.getX(), e.isShiftDown()),
+										roundCoor(e.getY(), e.isShiftDown()),
+										guiObjectToCreateIdentifier,
+										isStandardMode());
 						dm.addGUIObject(om);
 						dm.raiseAltered();
 					}
@@ -243,8 +260,11 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 					dragging = false;
 					if (dragged instanceof GUIObjectModel) {
 						GUIObjectModel t = (GUIObjectModel) dragged;
-						t.setXY(getView(), roundCoor(convertReverse(e.getX()) - draggingOffsetX, e.isShiftDown()),
-								roundCoor(convertReverse(e.getY()) - draggingOffsetY, e.isShiftDown()));
+						t
+								.setXY(
+										getView(),
+										roundCoor(convertReverse(e.getX()) - draggingOffsetX, e.isShiftDown()),
+										roundCoor(convertReverse(e.getY()) - draggingOffsetY, e.isShiftDown()));
 					} else if (dragged instanceof RelationPointContainer) {
 						RelationPointContainer rpc = (RelationPointContainer) dragged;
 						if (rpc.relation.collisionWithNeighbour(getView(), rpc.point)) {
@@ -276,8 +296,11 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 						} else if (v.elementAt(0) instanceof GUIRelationModel) {
 							dragging = true;
 							GUIRelationModel r = (GUIRelationModel) v.elementAt(0);
-							Point p = r.getPoint(getView(), convertReverse(roundCoor(e.getX(), e.isShiftDown())),
-									convertReverse(roundCoor(e.getY(), e.isShiftDown())));
+							Point p = r
+									.getPoint(
+											getView(),
+											convertReverse(roundCoor(e.getX(), e.isShiftDown())),
+											convertReverse(roundCoor(e.getY(), e.isShiftDown())));
 							dragged = new RelationPointContainer(r, p);
 						}
 						if ((len > 1) && (v.elementAt(1) instanceof GUIRelationModel)) {
@@ -287,8 +310,11 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 								index = 1;
 							}
 							GUIRelationModel r = (GUIRelationModel) v.elementAt(index);
-							Point p = r.getPoint(getView(), roundCoor(e.getX(), e.isShiftDown()),
-									roundCoor(e.getY(), e.isShiftDown()));
+							Point p = r
+									.getPoint(
+											getView(),
+											roundCoor(e.getX(), e.isShiftDown()),
+											roundCoor(e.getY(), e.isShiftDown()));
 							if (r.isEndPoint(getView(), p)) {
 								dragged = new RelationEndPointContainer(r, p, r.getObjectPointed(getView(), p));
 							} else {
@@ -303,8 +329,12 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 						repaint();
 					} else if (dragged instanceof RelationEndPointContainer) {
 						RelationEndPointContainer rpc = (RelationEndPointContainer) dragged;
-						rpc.relation.computeOffset(getView(), rpc.object, roundCoor(e.getX(), e.isShiftDown()),
-								roundCoor(e.getY(), e.isShiftDown()));
+						rpc.relation
+								.computeOffset(
+										getView(),
+										rpc.object,
+										roundCoor(e.getX(), e.isShiftDown()),
+										roundCoor(e.getY(), e.isShiftDown()));
 						repaint();
 					} else if (dragged instanceof RelationPointContainer) {
 						RelationPointContainer rpc = (RelationPointContainer) dragged;
@@ -326,7 +356,7 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 	}
 
 	private int roundCoor(int c, boolean shiftdown) {
-		if (shiftdown) {
+		if (!shiftdown) {
 			int c0 = (c + (this.rasterwidth / 2)) / this.rasterwidth;
 			c0 = c0 * this.rasterwidth;
 			return c0;
@@ -564,8 +594,13 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 		int page = 1;
 		while (page <= MAXPAGECOUNT) {
 			Point p = this.getLeftUpper(page);
-			if (this.hits((int) p.getX() + DOTSPERPAGEX / 2, (int) p.getY() + DOTSPERPAGEY / 2, DOTSPERPAGEX,
-					DOTSPERPAGEY).size() > 0) {
+			if (this
+					.hits(
+							(int) p.getX() + DOTSPERPAGEX / 2,
+							(int) p.getY() + DOTSPERPAGEY / 2,
+							DOTSPERPAGEX,
+							DOTSPERPAGEY)
+					.size() > 0) {
 				xmax = (x > xmax ? x : xmax);
 				ymax = (y > ymax ? y : ymax);
 			}
@@ -676,11 +711,19 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 		}
 		g.setColor(Color.black);
 		int y = 30;
-		g.setFont(new Font("sansserif", Font.BOLD,
-				(int) ((double) this.dm.getFontSizeDiagramHeadline() * this.getZoomFactor())));
+		g
+				.setFont(
+						new Font(
+								"sansserif",
+								Font.BOLD,
+								(int) ((double) this.dm.getFontSizeDiagramHeadline() * this.getZoomFactor())));
 		g.drawString(dm.getName(), convert(20), convert(y));
-		g.setFont(new Font("sansserif", Font.BOLD,
-				(int) ((double) this.dm.getFontSizeSubtitles() * this.getZoomFactor())));
+		g
+				.setFont(
+						new Font(
+								"sansserif",
+								Font.BOLD,
+								(int) ((double) this.dm.getFontSizeSubtitles() * this.getZoomFactor())));
 		y += g.getFontMetrics().getHeight() + 5;
 		g.drawString(this.dm.getAuthor(), convert(20), convert(y));
 		y += g.getFontMetrics().getHeight() + 5;
@@ -700,8 +743,14 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 					}
 				}
 				if (showTable) {
-					this.shapes.addElement(
-							tm.paintObject(this, this.getView(), g, (printout ? PaintMode.PRINTER : PaintMode.EDITOR)));
+					this.shapes
+							.addElement(
+									tm
+											.paintObject(
+													this,
+													this.getView(),
+													g,
+													(printout ? PaintMode.PRINTER : PaintMode.EDITOR)));
 					if (this.dragged == tm) {
 						g.setColor(new Color(0, 153, 102));
 						int tmx = tm.getX(this.getView());
@@ -738,8 +787,12 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 				}
 				if (showTable) {
 					g.setColor(Color.black);
-					for (ShapeContainer sc : tm.paintRelations(this, this.getView(), g,
-							(printout ? PaintMode.PRINTER : PaintMode.EDITOR))) {
+					for (ShapeContainer sc : tm
+							.paintRelations(
+									this,
+									this.getView(),
+									g,
+									(printout ? PaintMode.PRINTER : PaintMode.EDITOR))) {
 						this.shapes.addElement(sc);
 					}
 				}
@@ -818,10 +871,13 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 				 */
 			}
 		}
-		this.statusBarOwner.updateStatusMessage("(" + x + "," + y + ")"
-				+ (this.getDragged() != null ? "  - " + this.getDragged().toString()
-						: (clicked != null ? "  - " + clicked : ""))
-				+ (this.isInsertMode() ? StrUtil.FromHTML(" EINF&Uuml;GEN!") : ""));
+		this.statusBarOwner
+				.updateStatusMessage(
+						"(" + x + "," + y + ")"
+								+ (this.getDragged() != null
+										? "  - " + this.getDragged().toString()
+										: (clicked != null ? "  - " + clicked : ""))
+								+ (this.isInsertMode() ? StrUtil.FromHTML(" EINF&Uuml;GEN!") : ""));
 	}
 
 }
