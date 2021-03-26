@@ -42,23 +42,35 @@ public class RESTControllerCodeFactoryTest {
 			// Run
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
+			assertServiceFilesExisting("", tempDir);
+			assertRESTClientFilesExisting("", tempDir);
+		}
+
+		public void assertServiceFilesExisting(String prefix, Path tempDir) {
 			assertTrue(
 					new File(
-							tempDir.toAbsolutePath().toString()
+							tempDir.toAbsolutePath().toString() + prefix
 									+ "/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java").exists());
 			assertTrue(
 					new File(
-							tempDir.toAbsolutePath().toString()
+							tempDir.toAbsolutePath().toString() + prefix
 									+ "/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java").exists());
 			assertTrue(
 					new File(
-							tempDir.toAbsolutePath().toString()
+							tempDir.toAbsolutePath().toString() + prefix
 									+ "/src/main/java/base/pack/age/name/rest/converter/ATableDTOConverter.java")
 											.exists());
 			assertTrue(
 					new File(
-							tempDir.toAbsolutePath().toString()
+							tempDir.toAbsolutePath().toString() + prefix
 									+ "/src/main/java/base/pack/age/name/rest/ATableRESTController.java").exists());
+		}
+
+		public void assertRESTClientFilesExisting(String prefix, Path tempDir) {
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString() + prefix
+									+ "/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java").exists());
 		}
 
 		@Test
@@ -71,31 +83,8 @@ public class RESTControllerCodeFactoryTest {
 			// Run
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/app-service/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/app-service/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/app-service/src/main/java/base/pack/age/name/rest/converter/ATableDTOConverter.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/app-service/src/main/java/base/pack/age/name/rest/ATableRESTController.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/app-rest-client/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java")
-											.exists());
+			assertServiceFilesExisting("/app-service", tempDir);
+			assertRESTClientFilesExisting("/app-rest-client", tempDir);
 		}
 
 		@Test
@@ -107,30 +96,8 @@ public class RESTControllerCodeFactoryTest {
 			// Run
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/service/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java").exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/service/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/service/src/main/java/base/pack/age/name/rest/converter/ATableDTOConverter.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/service/src/main/java/base/pack/age/name/rest/ATableRESTController.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/rest-client/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java")
-											.exists());
+			assertServiceFilesExisting("/service", tempDir);
+			assertRESTClientFilesExisting("/rest-client", tempDir);
 		}
 
 		@Test
@@ -144,31 +111,8 @@ public class RESTControllerCodeFactoryTest {
 			// Run
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/alt-service/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/alt-service/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/alt-service/src/main/java/base/pack/age/name/rest/converter/ATableDTOConverter.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/alt-service/src/main/java/base/pack/age/name/rest/ATableRESTController.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/alt-rest-client/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java")
-											.exists());
+			assertServiceFilesExisting("/alt-service", tempDir);
+			assertRESTClientFilesExisting("/alt-rest-client", tempDir);
 		}
 
 		@Test
@@ -182,30 +126,8 @@ public class RESTControllerCodeFactoryTest {
 			// Run
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/service/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java").exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/service/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/service/src/main/java/base/pack/age/name/rest/converter/ATableDTOConverter.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/service/src/main/java/base/pack/age/name/rest/ATableRESTController.java")
-											.exists());
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString()
-									+ "/rest-client/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java")
-											.exists());
+			assertServiceFilesExisting("/service", tempDir);
+			assertRESTClientFilesExisting("/rest-client", tempDir);
 		}
 
 	}
