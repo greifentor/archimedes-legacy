@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -17,6 +18,7 @@ import archimedes.model.TableModel;
  */
 public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extends AbstractCodeGenerator<N> {
 
+	public static final String ALTERNATE_MODULE_PREFIX = "ALTERNATE_MODULE_PREFIX";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
 	public static final String MODULE_MODE = "MODULE_MODE";
 
@@ -60,7 +62,16 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected String getModuleName(DataModel dataModel) {
-		return dataModel.getApplicationName().toLowerCase() + "-" + getDefaultModuleName(dataModel);
+		String modulePrefix = dataModel.getApplicationName().toLowerCase();
+		if (getAlternateModuleName(dataModel) != null) {
+			modulePrefix = getAlternateModuleName(dataModel);
+		}
+		return modulePrefix + (modulePrefix.isEmpty() ? "" : "-") + getDefaultModuleName(dataModel);
+	}
+
+	private String getAlternateModuleName(DataModel dataModel) {
+		OptionModel option = dataModel.getOptionByName(AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX);
+		return option != null ? option.getParameter() : null;
 	}
 
 	protected abstract String getDefaultModuleName(DataModel dataModel);

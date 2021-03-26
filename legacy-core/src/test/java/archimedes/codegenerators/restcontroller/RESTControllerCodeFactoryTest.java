@@ -98,6 +98,116 @@ public class RESTControllerCodeFactoryTest {
 											.exists());
 		}
 
+		@Test
+		void happyRunInModuleModeNoAppName(@TempDir Path tempDir) {
+			// Prepare
+			DataModel model = readDataModel("Model.xml");
+			model.addOption(new Option(AbstractClassCodeGenerator.MODULE_MODE));
+			unitUnderTest.setDataModel(model);
+			// Run
+			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
+			// Check
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/service/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java").exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/service/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java")
+											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/service/src/main/java/base/pack/age/name/rest/converter/ATableDTOConverter.java")
+											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/service/src/main/java/base/pack/age/name/rest/ATableRESTController.java")
+											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/rest-client/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java")
+											.exists());
+		}
+
+		@Test
+		void happyRunInModuleModeAlternateModulePrefix(@TempDir Path tempDir) {
+			// Prepare
+			DataModel model = readDataModel("Model.xml");
+			model.setApplicationName(APPLICATION_NAME);
+			model.addOption(new Option(AbstractClassCodeGenerator.MODULE_MODE));
+			model.addOption(new Option(AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX, "alt"));
+			unitUnderTest.setDataModel(model);
+			// Run
+			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
+			// Check
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/alt-service/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java")
+											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/alt-service/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java")
+											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/alt-service/src/main/java/base/pack/age/name/rest/converter/ATableDTOConverter.java")
+											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/alt-service/src/main/java/base/pack/age/name/rest/ATableRESTController.java")
+											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/alt-rest-client/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java")
+											.exists());
+		}
+
+		@Test
+		void happyRunInModuleModeEmptyAlternateModulePrefixButAppName(@TempDir Path tempDir) {
+			// Prepare
+			DataModel model = readDataModel("Model.xml");
+			model.setApplicationName(APPLICATION_NAME);
+			model.addOption(new Option(AbstractClassCodeGenerator.MODULE_MODE));
+			model.addOption(new Option(AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX, ""));
+			unitUnderTest.setDataModel(model);
+			// Run
+			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
+			// Check
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/service/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java").exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/service/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java")
+											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/service/src/main/java/base/pack/age/name/rest/converter/ATableDTOConverter.java")
+											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/service/src/main/java/base/pack/age/name/rest/ATableRESTController.java")
+											.exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString()
+									+ "/rest-client/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java")
+											.exists());
+		}
+
 	}
 
 }
