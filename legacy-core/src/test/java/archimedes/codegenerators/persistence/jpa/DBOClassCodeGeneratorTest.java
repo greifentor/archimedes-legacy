@@ -37,6 +37,11 @@ public class DBOClassCodeGeneratorTest {
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
+					"import javax.persistence.Column;\n" + //
+					"import javax.persistence.Entity;\n" + //
+					"import javax.persistence.Id;\n" + //
+					"import javax.persistence.Table;\n" + //
+					"\n" + //
 					"import lombok.Data;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.experimental.Accessors;\n" + //
@@ -49,10 +54,16 @@ public class DBOClassCodeGeneratorTest {
 					"@Accessors(chain = true)\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
+					"@Entity(name = \"ATable\")\n" + //
+					"@Table(name = \"A_TABLE\")\n" + //
 					"public class ATableDBO {\n" + //
 					"\n" + //
+					"	@Id\n" + //
+					"	@Column(name = \"ID\")\n" + //
 					"	private long id;\n" + //
+					"	@Column(name = \"ADate\")\n" + //
 					"	private LocalDate aDate;\n" + //
+					"	@Column(name = \"Description\")\n" + //
 					"	private String description;\n" + //
 					"\n" + //
 					"}";

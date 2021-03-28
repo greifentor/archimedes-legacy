@@ -1,5 +1,6 @@
 package archimedes.codegenerators;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -14,7 +15,22 @@ public class Columns {
 
 	@Accessors(chain = true)
 	@Data
+	public static class ParameterData {
+		private String name;
+		private String value;
+	}
+
+	@Accessors(chain = true)
+	@Data
+	public static class AnnotationData {
+		private String name;
+		private List<ParameterData> parameters = new ArrayList<>();
+	}
+
+	@Accessors(chain = true)
+	@Data
 	public static class ColumnData {
+		private List<AnnotationData> annotations = new ArrayList<>();
 		private String fieldName;
 		private String fieldType;
 		private String getterCall;

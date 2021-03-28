@@ -4,6 +4,11 @@ package ${PackageName};
 import ${ImportLocalDate};
 
 #end
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
@@ -16,9 +21,14 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
+@Entity(name = "${EntityName}")
+@Table(name = "${TableName}")
 public class ${ClassName} {
 
 #foreach($Column in $ColumnData)
+#foreach($Annotation in ${Column.getAnnotations()})
+	@${Annotation.getName()}#if (${Annotation.getParameters().isEmpty()} == false)#foreach($Parameter in $Annotation.getParameters())($Parameter.getName() = $Parameter.getValue())#end#end
+#end
 	private ${Column.getFieldType()} ${Column.getFieldName()};
 #end
 

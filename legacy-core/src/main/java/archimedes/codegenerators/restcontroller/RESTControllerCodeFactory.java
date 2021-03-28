@@ -11,6 +11,7 @@ import archimedes.acf.checker.ModelChecker;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
+import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.model.DataModel;
@@ -44,7 +45,7 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 	public boolean generate(String path) {
 		LOG.info("Started code generation");
 		new File(path).mkdirs();
-		String basePackageName = this.dataModel.getBasePackageName();
+		String basePackageName = dataModel.getBasePackageName();
 		for (TableModel tableModel : dataModel.getTables()) {
 			if (tableModel.isGenerateCode()) {
 				codeGenerators.forEach(codeGenerator -> {
@@ -76,6 +77,11 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 	@Override
 	public String getVersion() {
 		return "1.0.0";
+	}
+
+	@Override
+	public void setModelCheckerMessageListFrameListeners(ModelCheckerMessageListFrameListener... listeners) {
+		// NOP
 	}
 
 }

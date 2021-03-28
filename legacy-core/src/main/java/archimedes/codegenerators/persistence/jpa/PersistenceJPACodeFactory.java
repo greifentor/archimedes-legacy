@@ -1,12 +1,16 @@
 package archimedes.codegenerators.persistence.jpa;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import archimedes.acf.checker.ModelChecker;
+import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.CodeGenerator;
 import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
@@ -20,21 +24,29 @@ import archimedes.model.TableModel;
 public class PersistenceJPACodeFactory extends AbstractCodeFactory
 		implements CodeFactoryProgressionEventProvider, StandardCodeFactoryProgressionFrameUser {
 
-	public static final String TEMPLATE_PATH = "src/main/resources/templates/persistence-jpa";
+	public static final String TEMPLATE_PATH = System
+			.getProperty("PersistenceJPACodeFactory.templates.path", "src/main/resources/templates/persistence-jpa");
 
 	private static final Logger LOG = LogManager.getLogger(PersistenceJPACodeFactory.class);
+
+	private List<CodeGenerator> codeGenerators = Arrays.asList(new DBOClassCodeGenerator());
 
 	@Override
 	public boolean generate(String path) {
 		LOG.info("Started code generation");
 		new File(path).mkdirs();
-		String basePackageName = this.dataModel.getBasePackageName();
+		String basePackageName = dataModel.getBasePackageName();
 		for (TableModel tableModel : dataModel.getTables()) {
 			if (tableModel.isGenerateCode()) {
-				new DBOClassCodeGenerator().generate(basePackageName, dataModel, tableModel);
+				codeGenerators.forEach(codeGenerator -> {
+					if (codeGenerator instanceof AbstractClassCodeGenerator<?>) {
+						((AbstractClassCodeGenerator<?>) codeGenerator)
+								.generate(path, basePackageName, dataModel, tableModel);
+					}
+				});
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override
