@@ -11,13 +11,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
+import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
 public class DBOClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
-	private static final String TABLE_NAME = "ATable";
 
 	@InjectMocks
 	private DBOClassCodeGenerator unitUnderTest;
@@ -33,7 +33,16 @@ public class DBOClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectWithoutAnyFields() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".persistence.entities;\n" + //
+			String expected = getExpected("persistence.entities");
+			DataModel dataModel = readDataModel("Model.xml");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String getExpected(String packageName) {
+			return "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
@@ -67,7 +76,19 @@ public class DBOClassCodeGeneratorTest {
 					"	private String description;\n" + //
 					"\n" + //
 					"}";
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithoutAnyFieldsAndAlternatePackageName() {
+			// Prepare
+			String alternatePackageName = "alternate.name";
+			String expected = getExpected(alternatePackageName);
 			DataModel dataModel = readDataModel("Model.xml");
+			dataModel
+					.addOption(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_ENTITIES_PACKAGE_NAME,
+									alternatePackageName));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
