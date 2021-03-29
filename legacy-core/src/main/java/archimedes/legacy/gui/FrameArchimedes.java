@@ -1675,6 +1675,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					}
 				} else {
 					final Thread t = new Thread(() -> {
+						LOG.info("Called code factory: " + cf.getClass().getSimpleName());
 						((CodeFactory) cf).addCodeFactoryListener(fa);
 						((CodeFactory) cf).setDataModel(fa.diagramm);
 						if (cf instanceof CodeFactoryProgressionEventProvider) {

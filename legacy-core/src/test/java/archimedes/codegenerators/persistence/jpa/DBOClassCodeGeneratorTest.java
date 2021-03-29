@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
@@ -89,6 +90,59 @@ public class DBOClassCodeGeneratorTest {
 							new Option(
 									PersistenceJPANameGenerator.ALTERNATE_ENTITIES_PACKAGE_NAME,
 									alternatePackageName));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String getExpectedPOJOModeBuilder(String packageName) {
+			return "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
+					"\n" + //
+					"import java.time.LocalDate;\n" + //
+					"\n" + //
+					"import javax.persistence.Column;\n" + //
+					"import javax.persistence.Entity;\n" + //
+					"import javax.persistence.Id;\n" + //
+					"import javax.persistence.Table;\n" + //
+					"\n" + //
+					"import lombok.Builder;\n" + //
+					"import lombok.Data;\n" + //
+					"import lombok.Generated;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A DBO for a_tables.\n" + //
+					" *\n" + //
+					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+					" */\n" + //
+					"@Builder\n" + //
+					"@Data\n" + //
+					"@Generated\n" + //
+					"@Entity(name = \"ATable\")\n" + //
+					"@Table(name = \"A_TABLE\")\n" + //
+					"public class ATableDBO {\n" + //
+					"\n" + //
+					"	@Id\n" + //
+					"	@Column(name = \"ID\")\n" + //
+					"	private long id;\n" + //
+					"	@Column(name = \"ADate\")\n" + //
+					"	private LocalDate aDate;\n" + //
+					"	@Column(name = \"Description\")\n" + //
+					"	private String description;\n" + //
+					"\n" + //
+					"}";
+		}
+
+		@Test
+		void happyRunForASimpleObjectPOJOModeBUILD() {
+			// Prepare
+			String expected = getExpectedPOJOModeBuilder("persistence.entities");
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel
+					.addOption(
+							new Option(
+									AbstractClassCodeGenerator.POJO_MODE,
+									AbstractClassCodeGenerator.POJO_MODE_BUILDER));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check

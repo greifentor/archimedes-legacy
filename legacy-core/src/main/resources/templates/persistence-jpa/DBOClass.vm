@@ -9,16 +9,25 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+#if ($POJOMode == "BUILDER")
+import lombok.Builder;
+#end
 import lombok.Data;
 import lombok.Generated;
+#if ($POJOMode == "CHAIN")
 import lombok.experimental.Accessors;
+#end
 
 /**
  * A DBO for ${PluralName}.
  *
  * ${Generated}
  */
+#if ($POJOMode == "CHAIN")
 @Accessors(chain = true)
+#elseif ($POJOMode == "BUILDER")
+@Builder
+#end
 @Data
 @Generated
 @Entity(name = "${EntityName}")

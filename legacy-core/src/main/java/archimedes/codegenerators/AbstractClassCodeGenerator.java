@@ -1,13 +1,17 @@
 package archimedes.codegenerators;
 
+import static corentx.util.Checks.ensure;
+
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionListProvider;
 import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
@@ -19,6 +23,9 @@ import archimedes.model.TableModel;
 public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extends AbstractCodeGenerator<N> {
 
 	public static final String ALTERNATE_MODULE_PREFIX = "ALTERNATE_MODULE_PREFIX";
+	public static final String POJO_MODE = "POJO_MODE";
+	public static final String POJO_MODE_BUILDER = "BUILDER";
+	public static final String POJO_MODE_CHAIN = "CHAIN";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
 	public static final String MODULE_MODE = "MODULE_MODE";
 
@@ -104,6 +111,21 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	protected boolean isGenerateIdClass(DataModel model, TableModel table) {
 		return (model.getOptionByName(AbstractClassCodeGenerator.GENERATE_ID_CLASS) != null)
 				|| (table.getOptionByName(AbstractClassCodeGenerator.GENERATE_ID_CLASS) != null);
+	}
+
+	protected POJOMode getPOJOMode(DataModel model, TableModel table) {
+		ensure(model != null, "data model cannot be null.");
+		ensure(table != null, "table model cannot be null.");
+		return getOptionByName(table, POJO_MODE)
+				.map(option -> POJOMode.valueOf(option.getParameter()))
+				.orElse(
+						getOptionByName(model, POJO_MODE)
+								.map(option -> POJOMode.valueOf(option.getParameter()))
+								.orElse(POJOMode.CHAIN));
+	}
+
+	private Optional<OptionModel> getOptionByName(OptionListProvider optionListProvider, String name) {
+		return Optional.ofNullable(optionListProvider.getOptionByName(name));
 	}
 
 }

@@ -42,6 +42,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
 		context.put("PackageName", getPackageName(model));
+		context.put("POJOMode", getPOJOMode(model, table).name());
 		context.put("TableName", table.getName());
 	}
 
