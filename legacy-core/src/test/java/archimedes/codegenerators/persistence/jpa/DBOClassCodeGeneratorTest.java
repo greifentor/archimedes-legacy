@@ -106,7 +106,9 @@ public class DBOClassCodeGeneratorTest {
 					"import javax.persistence.Id;\n" + //
 					"import javax.persistence.Table;\n" + //
 					"\n" + //
+					"import lombok.AllArgsConstructor;\n" + //
 					"import lombok.Builder;\n" + //
+					"import lombok.NoArgsConstructor;\n" + //
 					"import lombok.Data;\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
@@ -116,6 +118,8 @@ public class DBOClassCodeGeneratorTest {
 					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 					" */\n" + //
 					"@Builder\n" + //
+					"@AllArgsConstructor\n" + //
+					"@NoArgsConstructor\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
 					"@Entity(name = \"ATable\")\n" + //
