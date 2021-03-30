@@ -41,7 +41,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
-		context.put("PackageName", getPackageName(model));
+		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
 		context.put("TableName", table.getName());
 	}
@@ -87,8 +87,8 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 	}
 
 	@Override
-	public String getPackageName(DataModel model) {
-		return nameGenerator.getDBOPackageName(model);
+	public String getPackageName(DataModel model, TableModel table) {
+		return nameGenerator.getDBOPackageName(model, table);
 	}
 
 }

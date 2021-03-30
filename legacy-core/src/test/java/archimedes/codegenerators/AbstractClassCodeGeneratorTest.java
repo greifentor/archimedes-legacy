@@ -41,7 +41,7 @@ public class AbstractClassCodeGeneratorTest {
 			}
 
 			@Override
-			public String getPackageName(DataModel model) {
+			public String getPackageName(DataModel model, TableModel table) {
 				return null;
 			}
 

@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.NameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.scheme.Option;
@@ -32,7 +33,7 @@ public class DBOClassCodeGeneratorTest {
 	class TestsOfMethod_generate_String_TableModel {
 
 		@Test
-		void happyRunForASimpleObjectWithoutAnyFields() {
+		void happyRunForASimpleObject() {
 			// Prepare
 			String expected = getExpected("persistence.entities");
 			DataModel dataModel = readDataModel("Model.xml");
@@ -80,7 +81,7 @@ public class DBOClassCodeGeneratorTest {
 		}
 
 		@Test
-		void happyRunForASimpleObjectWithoutAnyFieldsAndAlternatePackageName() {
+		void happyRunForASimpleObjectAndAlternatePackageName() {
 			// Prepare
 			String alternatePackageName = "alternate.name";
 			String expected = getExpected(alternatePackageName);
@@ -90,6 +91,21 @@ public class DBOClassCodeGeneratorTest {
 							new Option(
 									PersistenceJPANameGenerator.ALTERNATE_ENTITIES_PACKAGE_NAME,
 									alternatePackageName));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectAndTechnicalPackageName() {
+			// Prepare
+			String technicalContextName = "technical";
+			String expected = getExpected(technicalContextName + ".persistence.entities");
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel
+					.getTableByName("A_TABLE")
+					.addOption(new Option(NameGenerator.TECHNICAL_CONTEXT, technicalContextName));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check

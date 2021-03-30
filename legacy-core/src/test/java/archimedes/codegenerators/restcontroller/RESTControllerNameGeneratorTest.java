@@ -148,8 +148,13 @@ public class RESTControllerNameGeneratorTest {
 	class DTOPackageNameTests {
 
 		@Test
-		void getDTOPackageName_PassANullValue_ReturnsANullValue() {
-			assertNull(unitUnderTest.getDTOPackageName(null));
+		void getDTOPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getDTOPackageName(null, table));
+		}
+
+		@Test
+		void getDTOPackageName_PassANullValueAsTable_ReturnsDefaultPackage() {
+			assertEquals("rest.dto", unitUnderTest.getDTOPackageName(model, null));
 		}
 
 		@Test
@@ -158,7 +163,7 @@ public class RESTControllerNameGeneratorTest {
 			String expected = BASE_PACKAGE_NAME + ".rest.dto";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
-			String returned = unitUnderTest.getDTOPackageName(model);
+			String returned = unitUnderTest.getDTOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -169,7 +174,7 @@ public class RESTControllerNameGeneratorTest {
 			String expected = "rest.dto";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
-			String returned = unitUnderTest.getDTOPackageName(model);
+			String returned = unitUnderTest.getDTOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -180,7 +185,7 @@ public class RESTControllerNameGeneratorTest {
 			String expected = "rest.dto";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
-			String returned = unitUnderTest.getDTOPackageName(model);
+			String returned = unitUnderTest.getDTOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -301,8 +306,13 @@ public class RESTControllerNameGeneratorTest {
 	class DTOConverterPackageNameTests {
 
 		@Test
-		void getDTOConverterPackageName_PassANullValue_ReturnsANullValue() {
-			assertNull(unitUnderTest.getDTOConverterPackageName(null));
+		void getDTOConverterPackageName_PassANullValueModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getDTOConverterPackageName(null, table));
+		}
+
+		@Test
+		void getDTOConverterPackageName_PassANullValueTable_ReturnsDefaultValue() {
+			assertEquals("rest.converter", unitUnderTest.getDTOConverterPackageName(model, null));
 		}
 
 		@Test
@@ -311,7 +321,7 @@ public class RESTControllerNameGeneratorTest {
 			String expected = BASE_PACKAGE_NAME + ".rest.converter";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
-			String returned = unitUnderTest.getDTOConverterPackageName(model);
+			String returned = unitUnderTest.getDTOConverterPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -322,7 +332,7 @@ public class RESTControllerNameGeneratorTest {
 			String expected = "rest.converter";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
-			String returned = unitUnderTest.getDTOConverterPackageName(model);
+			String returned = unitUnderTest.getDTOConverterPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -333,7 +343,7 @@ public class RESTControllerNameGeneratorTest {
 			String expected = "rest.converter";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
-			String returned = unitUnderTest.getDTOConverterPackageName(model);
+			String returned = unitUnderTest.getDTOConverterPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -563,8 +573,13 @@ public class RESTControllerNameGeneratorTest {
 	class RESTControllerPackageNameTests {
 
 		@Test
-		void getRESTControllerPackageName_PassANullValue_ReturnsANullValue() {
-			assertNull(unitUnderTest.getRESTControllerPackageName(null));
+		void getRESTControllerPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getRESTControllerPackageName(null, table));
+		}
+
+		@Test
+		void getRESTControllerPackageName_PassANullValueAsTable_ReturnsDefaultValue() {
+			assertEquals("rest", unitUnderTest.getRESTControllerPackageName(model, null));
 		}
 
 		@Test
@@ -573,7 +588,7 @@ public class RESTControllerNameGeneratorTest {
 			String expected = BASE_PACKAGE_NAME + ".rest";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
-			String returned = unitUnderTest.getRESTControllerPackageName(model);
+			String returned = unitUnderTest.getRESTControllerPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -584,7 +599,7 @@ public class RESTControllerNameGeneratorTest {
 			String expected = "rest";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
-			String returned = unitUnderTest.getRESTControllerPackageName(model);
+			String returned = unitUnderTest.getRESTControllerPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -595,7 +610,7 @@ public class RESTControllerNameGeneratorTest {
 			String expected = "rest";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
-			String returned = unitUnderTest.getRESTControllerPackageName(model);
+			String returned = unitUnderTest.getRESTControllerPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}

@@ -37,7 +37,7 @@ public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTContro
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
-		context.put("PackageName", getPackageName(model));
+		context.put("PackageName", getPackageName(model, table));
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns) {
@@ -62,8 +62,8 @@ public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTContro
 	}
 
 	@Override
-	public String getPackageName(DataModel model) {
-		return nameGenerator.getDTOPackageName(model);
+	public String getPackageName(DataModel model, TableModel table) {
+		return nameGenerator.getDTOPackageName(model, table);
 	}
 
 }

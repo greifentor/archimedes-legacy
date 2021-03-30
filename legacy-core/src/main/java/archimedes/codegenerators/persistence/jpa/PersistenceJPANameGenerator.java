@@ -18,7 +18,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 		return table != null ? getClassName(table) + "DBO" : null;
 	}
 
-	public String getDBOPackageName(DataModel model) {
+	public String getDBOPackageName(DataModel model, TableModel table) {
 		String packageName = "persistence.entities";
 		if (model != null) {
 			OptionModel option = model.getOptionByName(ALTERNATE_ENTITIES_PACKAGE_NAME);
@@ -26,7 +26,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 				packageName = option.getParameter();
 			}
 		}
-		return model != null ? getBasePackageNameWithDotExtension(model) + packageName : null;
+		return model != null ? getBasePackageNameWithDotExtension(model, table) + packageName : null;
 	}
 
 }

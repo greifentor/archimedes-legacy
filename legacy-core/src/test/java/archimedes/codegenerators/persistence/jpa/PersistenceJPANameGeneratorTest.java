@@ -146,8 +146,13 @@ public class PersistenceJPANameGeneratorTest {
 	class DBOPackageNameTests {
 
 		@Test
-		void getDBOPackageName_PassANullValue_ReturnsANullValue() {
-			assertNull(unitUnderTest.getDBOPackageName(null));
+		void getDBOPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getDBOPackageName(null, table));
+		}
+
+		@Test
+		void getDBOPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("persistence.entities", unitUnderTest.getDBOPackageName(model, null));
 		}
 
 		@Test
@@ -156,7 +161,7 @@ public class PersistenceJPANameGeneratorTest {
 			String expected = BASE_PACKAGE_NAME + ".persistence.entities";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
-			String returned = unitUnderTest.getDBOPackageName(model);
+			String returned = unitUnderTest.getDBOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -167,7 +172,7 @@ public class PersistenceJPANameGeneratorTest {
 			String expected = "persistence.entities";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
-			String returned = unitUnderTest.getDBOPackageName(model);
+			String returned = unitUnderTest.getDBOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -178,7 +183,7 @@ public class PersistenceJPANameGeneratorTest {
 			String expected = "persistence.entities";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
-			String returned = unitUnderTest.getDBOPackageName(model);
+			String returned = unitUnderTest.getDBOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}

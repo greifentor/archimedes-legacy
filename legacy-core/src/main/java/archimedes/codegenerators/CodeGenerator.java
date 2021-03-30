@@ -14,6 +14,6 @@ public interface CodeGenerator {
 
 	String getClassName(TableModel table);
 
-	String getPackageName(DataModel model);
+	String getPackageName(DataModel model, TableModel table);
 
 }

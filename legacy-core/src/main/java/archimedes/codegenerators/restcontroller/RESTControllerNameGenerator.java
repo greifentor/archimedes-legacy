@@ -18,16 +18,16 @@ public class RESTControllerNameGenerator extends NameGenerator {
 		return table != null ? getClassName(table) + "DTO" : null;
 	}
 
-	public String getDTOPackageName(DataModel model) {
-		return model != null ? getBasePackageNameWithDotExtension(model) + "rest.dto" : null;
+	public String getDTOPackageName(DataModel model, TableModel table) {
+		return model != null ? getBasePackageNameWithDotExtension(model, table) + "rest.dto" : null;
 	}
 
 	public String getDTOConverterClassName(TableModel table) {
 		return table != null ? getClassName(table) + "DTOConverter" : null;
 	}
 
-	public String getDTOConverterPackageName(DataModel model) {
-		return model != null ? getBasePackageNameWithDotExtension(model) + "rest.converter" : null;
+	public String getDTOConverterPackageName(DataModel model, TableModel table) {
+		return model != null ? getBasePackageNameWithDotExtension(model, table) + "rest.converter" : null;
 	}
 
 	public String getListDTOClassName(TableModel table) {
@@ -38,8 +38,8 @@ public class RESTControllerNameGenerator extends NameGenerator {
 		return table != null ? getClassName(table) + "RESTController" : null;
 	}
 
-	public String getRESTControllerPackageName(DataModel model) {
-		return model != null ? getBasePackageNameWithDotExtension(model) + "rest" : null;
+	public String getRESTControllerPackageName(DataModel model, TableModel table) {
+		return model != null ? getBasePackageNameWithDotExtension(model, table) + "rest" : null;
 	}
 
 	public String getURLName(DataModel model, TableModel table) {

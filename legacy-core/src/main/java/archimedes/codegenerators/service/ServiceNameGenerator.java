@@ -22,11 +22,11 @@ public class ServiceNameGenerator extends NameGenerator {
 		return table != null ? getClassName(table) + "Service" : null;
 	}
 
-	public String getServicePackageName(DataModel model) {
+	public String getServicePackageName(DataModel model, TableModel table) {
 		if (model == null) {
 			return null;
 		}
-		String basePackageName = getBasePackageNameWithDotExtension(model);
+		String basePackageName = getBasePackageNameWithDotExtension(model, table);
 		String packageName = "service";
 		return basePackageName + packageName;
 	}
@@ -35,11 +35,11 @@ public class ServiceNameGenerator extends NameGenerator {
 		return table != null ? getClassName(table) + "SO" : null;
 	}
 
-	public String getSOPackageName(DataModel model) {
+	public String getSOPackageName(DataModel model, TableModel table) {
 		if (model == null) {
 			return null;
 		}
-		String basePackageName = getBasePackageNameWithDotExtension(model);
+		String basePackageName = getBasePackageNameWithDotExtension(model, table);
 		OptionModel optionAlternatePackageNameForSOClasses = model.getOptionByName(ALTERNATE_PACKAGE_SO_CLASS);
 		String packageName = "service.model";
 		if (optionAlternatePackageNameForSOClasses != null) {

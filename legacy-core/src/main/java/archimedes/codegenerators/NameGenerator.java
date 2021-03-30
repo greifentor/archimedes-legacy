@@ -17,6 +17,7 @@ import archimedes.model.TableModel;
 public class NameGenerator {
 
 	public static final String PLURAL_NAME = "PLURAL_NAME";
+	public static final String TECHNICAL_CONTEXT = "TECHNICAL_CONTEXT";
 
 	public String getAttributeName(ColumnModel column) {
 		return getAttributeName(column, false);
@@ -96,10 +97,18 @@ public class NameGenerator {
 		return StringUtils.left(s, 1).toUpperCase() + (s.length() > 1 ? s.substring(1) : "");
 	}
 
-	protected String getBasePackageNameWithDotExtension(DataModel model) {
-		return (model.getBasePackageName() == null) || model.getBasePackageName().isEmpty()
+	protected String getBasePackageNameWithDotExtension(DataModel model, TableModel table) {
+		String technicalContextName = getTechnicalContextName(table);
+		return ((model.getBasePackageName() == null) || model.getBasePackageName().isEmpty()
 				? ""
-				: model.getBasePackageName() + ".";
+				: model.getBasePackageName() + ".")
+				+ (technicalContextName.isEmpty() ? "" : technicalContextName + ".");
+	}
+
+	private String getTechnicalContextName(TableModel table) {
+		return table == null
+				? ""
+				: OptionGetter.getOptionByName(table, TECHNICAL_CONTEXT).map(OptionModel::getParameter).orElse("");
 	}
 
 	protected String getPluralName(TableModel table) {

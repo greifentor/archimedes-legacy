@@ -41,18 +41,20 @@ public class DTOConverterClassCodeGenerator extends AbstractClassCodeGenerator<R
 		context
 				.put(
 						"DTOClassNameQualified",
-						getQualifiedName(nameGenerator.getDTOPackageName(model), nameGenerator.getDTOClassName(table)));
+						getQualifiedName(
+								nameGenerator.getDTOPackageName(model, table),
+								nameGenerator.getDTOClassName(table)));
 		context.put("GenerateIdClass", isGenerateIdClass(model, table));
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
-		context.put("PackageName", getPackageName(model));
+		context.put("PackageName", getPackageName(model, table));
 		context.put("SOClassName", serviceNameGenerator.getSOClassName(table));
 		context
 				.put(
 						"SOClassNameQualified",
 						getQualifiedName(
-								serviceNameGenerator.getSOPackageName(model),
+								serviceNameGenerator.getSOPackageName(model, table),
 								serviceNameGenerator.getSOClassName(table)));
 	}
 
@@ -93,8 +95,8 @@ public class DTOConverterClassCodeGenerator extends AbstractClassCodeGenerator<R
 	}
 
 	@Override
-	public String getPackageName(DataModel model) {
-		return nameGenerator.getDTOConverterPackageName(model);
+	public String getPackageName(DataModel model, TableModel table) {
+		return nameGenerator.getDTOConverterPackageName(model, table);
 	}
 
 }

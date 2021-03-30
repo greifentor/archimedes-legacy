@@ -257,8 +257,13 @@ public class ServiceNameGeneratorTest {
 	class ServicePackageNameTests {
 
 		@Test
-		void getServicePackageName_PassANullValue_ReturnsANullValue() {
-			assertNull(unitUnderTest.getServicePackageName(null));
+		void getServicePackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getServicePackageName(null, table));
+		}
+
+		@Test
+		void getServicePackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("service", unitUnderTest.getServicePackageName(model, null));
 		}
 
 		@Test
@@ -267,7 +272,7 @@ public class ServiceNameGeneratorTest {
 			String expected = BASE_PACKAGE_NAME + ".service";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
-			String returned = unitUnderTest.getServicePackageName(model);
+			String returned = unitUnderTest.getServicePackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -278,7 +283,7 @@ public class ServiceNameGeneratorTest {
 			String expected = "service";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
-			String returned = unitUnderTest.getServicePackageName(model);
+			String returned = unitUnderTest.getServicePackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -289,7 +294,7 @@ public class ServiceNameGeneratorTest {
 			String expected = "service";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
-			String returned = unitUnderTest.getServicePackageName(model);
+			String returned = unitUnderTest.getServicePackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -410,8 +415,13 @@ public class ServiceNameGeneratorTest {
 	class SOPackageNameTests {
 
 		@Test
-		void getSOPackageName_PassANullValue_ReturnsANullValue() {
-			assertNull(unitUnderTest.getSOPackageName(null));
+		void getSOPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getSOPackageName(null, table));
+		}
+
+		@Test
+		void getSOPackageName_PassANullValueAsTable_ReturnsDefaultValue() {
+			assertEquals("service.model", unitUnderTest.getSOPackageName(model, null));
 		}
 
 		@Test
@@ -420,7 +430,7 @@ public class ServiceNameGeneratorTest {
 			String expected = BASE_PACKAGE_NAME + ".service.model";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
-			String returned = unitUnderTest.getSOPackageName(model);
+			String returned = unitUnderTest.getSOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -431,7 +441,7 @@ public class ServiceNameGeneratorTest {
 			String expected = "service.model";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
-			String returned = unitUnderTest.getSOPackageName(model);
+			String returned = unitUnderTest.getSOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -442,7 +452,7 @@ public class ServiceNameGeneratorTest {
 			String expected = "service.model";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
-			String returned = unitUnderTest.getSOPackageName(model);
+			String returned = unitUnderTest.getSOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -456,7 +466,7 @@ public class ServiceNameGeneratorTest {
 			when(option.getParameter()).thenReturn(alternatePackageName);
 			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_PACKAGE_SO_CLASS)).thenReturn(option);
 			// Run
-			String returned = unitUnderTest.getSOPackageName(model);
+			String returned = unitUnderTest.getSOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}

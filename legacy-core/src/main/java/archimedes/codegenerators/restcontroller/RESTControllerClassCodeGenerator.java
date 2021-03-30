@@ -42,13 +42,15 @@ public class RESTControllerClassCodeGenerator extends AbstractClassCodeGenerator
 				.put(
 						"DTOConverterClassNameQualified",
 						getQualifiedName(
-								nameGenerator.getDTOConverterPackageName(model),
+								nameGenerator.getDTOConverterPackageName(model, table),
 								nameGenerator.getDTOConverterClassName(table)));
 		context.put("DTOClassName", nameGenerator.getDTOClassName(table));
 		context
 				.put(
 						"DTOClassNameQualified",
-						getQualifiedName(nameGenerator.getDTOPackageName(model), nameGenerator.getDTOClassName(table)));
+						getQualifiedName(
+								nameGenerator.getDTOPackageName(model, table),
+								nameGenerator.getDTOClassName(table)));
 		context.put("ListDTOClassName", nameGenerator.getListDTOClassName(table));
 		context.put("GenerateIdClass", isGenerateIdClass(model, table));
 		context.put("IdCall", getIdCall(model, table));
@@ -56,37 +58,37 @@ public class RESTControllerClassCodeGenerator extends AbstractClassCodeGenerator
 				.put(
 						"IdSOClassNameQualified",
 						getQualifiedName(
-								serviceNameGenerator.getSOPackageName(model),
+								serviceNameGenerator.getSOPackageName(model, table),
 								serviceNameGenerator.getIdSOClassName(table)));
 		context
 				.put(
 						"ListDTOClassNameQualified",
 						getQualifiedName(
-								nameGenerator.getDTOPackageName(model),
+								nameGenerator.getDTOPackageName(model, table),
 								nameGenerator.getListDTOClassName(table)));
 		context
 				.put(
 						"ListDTOClassNameQualified",
 						getQualifiedName(
-								nameGenerator.getDTOPackageName(model),
+								nameGenerator.getDTOPackageName(model, table),
 								nameGenerator.getListDTOClassName(table)));
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
-		context.put("PackageName", getPackageName(model));
+		context.put("PackageName", getPackageName(model, table));
 		context.put("ServiceClassName", serviceNameGenerator.getServiceClassName(table));
 		context
 				.put(
 						"ServiceClassNameQualified",
 						getQualifiedName(
-								serviceNameGenerator.getServicePackageName(model),
+								serviceNameGenerator.getServicePackageName(model, table),
 								serviceNameGenerator.getServiceClassName(table)));
 		context.put("SimpleName", nameGenerator.getSimpleName(table));
 		context
 				.put(
 						"SOClassNameQualified",
 						getQualifiedName(
-								serviceNameGenerator.getSOPackageName(model),
+								serviceNameGenerator.getSOPackageName(model, table),
 								serviceNameGenerator.getSOClassName(table)));
 		context.put("URL", nameGenerator.getURLName(model, table));
 	}
@@ -120,8 +122,8 @@ public class RESTControllerClassCodeGenerator extends AbstractClassCodeGenerator
 	}
 
 	@Override
-	public String getPackageName(DataModel model) {
-		return nameGenerator.getRESTControllerPackageName(model);
+	public String getPackageName(DataModel model, TableModel table) {
+		return nameGenerator.getRESTControllerPackageName(model, table);
 	}
 
 }

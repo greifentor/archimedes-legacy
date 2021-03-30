@@ -4,14 +4,12 @@ import static corentx.util.Checks.ensure;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
-import archimedes.model.OptionListProvider;
 import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
@@ -41,8 +39,10 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	public void generate(String path, String basePackageName, DataModel dataModel, TableModel tableModel) {
 		String code = generate(basePackageName, dataModel, tableModel);
-		String pathName =
-				path + SLASH + getBaseCodeFolderName(dataModel) + SLASH + getPackageName(dataModel).replace(".", SLASH);
+		String pathName = path + SLASH
+				+ getBaseCodeFolderName(dataModel)
+				+ SLASH
+				+ getPackageName(dataModel, tableModel).replace(".", SLASH);
 		File packagePath = new File(pathName);
 		if (!packagePath.exists()) {
 			packagePath.mkdirs();
@@ -116,16 +116,14 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	protected POJOMode getPOJOMode(DataModel model, TableModel table) {
 		ensure(model != null, "data model cannot be null.");
 		ensure(table != null, "table model cannot be null.");
-		return getOptionByName(table, POJO_MODE)
+		return OptionGetter
+				.getOptionByName(table, POJO_MODE)
 				.map(option -> POJOMode.valueOf(option.getParameter()))
 				.orElse(
-						getOptionByName(model, POJO_MODE)
+						OptionGetter
+								.getOptionByName(model, POJO_MODE)
 								.map(option -> POJOMode.valueOf(option.getParameter()))
 								.orElse(POJOMode.CHAIN));
-	}
-
-	private Optional<OptionModel> getOptionByName(OptionListProvider optionListProvider, String name) {
-		return Optional.ofNullable(optionListProvider.getOptionByName(name));
 	}
 
 }
