@@ -4,7 +4,7 @@ IF NOT EXIST "java-engine-path.bat" GOTO PathSet
 
 SET LIB=.\lib
 
-SET CP=.\legacy-core\target\archimedes-legacy-core-2.0.3-executable.jar
+SET CP=.\legacy-core\target\archimedes-legacy-core-2.0.4-executable.jar
 
 SET CP=%CP%;%LIB%\baccaraacf.jar
 SET CP=%CP%;%LIB%\commons-lang3-3.1.jar
