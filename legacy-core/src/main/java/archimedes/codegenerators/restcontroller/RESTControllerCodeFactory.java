@@ -25,9 +25,8 @@ import archimedes.model.TableModel;
 public class RESTControllerCodeFactory extends AbstractCodeFactory
 		implements CodeFactoryProgressionEventProvider, StandardCodeFactoryProgressionFrameUser {
 
-	public static final String TEMPLATE_PATH =
-			System.getProperty("CodeFactory.templates.path", "src/main/resources/templates")
-					+ System.getProperty("RESTControllerCodeFactory.templates.folder", "/restcontroller");
+	public static final String TEMPLATE_FOLDER_PATH = AbstractCodeFactory.TEMPLATE_PATH + System
+			.getProperty(RESTControllerCodeFactory.class.getSimpleName() + ".templates.folder", "/restcontroller");
 
 	private static final Logger LOG = LogManager.getLogger(RESTControllerCodeFactory.class);
 

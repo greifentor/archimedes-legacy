@@ -27,7 +27,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 	public DBOClassCodeGenerator() {
 		super(
 				"DBOClass.vm",
-				PersistenceJPACodeFactory.TEMPLATE_PATH,
+				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
 				new PersistenceJPANameGenerator(),
 				new TypeGenerator());
 	}

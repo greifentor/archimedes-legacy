@@ -27,7 +27,7 @@ public class RESTControllerClassCodeGenerator extends AbstractClassCodeGenerator
 	public RESTControllerClassCodeGenerator() {
 		super(
 				"RESTControllerClass.vm",
-				RESTControllerCodeFactory.TEMPLATE_PATH,
+				RESTControllerCodeFactory.TEMPLATE_FOLDER_PATH,
 				new RESTControllerNameGenerator(),
 				new TypeGenerator());
 	}

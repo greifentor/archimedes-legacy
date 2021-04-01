@@ -24,7 +24,7 @@ public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTContro
 	public DTOClassCodeGenerator() {
 		super(
 				"DTOClass.vm",
-				RESTControllerCodeFactory.TEMPLATE_PATH,
+				RESTControllerCodeFactory.TEMPLATE_FOLDER_PATH,
 				new RESTControllerNameGenerator(),
 				new TypeGenerator());
 	}

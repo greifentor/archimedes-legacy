@@ -17,7 +17,7 @@ public class ListDTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTCo
 	public ListDTOClassCodeGenerator() {
 		super(
 				"ListDTOClass.vm",
-				RESTControllerCodeFactory.TEMPLATE_PATH,
+				RESTControllerCodeFactory.TEMPLATE_FOLDER_PATH,
 				new RESTControllerNameGenerator(),
 				new TypeGenerator());
 	}

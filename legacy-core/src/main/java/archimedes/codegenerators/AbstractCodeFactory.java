@@ -19,10 +19,14 @@ import baccara.gui.GUIBundle;
  */
 public abstract class AbstractCodeFactory implements CodeFactory, CodeFactoryProgressionEventProvider {
 
+	public static final String TEMPLATE_PATH =
+			System.getProperty("CodeFactory.templates.path", "src/main/resources/templates");
+
 	protected DataModel dataModel;
 	protected GUIBundle guiBundle;
 	protected ModelCheckerMessageListFrameListener[] modelCheckerMessagelisteners =
 			new ModelCheckerMessageListFrameListener[0];
+
 	private List<CodeFactoryListener> listeners = new ArrayList<>();
 	private List<CodeFactoryProgressionListener> progressListeners = new ArrayList<>();
 
