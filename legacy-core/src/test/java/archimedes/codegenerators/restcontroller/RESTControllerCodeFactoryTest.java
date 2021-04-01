@@ -43,7 +43,6 @@ public class RESTControllerCodeFactoryTest {
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
 			assertServiceFilesExisting("", tempDir);
-			assertRESTClientFilesExisting("", tempDir);
 		}
 
 		public void assertServiceFilesExisting(String prefix, Path tempDir) {
@@ -66,13 +65,6 @@ public class RESTControllerCodeFactoryTest {
 									+ "/src/main/java/base/pack/age/name/rest/ATableRESTController.java").exists());
 		}
 
-		public void assertRESTClientFilesExisting(String prefix, Path tempDir) {
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString() + prefix
-									+ "/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java").exists());
-		}
-
 		@Test
 		void happyRunInModuleMode(@TempDir Path tempDir) {
 			// Prepare
@@ -84,7 +76,6 @@ public class RESTControllerCodeFactoryTest {
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
 			assertServiceFilesExisting("/app-service", tempDir);
-			assertRESTClientFilesExisting("/app-rest-client", tempDir);
 		}
 
 		@Test
@@ -97,7 +88,6 @@ public class RESTControllerCodeFactoryTest {
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
 			assertServiceFilesExisting("/service", tempDir);
-			assertRESTClientFilesExisting("/rest-client", tempDir);
 		}
 
 		@Test
@@ -112,7 +102,6 @@ public class RESTControllerCodeFactoryTest {
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
 			assertServiceFilesExisting("/alt-service", tempDir);
-			assertRESTClientFilesExisting("/alt-rest-client", tempDir);
 		}
 
 		@Test
@@ -127,7 +116,6 @@ public class RESTControllerCodeFactoryTest {
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
 			assertServiceFilesExisting("/service", tempDir);
-			assertRESTClientFilesExisting("/rest-client", tempDir);
 		}
 
 	}
