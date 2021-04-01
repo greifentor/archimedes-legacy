@@ -24,8 +24,9 @@ import archimedes.model.TableModel;
 public class PersistenceJPACodeFactory extends AbstractCodeFactory
 		implements CodeFactoryProgressionEventProvider, StandardCodeFactoryProgressionFrameUser {
 
-	public static final String TEMPLATE_PATH = System
-			.getProperty("PersistenceJPACodeFactory.templates.path", "src/main/resources/templates/persistence-jpa");
+	public static final String TEMPLATE_PATH =
+			System.getProperty("CodeFactory.templates.path", "src/main/resources/templates")
+					+ System.getProperty("PersistenceJPACodeFactory.templates.folder", "/persistence-jpa");
 
 	private static final Logger LOG = LogManager.getLogger(PersistenceJPACodeFactory.class);
 
