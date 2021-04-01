@@ -27,7 +27,7 @@ public class RESTControllerCodeFactory extends AbstractCodeFactory
 
 	public static final String TEMPLATE_PATH =
 			System.getProperty("CodeFactory.templates.path", "src/main/resources/templates")
-					+ System.getProperty("RestControllerCodeFactory.templates.folder", "/restcontroller");
+					+ System.getProperty("RESTControllerCodeFactory.templates.folder", "/restcontroller");
 
 	private static final Logger LOG = LogManager.getLogger(RESTControllerCodeFactory.class);
 

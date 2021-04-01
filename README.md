@@ -43,10 +43,18 @@ This working with Window only in the moment.
 
 ## News
 
-### 2.0.1 (24.03.2021)
+Will be provided since version 2.1.1 is released.
 
-* Ticks on the work sheet raster are standard now. It could be disabled by holding the SHIFT key pressed on dragging a
-GUI object.
+
+## Code Factories
+
+### Templates
+
+Each Archimedes Code Factory works with Velocity templates. These are found in the sub folders of 
+"archimedes-legacy/legacy-core/src/main/resources/templates". This may be configured to another path by property
+"CodeFactory.templates.path". The folder name for each code factory is to configure by property 
+"{CodeFactorySimpleClassName}.templates.folder" (e. g. "RESTControllerCodeFactory.templates.folder"). The default 
+values of the configurations should work in standard cases.
 
 
 ## Compare Data Models
