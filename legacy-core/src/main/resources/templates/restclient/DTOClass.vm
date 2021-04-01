@@ -1,0 +1,25 @@
+package ${PackageName};
+
+#if ($ImportLocalDate)
+import ${ImportLocalDate};
+
+#end
+import lombok.Data;
+import lombok.Generated;
+import lombok.experimental.Accessors;
+
+/**
+ * A DTO for ${PluralName}.
+ *
+ * ${Generated}
+ */
+@Accessors(chain = true)
+@Data
+@Generated
+public class ${ClassName} {
+
+#foreach($Column in $ColumnData)
+	private ${Column.getFieldType()} ${Column.getFieldName()};
+#end
+
+}
