@@ -30,15 +30,19 @@ public class RESTClientNameGenerator extends NameGenerator {
 		return model != null ? getBasePackageNameWithDotExtension(model, table) + "rest.converter" : null;
 	}
 
+	public String getIdDTOClassName(TableModel table) {
+		return table != null ? getClassName(table) + "IdDTO" : null;
+	}
+
 	public String getListDTOClassName(TableModel table) {
 		return table != null ? getClassName(table) + "ListDTO" : null;
 	}
 
-	public String getRESTControllerClassName(TableModel table) {
-		return table != null ? getClassName(table) + "RESTController" : null;
+	public String getRESTClientClassName(TableModel table) {
+		return table != null ? getClassName(table) + "RESTClient" : null;
 	}
 
-	public String getRESTControllerPackageName(DataModel model, TableModel table) {
+	public String getRESTClientPackageName(DataModel model, TableModel table) {
 		return model != null ? getBasePackageNameWithDotExtension(model, table) + "rest" : null;
 	}
 

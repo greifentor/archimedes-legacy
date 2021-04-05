@@ -1,0 +1,21 @@
+package ${PackageName};
+
+import lombok.Data;
+import lombok.Generated;
+import lombok.experimental.Accessors;
+
+/**
+ * An id DTO for ${PluralName}.
+ *
+ * ${Generated}
+ */
+@Accessors(chain = true)
+@Data
+@Generated
+public class ${ClassName} {
+
+#foreach($Column in $ColumnData)
+	private ${Column.getFieldType()} ${Column.getFieldName()};
+#end
+
+}
