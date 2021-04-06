@@ -64,7 +64,7 @@ public class RESTClientClassCodeGeneratorTest {
 					"		RestTemplate restTemplate = new RestTemplate();\n" + //
 					"		String fooResourceUrl = \"http://localhost:8080/api/v1/atables/\" + id.getId();\n" + //
 					"		return Optional\n" + //
-					"				.ofNullable(restTemplate.getForObject(fooResourceUrl, ATableDTO.class)));\n" + //
+					"				.ofNullable(restTemplate.getForObject(fooResourceUrl, ATableDTO.class));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"}";

@@ -23,7 +23,12 @@ public class RESTClientCodeFactory extends AbstractClassCodeFactory
 
 	@Override
 	protected List<CodeGenerator> getCodeGenerators() {
-		return Arrays.asList(new DTOClassCodeGenerator());
+		return Arrays
+				.asList(
+						new DTOClassCodeGenerator(),
+						new IdDTOClassCodeGenerator(),
+						new ListDTOClassCodeGenerator(),
+						new RESTClientClassCodeGenerator());
 	}
 
 	@Override

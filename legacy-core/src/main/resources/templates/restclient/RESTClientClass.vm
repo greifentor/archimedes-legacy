@@ -26,7 +26,7 @@ public class ${ClassName} {
 		RestTemplate restTemplate = new RestTemplate();
 		String fooResourceUrl = "http://localhost:8080/${URL}/" + id.getId();
 		return Optional
-				.ofNullable(restTemplate.getForObject(fooResourceUrl, ${DTOClassName}.class)));
+				.ofNullable(restTemplate.getForObject(fooResourceUrl, ${DTOClassName}.class));
 	}
 
 }

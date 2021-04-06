@@ -36,7 +36,7 @@ public class ListDTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTCl
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
-		return "service";
+		return "rest-client";
 	}
 
 	@Override

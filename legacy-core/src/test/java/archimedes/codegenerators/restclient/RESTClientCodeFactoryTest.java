@@ -50,6 +50,18 @@ public class RESTClientCodeFactoryTest {
 					new File(
 							tempDir.toAbsolutePath().toString() + prefix
 									+ "/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java").exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString() + prefix
+									+ "/src/main/java/base/pack/age/name/rest/dto/ATableIdDTO.java").exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString() + prefix
+									+ "/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java").exists());
+			assertTrue(
+					new File(
+							tempDir.toAbsolutePath().toString() + prefix
+									+ "/src/main/java/base/pack/age/name/rest/ATableRESTClient.java").exists());
 		}
 
 		@Test
