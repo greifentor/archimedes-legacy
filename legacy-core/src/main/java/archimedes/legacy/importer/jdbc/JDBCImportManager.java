@@ -2,7 +2,9 @@ package archimedes.legacy.importer.jdbc;
 
 import java.sql.Connection;
 
+import archimedes.legacy.importer.jdbc.postprocessor.PostgreSQLImportPostProcessor;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.model.DataModel;
 import corent.db.ConnectionManager;
 import corent.db.JDBCDataSourceRecord;
 import de.ollie.archimedes.alexandrian.service.so.DatabaseSO;
@@ -28,6 +30,7 @@ public class JDBCImportManager {
 		if (importData.getConnection() != null) {
 			importData.getConnection().close();
 		}
+		postProcess(model);
 		return model;
 	}
 
@@ -47,6 +50,10 @@ public class JDBCImportManager {
 				.setImportOnlyTablePatterns(connectionData.getImportOnlyTablePatterns())
 				.setPassword(connectionData.getPassword())
 				.setSchema(connectionData.getSchema());
+	}
+
+	private void postProcess(DataModel model) {
+		new PostgreSQLImportPostProcessor(model);
 	}
 
 	/**
