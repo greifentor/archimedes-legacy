@@ -38,17 +38,21 @@ public class IdDTOClassCodeGeneratorTest {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".rest.dto;\n" + //
 					"\n" + //
-					"import lombok.Data;\n" + //
+					"import lombok.AllArgsConstructor;\n" + //
+					"import lombok.EqualsAndHashCode;\n" + //
 					"import lombok.Generated;\n" + //
-					"import lombok.experimental.Accessors;\n" + //
+					"import lombok.Getter;\n" + //
+					"import lombok.ToString;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * An id DTO for a_tables.\n" + //
 					" *\n" + //
 					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 					" */\n" + //
-					"@Accessors(chain = true)\n" + //
-					"@Data\n" + //
+					"@AllArgsConstructor\n" + //
+					"@EqualsAndHashCode\n" + //
+					"@Getter\n" + //
+					"@ToString\n" + //
 					"@Generated\n" + //
 					"public class ATableIdDTO {\n" + //
 					"\n" + //

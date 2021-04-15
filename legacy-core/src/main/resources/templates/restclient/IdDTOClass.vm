@@ -1,16 +1,20 @@
 package ${PackageName};
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Generated;
-import lombok.experimental.Accessors;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * An id DTO for ${PluralName}.
  *
  * ${Generated}
  */
-@Accessors(chain = true)
-@Data
+@AllArgsConstructor
+@EqualsAndHashCode
+@Getter
+@ToString
 @Generated
 public class ${ClassName} {
 
