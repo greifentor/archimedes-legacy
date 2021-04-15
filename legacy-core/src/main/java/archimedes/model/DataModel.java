@@ -31,6 +31,8 @@ public interface DataModel extends CommentOwner, ComplexIndexListProvider, Datab
 		DiagramGUISupport, GeneratorSupport, GUIDiagramModel, HistoryOwner, ImportSupport, OptionListProvider,
 		SQLGeneratorSupport, StereotypeListProvider, UdschebtiSupport, ViewProvider {
 
+	public static final String SCHEMA_NAME = "SCHEMA_NAME";
+
 	/**
 	 * Adds the passed data model listener.
 	 *

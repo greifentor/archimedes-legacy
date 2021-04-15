@@ -5,6 +5,7 @@ import java.sql.Connection;
 import archimedes.legacy.importer.jdbc.postprocessor.PostgreSQLImportPostProcessor;
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.model.DataModel;
+import archimedes.scheme.Option;
 import corent.db.ConnectionManager;
 import corent.db.JDBCDataSourceRecord;
 import de.ollie.archimedes.alexandrian.service.so.DatabaseSO;
@@ -29,6 +30,9 @@ public class JDBCImportManager {
 		DiagrammModel model = importDiagram(importData, listener);
 		if (importData.getConnection() != null) {
 			importData.getConnection().close();
+		}
+		if ((importData.getSchema() != null) && !importData.getSchema().isEmpty()) {
+			model.addOption(new Option(DataModel.SCHEMA_NAME, importData.getSchema()));
 		}
 		postProcess(model);
 		return model;

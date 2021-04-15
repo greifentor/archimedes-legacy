@@ -30,10 +30,18 @@ public class DataModelToCMOConverter {
 	}
 
 	public DataModelCMO convert(DataModel dataModel, TableIgnore tableIgnore) {
-		DataModelCMO cmo = DataModelCMO.of(SchemaCMO.of(DEFAULT_SCHEMA_NAME, getTables(dataModel, tableIgnore)));
+		DataModelCMO cmo = DataModelCMO
+				.of(SchemaCMO.of(getSchemaName(dataModel, DEFAULT_SCHEMA_NAME), getTables(dataModel, tableIgnore)));
 		addForeignKeys(cmo, dataModel);
 		addPrimaryKeys(cmo, dataModel);
 		return cmo;
+	}
+
+	private String getSchemaName(DataModel model, String defaultSchemaName) {
+		if (model.getOptionByName(DataModel.SCHEMA_NAME) != null) {
+			return model.getOptionByName(DataModel.SCHEMA_NAME).getParameter();
+		}
+		return defaultSchemaName;
 	}
 
 	private TableCMO[] getTables(DataModel dataModel, TableIgnore tableIgnore) {
