@@ -38,6 +38,9 @@ public class DataModelToCMOConverter {
 	}
 
 	private String getSchemaName(DataModel model, String defaultSchemaName) {
+		if ((model.getSchemaName() != null) && !model.getSchemaName().isEmpty()) {
+			return model.getSchemaName();
+		}
 		if (model.getOptionByName(DataModel.SCHEMA_NAME) != null) {
 			return model.getOptionByName(DataModel.SCHEMA_NAME).getParameter();
 		}
@@ -88,11 +91,16 @@ public class DataModelToCMOConverter {
 								.getTables()
 								.entrySet()
 								.stream()
-								.forEach(tableValue -> addForeignKeys(tableValue.getValue(), cmo, dataModel)));
+								.forEach(
+										tableValue -> addForeignKeys(
+												schemaValue.getValue().getName(),
+												tableValue.getValue(),
+												cmo,
+												dataModel)));
 	}
 
-	private void addForeignKeys(TableCMO table, DataModelCMO cmo, DataModel dataModel) {
-		SchemaCMO schema = cmo.getSchemata().get(DEFAULT_SCHEMA_NAME);
+	private void addForeignKeys(String schemaName, TableCMO table, DataModelCMO cmo, DataModel dataModel) {
+		SchemaCMO schema = cmo.getSchemata().get(schemaName);
 		Arrays
 				.asList(dataModel.getTableByName(table.getName()).getColumns())
 				.stream()
