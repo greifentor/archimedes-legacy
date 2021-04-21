@@ -1,6 +1,5 @@
 package archimedes.legacy.updater;
 
-import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
 
@@ -227,9 +226,6 @@ public class ModelUpdater {
 	}
 
 	private DomainModel getDomain(int sqlType, Integer length, Integer precision, DataModel dataModel) {
-		if (sqlType == 16) { // Boolean
-			sqlType = Types.INTEGER;
-		}
 		DomainModel dom = objectFactory
 				.createDomain("*", sqlType, length == null ? -1 : length, precision == null ? -1 : precision);
 		String typeName = dom.getType().replace("(", "").replace(")", "").replace(" ", "");

@@ -53,7 +53,13 @@ public class PostgreSQLImportPostProcessor extends DataModelVisitor {
 				.stream()
 				.filter(domain -> domain.getDataType() == type)
 				.findFirst()
-				.orElse(new Domain("BoolValue", Types.BOOLEAN, 0, 0));
+				.orElse(createBooleanDomain(model));
+	}
+
+	private DomainModel createBooleanDomain(DataModel model) {
+		DomainModel d = new Domain("BoolValue", Types.BOOLEAN, 0, 0);
+		model.addDomain(d);
+		return d;
 	}
 
 	@Override
