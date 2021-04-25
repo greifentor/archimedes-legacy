@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.TypeGenerator;
@@ -21,12 +22,13 @@ import archimedes.model.TableModel;
  */
 public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTControllerNameGenerator> {
 
-	public DTOClassCodeGenerator() {
+	public DTOClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"DTOClass.vm",
 				RESTControllerCodeFactory.TEMPLATE_FOLDER_PATH,
 				new RESTControllerNameGenerator(),
-				new TypeGenerator());
+				new TypeGenerator(),
+				codeFactory);
 	}
 
 	@Override

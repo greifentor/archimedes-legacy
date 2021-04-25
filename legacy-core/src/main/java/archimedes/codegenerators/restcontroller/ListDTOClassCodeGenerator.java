@@ -3,6 +3,7 @@ package archimedes.codegenerators.restcontroller;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -14,12 +15,13 @@ import archimedes.model.TableModel;
  */
 public class ListDTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTControllerNameGenerator> {
 
-	public ListDTOClassCodeGenerator() {
+	public ListDTOClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"ListDTOClass.vm",
 				RESTControllerCodeFactory.TEMPLATE_FOLDER_PATH,
 				new RESTControllerNameGenerator(),
-				new TypeGenerator());
+				new TypeGenerator(),
+				codeFactory);
 	}
 
 	@Override

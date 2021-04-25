@@ -24,10 +24,10 @@ public class RESTControllerCodeFactory extends AbstractClassCodeFactory
 	protected List<CodeGenerator> getCodeGenerators() {
 		return Arrays
 				.asList(
-						new DTOClassCodeGenerator(),
-						new DTOConverterClassCodeGenerator(),
-						new ListDTOClassCodeGenerator(),
-						new RESTControllerClassCodeGenerator());
+						new DTOClassCodeGenerator(this),
+						new DTOConverterClassCodeGenerator(this),
+						new ListDTOClassCodeGenerator(this),
+						new RESTControllerClassCodeGenerator(this));
 	}
 
 	@Override

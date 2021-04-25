@@ -10,6 +10,8 @@ import archimedes.model.TableModel;
  */
 public interface CodeGenerator {
 
+	String getSourceFileName(String basePackageName, DataModel model, TableModel table);
+
 	String generate(String basePackageName, DataModel model, TableModel table);
 
 	String getClassName(TableModel table);

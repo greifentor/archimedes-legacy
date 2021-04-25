@@ -31,12 +31,14 @@ public class Columns {
 	@Data
 	public static class ColumnData {
 		private List<AnnotationData> annotations = new ArrayList<>();
+		private String descriptionName;
 		private String fieldName;
 		private String fieldType;
 		private String getterCall;
 		private String getterName;
 		private boolean pkMember;
 		private String setterName;
+		private String simpleName;
 	}
 
 	public static boolean containsFieldWithType(List<ColumnData> columnData, String typeName) {

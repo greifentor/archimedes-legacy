@@ -11,6 +11,7 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
 
+import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
@@ -28,6 +29,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 
 	private static final Logger LOG = LogManager.getLogger(AbstractCodeGenerator.class);
 
+	protected AbstractCodeFactory codeFactory;
 	protected N nameGenerator;
 	protected TypeGenerator typeGenerator;
 
@@ -38,8 +40,10 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 			String templateFileName,
 			String templatePathName,
 			N nameGenerator,
-			TypeGenerator typeGenerator) {
+			TypeGenerator typeGenerator,
+			AbstractCodeFactory codeFactory) {
 		super();
+		this.codeFactory = codeFactory;
 		this.nameGenerator = nameGenerator;
 		this.templateFileName = changeSeparators(templateFileName);
 		this.templatePathName = changeSeparators(templatePathName);

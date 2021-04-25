@@ -46,7 +46,7 @@ public class NameGenerator {
 
 	private boolean startsWithUpperCaseCharacter(String s) {
 		String firstChar = StringUtils.left(s, 1);
-		return firstChar.equals(firstChar.toUpperCase());
+		return firstChar.equals(firstChar.toUpperCase()); // NOSONAR OLI: Sonar is wrong with this case.
 	}
 
 	private String firstCharToLowerCase(String s) {
@@ -54,17 +54,20 @@ public class NameGenerator {
 	}
 
 	public String getClassName(TableModel tableSO) {
-		String tableName = tableSO.getName();
-		ensure(!tableName.isEmpty(), "table name cannot be empty.");
-		if (containsUnderScores(tableName)) {
-			tableName = buildTableNameFromUnderScoreString(tableName);
-		} else if (allCharactersAreUpperCase(tableName)) {
-			tableName = tableName.toLowerCase();
+		return getClassName(tableSO.getName());
+	}
+
+	public String getClassName(String s) {
+		ensure(!s.isEmpty(), "string cannot be empty.");
+		if (containsUnderScores(s)) {
+			s = buildTableNameFromUnderScoreString(s);
+		} else if (allCharactersAreUpperCase(s)) {
+			s = s.toLowerCase();
 		}
-		if (startsWithLowerCaseCharacter(tableName)) {
-			tableName = firstCharToUpperCase(tableName);
+		if (startsWithLowerCaseCharacter(s)) {
+			s = firstCharToUpperCase(s);
 		}
-		return tableName;
+		return s;
 	}
 
 	private boolean containsUnderScores(String s) {
@@ -109,6 +112,48 @@ public class NameGenerator {
 		return table == null
 				? ""
 				: OptionGetter.getOptionByName(table, TECHNICAL_CONTEXT).map(OptionModel::getParameter).orElse("");
+	}
+
+	public String getCamelCase(String s) {
+		if (s == null) {
+			return null;
+		}
+		s = s.replace("_", " ");
+		StringBuilder sb = new StringBuilder(s.substring(0, 1).toUpperCase());
+		for (int i = 1; i < s.length(); i++) {
+			String c = String.valueOf(s.charAt(i));
+			sb
+					.append(
+							(s.charAt(i - 1) == ' ')
+									? c.toUpperCase()
+									: getFirstCharToLowerCaseOnTwoDoublesPassed(c.charAt(0), s.charAt(i - 1)));
+		}
+		return sb.toString().replace(" ", "");
+	}
+
+	private boolean isUpperCase(char c) {
+		return (c >= 'A') && (c < 'Z');
+	}
+
+	private String getFirstCharToLowerCaseOnTwoDoublesPassed(char c0, char c1) {
+		return isUpperCase(c0) && isUpperCase(c1) ? String.valueOf(c0).toLowerCase() : String.valueOf(c0);
+	}
+
+	public String getDescriptionName(String s) {
+		ensure(s != null, "string cannot be null.");
+		if (s.isEmpty()) {
+			return s;
+		}
+		s = getCamelCase(s);
+		StringBuilder sb = new StringBuilder(s.substring(0, 1));
+		for (int i = 1; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (isUpperCase(c)) {
+				sb.append("_");
+			}
+			sb.append(c);
+		}
+		return sb.toString().replace("_", " ").toLowerCase();
 	}
 
 	protected String getPluralName(TableModel table) {

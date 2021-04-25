@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
@@ -24,12 +25,13 @@ import archimedes.model.TableModel;
  */
 public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
 
-	public DBOClassCodeGenerator() {
+	public DBOClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"DBOClass.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
 				new PersistenceJPANameGenerator(),
-				new TypeGenerator());
+				new TypeGenerator(),
+				codeFactory);
 	}
 
 	@Override

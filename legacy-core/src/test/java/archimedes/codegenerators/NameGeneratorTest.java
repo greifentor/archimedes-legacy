@@ -184,4 +184,79 @@ public class NameGeneratorTest {
 
 	}
 
+	@Nested
+	class TestsOfMethod_getDescriptionName_String {
+
+		@Test
+		void passANullValue_ThrowsAnException() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.getDescriptionName(null));
+		}
+
+		@Test
+		void passAnEmptyString_ReturnsAnEmptyString() {
+			assertEquals("", unitUnderTest.getDescriptionName(""));
+		}
+
+		@Test
+		void passASimpleString_ReturnsTheCorrectDescriptionName() {
+			assertEquals("simple", unitUnderTest.getDescriptionName("simple"));
+		}
+
+		@Test
+		void passASimpleStringStartingWithUpperCaseLetter_ReturnsTheCorrectDescriptionName() {
+			assertEquals("simple", unitUnderTest.getDescriptionName("Simple"));
+		}
+
+		@Test
+		void passASimpleStringHavingUpperCaseLetterInside_ReturnsTheCorrectDescriptionName() {
+			assertEquals("simple name", unitUnderTest.getDescriptionName("SimpleName"));
+		}
+
+		@Test
+		void passASimpleStringHavingUnderScoreInside_ReturnsTheCorrectDescriptionName() {
+			assertEquals("simple name", unitUnderTest.getDescriptionName("simple_name"));
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_getCamelCase_String {
+
+		@Test
+		void passANullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getCamelCase(null));
+		}
+
+		@Test
+		void passASimpleStringWithNoUpperCaseLetters_ReturnsThePassedStringStartingWithUpperCaseLetter() {
+			assertEquals("Simple", unitUnderTest.getCamelCase("simple"));
+		}
+
+		@Test
+		void passASimpleStringStartingWithAnUpperCaseLetters_ReturnsThePassedString() {
+			assertEquals("Simple", unitUnderTest.getCamelCase("Simple"));
+		}
+
+		@Test
+		void passAValidUpperCaseString_ReturnsThePassedString() {
+			assertEquals("SimpleString", unitUnderTest.getCamelCase("SimpleString"));
+		}
+
+		@Test
+		void passAStringWithSpaces_ReturnsACamelCaseString() {
+			assertEquals("SimpleString", unitUnderTest.getCamelCase("simple string"));
+		}
+
+		@Test
+		void passAStringWithUnderscores_ReturnsACamelCaseString() {
+			assertEquals("SimpleString", unitUnderTest.getCamelCase("simple_string"));
+		}
+
+		@Test
+		void passAnUpperCaseStringWithUnderscores_ReturnsACamelCaseString() {
+			assertEquals("SimpleString", unitUnderTest.getCamelCase("SIMPLE_STRING"));
+		}
+
+	}
+
 }

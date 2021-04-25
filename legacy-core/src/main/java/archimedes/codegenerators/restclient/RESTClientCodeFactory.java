@@ -25,10 +25,10 @@ public class RESTClientCodeFactory extends AbstractClassCodeFactory
 	protected List<CodeGenerator> getCodeGenerators() {
 		return Arrays
 				.asList(
-						new DTOClassCodeGenerator(),
-						new IdDTOClassCodeGenerator(),
-						new ListDTOClassCodeGenerator(),
-						new RESTClientClassCodeGenerator());
+						new DTOClassCodeGenerator(this),
+						new IdDTOClassCodeGenerator(this),
+						new ListDTOClassCodeGenerator(this),
+						new RESTClientClassCodeGenerator(this));
 	}
 
 	@Override

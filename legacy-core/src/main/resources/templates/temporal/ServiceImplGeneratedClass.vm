@@ -1,0 +1,34 @@
+package ${PackageName};
+
+#if ($ImportLocalDate)
+import ${ImportLocalDate};
+
+#end
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import lombok.Generated;
+
+import ${IdSOClassNameQualified};
+import ${ServiceInterfaceNameQualified};
+import ${PersistencePortInterfaceNameQualified};
+
+/**
+ * ${Generated}
+ */
+@Generated
+public abstract class ${ClassName} implements ${ServiceInterfaceName} {
+
+	private static final Logger logger = LogManager.getLogger(${ClassName}.class);
+
+	protected abstract ${PersistencePortInterfaceName} getPersistencePort();
+
+#foreach($Column in $ColumnData)
+	@Override
+	public void set${Column.getSimpleName()}(${IdSOClassName} id, ${Column.getFieldType()} ${Column.getFieldName()}) {
+		logger.info("set ${Column.getDescriptionName()} for ${DescriptionName} '{}' to: {}", id, ${Column.getFieldName()});
+		getPersistencePort().save${Column.getSimpleName()}(id, ${Column.getFieldName()});
+	}
+
+#end
+}

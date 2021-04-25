@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.TypeGenerator;
@@ -24,12 +25,13 @@ public class DTOConverterClassCodeGenerator extends AbstractClassCodeGenerator<R
 
 	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
-	public DTOConverterClassCodeGenerator() {
+	public DTOConverterClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"DTOConverterClass.vm",
 				RESTControllerCodeFactory.TEMPLATE_FOLDER_PATH,
 				new RESTControllerNameGenerator(),
-				new TypeGenerator());
+				new TypeGenerator(),
+				codeFactory);
 	}
 
 	@Override

@@ -22,6 +22,8 @@ public class AbstractClassCodeGeneratorTest {
 	private static final String TEMPLATE_PATH_NAME = "template/path/name";
 
 	@Mock
+	private AbstractCodeFactory codeFactory;
+	@Mock
 	private DataModel model;
 	@Mock
 	private TableModel table;
@@ -34,7 +36,8 @@ public class AbstractClassCodeGeneratorTest {
 				TEMPLATE_FILE_NAME,
 				TEMPLATE_PATH_NAME,
 				new NameGenerator(),
-				new TypeGenerator()) {
+				new TypeGenerator(),
+				codeFactory) {
 			@Override
 			public String getClassName(TableModel table) {
 				return null;

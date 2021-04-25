@@ -22,7 +22,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory
 
 	@Override
 	protected List<CodeGenerator> getCodeGenerators() {
-		return Arrays.asList(new DBOClassCodeGenerator());
+		return Arrays.asList(new DBOClassCodeGenerator(this));
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.TypeGenerator;
@@ -24,12 +25,13 @@ public class RESTControllerClassCodeGenerator extends AbstractClassCodeGenerator
 
 	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
-	public RESTControllerClassCodeGenerator() {
+	public RESTControllerClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"RESTControllerClass.vm",
 				RESTControllerCodeFactory.TEMPLATE_FOLDER_PATH,
 				new RESTControllerNameGenerator(),
-				new TypeGenerator());
+				new TypeGenerator(),
+				codeFactory);
 	}
 
 	@Override

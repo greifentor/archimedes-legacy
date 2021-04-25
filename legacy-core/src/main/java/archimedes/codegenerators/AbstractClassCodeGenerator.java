@@ -33,21 +33,14 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 			String templateFileName,
 			String templatePathName,
 			N nameGenerator,
-			TypeGenerator typeGenerator) {
-		super(templateFileName, templatePathName, nameGenerator, typeGenerator);
+			TypeGenerator typeGenerator,
+			AbstractCodeFactory codeFactory) {
+		super(templateFileName, templatePathName, nameGenerator, typeGenerator, codeFactory);
 	}
 
 	public void generate(String path, String basePackageName, DataModel dataModel, TableModel tableModel) {
 		String code = generate(basePackageName, dataModel, tableModel);
-		String pathName = path + SLASH
-				+ getBaseCodeFolderName(dataModel)
-				+ SLASH
-				+ getPackageName(dataModel, tableModel).replace(".", SLASH);
-		File packagePath = new File(pathName);
-		if (!packagePath.exists()) {
-			packagePath.mkdirs();
-		}
-		String fileName = pathName + SLASH + getClassName(tableModel) + getClassFileExtension(dataModel);
+		String fileName = getSourceFileName(path, dataModel, tableModel);
 		try (FileWriter writer = new FileWriter(fileName)) {
 			writer.write(code);
 			LOG.info("wrote file: {}", fileName);
@@ -79,6 +72,19 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	private String getAlternateModuleName(DataModel dataModel) {
 		OptionModel option = dataModel.getOptionByName(AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX);
 		return option != null ? option.getParameter() : null;
+	}
+
+	@Override
+	public String getSourceFileName(String path, DataModel dataModel, TableModel tableModel) {
+		String pathName = path + SLASH
+				+ getBaseCodeFolderName(dataModel)
+				+ SLASH
+				+ getPackageName(dataModel, tableModel).replace(".", SLASH);
+		File packagePath = new File(pathName);
+		if (!packagePath.exists()) {
+			packagePath.mkdirs();
+		}
+		return pathName + SLASH + getClassName(tableModel) + getClassFileExtension(dataModel);
 	}
 
 	protected abstract String getDefaultModuleName(DataModel dataModel);
