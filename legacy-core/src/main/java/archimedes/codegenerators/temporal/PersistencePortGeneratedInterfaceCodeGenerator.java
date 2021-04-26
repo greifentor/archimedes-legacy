@@ -15,15 +15,16 @@ import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
- * A class code generator for service impl classes in a temporal data.
+ * A class code generator for persistence port interface in a temporal data
  *
  * @author ollie (25.04.2021)
  */
-public class ServiceImplGeneratedClassCodeGenerator extends AbstractClassCodeGenerator<TemporalDataNameGenerator> {
+public class PersistencePortGeneratedInterfaceCodeGenerator
+		extends AbstractClassCodeGenerator<TemporalDataNameGenerator> {
 
-	public ServiceImplGeneratedClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	public PersistencePortGeneratedInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"ServiceImplGeneratedClass.vm",
+				"PersistencePortGeneratedInterface.vm",
 				TemporalDataCodeFactory.TEMPLATE_FOLDER_PATH,
 				new TemporalDataNameGenerator(),
 				new TypeGenerator(),
@@ -33,27 +34,14 @@ public class ServiceImplGeneratedClassCodeGenerator extends AbstractClassCodeGen
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		List<ColumnData> columnData = getColumnData(table.getColumns());
-		context.put("ClassName", nameGenerator.getServiceImplGeneratedClassName(table));
+		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
-		context.put("DescriptionName", nameGenerator.getDescriptionName(table.getName()));
 		context.put("IdSOClassName", nameGenerator.getIdSOClassName(table));
 		context
 				.put(
 						"IdSOClassNameQualified",
 						nameGenerator.getIdSOClassPackageName(model, table) + "."
 								+ nameGenerator.getIdSOClassName(table));
-		context.put("PersistencePortInterfaceName", nameGenerator.getPersistencePortInterfaceName(table));
-		context
-				.put(
-						"PersistencePortInterfaceNameQualified",
-						nameGenerator.getPersistencePortPackageName(model, table) + "."
-								+ nameGenerator.getPersistencePortInterfaceName(table));
-		context.put("ServiceInterfaceName", nameGenerator.getServiceInterfaceName(table));
-		context
-				.put(
-						"ServiceInterfaceNameQualified",
-						nameGenerator.getServicePackageName(model, table) + "."
-								+ nameGenerator.getServiceInterfaceName(table));
 		context.put("PackageName", getPackageName(model, table));
 	}
 
@@ -65,7 +53,6 @@ public class ServiceImplGeneratedClassCodeGenerator extends AbstractClassCodeGen
 				.filter(column -> typeGenerator.getJavaTypeString(column.getDomain(), false).equals("String"))
 				.map(
 						column -> new ColumnData()
-								.setDescriptionName(nameGenerator.getDescriptionName(column.getName()))
 								.setFieldName(nameGenerator.getAttributeName(column))
 								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false))
 								.setSimpleName(nameGenerator.getClassName(column.getName())))
@@ -74,7 +61,7 @@ public class ServiceImplGeneratedClassCodeGenerator extends AbstractClassCodeGen
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getServiceImplGeneratedClassName(table);
+		return nameGenerator.getPersistencePortGeneratedInterfaceName(table);
 	}
 
 	@Override
@@ -84,7 +71,7 @@ public class ServiceImplGeneratedClassCodeGenerator extends AbstractClassCodeGen
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getServiceImplPackageName(model, table);
+		return nameGenerator.getPersistencePortPackageName(model, table);
 	}
 
 }

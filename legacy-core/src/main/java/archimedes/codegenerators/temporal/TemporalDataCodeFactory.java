@@ -25,7 +25,12 @@ public class TemporalDataCodeFactory extends AbstractClassCodeFactory
 
 	@Override
 	protected List<CodeGenerator> getCodeGenerators() {
-		return Arrays.asList(new ServiceImplGeneratedClassCodeGenerator(this));
+		return Arrays
+				.asList(
+						new PersistencePortGeneratedInterfaceCodeGenerator(this),
+						new PersistencePortAdapterGeneratedClassCodeGenerator(this),
+						new ServiceImplGeneratedClassCodeGenerator(this),
+						new ServiceGeneratedInterfaceCodeGenerator(this));
 	}
 
 	@Override

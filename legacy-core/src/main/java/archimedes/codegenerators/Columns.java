@@ -32,6 +32,7 @@ public class Columns {
 	public static class ColumnData {
 		private List<AnnotationData> annotations = new ArrayList<>();
 		private String descriptionName;
+		private String enumIdentifier;
 		private String fieldName;
 		private String fieldType;
 		private String getterCall;

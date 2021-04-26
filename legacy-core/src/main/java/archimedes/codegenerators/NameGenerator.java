@@ -32,7 +32,7 @@ public class NameGenerator {
 		return getAttributeName(columnName);
 	}
 
-	protected String getAttributeName(String s) {
+	public String getAttributeName(String s) {
 		if (containsUnderScores(s)) {
 			s = buildTableNameFromUnderScoreString(s);
 		} else if (allCharactersAreUpperCase(s)) {
@@ -118,6 +118,9 @@ public class NameGenerator {
 		if (s == null) {
 			return null;
 		}
+		if (s.isEmpty()) {
+			return "";
+		}
 		s = s.replace("_", " ");
 		StringBuilder sb = new StringBuilder(s.substring(0, 1).toUpperCase());
 		for (int i = 1; i < s.length(); i++) {
@@ -154,6 +157,25 @@ public class NameGenerator {
 			sb.append(c);
 		}
 		return sb.toString().replace("_", " ").toLowerCase();
+	}
+
+	public String getEnumIdentifier(String s) {
+		if (s == null) {
+			return null;
+		}
+		if (s.isEmpty()) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(s.substring(0, 1));
+		for (int i = 1; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (isUpperCase(c) && (s.charAt(i - 1) != ' ') && (s.charAt(i - 1) != '_')
+					&& !isUpperCase(s.charAt(i - 1))) {
+				sb.append("_");
+			}
+			sb.append(c);
+		}
+		return sb.toString().toUpperCase();
 	}
 
 	protected String getPluralName(TableModel table) {

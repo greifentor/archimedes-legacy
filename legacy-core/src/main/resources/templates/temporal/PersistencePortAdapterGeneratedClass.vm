@@ -1,0 +1,39 @@
+package ${PackageName};
+
+#if ($ImportLocalDate)
+import ${ImportLocalDate};
+
+#end
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import lombok.Generated;
+
+import ${PackageName}.converter.${SimpleClassName}SimpleFieldChangeTo${SimpleClassName}ChangeDboConverter;
+import ${PackageName}.dbo.${SimpleClassName}AttributeDBO;
+import ${PackageName}.dbo.${SimpleClassName}ChangeActionDBO;
+import ${IdSOClassNameQualified};
+import ${PersistencePortGeneratedInterfaceNameQualified};
+
+/**
+ * ${Generated}
+ */
+@Generated
+public abstract class ${ClassName} implements ${PersistencePortGeneratedInterfaceName} {
+
+	private static final Logger logger = LogManager.getLogger(${ClassName}.class);
+
+	protected abstract ${SimpleClassName}SimpleFieldChangeTo${SimpleClassName}ChangeDboConverter<String> simpleFieldChangeToActionDBOConverter();
+
+	protected abstract void processAction(${SimpleClassName}ChangeActionDBO action, ${IdSOClassName} id);
+
+#foreach($Column in $ColumnData)
+	@Override
+	public void save${Column.getSimpleName()}(${IdSOClassName} id, ${Column.getFieldType()} ${Column.getFieldName()}) {
+		logger.info("new ${Column.getDescriptionName()} send to persistence port: {}", ${Column.getFieldName()});
+		${SimpleClassName}ChangeActionDBO action = simpleFieldChangeToActionDBOConverter().convert(${SimpleClassName}AttributeDBO.${Column.getEnumIdentifier()}, ${Column.getFieldName()});
+		processAction(action, id);
+	}
+
+#end
+}

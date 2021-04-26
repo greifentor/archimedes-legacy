@@ -31,7 +31,6 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 		LOG.info("Started code generation for: {}", getClass().getSimpleName());
 		new File(path).mkdirs();
 		String basePackageName = dataModel.getBasePackageName();
-		int process = 0;
 		List<CodeGenerator> generators = getCodeGenerators();
 		Counter processCounter = new Counter(1);
 		initializeProgress(generators.size());

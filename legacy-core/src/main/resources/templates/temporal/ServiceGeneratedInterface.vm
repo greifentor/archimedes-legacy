@@ -1,0 +1,21 @@
+package ${PackageName};
+
+#if ($ImportLocalDate)
+import ${ImportLocalDate};
+
+#end
+import lombok.Generated;
+
+import ${IdSOClassNameQualified};
+
+/**
+ * ${Generated}
+ */
+@Generated
+public interface ${ClassName} {
+
+#foreach($Column in $ColumnData)
+	void set${Column.getSimpleName()}(${IdSOClassName} id, ${Column.getFieldType()} ${Column.getFieldName()});
+
+#end
+}

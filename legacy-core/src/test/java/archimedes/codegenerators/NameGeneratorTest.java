@@ -228,6 +228,11 @@ public class NameGeneratorTest {
 		}
 
 		@Test
+		void passAnEmptyString_ReturnsAEmptyString() {
+			assertEquals("", unitUnderTest.getCamelCase(""));
+		}
+
+		@Test
 		void passASimpleStringWithNoUpperCaseLetters_ReturnsThePassedStringStartingWithUpperCaseLetter() {
 			assertEquals("Simple", unitUnderTest.getCamelCase("simple"));
 		}
@@ -255,6 +260,51 @@ public class NameGeneratorTest {
 		@Test
 		void passAnUpperCaseStringWithUnderscores_ReturnsACamelCaseString() {
 			assertEquals("SimpleString", unitUnderTest.getCamelCase("SIMPLE_STRING"));
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_getEnumIdentfier_String {
+
+		@Test
+		void passANullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getEnumIdentifier(null));
+		}
+
+		@Test
+		void passAnEmptyString_ReturnsAEmptyString() {
+			assertEquals("", unitUnderTest.getEnumIdentifier(""));
+		}
+
+		@Test
+		void passAnUpperCaseString_ReturnsThePassedString() {
+			// Prepare
+			String expected = "UPPER_CASE_STRING";
+			// Run
+			String returned = unitUnderTest.getEnumIdentifier(expected);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void passAnLowerCaseString_ReturnsThePassedString() {
+			// Prepare
+			String expected = "UPPER_CASE_STRING";
+			// Run
+			String returned = unitUnderTest.getEnumIdentifier(expected.toLowerCase());
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void passAnCamelCaseString_ReturnsThePassedString() {
+			// Prepare
+			String expected = "UPPER_CASE_STRING";
+			// Run
+			String returned = unitUnderTest.getEnumIdentifier("upperCaseString");
+			// Check
+			assertEquals(expected, returned);
 		}
 
 	}
