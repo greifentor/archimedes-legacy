@@ -85,6 +85,8 @@ import archimedes.legacy.acf.gui.CodeFactoryProgressionFrame;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.legacy.app.ApplicationUtil;
 import archimedes.legacy.checkers.ModelCheckerDomainNotInuse;
+import archimedes.legacy.checkers.ModelCheckerNoPrimaryKeySet;
+import archimedes.legacy.checkers.ModelCheckerPotentialForeignKeyNotSet;
 import archimedes.legacy.exporter.LiquibaseScriptCreator;
 import archimedes.legacy.gui.codepath.CodePathProvider;
 import archimedes.legacy.gui.comparision.DataModelComparison;
@@ -307,7 +309,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		GlobalEventManager.AddGlobalListener(this);
 		this.guiBundle = guiBundle;
 		buildInModelCheckers = Arrays
-				.asList(new ModelCheckerDomainNotInuse(guiBundle), new ModelCheckerDomainSetForAllColumns(guiBundle));
+				.asList(
+						new ModelCheckerDomainNotInuse(guiBundle),
+						new ModelCheckerDomainSetForAllColumns(guiBundle),
+						new ModelCheckerPotentialForeignKeyNotSet(guiBundle),
+						new ModelCheckerNoPrimaryKeySet(guiBundle));
 		int i = 0;
 		JMenuItem menuItem = null;
 
@@ -1494,6 +1500,12 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 	private void setPredeterminedOptionProviderForDiagram() {
 		CompoundPredeterminedOptionProvider compoundOptionProvider = new CompoundPredeterminedOptionProvider();
+		compoundOptionProvider
+				.addOptions(
+						OptionType.COLUMN,
+						new String[] { ModelCheckerPotentialForeignKeyNotSet.SUPPRESS_POTENTIAL_FK_WARNING });
+		compoundOptionProvider
+				.addOptions(OptionType.TABLE, new String[] { ModelCheckerNoPrimaryKeySet.SUPPRESS_NO_PK_WARNING });
 		for (Object cf : getCodeFactories("")) {
 			if (cf instanceof PredeterminedOptionProvider) {
 				for (OptionType optionType : OptionType.values()) {
@@ -1914,16 +1926,19 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * Updates the warning message.
 	 *
 	 * @param message The message which is to update.
-	 * @param warning Set this flag if the message notifies a warning or an error.
+	 * @param warning Set this flag if the message notifies a warning.
+	 * @param error   Set this flag if the message notifies an error.
 	 *
 	 * @changed OLI 18.05.2016 - Added.
 	 */
-	public void updateWarnings(final String message, final boolean warning) {
+	public void updateWarnings(String message, boolean warning, boolean error) {
 		this.component.updateWarnings(message);
-		if (warning) {
+		if (warning && !error) {
+			this.component.setWarningLabelForeGround(new Color(203, 166, 18));
+		} else if (error) {
 			this.component.setWarningLabelForeGround(Color.RED);
 		} else {
-			this.component.setWarningLabelForeGround(Color.BLACK);
+			this.component.setWarningLabelForeGround(new Color(94, 132, 84));
 		}
 	}
 
@@ -2261,19 +2276,16 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			final int errorCount = this.getMessageCount(mcms, ModelCheckerMessage.Level.ERROR);
 			final int warnCount = this.getMessageCount(mcms, ModelCheckerMessage.Level.WARNING);
 			String s = "";
-			boolean warning = false;
 			if (errorCount > 0) {
 				s += this.guiBundle.getResourceText(RES_WARNING_MESSAGES_ERRORS_DETECTED, errorCount);
-				warning = true;
 			}
 			if (warnCount > 0) {
 				s += ((s.length() > 0) ? ", " : "")
 						+ this.guiBundle.getResourceText(RES_WARNING_MESSAGES_WARNINGS_DETECTED, warnCount);
-				warning = true;
 			}
-			this.updateWarnings(s, warning);
+			this.updateWarnings(s, warnCount > 0, errorCount > 0);
 		} else {
-			this.updateWarnings(this.guiBundle.getResourceText(RES_WARNING_MESSAGES_NO_WARNINGS), false);
+			this.updateWarnings(this.guiBundle.getResourceText(RES_WARNING_MESSAGES_NO_WARNINGS), false, false);
 		}
 		this.menuGenerate.setEnabled(isReadyToGenerate());
 		this.lastModelCheckerMessages = mcms;

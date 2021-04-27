@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * An implementation of the PredeterminedOptionProvider interface for keep the predetermined options of many providers
@@ -43,7 +44,7 @@ public class CompoundPredeterminedOptionProvider implements PredeterminedOptionP
 	public String[] getSelectableOptions(OptionType optionType) {
 		ensure(optionType != null, new NullPointerException("option type cannot be null to get selectable options."));
 		List<String> l = selectableOptions.get(optionType);
-		return l.toArray(new String[l.size()]);
+		return l.stream().sorted().collect(Collectors.toList()).toArray(new String[l.size()]);
 	}
 
 }
