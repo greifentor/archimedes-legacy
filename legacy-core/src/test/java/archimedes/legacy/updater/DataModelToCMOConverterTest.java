@@ -16,6 +16,7 @@ import de.ollie.dbcomp.model.ColumnCMO;
 import de.ollie.dbcomp.model.DataModelCMO;
 import de.ollie.dbcomp.model.ForeignKeyCMO;
 import de.ollie.dbcomp.model.ForeignKeyMemberCMO;
+import de.ollie.dbcomp.model.IndexCMO;
 import de.ollie.dbcomp.model.SchemaCMO;
 import de.ollie.dbcomp.model.TableCMO;
 import de.ollie.dbcomp.model.TypeCMO;
@@ -117,6 +118,45 @@ public class DataModelToCMOConverterTest {
 		DataModelCMO expected = DataModelCMO.of(SchemaCMO.of("", anotherTable, aTable, tableB));
 		// Run
 		DataModelCMO returned = unitUnderTest.convert(dataModel, table -> table.getOptionByName("NO_DB") != null);
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void passADataModelWithASimpleIndexOnATable_ReturnsACorrectDataModel() {
+		// Prepare
+		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+		DataModel dataModel = reader.read("src/test/resources/dm/DataModel2DataModelCMO-SimpleIndex.xml");
+		ColumnCMO idColumn = ColumnCMO.of("Id", TypeCMO.of(Types.BIGINT, 0, 0), false, false);
+		ColumnCMO indexedColumn = ColumnCMO.of("IndexedColumn", TypeCMO.of(Types.BIGINT, 0, 0), false, false);
+		TableCMO aTable = TableCMO
+				.of(
+						"ATable",
+						idColumn,
+						ColumnCMO.of("Name", TypeCMO.of(Types.VARCHAR, 100, 0), false, true),
+						indexedColumn)
+				.addPrimaryKeys(idColumn.getName());
+		aTable.addIndex(IndexCMO.of("ix_ATable_IndexedColumn", indexedColumn));
+		DataModelCMO expected = DataModelCMO.of(SchemaCMO.of("", aTable));
+		// Run
+		DataModelCMO returned = unitUnderTest.convert(dataModel);
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void passADataModelWithAComplexIndexOnATable_ReturnsACorrectDataModel() {
+		// Prepare
+		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+		DataModel dataModel = reader.read("src/test/resources/dm/DataModel2DataModelCMO-ComplexIndex.xml");
+		ColumnCMO idColumn = ColumnCMO.of("Id", TypeCMO.of(Types.BIGINT, 0, 0), false, false);
+		ColumnCMO indexedColumn = ColumnCMO.of("IndexedColumn", TypeCMO.of(Types.BIGINT, 0, 0), false, false);
+		ColumnCMO nameColumn = ColumnCMO.of("Name", TypeCMO.of(Types.VARCHAR, 100, 0), false, true);
+		TableCMO aTable = TableCMO.of("ATable", idColumn, nameColumn, indexedColumn).addPrimaryKeys(idColumn.getName());
+		aTable.addIndex(IndexCMO.of("ix_ATable_IndexedColumn_Name", indexedColumn, nameColumn));
+		DataModelCMO expected = DataModelCMO.of(SchemaCMO.of("", aTable));
+		// Run
+		DataModelCMO returned = unitUnderTest.convert(dataModel);
 		// Check
 		assertEquals(expected, returned);
 	}

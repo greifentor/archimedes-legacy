@@ -7,11 +7,13 @@ import java.util.stream.Collectors;
 
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.IndexMetaData;
 import archimedes.model.TableModel;
 import de.ollie.dbcomp.model.ColumnCMO;
 import de.ollie.dbcomp.model.DataModelCMO;
 import de.ollie.dbcomp.model.ForeignKeyCMO;
 import de.ollie.dbcomp.model.ForeignKeyMemberCMO;
+import de.ollie.dbcomp.model.IndexCMO;
 import de.ollie.dbcomp.model.SchemaCMO;
 import de.ollie.dbcomp.model.TableCMO;
 import de.ollie.dbcomp.model.TypeCMO;
@@ -34,6 +36,7 @@ public class DataModelToCMOConverter {
 				.of(SchemaCMO.of(getSchemaName(dataModel, DEFAULT_SCHEMA_NAME), getTables(dataModel, tableIgnore)));
 		addForeignKeys(cmo, dataModel);
 		addPrimaryKeys(cmo, dataModel);
+		addIndices(cmo, dataModel);
 		return cmo;
 	}
 
@@ -158,6 +161,60 @@ public class DataModelToCMOConverter {
 		if (!pkMemberNames.isEmpty()) {
 			table.addPrimaryKeys(pkMemberNames.toArray(new String[pkMemberNames.size()]));
 		}
+	}
+
+	private void addIndices(DataModelCMO cmo, DataModel dataModel) {
+		cmo
+				.getSchemata()
+				.entrySet()
+				.stream()
+				.forEach(schemaValue -> schemaValue.getValue().getTables().entrySet().stream().forEach(tableValue -> {
+					addSimpleIndices(schemaValue.getValue(), dataModel);
+					addComplexIndices(schemaValue.getValue(), dataModel);
+				}));
+	}
+
+	private void addSimpleIndices(SchemaCMO schema, DataModel dataModel) {
+		Arrays
+				.asList(dataModel.getAllColumns())
+				.stream()
+				.filter(ColumnModel::hasIndex)
+				.forEach(column -> setIndexForColumn(column, schema));
+	}
+
+	private void setIndexForColumn(ColumnModel column, SchemaCMO schema) {
+		TableCMO table = getTable(schema, column.getTable());
+		ColumnCMO col = getColumn(schema, column);
+		if ((table != null) && (col != null)) {
+			table.addIndex(IndexCMO.of("ix_" + table.getName() + "_" + column.getName(), col));
+		}
+	}
+
+	private void addComplexIndices(SchemaCMO schema, DataModel dataModel) {
+		Arrays.asList(dataModel.getComplexIndices()).stream().forEach(index -> setIndexForModel(index, schema));
+	}
+
+	private void setIndexForModel(IndexMetaData index, SchemaCMO schema) {
+		TableCMO table = getTable(schema, (TableModel) index.getTable());
+		if (table != null) {
+			List<ColumnCMO> columns = getColumnOfIndex(index, schema);
+			String name = createIndexName(table.getName(), columns);
+			table.addIndex(IndexCMO.of(name, columns.toArray(new ColumnCMO[0])));
+		}
+	}
+
+	private List<ColumnCMO> getColumnOfIndex(IndexMetaData index, SchemaCMO schema) {
+		return Arrays
+				.asList(index.getColumns())
+				.stream()
+				.filter(column -> getColumn(schema, (ColumnModel) column) != null)
+				.map(column -> getColumn(schema, (ColumnModel) column))
+				.collect(Collectors.toList());
+	}
+
+	private String createIndexName(String tableName, List<ColumnCMO> columns) {
+		return "ix_" + tableName + "_"
+				+ columns.stream().map(ColumnCMO::getName).reduce((s0, s1) -> s0 + "_" + s1).orElse("");
 	}
 
 }
