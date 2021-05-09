@@ -315,6 +315,15 @@ public class JDBCModelReader implements ModelReader {
 		}
 	}
 
+	private boolean isAForeignKey(String indexName, TableSO table) {
+		for (ForeignKeySO foreignKey : table.getForeignKeys()) {
+			if (indexName.contains(foreignKey.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private void loadIndices(DatabaseMetaData dbmd, List<TableSO> tables, SchemeSO scheme) throws SQLException {
 		int max = tables.size();
 		int current = 0;
@@ -346,15 +355,6 @@ public class JDBCModelReader implements ModelReader {
 					new ModelReaderEvent(current, max, 5, ModelReaderEventType.INDEX_ADDED, table.getName()));
 			current++;
 		}
-	}
-
-	private boolean isAForeignKey(String indexName, TableSO table) {
-		for (ForeignKeySO foreignKey : table.getForeignKeys()) {
-			if (indexName.contains(foreignKey.getName())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private IndexSO getIndexByName(String name, TableSO table) {

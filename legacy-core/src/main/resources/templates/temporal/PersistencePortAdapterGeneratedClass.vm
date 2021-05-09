@@ -7,6 +7,9 @@ import ${ImportLocalDate};
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+import java.util.function.Function;
+
 import lombok.Generated;
 
 import ${PackageName}.converter.${SimpleClassName}SimpleFieldChangeTo${SimpleClassName}ChangeDboConverter;
@@ -27,6 +30,22 @@ public abstract class ${ClassName} implements ${PersistencePortGeneratedInterfac
 
 	protected abstract void processAction(${SimpleClassName}ChangeActionDBO action, ${IdSOClassName} id);
 
+	protected <T> T getValue(List<${SimpleClassName}ChangeActionDBO> actions, ${SimpleClassName}AttributeDBO attribute,
+			Function<String, T> setter, T defaultValue) {
+		return actions
+				.stream()
+				.filter(action -> action.getAttribute() == attribute)
+				.map(action -> setter.apply(action.getValue()))
+				.findFirst()
+				.orElse(defaultValue);
+	}
+
+#foreach($Column in $ColumnData)
+	protected String get${Column.getSimpleName()}(List<${SimpleClassName}ChangeActionDBO> actions) {
+		return getValue(actions, ${SimpleClassName}AttributeDBO.${Column.getEnumIdentifier()}, s -> s, "");
+	}
+
+#end
 #foreach($Column in $ColumnData)
 	@Override
 	public void save${Column.getSimpleName()}(${IdSOClassName} id, ${Column.getFieldType()} ${Column.getFieldName()}) {

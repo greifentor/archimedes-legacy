@@ -307,4 +307,54 @@ public class ModelUpdaterTest {
 		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
 	}
 
+	@Test
+	void passedModelWithOneIndexMoreThanSource_ReturnsAnUpdateReportWithMessageToAdd() {
+		// Prepare
+		UpdateReport expected = new UpdateReport()
+				.addUpdateReportAction(
+						new UpdateReportAction()
+								.setMessage(
+										"AddIndexCRO(tableName=Customer, schemaName=, indexName=ix_Customer_Name, indexMemberNames=[Name])")
+								.setStatus(Status.DONE)
+								.setType(Type.ADD_INDEX)
+								.setValues("ix_Customer_Name", "Customer", "[Name]"));
+		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
+		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Index-Added.xml");
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel0, dataModel1, Archimedes.Factory);
+		// Run
+		UpdateReport returned = unitUnderTest.update();
+		// Check
+		assertEquals(expected, returned);
+		assertNotNull(dataModel0.getTableByName("Customer"));
+		assertNotNull(dataModel0.getTableByName("Customer").getColumnByName("Name"));
+		assertTrue(dataModel0.getTableByName("Customer").getColumnByName("Name").hasIndex());
+		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
+	}
+
+	@Test
+	void passedModelWithOneIndexLessThanSource_ReturnsAnUpdateReportWithMessageToDrop() {
+		// Prepare
+		UpdateReport expected = new UpdateReport()
+				.addUpdateReportAction(
+						new UpdateReportAction()
+								.setMessage(
+										"DropIndexCRO(tableName=Customer, schemaName=, indexName=ix_Customer_Name, indexMemberNames=[Name])")
+								.setStatus(Status.DONE)
+								.setType(Type.DROP_INDEX)
+								.setValues("ix_Customer_Name", "Customer", "[Name]"));
+		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");
+		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Index-Added.xml");
+		ModelUpdater unitUnderTest = new ModelUpdater(dataModel1, dataModel0, Archimedes.Factory);
+		// Run
+		UpdateReport returned = unitUnderTest.update();
+		// Check
+		assertEquals(expected, returned);
+		assertNotNull(dataModel0.getTableByName("Customer"));
+		assertNotNull(dataModel0.getTableByName("Customer").getColumnByName("Name"));
+		assertFalse(dataModel0.getTableByName("Customer").getColumnByName("Name").hasIndex());
+		assertEquals(new UpdateReport(), unitUnderTest.update()); // Models are equal (means changes done).
+	}
+
 }

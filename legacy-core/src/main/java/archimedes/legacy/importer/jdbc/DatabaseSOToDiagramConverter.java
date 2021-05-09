@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import archimedes.legacy.Archimedes;
 import archimedes.legacy.importer.jdbc.JDBCImportConnectionData.Adjustment;
 import archimedes.legacy.model.DiagrammModel;
+import archimedes.legacy.scheme.DefaultIndexMetaData;
 import archimedes.legacy.scheme.Diagramm;
 import archimedes.legacy.scheme.Domain;
 import archimedes.legacy.scheme.MainView;
@@ -16,6 +17,7 @@ import archimedes.legacy.scheme.Tabelle;
 import archimedes.legacy.scheme.Tabellenspalte;
 import archimedes.model.ColumnModel;
 import archimedes.model.DomainModel;
+import archimedes.model.IndexMetaData;
 import archimedes.model.TableModel;
 import archimedes.model.ViewModel;
 import archimedes.model.gui.GUIViewModel;
@@ -29,6 +31,8 @@ import de.ollie.archimedes.alexandrian.service.so.OptionSO;
 import de.ollie.archimedes.alexandrian.service.so.ReferenceSO;
 import de.ollie.archimedes.alexandrian.service.so.SchemeSO;
 import de.ollie.archimedes.alexandrian.service.so.TableSO;
+import gengen.metadata.AttributeMetaData;
+import gengen.metadata.ClassMetaData;
 
 /**
  * A converter which converts database service objects into diagrams.
@@ -66,11 +70,13 @@ public class DatabaseSOToDiagramConverter {
 		}
 		diagram.setName(database.getName());
 		SchemeSO scheme = database.getSchemes().get(0);
-		List<TableSO> l = scheme.getTables() //
+		List<TableSO> l = scheme
+				.getTables() //
 				.stream() //
-				.sorted((t0, t1) -> tableAdjustment == Adjustment.CENTER_BY_REFERENCE_COUNT //
-						? getRelations(t1, scheme) - getRelations(t0, scheme) //
-						: t0.getName().compareTo(t1.getName())) //
+				.sorted(
+						(t0, t1) -> tableAdjustment == Adjustment.CENTER_BY_REFERENCE_COUNT //
+								? getRelations(t1, scheme) - getRelations(t0, scheme) //
+								: t0.getName().compareTo(t1.getName())) //
 				.collect(Collectors.toList());
 		int ff = 0;
 		for (TableSO table : l) {
@@ -94,6 +100,7 @@ public class DatabaseSOToDiagramConverter {
 			}
 		}
 		createForeignKeys(database.getSchemes().get(0).getTables(), diagram, mainView);
+		createIndices(database.getSchemes().get(0).getTables(), diagram);
 		return diagram;
 	}
 
@@ -149,13 +156,18 @@ public class DatabaseSOToDiagramConverter {
 		if (sqlType == 16) { // Boolean
 			sqlType = Types.INTEGER;
 		}
-		Domain dom = new Domain("*", sqlType, column.getType().getLength() == null ? -1 : column.getType().getLength(),
+		Domain dom = new Domain(
+				"*",
+				sqlType,
+				column.getType().getLength() == null ? -1 : column.getType().getLength(),
 				column.getType().getPrecision() == null ? -1 : column.getType().getPrecision());
 		String typeName = dom.getType().replace("(", "").replace(")", "").replace(" ", "");
 		typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1);
 		DomainModel domain = diagram.getDomainByName(typeName);
 		if (domain == null) {
-			domain = new Domain(typeName, sqlType,
+			domain = new Domain(
+					typeName,
+					sqlType,
 					column.getType().getLength() == null ? -1 : column.getType().getLength(),
 					column.getType().getPrecision() == null ? -1 : column.getType().getPrecision());
 			diagram.addDomain(domain);
@@ -175,6 +187,30 @@ public class DatabaseSOToDiagramConverter {
 				}
 			}
 		}
+	}
+
+	private void createIndices(List<TableSO> tables, DiagrammModel diagram) {
+		tables
+				.stream()
+				.filter(table -> !table.getIndices().isEmpty())
+				.forEach(table -> table.getIndices().forEach(index -> {
+					if (index.getColumns().size() == 1) {
+						ColumnSO column = index.getColumns().get(0);
+						TableModel tm = diagram.getTableByName(table.getName());
+						ColumnModel cm = tm.getColumnByName(column.getName());
+						if (cm != null) {
+							cm.setIndex(true);
+						}
+					} else if (index.getColumns().size() > 1) {
+						TableModel tm = diagram.getTableByName(table.getName());
+						IndexMetaData imd = new DefaultIndexMetaData(index.getName(), (ClassMetaData) tm);
+						index.getColumns().forEach(column -> {
+							ColumnModel cm = tm.getColumnByName(column.getName());
+							imd.addColumn((AttributeMetaData) cm);
+						});
+						diagram.addComplexIndex(imd);
+					}
+				}));
 	}
 
 }

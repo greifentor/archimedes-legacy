@@ -42,6 +42,9 @@ public class PersistencePortAdapterGeneratedClassCodeGeneratorTest {
 					"import org.apache.logging.log4j.LogManager;\n" + //
 					"import org.apache.logging.log4j.Logger;\n" + //
 					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.function.Function;\n" + //
+					"\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
 					"import " + BASE_PACKAGE_NAME
@@ -66,6 +69,21 @@ public class PersistencePortAdapterGeneratedClassCodeGeneratorTest {
 					"\n" + //
 					"	protected abstract void processAction(ATableChangeActionDBO action, ATableIdSO id);\n" + //
 					"\n" + //
+					"	protected <T> T getValue(List<ATableChangeActionDBO> actions, ATableAttributeDBO attribute,\n" + //
+					"			Function<String, T> setter, T defaultValue) {\n" + //
+					"		return actions\n" + //
+					"				.stream()\n" + //
+					"				.filter(action -> action.getAttribute() == attribute)\n" + //
+					"				.map(action -> setter.apply(action.getValue()))\n" + //
+					"				.findFirst()\n" + //
+					"				.orElse(defaultValue);\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	protected String getDescription(List<ATableChangeActionDBO> actions) {\n" + //
+					"		return getValue(actions, ATableAttributeDBO.DESCRIPTION, s -> s, \"\");\n" + //
+					"	}\n" + //
+					"\n" + //
+					"" + //
 					"	@Override\n" + //
 					"	public void saveDescription(ATableIdSO id, String description) {\n" + //
 					"		logger.info(\"new description send to persistence port: {}\", description);\n" + //

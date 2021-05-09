@@ -5,6 +5,7 @@ import java.util.List;
 
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.legacy.model.ObjectFactory;
+import archimedes.legacy.scheme.DefaultIndexMetaData;
 import archimedes.legacy.scheme.Tabellenspalte;
 import archimedes.legacy.updater.UpdateReportAction.Status;
 import archimedes.legacy.updater.UpdateReportAction.Type;
@@ -18,15 +19,18 @@ import de.ollie.dbcomp.comparator.DataModelComparator;
 import de.ollie.dbcomp.comparator.model.ChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.AddColumnChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.AddForeignKeyCRO;
+import de.ollie.dbcomp.comparator.model.actions.AddIndexCRO;
 import de.ollie.dbcomp.comparator.model.actions.AddPrimaryKeyCRO;
 import de.ollie.dbcomp.comparator.model.actions.CreateTableChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropColumnChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropForeignKeyCRO;
+import de.ollie.dbcomp.comparator.model.actions.DropIndexCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropPrimaryKeyCRO;
 import de.ollie.dbcomp.comparator.model.actions.DropTableChangeActionCRO;
 import de.ollie.dbcomp.comparator.model.actions.ForeignKeyMemberCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyDataTypeCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyNullableCRO;
+import gengen.metadata.ClassMetaData;
 
 /**
  * A class which is able to update a data model by a given source.
@@ -110,6 +114,22 @@ public class ModelUpdater {
 					}
 				});
 				action.setType(Type.ADD_PRIMARY_KEY).setValues(addCRO.getTableName(), addCRO.getPkMemberNames());
+			} else if (cro instanceof AddIndexCRO) {
+				AddIndexCRO addCRO = (AddIndexCRO) cro;
+				TableModel table = toUpdate.getTableByName(addCRO.getTableName());
+				if (addCRO.getIndexMemberNames().size() == 1) {
+					ColumnModel column = table.getColumnByName(addCRO.getIndexMemberNames().toArray(new String[1])[0]);
+					if (column != null) {
+						column.setIndex(true);
+					}
+				} else if (addCRO.getIndexMemberNames().size() > 1) {
+					toUpdate.addComplexIndex(new DefaultIndexMetaData(addCRO.getIndexName(), (ClassMetaData) table));
+				} else {
+					action.setStatus(Status.MANUAL);
+				}
+				action
+						.setType(Type.ADD_INDEX)
+						.setValues(addCRO.getIndexName(), addCRO.getTableName(), addCRO.getIndexMemberNames());
 			} else if (cro instanceof CreateTableChangeActionCRO) {
 				CreateTableChangeActionCRO createCRO = (CreateTableChangeActionCRO) cro;
 				TableModel table = objectFactory.createTabelle(getPrimaryView(), 0, 0, (DiagrammModel) toUpdate, false);
@@ -151,6 +171,21 @@ public class ModelUpdater {
 				action
 						.setType(Type.DROP_FOREIGN_KEY)
 						.setValues(((DropForeignKeyCRO) cro).getTableName(), ((DropForeignKeyCRO) cro).getMembers());
+			} else if (cro instanceof DropIndexCRO) {
+				DropIndexCRO dropCRO = (DropIndexCRO) cro;
+				TableModel table = toUpdate.getTableByName(dropCRO.getTableName());
+				if (dropCRO.getIndexMemberNames().size() == 1) {
+					ColumnModel column = table.getColumnByName(dropCRO.getIndexMemberNames().toArray(new String[1])[0]);
+					if (column != null) {
+						column.setIndex(false);
+					}
+				} else if (dropCRO.getIndexMemberNames().size() > 1) {
+				} else {
+					action.setStatus(Status.MANUAL);
+				}
+				action
+						.setType(Type.DROP_INDEX)
+						.setValues(dropCRO.getIndexName(), dropCRO.getTableName(), dropCRO.getIndexMemberNames());
 			} else if (cro instanceof DropPrimaryKeyCRO) {
 				DropPrimaryKeyCRO dropCRO = (DropPrimaryKeyCRO) cro;
 				TableModel table = toUpdate.getTableByName(dropCRO.getTableName());
@@ -195,7 +230,10 @@ public class ModelUpdater {
 			e.printStackTrace();
 			return action.setStatus(Status.FAILED);
 		}
-		return action.setStatus(Status.DONE);
+		if (action.getStatus() == null) {
+			action.setStatus(Status.DONE);
+		}
+		return action;
 	}
 
 	private String getForeignKeyString(ChangeActionCRO cro) {
