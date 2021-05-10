@@ -124,6 +124,9 @@ public class JDBCModelReader implements ModelReader {
 			schemes.add(this.factory.createScheme(schemeName, new ArrayList<>()));
 		}
 		rs.close();
+		if (schemes.isEmpty()) {
+			schemes.add(this.factory.createScheme("public", new ArrayList<>()));
+		}
 		return schemes.toArray(new SchemeSO[schemes.size()]);
 	}
 
