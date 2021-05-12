@@ -70,22 +70,11 @@ public class JDBCModelReaderTest {
 	private String dbNameSource = "sourceDB";
 	private DBTypeConverter typeConverter = new DBTypeConverter();
 
-	private TypeSO typeInteger = new TypeSO() //
-			.setSqlType(Types.INTEGER);
-	private TypeSO typeVarchar100 = new TypeSO() //
-			.setSqlType(Types.VARCHAR) //
-			.setLength(100);
-	private TypeSO typeNumeric102 = new TypeSO() //
-			.setSqlType(Types.NUMERIC) //
-			.setLength(10) //
-			.setPrecision(2);
-	private TypeSO typeChar12 = new TypeSO() //
-			.setSqlType(Types.CHAR) //
-			.setLength(12);
-	private TypeSO typeDecimal2412 = new TypeSO() //
-			.setSqlType(Types.DECIMAL) //
-			.setLength(24) //
-			.setPrecision(12);
+	private TypeSO typeInteger = new TypeSO().setSqlType(Types.INTEGER);
+	private TypeSO typeVarchar100 = new TypeSO().setSqlType(Types.VARCHAR).setLength(100);
+	private TypeSO typeNumeric102 = new TypeSO().setSqlType(Types.NUMERIC).setLength(10).setPrecision(2);
+	private TypeSO typeChar12 = new TypeSO().setSqlType(Types.CHAR).setLength(12);
+	private TypeSO typeDecimal2412 = new TypeSO().setSqlType(Types.DECIMAL).setLength(24).setPrecision(12);
 
 	@BeforeAll
 	public static void setUpClass() {
@@ -101,8 +90,14 @@ public class JDBCModelReaderTest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		this.connectionSource = getConnection(this.dbNameSource);
-		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
-				false, null, "*");
+		this.unitUnderTest = new JDBCModelReader(
+				this.factory,
+				this.typeConverter,
+				this.connectionSource,
+				SCHEME_NAME,
+				false,
+				null,
+				"*");
 	}
 
 	private Connection getConnection(String dbName) throws Exception {
@@ -119,7 +114,8 @@ public class JDBCModelReaderTest {
 	@Test
 	public void readModel_ValidConnectionOfAnEmptyDatabasePassed_ReturnsAnEmptyModel() throws Exception {
 		// Prepare
-		DatabaseSO expected = new DatabaseSO().setName("database")
+		DatabaseSO expected = new DatabaseSO()
+				.setName("database")
 				.addSchemes(this.factory.createScheme(SCHEME_NAME, new ArrayList<>()));
 
 		// Run
@@ -131,10 +127,12 @@ public class JDBCModelReaderTest {
 
 	private void createDatabase(Connection connection) throws Exception {
 		Statement stmt = connection.createStatement();
-		stmt.execute("CREATE TABLE " + TABLE_NAME_1 + " (" //
-				+ COLUMN_NAME_1 + " INTEGER, "//
-				+ COLUMN_NAME_2 + " VARCHAR(100), " //
-				+ COLUMN_NAME_3 + " NUMERIC(10,2))");
+		stmt
+				.execute(
+						"CREATE TABLE " + TABLE_NAME_1 + " (" //
+								+ COLUMN_NAME_1 + " INTEGER, "//
+								+ COLUMN_NAME_2 + " VARCHAR(100), " //
+								+ COLUMN_NAME_3 + " NUMERIC(10,2))");
 		stmt.close();
 	}
 
@@ -162,33 +160,27 @@ public class JDBCModelReaderTest {
 			throws Exception {
 		// Prepare
 		createDatabase(this.connectionSource);
-
 		List<ColumnSO> columns = new ArrayList<>();
-		columns.add(new ColumnSO() //
-				.setName(COLUMN_NAME_1.toUpperCase()) //
-				.setType(new TypeSO() //
-						.setSqlType(Types.INTEGER)));
-		columns.add(new ColumnSO() //
-				.setName(COLUMN_NAME_2.toUpperCase()) //
-				.setType(new TypeSO() //
-						.setSqlType(Types.VARCHAR) //
-						.setLength(100)));
-		columns.add(new ColumnSO() //
-				.setName(COLUMN_NAME_3.toUpperCase()) //
-				.setType(new TypeSO() //
-						.setSqlType(Types.NUMERIC) //
-						.setLength(10) //
-						.setPrecision(2)));
-		TableSO table = new TableSO() //
-				.setName(TABLE_NAME_1.toUpperCase()) //
-				.addColumns(columns.toArray(new ColumnSO[0]));
+		columns
+				.add(
+						new ColumnSO()
+								.setName(COLUMN_NAME_1.toUpperCase())
+								.setType(new TypeSO().setSqlType(Types.INTEGER)));
+		columns
+				.add(
+						new ColumnSO()
+								.setName(COLUMN_NAME_2.toUpperCase())
+								.setType(new TypeSO().setSqlType(Types.VARCHAR).setLength(100)));
+		columns
+				.add(
+						new ColumnSO()
+								.setName(COLUMN_NAME_3.toUpperCase())
+								.setType(new TypeSO().setSqlType(Types.NUMERIC).setLength(10).setPrecision(2)));
+		TableSO table = new TableSO().setName(TABLE_NAME_1.toUpperCase()).addColumns(columns.toArray(new ColumnSO[0]));
 		List<TableSO> tables = new ArrayList<>();
 		tables.add(table);
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO() //
-						.setName(SCHEME_NAME) //
-						.setTables(tables));
+		DatabaseSO expected =
+				new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME).setTables(tables));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -204,38 +196,22 @@ public class JDBCModelReaderTest {
 		createDatabaseWithTwoTables(this.connectionSource);
 
 		List<ColumnSO> columns1 = new ArrayList<>();
-		columns1.add(new ColumnSO() //
-				.setName(COLUMN_NAME_1.toUpperCase()) //
-				.setType(this.typeInteger));
-		columns1.add(new ColumnSO() //
-				.setName(COLUMN_NAME_2.toUpperCase()) //
-				.setType(this.typeVarchar100));
-		columns1.add(new ColumnSO() //
-				.setName(COLUMN_NAME_3.toUpperCase()) //
-				.setType(this.typeNumeric102));
-		TableSO table1 = new TableSO() //
-				.setName(TABLE_NAME_1.toUpperCase()).addColumns(columns1.toArray(new ColumnSO[0]));
+		columns1.add(new ColumnSO().setName(COLUMN_NAME_1.toUpperCase()).setType(this.typeInteger));
+		columns1.add(new ColumnSO().setName(COLUMN_NAME_2.toUpperCase()).setType(this.typeVarchar100));
+		columns1.add(new ColumnSO().setName(COLUMN_NAME_3.toUpperCase()).setType(this.typeNumeric102));
+		TableSO table1 =
+				new TableSO().setName(TABLE_NAME_1.toUpperCase()).addColumns(columns1.toArray(new ColumnSO[0]));
 		List<ColumnSO> columns2 = new ArrayList<>();
-		columns2.add(new ColumnSO() //
-				.setName(COLUMN_NAME_1.toUpperCase()) //
-				.setType(this.typeInteger));
-		columns2.add(new ColumnSO() //
-				.setName(COLUMN_NAME_2.toUpperCase()) //
-				.setType(this.typeVarchar100));
-		columns2.add(new ColumnSO() //
-				.setName(COLUMN_NAME_3.toUpperCase()) //
-				.setType(this.typeNumeric102));
-		TableSO table2 = new TableSO() //
-				.setName(TABLE_NAME_2.toUpperCase()) //
-				.addColumns(columns2.toArray(new ColumnSO[0]));
+		columns2.add(new ColumnSO().setName(COLUMN_NAME_1.toUpperCase()).setType(this.typeInteger));
+		columns2.add(new ColumnSO().setName(COLUMN_NAME_2.toUpperCase()).setType(this.typeVarchar100));
+		columns2.add(new ColumnSO().setName(COLUMN_NAME_3.toUpperCase()).setType(this.typeNumeric102));
+		TableSO table2 =
+				new TableSO().setName(TABLE_NAME_2.toUpperCase()).addColumns(columns2.toArray(new ColumnSO[0]));
 		List<TableSO> tables = new ArrayList<>();
 		tables.add(table1);
 		tables.add(table2);
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO() //
-						.setName(SCHEME_NAME) //
-						.setTables(tables));
+		DatabaseSO expected =
+				new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME).setTables(tables));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -246,14 +222,18 @@ public class JDBCModelReaderTest {
 
 	private void createDatabaseWithTwoTables(Connection connection) throws Exception {
 		Statement stmt = connection.createStatement();
-		stmt.execute("CREATE TABLE " + TABLE_NAME_1 + " (" //
-				+ COLUMN_NAME_1 + " INTEGER, " //
-				+ COLUMN_NAME_2 + " VARCHAR(100), " //
-				+ COLUMN_NAME_3 + " NUMERIC(10,2))");
-		stmt.execute("CREATE TABLE " + TABLE_NAME_2 + " (" //
-				+ COLUMN_NAME_1 + " INTEGER, " //
-				+ COLUMN_NAME_2 + " VARCHAR(100), " //
-				+ COLUMN_NAME_3 + " NUMERIC(10,2))");
+		stmt
+				.execute(
+						"CREATE TABLE " + TABLE_NAME_1 + " (" //
+								+ COLUMN_NAME_1 + " INTEGER, " //
+								+ COLUMN_NAME_2 + " VARCHAR(100), " //
+								+ COLUMN_NAME_3 + " NUMERIC(10,2))");
+		stmt
+				.execute(
+						"CREATE TABLE " + TABLE_NAME_2 + " (" //
+								+ COLUMN_NAME_1 + " INTEGER, " //
+								+ COLUMN_NAME_2 + " VARCHAR(100), " //
+								+ COLUMN_NAME_3 + " NUMERIC(10,2))");
 		stmt.close();
 	}
 
@@ -272,8 +252,8 @@ public class JDBCModelReaderTest {
 		TableSO table = new TableSO().setName(TABLE_NAME_1.toUpperCase()).addColumns(columns.toArray(new ColumnSO[0]));
 		List<TableSO> tables = new ArrayList<>();
 		tables.add(table);
-		DatabaseSO expected = new DatabaseSO().setName("database")
-				.addSchemes(new SchemeSO().setName(SCHEME_NAME).setTables(tables));
+		DatabaseSO expected =
+				new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME).setTables(tables));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -284,9 +264,14 @@ public class JDBCModelReaderTest {
 
 	private void createDatabaseWithATableWithFieldsAllTypes(Connection connection) throws Exception {
 		Statement stmt = connection.createStatement();
-		stmt.execute("CREATE TABLE " + TABLE_NAME_1 + " (" + COLUMN_NAME_1 + " INTEGER, " + COLUMN_NAME_2
-				+ " VARCHAR(100), " + COLUMN_NAME_3 + " NUMERIC(10,2), " + COLUMN_NAME_4 + " CHAR(12), " + COLUMN_NAME_5
-				+ " DECIMAL(24,12))");
+		stmt
+				.execute(
+						"CREATE TABLE " + TABLE_NAME_1 + " (" //
+								+ COLUMN_NAME_1 + " INTEGER, " //
+								+ COLUMN_NAME_2 + " VARCHAR(100), " //
+								+ COLUMN_NAME_3 + " NUMERIC(10,2), " //
+								+ COLUMN_NAME_4 + " CHAR(12), " //
+								+ COLUMN_NAME_5 + " DECIMAL(24,12))");
 		stmt.close();
 	}
 
@@ -294,13 +279,22 @@ public class JDBCModelReaderTest {
 	public void readlModel_ValidConnectionWithAnIndexOnTable_ReturnsTheModelWithTheIndex() throws Exception {
 		// Prepare
 		Statement stmt = connectionSource.createStatement();
-		stmt.execute("CREATE TABLE " + TABLE_NAME_1 + " (" + COLUMN_NAME_1 + " INTEGER, " + COLUMN_NAME_2
-				+ " VARCHAR(100), " + COLUMN_NAME_3 + " NUMERIC(10,2), " + COLUMN_NAME_4 + " CHAR(12), " + COLUMN_NAME_5
-				+ " DECIMAL(24,12))");
-		stmt.execute("CREATE INDEX " + INDEX_NAME + " ON " + TABLE_NAME_1 + " (" + COLUMN_NAME_1 + ", " + COLUMN_NAME_2
-				+ ")");
-		stmt.execute("CREATE UNIQUE INDEX U" + INDEX_NAME + " ON " + TABLE_NAME_1 + " (" + COLUMN_NAME_3 + ", "
-				+ COLUMN_NAME_4 + ")"); // To check, that unique indices are not respected.
+		stmt
+				.execute(
+						"CREATE TABLE " + TABLE_NAME_1 + " (" //
+								+ COLUMN_NAME_1 + " INTEGER, " //
+								+ COLUMN_NAME_2 + " VARCHAR(100), " //
+								+ COLUMN_NAME_3 + " NUMERIC(10,2), " //
+								+ COLUMN_NAME_4 + " CHAR(12), " //
+								+ COLUMN_NAME_5 + " DECIMAL(24,12))");
+		stmt
+				.execute(
+						"CREATE INDEX " + INDEX_NAME + " ON " + TABLE_NAME_1 + " (" + COLUMN_NAME_1 + ", "
+								+ COLUMN_NAME_2 + ")");
+		stmt
+				.execute(
+						"CREATE UNIQUE INDEX U" + INDEX_NAME + " ON " + TABLE_NAME_1 + " (" + COLUMN_NAME_3 + ", "
+								+ COLUMN_NAME_4 + ")"); // To check, that unique indices are not respected.
 		stmt.close();
 
 		List<ColumnSO> columns = new ArrayList<>();
@@ -321,9 +315,11 @@ public class JDBCModelReaderTest {
 		IndexSO index = returned.getSchemes().get(0).getTables().get(0).getIndices().get(0);
 		assertThat(index.getName(), equalTo(INDEX_NAME.toUpperCase()));
 		assertThat(index.getColumns().size(), equalTo(2));
-		assertThat(index.getColumns().get(0),
+		assertThat(
+				index.getColumns().get(0),
 				equalTo(new ColumnSO().setName(COLUMN_NAME_1.toUpperCase()).setType(typeInteger).setTable(table)));
-		assertThat(index.getColumns().get(1),
+		assertThat(
+				index.getColumns().get(1),
 				equalTo(new ColumnSO().setName(COLUMN_NAME_2.toUpperCase()).setType(typeVarchar100).setTable(table)));
 	}
 
@@ -335,55 +331,66 @@ public class JDBCModelReaderTest {
 
 		String fkName = "FK_" + TABLE_NAME_2 + "_" + COLUMN_NAME_2 + "_" + TABLE_NAME_1 + "_" + COLUMN_NAME_1;
 		List<ColumnSO> columns = new ArrayList<>();
-		ColumnSO columnRef = new ColumnSO() //
-				.setName(COLUMN_NAME_2.toUpperCase()) //
-				.setType(this.typeInteger);
+		ColumnSO columnRef = new ColumnSO().setName(COLUMN_NAME_2.toUpperCase()).setType(this.typeInteger);
 		columns.add(columnRef);
-		TableSO tableRef = new TableSO() //
-				.setName(TABLE_NAME_2.toUpperCase()).addColumns(columns.toArray(new ColumnSO[0]));
+		TableSO tableRef =
+				new TableSO().setName(TABLE_NAME_2.toUpperCase()).addColumns(columns.toArray(new ColumnSO[0]));
 		List<TableSO> tables = new ArrayList<>();
 		tables.add(tableRef);
 		columns = new ArrayList<>();
-		ColumnSO columnTarget = new ColumnSO() //
-				.setName(COLUMN_NAME_1.toUpperCase()) //
-				.setType(this.typeInteger);
+		ColumnSO columnTarget = new ColumnSO().setName(COLUMN_NAME_1.toUpperCase()).setType(this.typeInteger);
 		columns.add(columnTarget);
-		TableSO tableTarget = new TableSO() //
-				.setName(TABLE_NAME_1.toUpperCase()) //
-				.addColumns(columns.toArray(new ColumnSO[0]));
+		TableSO tableTarget =
+				new TableSO().setName(TABLE_NAME_1.toUpperCase()).addColumns(columns.toArray(new ColumnSO[0]));
 		tables.add(tableTarget);
-		ForeignKeySO foreignKey = new ForeignKeySO() //
-				.setName(fkName.toUpperCase()) //
-				.addReferences(new ReferenceSO() //
-						.setReferencedColumn(columnTarget) //
-						.setReferencingColumn(columnRef));
+		ForeignKeySO foreignKey = new ForeignKeySO()
+				.setName(fkName.toUpperCase())
+				.addReferences(new ReferenceSO().setReferencedColumn(columnTarget).setReferencingColumn(columnRef));
 		tableRef.addForeignKeys(foreignKey);
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
 
 		// Check
-		assertEquals(foreignKey.toString(), returned.getSchemes().get(0).getTableByName(TABLE_NAME_2).get()
-				.getForeignKeyByName(fkName).get().toString());
+		assertEquals(
+				foreignKey.toString(),
+				returned
+						.getSchemes()
+						.get(0)
+						.getTableByName(TABLE_NAME_2)
+						.get()
+						.getForeignKeyByName(fkName)
+						.get()
+						.toString());
 	}
 
 	private void createDatabaseWithATableWithForeingnKey(Connection connection) throws Exception {
 		Statement stmt = connection.createStatement();
-		stmt.execute("CREATE TABLE " + TABLE_NAME_1 + " (" //
-				+ COLUMN_NAME_1 + " INTEGER PRIMARY KEY)");
-		stmt.execute("CREATE TABLE " + TABLE_NAME_2 + " (" //
-				+ COLUMN_NAME_2 + " INTEGER)");
-		stmt.execute("ALTER TABLE " + TABLE_NAME_2 //
-				+ " ADD CONSTRAINT FK_" + TABLE_NAME_2 + "_" + COLUMN_NAME_2 + "_" + TABLE_NAME_1 + "_" + COLUMN_NAME_1 //
-				+ " FOREIGN KEY (" + COLUMN_NAME_2 + ") REFERENCES " + TABLE_NAME_1 + "(" + COLUMN_NAME_1 + ")");
+		stmt
+				.execute(
+						"CREATE TABLE " + TABLE_NAME_1 + " (" //
+								+ COLUMN_NAME_1 + " INTEGER PRIMARY KEY)");
+		stmt
+				.execute(
+						"CREATE TABLE " + TABLE_NAME_2 + " (" //
+								+ COLUMN_NAME_2 + " INTEGER)");
+		stmt
+				.execute(
+						"ALTER TABLE " + TABLE_NAME_2 //
+								+ " ADD CONSTRAINT FK_" + TABLE_NAME_2 + "_" + COLUMN_NAME_2 + "_" + TABLE_NAME_1 + "_"
+								+ COLUMN_NAME_1 //
+								+ " FOREIGN KEY (" + COLUMN_NAME_2 + ") REFERENCES " + TABLE_NAME_1 + "("
+								+ COLUMN_NAME_1 + ")");
 		stmt.close();
 	}
 
 	private void createDatabase_TableWithPrimaryKey(Connection connection) throws Exception {
 		Statement stmt = connection.createStatement();
-		stmt.execute("CREATE TABLE " + TABLE_NAME_1 + " (" //
-				+ COLUMN_NAME_1 + " INTEGER PRIMARY KEY, "//
-				+ COLUMN_NAME_2 + " VARCHAR(100))");
+		stmt
+				.execute(
+						"CREATE TABLE " + TABLE_NAME_1 + " (" //
+								+ COLUMN_NAME_1 + " INTEGER PRIMARY KEY, "//
+								+ COLUMN_NAME_2 + " VARCHAR(100))");
 		stmt.close();
 	}
 
@@ -394,24 +401,19 @@ public class JDBCModelReaderTest {
 		createDatabase_TableWithPrimaryKey(this.connectionSource);
 
 		List<ColumnSO> columns = new ArrayList<>();
-		columns.add(new ColumnSO() //
-				.setName(COLUMN_NAME_1.toUpperCase()) //
-				.setNullable(false) //
-				.setPkMember(true) //
-				.setType(this.typeInteger));
-		columns.add(new ColumnSO() //
-				.setName(COLUMN_NAME_2.toUpperCase()) //
-				.setType(this.typeVarchar100));
-		TableSO table = new TableSO() //
-				.setName(TABLE_NAME_1.toUpperCase()) //
-				.addColumns(columns.toArray(new ColumnSO[0]));
+		columns
+				.add(
+						new ColumnSO()
+								.setName(COLUMN_NAME_1.toUpperCase())
+								.setNullable(false)
+								.setPkMember(true)
+								.setType(this.typeInteger));
+		columns.add(new ColumnSO().setName(COLUMN_NAME_2.toUpperCase()).setType(this.typeVarchar100));
+		TableSO table = new TableSO().setName(TABLE_NAME_1.toUpperCase()).addColumns(columns.toArray(new ColumnSO[0]));
 		List<TableSO> tables = new ArrayList<>();
 		tables.add(table);
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO(). //
-						setName(SCHEME_NAME) //
-						.setTables(tables));
+		DatabaseSO expected =
+				new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME).setTables(tables));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -422,9 +424,11 @@ public class JDBCModelReaderTest {
 
 	private void createDatabase_TableWithNotNullColumn(Connection connection) throws Exception {
 		Statement stmt = connection.createStatement();
-		stmt.execute("CREATE TABLE " + TABLE_NAME_1 + " (" //
-				+ COLUMN_NAME_1 + " INTEGER NOT NULL, "//
-				+ COLUMN_NAME_2 + " VARCHAR(100))");
+		stmt
+				.execute(
+						"CREATE TABLE " + TABLE_NAME_1 + " (" //
+								+ COLUMN_NAME_1 + " INTEGER NOT NULL, " //
+								+ COLUMN_NAME_2 + " VARCHAR(100))");
 		stmt.close();
 	}
 
@@ -435,23 +439,13 @@ public class JDBCModelReaderTest {
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
 		List<ColumnSO> columns = new ArrayList<>();
-		columns.add(new ColumnSO() //
-				.setName(COLUMN_NAME_1.toUpperCase()) //
-				.setNullable(false) //
-				.setType(this.typeInteger));
-		columns.add(new ColumnSO() //
-				.setName(COLUMN_NAME_2.toUpperCase()) //
-				.setType(this.typeVarchar100));
-		TableSO table = new TableSO() //
-				.setName(TABLE_NAME_1.toUpperCase()) //
-				.addColumns(columns.toArray(new ColumnSO[0]));
+		columns.add(new ColumnSO().setName(COLUMN_NAME_1.toUpperCase()).setNullable(false).setType(this.typeInteger));
+		columns.add(new ColumnSO().setName(COLUMN_NAME_2.toUpperCase()).setType(this.typeVarchar100));
+		TableSO table = new TableSO().setName(TABLE_NAME_1.toUpperCase()).addColumns(columns.toArray(new ColumnSO[0]));
 		List<TableSO> tables = new ArrayList<>();
 		tables.add(table);
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO(). //
-						setName(SCHEME_NAME) //
-						.setTables(tables));
+		DatabaseSO expected =
+				new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME).setTables(tables));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -464,28 +458,24 @@ public class JDBCModelReaderTest {
 	public void readModel_ValidConnectionWithATableAndUnMatchingIgnorePattern_ReturnsTheModelOfTheDatabaseSuitableToTheConnection()
 			throws Exception {
 		// Prepare
-		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
-				false, "BLA", "*");
+		this.unitUnderTest = new JDBCModelReader(
+				this.factory,
+				this.typeConverter,
+				this.connectionSource,
+				SCHEME_NAME,
+				false,
+				"BLA",
+				"*");
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
 		List<ColumnSO> columns = new ArrayList<>();
-		columns.add(new ColumnSO() //
-				.setName(COLUMN_NAME_1.toUpperCase()) //
-				.setNullable(false) //
-				.setType(this.typeInteger));
-		columns.add(new ColumnSO() //
-				.setName(COLUMN_NAME_2.toUpperCase()) //
-				.setType(this.typeVarchar100));
-		TableSO table = new TableSO() //
-				.setName(TABLE_NAME_1.toUpperCase()) //
-				.addColumns(columns.toArray(new ColumnSO[0]));
+		columns.add(new ColumnSO().setName(COLUMN_NAME_1.toUpperCase()).setNullable(false).setType(this.typeInteger));
+		columns.add(new ColumnSO().setName(COLUMN_NAME_2.toUpperCase()).setType(this.typeVarchar100));
+		TableSO table = new TableSO().setName(TABLE_NAME_1.toUpperCase()).addColumns(columns.toArray(new ColumnSO[0]));
 		List<TableSO> tables = new ArrayList<>();
 		tables.add(table);
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO(). //
-						setName(SCHEME_NAME) //
-						.setTables(tables));
+		DatabaseSO expected =
+				new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME).setTables(tables));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -497,14 +487,17 @@ public class JDBCModelReaderTest {
 	@Test
 	public void readModel_ValidConnectionWithATableAndMatchingIgnorePattern_ReturnsAnEmptyModel() throws Exception {
 		// Prepare
-		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
-				false, TABLE_NAME_1.toUpperCase(), "*");
+		this.unitUnderTest = new JDBCModelReader(
+				this.factory,
+				this.typeConverter,
+				this.connectionSource,
+				SCHEME_NAME,
+				false,
+				TABLE_NAME_1.toUpperCase(),
+				"*");
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO(). //
-						setName(SCHEME_NAME));
+		DatabaseSO expected = new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -517,14 +510,17 @@ public class JDBCModelReaderTest {
 	public void readModel_ValidConnectionWithATableAndMatchingIgnorePatternEndsWithAsterix_ReturnsAnEmptyModel()
 			throws Exception {
 		// Prepare
-		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
-				false, TABLE_NAME_1.toUpperCase().substring(0, 4) + "*", "*");
+		this.unitUnderTest = new JDBCModelReader(
+				this.factory,
+				this.typeConverter,
+				this.connectionSource,
+				SCHEME_NAME,
+				false,
+				TABLE_NAME_1.toUpperCase().substring(0, 4) + "*",
+				"*");
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO(). //
-						setName(SCHEME_NAME));
+		DatabaseSO expected = new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -537,14 +533,17 @@ public class JDBCModelReaderTest {
 	public void readModel_ValidConnectionWithATableAndMatchingIgnorePatternStartsWithAsterix_ReturnsAnEmptyModel()
 			throws Exception {
 		// Prepare
-		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
-				false, "*" + TABLE_NAME_1.toUpperCase().substring(5), "*");
+		this.unitUnderTest = new JDBCModelReader(
+				this.factory,
+				this.typeConverter,
+				this.connectionSource,
+				SCHEME_NAME,
+				false,
+				"*" + TABLE_NAME_1.toUpperCase().substring(5),
+				"*");
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO(). //
-						setName(SCHEME_NAME));
+		DatabaseSO expected = new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -557,14 +556,17 @@ public class JDBCModelReaderTest {
 	public void readModel_ValidConnectionWithATableAndMatchingIgnorePatternStartsAndEndsWithAsterix_ReturnsAnEmptyModel()
 			throws Exception {
 		// Prepare
-		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
-				false, "*" + TABLE_NAME_1.toUpperCase().substring(3, 6) + "*", "*");
+		this.unitUnderTest = new JDBCModelReader(
+				this.factory,
+				this.typeConverter,
+				this.connectionSource,
+				SCHEME_NAME,
+				false,
+				"*" + TABLE_NAME_1.toUpperCase().substring(3, 6) + "*",
+				"*");
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO(). //
-						setName(SCHEME_NAME));
+		DatabaseSO expected = new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -577,14 +579,17 @@ public class JDBCModelReaderTest {
 	public void readModel_ValidConnectionWithATableAndUnmatchingImportOnlyTablePattern_ReturnsAnEmptyModel()
 			throws Exception {
 		// Prepare
-		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
-				false, null, "Unmatching");
+		this.unitUnderTest = new JDBCModelReader(
+				this.factory,
+				this.typeConverter,
+				this.connectionSource,
+				SCHEME_NAME,
+				false,
+				null,
+				"Unmatching");
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO(). //
-						setName(SCHEME_NAME));
+		DatabaseSO expected = new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();
@@ -597,30 +602,26 @@ public class JDBCModelReaderTest {
 	public void readModel_ValidConnectionWithATableAndMatchingImportOnlyTablePattern_ReturnsAnEmptyModel()
 			throws Exception {
 		// Prepare
-		this.unitUnderTest = new JDBCModelReader(this.factory, this.typeConverter, this.connectionSource, SCHEME_NAME,
-				false, null, TABLE_NAME_2.toUpperCase());
+		this.unitUnderTest = new JDBCModelReader(
+				this.factory,
+				this.typeConverter,
+				this.connectionSource,
+				SCHEME_NAME,
+				false,
+				null,
+				TABLE_NAME_2.toUpperCase());
 		createDatabaseWithTwoTables(this.connectionSource);
 
 		List<ColumnSO> columns2 = new ArrayList<>();
-		columns2.add(new ColumnSO() //
-				.setName(COLUMN_NAME_1.toUpperCase()) //
-				.setType(this.typeInteger));
-		columns2.add(new ColumnSO() //
-				.setName(COLUMN_NAME_2.toUpperCase()) //
-				.setType(this.typeVarchar100));
-		columns2.add(new ColumnSO() //
-				.setName(COLUMN_NAME_3.toUpperCase()) //
-				.setType(this.typeNumeric102));
-		TableSO table2 = new TableSO() //
-				.setName(TABLE_NAME_2.toUpperCase()) //
-				.addColumns(columns2.toArray(new ColumnSO[0]));
+		columns2.add(new ColumnSO().setName(COLUMN_NAME_1.toUpperCase()).setType(this.typeInteger));
+		columns2.add(new ColumnSO().setName(COLUMN_NAME_2.toUpperCase()).setType(this.typeVarchar100));
+		columns2.add(new ColumnSO().setName(COLUMN_NAME_3.toUpperCase()).setType(this.typeNumeric102));
+		TableSO table2 =
+				new TableSO().setName(TABLE_NAME_2.toUpperCase()).addColumns(columns2.toArray(new ColumnSO[0]));
 		List<TableSO> tables = new ArrayList<>();
 		tables.add(table2);
-		DatabaseSO expected = new DatabaseSO() //
-				.setName("database") //
-				.addSchemes(new SchemeSO() //
-						.setName(SCHEME_NAME) //
-						.setTables(tables));
+		DatabaseSO expected =
+				new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME).setTables(tables));
 
 		// Run
 		DatabaseSO returned = this.unitUnderTest.readModel();

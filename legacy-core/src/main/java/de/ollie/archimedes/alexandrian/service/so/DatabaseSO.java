@@ -53,6 +53,17 @@ public class DatabaseSO {
 		return this;
 	}
 
+	/**
+	 * Adds the passed schemes to the schemes of the database service object.
+	 * 
+	 * @param schemes The schemes to add ("null" values will not be added).
+	 * @return The database service object.
+	 */
+	public DatabaseSO addSchemes(List<SchemeSO> schemes) {
+		this.schemes.addAll(schemes);
+		return this;
+	}
+
 	public Optional<OptionSO> getOptionByName(String name) {
 		for (OptionSO option : this.options) {
 			if (option.getName().equals(name)) {

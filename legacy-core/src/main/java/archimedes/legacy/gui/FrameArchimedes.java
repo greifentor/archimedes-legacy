@@ -2402,4 +2402,4 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		diagramm.clearAltered();
 	}
 
-} // 2842
+} // 2405

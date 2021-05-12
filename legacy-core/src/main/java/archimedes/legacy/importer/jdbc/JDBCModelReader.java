@@ -9,13 +9,14 @@ package archimedes.legacy.importer.jdbc;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import archimedes.legacy.importer.jdbc.DatabaseMetaDataPort.ColumnImportInfo;
+import archimedes.legacy.importer.jdbc.DatabaseMetaDataPort.ForeignKeyReferenceImportInfo;
+import archimedes.legacy.importer.jdbc.DatabaseMetaDataPort.IndexMemberImportInfo;
 import corentx.util.Str;
 import de.ollie.archimedes.alexandrian.service.exception.ColumnNotFoundException;
 import de.ollie.archimedes.alexandrian.service.exception.TableNotFoundException;
@@ -25,7 +26,6 @@ import de.ollie.archimedes.alexandrian.service.so.ForeignKeySO;
 import de.ollie.archimedes.alexandrian.service.so.IndexSO;
 import de.ollie.archimedes.alexandrian.service.so.ReferenceSO;
 import de.ollie.archimedes.alexandrian.service.so.SchemeSO;
-import de.ollie.archimedes.alexandrian.service.so.SequenceSO;
 import de.ollie.archimedes.alexandrian.service.so.TableSO;
 import logging.Logger;
 
@@ -46,6 +46,7 @@ public class JDBCModelReader implements ModelReader {
 	private String[] ignoreTablePatterns;
 	private String[] importOnlyTablePatterns;
 	private List<ModelReaderListener> listeners = new ArrayList<>();
+	private DatabaseMetaDataPort databaseMetaDataPort = new DefaultDatabaseMetaDataAdapter();
 
 	/**
 	 * Creates a new model reader with the passed parameters.
@@ -108,26 +109,13 @@ public class JDBCModelReader implements ModelReader {
 	@Override
 	public DatabaseSO readModel() throws Exception {
 		DatabaseMetaData dbmd = this.connection.getMetaData();
-		SchemeSO[] schemes = getSchemes(dbmd, this.schemePattern);
-		for (SchemeSO scheme : schemes) {
+		List<SchemeSO> schemes = new ArrayList<>();
+		for (String schemeName : databaseMetaDataPort.getSchemeNames(dbmd, schemePattern)) {
+			SchemeSO scheme = factory.createScheme(schemeName, new ArrayList<>());
+			schemes.add(scheme);
 			addTables(dbmd, scheme);
-			List<SequenceSO> sequences = getSequences(dbmd);
 		}
 		return new DatabaseSO().setName("database").addSchemes(schemes);
-	}
-
-	private SchemeSO[] getSchemes(DatabaseMetaData dbmd, String schemePattern) throws SQLException {
-		List<SchemeSO> schemes = new ArrayList<>();
-		ResultSet rs = dbmd.getSchemas(null, schemePattern);
-		while (rs.next()) {
-			String schemeName = rs.getString("TABLE_SCHEM");
-			schemes.add(this.factory.createScheme(schemeName, new ArrayList<>()));
-		}
-		rs.close();
-		if (schemes.isEmpty()) {
-			schemes.add(this.factory.createScheme("public", new ArrayList<>()));
-		}
-		return schemes.toArray(new SchemeSO[schemes.size()]);
 	}
 
 	private void addTables(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {
@@ -143,12 +131,7 @@ public class JDBCModelReader implements ModelReader {
 	}
 
 	private void loadTables(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {
-		ResultSet rs = dbmd.getTables(null, scheme.getName(), "%", new String[] { "TABLE" });
-		List<String> tableNames = new ArrayList<>();
-		while (rs.next()) {
-			String tableName = rs.getString("TABLE_NAME");
-			tableNames.add(tableName);
-		}
+		List<String> tableNames = databaseMetaDataPort.getTableNames(dbmd, scheme.getName());
 		int max = tableNames.size();
 		int current = 0;
 		for (String tableName : tableNames) {
@@ -170,7 +153,6 @@ public class JDBCModelReader implements ModelReader {
 				current++;
 			}
 		}
-		rs.close();
 	}
 
 	private boolean isMatchingIgnorePattern(String tableName) {
@@ -203,40 +185,29 @@ public class JDBCModelReader implements ModelReader {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			ResultSet rs = dbmd.getColumns(null, scheme.getName(), table.getName(), "%");
-			while (rs.next()) {
-				String columnName = rs.getString("COLUMN_NAME");
-				String typeName = rs.getString("TYPE_NAME");
-				int dataType = rs.getInt("DATA_TYPE");
-				boolean nullable = "YES".equalsIgnoreCase(rs.getString("IS_NULLABLE"));
-				int columnSize = -1;
-				int decimalDigits = -1;
-				if ((dataType == Types.CHAR) || (dataType == Types.DECIMAL) || (dataType == Types.FLOAT)
-						|| (dataType == Types.LONGVARCHAR) || (dataType == Types.NUMERIC)
-						|| (dataType == Types.VARBINARY) || (dataType == Types.VARCHAR)) {
-					columnSize = rs.getInt("COLUMN_SIZE");
-				}
-				if ((dataType == Types.DECIMAL) || (dataType == Types.NUMERIC)) {
-					decimalDigits = rs.getInt("DECIMAL_DIGITS");
-				}
+			for (ColumnImportInfo columnInfo : databaseMetaDataPort
+					.getColumns(dbmd, scheme.getName(), table.getName())) {
 				try {
 					table
 							.addColumns(
-									this.factory
+									factory
 											.createColumn(
-													columnName,
-													this.typeConverter.convert(dataType, columnSize, decimalDigits),
-													nullable));
+													columnInfo.getColumnName(),
+													typeConverter
+															.convert(
+																	columnInfo.getDataType(),
+																	columnInfo.getColumnSize(),
+																	columnInfo.getDecimalDigits()),
+													columnInfo.isNullable()));
 				} catch (Exception e) {
 					log
 							.error(
-									"Problems while reading column '" + rs.getString("TABLE_SCHEM") + "."
-											+ table.getName() + "." + columnName + "' (" + typeName + " {" + dataType
-											+ "}): " + e.getMessage(),
+									"Problems while reading column '" + scheme.getName() + "." + table.getName() + "."
+											+ columnInfo.getColumnName() + "' (" + columnInfo.getDataType() + " {"
+											+ columnInfo.getDataType() + "}): " + e.getMessage(),
 									e);
 				}
 			}
-			rs.close();
 			fireModelReaderEvent(
 					new ModelReaderEvent(current, max, 2, ModelReaderEventType.COLUMNS_ADDED, table.getName()));
 			current++;
@@ -247,9 +218,8 @@ public class JDBCModelReader implements ModelReader {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			ResultSet rs = dbmd.getPrimaryKeys(null, scheme.getName(), table.getName());
-			while (rs.next()) {
-				String columnName = rs.getString("COLUMN_NAME");
+			for (String columnName : databaseMetaDataPort
+					.getPrimaryKeyColumnNames(dbmd, scheme.getName(), table.getName())) {
 				try {
 					ColumnSO pkColumn = this.getColumnByName(columnName, table);
 					pkColumn.setNullable(false);
@@ -258,60 +228,56 @@ public class JDBCModelReader implements ModelReader {
 					log.warn("warning: " + e.getMessage());
 				}
 			}
-			rs.close();
 			fireModelReaderEvent(
 					new ModelReaderEvent(current, max, 3, ModelReaderEventType.PRIMARY_KEY_ADDED, table.getName()));
 			current++;
 		}
+
 	}
 
 	private void loadForeignKeys(DatabaseMetaData dbmd, SchemeSO scheme) throws SQLException {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			ResultSet rs = dbmd.getImportedKeys(null, scheme.getName(), table.getName());
-			while (rs.next()) {
+			for (ForeignKeyReferenceImportInfo fkImportInfo : databaseMetaDataPort
+					.getForeignKeyReferencesInformation(dbmd, scheme.getName(), table.getName())) {
 				try {
-					String fkName = rs.getString("FK_NAME");
-					String fkTableName = rs.getString("FKTABLE_NAME");
-					String fkColumnName = rs.getString("FKCOLUMN_NAME");
-					String pkTableName = rs.getString("PKTABLE_NAME");
-					String pkColumnName = rs.getString("PKCOLUMN_NAME");
-					table.getForeignKeyByName(fkName).ifPresentOrElse(fk -> {
-						log.info("FK: " + fk);
-					}, () -> {
-						ForeignKeySO fk = new ForeignKeySO().setName(fkName);
-						TableSO referencedTable = scheme
-								.getTableByName(pkTableName)
-								.orElseThrow(() -> new TableNotFoundException(pkTableName));
-						TableSO referencingTable = scheme
-								.getTableByName(fkTableName)
-								.orElseThrow(() -> new TableNotFoundException(fkTableName));
-						fk
-								.addReferences(
-										new ReferenceSO()
-												.setReferencedColumn(
-														referencedTable
-																.getColumnByName(pkColumnName)
-																.orElseThrow(
-																		() -> new ColumnNotFoundException(
-																				pkTableName,
-																				pkColumnName)))
-												.setReferencingColumn(
-														referencingTable
-																.getColumnByName(fkColumnName)
-																.orElseThrow(
-																		() -> new ColumnNotFoundException(
-																				fkTableName,
-																				fkColumnName))));
-						table.addForeignKeys(fk);
-						log.info("FK created: " + fk);
-					});
+					table
+							.getForeignKeyByName(fkImportInfo.getFkName())
+							.ifPresentOrElse(fk -> log.info("FK: " + fk), () -> {
+								ForeignKeySO fk = new ForeignKeySO().setName(fkImportInfo.getFkName());
+								TableSO referencedTable = scheme
+										.getTableByName(fkImportInfo.getPkTableName())
+										.orElseThrow(() -> new TableNotFoundException(fkImportInfo.getPkTableName()));
+								TableSO referencingTable = scheme
+										.getTableByName(fkImportInfo.getFkTableName())
+										.orElseThrow(() -> new TableNotFoundException(fkImportInfo.getFkTableName()));
+								fk
+										.addReferences(
+												new ReferenceSO()
+														.setReferencedColumn(
+																referencedTable
+																		.getColumnByName(fkImportInfo.getPkColumnName())
+																		.orElseThrow(
+																				() -> new ColumnNotFoundException(
+																						fkImportInfo.getPkTableName(),
+																						fkImportInfo
+																								.getPkColumnName())))
+														.setReferencingColumn(
+																referencingTable
+																		.getColumnByName(fkImportInfo.getFkColumnName())
+																		.orElseThrow(
+																				() -> new ColumnNotFoundException(
+																						fkImportInfo.getFkTableName(),
+																						fkImportInfo
+																								.getFkColumnName()))));
+								table.addForeignKeys(fk);
+								log.info("FK created: " + fk);
+							});
 				} catch (Exception e) {
 					log.error("ERROR while reading from model: " + e.getMessage(), e);
 				}
 			}
-			rs.close();
 			fireModelReaderEvent(
 					new ModelReaderEvent(current, max, 4, ModelReaderEventType.FOREIGN_KEY_ADDED, table.getName()));
 			current++;
@@ -331,29 +297,22 @@ public class JDBCModelReader implements ModelReader {
 		int max = tables.size();
 		int current = 0;
 		for (TableSO table : tables) {
-			// TODO: Set "false, false" to "true, true" for large oracle tables.
-			ResultSet rs = dbmd.getIndexInfo(null, scheme.getName(), table.getName(), false, false);
-			while (rs.next()) {
-				boolean nonUniqueIndex = rs.getBoolean("NON_UNIQUE");
-				if (nonUniqueIndex) {
-					String indexName = rs.getString("INDEX_NAME");
-					if (!isAForeignKey(indexName, table)) {
-						String columnName = rs.getString("COLUMN_NAME");
-						try {
-							IndexSO index = getIndexByName(indexName, table);
-							ColumnSO column = getColumnByName(columnName, table);
-							index.getColumns().add(column);
-						} catch (IllegalArgumentException iae) {
-							log
-									.error(
-											LocalDateTime.now() + " - Index '" + indexName + "'not added: "
-													+ iae.getMessage(),
-											iae);
-						}
+			for (IndexMemberImportInfo indexInfo : databaseMetaDataPort
+					.getIndexInformation(dbmd, scheme.getName(), table.getName())) {
+				if (!isAForeignKey(indexInfo.getIndexName(), table)) {
+					try {
+						IndexSO index = getIndexByName(indexInfo.getIndexName(), table);
+						ColumnSO column = getColumnByName(indexInfo.getColumnName(), table);
+						index.getColumns().add(column);
+					} catch (IllegalArgumentException iae) {
+						log
+								.error(
+										LocalDateTime.now() + " - Index '" + indexInfo.getIndexName() + "'not added: "
+												+ iae.getMessage(),
+										iae);
 					}
 				}
 			}
-			rs.close();
 			fireModelReaderEvent(
 					new ModelReaderEvent(current, max, 5, ModelReaderEventType.INDEX_ADDED, table.getName()));
 			current++;
@@ -378,11 +337,6 @@ public class JDBCModelReader implements ModelReader {
 			}
 		}
 		throw new IllegalArgumentException("column '" + name + "' does not exist in table '" + table.getName() + "'.");
-	}
-
-	private List<SequenceSO> getSequences(DatabaseMetaData dbmd) throws SQLException {
-		List<SequenceSO> sequences = new ArrayList<>();
-		return sequences;
 	}
 
 	@Override
