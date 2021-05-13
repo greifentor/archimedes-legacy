@@ -20,9 +20,10 @@ public class MySQLDatabaseMetaDataAdapter extends DefaultDatabaseMetaDataAdapter
 	@Override
 	public List<String> getSchemeNames(DatabaseMetaData dbmd, String schemePattern) throws SQLException {
 		List<String> schemes = new ArrayList<>();
-		ResultSet rs = jdbcImportDatabaseMetaDataPort.getSchemas(dbmd, schemePattern);
+		ResultSet rs = dbmd.getCatalogs();
 		while (rs.next()) {
-			schemes.add(rs.getString("TABLE_SCHEM"));
+			String catalogName = rs.getString("TABLE_CAT");
+			schemes.add(catalogName);
 		}
 		rs.close();
 		return schemes;
