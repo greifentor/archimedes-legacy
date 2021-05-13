@@ -7,18 +7,23 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * A default implementation of the "DatabaseMetaDataPort".
  *
  * @author ollie (12.05.2021)
  */
+@RequiredArgsConstructor
 public class DefaultDatabaseMetaDataAdapter implements DatabaseMetaDataPort {
+
+	protected final JDBCImportDatabaseMetaDataPort jdbcImportDatabaseMetaDataPort;
 
 	@Override
 	public List<ColumnImportInfo> getColumns(DatabaseMetaData dbmd, String schemeName, String tableName)
 			throws SQLException {
 		List<ColumnImportInfo> columnImportInfos = new ArrayList<>();
-		ResultSet rs = dbmd.getColumns(null, schemeName, tableName, "%");
+		ResultSet rs = jdbcImportDatabaseMetaDataPort.getColumns(dbmd, schemeName, tableName);
 		while (rs.next()) {
 			String columnName = rs.getString("COLUMN_NAME");
 			String typeName = rs.getString("TYPE_NAME");
@@ -52,7 +57,7 @@ public class DefaultDatabaseMetaDataAdapter implements DatabaseMetaDataPort {
 	public List<ForeignKeyReferenceImportInfo> getForeignKeyReferencesInformation(DatabaseMetaData dbmd,
 			String schemeName, String tableName) throws SQLException {
 		List<ForeignKeyReferenceImportInfo> foreignKeyReferences = new ArrayList<>();
-		ResultSet rs = dbmd.getImportedKeys(null, schemeName, tableName);
+		ResultSet rs = jdbcImportDatabaseMetaDataPort.getImportedKeys(dbmd, schemeName, tableName);
 		while (rs.next()) {
 			String fkName = rs.getString("FK_NAME");
 			String fkTableName = rs.getString("FKTABLE_NAME");
@@ -77,7 +82,7 @@ public class DefaultDatabaseMetaDataAdapter implements DatabaseMetaDataPort {
 			throws SQLException {
 		List<IndexMemberImportInfo> indexInfos = new ArrayList<>();
 		// TODO: Set "false, false" to "true, true" for large oracle tables.
-		ResultSet rs = dbmd.getIndexInfo(null, schemeName, tableName, false, false);
+		ResultSet rs = jdbcImportDatabaseMetaDataPort.getIndices(dbmd, schemeName, tableName);
 		while (rs.next()) {
 			boolean nonUniqueIndex = rs.getBoolean("NON_UNIQUE");
 			if (nonUniqueIndex) {
@@ -94,7 +99,7 @@ public class DefaultDatabaseMetaDataAdapter implements DatabaseMetaDataPort {
 	public List<String> getPrimaryKeyColumnNames(DatabaseMetaData dbmd, String schemeName, String tableName)
 			throws SQLException {
 		List<String> pkColumnNames = new ArrayList<>();
-		ResultSet rs = dbmd.getPrimaryKeys(null, schemeName, tableName);
+		ResultSet rs = jdbcImportDatabaseMetaDataPort.getPrimaryKeys(dbmd, schemeName, tableName);
 		while (rs.next()) {
 			pkColumnNames.add(rs.getString("COLUMN_NAME"));
 		}
@@ -105,7 +110,7 @@ public class DefaultDatabaseMetaDataAdapter implements DatabaseMetaDataPort {
 	@Override
 	public List<String> getSchemeNames(DatabaseMetaData dbmd, String schemePattern) throws SQLException {
 		List<String> schemes = new ArrayList<>();
-		ResultSet rs = dbmd.getSchemas(null, schemePattern);
+		ResultSet rs = jdbcImportDatabaseMetaDataPort.getSchemas(dbmd, schemePattern);
 		while (rs.next()) {
 			schemes.add(rs.getString("TABLE_SCHEM"));
 		}
@@ -120,7 +125,7 @@ public class DefaultDatabaseMetaDataAdapter implements DatabaseMetaDataPort {
 
 	@Override
 	public List<String> getTableNames(DatabaseMetaData dbmd, String schemeName) throws SQLException {
-		ResultSet rs = dbmd.getTables(null, schemeName, "%", new String[] { "TABLE" });
+		ResultSet rs = jdbcImportDatabaseMetaDataPort.getTables(dbmd, schemeName);
 		List<String> tableNames = new ArrayList<>();
 		while (rs.next()) {
 			String tableName = rs.getString("TABLE_NAME");

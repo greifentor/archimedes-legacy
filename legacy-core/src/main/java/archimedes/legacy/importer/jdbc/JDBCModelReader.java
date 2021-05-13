@@ -17,6 +17,7 @@ import java.util.List;
 import archimedes.legacy.importer.jdbc.DatabaseMetaDataPort.ColumnImportInfo;
 import archimedes.legacy.importer.jdbc.DatabaseMetaDataPort.ForeignKeyReferenceImportInfo;
 import archimedes.legacy.importer.jdbc.DatabaseMetaDataPort.IndexMemberImportInfo;
+import corent.db.DBExecMode;
 import corentx.util.Str;
 import de.ollie.archimedes.alexandrian.service.exception.ColumnNotFoundException;
 import de.ollie.archimedes.alexandrian.service.exception.TableNotFoundException;
@@ -46,7 +47,8 @@ public class JDBCModelReader implements ModelReader {
 	private String[] ignoreTablePatterns;
 	private String[] importOnlyTablePatterns;
 	private List<ModelReaderListener> listeners = new ArrayList<>();
-	private DatabaseMetaDataPort databaseMetaDataPort = new DefaultDatabaseMetaDataAdapter();
+	private DatabaseMetaDataPort databaseMetaDataPort =
+			new DefaultDatabaseMetaDataAdapter(new DefaultJDBCImportDatabaseMetaDataAdapter());
 
 	/**
 	 * Creates a new model reader with the passed parameters.
@@ -61,6 +63,7 @@ public class JDBCModelReader implements ModelReader {
 	 * @param importOnlyTablePatterns Patterns of table names which are to import if the table name matches the at least
 	 *                                one pattern. The patterns to import only are checked before ignore table patterns
 	 *                                (set "*" if all tables are to import).
+	 * @param dbExecMode              The database exec mode.
 	 * @throws IllegalArgumentException Passing null value.
 	 */
 	public JDBCModelReader(
@@ -70,7 +73,8 @@ public class JDBCModelReader implements ModelReader {
 			String schemePattern,
 			boolean ignoreIndices,
 			String ignoreTablePatterns,
-			String importOnlyTablePatterns) {
+			String importOnlyTablePatterns,
+			DBExecMode dbExecMode) {
 		super();
 		this.connection = connection;
 		this.factory = factory;
@@ -79,6 +83,10 @@ public class JDBCModelReader implements ModelReader {
 		this.importOnlyTablePatterns = getPatterns(importOnlyTablePatterns);
 		this.schemePattern = schemePattern;
 		this.typeConverter = typeConverter;
+		if (dbExecMode == DBExecMode.MYSQL) {
+			this.databaseMetaDataPort =
+					new DefaultDatabaseMetaDataAdapter(new MySQLJDBCImportDatabaseMetaDataAdapter());
+		}
 	}
 
 	private String[] getPatterns(String s) {

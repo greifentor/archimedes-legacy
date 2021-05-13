@@ -65,7 +65,8 @@ public class JDBCModelExplorer {
 															schemeName,
 															importData.isIgnoreIndices(),
 															importData.getIgnoreTablePatterns(),
-															importData.getImportOnlyTablePatterns())
+															importData.getImportOnlyTablePatterns(),
+															importData.getDbExecMode())
 																	// .addModelReaderListener(mrpm::update)
 																	.readModel();
 													new FrameTextViewer(
@@ -76,8 +77,7 @@ public class JDBCModelExplorer {
 																							importData.getSchema(),
 																							database,
 																							importData.getOptions())
-																							.createReport(
-																									))),
+																									.createReport())),
 															DefaultFrameTextViewerComponentFactory.INSTANCE,
 															guiBundle.getInifile(),
 															guiBundle

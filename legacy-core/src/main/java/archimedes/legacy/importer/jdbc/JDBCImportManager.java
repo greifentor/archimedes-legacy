@@ -49,6 +49,7 @@ public class JDBCImportManager {
 		return new JDBCImportData()
 				.setAdjustment(connectionData.getAdjustment())
 				.setConnection(connection)
+				.setDbExecMode(connectionData.getConnection().getDBMode())
 				.setIgnoreIndices(connectionData.isIgnoreIndices())
 				.setIgnoreTablePatterns(connectionData.getIgnoreTablePatterns())
 				.setImportOnlyTablePatterns(connectionData.getImportOnlyTablePatterns())
@@ -78,7 +79,8 @@ public class JDBCImportManager {
 				schemeName,
 				importData.isIgnoreIndices(),
 				importData.getIgnoreTablePatterns(),
-				importData.getImportOnlyTablePatterns()).addModelReaderListener(listener).readModel();
+				importData.getImportOnlyTablePatterns(),
+				importData.getDbExecMode()).addModelReaderListener(listener).readModel();
 		return new DatabaseSOToDiagramConverter(importData.getAdjustment()).convert(database);
 	}
 

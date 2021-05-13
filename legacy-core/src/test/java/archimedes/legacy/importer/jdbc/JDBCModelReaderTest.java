@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import corent.db.DBExecMode;
 import de.ollie.archimedes.alexandrian.service.so.ColumnSO;
 import de.ollie.archimedes.alexandrian.service.so.DatabaseSO;
 import de.ollie.archimedes.alexandrian.service.so.ForeignKeySO;
@@ -97,7 +98,8 @@ public class JDBCModelReaderTest {
 				SCHEME_NAME,
 				false,
 				null,
-				"*");
+				"*",
+				DBExecMode.HSQL);
 	}
 
 	private Connection getConnection(String dbName) throws Exception {
@@ -465,7 +467,8 @@ public class JDBCModelReaderTest {
 				SCHEME_NAME,
 				false,
 				"BLA",
-				"*");
+				"*",
+				DBExecMode.HSQL);
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
 		List<ColumnSO> columns = new ArrayList<>();
@@ -494,7 +497,8 @@ public class JDBCModelReaderTest {
 				SCHEME_NAME,
 				false,
 				TABLE_NAME_1.toUpperCase(),
-				"*");
+				"*",
+				DBExecMode.HSQL);
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
 		DatabaseSO expected = new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME));
@@ -517,7 +521,8 @@ public class JDBCModelReaderTest {
 				SCHEME_NAME,
 				false,
 				TABLE_NAME_1.toUpperCase().substring(0, 4) + "*",
-				"*");
+				"*",
+				DBExecMode.HSQL);
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
 		DatabaseSO expected = new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME));
@@ -540,7 +545,8 @@ public class JDBCModelReaderTest {
 				SCHEME_NAME,
 				false,
 				"*" + TABLE_NAME_1.toUpperCase().substring(5),
-				"*");
+				"*",
+				DBExecMode.HSQL);
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
 		DatabaseSO expected = new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME));
@@ -563,7 +569,8 @@ public class JDBCModelReaderTest {
 				SCHEME_NAME,
 				false,
 				"*" + TABLE_NAME_1.toUpperCase().substring(3, 6) + "*",
-				"*");
+				"*",
+				DBExecMode.HSQL);
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
 		DatabaseSO expected = new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME));
@@ -586,7 +593,8 @@ public class JDBCModelReaderTest {
 				SCHEME_NAME,
 				false,
 				null,
-				"Unmatching");
+				"Unmatching",
+				DBExecMode.HSQL);
 		createDatabase_TableWithNotNullColumn(this.connectionSource);
 
 		DatabaseSO expected = new DatabaseSO().setName("database").addSchemes(new SchemeSO().setName(SCHEME_NAME));
@@ -609,7 +617,8 @@ public class JDBCModelReaderTest {
 				SCHEME_NAME,
 				false,
 				null,
-				TABLE_NAME_2.toUpperCase());
+				TABLE_NAME_2.toUpperCase(),
+				DBExecMode.HSQL);
 		createDatabaseWithTwoTables(this.connectionSource);
 
 		List<ColumnSO> columns2 = new ArrayList<>();

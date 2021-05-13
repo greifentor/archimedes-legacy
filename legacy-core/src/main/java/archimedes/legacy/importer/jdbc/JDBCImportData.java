@@ -3,6 +3,7 @@ package archimedes.legacy.importer.jdbc;
 import java.sql.Connection;
 
 import archimedes.legacy.importer.jdbc.JDBCImportConnectionData.Adjustment;
+import corent.db.DBExecMode;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -17,6 +18,7 @@ public class JDBCImportData {
 
 	private Adjustment adjustment;
 	private Connection connection;
+	private DBExecMode dbExecMode;
 	private String password;
 	private boolean ignoreIndices = false;
 	private String schema;
