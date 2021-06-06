@@ -23,7 +23,9 @@ public class MySQLDatabaseMetaDataAdapter extends DefaultDatabaseMetaDataAdapter
 		ResultSet rs = dbmd.getCatalogs();
 		while (rs.next()) {
 			String catalogName = rs.getString("TABLE_CAT");
-			schemes.add(catalogName);
+			if (catalogName.toLowerCase().equals(schemePattern)) {
+				schemes.add(catalogName);
+			}
 		}
 		rs.close();
 		return schemes;
