@@ -131,6 +131,7 @@ public class FilenameSelector extends JPanel implements Ressourced {
         int returnVal = -1;
         JFileChooser fc = new JFileChooser(this.path);
         String dn = null;
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fc.setAcceptAllFileFilterUsed(false);
         fc.setFileFilter(this.getFileFilter());
         fc.setCurrentDirectory(new File(this.path)); 

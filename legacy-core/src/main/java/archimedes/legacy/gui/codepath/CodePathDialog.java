@@ -22,6 +22,7 @@ import corent.gui.JDialogWithInifile;
 public class CodePathDialog extends JDialogWithInifile implements ActionListener, WindowListener { // NOSONAR
 
 	private JButton buttonOk = null;
+	private JButton buttonSelectPath = null;
 	private CodePathEditorPanel codePathEditorPanel = null;
 	private GUIBundle guiBundle = null;
 	private CodePath path = null;

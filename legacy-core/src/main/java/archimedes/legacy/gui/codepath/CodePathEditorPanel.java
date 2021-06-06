@@ -19,7 +19,7 @@ public class CodePathEditorPanel extends BaccaraEditorPanel<String, CodePath> { 
 	public CodePathEditorPanel(GUIBundle guiBundle, Container parent, ActionListener actionListener,
 			CodePath codePath) {
 		super(guiBundle, parent, "CodePathDialog", actionListener, codePath, new ComponentData[] { // NOSONAR
-				new ComponentData<>("path", Type.STRING, codePath.getPath()) //
+				new ComponentData<>("path", Type.FILE_NAME, codePath.getPath()) //
 		});
 	}
 

@@ -126,8 +126,10 @@ abstract public class BaccaraEditorPanel<ID, T> extends JPanel implements Editor
      */
     @Override public Object getValue(ComponentData<ID> cd) {
         Component c = this.componentsByName.get(cd.getName());
-        if (c instanceof LineTextEditor) {
-            return ((LineTextEditor) c).getText();
+        if (c instanceof FilenameSelector) {
+            return ((FilenameSelector) c).getText();
+        } else if (c instanceof LineTextEditor) {
+                return ((LineTextEditor) c).getText();
         } else if (c instanceof JCheckBox) {
             return ((JCheckBox) c).isSelected();
         } else if (c instanceof JComboBox) {

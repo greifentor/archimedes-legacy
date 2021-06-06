@@ -23,6 +23,7 @@ public enum Type {
     BOOLEAN,
     DATE,
     DOUBLE,
+    FILE_NAME,
     INTEGER,
     OBJECT,
     STRING,
