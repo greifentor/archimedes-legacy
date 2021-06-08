@@ -62,10 +62,10 @@ public class ModelUpdaterTest {
 				.addUpdateReportAction(
 						new UpdateReportAction()
 								.setMessage(
-										"AddColumnChangeActionCRO(tableName=Account, schemaName=, columnName=Note, sqlType=LONGVARCHAR)")
+										"AddColumnChangeActionCRO(tableName=Account, schemaName=, columnName=Note, sqlType=LONGVARCHAR, notNull=true)")
 								.setStatus(Status.DONE)
 								.setType(Type.ADD_COLUMN)
-								.setValues("Account", "Note", "LONGVARCHAR"));
+								.setValues("Account", "Note", "LONGVARCHAR", true));
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		DataModel dataModel0 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel-Account-Note-Dropped.xml");
 		DataModel dataModel1 = reader.read("src/test/resources/dm/ModelUpdater/BaseModel.xml");

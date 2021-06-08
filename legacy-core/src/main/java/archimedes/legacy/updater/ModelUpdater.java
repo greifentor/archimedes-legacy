@@ -1,8 +1,5 @@
 package archimedes.legacy.updater;
 
-import java.util.Arrays;
-import java.util.List;
-
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.legacy.model.ObjectFactory;
 import archimedes.legacy.scheme.DefaultIndexMetaData;
@@ -31,6 +28,9 @@ import de.ollie.dbcomp.comparator.model.actions.ForeignKeyMemberCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyDataTypeCRO;
 import de.ollie.dbcomp.comparator.model.actions.ModifyNullableCRO;
 import gengen.metadata.ClassMetaData;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A class which is able to update a data model by a given source.
@@ -81,7 +81,8 @@ public class ModelUpdater {
 						.setValues(
 								((AddColumnChangeActionCRO) cro).getTableName(),
 								((AddColumnChangeActionCRO) cro).getColumnName(),
-								sqlType);
+								sqlType,
+								((AddColumnChangeActionCRO) cro).isNotNull());
 			} else if (cro instanceof AddForeignKeyCRO) {
 				TableModel table = toUpdate.getTableByName(((AddForeignKeyCRO) cro).getTableName());
 				((AddForeignKeyCRO) cro).getMembers().forEach(member -> {
@@ -132,7 +133,8 @@ public class ModelUpdater {
 						.setValues(addCRO.getIndexName(), addCRO.getTableName(), addCRO.getIndexMemberNames());
 			} else if (cro instanceof CreateTableChangeActionCRO) {
 				CreateTableChangeActionCRO createCRO = (CreateTableChangeActionCRO) cro;
-				TableModel table = objectFactory.createTabelle(getPrimaryView(), 0, 0, (DiagrammModel) toUpdate, false);
+				TableModel table = objectFactory.createTabelle(getPrimaryView(), 0, 0, (DiagrammModel) toUpdate,
+						false);
 				createCRO.getColumns().forEach(column -> {
 					ColumnModel newColumn = objectFactory
 							.createTabellenspalte(
@@ -143,7 +145,9 @@ public class ModelUpdater {
 											TYPE_CONVERTER.getPrecision(column.getSqlType()),
 											toUpdate),
 									createCRO.isPrimaryKeyMember(column.getName()));
-					newColumn.setNotNull(createCRO.isPrimaryKeyMember(column.getName()) ? true : !column.isNullable());
+					newColumn.setNotNull(createCRO.isPrimaryKeyMember(column.getName())
+							? true
+							: !column.isNullable());
 					newColumn.setPanel(table.getPanels()[0]);
 					table.addColumn(newColumn);
 				});
@@ -175,7 +179,8 @@ public class ModelUpdater {
 				DropIndexCRO dropCRO = (DropIndexCRO) cro;
 				TableModel table = toUpdate.getTableByName(dropCRO.getTableName());
 				if (dropCRO.getIndexMemberNames().size() == 1) {
-					ColumnModel column = table.getColumnByName(dropCRO.getIndexMemberNames().toArray(new String[1])[0]);
+					ColumnModel column =
+							table.getColumnByName(dropCRO.getIndexMemberNames().toArray(new String[1])[0]);
 					if (column != null) {
 						column.setIndex(false);
 					}
@@ -265,13 +270,29 @@ public class ModelUpdater {
 
 	private DomainModel getDomain(int sqlType, Integer length, Integer precision, DataModel dataModel) {
 		DomainModel dom = objectFactory
-				.createDomain("*", sqlType, length == null ? -1 : length, precision == null ? -1 : precision);
+				.createDomain(
+						"*",
+						sqlType,
+						length == null
+								? -1
+								: length,
+						precision == null
+								? -1
+								: precision);
 		String typeName = dom.getType().replace("(", "").replace(")", "").replace(" ", "");
 		typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1);
 		DomainModel domain = getDomainByNameCaseInsensitive(dataModel, typeName);
 		if (domain == null) {
 			domain = objectFactory
-					.createDomain(typeName, sqlType, length == null ? -1 : length, precision == null ? -1 : precision);
+					.createDomain(
+							typeName,
+							sqlType,
+							length == null
+									? -1
+									: length,
+							precision == null
+									? -1
+									: precision);
 			dataModel.addDomain(domain);
 		}
 		return domain;
