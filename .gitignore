@@ -13,3 +13,7 @@ bin/
 /velocity.log
 /java-engine-path.bat
 /pom.xml.versionsBackup
+.idea/
+/*.iml
+/archimedes-legacy (2).iml
+/legacy-core/archimedes-legacy-core.iml
