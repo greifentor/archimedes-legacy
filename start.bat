@@ -2,7 +2,7 @@ IF NOT EXIST "java-engine-path.bat" GOTO PathSet
     CALL java-engine-path.bat
 :PathSet
 
-SET LIB=.\lib
+SET LIB=.\legacy-core\lib
 
 SET CP=.\legacy-core\target\archimedes-legacy-core-2.8.0-executable.jar
 
