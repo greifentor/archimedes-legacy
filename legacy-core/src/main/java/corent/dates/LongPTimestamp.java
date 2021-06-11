@@ -17,9 +17,8 @@ import java.util.GregorianCalendar;
 import logging.Logger;
 
 /**
- * Diese Klasse enth&auml;t einen Zeitpunkt mit Millisekunden. Sie ist in der
- * Lage Ganzzahlen zu erzeugen, die diesen Zeitpunkt in der Form
- * JJJJMMTTHHMMSSmmm zu repr&auml;sentieren.
+ * Diese Klasse enth&auml;t einen Zeitpunkt mit Millisekunden. Sie ist in der Lage Ganzzahlen zu erzeugen, die diesen
+ * Zeitpunkt in der Form JJJJMMTTHHMMSSmmm zu repr&auml;sentieren.
  *
  * <P>
  * <H3>Properties:</H3>
@@ -34,9 +33,8 @@ import logging.Logger;
  * <TD>corent.dates.LongPTimestamp.toString.suppress.warning</TD>
  * <TD>false</TD>
  * <TD>boolean</TD>
- * <TD>Wenn diese Flagge gesetzt ist, wird eine eventuelle log4j-Ausgabe einer
- * Warnung innerhalb der toString()-Methode unterdr&uuml;ckt. Die Ausgabe hat
- * den WARNING).</TD>
+ * <TD>Wenn diese Flagge gesetzt ist, wird eine eventuelle log4j-Ausgabe einer Warnung innerhalb der toString()-Methode
+ * unterdr&uuml;ckt. Die Ausgabe hat den WARNING).</TD>
  * </TR>
  * </TABLE>
  * <P>
@@ -44,18 +42,15 @@ import logging.Logger;
  *
  * @author O.Lieshoff
  *
- * @changed OLI 01.09.2008 - Erweiterung um die Implementierung der Methode
- *          <TT>getMillis()</TT>.
- * @changed OLI 05.01.2009 - Einbau einer M&ouml;glichkeit die Ausgabe der
- *          Warnung in der Methode <TT>toString()</TT> zu unterdr&uuml;cken.
+ * @changed OLI 01.09.2008 - Erweiterung um die Implementierung der Methode <TT>getMillis()</TT>.
+ * @changed OLI 05.01.2009 - Einbau einer M&ouml;glichkeit die Ausgabe der Warnung in der Methode <TT>toString()</TT> zu
+ *          unterdr&uuml;cken.
  * @changed OLI 12.03.2009 - Umstellen der Laufzeitausgaben auf log4j.
- * @changed OLI 19.03.2009 - Reaktivierung der Property
- *          "corent.dates.LongPTimestamp.toString.suppress.warning".
- *          Hier&uuml;ber kann nun die Ausgabe in das Log unterdr&uuml;ckt
- *          werden.
+ * @changed OLI 19.03.2009 - Reaktivierung der Property "corent.dates.LongPTimestamp.toString.suppress.warning".
+ *          Hier&uuml;ber kann nun die Ausgabe in das Log unterdr&uuml;ckt werden.
  * @changed OLI 19.06.2009 - Formatanpassungen.
- * @changed OLI 30.06.2009 - Umsetzung des log4j-Levels f&uuml;r die Warnmeldung
- *          in der Methode <TT>toString()</TT> auf DEBUG.
+ * @changed OLI 30.06.2009 - Umsetzung des log4j-Levels f&uuml;r die Warnmeldung in der Methode <TT>toString()</TT> auf
+ *          DEBUG.
  *
  */
 
@@ -86,17 +81,6 @@ public class LongPTimestamp implements Comparable, Serializable {
 	/**
 	 * Erzeugt eine neue Instanz mit den Daten des &uuml;bergebenen Objekts.
 	 *
-	 * @param tsm Der PTimestamp, dessen Daten &uuml;bernommen werden sollen.
-	 */
-	public LongPTimestamp(TimestampModel tsm) {
-		super();
-		PTimestamp pts = new PTimestamp(tsm);
-		this.timestamp = pts.toLong() * 1000;
-	}
-
-	/**
-	 * Erzeugt eine neue Instanz mit den Daten des &uuml;bergebenen Objekts.
-	 *
 	 * @param l Eine long-Zahl mit dem gepackten Datum.
 	 * @throws ParseException Falls beim Parsen des String ein Fehler auftritt.
 	 */
@@ -107,11 +91,10 @@ public class LongPTimestamp implements Comparable, Serializable {
 	}
 
 	/**
-	 * Die Implementierung der Methode wurde anhand einer Vorarbeit von Volodymyr
-	 * Medvid durchgef&uuml;hrt.
+	 * Die Implementierung der Methode wurde anhand einer Vorarbeit von Volodymyr Medvid durchgef&uuml;hrt.
 	 *
-	 * @return Die Millisekunden seit 01.01.1970 0:00, bzw. <TT>-1</TT>, wenn es bei
-	 *         der Berechnung der Millis einen Fehler gibt.
+	 * @return Die Millisekunden seit 01.01.1970 0:00, bzw. <TT>-1</TT>, wenn es bei der Berechnung der Millis einen
+	 *         Fehler gibt.
 	 *
 	 * @changed OLI 01.09.2008 - Hinzugef&uuml;gt.
 	 *
@@ -161,15 +144,11 @@ public class LongPTimestamp implements Comparable, Serializable {
 	}
 
 	/**
-	 * @changed OLI 05.01.2009 - Einbau einer M&ouml;:glichkeit, die Warnung im
-	 *          Exception-Zweig zu unterdr&uuml;cken (durch Setzen der Property
-	 *          <I>corent.dates.LongPTimestamp.toString.suppress.warning</I>).
-	 * @changed OLI 15.01.2009 - Erweiterung der ausgegebenen Warnung um dem Wert
-	 *          der Variablen <TT>this.timestamp</TT>.
-	 * @changed OLI 12.03.2009 - Ersetzen der System.out.println-Ausgabe durch einen
-	 *          log4j-Eintrag.
-	 * @changed OLI 30.06.2009 - Umsetzung des log4j-Levels f&uuml;r die Warnmeldung
-	 *          auf DEBUG.
+	 * @changed OLI 05.01.2009 - Einbau einer M&ouml;:glichkeit, die Warnung im Exception-Zweig zu unterdr&uuml;cken
+	 *          (durch Setzen der Property <I>corent.dates.LongPTimestamp.toString.suppress.warning</I>).
+	 * @changed OLI 15.01.2009 - Erweiterung der ausgegebenen Warnung um dem Wert der Variablen <TT>this.timestamp</TT>.
+	 * @changed OLI 12.03.2009 - Ersetzen der System.out.println-Ausgabe durch einen log4j-Eintrag.
+	 * @changed OLI 30.06.2009 - Umsetzung des log4j-Levels f&uuml;r die Warnmeldung auf DEBUG.
 	 *
 	 */
 	@Override
@@ -179,14 +158,16 @@ public class LongPTimestamp implements Comparable, Serializable {
 			pts = new PTimestamp((this.timestamp / 1000));
 		} catch (Exception e) {
 			if (!Boolean.getBoolean("corent.dates.LongPTimestamp.toString.suppress.warning")) {
-				log.debug("PTimestamp can not be created in LongPTimestamp.toString() (" + "timestamp=" + this.timestamp
-						+ ").");
+				log
+						.debug(
+								"PTimestamp can not be created in LongPTimestamp.toString() (" + "timestamp="
+										+ this.timestamp + ").");
 			}
 			/*
 			 * OLI 19.06.2009 - Herauskommentiert vor dem 19.06.2009. if
-			 * (!Boolean.getBoolean("corent.dates.LongPTimestamp.toString.suppress.warning")
-			 * ) { System.out.println("WARNING: PTimestamp can not be created in " +
-			 * "LongPTimestamp.toString() (timestamp=" + this.timestamp + ")."); }
+			 * (!Boolean.getBoolean("corent.dates.LongPTimestamp.toString.suppress.warning") ) {
+			 * System.out.println("WARNING: PTimestamp can not be created in " + "LongPTimestamp.toString() (timestamp="
+			 * + this.timestamp + ")."); }
 			 */
 		}
 		return pts.toString() + "." + (this.timestamp % 1000);

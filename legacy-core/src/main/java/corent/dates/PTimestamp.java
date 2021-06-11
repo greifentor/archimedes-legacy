@@ -12,7 +12,6 @@ package corent.dates;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import corent.base.Direction;
@@ -20,79 +19,69 @@ import corent.base.StrUtil;
 import corent.base.Utl;
 
 /**
- * Diese Klasse bietet Ihnen einen gekapselten Zeitstempel in
- * speicherfreundlichem Format.
+ * Diese Klasse bietet Ihnen einen gekapselten Zeitstempel in speicherfreundlichem Format.
  *
  * <P>
- * Die Zeitangaben werden in einer Ganzzahl in dem Format YYYYMMDDHHmmSS
- * gespeichert und sind auch in diesem Format verf&uuml;gbar. Dieses Format
- * besticht vorallem durch performante Vergleichsm&ouml;glichkeiten und hohe
+ * Die Zeitangaben werden in einer Ganzzahl in dem Format YYYYMMDDHHmmSS gespeichert und sind auch in diesem Format
+ * verf&uuml;gbar. Dieses Format besticht vorallem durch performante Vergleichsm&ouml;glichkeiten und hohe
  * Speicherfreundlichkeit.
  *
  * <HR SIZE=3>
  * <H3>Arbeiten mit PTimestamp</H3>
  * <HR>
  * <BR>
- * Sie k&ouml;nnen einen PTimestamp auf normalem Wege &uuml;ber den Aufruf eines
- * Konstruktors instanziieren. Der parameterlose Konstruktor liefert Ihnen eine
- * PTimestamp-Instanz mit der aktuellen, sekundengenauen Systemzeit.
+ * Sie k&ouml;nnen einen PTimestamp auf normalem Wege &uuml;ber den Aufruf eines Konstruktors instanziieren. Der
+ * parameterlose Konstruktor liefert Ihnen eine PTimestamp-Instanz mit der aktuellen, sekundengenauen Systemzeit.
  * <P>
- * Mit Hilfe der <TT>add(TimestampUnit, int)</TT>-Methode k&ouml;nnen Sie einen
- * bestehenden PTimestamp manipulieren. Hierbei wird eine Kopie der Instanz
- * angelegt. Der bestehende PTimestamp beh&auml;lt seinen Wert. &Uuml;bergeben
- * Sie der Methoden eine <TT>TimestampUnit</TT> als Parameter, &uuml;ber die Sie
- * das Attribut des PTimestamps ausw&auml;hlen, das manipuliert werden soll.
- * <BR>
- * M&ouml;chten Sie beispielsweise ein Datum um einen Tag in die Zukunft
- * verschieben, so m&uuml;ssen Sie folgenden Code implementieren:
+ * Mit Hilfe der <TT>add(TimestampUnit, int)</TT>-Methode k&ouml;nnen Sie einen bestehenden PTimestamp manipulieren.
+ * Hierbei wird eine Kopie der Instanz angelegt. Der bestehende PTimestamp beh&auml;lt seinen Wert. &Uuml;bergeben Sie
+ * der Methoden eine <TT>TimestampUnit</TT> als Parameter, &uuml;ber die Sie das Attribut des PTimestamps
+ * ausw&auml;hlen, das manipuliert werden soll. <BR>
+ * M&ouml;chten Sie beispielsweise ein Datum um einen Tag in die Zukunft verschieben, so m&uuml;ssen Sie folgenden Code
+ * implementieren:
  * 
  * <PRE>
  * PTimestamp pts = new PTimestamp();
  * pts = ((PTimestamp) pts).add(TimestampUnit.DAY, 1);
  * </PRE>
  * 
- * Der Cast auf PTimestamp ist notwendig, da die <TT>add</TT>-Methode ein
- * TimestampModel als R&uuml;ckgabewert vorsieht. PTimestamp ist lediglich eine
- * Implementierung dieses Interfaces. Daher der Cast. <BR>
- * Um ein Datum um einen Tag in die Vergangenheit zu verschieben, h&auml;lt ein
- * analoges Codest&uuml;ck her. Der Unterschied besteht lediglich im Vorzeichen:
+ * Der Cast auf PTimestamp ist notwendig, da die <TT>add</TT>-Methode ein TimestampModel als R&uuml;ckgabewert vorsieht.
+ * PTimestamp ist lediglich eine Implementierung dieses Interfaces. Daher der Cast. <BR>
+ * Um ein Datum um einen Tag in die Vergangenheit zu verschieben, h&auml;lt ein analoges Codest&uuml;ck her. Der
+ * Unterschied besteht lediglich im Vorzeichen:
  * 
  * <PRE>
  * PTimestamp pts = new PTimestamp();
  * pts = ((PTimestamp) pts).add(TimestampUnit.DAY, -1);
  * </PRE>
  * 
- * Die anderen Attribute, wie Stunden, Minuten Sekunden etc. k&ouml;nnen Sie
- * analog dazu unter Angabe anderer TimestampUnits manipulieren.
+ * Die anderen Attribute, wie Stunden, Minuten Sekunden etc. k&ouml;nnen Sie analog dazu unter Angabe anderer
+ * TimestampUnits manipulieren.
  * <P>
- * Die einzelnen Attribute eines PTimestamps lassen sich &uuml;ber die
- * <TT>set(TimestampUnit, int)</TT>- und <TT>get(TimestampUnit)</TT>-Methode
- * setzen bzw. auslesen. M&ouml;chten Sie beispielsweise nur die aktuelle
- * Jahreszahl eines PTimestamps auslesen, so k&ouml;nnen Sie dies durch die
- * folgenden Codezeilen erreichen:
+ * Die einzelnen Attribute eines PTimestamps lassen sich &uuml;ber die <TT>set(TimestampUnit, int)</TT>- und
+ * <TT>get(TimestampUnit)</TT>-Methode setzen bzw. auslesen. M&ouml;chten Sie beispielsweise nur die aktuelle Jahreszahl
+ * eines PTimestamps auslesen, so k&ouml;nnen Sie dies durch die folgenden Codezeilen erreichen:
  * 
  * <PRE>
  * PTimestamp pts = new PTimestamp();
  * int jahr = pts.get(TimestampUnit.YEAR);
  * </PRE>
  * 
- * Umgekehrt k&ouml;nnen Sie eine Jahreszahl setzen, indem Sie, wie durch das
- * folgende Codest&uuml;ck demonstriert, die <TT>set</TT>-Methode aufrufen:
+ * Umgekehrt k&ouml;nnen Sie eine Jahreszahl setzen, indem Sie, wie durch das folgende Codest&uuml;ck demonstriert, die
+ * <TT>set</TT>-Methode aufrufen:
  * 
  * <PRE>
  * PTimestamp pts = new PTimestamp();
  * pts = ((PTimestamp) pts).set(TimestampUnit.YEAR, 1998);
  * </PRE>
  * <P>
- * <I>Hinweis:</I> Nutzen Sie die <TT>set(TimestampUnit, int)</TT>-Methode nur,
- * um einem oder mehreren Attributen einen festen Wert zuzuweisen. F&uuml;r
- * relative &Auml;derungen an einem PTimestamp sollten Sie auf jeden Fall die
+ * <I>Hinweis:</I> Nutzen Sie die <TT>set(TimestampUnit, int)</TT>-Methode nur, um einem oder mehreren Attributen einen
+ * festen Wert zuzuweisen. F&uuml;r relative &Auml;derungen an einem PTimestamp sollten Sie auf jeden Fall die
  * <TT>add(TimestampUnit, int)</TT>-Methode benutzen. Ein
- * <TT>pts.set(TimestampUnit.DAY, pts.get(TimestampUnit.DAY)-1)</TT> mu&szlig;
- * nicht immer den Vortag ergeben ...
+ * <TT>pts.set(TimestampUnit.DAY, pts.get(TimestampUnit.DAY)-1)</TT> mu&szlig; nicht immer den Vortag ergeben ...
  * <P>
- * Die Wertebereiche f&uuml;r die Parameter der <TT>get</TT>- und der
- * <TT>set</TT>-Methode sind wie folgt definiert: <BR>
+ * Die Wertebereiche f&uuml;r die Parameter der <TT>get</TT>- und der <TT>set</TT>-Methode sind wie folgt definiert:
+ * <BR>
  * <A NAME="Table:TimestampUnitValues"></A>
  * <TABLE BORDER=1>
  * <TR VALIGN=TOP>
@@ -130,38 +119,32 @@ import corent.base.Utl;
  * </TABLE>
  *
  * <P>
- * Sie k&ouml;nnen PTimestamps jeder Zeit in einen <TT>long</TT>-Wert mit dem
- * oben angegebenen Format (YYYYMMDDHHmmSS) umwandeln. Dies erreichen Sie
- * &uuml;ber den Aufruf der Methode <TT>toLong()</TT>. Umgekehrt k&ouml;nnen Sie
- * auch <TT>long</TT>-Werte in diesem Format an einen entsprechenden Konstruktor
- * &uuml;bergeben, um daraus einen PTimestamp zu generieren. Diese Methoden
- * eignen sich sehr gut dazu, PTimestamps zu persistieren.
+ * Sie k&ouml;nnen PTimestamps jeder Zeit in einen <TT>long</TT>-Wert mit dem oben angegebenen Format (YYYYMMDDHHmmSS)
+ * umwandeln. Dies erreichen Sie &uuml;ber den Aufruf der Methode <TT>toLong()</TT>. Umgekehrt k&ouml;nnen Sie auch
+ * <TT>long</TT>-Werte in diesem Format an einen entsprechenden Konstruktor &uuml;bergeben, um daraus einen PTimestamp
+ * zu generieren. Diese Methoden eignen sich sehr gut dazu, PTimestamps zu persistieren.
  * <P>
  * &nbsp;
  *
  * <HR SIZE=3>
  * <H3>Ausgabe von PTimestamps</H3>
  * <HR>
- * F&uuml;r die Ausgabe von PTimestamps bietet Ihnen die Klasse eine Reihe von
- * Konfigurationsm&ouml;glichkeiten an. &Uuml;ber den Aufruf der
- * <TT>toString()</TT>-Methode erhalten Sie zun&auml;chst eine Ausgabe in dem
- * folgenden Format:
+ * F&uuml;r die Ausgabe von PTimestamps bietet Ihnen die Klasse eine Reihe von Konfigurationsm&ouml;glichkeiten an.
+ * &Uuml;ber den Aufruf der <TT>toString()</TT>-Methode erhalten Sie zun&auml;chst eine Ausgabe in dem folgenden Format:
  * 
  * <PRE>
  * new PTimestamp(19980206054800).toString() -&gt; 06.02.1998 05:48:00
  * </PRE>
  * 
- * Haben Sie hierbei die Property
- * <TT>corent.dates.PTimestamp.suppress.seconds</TT> gesetzt, so &auml;ndert
- * sich die Ausgabe ein wenig:
+ * Haben Sie hierbei die Property <TT>corent.dates.PTimestamp.suppress.seconds</TT> gesetzt, so &auml;ndert sich die
+ * Ausgabe ein wenig:
  * 
  * <PRE>
  * new PTimestamp(19980206054800).toString() -&gt; 06.02.1998 05:48
  * </PRE>
  * 
- * Neben der herk&ouml;mmlichen <TT>toString()</TT>-Methode gibt es noch eine
- * weitere, die einen Parameter erfordert, &uuml;ber den sie den generierten
- * String beeinflu&szlig;en k&ouml;nnen:
+ * Neben der herk&ouml;mmlichen <TT>toString()</TT>-Methode gibt es noch eine weitere, die einen Parameter erfordert,
+ * &uuml;ber den sie den generierten String beeinflu&szlig;en k&ouml;nnen:
  * 
  * <PRE>
  * new PTimestamp(20000407231500).toString(Mode.WEEK) -&gt; KW 14  07.03.2000 05:48
@@ -169,10 +152,8 @@ import corent.base.Utl;
  * new PTimestamp(20000407231500).toString(Mode.WEEKANDDAYIDENT) -&gt; KW 14  Fr  07.03.2000 05:48
  * </PRE>
  * 
- * Mit Hilfe der Properties
- * <TT>corent.dates.PDate.week.day.shortform.<I>x</I></TT> und
- * <TT>corent.dates.PDate.week.prefix</TT> sind sie in der Lage die Ausgabe zu
- * beeinflu&szlig;en:
+ * Mit Hilfe der Properties <TT>corent.dates.PDate.week.day.shortform.<I>x</I></TT> und
+ * <TT>corent.dates.PDate.week.prefix</TT> sind sie in der Lage die Ausgabe zu beeinflu&szlig;en:
  * 
  * <PRE>
  * System.setProperty("corent.dates.PDate.week.day.shortform.5", "Fri");
@@ -188,12 +169,11 @@ import corent.base.Utl;
  * <H3>Utilities</H3>
  * <HR>
  * <P>
- * Zus&auml;tzlich zum Umfang der Methoden, die sich auf die Instanzen der
- * Klasse beziehen, bietet PTimestamp zwei statische Utility-Methoden an, die
- * auch innerhalb der Instanzmethoden zum Einsatz kommen. <BR>
- * Um zu pr&uuml;fen, ob ein Jahr ein Schaltjahr ist, oder nicht, gen&uuml;gt
- * ein Aufruf der Methode <TT>Leapyear(int)</TT>. &Uuml;bergeben Sie als
- * Parameter einfach die Jahreszahl des Jahres, das sie pr&uuml;fen wollen:
+ * Zus&auml;tzlich zum Umfang der Methoden, die sich auf die Instanzen der Klasse beziehen, bietet PTimestamp zwei
+ * statische Utility-Methoden an, die auch innerhalb der Instanzmethoden zum Einsatz kommen. <BR>
+ * Um zu pr&uuml;fen, ob ein Jahr ein Schaltjahr ist, oder nicht, gen&uuml;gt ein Aufruf der Methode
+ * <TT>Leapyear(int)</TT>. &Uuml;bergeben Sie als Parameter einfach die Jahreszahl des Jahres, das sie pr&uuml;fen
+ * wollen:
  * 
  * <PRE>
  * System.out.println(PTimestamp.Leapyear(1999));
@@ -203,8 +183,8 @@ import corent.base.Utl;
  * &gt; true
  * </PRE>
  * 
- * Die Anzahl der Tage, die ein Monat in einem bestimmten Jahr hat, k&ouml;nnen
- * Sie &uuml;ber einen Aufruf der Methode <TT>DayCount(int, int)</TT> ermitteln:
+ * Die Anzahl der Tage, die ein Monat in einem bestimmten Jahr hat, k&ouml;nnen Sie &uuml;ber einen Aufruf der Methode
+ * <TT>DayCount(int, int)</TT> ermitteln:
  * 
  * <PRE>
  * System.out.println(PTimestamp.DayCount(2, 1999)); // Tage im Februar 1999.
@@ -219,12 +199,10 @@ import corent.base.Utl;
  * <HR SIZE=3>
  * <H3>Vergleiche</H3>
  * <HR>
- * Vergleiche von PTimestamp k&ouml;nnen Sie auf zweierlei Art durchf&uuml;hren:
- * a) Nutzen Sie die <TT>compareTo(Object)</TT>-Methode, oder b) vergleichen Sie
- * die R&uuml;ckgabewerte der Methode <TT>toLong()</TT> der einzelnen
- * PTimestamps miteinander. Die <TT>compareTo(Object)</TT>-Methode arbeitet
- * ebenfalls &uuml;ber einen Vergleich der Ergebnisse der Methode
- * <TT>toLong()</TT>.
+ * Vergleiche von PTimestamp k&ouml;nnen Sie auf zweierlei Art durchf&uuml;hren: a) Nutzen Sie die
+ * <TT>compareTo(Object)</TT>-Methode, oder b) vergleichen Sie die R&uuml;ckgabewerte der Methode <TT>toLong()</TT> der
+ * einzelnen PTimestamps miteinander. Die <TT>compareTo(Object)</TT>-Methode arbeitet ebenfalls &uuml;ber einen
+ * Vergleich der Ergebnisse der Methode <TT>toLong()</TT>.
  * <P>
  * &nbsp;
  * 
@@ -242,30 +220,28 @@ import corent.base.Utl;
  * <TD>corent.dates.PDate.week.day.shortform.<I>x</I></TD>
  * <TD>verschiedene</TD>
  * <TD>String</TD>
- * <TD>Diese Property erm&ouml;glicht das Setzen eines alternativen
- * Tagesk&uuml;rzels. Der Wert <I>x</I> steht f&uuml;r den Wochentag. Die Woche
- * beginnt mit dem Montag als Tag 0.</TD>
+ * <TD>Diese Property erm&ouml;glicht das Setzen eines alternativen Tagesk&uuml;rzels. Der Wert <I>x</I> steht f&uuml;r
+ * den Wochentag. Die Woche beginnt mit dem Montag als Tag 0.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>corent.dates.PDate.week.prefix</TD>
  * <TD>"KW"</TD>
  * <TD>String</TD>
- * <TD>Mit Hilfe dieser Property kann ein alternativer Pr&auml;fix f&uuml;r die
- * Kalenderwoche gesetzt werden.</TD>
+ * <TD>Mit Hilfe dieser Property kann ein alternativer Pr&auml;fix f&uuml;r die Kalenderwoche gesetzt werden.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>corent.dates.PTimestamp.suppress.seconds</TD>
  * <TD>false</TD>
  * <TD>Boolean</TD>
- * <TD>Wird diese Property gesetzt, so wird die Uhrzeit in der
- * <TT>toString()</TT>-Methode ohne Sekundenangabe ausgegeben.</TD>
+ * <TD>Wird diese Property gesetzt, so wird die Uhrzeit in der <TT>toString()</TT>-Methode ohne Sekundenangabe
+ * ausgegeben.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>corent.dates.PTimestamp.undefined.string</TD>
  * <TD>"--.--.---- --:--:--"</TD>
  * <TD>String</TD>
- * <TD>Mit Hilfe dieser Tabelle kann ein alternativer String f&uuml;r die
- * Ausgabe der Konstanten PTimestamp.NULL definiert werden.</TD>
+ * <TD>Mit Hilfe dieser Tabelle kann ein alternativer String f&uuml;r die Ausgabe der Konstanten PTimestamp.NULL
+ * definiert werden.</TD>
  * </TR>
  * </TABLE>
  * <P>
@@ -282,55 +258,29 @@ import corent.base.Utl;
  *
  * @changed
  *          <P>
- *          OLI 23.08.2007 - Die <TT>toString()</TT>-Methode kann nun &uuml;ber
- *          das Setzen der Property "corent.dates.PTimestamp.suppress.seconds"
- *          auch ohne Sekundenangabe erfolgen.
+ *          OLI 23.08.2007 - Die <TT>toString()</TT>-Methode kann nun &uuml;ber das Setzen der Property
+ *          "corent.dates.PTimestamp.suppress.seconds" auch ohne Sekundenangabe erfolgen.
  *          <P>
- *          OLI 12.09.2007 - Erweiterung der Testausgabe in der main-Methode um
- *          ein paar zus&auml;tzliche Testausgaben.
+ *          OLI 12.09.2007 - Erweiterung der Testausgabe in der main-Methode um ein paar zus&auml;tzliche Testausgaben.
  *          <P>
  *          OLI 16.09.2007 - Arbeiten an der Dokumentation der Klasse.
  *          <P>
- *          OLI 19.09.2007 - Erweiterung der Dokumentation (Wertebereiche der
- *          get- und set-Methode.
+ *          OLI 19.09.2007 - Erweiterung der Dokumentation (Wertebereiche der get- und set-Methode.
  *          <P>
- *          OLI 14.08.2008 - Erweiterung um die Implementierung der Methode
- *          <TT>getMillis()</TT>.
+ *          OLI 14.08.2008 - Erweiterung um die Implementierung der Methode <TT>getMillis()</TT>.
  *          <P>
- *          OLI 31.01.2009 - Erweiterung um einen Methode zur Umwandlung in ein
- *          PDate. Au&szlig;erdem: Debugging der Methode
- *          <TT>valueOf(java.util.Date)</TT> durch ver&auml;ndern der
- *          Reihenfolge, in der Monat und Tag zugewiesen werden.
+ *          OLI 31.01.2009 - Erweiterung um einen Methode zur Umwandlung in ein PDate. Au&szlig;erdem: Debugging der
+ *          Methode <TT>valueOf(java.util.Date)</TT> durch ver&auml;ndern der Reihenfolge, in der Monat und Tag
+ *          zugewiesen werden.
  *          <P>
- *          OLI 24.02.2009 - Die Methoden zur Manipulation von PTimestamps
- *          werfen eine <TT>IllegalArgumentException</TT>, wenn versucht wird,
- *          sie mit der <TT>TimestampUnit.MILLI</TT> zu manipulieren.
+ *          OLI 24.02.2009 - Die Methoden zur Manipulation von PTimestamps werfen eine
+ *          <TT>IllegalArgumentException</TT>, wenn versucht wird, sie mit der <TT>TimestampUnit.MILLI</TT> zu
+ *          manipulieren.
  *          <P>
  *
  */
 
 public class PTimestamp implements Comparable, Serializable, TimestampModel {
-
-	/**
-	 * Mit Hilfe dieses Aufz&auml;hltyps k&ouml;nnen Sie die Ausgabe der Methode
-	 * <TT>toString(Mode)</TT> konfigurieren. Eine Erkl&auml;rung der einzelnen
-	 * Konfigurationen finden Sie in der Beschreibung zur Klasse <TT>PTimestamp</TT>
-	 *
-	 * @see corent.dates.PTimestamp
-	 */
-	public enum Mode {
-		/** Der Bezeichner f&uuml;r die Standardausgabe ohne Extras. */
-		STANDARD,
-		/** Der Bezeichner f&uuml;r die Ausgabe mit Wochennummer. */
-		WEEK,
-		/** Der Bezeichner f&uuml;r die Ausgabe mit Tagesnamensk&uuml;rzel. */
-		DAYIDENT,
-		/**
-		 * Der Bezeichner f&uuml;r die Ausgabe mit Wochennummer und
-		 * Tagesnamensk&uuml;rzel.
-		 */
-		WEEKANDDAYIDENT
-	};
 
 	/**
 	 * Eine Referenz f&uuml;r undefinierte Timestamps.
@@ -341,8 +291,11 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 	public static final PTimestamp NULL = new PTimestamp(-1) {
 		@Override
 		public String toString() {
-			return Utl.GetProperty("corent.dates.PTimestamp.undefined.string",
-					"--.--.---- --:--" + (Boolean.getBoolean("corent.dates.PTimestamp.suppress.seconds") ? "" : ":--"));
+			return Utl
+					.GetProperty(
+							"corent.dates.PTimestamp.undefined.string",
+							"--.--.---- --:--"
+									+ (Boolean.getBoolean("corent.dates.PTimestamp.suppress.seconds") ? "" : ":--"));
 		}
 	};
 
@@ -393,9 +346,8 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 	}
 
 	/**
-	 * Erzeugt eine Instanz der Klasse anhand der &uuml;bergebenen Parameter. Der
-	 * &uuml;bergebene String darf entweder aus Datum und Zeit, oder nur aus einer
-	 * Datumsangabe bestehen. Die Angaben m&uuml;ssen folgendes Format haben:
+	 * Erzeugt eine Instanz der Klasse anhand der &uuml;bergebenen Parameter. Der &uuml;bergebene String darf entweder
+	 * aus Datum und Zeit, oder nur aus einer Datumsangabe bestehen. Die Angaben m&uuml;ssen folgendes Format haben:
 	 * 
 	 * <PRE>
 	 *
@@ -447,8 +399,8 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 		if (tsu == TimestampUnit.YEAR) {
 			this.timestamp = 10000000000l * value + this.timestamp % 10000000000l;
 		} else if (tsu == TimestampUnit.MONTH) {
-			this.timestamp = this.timestamp / 10000000000l * 10000000000l + value * 100000000l
-					+ this.timestamp % 100000000l;
+			this.timestamp =
+					this.timestamp / 10000000000l * 10000000000l + value * 100000000l + this.timestamp % 100000000l;
 		} else if (tsu == TimestampUnit.DAY) {
 			this.timestamp = this.timestamp / 100000000l * 100000000l + value * 1000000l + this.timestamp % 1000000l;
 		} else if (tsu == TimestampUnit.HOUR) {
@@ -460,54 +412,9 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 		}
 	}
 
-	/**
-	 * Wandelt erzeugt auf Grundlage des Tagesdatums einen PDate mit dem selben
-	 * Datum. Die Uhrzeit-Information geht hierbei verloren.
-	 *
-	 * @return Ein PDate mit dem Tagesdatum des PTimestamps.
-	 * @throws DateFormatException Falls der Inhalt des PTimestamps zu einem
-	 *                             fehlerhaften PDate f&uuml;hren w&uuml;rde.
-	 *                             Eigentlich d&uuml;rfte diese Exception an dieser
-	 *                             Stelle niemals geworfen werden.
-	 *
-	 * @changed OLI 31.01.2009 - Hinzugef&uuml;gt.
-	 *          <P>
-	 *
-	 */
-	public PDate toPDate() throws DateFormatException {
-		if (this.toLong() < 1) {
-			return PDate.UNDEFINIERT;
-		}
-		return new PDate((int) (this.toLong() / 1000000));
-	}
-
 	@Override
 	public long toLong() {
 		return this.timestamp;
-	}
-
-	/**
-	 * Wandelt den Zeitstempel in einen erweiterten Zeitstempel mit Wochenangabe und
-	 * Tagesnamenk&uuml;rzel um.
-	 *
-	 * @param m Der Modus nach dem umgewandelt werden soll.
-	 */
-	public String toString(Mode m) {
-		String s = this.toString();
-		PDate pd = new PDate((int) (this.toLong() / 1000000));
-		String week = StrUtil.PumpUp("" + pd.getWoche(), " ", 2, Direction.LEFT);
-		Wochentag w = pd.getWochentag();
-		if (m == Mode.WEEK) {
-			s = Utl.GetProperty("corent.dates.PDate.week.prefix", "KW ").concat(week).concat("  ").concat(s);
-		} else if (m == Mode.DAYIDENT) {
-			s = Utl.GetProperty("corent.dates.PDate.week.day.shortform." + w.ord(), w.toString().substring(0, 2))
-					.concat("  ").concat(s);
-		} else if (m == Mode.WEEKANDDAYIDENT) {
-			s = Utl.GetProperty("corent.dates.PDate.week.prefix", "KW ").concat(week).concat("  ").concat(
-					Utl.GetProperty("corent.dates.PDate.week.day.shortform." + w.ord(), w.toString().substring(0, 2)))
-					.concat("  ").concat(s);
-		}
-		return s;
 	}
 
 	/* Ueberschreiben von Methoden der Superklasse. */
@@ -537,7 +444,8 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 				+ StrUtil.PumpUp("" + this.get(TimestampUnit.YEAR), "0", 4, Direction.LEFT) + " "
 				+ StrUtil.PumpUp("" + this.get(TimestampUnit.HOUR), "0", 2, Direction.LEFT) + ":"
 				+ StrUtil.PumpUp("" + this.get(TimestampUnit.MINUTE), "0", 2, Direction.LEFT)
-				+ (Boolean.getBoolean("corent.dates.PTimestamp.suppress.seconds") ? ""
+				+ (Boolean.getBoolean("corent.dates.PTimestamp.suppress.seconds")
+						? ""
 						: (":" + StrUtil.PumpUp("" + this.get(TimestampUnit.SECOND), "0", 2, Direction.LEFT)));
 	}
 
@@ -561,15 +469,13 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 	 * Einen Hinweis zum Wertebereich der einzelnen TimestampUnits finden Sie
 	 * <A HREF="Table:TimestampUnitValues">hier</A>.
 	 *
-	 * @throws IllegalArgumentException falls versucht wird, &uuml;ber die
-	 *                                  <TT>TimestampUnit.MILLI</TT> den Inhalt des
+	 * @throws IllegalArgumentException falls versucht wird, &uuml;ber die <TT>TimestampUnit.MILLI</TT> den Inhalt des
 	 *                                  PTimestamps zu &auml;ndern.
 	 *
-	 * @changed OLI 19.09.2007 - Erweiterung der Dokumentation um den Link zur
-	 *          Tabelle mit den Wertebereichen der TimestampUnits.
+	 * @changed OLI 19.09.2007 - Erweiterung der Dokumentation um den Link zur Tabelle mit den Wertebereichen der
+	 *          TimestampUnits.
 	 *          <P>
-	 *          OLI 24.02.2009 - Die &Uuml;bergabe einer
-	 *          <TT>TimestampUnit.MILLI</TT> f&uuml;hrt nun zu einer
+	 *          OLI 24.02.2009 - Die &Uuml;bergabe einer <TT>TimestampUnit.MILLI</TT> f&uuml;hrt nun zu einer
 	 *          <TT>IllegalArgumentException</TT>.
 	 *          <P>
 	 *
@@ -588,19 +494,20 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 		} else if (tsu == TimestampUnit.MONTH) {
 			int daycount = DayCount(value, this.get(TimestampUnit.YEAR));
 			if ((value > 0) && (value < 13) && (this.get(TimestampUnit.DAY) <= daycount)) {
-				this.timestamp = this.timestamp / 10000000000l * 10000000000l + value * 100000000l
-						+ this.timestamp % 100000000l;
+				this.timestamp =
+						this.timestamp / 10000000000l * 10000000000l + value * 100000000l + this.timestamp % 100000000l;
 				return;
 			}
 			if ((value < 1) || (value > 12)) {
 				throw new IllegalArgumentException("Value " + value + " is not valid for month!");
 			}
-			throw new IllegalArgumentException("Collision with daycount. Month has " + daycount
-					+ " days only (actual day=" + this.get(TimestampUnit.DAY) + ")!");
+			throw new IllegalArgumentException(
+					"Collision with daycount. Month has " + daycount + " days only (actual day="
+							+ this.get(TimestampUnit.DAY) + ")!");
 		} else if (tsu == TimestampUnit.DAY) {
 			if ((value > 0) && (value <= DayCount(this.get(TimestampUnit.MONTH), this.get(TimestampUnit.YEAR)))) {
-				this.timestamp = this.timestamp / 100000000l * 100000000l + value * 1000000l
-						+ this.timestamp % 1000000l;
+				this.timestamp =
+						this.timestamp / 100000000l * 100000000l + value * 1000000l + this.timestamp % 1000000l;
 				return;
 			}
 			throw new IllegalArgumentException(
@@ -630,15 +537,13 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 	 * Einen Hinweis zum Wertebereich der einzelnen TimestampUnits finden Sie
 	 * <A HREF="Table:TimestampUnitValues">hier</A>.
 	 *
-	 * @throws IllegalArgumentException falls versucht wird, &uuml;ber die
-	 *                                  <TT>TimestampUnit.MILLI</TT> den Inhalt des
+	 * @throws IllegalArgumentException falls versucht wird, &uuml;ber die <TT>TimestampUnit.MILLI</TT> den Inhalt des
 	 *                                  PTimestamps zu lesen.
 	 *
-	 * @changed OLI 19.09.2007 - Erweiterung der Dokumentation um den Link zur
-	 *          Tabelle mit den Wertebereichen der TimestampUnits.
+	 * @changed OLI 19.09.2007 - Erweiterung der Dokumentation um den Link zur Tabelle mit den Wertebereichen der
+	 *          TimestampUnits.
 	 *          <P>
-	 *          OLI 24.02.2009 - Die &Uuml;bergabe einer
-	 *          <TT>TimestampUnit.MILLI</TT> f&uuml;hrt nun zu einer
+	 *          OLI 24.02.2009 - Die &Uuml;bergabe einer <TT>TimestampUnit.MILLI</TT> f&uuml;hrt nun zu einer
 	 *          <TT>IllegalArgumentException</TT>.
 	 *          <P>
 	 *
@@ -663,8 +568,7 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 	}
 
 	/**
-	 * Die Implementierung der Methode wurde anhand einer Vorarbeit von Volodymyr
-	 * Medvid durchgef&uuml;hrt.
+	 * Die Implementierung der Methode wurde anhand einer Vorarbeit von Volodymyr Medvid durchgef&uuml;hrt.
 	 *
 	 * @changed
 	 *          <P>
@@ -685,14 +589,12 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 	}
 
 	/**
-	 * @throws IllegalArgumentException falls versucht wird, &uuml;ber die
-	 *                                  <TT>TimestampUnit.MILLI</TT> den Inhalt des
+	 * @throws IllegalArgumentException falls versucht wird, &uuml;ber die <TT>TimestampUnit.MILLI</TT> den Inhalt des
 	 *                                  PTimestamps zu &auml;ndern.
 	 *
 	 * @changed
 	 *          <P>
-	 *          OLI 24.02.2009 - Die &Uuml;bergabe einer
-	 *          <TT>TimestampUnit.MILLI</TT> f&uuml;hrt nun zu einer
+	 *          OLI 24.02.2009 - Die &Uuml;bergabe einer <TT>TimestampUnit.MILLI</TT> f&uuml;hrt nun zu einer
 	 *          <TT>IllegalArgumentException</TT>.
 	 *          <P>
 	 *
@@ -705,8 +607,9 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 		TimestampModel pts = new PTimestamp(this);
 		if (tsu == TimestampUnit.YEAR) {
 			pts.set(TimestampUnit.YEAR, pts.get(TimestampUnit.YEAR) + value);
-			if ((pts.get(TimestampUnit.MONTH) == 2) && (DayCount(pts.get(TimestampUnit.MONTH),
-					pts.get(TimestampUnit.YEAR)) < pts.get(TimestampUnit.DAY))) {
+			if ((pts.get(TimestampUnit.MONTH) == 2)
+					&& (DayCount(pts.get(TimestampUnit.MONTH), pts.get(TimestampUnit.YEAR)) < pts
+							.get(TimestampUnit.DAY))) {
 				pts.set(TimestampUnit.DAY, 1);
 				pts.set(TimestampUnit.MONTH, 3);
 			}
@@ -727,8 +630,11 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 				}
 			}
 			if ((DayCount(pts.get(TimestampUnit.MONTH), pts.get(TimestampUnit.YEAR)) < pts.get(TimestampUnit.DAY))) {
-				pts = pts.add(TimestampUnit.DAY, (DayCount(pts.get(TimestampUnit.MONTH), pts.get(TimestampUnit.YEAR))
-						- pts.get(TimestampUnit.DAY)));
+				pts = pts
+						.add(
+								TimestampUnit.DAY,
+								(DayCount(pts.get(TimestampUnit.MONTH), pts.get(TimestampUnit.YEAR))
+										- pts.get(TimestampUnit.DAY)));
 				pts = pts.add(TimestampUnit.MONTH, 1);
 			}
 		} else if (tsu == TimestampUnit.DAY) {
@@ -738,8 +644,8 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 				if (pts.get(TimestampUnit.DAY) + inc < 1) {
 					pts = pts.add(TimestampUnit.MONTH, -1);
 					pts.set(TimestampUnit.DAY, DayCount(pts.get(TimestampUnit.MONTH), pts.get(TimestampUnit.YEAR)));
-				} else if (pts.get(TimestampUnit.DAY) + inc > DayCount(pts.get(TimestampUnit.MONTH),
-						pts.get(TimestampUnit.YEAR))) {
+				} else if (pts.get(TimestampUnit.DAY)
+						+ inc > DayCount(pts.get(TimestampUnit.MONTH), pts.get(TimestampUnit.YEAR))) {
 					((PTimestamp) pts).setUncontroled(TimestampUnit.MONTH, pts.get(TimestampUnit.MONTH) + 1);
 					if (pts.get(TimestampUnit.MONTH) > 12) {
 						pts.set(TimestampUnit.MONTH, 1);
@@ -779,8 +685,8 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 					pts = pts.add(TimestampUnit.HOUR, 1);
 					pts.set(TimestampUnit.MINUTE, 0);
 				} else {
-					((PTimestamp) pts).setUncontroled(TimestampUnit.MINUTE,
-							(int) (pts.get(TimestampUnit.MINUTE) + inc));
+					((PTimestamp) pts)
+							.setUncontroled(TimestampUnit.MINUTE, (int) (pts.get(TimestampUnit.MINUTE) + inc));
 				}
 			}
 		} else {
@@ -798,8 +704,8 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 					pts = pts.add(TimestampUnit.MINUTE, 1);
 					pts.set(TimestampUnit.SECOND, 0);
 				} else {
-					((PTimestamp) pts).setUncontroled(TimestampUnit.SECOND,
-							(int) (pts.get(TimestampUnit.SECOND) + inc));
+					((PTimestamp) pts)
+							.setUncontroled(TimestampUnit.SECOND, (int) (pts.get(TimestampUnit.SECOND) + inc));
 				}
 			}
 		}
@@ -825,10 +731,9 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 	 * Pr&uuml;ft, ob die angegebenen Jahresangabe ein Schaltjahr ist.
 	 *
 	 * @param year Das zu pr&uuml;fende Jahr.
-	 * @return <TT>true</TT>, wenn es sich bei dem angegebenen Jahr um ein
-	 *         Schaltjahr handelt.
+	 * @return <TT>true</TT>, wenn es sich bei dem angegebenen Jahr um ein Schaltjahr handelt.
 	 */
-	public static boolean Leapyear(int year) {
+	private static boolean Leapyear(int year) {
 		if (year % 400 == 0) {
 			return true;
 		} else if (year % 100 == 0) {
@@ -840,14 +745,13 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 	}
 
 	/**
-	 * Ermittelt die Anzahl der Tage des angegebenen Monats im ebenfalls angegebenen
-	 * Jahr.
+	 * Ermittelt die Anzahl der Tage des angegebenen Monats im ebenfalls angegebenen Jahr.
 	 *
 	 * @param month Der Monat, zu dem die Tagesanzahl ermittelt werden soll.
 	 * @param year  Das Jahr zu Monat.
 	 * @return Die Anzahl der Tage des Monats im angegebenen Jahr.
 	 */
-	public static int DayCount(int month, int year) {
+	private static int DayCount(int month, int year) {
 		switch (month) {
 		case 1:
 		case 3:
@@ -864,32 +768,6 @@ public class PTimestamp implements Comparable, Serializable, TimestampModel {
 			return 28;
 		}
 		return 30;
-	}
-
-	/**
-	 * Liefert einen PTimestamp zum &uuml;bergebenen java.util.Date.
-	 *
-	 * @param d Das java.util.Date, aus dem der PTimestamp generiert werden soll.
-	 * @return Der PTimestamp zum angegebenen java.util.Date.
-	 *
-	 * @changed OLI 02.11.2008 - Hinzugef&uuml;gt.
-	 *          <P>
-	 *          OLI 31.01.2009 - Debugging: Die Methode konnte nicht korrekt
-	 *          arbeiten, weil die Zuweisung von Monat und Tag in falscher
-	 *          Reihenfolge stattgefunden hat.
-	 *          <P>
-	 */
-	public static PTimestamp valueOf(Date d) {
-		Calendar c = Calendar.getInstance();
-		PTimestamp pts = new PTimestamp();
-		c.setTime(d);
-		pts.set(TimestampUnit.YEAR, c.get(Calendar.YEAR));
-		pts.set(TimestampUnit.DAY, c.get(Calendar.DAY_OF_MONTH));
-		pts.set(TimestampUnit.MONTH, c.get(Calendar.MONTH) + 1);
-		pts.set(TimestampUnit.HOUR, c.get(Calendar.HOUR_OF_DAY));
-		pts.set(TimestampUnit.MINUTE, c.get(Calendar.MINUTE));
-		pts.set(TimestampUnit.SECOND, c.get(Calendar.SECOND));
-		return pts;
 	}
 
 }

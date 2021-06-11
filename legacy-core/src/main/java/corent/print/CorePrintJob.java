@@ -36,10 +36,9 @@ import corent.base.StrUtil;
 import logging.Logger;
 
 /**
- * Mit Hilfe dieser Klasse k&ouml;nnen Druckauftr&auml;ge erzeugt, konfiguriert
- * und ausgef&uuml;hrt werden. Sie bietet zudem die M&ouml;glichkeit
- * Druckformulare aus beschreibenden Dateien zu &uuml;bernehmen und mit
- * &uuml;bergebenen Daten zu f&uuml;llen.<BR>
+ * Mit Hilfe dieser Klasse k&ouml;nnen Druckauftr&auml;ge erzeugt, konfiguriert und ausgef&uuml;hrt werden. Sie bietet
+ * zudem die M&ouml;glichkeit Druckformulare aus beschreibenden Dateien zu &uuml;bernehmen und mit &uuml;bergebenen
+ * Daten zu f&uuml;llen.<BR>
  * <HR>
  *
  * @author O.Lieshoff
@@ -74,15 +73,13 @@ public class CorePrintJob implements Previewable {
 	/** Y-Koordinate der letzten grafischen Operation <I>(Default 0.0d)</I>. */
 	protected double lasty = 0.0d;
 	/**
-	 * Die Abst&auml;nde zu den Seitenr&auml;ndern in dots <I>(Default double[]
-	 * {0.0d, 0.0d, 0.0d, 0.0d})</I>.
+	 * Die Abst&auml;nde zu den Seitenr&auml;ndern in dots <I>(Default double[] {0.0d, 0.0d, 0.0d, 0.0d})</I>.
 	 */
 	protected double[] margins = new double[] { 0.0d, 0.0d, 0.0d, 0.0d };
 	/** Liste der PrintJobMacros des Jobs <I>(Default new Hashtable())</I>. */
 	protected Hashtable macros = new Hashtable();
 	/**
-	 * Referenz die Parametertabelle zum auszudruckenden Objekt <I>(Default
-	 * null)</I>.
+	 * Referenz die Parametertabelle zum auszudruckenden Objekt <I>(Default null)</I>.
 	 */
 	protected Hashtable params = new Hashtable();
 	/** Die horizontale Ausrichtung von Figuren <I>(Default LEFT)</I>. */
@@ -102,30 +99,25 @@ public class CorePrintJob implements Previewable {
 	/** Referenz auf die PageAttributes des Druckauftrages <I>(Default null)</I>. */
 	protected PageAttributes pa = null;
 	/**
-	 * Die PreviewComponent, in der der Prinjob gegebenenfalls dargstellt werden
-	 * soll <I>( Default) </I>.
+	 * Die PreviewComponent, in der der Prinjob gegebenenfalls dargstellt werden soll <I>( Default) </I>.
 	 */
 	protected PreviewComponent pc = null;
 	/**
-	 * Referenz auf den systemeigenen PrintJob, &uuml;ber den das Objekt seine
-	 * Ausgabe tut <I> (Default null)</I>.
+	 * Referenz auf den systemeigenen PrintJob, &uuml;ber den das Objekt seine Ausgabe tut <I> (Default null)</I>.
 	 */
 	protected PrintJob job = null;
 	/**
-	 * Programmstack f&uuml;r die Scriptausf&uuml;hrung <I>(Default new
-	 * Stack())</I>.
+	 * Programmstack f&uuml;r die Scriptausf&uuml;hrung <I>(Default new Stack())</I>.
 	 */
 	protected Stack programmstack = new Stack();
 	/**
-	 * Referenz auf das Script, auf dessen Grundlage gemalt wird <I>(Default
-	 * null)</I>.
+	 * Referenz auf das Script, auf dessen Grundlage gemalt wird <I>(Default null)</I>.
 	 */
 	protected Vector script = null;
 
 	/**
-	 * Ist diese Flagge gesetzt werden die Zeichenanweisungen tats&auml;chlich
-	 * ausgef&uuml;hrt, andernfalls werden lediglich die dazu notwendigen Aktionen
-	 * simuliert <I>(Default true)</I>.
+	 * Ist diese Flagge gesetzt werden die Zeichenanweisungen tats&auml;chlich ausgef&uuml;hrt, andernfalls werden
+	 * lediglich die dazu notwendigen Aktionen simuliert <I>(Default true)</I>.
 	 */
 	private boolean drawMode = true;
 
@@ -133,8 +125,7 @@ public class CorePrintJob implements Previewable {
 	 * Generiert einen PrintJob anhand der &uuml;bergebenen Parameter.
 	 *
 	 * @param ja Ein JobAttributes-Objekt mit den Voreinstellungen zum Druckjob.
-	 * @param pa Ein PageAttributes-Objekt mit den Voreinstellungen zum Papier des
-	 *           Druckjobs.
+	 * @param pa Ein PageAttributes-Objekt mit den Voreinstellungen zum Papier des Druckjobs.
 	 */
 	public CorePrintJob(JobAttributes ja, PageAttributes pa) {
 		super();
@@ -148,11 +139,9 @@ public class CorePrintJob implements Previewable {
 	 * Generiert einen PrintJob anhand der &uuml;bergebenen Parameter.
 	 *
 	 * @param ja Ein JobAttributes-Objekt mit den Voreinstellungen zum Druckjob.
-	 * @param pa Ein PageAttributes-Objekt mit den Voreinstellungen zum Papier des
-	 *           Druckjobs.
+	 * @param pa Ein PageAttributes-Objekt mit den Voreinstellungen zum Papier des Druckjobs.
 	 * @param fn Dateiname, der Datei, aus der das Script gelesen werden soll.
-	 * @throws IOException falls ein Fehler bei der Arbeit mit dem Dateisystem
-	 *                     auftritt.
+	 * @throws IOException falls ein Fehler bei der Arbeit mit dem Dateisystem auftritt.
 	 */
 	public CorePrintJob(JobAttributes ja, PageAttributes pa, String fn) throws IOException {
 		this(ja, pa);
@@ -163,12 +152,10 @@ public class CorePrintJob implements Previewable {
 	 * Generiert einen PrintJob anhand der &uuml;bergebenen Parameter.
 	 *
 	 * @param ja     Ein JobAttributes-Objekt mit den Voreinstellungen zum Druckjob.
-	 * @param pa     Ein PageAttributes-Objekt mit den Voreinstellungen zum Papier
-	 *               des Druckjobs.
+	 * @param pa     Ein PageAttributes-Objekt mit den Voreinstellungen zum Papier des Druckjobs.
 	 * @param fn     Dateiname, der Datei, aus der das Script gelesen werden soll.
 	 * @param params Eine Tabelle mit Parametern zum auszudruckenden Objekt.
-	 * @throws IOException falls ein Fehler bei der Arbeit mit dem Dateisystem
-	 *                     auftritt.
+	 * @throws IOException falls ein Fehler bei der Arbeit mit dem Dateisystem auftritt.
 	 */
 	public CorePrintJob(JobAttributes ja, PageAttributes pa, String fn, Hashtable params) throws IOException {
 		this(ja, pa);
@@ -180,8 +167,7 @@ public class CorePrintJob implements Previewable {
 	 * Generiert einen PrintJob anhand der &uuml;bergebenen Parameter.
 	 *
 	 * @param ja     Ein JobAttributes-Objekt mit den Voreinstellungen zum Druckjob.
-	 * @param pa     Ein PageAttributes-Objekt mit den Voreinstellungen zum Papier
-	 *               des Druckjobs.
+	 * @param pa     Ein PageAttributes-Objekt mit den Voreinstellungen zum Papier des Druckjobs.
 	 * @param script Das Druck-Script in Vector-Form.
 	 * @param params Eine Tabelle mit Parametern zum auszudruckenden Objekt.
 	 */
@@ -236,8 +222,7 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * @return <TT>true</TT>, wenn die Koordinaten auf den Mittelpunkt der zu
-	 *         zeichnenden Figur gelegt werden sollen.
+	 * @return <TT>true</TT>, wenn die Koordinaten auf den Mittelpunkt der zu zeichnenden Figur gelegt werden sollen.
 	 */
 	public boolean isCentered() {
 		return ((this.align == CENTER) && (this.valign == CENTER));
@@ -279,12 +264,6 @@ public class CorePrintJob implements Previewable {
 		case TOP:
 			this.valign = valign;
 		}
-	}
-
-	/** Setzt die Ausrichtungen f&uuml;r Figuren auf zentriert. */
-	public void setCenter() {
-		this.setAlign(CENTER);
-		this.setVAlign(CENTER);
 	}
 
 	/**
@@ -402,10 +381,9 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * Schreibt den angegebenen String an die &uuml;bergebenen Koordinaten. Ist der
-	 * String l&auml;nger als die angegebene Maximall&auml;nge, so werden die
-	 * &uuml;berz&auml;hligen Zeichen abgetrennt und drei Punkte zur Kennzeichnung
-	 * angebracht.
+	 * Schreibt den angegebenen String an die &uuml;bergebenen Koordinaten. Ist der String l&auml;nger als die
+	 * angegebene Maximall&auml;nge, so werden die &uuml;berz&auml;hligen Zeichen abgetrennt und drei Punkte zur
+	 * Kennzeichnung angebracht.
 	 *
 	 * @param g Der Graphics-KOntext, auf den geschrieben werden soll.
 	 * @param s Der zu schreibende String.
@@ -431,29 +409,10 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * Schreibt den angegebenen String an die &uuml;bergebenen Koordinaten. Ist der
-	 * String l&auml;nger als die angegebene Maximall&auml;nge, so wird er
-	 * umgebrochen und in der n&auml;chsten Zeile weitergef&uuml;hrt. Reicht die
-	 * dazu angegebene Maximalh&ouml;he nicht aus, so wird der String entsprechend
-	 * gek&uml;rzt und um drei Punkte zur Kennzeichnung erweitert.
-	 *
-	 * @param g Der Graphics-KOntext, auf den geschrieben werden soll.
-	 * @param s Der zu schreibende String.
-	 * @param x Die X-Koordinate der Ausgabe in cm.
-	 * @param y Die Y-Koordinate der Ausgabe in cm.
-	 * @param w Die maximale Breite der Ausgabe in cm.
-	 * @param h Die maximale H&ouml;he der Ausgabe in cm.
-	 */
-	public void drawString(Graphics g, String s, double x, double y, double w, double h) {
-		this.drawString(g, s, x, y, w, h, 1.5);
-	}
-
-	/**
-	 * Schreibt den angegebenen String an die &uuml;bergebenen Koordinaten. Ist der
-	 * String l&auml;nger als die angegebene Maximall&auml;nge, so wird er
-	 * umgebrochen und in der n&auml;chsten Zeile weitergef&uuml;hrt. Reicht die
-	 * dazu angegebene Maximalh&ouml;he nicht aus, so wird der String entsprechend
-	 * gek&uml;rzt und um drei Punkte zur Kennzeichnung erweitert.
+	 * Schreibt den angegebenen String an die &uuml;bergebenen Koordinaten. Ist der String l&auml;nger als die
+	 * angegebene Maximall&auml;nge, so wird er umgebrochen und in der n&auml;chsten Zeile weitergef&uuml;hrt. Reicht
+	 * die dazu angegebene Maximalh&ouml;he nicht aus, so wird der String entsprechend gek&uml;rzt und um drei Punkte
+	 * zur Kennzeichnung erweitert.
 	 *
 	 * @param g  Der Graphics-KOntext, auf den geschrieben werden soll.
 	 * @param s  Der zu schreibende String.
@@ -486,11 +445,10 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * Schreibt den angegebenen String an die &uuml;bergebenen Koordinaten. Ist der
-	 * String l&auml;nger als die angegebene Maximall&auml;nge, so wird er
-	 * umgebrochen und in der n&auml;chsten Zeile weitergef&uuml;hrt. Reicht die
-	 * dazu angegebene Maximalh&ouml;he nicht aus, so wird der String entsprechend
-	 * gek&uml;rzt und um drei Punkte zur Kennzeichnung erweitert.
+	 * Schreibt den angegebenen String an die &uuml;bergebenen Koordinaten. Ist der String l&auml;nger als die
+	 * angegebene Maximall&auml;nge, so wird er umgebrochen und in der n&auml;chsten Zeile weitergef&uuml;hrt. Reicht
+	 * die dazu angegebene Maximalh&ouml;he nicht aus, so wird der String entsprechend gek&uml;rzt und um drei Punkte
+	 * zur Kennzeichnung erweitert.
 	 *
 	 * @param g  Der Graphics-KOntext, auf den geschrieben werden soll.
 	 * @param s  Die Zeilen des zu schreibenden Textes.
@@ -624,8 +582,7 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * Zeichnet ein gef&uuml;lltes Rechteck mit abgerundeten Ecken an die
-	 * angegebenen Koordinaten.
+	 * Zeichnet ein gef&uuml;lltes Rechteck mit abgerundeten Ecken an die angegebenen Koordinaten.
 	 *
 	 * @param g  Der Grafikkontext, auf den gemalt werden soll.
 	 * @param x  Die X-Koordinate der rechten oberen Ecke des Rechtecks.
@@ -660,29 +617,11 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * Setzt den angegeben Font mit den angegebenen Parametern und rechnet die
-	 * Fontgr&ouml;&szlig;e entsprechend der Anzeigeart um.
-	 *
-	 * @param g        Der Grafik-Kontext, f&uuml;r den die Einstellung vorgenommen
-	 *                 werden soll.
-	 * @param fontname Der Name des Fonts.
-	 * @param style    Der Style, in dem der Font angezeigt werden soll (PLAIN,
-	 *                 ITALIC etc.).
-	 * @param pt       Die Gr&ouml;&szlig;e in Punkt (Pixels?).
-	 */
-	public void setFont(Graphics g, String fontname, int style, int pt) {
-		double d = ((double) pt) * ((double) this.dpi) / 72.0;
-		int size = (int) d;
-		g.setFont(new Font(fontname, style, size));
-	}
-
-	/**
 	 * Liest und parst ein Script aus der angegebenen Datei.
 	 *
 	 * @param fn Der Name der Datei aus der gelesen werden soll.
 	 * @return Ein Vector mit den Zeilen der Datei.
-	 * @throws IOException falls ein Fehler bei der Arbeit mit dem Dateisystem
-	 *                     auftritt.
+	 * @throws IOException falls ein Fehler bei der Arbeit mit dem Dateisystem auftritt.
 	 */
 	protected Vector getScript(String fn) throws IOException {
 		Vector script = new Vector();
@@ -708,12 +647,11 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * Liest und entfernt die Konfigurationsanweisungen aus dem Script und arbeitet
-	 * den Rest f&uuml;r die paint-Routine auf.
+	 * Liest und entfernt die Konfigurationsanweisungen aus dem Script und arbeitet den Rest f&uuml;r die paint-Routine
+	 * auf.
 	 *
 	 * @param script0 Das noch unbearbeitete Script.
-	 * @return <TT>true</TT>, wenn der Konfigurationsteil des Scriptes fehlerfrei
-	 *         abgearbeitet werden konnte,<BR>
+	 * @return <TT>true</TT>, wenn der Konfigurationsteil des Scriptes fehlerfrei abgearbeitet werden konnte,<BR>
 	 *         <TT>false</TT> sonst.
 	 */
 	protected boolean configure(Vector script0) {
@@ -817,9 +755,8 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * Diese Methode kann zur Erweiterung der Konfigurationsanweisungen im Script
-	 * &uuml;berschrieben werden. Auf Fehler bei der abarbeitung des Scriptes
-	 * mu&szlig; mit einer Exception reagiert werden.
+	 * Diese Methode kann zur Erweiterung der Konfigurationsanweisungen im Script &uuml;berschrieben werden. Auf Fehler
+	 * bei der abarbeitung des Scriptes mu&szlig; mit einer Exception reagiert werden.
 	 * 
 	 * @param cmd   Das Kommando.
 	 * @param stack Der Stack, auf dem das Script arbeitet.
@@ -834,8 +771,7 @@ public class CorePrintJob implements Previewable {
 	/**
 	 * Druckt den Druckauftrag mit Hilfe der <TT>paint</TT>-Methode.
 	 *
-	 * @return <TT>true</TT>, falls der Auftrag ordnungsgem&auml;&szlig;
-	 *         ausgef&uuml;hrt werden konntem,<BR>
+	 * @return <TT>true</TT>, falls der Auftrag ordnungsgem&auml;&szlig; ausgef&uuml;hrt werden konntem,<BR>
 	 *         <TT>false</TT>, sonst.
 	 */
 	public boolean print() {
@@ -862,20 +798,7 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * Diese Methode malt anhand des aufgearbeiteten Vector den eigentlichen
-	 * Ausdruck.
-	 *
-	 * @return Die Anzahl der Seiten, die von dem Druck ben&ouml;tigt werden.
-	 */
-	public int countPages() {
-		return this.makePages(
-				new BufferedImage(this.dimPage.width, this.dimPage.height, BufferedImage.TYPE_INT_RGB).createGraphics(),
-				-1);
-	}
-
-	/**
-	 * Diese Methode malt anhand des aufgearbeiteten Vector den eigentlichen
-	 * Ausdruck.
+	 * Diese Methode malt anhand des aufgearbeiteten Vector den eigentlichen Ausdruck.
 	 *
 	 * @param g    Der Grafik-Kontext, auf den gedruckt werden soll.
 	 * @param page Die Seite, die gedruckt werden soll.
@@ -982,8 +905,7 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * Diese Methode malt anhand des aufgearbeiteten Vector den eigentlichen
-	 * Ausdruck.
+	 * Diese Methode malt anhand des aufgearbeiteten Vector den eigentlichen Ausdruck.
 	 *
 	 * @param g    Der Grafik-Kontext, auf den gedruckt werden soll.
 	 * @param page Die Seite, die gedruckt werden soll.
@@ -1005,16 +927,10 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * @return <TT>true</TT>, wenn der PrintJob gerade mit dem drucken
-	 *         besch&auml;ftigt ist
+	 * @return <TT>true</TT>, wenn der PrintJob gerade mit dem drucken besch&auml;ftigt ist
 	 */
 	public boolean isActive() {
 		return this.aktiv;
-	}
-
-	/** Setzt den Status des PrintJobs auf Aktiv. */
-	public void setActive() {
-		this.aktiv = true;
 	}
 
 	/**
@@ -1347,8 +1263,7 @@ public class CorePrintJob implements Previewable {
 	 * @param stack Der Stack, von dem das Kommando seine Parameter beziehen kann.
 	 * @param line  Nummer des verarbeiteten Kommandos.
 	 * @param page  Die vom PrintJob angeforderte Druckseite.
-	 * @return <TT>true</TT>, wenn das Kommando als PrintJobMacro erkannt werden
-	 *         konnte.
+	 * @return <TT>true</TT>, wenn das Kommando als PrintJobMacro erkannt werden konnte.
 	 */
 	protected boolean executeMacro(String cmd, Graphics g, Stack stack, int line, int page) {
 		int len = 0;
@@ -1425,9 +1340,8 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * Bearbeitet das &uuml;bergebene Kommando und &uuml;bertr&auml;gt das Ergebnis
-	 * gegebenenfalls auf den graphischen Kontext. Als Seiteneffekt wird der
-	 * &uuml;bergebene Stack manipuliert. Auf Fehler mu&szlig; mit einer Exception
+	 * Bearbeitet das &uuml;bergebene Kommando und &uuml;bertr&auml;gt das Ergebnis gegebenenfalls auf den graphischen
+	 * Kontext. Als Seiteneffekt wird der &uuml;bergebene Stack manipuliert. Auf Fehler mu&szlig; mit einer Exception
 	 * reagiert werden.
 	 *
 	 * @param cmd   Das Kommando.
@@ -1447,8 +1361,7 @@ public class CorePrintJob implements Previewable {
 	}
 
 	/**
-	 * L&ouml;&szlig;st den &uuml;bergebenen Vector aus Anweisungszeilen in einzelne
-	 * Strings auf.
+	 * L&ouml;&szlig;st den &uuml;bergebenen Vector aus Anweisungszeilen in einzelne Strings auf.
 	 *
 	 * @param script Die Anweisungszeilen.
 	 * @return Ein Vector mit den einzelnen Strings der Anweisungszeilen.

@@ -12,11 +12,9 @@ package corent.db;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Vector;
-
-import logging.Logger;
 
 import corent.base.SortedVector;
+import logging.Logger;
 
 /**
  * Diese Klasse bietet eine Reihe von Utilities zur Arbeit mit DBMS und JDBC an.
@@ -331,38 +329,6 @@ public class DBUtil {
 	}
 
 	/**
-	 * Definiert, ob der angegebene Type &uuml;ber eine L&auml;ngenangabe verf&uuml;gen kann.
-	 *
-	 * @param dt Der zu &uuml;berpr&uuml;fende Datentyp.
-	 * @return <TT>true</TT>, wenn zu dem Datentyp eine L&auml,ngenangabe gemacht werden kann.
-	 */
-	public static boolean IsLength(int dt) {
-		switch (dt) {
-		case Types.DECIMAL:
-		case Types.NUMERIC:
-		case Types.VARBINARY:
-		case Types.VARCHAR:
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Definiert, ob der angegebene Type &uuml;ber eine Nachkommastellenangabe verf&uuml;gen kann.
-	 *
-	 * @param dt Der zu &uuml;berpr&uuml;fende Datentyp.
-	 * @return <TT>true</TT>, wenn zu dem Datentyp eine Nachkommastellenangabe gemacht werden kann.
-	 */
-	public static boolean IsNKS(int dt) {
-		switch (dt) {
-		case Types.DECIMAL:
-		case Types.NUMERIC:
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Mit Hilfe dieser Methode lassen sich aus einem ResultSet Objekt gewinnen. Mit der reinen
 	 * <TT>getObject()</TT>-Methode des ResultSet ist dies so nicht m&ouml;glich.
 	 *
@@ -465,32 +431,14 @@ public class DBUtil {
 			}
 			return null;
 		}
-		log.debug("                                   -> type=" + columntype + "(" + TypeToString(columntype)
-				+ "), result=" + obj);
+		log
+				.debug(
+						"                                   -> type=" + columntype + "(" + TypeToString(columntype)
+								+ "), result=" + obj);
 		if (rs.wasNull() && nullsAllowed) {
 			return null;
 		}
 		return obj;
-	}
-
-	/**
-	 * Liefert einen String mit durch Kommata getrennten Tabellenspaltennamen des angegebenen PersistenceDescriptors.
-	 *
-	 * @param pd Der PersistenceDescriptor, zu dem die Tabellenspaltennamen geliefert werden sollen.
-	 * @return Eine Liste mit den vollen Namen der Tabellenspalten des angegebenen PersistenceDesriptors.
-	 */
-	public static String GetColumnnameListAsString(PersistenceDescriptor pd) {
-		Vector<Integer> vat = pd.getAttributes();
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0, len = vat.size(); i < len; i++) {
-			Integer at = vat.elementAt(i);
-			ColumnRecord cr = pd.getColumn(at.intValue());
-			if (sb.length() > 0) {
-				sb.append(", ");
-			}
-			sb.append(cr.getFullname());
-		}
-		return sb.toString();
 	}
 
 }
