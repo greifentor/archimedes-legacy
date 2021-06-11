@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -212,21 +211,11 @@ public class DBExec {
 	private boolean printTimestamp = PrintTimestamp;
 	private boolean showStatements = true; // ShowStatements;
 	private DBExecMode dbmode = DBMODE;
-	private Vector<DBExecListener> dbExecListeners = new Vector<DBExecListener>();
 
 	/** Generiert eine Instanz der DBExec-Klasse. */
 	public DBExec() {
 		super();
 		this.setShowStatements(Boolean.getBoolean("corent.db.DBExec.ShowStatements"));
-	}
-
-	private void fireDBExecEvent(DBExecEventType type, long millis, String statement) {
-		for (Iterator<DBExecListener> i = this.dbExecListeners.iterator(); i.hasNext();) {
-			i
-					.next()
-					.eventDetected(
-							new DBExecEvent(type, new PTimestamp().toLong(), millis, statement, this == INSTANCE));
-		}
 	}
 
 	/**
@@ -277,7 +266,6 @@ public class DBExec {
 	 */
 	private int update(Connection connection, String statement) throws SQLException {
 		int count = 0;
-		long millis = System.currentTimeMillis();
 		Statement stmt = null;
 		if (this.showStatements) {
 			this.printMessage(statement);
@@ -285,7 +273,6 @@ public class DBExec {
 		try {
 			stmt = connection.createStatement();
 			count = stmt.executeUpdate(statement);
-			this.fireDBExecEvent(DBExecEventType.UPDATE, System.currentTimeMillis() - millis, statement);
 		} catch (SQLException sqle) {
 			if (!this.isSuppressOutputOfFaultyStatements()) {
 				LOG.error("\nby stmt: " + statement);
@@ -340,7 +327,6 @@ public class DBExec {
 	 *
 	 */
 	private ResultSet query(Connection connection, String statement, long limit) throws SQLException {
-		long millis = System.currentTimeMillis();
 		ResultSet rs = null;
 		Statement stmt = null;
 		if (limit > 0) {
@@ -352,7 +338,6 @@ public class DBExec {
 		try {
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(statement);
-			this.fireDBExecEvent(DBExecEventType.QUERY, System.currentTimeMillis() - millis, statement);
 		} catch (SQLException sqle) {
 			if (!this.isSuppressOutputOfFaultyStatements()) {
 				LOG.error("\nby stmt: " + statement);
