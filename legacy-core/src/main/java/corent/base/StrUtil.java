@@ -10,15 +10,12 @@
 package corent.base;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
-import logging.Logger;
 
-import corentx.util.VowelMutationReplaceStrategy;
+import logging.Logger;
 
 /**
  * Diese Klasse sammelt diverse Funktionen, die sich auf den Umgang mit Strings beziehen.
@@ -67,44 +64,6 @@ public class StrUtil {
 	 * / public static boolean Contains(String s, char c) { int len = s.length(); for (int i = 0; i < len; i++) { if
 	 * (s.charAt(i) == c) { return true; } } return false; }
 	 */
-
-	/**
-	 * Liefert den Inhalt des angegebenen XML-Style-Tags (begrenzt von einem attributfreien &ouml;ffnenden und einem
-	 * schliessenden Tag).
-	 *
-	 * @param src     Der XML-Style-String, aus dem der Inhalt des angegebenen Tags extrahiert werden soll.
-	 * @param tagname Der Name des Tags, dessen Inhalt extrahiert werden soll.
-	 * @return Der Inhalt des angegebenen Tags.
-	 * @throws NoSuchElementException Falls der Quellstring kein attributfreies Tag mit den angegebenen Namen aufweist.
-	 * @throws NullPointerException   Falls Quellstring oder Tagname als <TT>null</TT>-Referenz &uuml;bergeben werden.
-	 *
-	 * @precondition src und tagname sind ungleich null.
-	 *
-	 * @changed OLI 03.06.2009 - Hinzugef&uuml;gt.
-	 *
-	 */
-	public static String ExtractXMLStyleTagValue(String src, String tagname)
-			throws NoSuchElementException, NullPointerException {
-		assert (src != null) && (tagname != null) : "Source string and tagname have to be not "
-				+ "null while calling method StrUtil.ExtractXMLStyleTagValue(String, String)!";
-		int end = 0;
-		int start = 0;
-		String result = null;
-		String tagEnd = "</".concat(tagname).concat(">");
-		String tagStart = "<".concat(tagname).concat(">");
-		if (!src.contains(tagStart)) {
-			throw new NoSuchElementException("Tagname (" + tagname + ") does not exists in " + "string (" + src + ")!");
-		}
-		start = src.indexOf(tagStart);
-		end = src.indexOf(tagEnd);
-		if ((start >= 0) && (end >= 0)) {
-			result = src.substring(start + tagStart.length(), end);
-		} else {
-			throw new NoSuchElementException(
-					"Closing tag not found. May be tag (" + tagname + ") is not in a valifd form!");
-		}
-		return result;
-	}
 
 	/**
 	 * Mit Hilfe dieser Funktion l&auml;&szlig;t sich ein double-Wert in einen formatierten String umwandeln.
@@ -182,34 +141,6 @@ public class StrUtil {
 	}
 
 	/**
-	 * Vergleich (z. B. zwecks Sortierung) zwischen den angegebenen String nach deutscher Sortierung (&uuml; wird
-	 * beispielsweise als u gewertet, &ouml; als o usw.).
-	 *
-	 * <P>
-	 * <I><B>Hinweis:</B> Der Vergleich ist nicht case sensitive</I>.
-	 *
-	 * @param s0 Der String gegen den verglichen werden soll.
-	 * @param s1 Der zuvergleichende String.
-	 * @return <TT>-1</TT> wenn s0 > s1, <TT>0</TT> bei Gleichheit und <TT>1</TT> wenn s0 < s1.
-	 * @throws NullPointerException Falls einer der beiden &uuml;bergebenen Strings eine null-Referenz ist.
-	 *
-	 * @precondition s0 und s1 sind ungleich <TT>null</TT>.
-	 *
-	 * @changed OLI 04.06.2009 - Hinzugef&uuml;gt.
-	 *
-	 */
-	public static int GermanCompare(String s0, String s1) {
-		assert (s0 != null) && (s1 != null) : "One of the parameter strings is null!";
-		int result = ReplaceVowelMutations(s0, VowelMutationReplaceStrategy.SIMPLE_REPLACE)
-				.compareToIgnoreCase(ReplaceVowelMutations(s1, VowelMutationReplaceStrategy.SIMPLE_REPLACE));
-		if (result == 0) {
-			result = ReplaceVowelMutations(s0, VowelMutationReplaceStrategy.TWO_CHAR_REPLACE)
-					.compareToIgnoreCase(ReplaceVowelMutations(s1, VowelMutationReplaceStrategy.TWO_CHAR_REPLACE));
-		}
-		return result;
-	}
-
-	/**
 	 * Diese Methode ersetzt den angegebenen String durch den Inhalt der angegebenen Property die, falls existent, gegen
 	 * den Inhalt einer Property mit dem um den angegebenen Suffix erweiterten Namen ersetzt wird.
 	 *
@@ -238,70 +169,6 @@ public class StrUtil {
 	 */
 	public static String InsertStr(String s, String ins, int pos) throws IndexOutOfBoundsException {
 		return s.substring(0, pos).concat(ins).concat(s.substring(pos, s.length()));
-	}
-
-	/**
-	 * Wandelt das &uuml;bergebene Zeichen in einen Kleinbuchstaben um. Nicht die effizienteste Art ein Zeichen
-	 * umzuwandeln, aber eine funktionsf&auml;hige.
-	 *
-	 * @param c Der umzuwandelnde Buchstabe.
-	 * @return Der Kleinbuchstabe zu c.
-	 */
-	public static char LowerCase(char c) {
-		return ("" + c).toLowerCase().charAt(0);
-	}
-
-	/**
-	 * Parst einen String auf nummerischen Inhalt und liefert ein entsprechendes Wrapper-Objekt zur&uuml;ck.
-	 *
-	 * @param s Der zu parsende String.
-	 * @return Ein Objekt mit dem entsprechenden Wert in einem Wrapper-Objekt, bzw. <TT>null</TT>, falls kein
-	 *         nummerischer Wert ermittelt werden konnte.
-	 */
-	public static Number Parse(String s) {
-		s = s.toLowerCase();
-		try {
-			if (s.endsWith("d")) {
-				s = s.substring(0, s.length() - 1);
-				try {
-					return new Double(s);
-				} catch (NumberFormatException nfe1) {
-				}
-			} else if (s.endsWith("f")) {
-				s = s.substring(0, s.length() - 1);
-				try {
-					return new Float(s);
-				} catch (NumberFormatException nfe1) {
-				}
-			} else if (s.endsWith("l")) {
-				s = s.substring(0, s.length() - 1);
-				try {
-					return new Long(s);
-				} catch (NumberFormatException nfe1) {
-				}
-			}
-			try {
-				return new Integer(s);
-			} catch (NumberFormatException nfe1) {
-				try {
-					return new Long(s);
-				} catch (NumberFormatException nfe2) {
-					try {
-						return new Float(s);
-					} catch (NumberFormatException nfe3) {
-						try {
-							return new Double(s);
-						} catch (NumberFormatException nfe4) {
-						}
-					}
-				}
-			}
-		} catch (NumberFormatException nfe) {
-			if (Boolean.getBoolean("corent.StrUtil.debug")) {
-				nfe.printStackTrace();
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -368,76 +235,6 @@ public class StrUtil {
 		int pos = s.indexOf(p);
 		if (pos >= 0) {
 			s = s.substring(0, pos) + c + Replace(s.substring(pos + len), p, c);
-		}
-		return s;
-	}
-
-	/**
-	 * Diese Methode ersetzt in dem angegebenen String s den ersten Teilstrings p durch den String c.
-	 *
-	 * @param s Der String, der als Grundlage f&uuml;r die Ersetzung dienen soll.
-	 * @param p Das Muster, welches ersetzt werden soll.
-	 * @param c Der Teilstring, der anstelle des Musters eingesetzt werden soll.
-	 * @return Der String s mit den entsprechenden Ersetzungen.
-	 *
-	 * @changed OLI 01.05.2008 - Hinzugef&uuml;gt.
-	 *          <P>
-	 *
-	 */
-	public static String ReplaceFirst(String s, String p, String c) {
-		int len = p.length();
-		int pos = s.indexOf(p);
-		if (pos >= 0) {
-			s = s.substring(0, pos).concat(c).concat(s.substring(pos + len));
-		}
-		return s;
-	}
-
-	/**
-	 * Ersetzt die Umlaute in dem &uuml;bergebenen String anhand der gew&auml;hlten Strategie.
-	 *
-	 * @param s    Der String, in dem die Umlaute ersetzt werden sollen.
-	 * @param vmrs Die Austauschstrategie.
-	 * @return Der String mit den ausgetauschten Umlauten.
-	 * @throws NullPointerException Falls der String als null-Referenz &uuml;bergeben wird.
-	 *
-	 * @precondition s ungleich <TT>null</TT>
-	 *
-	 * @changed OLI 04.06.2009 - Hinzugef&uuml;gt.
-	 *
-	 */
-	public static String ReplaceVowelMutations(String s, VowelMutationReplaceStrategy vmrs) {
-		assert s != null : "the string parameter can not be null!";
-		if (vmrs == VowelMutationReplaceStrategy.SIMPLE_REPLACE) {
-			s = s.replace(FromHTML("&auml;"), "a");
-			s = s.replace(FromHTML("&ouml;"), "o");
-			s = s.replace(FromHTML("&uuml;"), "u");
-			s = s.replace(FromHTML("&szlig;"), "ss");
-			s = s.replace(FromHTML("&Auml;"), "A");
-			s = s.replace(FromHTML("&Ouml;"), "O");
-			s = s.replace(FromHTML("&Uuml;"), "U");
-		} else {
-			s = s.replace(FromHTML("&auml;"), "ae");
-			s = s.replace(FromHTML("&ouml;"), "oe");
-			s = s.replace(FromHTML("&uuml;"), "ue");
-			s = s.replace(FromHTML("&szlig;"), "ss");
-			s = s.replace(FromHTML("&Auml;"), "Ae");
-			s = s.replace(FromHTML("&Ouml;"), "Oe");
-			s = s.replace(FromHTML("&Uuml;"), "Ue");
-		}
-		return s;
-	}
-
-	/**
-	 * Wandelt einen Wert vom Typ int in eine vorzeichenbehaftete Stringdarstellung um.
-	 *
-	 * @param l Der umzuwandelnde Wert.
-	 */
-	public static String SignedIntegerToStr(int l) {
-		Integer ol = new Integer(l);
-		String s = ol.toString();
-		if (ol.intValue() > 0) {
-			s = "+".concat(s);
 		}
 		return s;
 	}
@@ -512,62 +309,6 @@ public class StrUtil {
 		html = Replace(html, "ô", "&ocircum;");
 		html = Replace(html, "û", "&ucircum;");
 		return html;
-	}
-
-	/**
-	 * Entfernt die in dem String <TT>toRemove</TT> definierten Zeichen vom Anfang und Ende des Strings <TT>s</TT>.
-	 *
-	 * @param s        Der String, dessen Anfangs- und Endsequenz von den im String <TT>toRemove</TT> definierten
-	 *                 Zeichen bereinigt werden sollen.
-	 * @param toRemove Die Zeichen, die gegebenenfalls entfernt werden sollen, sofern sie am Anfang bzw. Ende des
-	 *                 Strings <TT>s</TT> stehen.
-	 * @return Der String <TT>s</TT> mit der entsprechend bereinigten Anfangs- und Endsequenz.
-	 * @throws NullPointerException falls wenigstens eines der beiden Argumente eine <TT>null</TT>-Referenz ist.
-	 *
-	 * @changed OLI 13.03.2009 - Hinzugef&uuml;gt.
-	 *          <P>
-	 *
-	 */
-	public static String Trim(String s, String toRemove) throws NullPointerException {
-		int i = 0;
-		int len = s.length();
-		int n = 0;
-		if (toRemove == null) {
-			throw new NullPointerException("the charset to remove may not be null.");
-		}
-		if (len > 0) {
-			i = 0;
-			n = 0;
-			while ((i < len) && StringUtils.contains(toRemove, s.charAt(i))) {
-				n++;
-				i++;
-			}
-			if ((n > 0) && (n < len)) {
-				s = s.substring(n, len);
-			}
-			len = s.length();
-			i = len - 1;
-			n = -1;
-			while ((i >= 0) && StringUtils.contains(toRemove, s.charAt(i))) {
-				n = i;
-				i--;
-			}
-			if (n >= 0) {
-				s = s.substring(0, n);
-			}
-		}
-		return s;
-	}
-
-	/**
-	 * Wandelt das &uuml;bergebene Zeichen in einen Gro&szlig;buchstaben um. Nicht die effizienteste Art ein Zeichen
-	 * umzuwandeln, aber eine funktionsf&auml;hige.
-	 *
-	 * @param c Der umzuwandelnde Buchstabe.
-	 * @return Der Gro&szlig;buchstabe zu c.
-	 */
-	public static char UpperCase(char c) {
-		return ("" + c).toUpperCase().charAt(0);
 	}
 
 }

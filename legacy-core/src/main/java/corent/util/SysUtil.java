@@ -11,12 +11,9 @@ package corent.util;
 
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
-import java.util.Enumeration;
-import java.util.List;
 
 import javax.swing.JButton;
 
-import corent.base.SortedVector;
 import logging.Logger;
 
 /**
@@ -45,66 +42,6 @@ import logging.Logger;
 public class SysUtil {
 
 	private static final Logger log = Logger.getLogger(SysUtil.class);
-
-	/**
-	 * Diese Methode f&uuml;hrt die equals-Methode des ersten der beiden angegebenen
-	 * Objekte mit dem zweiten durch. Allerdings finden <TT>null</TT>-Referenzen
-	 * besondere Beachtung:
-	 *
-	 * <TABLE BORDER=1>
-	 * <TR>
-	 * <TD><B>oO</B></TD>
-	 * <TD><B>o1</B></TD>
-	 * <TD><B>Ergebnis</B></TD>
-	 * </TR>
-	 * <TR>
-	 * <TD><B><TT>null</TT></B></TD>
-	 * <TD><B><TT>null</TT></B></TD>
-	 * <TD><B><TT>true</TT></B></TD>
-	 * </TR>
-	 * <TR>
-	 * <TD><B><TT>null</TT></B></TD>
-	 * <TD><B>Referenz</B></TD>
-	 * <TD><B><TT>false</TT></B></TD>
-	 * </TR>
-	 * <TR>
-	 * <TD><B>Referenz</B></TD>
-	 * <TD><B><TT>null</TT></B></TD>
-	 * <TD><B><TT>false</TT></B></TD>
-	 * </TR>
-	 * <TR>
-	 * <TD><B>Referenz</B></TD>
-	 * <TD><B>Referenz</B></TD>
-	 * <TD><B><TT>o0.equals(o1)</TT></B></TD>
-	 * </TR>
-	 * </TABLE>
-	 *
-	 * <P>
-	 * &nbsp;
-	 *
-	 * @param o0 Die Referenz, deren <TT>equals(Object)</TT>-Methode gegebenenfalls
-	 *           ausgef&uuml;hrt werden soll.
-	 * @param o1 Die Referenz, die gegebenenfalls als Parameter bei der
-	 *           Ausf&uuml;hrung der Methode <TT>o0.equals(Object)</TT>-Methode
-	 *           ausgef&uuml;hrt werden soll.
-	 * @return <TT>true</TT>, falls beide Parameter eine <TT>null</TT>-Referenz
-	 *         sind. <BR>
-	 *         <TT>false</TT>, wenn nur einer der beiden Parameter eine
-	 *         <TT>null</TT>-Referenz ist. <BR>
-	 *         <TT>o0.equals(o1)</TT>, falls beide Referenzen <U>keine</U>
-	 *         <TT>null</TT>-Referenz sind.
-	 *
-	 * @changed OLI 17.07.2009 - Hinzugef&uuml;gt.
-	 *
-	 */
-	public static boolean equalsRef(Object o0, Object o1) {
-		if ((o0 == null) && (o1 == null)) {
-			return true;
-		} else if (((o0 == null) && (o1 != null)) || ((o0 != null) && (o1 == null))) {
-			return false;
-		}
-		return o0.equals(o1);
-	}
 
 	/**
 	 * Diese Methode liefert den Namen des Rechners zur&uuml;ck, auf dem die JVM
@@ -154,68 +91,6 @@ public class SysUtil {
 			log.info("-------------------------------------------------------------------------------");
 		}
 		return hn;
-	}
-
-	/**
-	 * Ein Aufruf dieser Methode gibt eine Liste der in der JVM befindlichen
-	 * Properties als Name-Wert-P&auml;rchen auf der Konsole aus bzw. liefert eine
-	 * Liste mit Strings des selben Inhalts.
-	 *
-	 * @param output Wird diese Flagge gesetzt, so werden die Wertep&auml;rchen auf
-	 *               der Console ausgegeben.
-	 * @return Eine Liste mit String, die im Format "Name=Wert" alle in der JVM
-	 *         bekannten Properties enth&auml;lt.
-	 */
-	public static List<String> ShowProperties(boolean output) {
-		class PropertyEntry implements Comparable {
-			public String pn = "";
-			public String pv = "";
-
-			public PropertyEntry(String pn, String pv) {
-				super();
-				this.pn = pn;
-				this.pv = pv;
-			}
-
-			@Override
-			public String toString() {
-				return this.pn + "=" + this.pv;
-			}
-
-			@Override
-			public int compareTo(Object obj) {
-				PropertyEntry pe = (PropertyEntry) obj;
-				return this.pn.compareTo(pe.pn);
-			}
-		}
-		;
-		SortedVector sv = new SortedVector();
-		for (Enumeration e = System.getProperties().propertyNames(); e.hasMoreElements();) {
-			String pn = (String) e.nextElement();
-			String pv = System.getProperty(pn);
-			sv.addElement(new PropertyEntry(pn, pv));
-		}
-		for (int i = 0, len = sv.size(); i < len; i++) {
-			log.info("" + sv.elementAt(i));
-		}
-		return sv;
-	}
-
-	/**
-	 * F&uuml;hrt die angegebene Kommandozeile ohne R&uuml;cksicht auf das Ergebnis
-	 * aus.
-	 *
-	 * @param cmd Das auszuf&uuml;hrende Kommando.
-	 *
-	 * @changed OLI 26.11.2007 - Hinzugef&uuml;gt.
-	 *
-	 */
-	public static void Execute(String cmd) {
-		try {
-			Runtime.getRuntime().exec(cmd);
-		} catch (Exception e) {
-			log.error("CAUSED BY method corent.util.SysUtil.Execute(" + cmd + ")", e);
-		}
 	}
 
 	/**

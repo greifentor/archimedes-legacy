@@ -10,8 +10,11 @@
 package corent.base.dynamic;
 
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 import logging.Logger;
 
@@ -67,8 +70,8 @@ public class DynamicObject implements Dynamic, Serializable {
     /* Referenz auf den f&uuml;r die Klasse zust&auml;ndigen Logger. */
     private static Logger log = Logger.getLogger(DynamicObject.class); 
 
-    /** Hashtable mit den Attributen des Objektes. */
-    protected Hashtable<String, Object> attribute = new Hashtable<String, Object>();
+	/* Hashtable mit den Attributen des Objektes. */
+	private Hashtable<String, Object> attribute = new Hashtable<String, Object>();
 
     /*
      * Die Referenz auf die Hashtable mit den Descriptoren f&uuml;r die Erstellung der
@@ -79,19 +82,6 @@ public class DynamicObject implements Dynamic, Serializable {
     /** Generiert ein DynamicObject ohne Attribute. */
     protected DynamicObject() {
         super();
-    }
-
-    /**
-     * Erzeugt ein neues DynamicObject anhand des &uuml;bergebenen AttributeDescriptors. Dieser
-     * Sollte aus Speicher- und Performanzgr&uuml;nden eine Referenz auf eine statische
-     * Hashtable sein, die f&uuml;r alle Objekte mit dem selben (hier im wahrsten Sinne des
-     * Wortes gemeint) Descriptor bem&uuml;ht werden sollte.
-     *
-     * @param had Referenz auf die Hashtable mit den AttributeDescriptoren zum Object.
-     */
-    public DynamicObject(Hashtable<String, AttributeDescriptor> had) {
-        super();
-        this.buildAttributes(had);
     }
 
     /**
@@ -140,78 +130,6 @@ public class DynamicObject implements Dynamic, Serializable {
                 }
             }
         }
-    }
-
-    /**
-     * Kopiert die Attribute des &uuml;bergebenen Objektes in das vorliegende Objekt.
-     *
-     * <P><I><B>Hinweis:</B> Die Methode kopiert lediglich Referenzen. Beim Kopieren eines nicht
-     * unver&auml;nderlichen Objektes verweisen also beide DynamicObjects auf dasselbe Attribut!
-     * </I>
-     *
-     * @param o Das DynamicObject, dessen Attributwerte in das vorliegenden Objektes kopiert
-     *         werden sollen.
-     * @throws AttributeNotFoundException Falls das Quellobjekt nicht wenigstens alle Attribute
-     *         des vorliegenden Objektes besitzt.
-     *
-     * @changed OLI 17.02.2009 - Debugging: Attribute mit dem Wert <TT>null</TT> haben f&uuml;r
-     *         das Werfen einer <TT>NullPointerException</TT> w&auml;hrend des Anfertigens der
-     *         Sicherheitskopie gesorgt. Solche Werte werden nun &uuml;bergangen.
-     *
-     */
-    public void copyAttributes(DynamicObject o) throws AttributeNotFoundException {
-        Hashtable<String, Object> htsik = new Hashtable<String, Object>();
-        List<String> attrnames = null;
-        List<String> attrnames0 = null;
-        String attrname = null;
-        attrnames0 = this.getAttributenames();
-        attrnames = o.getAttributenames();
-        for (int i = 0, len = attrnames0.size(); i < len; i++) {
-            if (this.get(attrnames0.get(i)) != null) {
-                htsik.put(attrnames0.get(i), this.get(attrnames0.get(i)));
-            }
-        }
-        for (int i = 0, len = attrnames0.size(); i < len; i++) {
-            attrname = attrnames0.get(i);
-            if (!attrnames.contains(attrname)) {
-                for (int j = 0, lenj = attrnames0.size(); j < lenj; j++) {
-                    this.set(attrnames0.get(j), htsik.get(attrnames0.get(j)));
-                }
-                throw new AttributeNotFoundException(attrname, this.getClass().getName());
-            }
-            this.set(attrname, o.get(attrname));
-        }
-    }
-
-    /**
-     * Liefert einen Attributnamen zum angegebenen String, falls einer vorhanden ist (der
-     * Vergleich findet in Kleinschreibweise statt).
-     *
-     * @param s Der String zu dem der Attributname gefunden werden soll.
-     * @return Ein Attributname zum angegebenen String, falls einer vorhanden ist (der Vergleich
-     *         findet &uuml;ber Kleinschreibweise statt), bzw. <TT>null</TT>, falls kein
-     *         passender Attributname zum angegebenen String gefunden werden konnte.
-     * @throws NullPointerException Falls der &uuml;bergebene String ein Null-Pointer ist.
-     *
-     * @changed OLI 09.06.2009 - Hinzugef&uuml;gt.
-     *
-     * @precondition s != <TT>null</TT>
-     *
-     */
-    public String getAttributeName(String s) {
-        assert s != null : "the attribute name pattern is null";
-        int i = 0;
-        int leni = 0;
-        List<String> lan = this.getAttributeNames();
-        String an = null;
-        s = s.toLowerCase();
-        for (i = 0, leni = lan.size(); i < leni; i++) {
-            an = lan.get(i);
-            if (s.equals(an.toLowerCase())) {
-                return an;
-            }
-        }
-        return null;
     }
 
     @Deprecated
@@ -283,7 +201,7 @@ public class DynamicObject implements Dynamic, Serializable {
      *         Debug-Ausgabe zu konfigurieren. 
      *
      */
-    public void set(String attr, Object value, boolean change) throws ClassCastException,
+	public void set(String attr, Object value, boolean change) throws ClassCastException,
             IllegalArgumentException {
         log.debug("DynamicObject.set(\"" + attr + "\", " + value + ", " + change + ")");
         Object o = this.attribute.get(attr);
@@ -363,9 +281,9 @@ public class DynamicObject implements Dynamic, Serializable {
         this.had = had;
     }
 
-
     /* Implementierung des Interfaces Dynamic. */
 
+	@Override
     public Object get(String attr) throws IllegalArgumentException {
         Object o = this.attribute.get(attr);
         if (this.had == null) {
@@ -378,11 +296,13 @@ public class DynamicObject implements Dynamic, Serializable {
         return o;
     }
 
+	@Override
     public void set(String attr, Object value) throws ClassCastException,
             IllegalArgumentException {
         set(attr, value, true);
     }
 
+	@Override
     public Class getType(String attr) throws ClassCastException, IllegalArgumentException {
         AttributeDescriptor ad = this.had.get(attr);
         if (ad == null) {

@@ -11,7 +11,6 @@ package corent.dates;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import corent.base.Utl;
@@ -104,10 +103,6 @@ public class PDate implements Serializable {
 	public PDate(int pd) throws DateFormatException {
 		this(pd % 100, (pd / 100) % 100, pd / 10000);
 	}
-	/*
-	 * public PDate(Integer ihd) throws DateFormatException { this(ihd.intValue() %
-	 * 100, (ihd.intValue() / 100) % 100, ihd.intValue() / 10000); }
-	 */
 
 	/**
 	 * Erzeugt ein PDate als Kopie des &uuml;bergebenen PDates.
@@ -133,35 +128,6 @@ public class PDate implements Serializable {
 			this.d = jahr * 10000 + monat * 100 + tag;
 		} else {
 			throw new DateFormatException("date not valid: " + tag + "." + monat + "." + jahr);
-		}
-	}
-
-	/**
-	 * Erzeugt ein PDate aus dem angegebenen Date-Objekt.
-	 * 
-	 * @param d Das Date-Objekt, zu dem ein PDate erzeugt werden soll.
-	 * @throws DateFormatException wenn der Inhalt des &uuml;bergebenen Dates
-	 *                             fehlerhaft ist.
-	 *
-	 * @changed OLI 14.11.2008 - Fehler Beseitigt (Umwandlung wurde aufgrund einer
-	 *          Fehlern Klammerung der Monatsberechnung nicht korrekt
-	 *          durchgef&uuml;hrt). Au&szlig;erdem Erweiterung um Debugausgaben.
-	 *          <P>
-	 *
-	 */
-	public PDate(Date d) {
-		super();
-		Calendar dt = Calendar.getInstance();
-		dt.setTime(d);
-		if (CheckDate(dt.get(Calendar.DAY_OF_MONTH), dt.get(Calendar.MONTH) + 1, dt.get(Calendar.YEAR))) {
-			this.d = dt.get(Calendar.YEAR) * 10000 + (dt.get(Calendar.MONTH) + 1) * 100 + dt.get(Calendar.DAY_OF_MONTH);
-			log.debug("\n\n PDate > " + this.d);
-			log.debug(" year  > " + dt.get(Calendar.YEAR) * 10000);
-			log.debug(" month > " + (dt.get(Calendar.MONTH) + 1) * 100);
-			log.debug(" day   > " + dt.get(Calendar.DAY_OF_MONTH));
-		} else {
-			throw new DateFormatException("date not valid: " + dt.get(Calendar.DAY_OF_MONTH) + "."
-					+ (dt.get(Calendar.MONTH) + 1) + "." + dt.get(Calendar.YEAR));
 		}
 	}
 
@@ -211,18 +177,19 @@ public class PDate implements Serializable {
 		return new PDate(tag, monat, jahr);
 	}
 
-	/**
-	 * Checkt die &uuml;bergebenen Parameter auf Darstellung eines g&uuml;tigen
-	 * Datums.
+	/*
+	 * Checkt die &uuml;bergebenen Parameter auf Darstellung eines g&uuml;tigen Datums.
 	 *
-	 * @param tag   Der Tag des zu pr&uuml;fenden Datums.
+	 * @param tag Der Tag des zu pr&uuml;fenden Datums.
+	 * 
 	 * @param monat Der Monat des zu pr&uuml;fenden Datums.
-	 * @param jahr  Der Jahr des zu pr&uuml;fenden Datums.
-	 * @return <TT>true</TT>, wenn die &uuml;bergebenen Parameter ein g&uuml;ltiges
-	 *         Datum ergeben,<BR>
-	 *         <TT>false</TT> sonst.
+	 * 
+	 * @param jahr Der Jahr des zu pr&uuml;fenden Datums.
+	 * 
+	 * @return <TT>true</TT>, wenn die &uuml;bergebenen Parameter ein g&uuml;ltiges Datum ergeben,<BR> <TT>false</TT>
+	 * sonst.
 	 */
-	public static boolean CheckDate(int tag, int monat, int jahr) {
+	private static boolean CheckDate(int tag, int monat, int jahr) {
 		if (monat < 1) {
 			return false;
 		}
@@ -269,45 +236,12 @@ public class PDate implements Serializable {
 	}
 
 	/**
-	 * Wandelt ein PDate in ein Date-Objekt um.
-	 *
-	 * @return Das Date-Objekt mit den Daten des PDate.
-	 */
-	public Date toDate() {
-		Calendar dt = Calendar.getInstance();
-		dt.set(this.getJahr(), this.getMonat() - 1, this.getTag());
-		return dt.getTime();
-	}
-
-	/**
 	 * Wandelt ein PDate in einen int-Wert um.
 	 *
 	 * @return Der int-Wert (JJJJMMTT) zum PDate.
 	 */
 	public int toInt() {
 		return d;
-	}
-
-	/**
-	 * Wandelt ein PDate in einen PTimestamp um. Die Uhrzeit des PTimestamps wird
-	 * auf 0:00 Uhr gesetzt.
-	 *
-	 * @return Ein PTimestamp mit dem Datum des PDates und der Uhrzeit 0:00 Uhr.
-	 * @throws java.text.ParseException Falls der Inhalt des PDates zu einem
-	 *                                  fehlerhaften PTimestamp f&uuml;hren
-	 *                                  w&uuml;rde. Eigentlich d&uuml;rfte diese
-	 *                                  Exception an dieser Stelle niemals geworfen
-	 *                                  werden.
-	 *
-	 * @changed OLI 31.01.2009 - Hinzugef&uuml;gt.
-	 *          <P>
-	 *
-	 */
-	public PTimestamp toPTimestamp() throws java.text.ParseException {
-		if (this.toInt() < 1) {
-			return PTimestamp.NULL;
-		}
-		return new PTimestamp((this.toInt()) * 1000000l);
 	}
 
 	/** @return Der Tag des Datums (Ordnungszahl in bezug zum Monat). */
@@ -394,40 +328,6 @@ public class PDate implements Serializable {
 		return s;
 	}
 
-	public String toStringKurzdarstellung() {
-		String s = "";
-		if (this.toInt() == -1) {
-			s = s + Utl.GetProperty("corent.dates.PDate.undefined.string.short", "XX.XX.XX");
-		} else {
-			String h = "" + this.getTag();
-			if (h.length() < 2) {
-				s = "0";
-			}
-			s = s + h + ".";
-			h = "" + this.getMonat();
-			if (h.length() < 2) {
-				s = s + "0";
-			}
-			s = s + h + ".";
-			h = "" + (this.getJahr() % 100);
-			while (h.length() < 2) {
-				h = "0" + h;
-			}
-			s = s + h;
-		}
-		return s;
-	}
-
-	/** @return Das Windows/Dos Maximal-Datum. */
-	public static PDate WinDosMax() {
-		return new PDate(20791231);
-	}
-
-	/** @return Das Windows/Dos Minimal-Datum. */
-	public static PDate WinDosMin() {
-		return new PDate(19800101);
-	}
-
 	/** @return Datum des Folgetages zum vorliegenden Datum. */
 	public PDate naechsterTag() {
 		int day = this.getTag() + 1;
@@ -488,7 +388,7 @@ public class PDate implements Serializable {
 	 * @return Datum das n Tage nach dem vorliegenden Datum liegt.
 	 * @throws IllegalArgumentException wenn n kleiner als 0 ist.
 	 */
-	public PDate naechsterTag(int n) throws IllegalArgumentException {
+	PDate naechsterTag(int n) throws IllegalArgumentException {
 		if (n <= 0) {
 			throw new IllegalArgumentException("n muss groesser oder gleich 0 sein!");
 		}

@@ -10,7 +10,7 @@
 package corent.base;
 
 
-import java.util.*;
+import java.util.Vector;
 
 
 /**
@@ -26,21 +26,6 @@ public class SortedVector<T extends Comparable> extends Vector<T> {
     
     public SortedVector() {
         super();
-    }
-
-    public SortedVector(Collection c) {
-        super();
-        for (Iterator i = c.iterator(); i.hasNext(); ) {
-            this.addElement((T) i.next());
-        }
-    }
-
-    public SortedVector(int initialCapacity) {
-        super(initialCapacity);
-    }
-
-    public SortedVector(int initialCapacity, int initialIncrement) {
-        super(initialCapacity, initialIncrement);
     }
 
     /**

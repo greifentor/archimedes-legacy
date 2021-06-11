@@ -13,16 +13,36 @@
 package corent.util;
 
 
-import corent.base.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.awt.geom.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import java.util.*;
-import java.text.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+
+import corent.base.Constants;
 
 
 /**
@@ -36,8 +56,7 @@ import java.text.*;
  */
 public class MemoryMonitor extends JPanel {
 
-    public MonitorComponent1 mc;
-    public MonitorComponent2 mc2;
+	private MonitorComponent1 mc;
 
     public MemoryMonitor() {
         setLayout(new BorderLayout());
@@ -46,12 +65,7 @@ public class MemoryMonitor extends JPanel {
         add(mc);
     }
 
-    public MemoryMonitor(JPanel p) {
-        mc2 = new MonitorComponent2(p);
-        add(mc2);
-    }
-
-    public class MonitorComponent1 extends JPanel implements Runnable {
+	private class MonitorComponent1 extends JPanel implements Runnable {
         public Thread thread;
         private int w, h;
         private BufferedImage bimg;
@@ -259,10 +273,11 @@ public class MemoryMonitor extends JPanel {
         */
     }
 
-    public class MonitorComponent2 extends JPanel implements Runnable {
-        public Thread thread;
-        JLabel label1;
-        public MonitorComponent2(JPanel p) {
+	private class MonitorComponent2 extends JPanel implements Runnable {
+		private Thread thread;
+		private JLabel label1;
+
+		private MonitorComponent2(JPanel p) {
             label1 = new JLabel("Datum", JLabel.LEFT);
             label1.setBorder(new EtchedBorder(Constants.ETCH));
             Border margin = new EmptyBorder(new Insets(0, 0, 0, 0));
@@ -293,18 +308,19 @@ public class MemoryMonitor extends JPanel {
             return getPreferredSize();
         }
 
-        public void start() {
+		private void start() {
             thread = new Thread(this);
             thread.setPriority(Thread.MIN_PRIORITY);
             thread.setName("ClockMonitor");
             thread.start();
         }
 
-        public synchronized void stop() {
+		private synchronized void stop() {
             thread = null;
             notify();
         }
 
+		@Override
         public void run() {
             Thread me = Thread.currentThread();
             while (thread == me && !isShowing() || getSize().width == 0) {

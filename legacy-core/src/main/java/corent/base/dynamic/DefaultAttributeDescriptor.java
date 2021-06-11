@@ -10,7 +10,7 @@
 package corent.base.dynamic;
 
 
-import java.io.*;
+import java.io.Serializable;
 
 
 /**
@@ -45,24 +45,6 @@ public class DefaultAttributeDescriptor implements AttributeDescriptor, Serializ
         super();
     }
    
-    /** 
-     * Erzeugt einen neuen DefaultAttributeDescriptor anhand der &uuml;bergebenen Parameter.
-     *
-     * @param name Der Name des durch den Descriptor beschriebenen Attributes. 
-     * @param cls Die Klasse des durch den Descriptor beschriebenen Attributes. 
-     * @param initial Der Initialwert zum durch den Descriptor beschriebenen Attribut.
-     * @param reference Diese Flagge mu&szlig; gesetzt werden, wenn das beschriebene Attribut
-     *     eine Referenz ist.
-     */
-    public DefaultAttributeDescriptor(String name, Class cls, Object initial, boolean reference
-            ) {
-        super();
-        this.setAttributeClass(cls);
-        this.setAttributeName(name);
-        this.setAttributeInitialValue(initial);
-        this.setReference(reference);
-    }
-    
     /**
      * Setzt die &uuml;bergebene Klasse als neue Klasse zum Attribut ein.
      *
@@ -102,6 +84,7 @@ public class DefaultAttributeDescriptor implements AttributeDescriptor, Serializ
     
     /* Ueberschreiben von Methoden der Superklasse. */
     
+	@Override
     public String toString() {
         return new StringBuffer("DefaultAttributeDescriptor[").append(this.getAttributeName()
                 ).append(",").append(this.getAttributeClass().getName()).append(",").append(
@@ -113,20 +96,24 @@ public class DefaultAttributeDescriptor implements AttributeDescriptor, Serializ
     
     /* Implementierung des Interfaces AttributeDescriptor. */
     
+	@Override
     public String getAttributeName() {
         return this.name;
     }
     
+	@Override
     public Class getAttributeClass() {
         return this.cls;
     }
     
+	@Override
     public Object getAttributeInitialValue() {
         return this.initialvalue; 
     }
     
+	@Override
     public boolean isReference() {
         return this.reference;
     }
     
-}   
+}

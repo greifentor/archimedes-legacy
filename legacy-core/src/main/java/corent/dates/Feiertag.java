@@ -12,8 +12,10 @@
 package corent.dates;
 
 
-import java.io.*;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import com.ibm.icu.util.Holiday;
 
 
 /**
@@ -209,96 +211,13 @@ public class Feiertag {
     }
 
     /**
-     * Konstruktor, der seine Daten aus der Angegebenen Konfigurationsdatei ermittelt.
-     *
-     * @param dateiname Der Name der Datei, aus der die Konfigurationsdaten ermittelt werden
-     *     sollen.
-     */
-    public Feiertag(String dateiname) {
-        this();
-        if ((dateiname != null) && (new File(dateiname).exists())) {
-            try {
-                FileReader fr = new FileReader(dateiname);
-                BufferedReader reader = new BufferedReader(fr);
-                int zeilennum = 0;
-                String s = null;
-                String zeile = new String();
-                try {
-                    zeile = reader.readLine();
-                    while (zeile != null) {
-                        StringTokenizer st = new StringTokenizer(zeile, "\n\r\t ");
-                        while (st.hasMoreTokens()) {
-                            s = st.nextToken().toLowerCase();
-                            if (s.equals("#")) {
-                                break;
-                            } else if (s.equals("clear")) {
-                                this.regeln = new Vector();
-                                break;
-                            } else if (s.equals("os")) {
-                                s = st.nextToken();
-                                PDate pd = null;
-                                try {
-                                    pd = PDate.valueOf(s);
-                                } catch (DateFormatException dfe) {
-                                    throw new IllegalArgumentException("date-string " 
-                                            + s + " cannot be converted to corent.dates.PDate!",
-                                            dfe);
-                                }
-                                s = st.nextToken("\n\r").trim();
-                                this.regeln.addElement(new Ostersonntag(pd.toInt(), s));
-                                break;
-                            } else if (s.equals("ff")) {
-                                s = st.nextToken();
-                                int tag = -1;
-                                int monat = -1;
-                                try {
-                                    tag = Integer.parseInt(s);
-                                    monat = Integer.parseInt(st.nextToken());
-                                } catch (NumberFormatException nfe) {
-                                    nfe.printStackTrace();
-                                }
-                                if ((tag > 0) && (monat > 0)) {
-                                    s = st.nextToken("\n\r").trim();
-                                    this.regeln.addElement(new FesterFeiertag(tag, monat, s));
-                                }
-                                break;
-                            } else if (s.equals("vf")) {
-                                s = st.nextToken();
-                                int diff = 0;
-                                try {
-                                    diff = Integer.parseInt(s);
-                                } catch (NumberFormatException nfe) {
-                                    nfe.printStackTrace();
-                                }
-                                if (diff != 0) {
-                                    s = st.nextToken("\n\r").trim();
-                                    this.regeln.addElement(new VariablerFeiertag(diff, s));
-                                }
-                                break;
-                            }
-                        }
-                        zeilennum++;
-                        zeile = reader.readLine();
-                    }
-                    reader.close();
-                    fr.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    /**
      * Pr&uuml;ft, ob das angegebene Datum ein Feiertag ist.
      *
      * @param datum Das zupr&uuml;fende Datum.
      * @return null, wenn es sich nicht um einen Feiertag handelt,
      *     die Bezeichnung des Feiertages sonst.
      */
-    public String isFeiertag(PDate datum) {
+	private String isFeiertag(PDate datum) {
         int jahr = (int) datum.getJahr();
         int monatUndTag = (int) (datum.getMonat() * 100 + datum.getTag());
         Hashtable ft = (Hashtable) this.feiertage.get(new Integer(jahr));
@@ -362,17 +281,6 @@ public class Feiertag {
      */
     public static String IsFeiertag(PDate datum) {
         return Instanz.isFeiertag(datum);
-    }
-
-    /**
-     * Ersetzt die statische Instanz durch eine neue, die mit Hilfe der angegebenen Datei
-     * konfiguriert werden kann. Soll nur eine Standardinstanz erzeugt werden, so mu&szlig; der
-     * Dateiname als <TT>null</TT> &uuml;bergeben werden.
-     *
-     * @param dateiname Der Name einer Konfigurationsdatei.
-     */
-    public static void Aktualisieren(String dateiname) {
-        Instanz = new Feiertag(dateiname);
     }
 
 }

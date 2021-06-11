@@ -44,17 +44,6 @@ public class Semaphore {
     }
 
     /**
-     * Dieser Konstruktor fordert einen Initialwert. Der &uuml;bergebene Wert definiert die
-     * Maximalanzahl der Prozesse, die sich im kritischen Abschnitt aufhalten d&uuml;rfen.
-     *
-     * @param i Description of the Parameter
-     */
-    public Semaphore(int i) {
-        super();
-        count = i;
-    }
-
-    /**
      * Diese Methode mu&szlig; an den Beginn des zu sch&uuml;tzenden Abschnitts gesetzt werden.
      * P steht f&uuml; <I>passeren</I> , V f&uuml; <I>vrijgeven</I> . Wie man sich leicht
      * vorstellen kann, waren die Erfinder dieser Methodik muttersprachliche Niederl&auml;nder.
