@@ -110,7 +110,7 @@ abstract public class AbstractChangeOperation implements Comparable<AbstractChan
      *
      * @changed OLI 19.02.2016 - Added.
      */
-    public String quote(String s) {
+	private String quote(String s) {
         return Str.quote(s, "\"");
     }
 

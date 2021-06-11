@@ -10,7 +10,7 @@
 package gengen.metadata;
 
 
-import java.util.*;
+import java.util.List;
 
 
 /**
@@ -52,7 +52,7 @@ public interface ModelMetaData {
      * @throws IndexOutOfBoundsException Falls die Position i nicht im Rahmen der Liste der
      *         Klassen des Modells liegt.
      */
-    public ClassMetaData getClass(int i) throws IndexOutOfBoundsException;
+	public ClassMetaData getClass(int i) throws IndexOutOfBoundsException; // NO_UCD
 
     /**
      * Liefert die Klasse zum angegebenen Namen.

@@ -12,8 +12,6 @@ package gengen.generator;
 import java.io.File;
 import java.util.List;
 
-import logging.Logger;
-
 import corentx.dates.PDate;
 import corentx.io.FileUtil;
 import corentx.util.AlphabeticalStringComparator;
@@ -22,6 +20,7 @@ import corentx.util.Utl;
 import gengen.metadata.AttributeMetaData;
 import gengen.metadata.ClassMetaData;
 import gengen.metadata.ModelMetaData;
+import logging.Logger;
 
 /**
  * Dieser dient als Grundlage f&uuml;r die durch den GenGen erzeugten Generatoren. Er bietet grundlegende Methoden, die
@@ -73,25 +72,6 @@ public abstract class AbstractCodeGenerator implements CodeGenerator {
 	/** Generiert ein AbstractGenerator-Objekt mit Defaultwerten. */
 	public AbstractCodeGenerator() {
 		super();
-	}
-
-	/**
-	 * Liefert einen Getter-Namen zum Attribute (z. B. isDeleted oder getName).
-	 *
-	 * @param amd Die Attributmetadaten zu dem Attribute zu dem der Gettername generiert werden soll.
-	 * @return Der Gettername zum Attribut.
-	 * @throws NullPointerException Falls die Attributmetadaten als <TT>null</TT>-Referenz angegeben werden.
-	 *
-	 * @precondition amd != <TT>null</TT>
-	 *
-	 * @changed OLI 21.09.2009 - Hinzugef&uuml;gt.
-	 */
-	public String getAccessorName(AttributeMetaData amd) {
-		assert amd != null : "Method getAccessorName does not work with null attribute.";
-		if (amd.getJavaType().equals("boolean")) {
-			return "is".concat(amd.getName());
-		}
-		return "get".concat(amd.getName());
 	}
 
 	/**
@@ -170,107 +150,6 @@ public abstract class AbstractCodeGenerator implements CodeGenerator {
 	}
 
 	/**
-	 * Liefert einen String zur Angabe des Defaultwertes zum angegebenen Attribut.
-	 *
-	 * @param amd Die Attributmetadaten, zu denen der Defaultwert geliefert werden soll.
-	 * @return Ein String mit dem Defaultwert zu den angegebenen Attributmetadaten zum Einf&uuml;gen in den generierten
-	 *         Code. F&uuml;r Attribute mit <TT>null</TT> als Defaultwert wird der String 'null' zur&uuml;ckgegeben.
-	 *         String werden mit Anf&uuml;hrungszeichen zur&uuml;ckgeliefert. <BR>
-	 *         F&uuml;r Attribute vom Typ <TT><B>boolen</B></TT> gilt: ein Defaultwert von "0" oder "false" (Gro&szlig;-
-	 *         und Kleinschreibung wird nicht beachtet) ergibt den String "false"; alles andere den String "true".
-	 *
-	 * @changed OLI 04.10.2009 - Hinzugef&uuml;gt.
-	 * @changed OLI 07.10.2009 - Ber&uuml;cksichtigung von elementaren Boolean-Werten.
-	 */
-	public String getDefaultValueString(AttributeMetaData amd) {
-		boolean isElementaryBoolean = amd.getJavaType().equals("boolean");
-		String s = amd.getDefaultValue();
-		if (isElementaryBoolean) {
-			return (s.equals("0") || s.equalsIgnoreCase("false") ? "false" : "true");
-		} else if (s == null) {
-			return "null";
-		}
-		return s;
-	}
-
-	/**
-	 * Liefert ein Session-Tag f&uuml;r die angegebene Klasse zur Integration in eine + EJB-JAR-XML-Datei.
-	 *
-	 * @param cmd    Die Metadaten der Klasse, zu dem das Session-Tag erzeugt werden soll.
-	 * @param bpn    Der Name des Basispackages, der den Projectpackages vorangestellt werden soll.
-	 * @param indent Die Einr&uuml;ckung der &auml;&szlig;eren linken Linie des generierten codes.
-	 * @return Ein Code-Fragment mit dem Session-Tag.
-	 * @throws IllegalArgumentException Falls die Einr&uuml;ckung kleiner als null ist.
-	 * @throws NullPointerException     Falls die Klassenmetadaten oder der Basispackagename als <TT>null</TT>-Referenz
-	 *                                  &uuml;bergeben werden.
-	 * @precondition cmd != <TT>null</TT>.
-	 * @precondition indent &gt; 0.
-	 * @precondition pn != <TT>null</TT>.
-	 *
-	 * @changed OLI 30.09.2009 - Hinzugef&uuml;gt.
-	 */
-	public String getEJBJarSessionTag(ClassMetaData cmd, String bpn, int indent)
-			throws IllegalArgumentException, NullPointerException {
-		String spc = this.getSpaces(indent);
-		String s = spc + "<session>\n" + spc + "    <description>$PROJECTTOKEN$MasterDataInterface$CLASSNAME$"
-				+ "</description>\n" + spc + "    <ejb-name>$PROJECTTOKEN$MasterDataInterface$CLASSNAME$</ejb-name>\n"
-				+ spc + "    <home>$PN$.scheme.ejb.interfaces.$PROJECTTOKEN$MasterData"
-				+ "Interface$CLASSNAME$Home</home>\n" + spc
-				+ "    <remote>$PN$.scheme.ejb.interfaces.$PROJECTTOKEN$Master"
-				+ "DataInterface$CLASSNAME$Remote</remote>\n" + spc
-				+ "    <local-home>$PN$.scheme.ejb.interfaces.$PROJECTTOKEN$Master"
-				+ "DataInterface$CLASSNAME$LocalHome</local-home>\n" + spc
-				+ "    <local>$PN$.scheme.ejb.interfaces.$PROJECTTOKEN$MasterData"
-				+ "Interface$CLASSNAME$LocalRemote</local>\n" + spc
-				+ "    <ejb-class>$PN$.scheme.ejb.beans.$PROJECTTOKEN$MasterData"
-				+ "Interface$CLASSNAME$Bean</ejb-class>\n" + spc + "    <session-type>Stateless</session-type>\n" + spc
-				+ "    <transaction-type>Container</transaction-type>\n" + spc + "</session>\n";
-		s = s.replace("$PN$", bpn);
-		s = s.replace("$CLASSNAME$", cmd.getName());
-		s = s.replace("$PROJECTTOKEN$", cmd.getModel().getProjectToken());
-		return s;
-	}
-
-	/**
-	 * Liefert ein Return-Statement f&uuml;r einen Vergleich der Attribute zweier Instanzen der angegebenen Klasse.
-	 *
-	 * @param cmd Die Klassenmetadaten, anhand derer der Attributblock generiert werden soll.
-	 * @param vn  Der Name der Variablen, auf die sich der Vergleich beziehen soll.
-	 * @return Eine Liste mit den durch Kommata abgesetzten Namen der Attribute der Klasse.
-	 * @throws NullPointerException Falls die Klassenmetadaten oder der angegebene Variablenname als
-	 *                              <TT>null</TT>-Pointer &uuml;bergeben werden.
-	 *
-	 * @precondition cmd != <TT>null</TT> &amp;&amp; vn != <TT>null</TT>
-	 *
-	 * @changed OLI 21.09.2009 - Hinzugef&uuml;gt.
-	 */
-	public String getEqualsReturnStatement(ClassMetaData cmd, String vn) throws NullPointerException {
-		assert cmd != null : "class meta data can not be null for generating an equals return " + "statement.";
-		assert vn != null : "null is not a valid name for a variable.";
-		AttributeMetaData amd = null;
-		int i = 0;
-		int len = 0;
-		List<AttributeMetaData> amds = cmd.getAttributes();
-		String an = null;
-		StringBuffer sb = new StringBuffer();
-		for (i = 0, len = amds.size(); i < len; i++) {
-			amd = amds.get(i);
-			if (sb.length() > 0) {
-				sb.append("\n                && ");
-			}
-			an = this.getAccessorName(amd);
-			sb.append("Utl.equals(this.").append(an).append("(), ").append(vn).append(".").append(an).append("())");
-			/*
-			 * // OLI 07.10.2009 - Das war die alte, differenzierte Version. if
-			 * (this.isElementaryType(amd.getJavaType())) {
-			 * sb.append("(this.").append(an).append("() == ").append(vn).append(".").append(an ).append("())"); } else
-			 * { sb.append("this.").append(an).append("().equals(").append(vn).append("." ).append(an).append("())"); }
-			 */
-		}
-		return "        return ".concat(sb.toString()).concat(";\n");
-	}
-
-	/**
 	 * Liefert ein Codefragment zum Einlesen des Attributs aus einem ResultSet (rs).
 	 *
 	 * @param amd    Die Attributmetadaten, zu dem das Codefragment gebildet werden soll.
@@ -301,103 +180,6 @@ public abstract class AbstractCodeGenerator implements CodeGenerator {
 	}
 
 	/**
-	 * Generiert ein Java-Codefragment, mit dem f&uuml;r das angegbene Attribut von der angegebenen Position aus einem
-	 * ResultSet gelesem werden kann. <BR>
-	 * Die erzeugten Codefragmente sind auf die Nutzung in Kombination mit dem AbstractCodeGenerator und einer
-	 * AbstractDBDataSource-Implementierung abgestimmt.
-	 *
-	 * <P>
-	 * <I><B>Beispiel:</B> <TT>rs.getString(10)</TT> oder <TT>this.getNumber(rs, 42, 1L)</I>
-	 *
-	 * &#64;param amd Die Attributmetadaten, zu denen das Codefragment gebildet werden soll.
-	 * &#64;param i Die Position (Spalte) innerhalb des ResultSets, aus der das Attribut seine
-	 *         Daten lesen soll. Der &uuml;bergebene mu&szlig; gr&ouml;&szlig;er als null sein.
-	 * &#64;param vn Der Name der ResultSet-Variablen, auf die im Code zugegriffen werden soll. Wird
-	 *         hier eine <TT>null</TT>-Referenz &uuml;bergeben, so wird der Name "rs" f&uuml;r das ResultSet angenommen
-	 * und in den Code generiert.
-	 * @throws IllegalArgumentException Falls i < als 1 &uuml;bergeben wird.
-	 * @throws NullPointerException     Falls die Attributmetadaten als <TT>null</TT>-Referenz angegebenen werden.
-	 * @precondition amd != <TT>null</TT>.
-	 * @precondition i &gt; 0.
-	 *
-	 * @changed OLI 01.10.2009 - Hinzugef&uuml;gt.
-	 */
-	public String getRSGet(AttributeMetaData amd, int i, String vn)
-			throws IllegalArgumentException, NullPointerException {
-		assert amd != null : "method doesn't works with attribute meta data null reference.";
-		assert i > 0 : "index for result set have to be 1 or more.";
-		StringBuffer sb = null;
-		if (i < 1) {
-			throw new IllegalArgumentException("index for result set have to be 1 or more.");
-		}
-		if (vn == null) {
-			vn = "rs";
-		}
-		sb = new StringBuffer();
-		if (amd.getJavaType().equals("boolean")) {
-			return sb.append("(").append(vn).append(".getInt(").append(i).append(") != 0)").toString();
-		} else if (amd.getJavaType().equals("String")) {
-			return sb.append(vn).append(".getString(").append(i).append(")").toString();
-		} else if (amd.getJavaType().endsWith("LongPTimestamp")) {
-			return sb.append("DBDataSourceUtil.getLongPTimestamp(").append(vn).append(", ").append(i).append(")")
-					.toString();
-		} else if (amd.getJavaType().endsWith("PDate")) {
-			return sb.append("DBDataSourceUtil.getPDate(").append(vn).append(", ").append(i).append(")").toString();
-		} else if (amd.getJavaType().endsWith("PTime")) {
-			return sb.append("DBDataSourceUtil.getPTime(").append(vn).append(", ").append(i).append(")").toString();
-		} else if (amd.getJavaType().endsWith("PTimestamp")) {
-			return sb.append("DBDataSourceUtil.getPTimestamp(").append(vn).append(", ").append(i).append(")")
-					.toString();
-		} else if (gengen.util.SQLUtil.isElementaryNumberType(amd.getJavaType())) {
-			return sb.append("DBDataSourceUtil.getNumber(").append(vn).append(", ").append(i).append(", ")
-					.append((amd.getDefaultValue() != null
-							? amd.getDefaultValue().toString() + gengen.util.SQLUtil.getTypeSuffix(amd.getJavaType())
-							: "0L"))
-					.append(")").toString();
-		}
-		log.info("type '" + amd.getJavaType() + "' (" + amd.getName() + ") can not be processed"
-				+ " by AbstractCodeGenerator (method getRSGet(AttributeMetaData amd, int i, " + "String vn))");
-		return "<<<<< MANUAL CODING REQUIERED (" + amd.getJavaType() + ") >>>>>";
-	}
-
-	/**
-	 * Liefert ein Codefragment mit einem Setter, der das angegebene Attribut aus einer Stringvariablen bel&auml;dt.
-	 *
-	 * @param amd      Das Attribut, zu dem der Setter gebildet werden soll.
-	 * @param vn       Der Name der Stringvariablen, aus der der Setter den Wert in dem Codefragment lesen soll.
-	 * @param tsAsLong Wird diese Flagge gesetzt, so werden Zeitstempelsetter mit umgewandelten Longwerten (in
-	 *                 entsprechenden Konstruktoren) aufgerufen.
-	 * @return Ein Codefragment mit einem Setter zum Attribut, f&uuml;r den der &Uum;bergabeparameter aus einem String
-	 *         konvertiert wird.
-	 * @throws IllegaleArgumentException Falls der Name der Stringvariablen leer &uuml;bergeben wird.
-	 * @throws NullPointerException      Falls die Attributmetadaten oder der Name der Stringvariablen als
-	 *                                   <TT>null</TT>-Referenz &uuml;bergeben wird.
-	 * @precondition amd != <TT>null</TT>.
-	 * @precondition vn != <TT>null</TT> &amp;&amp; !vn.equals("").
-	 *
-	 * @changed OLI 04.10.2009 - Hinzugef&uuml;gt.
-	 */
-	public static String getSetterFromString(AttributeMetaData amd, String vn, boolean tsAsLong)
-			throws IllegalArgumentException, NullPointerException {
-		assert amd != null : "method doesn't works with null attribute meta data";
-		assert vn != null : "method doesn't works with null variable name.";
-		assert vn.length() > 0 : "empty string is not valid for variable names.";
-		StringBuffer sb = null;
-		if (vn.length() == 0) {
-			throw new IllegalArgumentException("empty string is not valid for variable names.");
-		}
-		sb = new StringBuffer("set").append(amd.getName()).append("(");
-		if (tsAsLong && (amd.getJavaType().endsWith("LongPTimestamp") || amd.getJavaType().endsWith("PDate")
-				|| amd.getJavaType().endsWith("PTimestamp"))) {
-			sb.append("new ").append(amd.getJavaType()).append("(Long.valueOf(").append(vn).append(")));");
-		} else {
-			sb.append(AbstractCodeGenerator.getWrapperType(amd.getJavaType())).append(".valueOf(").append(vn)
-					.append("));");
-		}
-		return sb.toString();
-	}
-
-	/**
 	 * Liefert einen String mit der angegebenen Zahl von Spaces.
 	 *
 	 * @param i Die Anzahl der Spaces, die der String enthalten soll.
@@ -407,46 +189,8 @@ public abstract class AbstractCodeGenerator implements CodeGenerator {
 	 *
 	 * @deprecated OLI 04.10.2009 - Bitte die Methode corentx.util.Str.spaces(int) benutzen.
 	 */
-	public String getSpaces(int i) {
+	private String getSpaces(int i) {
 		return corentx.util.Str.spaces(i);
-	}
-
-	/**
-	 * Liefert gegebenenfalls den Namen eines Wrappertyps, sonst den angegebenen Typ.
-	 *
-	 * @param tn Der Name eine Javatyps.
-	 * @return Ein Wrappertyp, falls es sich bei dem Javatyp um einen elementaren Typen handelt, den angegebenen Typen
-	 *         sonst.
-	 * @throws IllegalArgumentException Falls der Typname leer &uuml;bergeben wird.
-	 * @throws NullPointerException     Falls der Typname als <TT>null</TT>-Referenz &uuml;bergeben wird.
-	 * @precondition tn != <TT>null</TT> &amp;&amp; tn.length() > 0.
-	 *
-	 * @changed OLI 04.10.2009 - Hinzugef&uuml;gt.
-	 */
-	public static String getWrapperType(String tn) throws IllegalArgumentException, NullPointerException {
-		assert tn != null : "type name null is not valid.";
-		assert tn.length() > 0 : "empty type name is not valid.";
-		if (tn.length() == 0) {
-			throw new IllegalArgumentException("empty type name is not valid.");
-		}
-		if (tn.equals("boolean")) {
-			return "Boolean";
-		} else if (tn.equals("byte")) {
-			return "Byte";
-		} else if (tn.equals("char")) {
-			return "Character";
-		} else if (tn.equals("double")) {
-			return "Double";
-		} else if (tn.equals("float")) {
-			return "Float";
-		} else if (tn.equals("int")) {
-			return "Integer";
-		} else if (tn.equals("long")) {
-			return "Long";
-		} else if (tn.equals("short")) {
-			return "Short";
-		}
-		return tn;
 	}
 
 	/**
@@ -461,7 +205,7 @@ public abstract class AbstractCodeGenerator implements CodeGenerator {
 	 *
 	 * @changed OLI 19.10.2010 - Hinzugef&uuml;gt.
 	 */
-	public boolean isCodeClass(ClassMetaData cmd) throws NullPointerException {
+	private boolean isCodeClass(ClassMetaData cmd) throws NullPointerException {
 		return true;
 	}
 
@@ -478,7 +222,7 @@ public abstract class AbstractCodeGenerator implements CodeGenerator {
 	 *       einfach so belassen wird (trotz Redundanz mit der Methode in der Klasse <TT>gengen.util.SQLUtil</TT> (OLI,
 	 *       30.09.2009).
 	 */
-	public boolean isElementaryType(String typeName) throws NullPointerException {
+	private boolean isElementaryType(String typeName) throws NullPointerException {
 		assert typeName != null : "type name can not be null for reference type check.";
 		return gengen.util.SQLUtil.isElementaryType(typeName);
 	}
@@ -556,6 +300,7 @@ public abstract class AbstractCodeGenerator implements CodeGenerator {
 	 *          Log.
 	 * @changed OLI 19.10.2010 - M&ouml;glichkeit der Einschr&auml;nkung der Erzeugung des Codes.
 	 */
+	@Override
 	public void generate(ModelMetaData mmd) throws Exception {
 		ClassMetaData cmd = null;
 		int i = 0;
@@ -587,10 +332,12 @@ public abstract class AbstractCodeGenerator implements CodeGenerator {
 		}
 	}
 
+	@Override
 	public String getCompleteClassName(ClassMetaData cmd) {
 		return cmd.getName();
 	}
 
+	@Override
 	public String getPackageName() {
 		return null;
 	}

@@ -10,7 +10,7 @@
 package gengen.metadata;
 
 
-import java.util.*;
+import java.util.List;
 
 
 /**
@@ -123,7 +123,7 @@ public interface ClassMetaData {
      *
      * @changed OLI 06.10.2009 - Hinzugef&uuml;gt.
      */
-    public boolean isOfStereotype(String sn) throws NullPointerException;
+	public boolean isOfStereotype(String sn) throws NullPointerException; // NO_UCD
 
     /**
      * Pr&uuml;ft, ob die Klasse kodiert werden soll.

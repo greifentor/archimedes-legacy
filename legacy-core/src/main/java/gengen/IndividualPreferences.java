@@ -10,13 +10,16 @@
 package gengen;
 
 
-import static corentx.util.Checks.*;
+import static corentx.util.Checks.ensure;
 
-import corentx.util.*;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import org.apache.commons.lang3.builder.*;
+import corentx.util.SortedVector;
 
 
 /**
@@ -191,17 +194,6 @@ public class IndividualPreferences {
      */
     public String getUserToken() {
         return this.userToken;
-    }
-
-    /**
-     * Removes the alternate path for the passed token to the list of alternate pathes.
-     *
-     * @param token The token of the alternate path which is to remove.
-     *
-     * @changed OLI 12.07.2014 - Added.
-     */
-    public void removeAlternateBaseCodePath(String token) {
-        this.alternateBaseCodePathes.remove(token);
     }
 
     /**
