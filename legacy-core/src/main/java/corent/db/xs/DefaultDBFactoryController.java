@@ -46,30 +46,22 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 
 /**
- * Diese Musterimplementierung eines DBFactoryControllers vermittelt einen
- * &Uuml;berblick &uuml;ber die Arbeitsweise einer solchen Klasse und
- * l&auml;&szlig;t sich in den meisten Standardsituationen einsetzen.
+ * Diese Musterimplementierung eines DBFactoryControllers vermittelt einen &Uuml;berblick &uuml;ber die Arbeitsweise
+ * einer solchen Klasse und l&auml;&szlig;t sich in den meisten Standardsituationen einsetzen.
  * <P>
- * F&uuml;r jeden DDBFC (DefaultDBFactoryController) kann explizit eingestellt
- * werden, ob er mit einer einzigen Connection arbeiten soll, die zwischen den
- * Aufrufen gehalten werden soll, oder ob er bei jedem Aufruf eine neue
- * Connection anfordern soll. Bei Datenbankoperationen, die &uuml;ber als
- * Transaktionen zusammengefa&szlig;t werden sollen oder die massiv auf die
- * Datenbank zugreifen, empfiehlt es sich diese Konfiguration zu nutzen. Der
- * Standardwert wird &uuml;ber die Property
- * <TT>corent.db.xs.DefaultDBFactoryController.holdConnection</TT> gesetzt.
+ * F&uuml;r jeden DDBFC (DefaultDBFactoryController) kann explizit eingestellt werden, ob er mit einer einzigen
+ * Connection arbeiten soll, die zwischen den Aufrufen gehalten werden soll, oder ob er bei jedem Aufruf eine neue
+ * Connection anfordern soll. Bei Datenbankoperationen, die &uuml;ber als Transaktionen zusammengefa&szlig;t werden
+ * sollen oder die massiv auf die Datenbank zugreifen, empfiehlt es sich diese Konfiguration zu nutzen. Der Standardwert
+ * wird &uuml;ber die Property <TT>corent.db.xs.DefaultDBFactoryController.holdConnection</TT> gesetzt.
  * <P>
- * Der Lock-Mechanismus kann entweder &uuml;ber eine speicherinterne Tabelle im
- * DBFactoryController, oder &uuml;ber eine Datenbanktabelle genutzt werden. Der
- * erste Weg funktioniert nur, solange der Controller nicht im Cluster
- * l&auml;uft. In diesem Fall mu&szlig; auf jeden Fall die Variante mit der
- * Datenbanktabelle genutzt werden. Sie wird durch das Setzen der Property
- * <TT>corent.db.xs.DefaultDBFactoryController.locksByDatabasetable</TT>
- * aktiviert.
+ * Der Lock-Mechanismus kann entweder &uuml;ber eine speicherinterne Tabelle im DBFactoryController, oder &uuml;ber eine
+ * Datenbanktabelle genutzt werden. Der erste Weg funktioniert nur, solange der Controller nicht im Cluster l&auml;uft.
+ * In diesem Fall mu&szlig; auf jeden Fall die Variante mit der Datenbanktabelle genutzt werden. Sie wird durch das
+ * Setzen der Property <TT>corent.db.xs.DefaultDBFactoryController.locksByDatabasetable</TT> aktiviert.
  * <P>
- * Zur Abbildung der Locks in einer Datenbanktabelle ist die Erzeugung einer
- * speziellen Tabelle n&ouml;tig. Das folgende <TT>CREATE</TT>-Statement zeigt
- * die Tabelle und ihre Felder mit der Default-Namensgebung:
+ * Zur Abbildung der Locks in einer Datenbanktabelle ist die Erzeugung einer speziellen Tabelle n&ouml;tig. Das folgende
+ * <TT>CREATE</TT>-Statement zeigt die Tabelle und ihre Felder mit der Default-Namensgebung:
  * 
  * <PRE>
  * create table LockObject (
@@ -79,113 +71,87 @@ import net.sf.jasperreports.engine.data.JRCsvDataSource;
  * );
  * </PRE>
  * 
- * Die Namen der Tabelle und ihrer Spalten k&ouml;nnen &uuml;ber die folgenden
- * Properties angepa&szlig;t werden:
+ * Die Namen der Tabelle und ihrer Spalten k&ouml;nnen &uuml;ber die folgenden Properties angepa&szlig;t werden:
  * <TT>corent.db.xs.DefaultDBFactoryController.locks.tablename</TT>,
  * <TT>corent.db.xs.DefaultDBFactoryController.locks.column.LockObject</TT>,
  * <TT>corent.db.xs.DefaultDBFactoryController.locks.column.LastRequest</TT> und
  * <TT>corent.db.xs.DefaultDBFactoryController.locks.column.UserId</TT>.
  * <P>
- * Wird die Property <TT>corent.db.xs.DefaultDBFactoryController.debug</TT> auf
- * den Wert <TT>true</TT> gesetzt, wird an einigen Stellen der ausgef&uuml;hrten
- * Methoden zus&auml;tzlicher Output generiert.
+ * Wird die Property <TT>corent.db.xs.DefaultDBFactoryController.debug</TT> auf den Wert <TT>true</TT> gesetzt, wird an
+ * einigen Stellen der ausgef&uuml;hrten Methoden zus&auml;tzlicher Output generiert.
  * <P>
- * Die Property <TT>corent.db.xs.DefaultDBFactoryController.showAccesstimes</TT>
- * stellt einen Defaultwert f&uuml;r die Eigenschaft <I>showAccesstimes</I> zur
- * Verf&uuml;gung.
+ * Die Property <TT>corent.db.xs.DefaultDBFactoryController.showAccesstimes</TT> stellt einen Defaultwert f&uuml;r die
+ * Eigenschaft <I>showAccesstimes</I> zur Verf&uuml;gung.
  *
- * Die folgenden Properties dienen der Steuerung des Archiv-Drucks im
- * Zusammenhang mit Objekten, die das Interface <TT>Archivable</TT>
- * implementieren:<BR>
- * <TT>corent.db.xs.DefaultDBFactoryController.archive.path</TT> (String,
- * Default "./") definiert einen Pfad, in den die Archiv-Exporte erfolgen
- * sollen.<BR>
- * <TT>corent.db.xs.DefaultDBFactoryController.archive.timestamp</TT> (Boolean)
- * kann gesetzt werden, um den Dateinamen um eine millisekunden genauen
- * Zeitstempel zu erweitern. Auf diese Weise k&ouml;nnen historische
- * Zust&auml;nde archiviert werden.<BR>
- * <TT>corent.db.xs.DefaultDBFactoryController.archive.extension</TT> (String,
- * Default ".html") kann zur Definition einer alternativen
- * Dateinamenserweiterung der Archivdateien gesetzt werden.<BR>
- * <TT>corent.db.xs.DefaultDBFactoryController.archive.synchon</TT> (Boolean)
- * kann gesetzt werden, um das Erzeugen der Archiv-Exporte synchron ablaufen zu
- * lassen. Hierbei kann es allerdings zu Wartezeiten beim Speichern kommen.
+ * Die folgenden Properties dienen der Steuerung des Archiv-Drucks im Zusammenhang mit Objekten, die das Interface
+ * <TT>Archivable</TT> implementieren:<BR>
+ * <TT>corent.db.xs.DefaultDBFactoryController.archive.path</TT> (String, Default "./") definiert einen Pfad, in den die
+ * Archiv-Exporte erfolgen sollen.<BR>
+ * <TT>corent.db.xs.DefaultDBFactoryController.archive.timestamp</TT> (Boolean) kann gesetzt werden, um den Dateinamen
+ * um eine millisekunden genauen Zeitstempel zu erweitern. Auf diese Weise k&ouml;nnen historische Zust&auml;nde
+ * archiviert werden.<BR>
+ * <TT>corent.db.xs.DefaultDBFactoryController.archive.extension</TT> (String, Default ".html") kann zur Definition
+ * einer alternativen Dateinamenserweiterung der Archivdateien gesetzt werden.<BR>
+ * <TT>corent.db.xs.DefaultDBFactoryController.archive.synchon</TT> (Boolean) kann gesetzt werden, um das Erzeugen der
+ * Archiv-Exporte synchron ablaufen zu lassen. Hierbei kann es allerdings zu Wartezeiten beim Speichern kommen.
  *
  * <P>
- * Die Methoden zum Setzen und Lesen der <B>Controllerproperties</B> sind zur
- * Realisation ansynchroner Abl&auml;fe gedacht. Hinter den Zugriffsmethoden
- * steht kein echtes Property-Objekt. Es handelt sich auch nicht um die
- * System.properties. Vielmehr sind die Controllerproperties ein abgeschlossener
- * Variablenbereich, &uuml;ber den der Client mit dem Server relativ frei
- * kommunizieren kann.<BR>
- * Asynchrone Anwendungen k&ouml;nnen beispielsweise dadurch erzeugt werden,
- * da&szlig; bestimmte Methoden der an den Controller gebundenen
- * DBFactory-Implementierungen als Threads programmiert sind und beispielsweise
- * ihren Fortschritt regelm&auml;&szlig;ig in eine Controllerproperty
- * hinterlegen. So w&auml;re ein Client in der Lage den aktuellen Fortschritt
- * seinerseits z. B. in einer Anzeige zu aktualisieren.
+ * Die Methoden zum Setzen und Lesen der <B>Controllerproperties</B> sind zur Realisation ansynchroner Abl&auml;fe
+ * gedacht. Hinter den Zugriffsmethoden steht kein echtes Property-Objekt. Es handelt sich auch nicht um die
+ * System.properties. Vielmehr sind die Controllerproperties ein abgeschlossener Variablenbereich, &uuml;ber den der
+ * Client mit dem Server relativ frei kommunizieren kann.<BR>
+ * Asynchrone Anwendungen k&ouml;nnen beispielsweise dadurch erzeugt werden, da&szlig; bestimmte Methoden der an den
+ * Controller gebundenen DBFactory-Implementierungen als Threads programmiert sind und beispielsweise ihren Fortschritt
+ * regelm&auml;&szlig;ig in eine Controllerproperty hinterlegen. So w&auml;re ein Client in der Lage den aktuellen
+ * Fortschritt seinerseits z. B. in einer Anzeige zu aktualisieren.
  *
  * <P>
  * Mit Hilfe der Property
- * <I>corent.db.xs.DefaultDBFactoryController.CreateFilter.convert.to.str.[Tablename].[Spaltenname]</I>
- * kann eine Konvertierung von numerischen Felder in den Typ VARCHAR bei der
- * Bildung des Filters zur Auswahl von Datens&auml;tzen erzwungen werden. Dies
- * ist z. B. bei MYSQL 5 notwendig.
+ * <I>corent.db.xs.DefaultDBFactoryController.CreateFilter.convert.to.str.[Tablename].[Spaltenname]</I> kann eine
+ * Konvertierung von numerischen Felder in den Typ VARCHAR bei der Bildung des Filters zur Auswahl von Datens&auml;tzen
+ * erzwungen werden. Dies ist z. B. bei MYSQL 5 notwendig.
  *
- * Die Zeichensatzkodierung beim Drucken von CSV-Dateien l&auml;&szlig;t sich
- * mit Hilfe der Property
- * <I>corent.db.xs.DefaultDBFactoryController.csv.encoding</I> konfigurieren.
- * Als Default ist die "ISO-8859-1" eingestellt.
+ * Die Zeichensatzkodierung beim Drucken von CSV-Dateien l&auml;&szlig;t sich mit Hilfe der Property
+ * <I>corent.db.xs.DefaultDBFactoryController.csv.encoding</I> konfigurieren. Als Default ist die "ISO-8859-1"
+ * eingestellt.
  *
  * <P>
- * <B>Hinweis:</B> Die Geschichte mit dem DBFactoryControllerListener ist noch
- * nicht in Funktion.
+ * <B>Hinweis:</B> Die Geschichte mit dem DBFactoryControllerListener ist noch nicht in Funktion.
  *
  * @author O.Lieshoff
  *         <P>
  *
- * @changed OLI 22.08.2007 - Erweiterung um die
- *          Archivierungsfunktionalit&auml;t. Die <TT>write</TT>-Methode
- *          reagiert nun auf Implementierungen des Interfaces
- *          <TT>Archivable</TT>. Entsprechende Objekte werden gegebenenfalls in
- *          HTML exportiert (analog zum Reportdruck). Zur serverseitigen
- *          Steuerung des Exports gibt es einen Satz neuer Properties.
+ * @changed OLI 22.08.2007 - Erweiterung um die Archivierungsfunktionalit&auml;t. Die <TT>write</TT>-Methode reagiert
+ *          nun auf Implementierungen des Interfaces <TT>Archivable</TT>. Entsprechende Objekte werden gegebenenfalls in
+ *          HTML exportiert (analog zum Reportdruck). Zur serverseitigen Steuerung des Exports gibt es einen Satz neuer
+ *          Properties.
  *          <P>
- *          OLI 27.08.2007 - Erweiterung um die Controllerproperties und
- *          Implementierung der Zugriffsmethoden
- *          <TT>getControllerProperty(String)</TT> und
- *          <TT>setControllerProperty(String, Object)</TT> aus dem Interface
+ *          OLI 27.08.2007 - Erweiterung um die Controllerproperties und Implementierung der Zugriffsmethoden
+ *          <TT>getControllerProperty(String)</TT> und <TT>setControllerProperty(String, Object)</TT> aus dem Interface
  *          <TT>DBFactoryController</TT>.
  *          <P>
- *          OLI 04.11.2007 - Erweiterung um das Zusammenspiel mit der
- *          Erweiterung des Interfaces <TT>JasperReportable</TT> um die Methode
- *          <TT>isSaveBeforePrintingRequired()</TT>.
+ *          OLI 04.11.2007 - Erweiterung um das Zusammenspiel mit der Erweiterung des Interfaces
+ *          <TT>JasperReportable</TT> um die Methode <TT>isSaveBeforePrintingRequired()</TT>.
  *          <P>
- *          OLI 24.01.2008 - Erweiterung um die Implementierung der Methode
- *          <TT>getTransactionNumber()</TT>.
+ *          OLI 24.01.2008 - Erweiterung um die Implementierung der Methode <TT>getTransactionNumber()</TT>.
  *          <P>
- *          OLI 06.05.2008 - Erweiterung der Filterbildung um eine erzwungene
- *          Umwandlung von numerischen Werten nach VARCHAR.
+ *          OLI 06.05.2008 - Erweiterung der Filterbildung um eine erzwungene Umwandlung von numerischen Werten nach
+ *          VARCHAR.
  *          <P>
- *          OLI 16.07.2008 - &Auml;nderungen an der <TT>write</TT>-Methode im
- *          Rahmen der &Auml;nderung des Interfaces <TT>DBFactory</TT>
+ *          OLI 16.07.2008 - &Auml;nderungen an der <TT>write</TT>-Methode im Rahmen der &Auml;nderung des Interfaces
+ *          <TT>DBFactory</TT>
  *          <P>
- *          OLI 18.09.2008 - Anpassung an die M&ouml;glichkeit zur
- *          Unterdr&uuml;ckung von UserNotifications seitens des Interfaces
- *          <TT>UserChangesNoticeable</TT>.
+ *          OLI 18.09.2008 - Anpassung an die M&ouml;glichkeit zur Unterdr&uuml;ckung von UserNotifications seitens des
+ *          Interfaces <TT>UserChangesNoticeable</TT>.
  *          <P>
- *          OLI 30.09.2008 - Einbau einer M&ouml;glichkeit die tempor&auml;re
- *          Datei beim Drucken einer CSV-Datei mit einer Zeichencodierung zu
- *          belegen.
+ *          OLI 30.09.2008 - Einbau einer M&ouml;glichkeit die tempor&auml;re Datei beim Drucken einer CSV-Datei mit
+ *          einer Zeichencodierung zu belegen.
  *          <P>
- *          OLI 29.01.2009 - Erweiterung um die Methode
- *          <TT>getSelectionView(String, String, 
- *             Connection, boolean)</TT>. Daf&uuml;r ist die Methode
- *          <TT>getSelectionView(
+ *          OLI 29.01.2009 - Erweiterung um die Methode <TT>getSelectionView(String, String, 
+ *             Connection, boolean)</TT>. Daf&uuml;r ist die Methode <TT>getSelectionView(
  *             String, String, Connection)</TT> zur&uuml;ckgestellt worden.
  *          <P>
- *          OLI 27.03.2009 - Erweiterung um die Implementierung der Methode
- *          <TT>resetConnection()</TT>.
+ *          OLI 27.03.2009 - Erweiterung um die Implementierung der Methode <TT>resetConnection()</TT>.
  *          <P>
  *
  */
@@ -198,14 +164,13 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	private static long OpCounter = 0;
 
 	/*
-	 * Ist diese Flagge gesetzt, wird eine Connections &uml;ber die Lebensdauer des
-	 * DBFC gehalten. Andernfalls wird bei jedem Aufruf eine neue Connection
-	 * erstellt.
+	 * Ist diese Flagge gesetzt, wird eine Connections &uml;ber die Lebensdauer des DBFC gehalten. Andernfalls wird bei
+	 * jedem Aufruf eine neue Connection erstellt.
 	 */
 	private boolean holdConnection = Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.holdConnection");
 	/*
-	 * Ist diese Flagge gesetzt, wenn zu jeder Operation eine Information &uuml;ber
-	 * deren Zeitverbrauch auf der Konsole ausgegeben werden soll.
+	 * Ist diese Flagge gesetzt, wenn zu jeder Operation eine Information &uuml;ber deren Zeitverbrauch auf der Konsole
+	 * ausgegeben werden soll.
 	 */
 	private boolean showAccesstimes = Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.showAccesstimes");
 	/* Die Connection, auf der im Falle zu haltender Connections gearbeitet wird. */
@@ -221,21 +186,16 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	/* Die Id des DBFactoryControllers (z. B. zur Verwendung im Clusterbetrieb. */
 	private int id = 0;
 	/*
-	 * Der Thread, &uuml;ber den die Locks in regelm&auml;&szlig;igen Abst&auml;nden
-	 * bereinigt werden.
+	 * Der Thread, &uuml;ber den die Locks in regelm&auml;&szlig;igen Abst&auml;nden bereinigt werden.
 	 */
 	private Thread th = null;
 
 	/**
-	 * Generiert einen neuen Controller anhand des &uuml;bergebenen
-	 * JDBCDataSourceRecord.
+	 * Generiert einen neuen Controller anhand des &uuml;bergebenen JDBCDataSourceRecord.
 	 *
-	 * @param dsr       Der JDBCDataSourceRecord mit den Daten zur Verbindung mit
-	 *                  der Datenbank.
-	 * @param factories Eine Tabelle mit Klassen-DBFactory-Tupeln, zum Zugriff auf
-	 *                  die Datenbank.
-	 * @param id        Eine Id, falls der DBFactoryController im Clusterbetrieb
-	 *                  gefahren werden kann.
+	 * @param dsr       Der JDBCDataSourceRecord mit den Daten zur Verbindung mit der Datenbank.
+	 * @param factories Eine Tabelle mit Klassen-DBFactory-Tupeln, zum Zugriff auf die Datenbank.
+	 * @param id        Eine Id, falls der DBFactoryController im Clusterbetrieb gefahren werden kann.
 	 * @throws RemoteException ?!?
 	 */
 	public DefaultDBFactoryController(JDBCDataSourceRecord dsr, Hashtable<Class, DBFactory> factories, int id)
@@ -245,13 +205,10 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * Generiert einen neuen Controller anhand des &uuml;bergebenen
-	 * JDBCDataSourceRecord.
+	 * Generiert einen neuen Controller anhand des &uuml;bergebenen JDBCDataSourceRecord.
 	 *
-	 * @param dsr       Der JDBCDataSourceRecord mit den Daten zur Verbindung mit
-	 *                  der Datenbank.
-	 * @param factories Eine Tabelle mit Klassen-DBFactory-Tupeln, zum Zugriff auf
-	 *                  die Datenbank.
+	 * @param dsr       Der JDBCDataSourceRecord mit den Daten zur Verbindung mit der Datenbank.
+	 * @param factories Eine Tabelle mit Klassen-DBFactory-Tupeln, zum Zugriff auf die Datenbank.
 	 * @throws RemoteException ?!?
 	 */
 	public DefaultDBFactoryController(JDBCDataSourceRecord dsr, Hashtable<Class, DBFactory> factories)
@@ -284,13 +241,10 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	/* Statische Methoden. */
 
 	/**
-	 * Diese Methode generiert einen Standard-Suchfilter zur Nutzung mit den
-	 * Selection-Djinns.
+	 * Diese Methode generiert einen Standard-Suchfilter zur Nutzung mit den Selection-Djinns.
 	 *
-	 * @param cols     Liste mit den Namen der Tabellenspalten, die zur Selektion
-	 *                 herangezogen werden sollen.
-	 * @param criteria Eine Liste mit den Kriterien, nach denen die Tabellenspalten
-	 *                 durchsucht werden sollen.
+	 * @param cols     Liste mit den Namen der Tabellenspalten, die zur Selektion herangezogen werden sollen.
+	 * @param criteria Eine Liste mit den Kriterien, nach denen die Tabellenspalten durchsucht werden sollen.
 	 */
 	public static String CreateFilter(String[] cols, Object[] criteria) {
 		Vector<String> vs = new Vector<String>();
@@ -301,38 +255,29 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * Diese Methode generiert einen Standard-Suchfilter zur Nutzung mit den
-	 * Selection-Djinns.
+	 * Diese Methode generiert einen Standard-Suchfilter zur Nutzung mit den Selection-Djinns.
 	 * <P>
-	 * Ist dem Spaltennamen ein Asterix vorangestellt, so wird die Spalte als
-	 * kodiert behandelt.
+	 * Ist dem Spaltennamen ein Asterix vorangestellt, so wird die Spalte als kodiert behandelt.
 	 * <P>
-	 * Beginnt die der erste Eintrag in der criteria-Liste mit dem Pr&auml;fix
-	 * <I>"$SQL:" </I>, so wird sie nicht weiter &uuml;ber den PersistenceDescriptor
-	 * manipuliert, sondern direkt an das DBMS durchgeleitet. Nach dem Pr&auml;fix
-	 * sind eine Where-Klausel (ohne das Schl&uuml;sselwort "where") und/oder eine
-	 * order-by-Angabe (mit Schl&uuml;sselwort "order by") erlaubt. Die einzelnen
-	 * Komponenten der Klauseln k&ouml;nnen auf ein oder mehrere Eintr&auml;ge in
-	 * der criteria-Liste verteilt sein.
+	 * Beginnt die der erste Eintrag in der criteria-Liste mit dem Pr&auml;fix <I>"$SQL:" </I>, so wird sie nicht weiter
+	 * &uuml;ber den PersistenceDescriptor manipuliert, sondern direkt an das DBMS durchgeleitet. Nach dem Pr&auml;fix
+	 * sind eine Where-Klausel (ohne das Schl&uuml;sselwort "where") und/oder eine order-by-Angabe (mit
+	 * Schl&uuml;sselwort "order by") erlaubt. Die einzelnen Komponenten der Klauseln k&ouml;nnen auf ein oder mehrere
+	 * Eintr&auml;ge in der criteria-Liste verteilt sein.
 	 *
-	 * @param cols     Liste mit den Namen der Tabellenspalten, die zur Selektion
-	 *                 herangezogen werden sollen.
-	 * @param criteria Eine Liste mit den Kriterien, nach denen die Tabellenspalten
-	 *                 durchsucht werden sollen.
+	 * @param cols     Liste mit den Namen der Tabellenspalten, die zur Selektion herangezogen werden sollen.
+	 * @param criteria Eine Liste mit den Kriterien, nach denen die Tabellenspalten durchsucht werden sollen.
 	 *
-	 * @changed OLI 06.05.2008 - Erweiterung um die M&ouml;glichkeit &uuml;ber die
-	 *          Property
-	 *          <I>corent.db.xs.DefaultDBFactoryController.CreateFilter.convert.to.str...</I>
-	 *          eine Konvertierung von numerischen Felder in den Typ VARCHAR bei der
-	 *          Bildung des Filters zu erzwingen.
+	 * @changed OLI 06.05.2008 - Erweiterung um die M&ouml;glichkeit &uuml;ber die Property
+	 *          <I>corent.db.xs.DefaultDBFactoryController.CreateFilter.convert.to.str...</I> eine Konvertierung von
+	 *          numerischen Felder in den Typ VARCHAR bei der Bildung des Filters zu erzwingen.
 	 *          <P>
-	 *          OLI 27.04.2009 - Erweiterung um eine M&ouml;glichkeit die
-	 *          Typkonvertierung nach <TT>VARCHAR</TT> pauschal f&uuml;r alle Felder
-	 *          durchf&uuml;hren zu lassen.
+	 *          OLI 27.04.2009 - Erweiterung um eine M&ouml;glichkeit die Typkonvertierung nach <TT>VARCHAR</TT>
+	 *          pauschal f&uuml;r alle Felder durchf&uuml;hren zu lassen.
 	 *          <P>
 	 *
 	 */
-	public static String CreateFilter(Vector<String> cols, Object[] criteria) {
+	private static String CreateFilter(Vector<String> cols, Object[] criteria) {
 		boolean suppresslc = Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.suppress.lower.on.select");
 		if ((criteria == null) || (criteria.length == 0)) {
 			return "";
@@ -373,8 +318,11 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				if (s.length() > 0) {
 					s += " and ";
 				}
-				s += "(" + c + " like " + (!suppresslc ? DBExec.LowerCase("'%" + criteria[i].toString() + "%'")
-						: "'%" + criteria[i].toString() + "%'") + ")";
+				s += "(" + c + " like "
+						+ (!suppresslc
+								? DBExec.LowerCase("'%" + criteria[i].toString() + "%'")
+								: "'%" + criteria[i].toString() + "%'")
+						+ ")";
 			}
 		}
 		if ((DBFactoryUtil.CODER != null) && (vs.size() > 0)) {
@@ -402,8 +350,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * Diese Klasse ist ein einfacher Container f&uuml;r die Daten einer
-	 * Zugriffszeitnahme.
+	 * Diese Klasse ist ein einfacher Container f&uuml;r die Daten einer Zugriffszeitnahme.
 	 */
 	private class AccesstimeRecord {
 		public long opid = 0;
@@ -423,12 +370,12 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * Erzeugt eine Konsolenausgabe &uuml;ber den Start der angegebenen Operation
-	 * und liefert die zur Zeitnahme erforderlichen Daten.
+	 * Erzeugt eine Konsolenausgabe &uuml;ber den Start der angegebenen Operation und liefert die zur Zeitnahme
+	 * erforderlichen Daten.
 	 *
 	 * @param cls    Die Klasse, auf die sich die Operation bezieht.
-	 * @param opname Der Name der Operation. Hier bietet sich der Name der Methode
-	 *               an, innerhalb derer die Zeitnahme durchgef&uuml;hrt wird.
+	 * @param opname Der Name der Operation. Hier bietet sich der Name der Methode an, innerhalb derer die Zeitnahme
+	 *               durchgef&uuml;hrt wird.
 	 * @return Ein Datensatz mit den f&uuml;r die Zeitnahme erforderlichen Daten.
 	 */
 	private AccesstimeRecord startOperation(Class cls, String opname) {
@@ -496,8 +443,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return res;
 		}
-		throw new IllegalArgumentException("DBFactory for class " + c.getName() + " not found "
-				+ "in DefaultDBFactoryController.createFilter(Class, Object[])!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + c.getName() + " not found "
+						+ "in DefaultDBFactoryController.createFilter(Class, Object[])!");
 	}
 
 	/**
@@ -526,12 +474,10 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * @changed OLI 28.03.2008 - Ich habe den Block, in dem der eigentliche
-	 *          Lesezugriff stattfindet, synchronisiert. Im Kampfeinsatz (SPMi)
-	 *          kommt es immer wieder vor, da&szlig; durch eine unvorteilhafte
-	 *          Verzahnung die ShowStatements-Property der statischen DBExec-Instanz
-	 *          falsch gesetzt wird. Dies bleibt dann auch w&auml;hrend des
-	 *          folgenden Programmablaufes so.
+	 * @changed OLI 28.03.2008 - Ich habe den Block, in dem der eigentliche Lesezugriff stattfindet, synchronisiert. Im
+	 *          Kampfeinsatz (SPMi) kommt es immer wieder vor, da&szlig; durch eine unvorteilhafte Verzahnung die
+	 *          ShowStatements-Property der statischen DBExec-Instanz falsch gesetzt wird. Dies bleibt dann auch
+	 *          w&auml;hrend des folgenden Programmablaufes so.
 	 */
 	@Override
 	public Vector read(Class c, String w, OrderByDescriptor o, boolean sl, boolean includeRemoved)
@@ -561,8 +507,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return v;
 		}
-		throw new IllegalArgumentException("DBFactory for class " + c.getName() + " not found "
-				+ "in DefaultDBFactoryController.read(Class, String)!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + c.getName() + " not found "
+						+ "in DefaultDBFactoryController.read(Class, String)!");
 	}
 
 	@Override
@@ -586,8 +533,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * @changed OLI 18.09.2008 - Einbau der Pr&uuml;fung auf
-	 *          <TT>SuppressUserNotification</TT>.
+	 * @changed OLI 18.09.2008 - Einbau der Pr&uuml;fung auf <TT>SuppressUserNotification</TT>.
 	 *          <P>
 	 */
 	@Override
@@ -617,37 +563,50 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			if ((o instanceof CacheNotifier)
 					&& Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.cache.notification")) {
 				/*
-				 * Table varchar(255), Id varchar(255), Changer varchar(255), ChangeDate
-				 * numeric(14,0), Mode varchar(5) -- 'U' updated, 'R' removed.
+				 * Table varchar(255), Id varchar(255), Changer varchar(255), ChangeDate numeric(14,0), Mode varchar(5)
+				 * -- 'U' updated, 'R' removed.
 				 */
 				try {
 					CacheNotifier cn = (CacheNotifier) o;
-					String ct = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Table", "Table");
-					String cid = System.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.column.Id",
-							"Id");
-					String cchng = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Changer", "Changer");
-					String cdt = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "ChangeDate",
-							"ChangeDate");
-					String cmd = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Mode", "Mode");
-					String tn = System.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.tablename",
-							"CacheNotification");
-					int count = DBExec.Update(c,
-							"update " + tn + " set " + cchng + "="
-									+ DBUtil.DBString(cn.getPCName() + "-" + cn.getModificationUser()) + ", " + cdt
-									+ "=" + new PTimestamp().toLong() + ", " + cmd + "='U'" + " where " + ct + "="
-									+ DBUtil.DBString(cn.getTablename()) + " and " + cid + "="
-									+ DBUtil.DBString(cn.getIdValue()));
+					String ct = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Table",
+									"Table");
+					String cid = System
+							.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.column.Id", "Id");
+					String cchng = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Changer",
+									"Changer");
+					String cdt = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "ChangeDate",
+									"ChangeDate");
+					String cmd = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Mode",
+									"Mode");
+					String tn = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.tablename",
+									"CacheNotification");
+					int count = DBExec
+							.Update(
+									c,
+									"update " + tn + " set " + cchng + "="
+											+ DBUtil.DBString(cn.getPCName() + "-" + cn.getModificationUser()) + ", "
+											+ cdt + "=" + new PTimestamp().toLong() + ", " + cmd + "='U'" + " where "
+											+ ct + "=" + DBUtil.DBString(cn.getTablename()) + " and " + cid + "="
+											+ DBUtil.DBString(cn.getIdValue()));
 					if (count == 0) {
-						DBExec.Update(c,
-								"insert into " + tn + " (" + ct + ", " + cid + ", " + cchng + ", " + cdt + ", " + cmd
-										+ ") values (" + DBUtil.DBString(cn.getTablename()) + ", "
-										+ DBUtil.DBString(cn.getIdValue()) + ", "
-										+ DBUtil.DBString(cn.getPCName() + "-" + cn.getModificationUser()) + ", "
-										+ new PTimestamp().toLong() + ", 'U')");
+						DBExec
+								.Update(
+										c,
+										"insert into " + tn + " (" + ct + ", " + cid + ", " + cchng + ", " + cdt + ", "
+												+ cmd + ") values (" + DBUtil.DBString(cn.getTablename()) + ", "
+												+ DBUtil.DBString(cn.getIdValue()) + ", "
+												+ DBUtil.DBString(cn.getPCName() + "-" + cn.getModificationUser())
+												+ ", " + new PTimestamp().toLong() + ", 'U')");
 					}
 				} catch (SQLException sqle) {
 					sqle.printStackTrace();
@@ -656,13 +615,19 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			if (o instanceof Archivable) {
 				Archivable arc = (Archivable) o;
 				if (arc.getArchiveFilename() != null) {
-					String outfn = System.getProperty("corent.db.xs.DefaultDBFactoryController.archive.path", "./")
+					String outfn = System
+							.getProperty("corent.db.xs.DefaultDBFactoryController.archive.path", "./")
 							.replace("\\", "/") + arc.getArchiveFilename();
 					if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.archive.timestamp")) {
 						outfn = outfn.concat("-" + (new LongPTimestamp().toLong()));
 					}
-					outfn = outfn.concat(System.getProperty("corent.db.xs.DefaultDBFactoryController.archive.extension."
-							+ arc.getArchiveMode().toString(), ".html"));
+					outfn = outfn
+							.concat(
+									System
+											.getProperty(
+													"corent.db.xs.DefaultDBFactoryController.archive.extension."
+															+ arc.getArchiveMode().toString(),
+													".html"));
 					if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.archive.synchon")) {
 						log.warn("Archive file " + outfn + " is not created. Feature is deactivated!!!");
 					} else {
@@ -675,8 +640,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return o;
 		}
-		throw new IllegalArgumentException("DBFactory for class " + o.getClass().getName()
-				+ " not found in DefaultDBFactoryController.write(Object)!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + o.getClass().getName()
+						+ " not found in DefaultDBFactoryController.write(Object)!");
 	}
 
 	@Override
@@ -694,27 +660,41 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.cache.notification")) {
 				try {
-					String ct = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Table", "Table");
-					String cid = System.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.column.Id",
-							"Id");
-					String cchng = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Changer", "Changer");
-					String cdt = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "ChangeDate",
-							"ChangeDate");
-					String cmd = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Mode", "Mode");
-					String tn = System.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.tablename",
-							"CacheNotification");
-					int count = DBExec.Update(c,
-							"update " + tn + " set " + cchng + "='*'" + ", " + cdt + "=" + new PTimestamp().toLong()
-									+ ", " + cmd + "='U' where " + ct + "=" + cls.getName() + " and " + cid + "='*'");
+					String ct = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Table",
+									"Table");
+					String cid = System
+							.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.column.Id", "Id");
+					String cchng = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Changer",
+									"Changer");
+					String cdt = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "ChangeDate",
+									"ChangeDate");
+					String cmd = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Mode",
+									"Mode");
+					String tn = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.tablename",
+									"CacheNotification");
+					int count = DBExec
+							.Update(
+									c,
+									"update " + tn + " set " + cchng + "='*'" + ", " + cdt + "="
+											+ new PTimestamp().toLong() + ", " + cmd + "='U' where " + ct + "="
+											+ cls.getName() + " and " + cid + "='*'");
 					if (count == 0) {
-						DBExec.Update(c,
-								"insert into " + tn + " (" + ct + ", " + cid + ", " + cchng + ", " + cdt + ", " + cmd
-										+ ") values (" + cls.getName() + ", '*', '*', " + new PTimestamp().toLong()
-										+ ", 'U')");
+						DBExec
+								.Update(
+										c,
+										"insert into " + tn + " (" + ct + ", " + cid + ", " + cchng + ", " + cdt + ", "
+												+ cmd + ") values (" + cls.getName() + ", '*', '*', "
+												+ new PTimestamp().toLong() + ", 'U')");
 					}
 				} catch (SQLException sqle) {
 					sqle.printStackTrace();
@@ -725,9 +705,10 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return;
 		}
-		throw new IllegalArgumentException("DBFactory for class " + cls.getName()
-				+ " not found in DefaultDBFactoryController.writeBatch(Class, Vector, "
-				+ "Hashtable<Integer, Object>)!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + cls.getName()
+						+ " not found in DefaultDBFactoryController.writeBatch(Class, Vector, "
+						+ "Hashtable<Integer, Object>)!");
 	}
 
 	@Override
@@ -745,8 +726,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return o;
 		}
-		throw new IllegalArgumentException("DBFactory for class " + c.getName() + " not found "
-				+ "in DefaultDBFactoryController.generate(Class)!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + c.getName() + " not found "
+						+ "in DefaultDBFactoryController.generate(Class)!");
 	}
 
 	@Override
@@ -767,8 +749,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return res;
 		}
-		throw new IllegalArgumentException("DBFactory for class " + o.getClass().getName()
-				+ " not found in DefaultDBFactoryController.duplicate(Object)!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + o.getClass().getName()
+						+ " not found in DefaultDBFactoryController.duplicate(Object)!");
 	}
 
 	@Override
@@ -799,32 +782,45 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 					&& Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.cache.notification")) {
 				try {
 					CacheNotifier cn = (CacheNotifier) o;
-					String ct = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Table", "Table");
-					String cid = System.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.column.Id",
-							"Id");
-					String cchng = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Changer", "Changer");
-					String cdt = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "ChangeDate",
-							"ChangeDate");
-					String cmd = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Mode", "Mode");
-					String tn = System.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.tablename",
-							"CacheNotification");
-					int count = DBExec.Update(c,
-							"update " + tn + " set " + cchng + "="
-									+ DBUtil.DBString(cn.getPCName() + "-" + cn.getModificationUser()) + ", " + cdt
-									+ "=" + new PTimestamp().toLong() + ", " + cmd + "='R'" + " where " + ct + "="
-									+ DBUtil.DBString(cn.getTablename()) + " and " + cid + "="
-									+ DBUtil.DBString(cn.getIdValue()));
+					String ct = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Table",
+									"Table");
+					String cid = System
+							.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.column.Id", "Id");
+					String cchng = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Changer",
+									"Changer");
+					String cdt = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "ChangeDate",
+									"ChangeDate");
+					String cmd = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Mode",
+									"Mode");
+					String tn = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.tablename",
+									"CacheNotification");
+					int count = DBExec
+							.Update(
+									c,
+									"update " + tn + " set " + cchng + "="
+											+ DBUtil.DBString(cn.getPCName() + "-" + cn.getModificationUser()) + ", "
+											+ cdt + "=" + new PTimestamp().toLong() + ", " + cmd + "='R'" + " where "
+											+ ct + "=" + DBUtil.DBString(cn.getTablename()) + " and " + cid + "="
+											+ DBUtil.DBString(cn.getIdValue()));
 					if (count == 0) {
-						DBExec.Update(c,
-								"insert into " + tn + " (" + ct + ", " + cid + ", " + cchng + ", " + cdt + ", " + cmd
-										+ ") values (" + DBUtil.DBString(cn.getTablename()) + ", "
-										+ DBUtil.DBString(cn.getIdValue()) + ", "
-										+ DBUtil.DBString(cn.getPCName() + "-" + cn.getModificationUser()) + ", "
-										+ new PTimestamp().toLong() + ", 'R')");
+						DBExec
+								.Update(
+										c,
+										"insert into " + tn + " (" + ct + ", " + cid + ", " + cchng + ", " + cdt + ", "
+												+ cmd + ") values (" + DBUtil.DBString(cn.getTablename()) + ", "
+												+ DBUtil.DBString(cn.getIdValue()) + ", "
+												+ DBUtil.DBString(cn.getPCName() + "-" + cn.getModificationUser())
+												+ ", " + new PTimestamp().toLong() + ", 'R')");
 					}
 				} catch (SQLException sqle) {
 					sqle.printStackTrace();
@@ -835,8 +831,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return;
 		}
-		throw new IllegalArgumentException("DBFactory for class " + o.getClass().getName()
-				+ " not found in DefaultDBFactoryController.remove(Object, boolean)!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + o.getClass().getName()
+						+ " not found in DefaultDBFactoryController.remove(Object, boolean)!");
 	}
 
 	@Override
@@ -854,27 +851,41 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.cache.notification")) {
 				try {
-					String ct = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Table", "Table");
-					String cid = System.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.column.Id",
-							"Id");
-					String cchng = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Changer", "Changer");
-					String cdt = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "ChangeDate",
-							"ChangeDate");
-					String cmd = System.getProperty(
-							"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Mode", "Mode");
-					String tn = System.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.tablename",
-							"CacheNotification");
-					int count = DBExec.Update(c,
-							"update " + tn + " set " + cchng + "='*'" + ", " + cdt + "=" + new PTimestamp().toLong()
-									+ ", " + cmd + "='R' where " + ct + "=" + cls.getName() + " and " + cid + "='*'");
+					String ct = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Table",
+									"Table");
+					String cid = System
+							.getProperty("corent.db.xs.DefaultDBFactoryController.changenotifier.column.Id", "Id");
+					String cchng = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Changer",
+									"Changer");
+					String cdt = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "ChangeDate",
+									"ChangeDate");
+					String cmd = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.column." + "Mode",
+									"Mode");
+					String tn = System
+							.getProperty(
+									"corent.db.xs.DefaultDBFactoryController.changenotifier.tablename",
+									"CacheNotification");
+					int count = DBExec
+							.Update(
+									c,
+									"update " + tn + " set " + cchng + "='*'" + ", " + cdt + "="
+											+ new PTimestamp().toLong() + ", " + cmd + "='R' where " + ct + "="
+											+ cls.getName() + " and " + cid + "='*'");
 					if (count == 0) {
-						DBExec.Update(c,
-								"insert into " + tn + " (" + ct + ", " + cid + ", " + cchng + ", " + cdt + ", " + cmd
-										+ ") values (" + cls.getName() + ", '*', '*', " + new PTimestamp().toLong()
-										+ ", 'R')");
+						DBExec
+								.Update(
+										c,
+										"insert into " + tn + " (" + ct + ", " + cid + ", " + cchng + ", " + cdt + ", "
+												+ cmd + ") values (" + cls.getName() + ", '*', '*', "
+												+ new PTimestamp().toLong() + ", 'R')");
 					}
 				} catch (SQLException sqle) {
 					sqle.printStackTrace();
@@ -885,8 +896,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return;
 		}
-		throw new IllegalArgumentException("DBFactory for class " + cls.getName()
-				+ " not found in DefaultDBFactoryController.removeBatch(Class, Vector, boolean)" + "!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + cls.getName()
+						+ " not found in DefaultDBFactoryController.removeBatch(Class, Vector, boolean)" + "!");
 	}
 
 	@Override
@@ -906,8 +918,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return dbf.isUnique(o, c);
 		}
-		throw new IllegalArgumentException("DBFactory for class " + o.getClass().getName()
-				+ " not found in DefaultDBFactoryController.isUnique(Object)!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + o.getClass().getName()
+						+ " not found in DefaultDBFactoryController.isUnique(Object)!");
 	}
 
 	@Override
@@ -919,12 +932,11 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	private static int TmpFileCounter = 0;
 
 	/**
-	 * @changed OLI 04.11.2007 - Erweiterung um den Aufruf der
-	 *          <TT>write(Object)</TT>-Methode, im Falle, da&szlig; das Objekt vor
-	 *          dem Drucken zu speichern ist.
+	 * @changed OLI 04.11.2007 - Erweiterung um den Aufruf der <TT>write(Object)</TT>-Methode, im Falle, da&szlig; das
+	 *          Objekt vor dem Drucken zu speichern ist.
 	 *          <P>
-	 *          OLI 30.09.2008 - Erweiterung um die M&ouml;glichkeit die
-	 *          Zeichensatzkodierung beim Drucken von CSV-Dateien zu bestimmen.
+	 *          OLI 30.09.2008 - Erweiterung um die M&ouml;glichkeit die Zeichensatzkodierung beim Drucken von
+	 *          CSV-Dateien zu bestimmen.
 	 *          <P>
 	 *
 	 */
@@ -962,7 +974,8 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			try {
 				// FileWriter fw = new FileWriter(fn, false);
 				FileOutputStream fos = new FileOutputStream(fn, false);
-				OutputStreamWriter osw = new OutputStreamWriter(fos,
+				OutputStreamWriter osw = new OutputStreamWriter(
+						fos,
 						System.getProperty("corent.db.xs.DefaultDBFactoryController.csv.encoding", "ISO-8859-1"));
 				BufferedWriter writer = new BufferedWriter(osw);
 				writer.write(csvcontent);
@@ -983,9 +996,12 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				jrcsvds.setColumnNames(jrcsv.getColumnNames());
 				jrcsvds.setFieldDelimiter(jrcsv.getFieldDelimiter());
 				jrcsvds.setRecordDelimiter(jrcsv.getRecordDelimiter());
-				jp = JasperFillManager.fillReport(
-						System.getProperty("corent.print.jasper.reportdir") + jr.getJasperReportFilename(reportnumber),
-						hm, jrcsvds);
+				jp = JasperFillManager
+						.fillReport(
+								System.getProperty("corent.print.jasper.reportdir")
+										+ jr.getJasperReportFilename(reportnumber),
+								hm,
+								jrcsvds);
 				File f = new File(fn);
 				f.delete();
 			} catch (Exception e) {
@@ -993,9 +1009,12 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 		} else {
 			Connection c = this.getConnection();
-			jp = JasperFillManager.fillReport(
-					System.getProperty("corent.print.jasper.reportdir") + jr.getJasperReportFilename(reportnumber), hm,
-					c);
+			jp = JasperFillManager
+					.fillReport(
+							System.getProperty("corent.print.jasper.reportdir")
+									+ jr.getJasperReportFilename(reportnumber),
+							hm,
+							c);
 		}
 		log.debug("Print> ready at " + new PTimestamp());
 		if (atr != null) {
@@ -1022,13 +1041,11 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	@Override
 	@Deprecated
 	/**
-	 * @changed OLI 29.01.2009 - Auf einen Aufruf der Methode
-	 *          <TT>getSelectionView(Object, String,
+	 * @changed OLI 29.01.2009 - Auf einen Aufruf der Methode <TT>getSelectionView(Object, String,
 	 *             boolean)</TT> umgestellt.
 	 *          <P>
 	 *
-	 * @deprecated OLI 29.01.2009 - Zugunsten der Methode
-	 *             <TT>getSelectionView(Object, String,
+	 * @deprecated OLI 29.01.2009 - Zugunsten der Methode <TT>getSelectionView(Object, String,
 	 *             boolean)</TT> zur&uuml;ckgesetzt.
 	 *
 	 */
@@ -1036,8 +1053,10 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		AccesstimeRecord atr = null;
 		SelectionTableModel stm = null;
 		if (this.showAccesstimes) {
-			atr = this.startOperation((o != null ? o.getClass() : null),
-					"getSelectionView(" + "Object, String, boolean)");
+			atr = this
+					.startOperation(
+							(o != null ? o.getClass() : null),
+							"getSelectionView(" + "Object, String, boolean)");
 		}
 		stm = this.getSelectionView(o, w, false);
 		if (atr != null) {
@@ -1047,8 +1066,7 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 	}
 
 	/**
-	 * @changed OLI 29.01.2009 - Auf Basis der Methode
-	 *          <TT>getSelectionView(Object, String)</TT> hinzugef&uuml;gt.
+	 * @changed OLI 29.01.2009 - Auf Basis der Methode <TT>getSelectionView(Object, String)</TT> hinzugef&uuml;gt.
 	 *          <P>
 	 *
 	 */
@@ -1057,8 +1075,10 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			throws RemoteException, SQLException {
 		AccesstimeRecord atr = null;
 		if (this.showAccesstimes) {
-			atr = this.startOperation((o != null ? o.getClass() : null),
-					"getSelectionView(" + "Object, String, boolean)");
+			atr = this
+					.startOperation(
+							(o != null ? o.getClass() : null),
+							"getSelectionView(" + "Object, String, boolean)");
 		}
 		Connection c = this.getConnection();
 		DBFactory dbf = this.factories.get(o.getClass());
@@ -1073,8 +1093,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return stm;
 		}
-		throw new IllegalArgumentException("DBFactory for class " + o.getClass().getName()
-				+ " not found in DefaultDBFactoryController.getSelectionView(Object)!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + o.getClass().getName()
+						+ " not found in DefaultDBFactoryController.getSelectionView(Object)!");
 	}
 
 	@Override
@@ -1092,8 +1113,9 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 			}
 			return o;
 		}
-		throw new IllegalArgumentException("DBFactory for class " + c.getName() + " not found "
-				+ "in DefaultDBFactoryController.doAction(Class, int, Object...)!");
+		throw new IllegalArgumentException(
+				"DBFactory for class " + c.getName() + " not found "
+						+ "in DefaultDBFactoryController.doAction(Class, int, Object...)!");
 	}
 
 	@Override
@@ -1115,19 +1137,23 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		if (this.showAccesstimes) {
 			atr = this.startOperation(cls, "lock(Class, Object, String)");
 		}
-		DefaultDBFactoryControllerLock dbfcl = new DefaultDBFactoryControllerLock(cls, k,
-				(PTimestamp) new PTimestamp().add(TimestampUnit.MINUTE,
-						Integer.getInteger("corent.db.xs.DefaultDBFactoryController.lock.expires", 60)),
+		DefaultDBFactoryControllerLock dbfcl = new DefaultDBFactoryControllerLock(
+				cls,
+				k,
+				(PTimestamp) new PTimestamp()
+						.add(
+								TimestampUnit.MINUTE,
+								Integer.getInteger("corent.db.xs.DefaultDBFactoryController.lock.expires", 60)),
 				userid);
 		if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.locksByDatabasetable")) {
 			try {
 				Connection c = this.getConnection();
-				String clo = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LockObject",
-						"LockObject");
-				String clr = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LastRequest",
-						"LastRequest");
-				String cuid = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.UserId",
-						"UserId");
+				String clo = System
+						.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LockObject", "LockObject");
+				String clr = System
+						.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LastRequest", "LastRequest");
+				String cuid =
+						System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.UserId", "UserId");
 				String lck = cls.getName().toString().concat("-");
 				if (k instanceof Lockable) {
 					lck = lck.concat(((Lockable) k).getLockString());
@@ -1136,19 +1162,23 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				}
 				String tn = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.tablename", "LockObject");
 				try {
-					int count = DBExec.Update(c,
-							"update " + tn + " set " + clr + "=" + dbfcl.getTimeOfExspiration().toLong() + " where "
-									+ clo + "=" + DBUtil.DBString(lck) + " and " + cuid + "="
-									+ DBUtil.DBString(userid));
+					int count = DBExec
+							.Update(
+									c,
+									"update " + tn + " set " + clr + "=" + dbfcl.getTimeOfExspiration().toLong()
+											+ " where " + clo + "=" + DBUtil.DBString(lck) + " and " + cuid + "="
+											+ DBUtil.DBString(userid));
 					if (count == 0) {
-						DBExec.Update(c,
-								"insert into " + tn + " (" + clo + ", " + cuid + ", " + clr + ") values ("
-										+ DBUtil.DBString(lck) + ", " + DBUtil.DBString(userid) + ", "
-										+ dbfcl.getTimeOfExspiration().toLong() + ")");
+						DBExec
+								.Update(
+										c,
+										"insert into " + tn + " (" + clo + ", " + cuid + ", " + clr + ") values ("
+												+ DBUtil.DBString(lck) + ", " + DBUtil.DBString(userid) + ", "
+												+ dbfcl.getTimeOfExspiration().toLong() + ")");
 					}
 				} catch (Exception e) {
-					ResultSet rs = DBExec.Query(c,
-							"select " + cuid + " from " + tn + " where " + clo + "='" + lck + "'");
+					ResultSet rs =
+							DBExec.Query(c, "select " + cuid + " from " + tn + " where " + clo + "='" + lck + "'");
 					String s = "UNKNOWN";
 					if (rs.next()) {
 						s = rs.getString(1);
@@ -1193,10 +1223,10 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.locksByDatabasetable")) {
 			try {
 				Connection c = this.getConnection();
-				String clo = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LockObject",
-						"LockObject");
-				String cuid = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.UserId",
-						"UserId");
+				String clo = System
+						.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LockObject", "LockObject");
+				String cuid =
+						System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.UserId", "UserId");
 				String lck = cls.getName().toString().concat("-");
 				if (k instanceof Lockable) {
 					lck = lck.concat(((Lockable) k).getLockString());
@@ -1205,8 +1235,11 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 				}
 				String tn = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.tablename", "LockObject");
 				try {
-					int count = DBExec.Update(c, "delete from " + tn + " where " + clo + "=" + DBUtil.DBString(lck)
-							+ " and " + cuid + "=" + DBUtil.DBString(userid));
+					int count = DBExec
+							.Update(
+									c,
+									"delete from " + tn + " where " + clo + "=" + DBUtil.DBString(lck) + " and " + cuid
+											+ "=" + DBUtil.DBString(userid));
 					if (atr != null) {
 						this.stopOperation(atr);
 					}
@@ -1242,8 +1275,8 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.locksByDatabasetable")) {
 			try {
 				Connection c = this.getConnection();
-				String clr = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LastRequest",
-						"LastRequest");
+				String clr = System
+						.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LastRequest", "LastRequest");
 				String tn = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.tablename", "LockObject");
 				try {
 					DBExec.Update(c, "delete from " + tn + " where " + clr + "<=" + new PTimestamp().toLong());
@@ -1278,8 +1311,8 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.locksByDatabasetable")) {
 			try {
 				Connection c = this.getConnection();
-				String clr = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LastRequest",
-						"LastRequest");
+				String clr = System
+						.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LastRequest", "LastRequest");
 				String tn = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.tablename", "LockObject");
 				try {
 					DBExec.Update(c, "delete from " + tn + " where " + clr + " like '" + cls.getName() + "%'");
@@ -1312,12 +1345,12 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.locksByDatabasetable")) {
 			try {
 				Connection c = this.getConnection();
-				String clo = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LockObject",
-						"LockObject");
-				String clr = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LastRequest",
-						"LastRequest");
-				String cuid = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.UserId",
-						"UserId");
+				String clo = System
+						.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LockObject", "LockObject");
+				String clr = System
+						.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LastRequest", "LastRequest");
+				String cuid =
+						System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.UserId", "UserId");
 				String tn = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.tablename", "LockObject");
 				Vector<DBFactoryControllerLock> v = new Vector<DBFactoryControllerLock>();
 				try {
@@ -1364,8 +1397,8 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 		if (Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.locksByDatabasetable")) {
 			try {
 				Connection c = this.getConnection();
-				String clo = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LockObject",
-						"LockObject");
+				String clo = System
+						.getProperty("corent.db.xs.DefaultDBFactoryController.locks.column.LockObject", "LockObject");
 				String tn = System.getProperty("corent.db.xs.DefaultDBFactoryController.locks.tablename", "LockObject");
 				try {
 					DBExec.Update(c, "delete from " + tn + " where " + clo + "=" + DBUtil.DBString(dbfcl.getLockKey()));
