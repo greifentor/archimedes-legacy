@@ -9,22 +9,15 @@
 
 package corent.db.xs;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import corent.base.Direction;
-import corent.base.StrUtil;
 import corent.dates.LongPTimestamp;
 import corent.dates.PTimestamp;
 import corent.dates.TimestampUnit;
@@ -35,15 +28,9 @@ import corent.db.DBUtil;
 import corent.db.JDBCDataSourceRecord;
 import corent.db.OrderByDescriptor;
 import corent.print.Archivable;
-import corent.print.JasperReportable;
-import corent.print.JasperReportableCSV;
 import corent.util.SysUtil;
 import corentx.ds.Lockable;
 import logging.Logger;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRCsvDataSource;
 
 /**
  * Diese Musterimplementierung eines DBFactoryControllers vermittelt einen &Uuml;berblick &uuml;ber die Arbeitsweise
@@ -923,105 +910,8 @@ public class DefaultDBFactoryController extends UnicastRemoteObject implements D
 						+ " not found in DefaultDBFactoryController.isUnique(Object)!");
 	}
 
-	@Override
-	public JasperPrint print(JasperReportable jr) throws JRException, RemoteException, SQLException {
-		return this.print(jr, 0);
-	}
-
 	/* Z&auml;hler f&uuml;r die Benamsung der tempor&auml;ren Dateien. */
 	private static int TmpFileCounter = 0;
-
-	/**
-	 * @changed OLI 04.11.2007 - Erweiterung um den Aufruf der <TT>write(Object)</TT>-Methode, im Falle, da&szlig; das
-	 *          Objekt vor dem Drucken zu speichern ist.
-	 *          <P>
-	 *          OLI 30.09.2008 - Erweiterung um die M&ouml;glichkeit die Zeichensatzkodierung beim Drucken von
-	 *          CSV-Dateien zu bestimmen.
-	 *          <P>
-	 *
-	 */
-	@Override
-	public JasperPrint print(JasperReportable jr, int reportnumber) throws JRException, RemoteException, SQLException {
-		AccesstimeRecord atr = null;
-		if (this.showAccesstimes) {
-			atr = this.startOperation((jr != null ? jr.getClass() : null), "print(JasperReportable, int)");
-		}
-		boolean debug = Boolean.getBoolean("corent.db.xs.DefaultDBFactoryController.debug");
-		HashMap hm = jr.getReportParams(reportnumber, this);
-		String fn = null;
-		if (jr.isSaveBeforePrintingRequired()) {
-			Connection c = this.getConnection();
-			DBFactory dbf = this.factories.get(jr.getClass());
-			if (jr instanceof RemoteDBMember) {
-				((RemoteDBMember) jr).objectBeforeWrite();
-			}
-			if (dbf != null) {
-				dbf.write(jr, c);
-			}
-		}
-		log.debug("Print> starting at " + new PTimestamp());
-		log.debug("Print> file name: " + jr.getJasperReportFilename(reportnumber));
-		if (jr instanceof JasperReportableCSV) {
-			log.debug("Print> csv report");
-			JasperReportableCSV jrcsv = (JasperReportableCSV) jr;
-			TmpFileCounter++;
-			String csvcontent = jrcsv.getCSVContent(reportnumber).replace("\n", System.getProperty("line.separator"));
-			fn = System.getProperty("corent.db.xs.DefaultDBFactoryController.tmpdir", "tmp/").replace("\\", "/");
-			if (!fn.endsWith("/")) {
-				fn = fn.concat("/");
-			}
-			fn = fn.concat("tmp-reportfile-" + StrUtil.PumpUp("" + TmpFileCounter, "0", 6, Direction.LEFT));
-			try {
-				// FileWriter fw = new FileWriter(fn, false);
-				FileOutputStream fos = new FileOutputStream(fn, false);
-				OutputStreamWriter osw = new OutputStreamWriter(
-						fos,
-						System.getProperty("corent.db.xs.DefaultDBFactoryController.csv.encoding", "ISO-8859-1"));
-				BufferedWriter writer = new BufferedWriter(osw);
-				writer.write(csvcontent);
-				writer.flush();
-				writer.close();
-				osw.close();
-				fos.close();
-				hm.put("CSVTMPFILENAME", fn);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		JasperPrint jp = null;
-		if (jr instanceof JasperReportableCSV) {
-			try {
-				JasperReportableCSV jrcsv = (JasperReportableCSV) jr;
-				JRCsvDataSource jrcsvds = new JRCsvDataSource(new File(fn));
-				jrcsvds.setColumnNames(jrcsv.getColumnNames());
-				jrcsvds.setFieldDelimiter(jrcsv.getFieldDelimiter());
-				jrcsvds.setRecordDelimiter(jrcsv.getRecordDelimiter());
-				jp = JasperFillManager
-						.fillReport(
-								System.getProperty("corent.print.jasper.reportdir")
-										+ jr.getJasperReportFilename(reportnumber),
-								hm,
-								jrcsvds);
-				File f = new File(fn);
-				f.delete();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			Connection c = this.getConnection();
-			jp = JasperFillManager
-					.fillReport(
-							System.getProperty("corent.print.jasper.reportdir")
-									+ jr.getJasperReportFilename(reportnumber),
-							hm,
-							c);
-		}
-		log.debug("Print> ready at " + new PTimestamp());
-		if (atr != null) {
-			this.stopOperation(atr);
-		}
-		return jp;
-	}
 
 	@Override
 	public boolean isHoldConnection() throws RemoteException {

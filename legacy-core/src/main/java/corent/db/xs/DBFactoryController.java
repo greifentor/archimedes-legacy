@@ -18,8 +18,6 @@ import java.util.Vector;
 
 import corent.dates.PTimestamp;
 import corent.db.OrderByDescriptor;
-import corent.print.JasperReportable;
-import net.sf.jasperreports.engine.*;
 
 /**
  * Mit Hilfe dieses Interfaces werden Funktionalit&auml;ten f&uuml;r einen Controller (DBFC) festgelegt, der in der Lage
@@ -48,7 +46,11 @@ public interface DBFactoryController extends Remote {
 
 	/** Bezeichner zur Typung von Events. */
 	public enum MessageTyp {
-		OBJECT_CHANGED, OBJECT_CREATED, OBJECT_REMOVED, OBJEKT_LOCKED, OBJEKT_UNLOCKED
+		OBJECT_CHANGED,
+		OBJECT_CREATED,
+		OBJECT_REMOVED,
+		OBJEKT_LOCKED,
+		OBJEKT_UNLOCKED
 	};
 
 	/**
@@ -289,38 +291,6 @@ public interface DBFactoryController extends Remote {
 	 *                         Client-/Server-Kommunikation auftritt.
 	 */
 	public String lock(Class cls, Object k, String userid) throws RemoteException;
-
-	/**
-	 * Druckt das angegebene Objekt als JasperReport aus (sofern die notwendigen jasper-Dateien vorhanden sind). Die an
-	 * die JasperReportables &uuml;bergebene Reportnumber ist 0.
-	 *
-	 * @param jr Das Objekt, das gedruckt werden soll.
-	 * @return Der JasperPrint zum angegebenen JasperReportable.
-	 * @throws JRException     Falls beim Erzeugen des Reports ein Problem diagnostiziert wird.
-	 * @throws RemoteException Falls der Controller im Remote-Betrieb l&auml;uft und ein Problem bei der
-	 *                         Client-/Server-Kommunikation auftritt.
-	 * @throws SQLException    Falls beim Zugriff auf die Datenbank w&auml;hrend des Erstellens des Reports ein Fehler
-	 *                         auftritt.
-	 */
-	public JasperPrint print(JasperReportable jr) throws JRException, RemoteException, SQLException;
-
-	/**
-	 * Druckt das angegebene Objekt als JasperReport aus (sofern die notwendigen jasper-Dateien vorhanden sind).
-	 * <P>
-	 * Die Methode f&uuml;gt dem JasperReportable einen Report-Parameter mit dem Namen "CSVTMPFILENAME" hinzu, in dem
-	 * der tempor&auml;re Dateiname der CSV-Datei hinterlegt ist. Hat das JasperReportable bereits einen solchen
-	 * Report-Parameter, so wird dieser &uuml;berschrieben.
-	 *
-	 * @param jr           Das Objekt, das gedruckt werden soll.
-	 * @param reportnumber &Uuml;bergibt die angegebene Reportnumber an die Methoden des JasperReportable.
-	 * @return Der JasperPrint zum angegebenen JasperReportable.
-	 * @throws JRException     Falls beim Erzeugen des Reports ein Problem diagnostiziert wird.
-	 * @throws RemoteException Falls der Controller im Remote-Betrieb l&auml;uft und ein Problem bei der
-	 *                         Client-/Server-Kommunikation auftritt.
-	 * @throws SQLException    Falls beim Zugriff auf die Datenbank w&auml;hrend des Erstellens des Reports ein Fehler
-	 *                         auftritt.
-	 */
-	public JasperPrint print(JasperReportable jr, int reportnumber) throws JRException, RemoteException, SQLException;
 
 	/**
 	 * Liest einen Vector von Objekten der angegebenen Klasse aus der Datenbank, dessen Elemente durch die angegebene
