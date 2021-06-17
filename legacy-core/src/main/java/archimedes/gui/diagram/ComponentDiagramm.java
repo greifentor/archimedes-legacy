@@ -209,8 +209,8 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 							Point p = r
 									.getPoint(
 											getView(),
-											roundCoor(convertReverse(e.getX()), e.isShiftDown()),
-											roundCoor(convertReverse(e.getY()), e.isShiftDown()));
+											roundCoor(convertReverse(e.getX()), true),
+											roundCoor(convertReverse(e.getY()), true));
 							r.removePoint(getView(), p);
 							dm.raiseAltered();
 							repaint();
@@ -299,8 +299,8 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 							Point p = r
 									.getPoint(
 											getView(),
-											convertReverse(roundCoor(e.getX(), e.isShiftDown())),
-											convertReverse(roundCoor(e.getY(), e.isShiftDown())));
+											convertReverse(roundCoor(e.getX(), true)),
+											convertReverse(roundCoor(e.getY(), true)));
 							dragged = new RelationPointContainer(r, p);
 						}
 						if ((len > 1) && (v.elementAt(1) instanceof GUIRelationModel)) {
@@ -313,8 +313,8 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 							Point p = r
 									.getPoint(
 											getView(),
-											roundCoor(e.getX(), e.isShiftDown()),
-											roundCoor(e.getY(), e.isShiftDown()));
+											roundCoor(e.getX(), true),
+											roundCoor(e.getY(), true));
 							if (r.isEndPoint(getView(), p)) {
 								dragged = new RelationEndPointContainer(r, p, r.getObjectPointed(getView(), p));
 							} else {
