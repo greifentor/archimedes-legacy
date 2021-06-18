@@ -52,8 +52,7 @@ import java.util.Locale;
 
 public class PDate implements DateOfDay, Serializable, Timestamp<PDate> {
 
-	/** Eine PDateFactory, die zum Generieren aktueller Datumsangaben genutzt wird. */
-	public static PDateFactory pDateFactory = new SystemPDateFactory();
+	private static PDateFactory pDateFactory = new SystemPDateFactory();
 
 	private static LenientModeChecker lenientModeChecker = new LenientModeChecker(PDate.class);
 
@@ -76,15 +75,7 @@ public class PDate implements DateOfDay, Serializable, Timestamp<PDate> {
 		this(date % 100, (date / 100) % 100, date / 10000);
 	}
 
-	/**
-	 * Erzeugt ein PDate aus den &uuml;bergebenen Parametern.
-	 *
-	 * @param day   Der Tag des zu setzenden Datums.
-	 * @param month Der Monat des zu setzenden Datums.
-	 * @param year  Der Jahr des zu setzenden Datums.
-	 * @throws IllegalArgumentException Falls die Parameter nicht in ein valides Datum umgesetzt werden k&ouml;nnen.
-	 */
-	public PDate(long day, long month, long year) throws IllegalArgumentException {
+	private PDate(long day, long month, long year) throws IllegalArgumentException {
 		super();
 		if (TimestampUtil.validate(day, month, year)) {
 			this.date = (year * 10000) + (month * 100) + day;
@@ -241,7 +232,7 @@ public class PDate implements DateOfDay, Serializable, Timestamp<PDate> {
 	 *
 	 * @changed OLI 12.08.2009 - Hinzugef&uuml;gt.
 	 */
-	public static boolean validate(long day, long month, long year) {
+	private static boolean validate(long day, long month, long year) {
 		if (year < 1) {
 			return false;
 		}

@@ -9,13 +9,11 @@
 
 package corentx.util;
 
-
-import java.util.*;
-
+import java.util.Comparator;
 
 /**
- * Dieser Comparator vergleicht Strings ohne Ber&uuml;cksichtigung der Gro&szlig;- und
- * Kleinschreibung anhand der alphabetischen Ordnung mit einander.
+ * Dieser Comparator vergleicht Strings ohne Ber&uuml;cksichtigung der Gro&szlig;- und Kleinschreibung anhand der
+ * alphabetischen Ordnung mit einander.
  *
  * @author O.Lieshoff
  *
@@ -25,25 +23,15 @@ import java.util.*;
 
 public class AlphabeticalStringComparator implements Comparator<String> {
 
-    /** Generiert ein AlphabeticalStringComparator-Objekt mit Defaultwerten. */
-    public AlphabeticalStringComparator() {
-        super();
-    }
+	/** Generiert ein AlphabeticalStringComparator-Objekt mit Defaultwerten. */
+	public AlphabeticalStringComparator() {
+		super();
+	}
 
+	/* Implememtierung des Interfaces Comparator. */
 
-    /* Implememtierung des Interfaces Comparator. */
-
-    public int compare(String o1, String o2)  {
-        return o1.toLowerCase().compareTo(o2.toLowerCase());
-    }
-
-    /* OLI 22.10.2009 - Wozu war die gut?!?
-    public boolean equals(Object o) {
-        if (!(o instanceof AlphabeticalStringComparator)) {
-            return false;
-        }
-        return super.equals(o);
-    }
-    */
+	public int compare(String o1, String o2) {
+		return o1.toLowerCase().compareTo(o2.toLowerCase());
+	}
 
 }
