@@ -201,97 +201,97 @@ import logging.Logger;
 
 public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 
-	public static final Logger LOG = Logger.getLogger(Diagramm.class);
+	private static final Logger LOG = Logger.getLogger(Diagramm.class);
 	/** Ein Bezeichner zum Zugriff auf den Namen des Diagramms. */
-	public static final int ID_NAME = 0;
+	private static final int ID_NAME = 0;
 	/** Ein Bezeichner zum Zugriff auf den Autor des Diagramms. */
-	public static final int ID_AUTOR = 1;
+	private static final int ID_AUTOR = 1;
 	/** Ein Bezeichner zum Zugriff auf den Kommentar zum Diagramms. */
-	public static final int ID_COMMENT = 2;
+	private static final int ID_COMMENT = 2;
 	/** Ein Bezeichner zum Zugriff auf die Version des Diagramms. */
-	public static final int ID_VERSION = 3;
+	private static final int ID_VERSION = 3;
 	/** Ein Bezeichner zum Zugriff auf das Versionsdatum des Diagramms. */
-	public static final int ID_VERSIONSDATUM = 4;
+	private static final int ID_VERSIONSDATUM = 4;
 	/** Ein Bezeichner zum Zugriff auf den Versionskommentar des Diagramms. */
-	public static final int ID_VERSIONSKOMMENTAR = 5;
+	private static final int ID_VERSIONSKOMMENTAR = 5;
 	/**
 	 * Ein Bezeichner zum Zugriff auf die Schriftg&ouml;&szlig;e f&uuml;r die Tabelleninhalte.
 	 */
-	public static final int ID_SCHRIFTGROESSE_TABELLEN = 6;
+	private static final int ID_SCHRIFTGROESSE_TABELLEN = 6;
 	/**
 	 * Ein Bezeichner zum Zugriff auf die Schriftg&ouml;&szlig;e f&uuml;r die &Uuml;berschrift.
 	 */
-	public static final int ID_SCHRIFTGROESSE_UEBERSCHRIFT = 7;
+	private static final int ID_SCHRIFTGROESSE_UEBERSCHRIFT = 7;
 	/**
 	 * Ein Bezeichner zum Zugriff auf die Schriftg&ouml;&szlig;e f&uuml;r die Untertitel.
 	 */
-	public static final int ID_SCHRIFTGROESSE_UNTERTITEL = 8;
+	private static final int ID_SCHRIFTGROESSE_UNTERTITEL = 8;
 	/**
 	 * Ein Bezeichner zum Zugriff auf Flagge zu Druck und Anzeige von aufgehobenen Objekten.
 	 */
-	public static final int ID_HIDE_DEPRECATED = 9;
+	private static final int ID_HIDE_DEPRECATED = 9;
 	/**
 	 * Ein Bezeichner zum Zugriff auf den Zielpfad f&uuml;r die Code-Generierung.
 	 */
-	public static final int ID_CODEPFAD = 10;
+	private static final int ID_CODEPFAD = 10;
 	/**
 	 * Ein Bezeichner zum Zugriff auf den Namen der zu generierenden Applikation.
 	 */
-	public static final int ID_APPLICATIONNAME = 11;
+	private static final int ID_APPLICATIONNAME = 11;
 	/**
 	 * Ein Bezeichner zum Zugriff auf den Namen DB-Versionen-Tabelle, falls eine solche existiert.
 	 */
-	public static final int ID_DBVERSIONTABLENAME = 12;
+	private static final int ID_DBVERSIONTABLENAME = 12;
 	/**
 	 * Ein Bezeichner zum Zugriff auf die Flagge zur Anzeige von referenzierten Spaltennamen im Diagramm.
 	 */
-	public static final int ID_SHOWREFERENCEDCOLUMNAMES = 13;
+	private static final int ID_SHOWREFERENCEDCOLUMNAMES = 13;
 	/**
 	 * Ein Bezeichner zum Zugriff auf den Namen der Versionsspalte in der DB-Versionen-Tabelle, falls eine solche
 	 * existiert.
 	 */
-	public static final int ID_DBVERSIONDBVERSIONCOLUMN = 14;
+	private static final int ID_DBVERSIONDBVERSIONCOLUMN = 14;
 	/**
 	 * Ein Bezeichner zum Zugriff auf den Namen der Beschreibungsspalte der DB-Versionen-Tabelle, falls eine solche
 	 * existiert.
 	 */
-	public static final int ID_DBVERSIONDESCRIPTIONCOLUMN = 15;
+	private static final int ID_DBVERSIONDESCRIPTIONCOLUMN = 15;
 	/** Ein Bezeichner zum Zugriff auf die View-Liste. */
-	public static final int ID_MARKUPWRITEABLEMEMBER = 16;
+	private static final int ID_MARKUPWRITEABLEMEMBER = 16;
 	/** Ein Bezeichner zum Zugriff auf den Basis-Packagenamen. */
-	public static final int ID_BASEPACKAGENAME = 17;
+	private static final int ID_BASEPACKAGENAME = 17;
 	/** Ein Bezeichner zum Zugriff auf den Namen der CodeFactory-Klasse. */
-	public static final int ID_CODEFACTORYCLASSNAME = 18;
+	private static final int ID_CODEFACTORYCLASSNAME = 18;
 	/** Ein Bezeichner zum Zugriff auf die MarkWriteablemembers-Flagge. */
-	public static final int ID_VIEWS = 19;
+	private static final int ID_VIEWS = 19;
 	/** Ein Bezeichner zum Zugriff auf das Attribut UdschebtiBaseClassName. */
-	public static final int ID_UDSCHEBTIBASECLASSNAME = 20;
+	private static final int ID_UDSCHEBTIBASECLASSNAME = 20;
 	/** Ein Bezeichner zum Zugriff auf das Attribut PaintTechnicalFieldsInGray. */
-	public static final int ID_PAINTTECHNICALFIELDSINGRAY = 21;
+	private static final int ID_PAINTTECHNICALFIELDSINGRAY = 21;
 	/** Ein Bezeichner zum Zugriff auf AfterWriteScript. */
-	public static final int ID_AFTERWRITESCRIPT = 22;
+	private static final int ID_AFTERWRITESCRIPT = 22;
 	/** Ein Bezeichner zum Zugriff auf das Feld AdditionalSQLScriptListener. */
-	public static final int ID_ADDITIONALSCRIPTLISTENER = 23;
+	private static final int ID_ADDITIONALSCRIPTLISTENER = 23;
 	/** Ein Bezeichner zum Zugriff auf das Feld History. */
-	public static final int ID_HISTORY = 24;
+	private static final int ID_HISTORY = 24;
 	/** Ein Bezeichner zum Zugriff auf das Feld Schemaname. */
-	public static final int ID_SCHEMA_NAME = 25;
+	private static final int ID_SCHEMA_NAME = 25;
 	/** Ein Bezeichner zum Zugriff auf die Optionen des Modells */
-	public static final int ID_OPTIONS = 26;
+	private static final int ID_OPTIONS = 26;
 	/** Ein Bezeichner zum Zugriff auf die Farbe fuer regul&auml;re Relationen. */
-	public static final int ID_RELATION_COLOR_REGULAR = 27;
+	private static final int ID_RELATION_COLOR_REGULAR = 27;
 	/**
 	 * Ein Bezeichner zum Zugriff auf die Farbe fuer Relationen auf externe Tabellen.
 	 */
-	public static final int ID_RELATION_COLOR_EXTERNAL_TABLES = 28;
+	private static final int ID_RELATION_COLOR_EXTERNAL_TABLES = 28;
 	/** Ein Bezeichner zum Zugriff auf das Attribut PaintTransientFieldsInGray. */
-	public static final int ID_PAINTTRANSIENTFIELDSINGRAY = 29;
+	private static final int ID_PAINTTRANSIENTFIELDSINGRAY = 29;
 	/** Ein Bezeichner zum Zugriff auf das Attribut Owner. */
-	public static final int ID_OWNER = 30;
+	private static final int ID_OWNER = 30;
 	/** Ein Bezeichner zum Zugriff auf das Attribut AdditionalDiagramInfo. */
-	public static final int ID_ADDITIONAL_DIAGRAM_INFO = 31;
+	private static final int ID_ADDITIONAL_DIAGRAM_INFO = 31;
 	/** Ein Bezeichner zum Zugriff auf das Attribut DomainShowMode. */
-	public static final int ID_DOMAIN_SHOW_MODE = 32;
+	private static final int ID_DOMAIN_SHOW_MODE = 32;
 
 	/* Der JDBCDataSourceRecord mit den Daten f&uuml;r den Datanschema-Import. */
 	private ArchimedesImportJDBCDataSourceRecord importDSR = null;

@@ -10,6 +10,7 @@
 package archimedes.legacy.scheme;
 
 import static corentx.util.Checks.ensure;
+
 import archimedes.legacy.model.ComplexIndicesToSTFWriter;
 import archimedes.legacy.model.IndexListCleaner;
 import archimedes.model.DataModel;
@@ -24,7 +25,7 @@ import corent.files.StructuredTextFile;
  * @changed OLI 16.12.2011 - Hinzugef&uuml;gt.
  */
 
-public class ComplexIndexWriter {
+class ComplexIndexWriter {
 
 	private IndexListCleaner cleaner = null;
 	private ComplexIndicesToSTFWriter writer = null;
@@ -45,7 +46,7 @@ public class ComplexIndexWriter {
 	 * 
 	 * @changed OLI 16.12.2011 - Hinzugef&uuml;gt.
 	 */
-	public ComplexIndexWriter(IndexListCleaner cleaner, ComplexIndicesToSTFWriter writer)
+	ComplexIndexWriter(IndexListCleaner cleaner, ComplexIndicesToSTFWriter writer)
 			throws IllegalArgumentException {
 		super();
 		ensure(cleaner != null, "writer cannot be null.");
@@ -72,7 +73,7 @@ public class ComplexIndexWriter {
 	 * 
 	 * @changed OLI 16.12.2011 - Hinzugef&uuml;gt.
 	 */
-	public void store(StructuredTextFile stf, DataModel dm) {
+	void store(StructuredTextFile stf, DataModel dm) {
 		ensure(dm != null, "data model cannot be null.");
 		ensure(stf != null, "structured text file cannot be null.");
 		this.cleaner.clean(dm);

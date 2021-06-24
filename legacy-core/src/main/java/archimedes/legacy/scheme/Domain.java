@@ -61,23 +61,23 @@ import corent.xml.ToXMLTag;
 public class Domain implements Attributed, DomainModel, ListViewSelectable, TabbedEditable, ToXMLAttributes, ToXMLTag {
 
 	/** Ein Bezeichner zum Zugriff auf den Namen der Domain. */
-	public static final int ID_NAME = 0;
+	private static final int ID_NAME = 0;
 	/** Ein Bezeichner zum Zugriff auf den SQL-Typ der Domain. */
-	public static final int ID_SQLTYP = 1;
+	private static final int ID_SQLTYP = 1;
 	/** Ein Bezeichner zum Zugriff auf die Beschreibung zur Domain. */
-	public static final int ID_COMMENT = 2;
+	private static final int ID_COMMENT = 2;
 	/** Ein Bezeichner zum Zugriff auf die Types-Konstante zur Domain. */
-	public static final int ID_DATATYPE = 3;
+	private static final int ID_DATATYPE = 3;
 	/** Ein Bezeichner zum Zugriff auf die Feldl&auml;nge zur Domain. */
-	public static final int ID_LENGTH = 4;
+	private static final int ID_LENGTH = 4;
 	/** Ein Bezeichner zum Zugriff auf die Nachkommastellen zur Domain. */
-	public static final int ID_NKS = 5;
+	private static final int ID_NKS = 5;
 	/** Ein Bezeichner zum Zugriff auf den Initialwert zur Domain. */
-	public static final int ID_INITIALWERT = 6;
+	private static final int ID_INITIALWERT = 6;
 	/** Ein Bezeichner zum Zugriff auf die Historie. */
-	public static final int ID_HISTORY = 7;
+	private static final int ID_HISTORY = 7;
 	/** Ein Bezeichner zum Zugriff auf den Parameterstring. */
-	public static final int ID_PARAMETERS = 8;
+	private static final int ID_PARAMETERS = 8;
 
 	/* Ein Z&auml;hler f&uuml;r die Anzahl der bereits erzeugten Instanzen. */
 	private static int count = 0;
@@ -422,6 +422,7 @@ public class Domain implements Attributed, DomainModel, ListViewSelectable, Tabb
 		return sb.toString();
 	}
 
+	@Override
 	public String toXMLAttributes() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("name=\"").append(StrUtil.ToHTML(this.getName())).append("\" ");
