@@ -134,12 +134,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	public String getPackageName(DataModel model, TableModel table) {
-		return OptionGetter.getOptionByName(table, MODULE).map(option -> option.getParameter() + ".").orElse("")
-				+ getPackageNameLastPart(model, table);
-	}
-
-	public String getPackageNameLastPart(DataModel model, TableModel table) {
-		return "";
+		return getPackageName(model, table);
 	}
 
 }

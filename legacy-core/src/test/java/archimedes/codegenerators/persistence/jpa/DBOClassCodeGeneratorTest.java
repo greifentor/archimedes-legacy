@@ -49,7 +49,7 @@ public class DBOClassCodeGeneratorTest {
 		}
 
 		private String getExpected(String prefix, String packageName) {
-			return "package " + (prefix != null ? prefix + "." : "") + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
+			return "package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
