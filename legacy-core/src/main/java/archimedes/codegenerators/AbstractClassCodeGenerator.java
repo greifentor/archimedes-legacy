@@ -26,6 +26,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String POJO_MODE_CHAIN = "CHAIN";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
 	public static final String MODULE_MODE = "MODULE_MODE";
+	public static final String MODULE = "MODULE";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
@@ -130,6 +131,15 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 								.getOptionByName(model, POJO_MODE)
 								.map(option -> POJOMode.valueOf(option.getParameter()))
 								.orElse(POJOMode.CHAIN));
+	}
+
+	public String getPackageName(DataModel model, TableModel table) {
+		return OptionGetter.getOptionByName(table, MODULE).map(option -> option.getParameter() + ".").orElse("")
+				+ getPackageNameLastPart(model, table);
+	}
+
+	public String getPackageNameLastPart(DataModel model, TableModel table) {
+		return "";
 	}
 
 }

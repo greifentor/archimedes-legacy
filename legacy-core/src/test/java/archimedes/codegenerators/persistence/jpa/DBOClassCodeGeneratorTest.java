@@ -13,6 +13,7 @@ import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
+import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
@@ -44,7 +45,11 @@ public class DBOClassCodeGeneratorTest {
 		}
 
 		private String getExpected(String packageName) {
-			return "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
+			return getExpected(null, packageName);
+		}
+
+		private String getExpected(String prefix, String packageName) {
+			return "package " + (prefix != null ? prefix + "." : "") + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
@@ -108,6 +113,20 @@ public class DBOClassCodeGeneratorTest {
 					.addOption(new Option(NameGenerator.TECHNICAL_CONTEXT, technicalContextName));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithModuleForTable() {
+			// Prepare
+			String prefix = "prefix";
+			String expected = getExpected(prefix, "persistence.entities");
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.addOption(new Option(AbstractClassCodeGenerator.MODULE, prefix));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
 			assertEquals(expected, returned);
 		}

@@ -89,7 +89,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 	}
 
 	@Override
-	public String getPackageName(DataModel model, TableModel table) {
+	public String getPackageNameLastPart(DataModel model, TableModel table) {
 		return nameGenerator.getDBOPackageName(model, table);
 	}
 
