@@ -16,6 +16,7 @@ import archimedes.codegenerators.Columns.ParameterData;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -37,6 +38,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		List<ColumnData> columnData = getColumnData(table.getColumns());
+		context.put("Autoincrement", hasAutoincrementField(table));
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		context.put("EntityName", nameGenerator.getClassName(table));
@@ -46,6 +48,13 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
 		context.put("TableName", table.getName());
+	}
+
+	private boolean hasAutoincrementField(TableModel table) {
+		return Arrays
+				.asList(table.getColumns())
+				.stream()
+				.anyMatch(column -> column.getOptionByName(AbstractClassCodeGenerator.AUTOINCREMENT) != null);
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns) {
@@ -64,6 +73,19 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		List<AnnotationData> annotations = new ArrayList<>();
 		if (column.isPrimaryKey()) {
 			annotations.add(new AnnotationData().setName("Id"));
+		}
+		OptionModel autoincrement = column.getOptionByName(AbstractClassCodeGenerator.AUTOINCREMENT);
+		if (autoincrement != null) {
+			annotations
+					.add(
+							new AnnotationData()
+									.setName("GeneratedValue")
+									.setParameters(
+											Arrays
+													.asList(
+															new ParameterData()
+																	.setName("strategy")
+																	.setValue("GenerationType.IDENTITY"))));
 		}
 		annotations
 				.add(

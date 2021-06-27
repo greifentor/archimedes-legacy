@@ -21,12 +21,12 @@ import archimedes.model.TableModel;
 public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extends AbstractCodeGenerator<N> {
 
 	public static final String ALTERNATE_MODULE_PREFIX = "ALTERNATE_MODULE_PREFIX";
+	public static final String AUTOINCREMENT = "AUTOINCREMENT";
 	public static final String POJO_MODE = "POJO_MODE";
 	public static final String POJO_MODE_BUILDER = "BUILDER";
 	public static final String POJO_MODE_CHAIN = "CHAIN";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
 	public static final String MODULE_MODE = "MODULE_MODE";
-	public static final String MODULE = "MODULE";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 

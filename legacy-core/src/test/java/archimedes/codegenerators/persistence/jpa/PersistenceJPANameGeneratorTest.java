@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 
 @ExtendWith(MockitoExtension.class)
 public class PersistenceJPANameGeneratorTest {
@@ -152,13 +153,13 @@ public class PersistenceJPANameGeneratorTest {
 
 		@Test
 		void getDBOPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("persistence.entities", unitUnderTest.getDBOPackageName(model, null));
+			assertEquals("persistence.entity", unitUnderTest.getDBOPackageName(model, null));
 		}
 
 		@Test
 		void getDBOPackageName_PassAValidTableModel_ReturnsACorrecDBOName() {
 			// Prepare
-			String expected = BASE_PACKAGE_NAME + ".persistence.entities";
+			String expected = BASE_PACKAGE_NAME + ".persistence.entity";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
 			String returned = unitUnderTest.getDBOPackageName(model, table);
@@ -169,7 +170,7 @@ public class PersistenceJPANameGeneratorTest {
 		@Test
 		void getDBOPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecDBOName() {
 			// Prepare
-			String expected = "persistence.entities";
+			String expected = "persistence.entity";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
 			String returned = unitUnderTest.getDBOPackageName(model, table);
@@ -180,12 +181,64 @@ public class PersistenceJPANameGeneratorTest {
 		@Test
 		void getDBOPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecDBOName() {
 			// Prepare
-			String expected = "persistence.entities";
+			String expected = "persistence.entity";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
 			String returned = unitUnderTest.getDBOPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDBOPackageName_PassAValidTableModelWithMODULEOption_ReturnsACorrecDBOName() {
+			// Prepare
+			String prefix = "prefix";
+			String expected = "prefix.persistence.entity";
+			when(model.getBasePackageName()).thenReturn(null);
+			when(table.getOptionByName(PersistenceJPANameGenerator.MODULE))
+					.thenReturn(new Option(PersistenceJPANameGenerator.MODULE, prefix));
+			// Run
+			String returned = unitUnderTest.getDBOPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests of the JPA repository class names.")
+	@Nested
+	class JPARepositoryInterfaceNameTests {
+
+		@Test
+		void getJPARepositoryInterfaceName_PassNullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getJPARepositoryInterfaceName(null));
+		}
+
+		@Test
+		void getJPARepositoryInterfaceName_ATableWithName_ReturnsTheCorrectClassName() {
+			// Prepare
+			String expected = "NameDBORepository";
+			when(table.getName()).thenReturn("Name");
+			// Run
+			String returned = unitUnderTest.getJPARepositoryInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for DBO package names")
+	@Nested
+	class JPARepositoryPackageNameTests {
+
+		@Test
+		void getJPARepositoryPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getJPARepositoryPackageName(null, table));
+		}
+
+		@Test
+		void getJPARepositoryPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("persistence.repository", unitUnderTest.getJPARepositoryPackageName(model, table));
 		}
 
 	}

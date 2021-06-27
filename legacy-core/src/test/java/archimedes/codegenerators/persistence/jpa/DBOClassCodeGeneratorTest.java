@@ -124,21 +124,25 @@ public class DBOClassCodeGeneratorTest {
 			String expected = getExpected(prefix, "persistence.entities");
 			DataModel dataModel = readDataModel("Model.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
-			table.addOption(new Option(AbstractClassCodeGenerator.MODULE, prefix));
+			table.addOption(new Option(PersistenceJPANameGenerator.MODULE, prefix));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
-		private String getExpectedPOJOModeBuilder(String packageName) {
-			return "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
+		private String getExpectedPOJOModeBuilder(String packageName, boolean autoincrement) {
+			String s = "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
 					"import javax.persistence.Column;\n" + //
-					"import javax.persistence.Entity;\n" + //
-					"import javax.persistence.Id;\n" + //
+					"import javax.persistence.Entity;\n";
+			if (autoincrement) {
+				s += "import javax.persistence.GeneratedValue;\n" + //
+						"import javax.persistence.GenerationType;\n";
+			}
+			s += "import javax.persistence.Id;\n" + //
 					"import javax.persistence.Table;\n" + //
 					"\n" + //
 					"import lombok.AllArgsConstructor;\n" + //
@@ -161,8 +165,11 @@ public class DBOClassCodeGeneratorTest {
 					"@Table(name = \"A_TABLE\")\n" + //
 					"public class ATableDBO {\n" + //
 					"\n" + //
-					"	@Id\n" + //
-					"	@Column(name = \"ID\")\n" + //
+					"	@Id\n";
+			if (autoincrement) {
+				s += "	@GeneratedValue(strategy = GenerationType.IDENTITY)\n";
+			}
+			return s + "	@Column(name = \"ID\")\n" + //
 					"	private long id;\n" + //
 					"	@Column(name = \"ADate\")\n" + //
 					"	private LocalDate aDate;\n" + //
@@ -175,7 +182,7 @@ public class DBOClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectPOJOModeBUILD() {
 			// Prepare
-			String expected = getExpectedPOJOModeBuilder("persistence.entities");
+			String expected = getExpectedPOJOModeBuilder("persistence.entities", true);
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel
 					.addOption(
@@ -183,6 +190,10 @@ public class DBOClassCodeGeneratorTest {
 									AbstractClassCodeGenerator.POJO_MODE,
 									AbstractClassCodeGenerator.POJO_MODE_BUILDER));
 			// Run
+			dataModel
+					.getTableByName("A_TABLE")
+					.getColumnByName("ID")
+					.addOption(new Option(AbstractClassCodeGenerator.AUTOINCREMENT));
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);

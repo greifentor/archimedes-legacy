@@ -41,30 +41,6 @@ public class DataWriterCodeGenerator extends BaccaraBaseCodeGenerator {
 	private static DataWriterCodeGenerator instance = new DataWriterCodeGenerator();
 
 	/**
-	 * Returns the class name for the code generator for the passed table.
-	 *
-	 * @param table The table which the class name is to create for.
-	 * @return The class name for the code generator for the passed table.
-	 *
-	 * @changed OLI 05.09.2016 - Added.
-	 */
-	public static String className(TableModel table) {
-		return instance.getClassName(table);
-	}
-
-	/**
-	 * Returns the package name for the code generator for the passed table.
-	 *
-	 * @param table The table which the package name is to create for.
-	 * @return The package name for the code generator for the passed table.
-	 *
-	 * @changed OLI 05.09.2016 - Added.
-	 */
-	public static String packageName(TableModel table) {
-		return instance.getPackageName(table);
-	}
-
-	/**
 	 * @changed OLI 05.09.2016 - Added.
 	 */
 	@Override

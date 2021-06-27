@@ -6,6 +6,10 @@ import ${ImportLocalDate};
 #end
 import javax.persistence.Column;
 import javax.persistence.Entity;
+#if ($Autoincrement)
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+#end
 import javax.persistence.Id;
 import javax.persistence.Table;
 

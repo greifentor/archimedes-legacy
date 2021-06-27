@@ -1,0 +1,7 @@
+@startuml
+
+class Rezept {
+	menge :Numeric(2,0)
+}
+
+@enduml

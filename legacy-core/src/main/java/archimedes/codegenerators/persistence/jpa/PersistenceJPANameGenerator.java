@@ -21,7 +21,10 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getDBOPackageName(DataModel model, TableModel table) {
-		String packageName = "persistence.entities";
+		return createPackageName(model, table, "persistence.entity");
+	}
+
+	private String createPackageName(DataModel model, TableModel table, String packageName) {
 		String prefix = "";
 		if (model != null) {
 			OptionModel option = model.getOptionByName(ALTERNATE_ENTITIES_PACKAGE_NAME);
@@ -33,6 +36,14 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 			prefix = OptionGetter.getOptionByName(table, MODULE).map(option -> option.getParameter() + ".").orElse("");
 		}
 		return model != null ? getBasePackageNameWithDotExtension(model, table) + prefix + packageName : null;
+	}
+
+	public String getJPARepositoryInterfaceName(TableModel table) {
+		return table != null ? getClassName(table) + "DBORepository" : null;
+	}
+
+	public String getJPARepositoryPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "persistence.repository");
 	}
 
 }
