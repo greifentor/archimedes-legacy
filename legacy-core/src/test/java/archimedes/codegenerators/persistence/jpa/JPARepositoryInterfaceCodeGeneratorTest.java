@@ -49,15 +49,15 @@ public class JPARepositoryInterfaceCodeGeneratorTest {
 					"import org.springframework.data.jpa.repository.JpaRepository;\n" + //
 					"import org.springframework.stereotype.Repository;\n" + //
 					"\n" + //
-					"import de.ollie.carp.chalkous9.persistence.entity.ATableDBO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".persistence.entity.ATableDBO;\n" + //
 					"\n" + //
 					"/**\n" + //
-					" * A JPA repository for a_tables. \n" + //
+					" * A JPA repository for a_tables.\n" + //
 					" *\n" + //
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
 					"@Repository\n" + //
-					"public interface ATableDBORepository extends JpaRepository<ATableDBO, String> {\n" + //
+					"public interface ATableDBORepository extends JpaRepository<ATableDBO, Long> {\n" + //
 					"}";
 		}
 

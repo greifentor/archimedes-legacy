@@ -1,5 +1,7 @@
 package archimedes.codegenerators.persistence.jpa;
 
+import java.util.Arrays;
+
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
@@ -28,7 +30,18 @@ public class JPARepositoryInterfaceCodeGenerator extends AbstractClassCodeGenera
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		context.put("ClassName", getClassName(table));
 		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
+		context.put("DBOPackageName", nameGenerator.getDBOPackageName(model, table));
+		context.put("IdClassName", getIdClassName(table));
 		context.put("PackageName", getPackageName(model, table));
+	}
+
+	private String getIdClassName(TableModel table) {
+		return Arrays
+				.asList(table.getPrimaryKeyColumns())
+				.stream()
+				.findFirst()
+				.map(column -> typeGenerator.getJavaTypeString(column.getDomain(), true))
+				.orElse("UNKNOWN");
 	}
 
 	@Override
