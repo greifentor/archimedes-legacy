@@ -4,7 +4,9 @@ import ${SOPackageName}.${SOClassName};
 import ${DTOPackageName}.${DTOClassName};
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+#if ($ConverterExtension)
+import org.springframework.core.convert.converter.Converter;
+#end
 
 /**
  * A DTO mapper for ${PluralName}.
@@ -12,7 +14,7 @@ import org.mapstruct.Mapping;
  * ${Generated}
  */
 @Mapper(componentModel = "spring")
-public interface ${ClassName} {
+public interface ${ClassName} #if ($ConverterExtension)extends Converter<${SOClassName}, ${DTOClassName}> #end{
 
     ${DTOClassName} toDto(${SOClassName} model);
 

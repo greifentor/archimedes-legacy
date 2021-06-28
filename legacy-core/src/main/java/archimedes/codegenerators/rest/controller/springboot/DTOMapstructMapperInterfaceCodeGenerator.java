@@ -30,12 +30,22 @@ public class DTOMapstructMapperInterfaceCodeGenerator extends AbstractClassCodeG
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		context.put("ConverterExtension", isConverterExtensionSet(model, table));
 		context.put("ClassName", getClassName(table));
 		context.put("DTOClassName", nameGenerator.getDTOClassName(table));
 		context.put("DTOPackageName", nameGenerator.getDTOPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("SOClassName", serviceNameGenerator.getSOClassName(table));
 		context.put("SOPackageName", serviceNameGenerator.getSOPackageName(model, table));
+	}
+
+	private boolean isConverterExtensionSet(DataModel model, TableModel table) {
+		String mapper = getMappersParameter(model, table);
+		return (mapper != null) && mapper.toLowerCase().endsWith(":converter");
+	}
+
+	private String getMappersParameter(DataModel model, TableModel table) {
+		return OptionGetter.getParameterOfOptionByName(model, AbstractClassCodeGenerator.MAPPERS).orElse(null);
 	}
 
 	@Override
@@ -55,8 +65,8 @@ public class DTOMapstructMapperInterfaceCodeGenerator extends AbstractClassCodeG
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
-		String mapper = OptionGetter.getParameterOfOptionByName(model, AbstractClassCodeGenerator.MAPPERS).orElse(null);
-		return (mapper == null) || !mapper.equalsIgnoreCase("mapstruct");
+		String mapper = getMappersParameter(model, table);
+		return (mapper == null) || !mapper.toLowerCase().startsWith("mapstruct");
 	}
 
 }

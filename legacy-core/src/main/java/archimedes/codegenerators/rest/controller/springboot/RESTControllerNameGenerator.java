@@ -64,7 +64,7 @@ public class RESTControllerNameGenerator extends NameGenerator {
 				? "DTOConverter"
 				: OptionGetter
 						.getParameterOfOptionByName(table.getDataModel(), AbstractClassCodeGenerator.MAPPERS)
-						.filter(s -> s.equalsIgnoreCase("mapstruct"))
+						.filter(s -> s.toLowerCase().startsWith("mapstruct"))
 						.map(s -> getDTOMapperInterfaceNameSuffix(table))
 						.orElse("DTOConverter");
 	}
