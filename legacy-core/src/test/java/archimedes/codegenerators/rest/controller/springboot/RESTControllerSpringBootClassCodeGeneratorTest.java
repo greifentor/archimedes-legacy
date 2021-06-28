@@ -1,4 +1,4 @@
-package archimedes.codegenerators.restcontroller;
+package archimedes.codegenerators.rest.controller.springboot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,13 +10,15 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.rest.controller.springboot.RESTControllerSpringBootClassCodeGenerator;
+import archimedes.codegenerators.rest.controller.springboot.RESTControllerNameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class RESTControllerClassCodeGeneratorTest {
+public class RESTControllerSpringBootClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
@@ -24,7 +26,7 @@ public class RESTControllerClassCodeGeneratorTest {
 	private RESTControllerNameGenerator nameGenerator = new RESTControllerNameGenerator();
 
 	@InjectMocks
-	private RESTControllerClassCodeGenerator unitUnderTest;
+	private RESTControllerSpringBootClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());

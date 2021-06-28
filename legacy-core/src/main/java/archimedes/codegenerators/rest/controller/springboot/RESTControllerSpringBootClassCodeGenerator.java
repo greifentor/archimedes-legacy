@@ -1,4 +1,4 @@
-package archimedes.codegenerators.restcontroller;
+package archimedes.codegenerators.rest.controller.springboot;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,14 +21,14 @@ import archimedes.model.TableModel;
  *
  * @author ollie (18.03.2021)
  */
-public class RESTControllerClassCodeGenerator extends AbstractClassCodeGenerator<RESTControllerNameGenerator> {
+public class RESTControllerSpringBootClassCodeGenerator extends AbstractClassCodeGenerator<RESTControllerNameGenerator> {
 
 	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
-	public RESTControllerClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	public RESTControllerSpringBootClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"RESTControllerClass.vm",
-				RESTControllerCodeFactory.TEMPLATE_FOLDER_PATH,
+				RESTControllerSpringBootCodeFactory.TEMPLATE_FOLDER_PATH,
 				new RESTControllerNameGenerator(),
 				new TypeGenerator(),
 				codeFactory);

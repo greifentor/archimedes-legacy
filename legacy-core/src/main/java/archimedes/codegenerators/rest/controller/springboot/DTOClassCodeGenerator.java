@@ -1,4 +1,4 @@
-package archimedes.codegenerators.restcontroller;
+package archimedes.codegenerators.rest.controller.springboot;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,7 @@ public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTContro
 	public DTOClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"DTOClass.vm",
-				RESTControllerCodeFactory.TEMPLATE_FOLDER_PATH,
+				RESTControllerSpringBootCodeFactory.TEMPLATE_FOLDER_PATH,
 				new RESTControllerNameGenerator(),
 				new TypeGenerator(),
 				codeFactory);

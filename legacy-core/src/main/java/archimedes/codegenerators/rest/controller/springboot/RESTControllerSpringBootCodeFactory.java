@@ -1,4 +1,4 @@
-package archimedes.codegenerators.restcontroller;
+package archimedes.codegenerators.rest.controller.springboot;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,11 +14,13 @@ import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
  *
  * @author ollie (03.03.2021)
  */
-public class RESTControllerCodeFactory extends AbstractClassCodeFactory
+public class RESTControllerSpringBootCodeFactory extends AbstractClassCodeFactory
 		implements CodeFactoryProgressionEventProvider, StandardCodeFactoryProgressionFrameUser {
 
 	public static final String TEMPLATE_FOLDER_PATH = AbstractCodeFactory.TEMPLATE_PATH + System
-			.getProperty(RESTControllerCodeFactory.class.getSimpleName() + ".templates.folder", "/restcontroller");
+			.getProperty(
+					RESTControllerSpringBootCodeFactory.class.getSimpleName() + ".templates.folder",
+					"/rest-controller-springboot");
 
 	@Override
 	protected List<CodeGenerator> getCodeGenerators() {
@@ -27,7 +29,7 @@ public class RESTControllerCodeFactory extends AbstractClassCodeFactory
 						new DTOClassCodeGenerator(this),
 						new DTOConverterClassCodeGenerator(this),
 						new ListDTOClassCodeGenerator(this),
-						new RESTControllerClassCodeGenerator(this));
+						new RESTControllerSpringBootClassCodeGenerator(this));
 	}
 
 	@Override

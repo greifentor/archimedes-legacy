@@ -1,4 +1,4 @@
-package archimedes.codegenerators.restcontroller;
+package archimedes.codegenerators.rest.controller.springboot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import archimedes.codegenerators.rest.controller.springboot.ListDTOClassCodeGenerator;
+import archimedes.codegenerators.rest.controller.springboot.RESTControllerNameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.scheme.xml.ModelXMLReader;

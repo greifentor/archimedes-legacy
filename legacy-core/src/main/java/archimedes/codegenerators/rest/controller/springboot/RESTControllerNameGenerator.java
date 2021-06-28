@@ -1,4 +1,4 @@
-package archimedes.codegenerators.restcontroller;
+package archimedes.codegenerators.rest.controller.springboot;
 
 import archimedes.codegenerators.NameGenerator;
 import archimedes.model.DataModel;

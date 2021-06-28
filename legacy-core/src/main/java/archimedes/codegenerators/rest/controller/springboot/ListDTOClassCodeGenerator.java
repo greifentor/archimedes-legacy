@@ -1,4 +1,4 @@
-package archimedes.codegenerators.restcontroller;
+package archimedes.codegenerators.rest.controller.springboot;
 
 import org.apache.velocity.VelocityContext;
 
@@ -18,7 +18,7 @@ public class ListDTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTCo
 	public ListDTOClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"ListDTOClass.vm",
-				RESTControllerCodeFactory.TEMPLATE_FOLDER_PATH,
+				RESTControllerSpringBootCodeFactory.TEMPLATE_FOLDER_PATH,
 				new RESTControllerNameGenerator(),
 				new TypeGenerator(),
 				codeFactory);

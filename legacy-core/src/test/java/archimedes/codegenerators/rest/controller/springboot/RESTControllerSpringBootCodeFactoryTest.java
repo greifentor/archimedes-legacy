@@ -1,4 +1,4 @@
-package archimedes.codegenerators.restcontroller;
+package archimedes.codegenerators.rest.controller.springboot;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,18 +13,19 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.rest.controller.springboot.RESTControllerSpringBootCodeFactory;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class RESTControllerCodeFactoryTest {
+public class RESTControllerSpringBootCodeFactoryTest {
 
 	private static final String APPLICATION_NAME = "App";
 
 	@InjectMocks
-	private RESTControllerCodeFactory unitUnderTest;
+	private RESTControllerSpringBootCodeFactory unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
