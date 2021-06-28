@@ -142,6 +142,56 @@ public class PersistenceJPANameGeneratorTest {
 
 	}
 
+	@DisplayName("tests for DBO converter class names")
+	@Nested
+	class DBBConverterClassNameTests {
+
+		@Test
+		void getDBOConverterClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getDBOConverterClassName(null));
+		}
+
+		@Test
+		void getDBOConverterClassName_passAValidTable_ReturnsACorrectDBOConverterClassName() {
+			// Prepare
+			String expected = "TableDBOConverter";
+			when(table.getName()).thenReturn("Table");
+			// Run
+			String returned = unitUnderTest.getDBOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for DBO converter package names")
+	@Nested
+	class DBOConverterPackageNameTests {
+
+		@Test
+		void getDBOConverterPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getDBOConverterPackageName(null, table));
+		}
+
+		@Test
+		void getDBOConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("persistence.converter", unitUnderTest.getDBOConverterPackageName(model, null));
+		}
+
+		@Test
+		void getDBOConverterPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_CONVERTER_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_CONVERTER_PACKAGE_NAME,
+									"persistence.mapper"));
+			// Run & Check
+			assertEquals("persistence.mapper", unitUnderTest.getDBOConverterPackageName(model, table));
+		}
+
+	}
+
 	@DisplayName("tests for DBO package names")
 	@Nested
 	class DBOPackageNameTests {
@@ -203,6 +253,66 @@ public class PersistenceJPANameGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void getDBOPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME))
+					.thenReturn(
+							new Option(PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME, "persistence.dbos"));
+			// Run & Check
+			assertEquals("persistence.dbos", unitUnderTest.getDBOPackageName(model, table));
+		}
+
+	}
+
+	@DisplayName("tests of the JPA persistence adapter class names.")
+	@Nested
+	class JPAPersistenceAdapterClassNameTests {
+
+		@Test
+		void getJPAPersistenceAdapterClassName_PassNullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getJPAPersistenceAdapterClassName(null));
+		}
+
+		@Test
+		void getJPAPersistenceAdapterClassName_ATableWithName_ReturnsTheCorrectClassName() {
+			// Prepare
+			String expected = "NameJPAPersistenceAdapter";
+			when(table.getName()).thenReturn("Name");
+			// Run
+			String returned = unitUnderTest.getJPAPersistenceAdapterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for DBO package names")
+	@Nested
+	class JPAPersistenceAdapterPackageNameTests {
+
+		@Test
+		void getJPAPersistenceAdapterPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getJPAPersistenceAdapterPackageName(null, table));
+		}
+
+		@Test
+		void getJPAPersistenceAdapterPackageName_PassAValidTable_ReturnsACorrectPackageName() {
+			assertEquals("persistence", unitUnderTest.getJPAPersistenceAdapterPackageName(model, table));
+		}
+
+		@Test
+		void getJPAPersistenceAdapterPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_ADAPTER_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_ADAPTER_PACKAGE_NAME,
+									"persistence.adapters"));
+			// Run & Check
+			assertEquals("persistence.adapters", unitUnderTest.getJPAPersistenceAdapterPackageName(model, table));
+		}
+
 	}
 
 	@DisplayName("tests of the JPA repository class names.")
@@ -237,8 +347,20 @@ public class PersistenceJPANameGeneratorTest {
 		}
 
 		@Test
-		void getJPARepositoryPackageName_PassANullValueAsTable_ReturnsANullValue() {
+		void getJPARepositoryPackageName_PassAValidTable_ReturnsACorrectPackageName() {
 			assertEquals("persistence.repository", unitUnderTest.getJPARepositoryPackageName(model, table));
+		}
+
+		@Test
+		void getJPARepositoryPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME,
+									"persistence.repos"));
+			// Run & Check
+			assertEquals("persistence.repos", unitUnderTest.getJPARepositoryPackageName(model, table));
 		}
 
 	}

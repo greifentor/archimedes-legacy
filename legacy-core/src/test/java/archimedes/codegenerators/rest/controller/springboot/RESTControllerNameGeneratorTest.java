@@ -658,13 +658,13 @@ public class RESTControllerNameGeneratorTest {
 
 		@Test
 		void getRESTControllerPackageName_PassANullValueAsTable_ReturnsDefaultValue() {
-			assertEquals("rest", unitUnderTest.getRESTControllerPackageName(model, null));
+			assertEquals("rest.v1", unitUnderTest.getRESTControllerPackageName(model, null));
 		}
 
 		@Test
 		void getRESTControllerPackageName_PassAValidTableModel_ReturnsACorrecRESTControllerName() {
 			// Prepare
-			String expected = BASE_PACKAGE_NAME + ".rest";
+			String expected = BASE_PACKAGE_NAME + ".rest.v1";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
 			String returned = unitUnderTest.getRESTControllerPackageName(model, table);
@@ -675,7 +675,7 @@ public class RESTControllerNameGeneratorTest {
 		@Test
 		void getRESTControllerPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecRESTControllerName() {
 			// Prepare
-			String expected = "rest";
+			String expected = "rest.v1";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
 			String returned = unitUnderTest.getRESTControllerPackageName(model, table);
@@ -686,7 +686,7 @@ public class RESTControllerNameGeneratorTest {
 		@Test
 		void getRESTControllerPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecRESTControllerName() {
 			// Prepare
-			String expected = "rest";
+			String expected = "rest.v1";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
 			String returned = unitUnderTest.getRESTControllerPackageName(model, table);

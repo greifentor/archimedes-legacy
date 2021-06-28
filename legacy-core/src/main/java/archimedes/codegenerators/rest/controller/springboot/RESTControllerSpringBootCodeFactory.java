@@ -19,9 +19,8 @@ import archimedes.model.PredeterminedOptionProvider;
  *
  * @author ollie (03.03.2021)
  */
-public class RESTControllerSpringBootCodeFactory extends AbstractClassCodeFactory
-		implements CodeFactoryProgressionEventProvider, PredeterminedOptionProvider,
-		StandardCodeFactoryProgressionFrameUser {
+public class RESTControllerSpringBootCodeFactory extends AbstractClassCodeFactory implements
+		CodeFactoryProgressionEventProvider, PredeterminedOptionProvider, StandardCodeFactoryProgressionFrameUser {
 
 	public static final String TEMPLATE_FOLDER_PATH = AbstractCodeFactory.TEMPLATE_PATH + System
 			.getProperty(
@@ -72,7 +71,7 @@ public class RESTControllerSpringBootCodeFactory extends AbstractClassCodeFactor
 					RESTControllerNameGenerator.REST_URL_PREFIX };
 		case TABLE:
 			return new String[] {
-					RESTControllerNameGenerator.MODULE,
+					NameGenerator.MODULE,
 					NameGenerator.PLURAL_NAME,
 					RESTControllerNameGenerator.REST_URL_PREFIX };
 		default:

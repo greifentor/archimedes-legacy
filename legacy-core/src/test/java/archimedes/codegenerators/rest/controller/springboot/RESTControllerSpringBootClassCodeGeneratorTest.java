@@ -10,8 +10,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
-import archimedes.codegenerators.rest.controller.springboot.RESTControllerSpringBootClassCodeGenerator;
-import archimedes.codegenerators.rest.controller.springboot.RESTControllerNameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.scheme.Option;
@@ -39,7 +37,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest;\n" + ////
+			String expected = "package " + BASE_PACKAGE_NAME + ".rest.v1;\n" + ////
 					"\n" + //
 					"import java.util.NoSuchElementException;\n" + //
 					"\n" + //
@@ -95,7 +93,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject_GenerateIdClassInModel() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest;\n" + ////
+			String expected = "package " + BASE_PACKAGE_NAME + ".rest.v1;\n" + ////
 					"\n" + //
 					"import java.util.NoSuchElementException;\n" + //
 					"\n" + //
@@ -153,7 +151,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject_GenerateIdClassInTable() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest;\n" + ////
+			String expected = "package " + BASE_PACKAGE_NAME + ".rest.v1;\n" + ////
 					"\n" + //
 					"import java.util.NoSuchElementException;\n" + //
 					"\n" + //

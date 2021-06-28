@@ -7,6 +7,7 @@ import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
+import archimedes.codegenerators.NameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.model.OptionType;
@@ -25,7 +26,11 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 
 	@Override
 	protected List<CodeGenerator> getCodeGenerators() {
-		return Arrays.asList(new DBOClassCodeGenerator(this));
+		return Arrays
+				.asList(
+						new DBOClassCodeGenerator(this),
+						new DBOConverterClassCodeGenerator(this),
+						new JPARepositoryInterfaceCodeGenerator(this));
 	}
 
 	@Override
@@ -50,6 +55,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 			return new String[] { AbstractClassCodeGenerator.AUTOINCREMENT };
 		case MODEL:
 			return new String[] {
+					PersistenceJPANameGenerator.ALTERNATE_CONVERTER_PACKAGE_NAME,
 					PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
@@ -57,7 +63,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 		case TABLE:
 			return new String[] {
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
-					PersistenceJPANameGenerator.MODULE,
+					NameGenerator.MODULE,
 					AbstractClassCodeGenerator.POJO_MODE };
 		default:
 			return new String[0];

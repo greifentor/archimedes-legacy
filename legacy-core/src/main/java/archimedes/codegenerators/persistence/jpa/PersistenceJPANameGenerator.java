@@ -1,9 +1,7 @@
 package archimedes.codegenerators.persistence.jpa;
 
 import archimedes.codegenerators.NameGenerator;
-import archimedes.codegenerators.OptionGetter;
 import archimedes.model.DataModel;
-import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -13,29 +11,33 @@ import archimedes.model.TableModel;
  */
 public class PersistenceJPANameGenerator extends NameGenerator {
 
+	public static final String ALTERNATE_ADAPTER_PACKAGE_NAME = "ALTERNATE_ADAPTER_PACKAGE_NAME";
+	public static final String ALTERNATE_CONVERTER_PACKAGE_NAME = "ALTERNATE_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_ENTITY_PACKAGE_NAME = "ALTERNATE_ENTITY_PACKAGE_NAME";
-	public static final String MODULE = "MODULE";
+	public static final String ALTERNATE_REPOSITORY_PACKAGE_NAME = "ALTERNATE_REPOSITORY_PACKAGE_NAME";
 
 	public String getDBOClassName(TableModel table) {
 		return table != null ? getClassName(table) + "DBO" : null;
 	}
 
-	public String getDBOPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "persistence.entity");
+	public String getDBOConverterClassName(TableModel table) {
+		return table != null ? getClassName(table) + "DBOConverter" : null;
 	}
 
-	private String createPackageName(DataModel model, TableModel table, String packageName) {
-		String prefix = "";
-		if (model != null) {
-			OptionModel option = model.getOptionByName(ALTERNATE_ENTITY_PACKAGE_NAME);
-			if ((option != null) && (option.getParameter() != null) && !option.getParameter().isEmpty()) {
-				packageName = option.getParameter();
-			}
-		}
-		if (table != null) {
-			prefix = OptionGetter.getOptionByName(table, MODULE).map(option -> option.getParameter() + ".").orElse("");
-		}
-		return model != null ? getBasePackageNameWithDotExtension(model, table) + prefix + packageName : null;
+	public String getDBOConverterPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "persistence.converter", ALTERNATE_CONVERTER_PACKAGE_NAME);
+	}
+
+	public String getDBOPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "persistence.entity", ALTERNATE_ENTITY_PACKAGE_NAME);
+	}
+
+	public String getJPAPersistenceAdapterClassName(TableModel table) {
+		return table != null ? getClassName(table) + "JPAPersistenceAdapter" : null;
+	}
+
+	public String getJPAPersistenceAdapterPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "persistence", ALTERNATE_ADAPTER_PACKAGE_NAME);
 	}
 
 	public String getJPARepositoryInterfaceName(TableModel table) {
@@ -43,7 +45,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getJPARepositoryPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "persistence.repository");
+		return createPackageName(model, table, "persistence.repository", ALTERNATE_REPOSITORY_PACKAGE_NAME);
 	}
 
 }

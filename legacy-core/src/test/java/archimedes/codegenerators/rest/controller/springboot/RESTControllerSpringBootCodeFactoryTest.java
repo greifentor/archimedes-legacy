@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
-import archimedes.codegenerators.rest.controller.springboot.RESTControllerSpringBootCodeFactory;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.scheme.Option;
@@ -63,7 +62,7 @@ public class RESTControllerSpringBootCodeFactoryTest {
 			assertTrue(
 					new File(
 							tempDir.toAbsolutePath().toString() + prefix
-									+ "/src/main/java/base/pack/age/name/rest/ATableRESTController.java").exists());
+									+ "/src/main/java/base/pack/age/name/rest/v1/ATableRESTController.java").exists());
 		}
 
 		@Test

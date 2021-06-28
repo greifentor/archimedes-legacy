@@ -20,7 +20,6 @@ public class RESTControllerNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_DTOMAPPER_PACKAGE_NAME = "ALTERNATE_DTOMAPPER_PACKAGE_NAME";
 	public static final String ALTERNATE_RESTCONTROLLER_CLASS_NAME_SUFFIX =
 			"ALTERNATE_RESTCONTROLLER_CLASS_NAME_SUFFIX";
-	public static final String MODULE = "MODULE";
 	public static final String REST_URL_PREFIX = "REST_URL_PREFIX";
 
 	public String getDTOClassName(TableModel table) {
@@ -38,21 +37,6 @@ public class RESTControllerNameGenerator extends NameGenerator {
 
 	public String getDTOPackageName(DataModel model, TableModel table) {
 		return createPackageName(model, table, "rest.dto", ALTERNATE_DTO_PACKAGE_NAME);
-	}
-
-	private String createPackageName(DataModel model, TableModel table, String packageName,
-			String alternatePackageNameOption) {
-		String prefix = "";
-		if ((model != null) && (alternatePackageNameOption != null)) {
-			OptionModel option = model.getOptionByName(alternatePackageNameOption);
-			if ((option != null) && (option.getParameter() != null) && !option.getParameter().isEmpty()) {
-				packageName = option.getParameter();
-			}
-		}
-		if (table != null) {
-			prefix = OptionGetter.getOptionByName(table, MODULE).map(option -> option.getParameter() + ".").orElse("");
-		}
-		return model != null ? getBasePackageNameWithDotExtension(model, table) + prefix + packageName : null;
 	}
 
 	public String getDTOConverterClassName(TableModel table) {
@@ -100,7 +84,7 @@ public class RESTControllerNameGenerator extends NameGenerator {
 	}
 
 	public String getRESTControllerPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "rest", null);
+		return createPackageName(model, table, "rest.v1", null);
 	}
 
 	public String getURLName(DataModel model, TableModel table) {

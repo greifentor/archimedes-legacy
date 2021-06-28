@@ -1,0 +1,46 @@
+package ${PackageName};
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Named;
+
+#if ($ImportLocalDate)
+import ${ImportLocalDate};
+
+#end
+import lombok.Generated;
+
+import ${DBOClassNameQualified};
+import ${SOClassNameQualified};
+
+/**
+ * A DBO converter for ${PluralName}.
+ *
+ * ${Generated}
+ */
+@Generated
+@Named
+public class ${ClassName} {
+
+	public ${DBOClassName} toDBO(${SOClassName} so) {
+		if (so == null) {
+			return null;
+		}
+		return new ${DBOClassName}()
+#foreach($Column in $ColumnData)
+				.${Column.getSetterName()}(so.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
+#end
+	}
+
+	public ${SOClassName} toSO(${DBOClassName} dbo) {
+		if (dbo == null) {
+			return null;
+		}
+		return new ${SOClassName}()
+#foreach($Column in $ColumnData)
+				.${Column.getSetterName()}(dbo.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
+#end
+	}
+
+}
