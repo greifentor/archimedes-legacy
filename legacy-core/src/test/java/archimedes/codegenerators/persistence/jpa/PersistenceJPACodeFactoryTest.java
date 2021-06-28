@@ -46,11 +46,9 @@ public class PersistenceJPACodeFactoryTest {
 		}
 
 		public void assertEntityFilesExisting(String prefix, Path tempDir) {
-			assertTrue(
-					new File(
-							tempDir.toAbsolutePath().toString() + prefix
-									+ "/src/main/java/base/pack/age/name/persistence/entities/ATableDBO.java")
-											.exists());
+			String expectedFileName = tempDir.toAbsolutePath().toString() + prefix
+					+ "/src/main/java/base/pack/age/name/persistence/entity/ATableDBO.java";
+			assertTrue(new File(expectedFileName).exists(), "file does not exists: " + expectedFileName);
 		}
 
 		@Test
