@@ -52,7 +52,7 @@ public class JPARepositoryInterfaceCodeGeneratorTest {
 					"import de.ollie.carp.chalkous9.persistence.entity.ATableDBO;\n" + //
 					"\n" + //
 					"/**\n" + //
-					" * A JPA repository for a_tables.\n" + //
+					" * A JPA repository for a_tables. \n" + //
 					" *\n" + //
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
