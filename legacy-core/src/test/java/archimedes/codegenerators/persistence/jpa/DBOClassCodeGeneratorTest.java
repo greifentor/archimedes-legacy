@@ -36,7 +36,7 @@ public class DBOClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = getExpected("persistence.entities");
+			String expected = getExpected("persistence.entity");
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
@@ -106,7 +106,7 @@ public class DBOClassCodeGeneratorTest {
 		void happyRunForASimpleObjectAndTechnicalPackageName() {
 			// Prepare
 			String technicalContextName = "technical";
-			String expected = getExpected(technicalContextName + ".persistence.entities");
+			String expected = getExpected(technicalContextName + ".persistence.entity");
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel
 					.getTableByName("A_TABLE")
@@ -121,7 +121,7 @@ public class DBOClassCodeGeneratorTest {
 		void happyRunForASimpleObjectWithModuleForTable() {
 			// Prepare
 			String prefix = "prefix";
-			String expected = getExpected(prefix, "persistence.entities");
+			String expected = getExpected(prefix, "persistence.entity");
 			DataModel dataModel = readDataModel("Model.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			table.addOption(new Option(PersistenceJPANameGenerator.MODULE, prefix));
@@ -182,7 +182,7 @@ public class DBOClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectPOJOModeBUILD() {
 			// Prepare
-			String expected = getExpectedPOJOModeBuilder("persistence.entities", true);
+			String expected = getExpectedPOJOModeBuilder("persistence.entity", true);
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel
 					.addOption(
