@@ -43,9 +43,13 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 					String fileName = codeGenerator.getSourceFileName(path, dataModel, tableModel);
 					incrementStepProgress(stepCounter, "- writing file: " + fileName);
 					if (isReadyToOverride(fileName) && (codeGenerator instanceof AbstractClassCodeGenerator<?>)) {
-						((AbstractClassCodeGenerator<?>) codeGenerator)
-								.generate(path, basePackageName, dataModel, tableModel);
-						LOG.info("- wrote file to: {}", fileName);
+						AbstractClassCodeGenerator<?> generator = ((AbstractClassCodeGenerator<?>) codeGenerator);
+						if (!generator.isToIgnoreFor(dataModel, tableModel)) {
+							generator.generate(path, basePackageName, dataModel, tableModel);
+							LOG.info("- wrote file to: {}", fileName);
+						} else {
+							LOG.info("- ignored file to: {}", fileName);
+						}
 					}
 				});
 			} else {

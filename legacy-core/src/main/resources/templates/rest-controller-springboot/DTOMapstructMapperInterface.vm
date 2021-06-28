@@ -1,0 +1,21 @@
+package ${PackageName};
+
+import ${SOPackageName}.${SOClassName};
+import ${DTOPackageName}.${DTOClassName};
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+/**
+ * A DTO mapper for ${PluralName}.
+ *
+ * ${Generated}
+ */
+@Mapper(componentModel = "spring")
+public interface ${ClassName} {
+
+    ${DTOClassName} toDto(${SOClassName} model);
+
+    ${SOClassName} toModel(${DTOClassName} dto);
+
+}

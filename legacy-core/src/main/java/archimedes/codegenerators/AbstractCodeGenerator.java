@@ -11,7 +11,6 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
 
-import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
@@ -85,6 +84,10 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 	}
 
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+	}
+
+	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
+		return false;
 	}
 
 }

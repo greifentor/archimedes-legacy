@@ -1,6 +1,7 @@
 package archimedes.codegenerators.service;
 
 import archimedes.codegenerators.NameGenerator;
+import archimedes.codegenerators.OptionGetter;
 import archimedes.model.DataModel;
 import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
@@ -12,7 +13,8 @@ import archimedes.model.TableModel;
  */
 public class ServiceNameGenerator extends NameGenerator {
 
-	public static final String ALTERNATE_PACKAGE_SO_CLASS = "ALTERNATE_PACKAGE_SO_CLASS";
+	public static final String ALTERNATE_SO_CLASS_NAME_SUFFIX = "ALTERNATE_SO_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_SO_PACKAGE_NAME = "ALTERNATE_SO_PACKAGE_NAME";
 
 	public String getIdSOClassName(TableModel table) {
 		return table != null ? getClassName(table) + "IdSO" : null;
@@ -32,7 +34,16 @@ public class ServiceNameGenerator extends NameGenerator {
 	}
 
 	public String getSOClassName(TableModel table) {
-		return table != null ? getClassName(table) + "SO" : null;
+		return table != null ? getClassName(table) + getSOClassNameSuffix(table) : null;
+	}
+
+	private String getSOClassNameSuffix(TableModel table) {
+		return table.getDataModel() == null
+				? "SO"
+				: OptionGetter
+						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_SO_CLASS_NAME_SUFFIX)
+						.map(s -> s)
+						.orElse("SO");
 	}
 
 	public String getSOPackageName(DataModel model, TableModel table) {
@@ -40,7 +51,7 @@ public class ServiceNameGenerator extends NameGenerator {
 			return null;
 		}
 		String basePackageName = getBasePackageNameWithDotExtension(model, table);
-		OptionModel optionAlternatePackageNameForSOClasses = model.getOptionByName(ALTERNATE_PACKAGE_SO_CLASS);
+		OptionModel optionAlternatePackageNameForSOClasses = model.getOptionByName(ALTERNATE_SO_PACKAGE_NAME);
 		String packageName = "service.model";
 		if (optionAlternatePackageNameForSOClasses != null) {
 			packageName = optionAlternatePackageNameForSOClasses.getParameter();

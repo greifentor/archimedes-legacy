@@ -13,7 +13,7 @@ import archimedes.model.TableModel;
  */
 public class PersistenceJPANameGenerator extends NameGenerator {
 
-	public static final String ALTERNATE_ENTITIES_PACKAGE_NAME = "ALTERNATE_ENTITIES_PACKAGE_NAME";
+	public static final String ALTERNATE_ENTITY_PACKAGE_NAME = "ALTERNATE_ENTITY_PACKAGE_NAME";
 	public static final String MODULE = "MODULE";
 
 	public String getDBOClassName(TableModel table) {
@@ -27,7 +27,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	private String createPackageName(DataModel model, TableModel table, String packageName) {
 		String prefix = "";
 		if (model != null) {
-			OptionModel option = model.getOptionByName(ALTERNATE_ENTITIES_PACKAGE_NAME);
+			OptionModel option = model.getOptionByName(ALTERNATE_ENTITY_PACKAGE_NAME);
 			if ((option != null) && (option.getParameter() != null) && !option.getParameter().isEmpty()) {
 				packageName = option.getParameter();
 			}

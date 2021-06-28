@@ -6,12 +6,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractCodeGenerator;
-import archimedes.codegenerators.rest.controller.springboot.DTOConverterClassCodeGenerator;
-import archimedes.codegenerators.rest.controller.springboot.RESTControllerNameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.scheme.Option;
@@ -21,9 +18,6 @@ import archimedes.scheme.xml.ModelXMLReader;
 public class DTOConverterClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
-
-	@Spy
-	private RESTControllerNameGenerator nameGenerator = new RESTControllerNameGenerator();
 
 	@InjectMocks
 	private DTOConverterClassCodeGenerator unitUnderTest;

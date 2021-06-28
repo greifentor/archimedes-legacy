@@ -50,7 +50,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 			return new String[] { AbstractClassCodeGenerator.AUTOINCREMENT };
 		case MODEL:
 			return new String[] {
-					PersistenceJPANameGenerator.ALTERNATE_ENTITIES_PACKAGE_NAME,
+					PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 					AbstractClassCodeGenerator.MODULE_MODE };

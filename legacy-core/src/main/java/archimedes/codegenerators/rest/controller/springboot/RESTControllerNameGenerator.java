@@ -1,6 +1,8 @@
 package archimedes.codegenerators.rest.controller.springboot;
 
+import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.NameGenerator;
+import archimedes.codegenerators.OptionGetter;
 import archimedes.model.DataModel;
 import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
@@ -12,41 +14,100 @@ import archimedes.model.TableModel;
  */
 public class RESTControllerNameGenerator extends NameGenerator {
 
+	public static final String ALTERNATE_DTO_CLASS_NAME_SUFFIX = "ALTERNATE_DTO_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_DTO_PACKAGE_NAME = "ALTERNATE_DTO_PACKAGE_NAME";
+	public static final String ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX = "ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_DTOMAPPER_PACKAGE_NAME = "ALTERNATE_DTOMAPPER_PACKAGE_NAME";
+	public static final String ALTERNATE_RESTCONTROLLER_CLASS_NAME_SUFFIX =
+			"ALTERNATE_RESTCONTROLLER_CLASS_NAME_SUFFIX";
+	public static final String MODULE = "MODULE";
 	public static final String REST_URL_PREFIX = "REST_URL_PREFIX";
 
 	public String getDTOClassName(TableModel table) {
-		return table != null ? getClassName(table) + "DTO" : null;
+		return table != null ? getClassName(table) + getDTOClassNameSuffix(table) : null;
+	}
+
+	private String getDTOClassNameSuffix(TableModel table) {
+		return table.getDataModel() == null
+				? "DTO"
+				: OptionGetter
+						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_DTO_CLASS_NAME_SUFFIX)
+						.map(s -> s)
+						.orElse("DTO");
 	}
 
 	public String getDTOPackageName(DataModel model, TableModel table) {
-		return model != null ? getBasePackageNameWithDotExtension(model, table) + "rest.dto" : null;
+		return createPackageName(model, table, "rest.dto", ALTERNATE_DTO_PACKAGE_NAME);
+	}
+
+	private String createPackageName(DataModel model, TableModel table, String packageName,
+			String alternatePackageNameOption) {
+		String prefix = "";
+		if ((model != null) && (alternatePackageNameOption != null)) {
+			OptionModel option = model.getOptionByName(alternatePackageNameOption);
+			if ((option != null) && (option.getParameter() != null) && !option.getParameter().isEmpty()) {
+				packageName = option.getParameter();
+			}
+		}
+		if (table != null) {
+			prefix = OptionGetter.getOptionByName(table, MODULE).map(option -> option.getParameter() + ".").orElse("");
+		}
+		return model != null ? getBasePackageNameWithDotExtension(model, table) + prefix + packageName : null;
 	}
 
 	public String getDTOConverterClassName(TableModel table) {
-		return table != null ? getClassName(table) + "DTOConverter" : null;
+		return table != null ? getClassName(table) + getDTOConverterNameSuffix(table) : null;
+	}
+
+	private String getDTOConverterNameSuffix(TableModel table) {
+		return table.getDataModel() == null
+				? "DTOConverter"
+				: OptionGetter
+						.getParameterOfOptionByName(table.getDataModel(), AbstractClassCodeGenerator.MAPPERS)
+						.filter(s -> s.equalsIgnoreCase("mapstruct"))
+						.map(s -> getDTOMapperInterfaceNameSuffix(table))
+						.orElse("DTOConverter");
+	}
+
+	private String getDTOMapperInterfaceNameSuffix(TableModel table) {
+		return table.getDataModel() == null
+				? "DTOMapper"
+				: OptionGetter
+						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX)
+						.map(s -> s)
+						.orElse("DTOMapper");
 	}
 
 	public String getDTOConverterPackageName(DataModel model, TableModel table) {
-		return model != null ? getBasePackageNameWithDotExtension(model, table) + "rest.converter" : null;
+		return createPackageName(model, table, "rest.converter", ALTERNATE_DTOMAPPER_PACKAGE_NAME);
 	}
 
 	public String getListDTOClassName(TableModel table) {
-		return table != null ? getClassName(table) + "ListDTO" : null;
+		return table != null ? getClassName(table) + "List" + getDTOClassNameSuffix(table) : null;
 	}
 
 	public String getRESTControllerClassName(TableModel table) {
-		return table != null ? getClassName(table) + "RESTController" : null;
+		return table != null ? getClassName(table) + getRESTControllerClassNameSuffix(table) : null;
+	}
+
+	private String getRESTControllerClassNameSuffix(TableModel table) {
+		return table.getDataModel() == null
+				? "RESTController"
+				: OptionGetter
+						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_RESTCONTROLLER_CLASS_NAME_SUFFIX)
+						.map(s -> s)
+						.orElse("RESTController");
 	}
 
 	public String getRESTControllerPackageName(DataModel model, TableModel table) {
-		return model != null ? getBasePackageNameWithDotExtension(model, table) + "rest" : null;
+		return createPackageName(model, table, "rest", null);
 	}
 
 	public String getURLName(DataModel model, TableModel table) {
 		String prefix = "api/v1";
 		prefix = getPrefix(prefix, model.getOptionByName(REST_URL_PREFIX));
 		prefix = getPrefix(prefix, table.getOptionByName(REST_URL_PREFIX));
-		return prefix + "/" + getPluralName(getAttributeName(table.getName())).toLowerCase();
+		return prefix + "/" + getAttributeName(getPluralName(table)).toLowerCase();
 	}
 
 	private String getPrefix(String prefix, OptionModel option) {

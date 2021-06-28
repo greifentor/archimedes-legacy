@@ -10,6 +10,7 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
+import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
@@ -99,6 +100,11 @@ public class DTOConverterClassCodeGenerator extends AbstractClassCodeGenerator<R
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
 		return nameGenerator.getDTOConverterPackageName(model, table);
+	}
+
+	@Override
+	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
+		return OptionGetter.getOptionByName(model, AbstractClassCodeGenerator.MAPPERS).isPresent();
 	}
 
 }

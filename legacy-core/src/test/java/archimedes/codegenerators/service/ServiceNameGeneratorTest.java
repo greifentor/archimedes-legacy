@@ -18,6 +18,7 @@ import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 
 @ExtendWith(MockitoExtension.class)
 public class ServiceNameGeneratorTest {
@@ -408,6 +409,48 @@ public class ServiceNameGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void getSOClassName_PassTableModelWithAlternateSOClassSuffix_ReturnsACorrectSOName() {
+			// Prepare
+			String expected = "TableModel";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX))
+					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX, "Model"));
+			// Run
+			String returned = unitUnderTest.getSOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getSOClassName_PassTableModelNullAsWithAlternateSOClassSuffix_ReturnsACorrectSOName() {
+			// Prepare
+			String expected = "TableSO";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX))
+					.thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getSOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getSOClassName_PassTableModelEmptyAsWithAlternateSOClassSuffix_ReturnsACorrectSOName() {
+			// Prepare
+			String expected = "Table";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX))
+					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX, ""));
+			// Run
+			String returned = unitUnderTest.getSOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 	@DisplayName("Tests for SO package names")
@@ -464,7 +507,7 @@ public class ServiceNameGeneratorTest {
 			String expected = alternatePackageName;
 			OptionModel option = mock(OptionModel.class);
 			when(option.getParameter()).thenReturn(alternatePackageName);
-			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_PACKAGE_SO_CLASS)).thenReturn(option);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SO_PACKAGE_NAME)).thenReturn(option);
 			// Run
 			String returned = unitUnderTest.getSOPackageName(model, table);
 			// Check

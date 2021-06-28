@@ -94,7 +94,7 @@ public class DBOClassCodeGeneratorTest {
 			dataModel
 					.addOption(
 							new Option(
-									PersistenceJPANameGenerator.ALTERNATE_ENTITIES_PACKAGE_NAME,
+									PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
 									alternatePackageName));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));

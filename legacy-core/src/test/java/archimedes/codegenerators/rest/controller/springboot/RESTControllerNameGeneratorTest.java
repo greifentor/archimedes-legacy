@@ -3,6 +3,7 @@ package archimedes.codegenerators.rest.controller.springboot;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -14,11 +15,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import archimedes.codegenerators.rest.controller.springboot.RESTControllerNameGenerator;
+import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 
 @ExtendWith(MockitoExtension.class)
 public class RESTControllerNameGeneratorTest {
@@ -136,6 +138,21 @@ public class RESTControllerNameGeneratorTest {
 			// Prepare
 			String expected = "TDTO";
 			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getDTOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOPackageName_PassDataModelWithALTERNATE_DTO_CLASS_NAME_SUFFIXOption_ReturnsACorrectDTOName() {
+			// Prepare
+			String expected = "TableDto";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			doReturn(new Option(RESTControllerNameGenerator.ALTERNATE_DTO_CLASS_NAME_SUFFIX, "Dto"))
+					.when(model)
+					.getOptionByName(RESTControllerNameGenerator.ALTERNATE_DTO_CLASS_NAME_SUFFIX);
 			// Run
 			String returned = unitUnderTest.getDTOClassName(table);
 			// Check
@@ -300,6 +317,38 @@ public class RESTControllerNameGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void getDTOConverterClassName_PassDataModelWithMapStructMapperOption_ReturnsACorrectDTOConverterName() {
+			// Prepare
+			String expected = "TableDTOMapper";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(AbstractClassCodeGenerator.MAPPERS))
+					.thenReturn(new Option(AbstractClassCodeGenerator.MAPPERS, "mapstruct"));
+			// Run
+			String returned = unitUnderTest.getDTOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterClassName_PassDataModelWithALTERNATE_DTO_MAPPER_NAME_SUFFIXOption_ReturnsACorrectDTOConverterName() {
+			// Prepare
+			String expected = "TableDtoMapper";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			doReturn(new Option(AbstractClassCodeGenerator.MAPPERS, "mapstruct"))
+					.when(model)
+					.getOptionByName(AbstractClassCodeGenerator.MAPPERS);
+			doReturn(new Option(RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX, "DtoMapper"))
+					.when(model)
+					.getOptionByName(RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX);
+			// Run
+			String returned = unitUnderTest.getDTOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 	@DisplayName("tests for DTO converter package names")
@@ -343,6 +392,20 @@ public class RESTControllerNameGeneratorTest {
 			// Prepare
 			String expected = "rest.converter";
 			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getDTOConverterPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDTOConverterClassName_PassModelWithAlternateDTOMapperPackageName_ReturnsACorrectDTOMapperPackageName() {
+			// Prepare
+			String expected = "rest.mapper";
+			when(model.getBasePackageName()).thenReturn(null);
+			when(model.getOptionByName(RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_PACKAGE_NAME))
+					.thenReturn(
+							new Option(RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_PACKAGE_NAME, "rest.mapper"));
 			// Run
 			String returned = unitUnderTest.getDTOConverterPackageName(model, table);
 			// Check
@@ -563,6 +626,21 @@ public class RESTControllerNameGeneratorTest {
 			when(table.getName()).thenReturn("t");
 			// Run
 			String returned = unitUnderTest.getRESTControllerClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRESTControllerClassName_PassDataModelWithALTERNATE_DTO_CLASS_NAME_SUFFIXOption_ReturnsACorrectRESTControllerName() {
+			// Prepare
+			String expected = "TableDto";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			doReturn(new Option(RESTControllerNameGenerator.ALTERNATE_DTO_CLASS_NAME_SUFFIX, "Dto"))
+					.when(model)
+					.getOptionByName(RESTControllerNameGenerator.ALTERNATE_DTO_CLASS_NAME_SUFFIX);
+			// Run
+			String returned = unitUnderTest.getDTOClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}

@@ -14,4 +14,10 @@ public class OptionGetter {
 		return Optional.ofNullable(optionListProvider.getOptionByName(name));
 	}
 
+	public static Optional<String> getParameterOfOptionByName(OptionListProvider optionListProvider, String name) {
+		return Optional
+				.ofNullable(
+						getOptionByName(optionListProvider, name).map(option -> option.getParameter()).orElse(null));
+	}
+
 }

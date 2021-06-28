@@ -36,7 +36,10 @@ public class CompoundPredeterminedOptionProvider implements PredeterminedOptionP
 		ensure(optionType != null, new NullPointerException("option type to add cannot be null."));
 		for (String option : options) {
 			ensure(option != null, new NullPointerException("option to add cannot be null."));
-			selectableOptions.get(optionType).add(option);
+			List<String> l = selectableOptions.get(optionType);
+			if ((l != null) && !l.contains(option)) {
+				l.add(option);
+			}
 		}
 	}
 
