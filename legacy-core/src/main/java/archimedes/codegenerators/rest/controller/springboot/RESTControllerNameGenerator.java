@@ -16,8 +16,8 @@ public class RESTControllerNameGenerator extends NameGenerator {
 
 	public static final String ALTERNATE_DTO_CLASS_NAME_SUFFIX = "ALTERNATE_DTO_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_DTO_PACKAGE_NAME = "ALTERNATE_DTO_PACKAGE_NAME";
-	public static final String ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX = "ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX";
-	public static final String ALTERNATE_DTOMAPPER_PACKAGE_NAME = "ALTERNATE_DTOMAPPER_PACKAGE_NAME";
+	public static final String ALTERNATE_DTOCONVERTER_CLASS_NAME_SUFFIX = "ALTERNATE_DTOCONVERTER_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_DTOCONVERTER_PACKAGE_NAME = "ALTERNATE_DTOCONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_RESTCONTROLLER_CLASS_NAME_SUFFIX =
 			"ALTERNATE_RESTCONTROLLER_CLASS_NAME_SUFFIX";
 	public static final String REST_URL_PREFIX = "REST_URL_PREFIX";
@@ -57,13 +57,13 @@ public class RESTControllerNameGenerator extends NameGenerator {
 		return table.getDataModel() == null
 				? "DTOMapper"
 				: OptionGetter
-						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX)
+						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_DTOCONVERTER_CLASS_NAME_SUFFIX)
 						.map(s -> s)
 						.orElse("DTOMapper");
 	}
 
 	public String getDTOConverterPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "rest.converter", ALTERNATE_DTOMAPPER_PACKAGE_NAME);
+		return createPackageName(model, table, "rest.converter", ALTERNATE_DTOCONVERTER_PACKAGE_NAME);
 	}
 
 	public String getListDTOClassName(TableModel table) {

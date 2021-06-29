@@ -340,9 +340,9 @@ public class RESTControllerNameGeneratorTest {
 			doReturn(new Option(AbstractClassCodeGenerator.MAPPERS, "mapstruct"))
 					.when(model)
 					.getOptionByName(AbstractClassCodeGenerator.MAPPERS);
-			doReturn(new Option(RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX, "DtoMapper"))
+			doReturn(new Option(RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_CLASS_NAME_SUFFIX, "DtoMapper"))
 					.when(model)
-					.getOptionByName(RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX);
+					.getOptionByName(RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_CLASS_NAME_SUFFIX);
 			// Run
 			String returned = unitUnderTest.getDTOConverterClassName(table);
 			// Check
@@ -403,9 +403,9 @@ public class RESTControllerNameGeneratorTest {
 			// Prepare
 			String expected = "rest.mapper";
 			when(model.getBasePackageName()).thenReturn(null);
-			when(model.getOptionByName(RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_PACKAGE_NAME))
+			when(model.getOptionByName(RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_PACKAGE_NAME))
 					.thenReturn(
-							new Option(RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_PACKAGE_NAME, "rest.mapper"));
+							new Option(RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_PACKAGE_NAME, "rest.mapper"));
 			// Run
 			String returned = unitUnderTest.getDTOConverterPackageName(model, table);
 			// Check

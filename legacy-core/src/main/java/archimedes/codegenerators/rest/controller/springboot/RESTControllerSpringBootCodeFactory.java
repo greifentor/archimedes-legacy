@@ -60,8 +60,8 @@ public class RESTControllerSpringBootCodeFactory extends AbstractClassCodeFactor
 			return new String[] {
 					RESTControllerNameGenerator.ALTERNATE_DTO_CLASS_NAME_SUFFIX,
 					RESTControllerNameGenerator.ALTERNATE_DTO_PACKAGE_NAME,
-					RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_CLASS_NAME_SUFFIX,
-					RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_PACKAGE_NAME,
+					RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_CLASS_NAME_SUFFIX,
+					RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_PACKAGE_NAME,
 					RESTControllerNameGenerator.ALTERNATE_RESTCONTROLLER_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_SO_PACKAGE_NAME,
