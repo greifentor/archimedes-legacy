@@ -30,6 +30,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 				.asList(
 						new DBOClassCodeGenerator(this),
 						new DBOConverterClassCodeGenerator(this),
+						new DBOMapstructMapperInterfaceCodeGenerator(this),
 						new JPARepositoryInterfaceCodeGenerator(this));
 	}
 
@@ -55,8 +56,13 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 			return new String[] { AbstractClassCodeGenerator.AUTOINCREMENT };
 		case MODEL:
 			return new String[] {
-					PersistenceJPANameGenerator.ALTERNATE_CONVERTER_PACKAGE_NAME,
+					PersistenceJPANameGenerator.ALTERNATE_ADAPTER_PACKAGE_NAME,
+					PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX,
+					PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_PACKAGE_NAME,
+					PersistenceJPANameGenerator.ALTERNATE_ENTITY_CLASS_NAME_SUFFIX,
 					PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
+					PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX,
+					PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME,
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 					AbstractClassCodeGenerator.MODULE_MODE };

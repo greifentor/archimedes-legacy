@@ -63,7 +63,8 @@ public class DTOMapstructMapperInterfaceCodeGeneratorTest {
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel
-					.addOption(new Option(RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_PACKAGE_NAME, "rest.mapper"));
+					.addOption(
+							new Option(RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_PACKAGE_NAME, "rest.mapper"));
 			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX, ""));
 			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_SO_PACKAGE_NAME, "core.model"));
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.MAPPERS, "mapstruct"));
@@ -99,7 +100,8 @@ public class DTOMapstructMapperInterfaceCodeGeneratorTest {
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel
-					.addOption(new Option(RESTControllerNameGenerator.ALTERNATE_DTOMAPPER_PACKAGE_NAME, "rest.mapper"));
+					.addOption(
+							new Option(RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_PACKAGE_NAME, "rest.mapper"));
 			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX, ""));
 			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_SO_PACKAGE_NAME, "core.model"));
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.MAPPERS, "mapstruct:converter"));

@@ -3,8 +3,10 @@ package archimedes.codegenerators.persistence.jpa;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -140,6 +142,21 @@ public class PersistenceJPANameGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void getDBOClassName_PassDataModelWithALTERNATE_ENTITY_CLASS_NAME_SUFFIXOption_ReturnsACorrectDBOName() {
+			// Prepare
+			String expected = "TableDbo";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			doReturn(new Option(PersistenceJPANameGenerator.ALTERNATE_ENTITY_CLASS_NAME_SUFFIX, "Dbo"))
+					.when(model)
+					.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_ENTITY_CLASS_NAME_SUFFIX);
+			// Run
+			String returned = unitUnderTest.getDBOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 	@DisplayName("tests for DBO converter class names")
@@ -156,6 +173,23 @@ public class PersistenceJPANameGeneratorTest {
 			// Prepare
 			String expected = "TableDBOConverter";
 			when(table.getName()).thenReturn("Table");
+			// Run
+			String returned = unitUnderTest.getDBOConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Disabled("TODO OLI: This should also work as described by the test.")
+		@Test
+		void getDBOConverterClassName_passAValidTableModelWithAlternateClassName_ReturnsACorrectDBOConverterClassName() {
+			// Prepare
+			String expected = "TableDBOMapper";
+			when(table.getName()).thenReturn("Table");
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX,
+									"DBOMapper"));
 			// Run
 			String returned = unitUnderTest.getDBOConverterClassName(table);
 			// Check
@@ -181,10 +215,10 @@ public class PersistenceJPANameGeneratorTest {
 		@Test
 		void getDBOConverterPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
 			// Prepare
-			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_CONVERTER_PACKAGE_NAME))
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_PACKAGE_NAME))
 					.thenReturn(
 							new Option(
-									PersistenceJPANameGenerator.ALTERNATE_CONVERTER_PACKAGE_NAME,
+									PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_PACKAGE_NAME,
 									"persistence.mapper"));
 			// Run & Check
 			assertEquals("persistence.mapper", unitUnderTest.getDBOConverterPackageName(model, table));
@@ -329,6 +363,21 @@ public class PersistenceJPANameGeneratorTest {
 			// Prepare
 			String expected = "NameDBORepository";
 			when(table.getName()).thenReturn("Name");
+			// Run
+			String returned = unitUnderTest.getJPARepositoryInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getJPARepositoryInterfaceName_PassDataModelWithALTERNATE_REPOSITORY_CLASS_NAME_SUFFIXOption_ReturnsACorrectDBOName() {
+			// Prepare
+			String expected = "TableRepo";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			doReturn(new Option(PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX, "Repo"))
+					.when(model)
+					.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
 			// Run
 			String returned = unitUnderTest.getJPARepositoryInterfaceName(table);
 			// Check
