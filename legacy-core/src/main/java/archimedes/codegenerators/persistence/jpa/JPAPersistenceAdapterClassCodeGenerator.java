@@ -8,6 +8,8 @@ import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
+import java.util.Arrays;
+
 /**
  * A code generator for JPA persistence adapters.
  *
@@ -27,9 +29,23 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		context.put("ClassName", getClassName(table));
-		context.put("EntityName", nameGenerator.getClassName(table));
+		context.put("DBOConverterClassName", nameGenerator.getDBOConverterClassName(table));
+		context.put("DBOConverterPackageName", nameGenerator.getDBOConverterPackageName(model, table));
+		context.put("JPARepositoryClassName", nameGenerator.getJPARepositoryInterfaceName(table));
+		context.put("JPARepositoryPackageName", nameGenerator.getJPARepositoryPackageName(model, table));
+		context.put("SOClassName", nameGenerator.getDBOClassName(table));
+		context.put("SOPackageName", nameGenerator.getDBOPackageName(model, table));
+		context.put("IdClassName", getIdClassName(table));
 		context.put("PackageName", getPackageName(model, table));
-		context.put("TableName", table.getName());
+	}
+
+	private String getIdClassName(TableModel table) {
+		return Arrays
+				.asList(table.getPrimaryKeyColumns())
+				.stream()
+				.findFirst()
+				.map(column -> typeGenerator.getJavaTypeString(column.getDomain(), true))
+				.orElse("UNKNOWN");
 	}
 
 	@Override

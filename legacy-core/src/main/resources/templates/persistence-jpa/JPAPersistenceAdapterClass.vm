@@ -1,0 +1,29 @@
+package ${PackageName};
+
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import ${DBOConverterPackageName}.${DBOConverterClassName};
+import ${JPARepositoryPackageName}.${JPARepositoryClassName};
+import ${SOPackageName}.${SOClassName};
+
+/**
+ * A DBO persistence adapter for ${PluralName}.
+ *
+ * ${Generated}
+ */
+@Named
+public class ${ClassName} {
+
+	@Inject
+	private ${DBOConverterClassName} converter;
+	@Inject
+	private ${JPARepositoryClassName} repository;
+
+	public Optional<${SOClassName}> findById(${IdClassName} key) {
+		return repository.findById(key).map(dbo -> converter.toSO(dbo));
+	}
+
+}
