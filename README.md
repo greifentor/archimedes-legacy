@@ -50,7 +50,7 @@ Will be provided since version 2.1.1 is released.
 
 ### Included Code Factories
 
-[Persistence JPA](./archimedes-legacy/archimedes-legacy-core/src/main/java/archimedes/codegenerators/persistence/jpa/README.md)
+[Persistence JPA](./legacy-core/src/main/java/archimedes/codegenerators/persistence/jpa/README.md)
 
 ### Templates
 
