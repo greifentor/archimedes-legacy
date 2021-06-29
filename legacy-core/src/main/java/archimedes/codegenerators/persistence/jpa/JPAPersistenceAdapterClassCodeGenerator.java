@@ -1,5 +1,6 @@
 package archimedes.codegenerators.persistence.jpa;
 
+import archimedes.codegenerators.service.ServiceNameGenerator;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
@@ -17,6 +18,8 @@ import java.util.Arrays;
  */
 public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
 
+	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
+
 	public JPAPersistenceAdapterClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"JPAPersistenceAdapterClass.vm",
@@ -33,8 +36,8 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 		context.put("DBOConverterPackageName", nameGenerator.getDBOConverterPackageName(model, table));
 		context.put("JPARepositoryClassName", nameGenerator.getJPARepositoryInterfaceName(table));
 		context.put("JPARepositoryPackageName", nameGenerator.getJPARepositoryPackageName(model, table));
-		context.put("SOClassName", nameGenerator.getDBOClassName(table));
-		context.put("SOPackageName", nameGenerator.getDBOPackageName(model, table));
+		context.put("SOClassName", serviceNameGenerator.getSOClassName(table));
+		context.put("SOPackageName", serviceNameGenerator.getSOPackageName(model, table));
 		context.put("IdClassName", getIdClassName(table));
 		context.put("PackageName", getPackageName(model, table));
 	}

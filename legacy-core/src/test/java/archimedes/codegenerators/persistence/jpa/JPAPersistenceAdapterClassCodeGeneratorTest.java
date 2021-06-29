@@ -55,7 +55,7 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 					"\n" + //
 					"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
 					"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
-					"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+					"import base.pack.age.name.service.model.ATableSO;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * A DBO persistence adapter for a_tables.\n" + //
@@ -70,7 +70,7 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 					"\t@Inject\n" + //
 					"\tprivate ATableDBORepository repository;\n" + //
 					"\n" + //
-					"\tpublic Optional<ATableDBO> findById(Long key) {\n" + //
+					"\tpublic Optional<ATableSO> findById(Long key) {\n" + //
 					"\t\treturn repository.findById(key).map(dbo -> converter.toSO(dbo));\n" + //
 					"\t}\n" + //
 					"\n}";
