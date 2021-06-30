@@ -35,109 +35,109 @@ public class ServiceNameGeneratorTest {
 	@InjectMocks
 	private ServiceNameGenerator unitUnderTest;
 
-	@DisplayName("Tests for IdSO class names")
+	@DisplayName("Tests for IdModel class names")
 	@Nested
-	class IdSOClassNameTests {
+	class IdModelClassNameTests {
 
 		@Test
-		void getIdSOClassName_PassTableModelWithEmptyName_ThrowsException() {
+		void getIdModelClassName_PassTableModelWithEmptyName_ThrowsException() {
 			// Prepare
 			when(table.getName()).thenReturn("");
 			// Run
 			assertThrows(IllegalArgumentException.class, () -> {
-				unitUnderTest.getIdSOClassName(table);
+				unitUnderTest.getIdModelClassName(table);
 			});
 		}
 
 		@Test
-		void getIdSOClassName_PassNullValue_ReturnsNullValue() {
-			assertNull(unitUnderTest.getIdSOClassName(null));
+		void getIdModelClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getIdModelClassName(null));
 		}
 
 		@Test
-		void getIdSOClassName_PassTableModelWithNameCamelCase_ReturnsACorrectIdSOName() {
+		void getIdModelClassName_PassTableModelWithNameCamelCase_ReturnsACorrectIdModelName() {
 			// Prepare
-			String expected = "TestTableIdSO";
+			String expected = "TestTableId";
 			when(table.getName()).thenReturn("TestTable");
 			// Run
-			String returned = unitUnderTest.getIdSOClassName(table);
+			String returned = unitUnderTest.getIdModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getIdSOClassName_PassTableModelWithNameUpperCase_ReturnsACorrectIdSOName() {
+		void getIdModelClassName_PassTableModelWithNameUpperCase_ReturnsACorrectIdModelName() {
 			// Prepare
-			String expected = "TableIdSO";
+			String expected = "TableId";
 			when(table.getName()).thenReturn("TABLE");
 			// Run
-			String returned = unitUnderTest.getIdSOClassName(table);
+			String returned = unitUnderTest.getIdModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getIdSOClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectIdSOName() {
+		void getIdModelClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectIdModelName() {
 			// Prepare
-			String expected = "TableNameIdSO";
+			String expected = "TableNameId";
 			when(table.getName()).thenReturn("TABLE_NAME");
 			// Run
-			String returned = unitUnderTest.getIdSOClassName(table);
+			String returned = unitUnderTest.getIdModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getIdSOClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectIdSOName() {
+		void getIdModelClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectIdModelName() {
 			// Prepare
-			String expected = "TableNameIdSO";
+			String expected = "TableNameId";
 			when(table.getName()).thenReturn("table_name");
 			// Run
-			String returned = unitUnderTest.getIdSOClassName(table);
+			String returned = unitUnderTest.getIdModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getIdSOClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectIdSOName() {
+		void getIdModelClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectIdModelName() {
 			// Prepare
-			String expected = "TableNameIdSO";
+			String expected = "TableNameId";
 			when(table.getName()).thenReturn("Table_Name");
 			// Run
-			String returned = unitUnderTest.getIdSOClassName(table);
+			String returned = unitUnderTest.getIdModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getIdSOClassName_PassTableModelWithNameLowerCase_ReturnsACorrectIdSOName() {
+		void getIdModelClassName_PassTableModelWithNameLowerCase_ReturnsACorrectIdModelName() {
 			// Prepare
-			String expected = "TableIdSO";
+			String expected = "TableId";
 			when(table.getName()).thenReturn("table");
 			// Run
-			String returned = unitUnderTest.getIdSOClassName(table);
+			String returned = unitUnderTest.getIdModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getIdSOClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectIdSOName() {
+		void getIdModelClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectIdModelName() {
 			// Prepare
-			String expected = "TIdSO";
+			String expected = "TId";
 			when(table.getName()).thenReturn("T");
 			// Run
-			String returned = unitUnderTest.getIdSOClassName(table);
+			String returned = unitUnderTest.getIdModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getIdSOClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectIdSOName() {
+		void getIdModelClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectIdModelName() {
 			// Prepare
-			String expected = "TIdSO";
+			String expected = "TId";
 			when(table.getName()).thenReturn("t");
 			// Run
-			String returned = unitUnderTest.getIdSOClassName(table);
+			String returned = unitUnderTest.getIdModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -264,13 +264,13 @@ public class ServiceNameGeneratorTest {
 
 		@Test
 		void getServicePackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("service", unitUnderTest.getServicePackageName(model, null));
+			assertEquals("core", unitUnderTest.getServicePackageName(model, null));
 		}
 
 		@Test
 		void getServicePackageName_PassAValidDataModel_ReturnsACorrecServiceName() {
 			// Prepare
-			String expected = BASE_PACKAGE_NAME + ".service";
+			String expected = BASE_PACKAGE_NAME + ".core";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
 			String returned = unitUnderTest.getServicePackageName(model, table);
@@ -281,7 +281,7 @@ public class ServiceNameGeneratorTest {
 		@Test
 		void getServicePackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectServiceName() {
 			// Prepare
-			String expected = "service";
+			String expected = "core";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
 			String returned = unitUnderTest.getServicePackageName(model, table);
@@ -292,7 +292,7 @@ public class ServiceNameGeneratorTest {
 		@Test
 		void getServicePackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectServiceName() {
 			// Prepare
-			String expected = "service";
+			String expected = "core";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
 			String returned = unitUnderTest.getServicePackageName(model, table);
@@ -302,214 +302,214 @@ public class ServiceNameGeneratorTest {
 
 	}
 
-	@DisplayName("Tests for SO class names")
+	@DisplayName("Tests for Model class names")
 	@Nested
-	class SOClassNameTests {
+	class ModelClassNameTests {
 
 		@Test
-		void getSOClassName_PassTableModelWithEmptyName_ThrowsException() {
+		void getModelClassName_PassTableModelWithEmptyName_ThrowsException() {
 			// Prepare
 			when(table.getName()).thenReturn("");
 			// Run
 			assertThrows(IllegalArgumentException.class, () -> {
-				unitUnderTest.getSOClassName(table);
+				unitUnderTest.getModelClassName(table);
 			});
 		}
 
 		@Test
-		void getSOClassName_PassNullValue_ReturnsNullValue() {
-			assertNull(unitUnderTest.getSOClassName(null));
+		void getModelClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getModelClassName(null));
 		}
 
 		@Test
-		void getSOClassName_PassTableModelWithNameCamelCase_ReturnsACorrectSOName() {
+		void getModelClassName_PassTableModelWithNameCamelCase_ReturnsACorrectModelName() {
 			// Prepare
-			String expected = "TestTableSO";
+			String expected = "TestTable";
 			when(table.getName()).thenReturn("TestTable");
 			// Run
-			String returned = unitUnderTest.getSOClassName(table);
+			String returned = unitUnderTest.getModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOClassName_PassTableModelWithNameUpperCase_ReturnsACorrectSOName() {
+		void getModelClassName_PassTableModelWithNameUpperCase_ReturnsACorrectModelName() {
 			// Prepare
-			String expected = "TableSO";
+			String expected = "Table";
 			when(table.getName()).thenReturn("TABLE");
 			// Run
-			String returned = unitUnderTest.getSOClassName(table);
+			String returned = unitUnderTest.getModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectSOName() {
+		void getModelClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectModelName() {
 			// Prepare
-			String expected = "TableNameSO";
+			String expected = "TableName";
 			when(table.getName()).thenReturn("TABLE_NAME");
 			// Run
-			String returned = unitUnderTest.getSOClassName(table);
+			String returned = unitUnderTest.getModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectSOName() {
+		void getModelClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectModelName() {
 			// Prepare
-			String expected = "TableNameSO";
+			String expected = "TableName";
 			when(table.getName()).thenReturn("table_name");
 			// Run
-			String returned = unitUnderTest.getSOClassName(table);
+			String returned = unitUnderTest.getModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectSOName() {
+		void getModelClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectModelName() {
 			// Prepare
-			String expected = "TableNameSO";
+			String expected = "TableName";
 			when(table.getName()).thenReturn("Table_Name");
 			// Run
-			String returned = unitUnderTest.getSOClassName(table);
+			String returned = unitUnderTest.getModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOClassName_PassTableModelWithNameLowerCase_ReturnsACorrectSOName() {
+		void getModelClassName_PassTableModelWithNameLowerCase_ReturnsACorrectModelName() {
 			// Prepare
-			String expected = "TableSO";
+			String expected = "Table";
 			when(table.getName()).thenReturn("table");
 			// Run
-			String returned = unitUnderTest.getSOClassName(table);
+			String returned = unitUnderTest.getModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectSOName() {
+		void getModelClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectModelName() {
 			// Prepare
-			String expected = "TSO";
+			String expected = "T";
 			when(table.getName()).thenReturn("T");
 			// Run
-			String returned = unitUnderTest.getSOClassName(table);
+			String returned = unitUnderTest.getModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectSOName() {
+		void getModelClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectModelName() {
 			// Prepare
-			String expected = "TSO";
+			String expected = "T";
 			when(table.getName()).thenReturn("t");
 			// Run
-			String returned = unitUnderTest.getSOClassName(table);
+			String returned = unitUnderTest.getModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOClassName_PassTableModelWithAlternateSOClassSuffix_ReturnsACorrectSOName() {
+		void getModelClassName_PassTableModelWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
 			// Prepare
 			String expected = "TableModel";
 			when(table.getName()).thenReturn("Table");
 			when(table.getDataModel()).thenReturn(model);
-			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX))
-					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX, "Model"));
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX))
+					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX, "Model"));
 			// Run
-			String returned = unitUnderTest.getSOClassName(table);
+			String returned = unitUnderTest.getModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOClassName_PassTableModelNullAsWithAlternateSOClassSuffix_ReturnsACorrectSOName() {
-			// Prepare
-			String expected = "TableSO";
-			when(table.getName()).thenReturn("Table");
-			when(table.getDataModel()).thenReturn(model);
-			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX))
-					.thenReturn(null);
-			// Run
-			String returned = unitUnderTest.getSOClassName(table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getSOClassName_PassTableModelEmptyAsWithAlternateSOClassSuffix_ReturnsACorrectSOName() {
+		void getModelClassName_PassTableModelNullAsWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
 			// Prepare
 			String expected = "Table";
 			when(table.getName()).thenReturn("Table");
 			when(table.getDataModel()).thenReturn(model);
-			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX))
-					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX, ""));
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX))
+					.thenReturn(null);
 			// Run
-			String returned = unitUnderTest.getSOClassName(table);
+			String returned = unitUnderTest.getModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getModelClassName_PassTableModelEmptyAsWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "Table";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX))
+					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX, ""));
+			// Run
+			String returned = unitUnderTest.getModelClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 	}
 
-	@DisplayName("Tests for SO package names")
+	@DisplayName("Tests for model package names")
 	@Nested
-	class SOPackageNameTests {
+	class ModelPackageNameTests {
 
 		@Test
-		void getSOPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getSOPackageName(null, table));
+		void getModelPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getModelPackageName(null, table));
 		}
 
 		@Test
-		void getSOPackageName_PassANullValueAsTable_ReturnsDefaultValue() {
-			assertEquals("service.model", unitUnderTest.getSOPackageName(model, null));
+		void getModelPackageName_PassANullValueAsTable_ReturnsDefaultValue() {
+			assertEquals("core.model", unitUnderTest.getModelPackageName(model, null));
 		}
 
 		@Test
-		void getSOPackageName_PassAValidDataModel_ReturnsACorrecSOName() {
+		void getModelPackageName_PassAValidDataModel_ReturnsACorrecModelName() {
 			// Prepare
-			String expected = BASE_PACKAGE_NAME + ".service.model";
+			String expected = BASE_PACKAGE_NAME + ".core.model";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
-			String returned = unitUnderTest.getSOPackageName(model, table);
+			String returned = unitUnderTest.getModelPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOPackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectSOName() {
+		void getModelPackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectModelName() {
 			// Prepare
-			String expected = "service.model";
+			String expected = "core.model";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
-			String returned = unitUnderTest.getSOPackageName(model, table);
+			String returned = unitUnderTest.getModelPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOPackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectSOName() {
+		void getModelPackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectModelName() {
 			// Prepare
-			String expected = "service.model";
+			String expected = "core.model";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
-			String returned = unitUnderTest.getSOPackageName(model, table);
+			String returned = unitUnderTest.getModelPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getSOPackageName_PassAValidDataModelWithSetWithAlternatePackageNameForSOClasses_ReturnsACorrectSOName() {
+		void getModelPackageName_PassAValidDataModelWithSetWithAlternatePackageNameForModelClasses_ReturnsACorrectModelName() {
 			// Prepare
 			String alternatePackageName = "alternate.package.name";
 			String expected = alternatePackageName;
 			OptionModel option = mock(OptionModel.class);
 			when(option.getParameter()).thenReturn(alternatePackageName);
-			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SO_PACKAGE_NAME)).thenReturn(option);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME)).thenReturn(option);
 			// Run
-			String returned = unitUnderTest.getSOPackageName(model, table);
+			String returned = unitUnderTest.getModelPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}

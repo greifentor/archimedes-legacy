@@ -7,7 +7,7 @@ import javax.inject.Named;
 
 import ${DBOConverterPackageName}.${DBOConverterClassName};
 import ${JPARepositoryPackageName}.${JPARepositoryClassName};
-import ${SOPackageName}.${SOClassName};
+import ${ModelPackageName}.${ModelClassName};
 
 #if (!$CommentsOff )
 /**
@@ -24,21 +24,21 @@ public class ${ClassName} {
 	@Inject
 	private ${JPARepositoryClassName} repository;
 
-	public ${SOClassName} create(${SOClassName} so) {
-		so.set${IdFieldNameCamelCase}(null);
-		return converter.toSO(repository.save(converter.toDbo(so)));
+	public ${ModelClassName} create(${ModelClassName} model) {
+		model.set${IdFieldNameCamelCase}(null);
+		return converter.toModel(repository.save(converter.toDbo(model)));
 	}
 
-	public Optional<${SOClassName}> findById(${IdClassName} key) {
-		return repository.findById(key).map(dbo -> converter.toSO(dbo));
+	public Optional<${ModelClassName}> findById(${IdClassName} key) {
+		return repository.findById(key).map(dbo -> converter.toModel(dbo));
 	}
 
-	public ${SOClassName} update(${SOClassName} so) {
-		return converter.toSO(repository.save(converter.toDbo(so)));
+	public ${ModelClassName} update(${ModelClassName} model) {
+		return converter.toModel(repository.save(converter.toDbo(model)));
 	}
 
-	public void delete(${SOClassName} so) {
-		return repository.delete(so.getId());
+	public void delete(${ModelClassName} model) {
+		return repository.delete(model.getId());
 	}
 
 }

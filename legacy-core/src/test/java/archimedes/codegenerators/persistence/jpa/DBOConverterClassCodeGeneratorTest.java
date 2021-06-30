@@ -44,7 +44,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					"import lombok.Generated;\n" + //
 					"\n" + //
 					"import " + BASE_PACKAGE_NAME + ".persistence.entity.ATableDBO;\n" + //
-					"import " + BASE_PACKAGE_NAME + ".service.model.ATableSO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * A DBO converter for a_tables.\n" + //
@@ -55,21 +55,21 @@ public class DBOConverterClassCodeGeneratorTest {
 					"@Named\n" + //
 					"public class ATableDBOConverter {\n" + //
 					"\n" + //
-					"	public ATableDBO toDBO(ATableSO so) {\n" + //
-					"		if (so == null) {\n" + //
+					"	public ATableDBO toDBO(ATable model) {\n" + //
+					"		if (model == null) {\n" + //
 					"			return null;\n" + //
 					"		}\n" + //
 					"		return new ATableDBO()\n" + //
-					"				.setId(so.getId())\n" + //
-					"				.setADate(so.getADate())\n" + //
-					"				.setDescription(so.getDescription());\n" + //
+					"				.setId(model.getId())\n" + //
+					"				.setADate(model.getADate())\n" + //
+					"				.setDescription(model.getDescription());\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	public ATableSO toSO(ATableDBO dbo) {\n" + //
+					"	public ATable toModel(ATableDBO dbo) {\n" + //
 					"		if (dbo == null) {\n" + //
 					"			return null;\n" + //
 					"		}\n" + //
-					"		return new ATableSO()\n" + //
+					"		return new ATable()\n" + //
 					"				.setId(dbo.getId())\n" + //
 					"				.setADate(dbo.getADate())\n" + //
 					"				.setDescription(dbo.getDescription());\n" + //

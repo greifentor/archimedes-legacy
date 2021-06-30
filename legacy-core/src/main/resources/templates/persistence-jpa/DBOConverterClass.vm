@@ -12,7 +12,7 @@ import ${ImportLocalDate};
 import lombok.Generated;
 
 import ${DBOClassNameQualified};
-import ${SOClassNameQualified};
+import ${ModelClassNameQualified};
 
 /**
  * A DBO converter for ${PluralName}.
@@ -23,21 +23,21 @@ import ${SOClassNameQualified};
 @Named
 public class ${ClassName} {
 
-	public ${DBOClassName} toDBO(${SOClassName} so) {
-		if (so == null) {
+	public ${DBOClassName} toDBO(${ModelClassName} model) {
+		if (model == null) {
 			return null;
 		}
 		return new ${DBOClassName}()
 #foreach($Column in $ColumnData)
-				.${Column.getSetterName()}(so.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
+				.${Column.getSetterName()}(model.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
 #end
 	}
 
-	public ${SOClassName} toSO(${DBOClassName} dbo) {
+	public ${ModelClassName} toModel(${DBOClassName} dbo) {
 		if (dbo == null) {
 			return null;
 		}
-		return new ${SOClassName}()
+		return new ${ModelClassName}()
 #foreach($Column in $ColumnData)
 				.${Column.getSetterName()}(dbo.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
 #end

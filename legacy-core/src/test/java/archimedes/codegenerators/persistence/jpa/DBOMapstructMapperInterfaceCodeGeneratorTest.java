@@ -67,8 +67,8 @@ public class DBOMapstructMapperInterfaceCodeGeneratorTest {
 							new Option(
 									PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_PACKAGE_NAME,
 									"persistence.mapper"));
-			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX, ""));
-			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_SO_PACKAGE_NAME, "core.model"));
+			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX, ""));
+			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME, "core.model"));
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.MAPPERS, "mapstruct"));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
@@ -106,8 +106,8 @@ public class DBOMapstructMapperInterfaceCodeGeneratorTest {
 							new Option(
 									PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_PACKAGE_NAME,
 									"persistence.mapper"));
-			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_SO_CLASS_NAME_SUFFIX, ""));
-			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_SO_PACKAGE_NAME, "core.model"));
+			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX, ""));
+			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME, "core.model"));
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.MAPPERS, "mapstruct:converter"));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));

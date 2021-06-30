@@ -1,1 +1,1 @@
-#if (${GenerateIdClass} == true)new ${IdSOClass}().setKey(id)#{else}id#end
+#if (${GenerateIdClass} == true)new ${IdModelClass}().setKey(id)#{else}id#end

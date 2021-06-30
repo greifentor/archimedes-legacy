@@ -8,6 +8,7 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.codegenerators.NameGenerator;
+import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.model.OptionType;
@@ -63,6 +64,8 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 						PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_PACKAGE_NAME,
 						PersistenceJPANameGenerator.ALTERNATE_ENTITY_CLASS_NAME_SUFFIX,
 						PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
+						ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
+						ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
 						PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX,
 						PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME,
 						AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,

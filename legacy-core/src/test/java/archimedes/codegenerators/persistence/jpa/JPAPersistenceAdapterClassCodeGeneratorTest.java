@@ -54,7 +54,7 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 							"\n" + //
 							"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
 							"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
-							"import base.pack.age.name.service.model.ATableSO;\n" + //
+							"import base.pack.age.name.core.model.ATable;\n" + //
 							"\n";
 			if (!suppressComment) {
 				s += "/**\n" + //
@@ -71,21 +71,21 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 					"\t@Inject\n" + //
 					"\tprivate ATableDBORepository repository;\n" + //
 					"\n" + //
-					"\tpublic ATableSO create(ATableSO so) {\n" + //
-					"\t\tso.setId(null);\n" + //
-					"\t\treturn converter.toSO(repository.save(converter.toDbo(so)));\n" + //
+					"\tpublic ATable create(ATable model) {\n" + //
+					"\t\tmodel.setId(null);\n" + //
+					"\t\treturn converter.toModel(repository.save(converter.toDbo(model)));\n" + //
 					"\t}\n" + //
 					"\n" + //
-					"\tpublic Optional<ATableSO> findById(Long key) {\n" + //
-					"\t\treturn repository.findById(key).map(dbo -> converter.toSO(dbo));\n" + //
+					"\tpublic Optional<ATable> findById(Long key) {\n" + //
+					"\t\treturn repository.findById(key).map(dbo -> converter.toModel(dbo));\n" + //
 					"\t}\n" + //
 					"\n" + //
-					"\tpublic ATableSO update(ATableSO so) {\n" + //
-					"\t\treturn converter.toSO(repository.save(converter.toDbo(so)));\n" + //
+					"\tpublic ATable update(ATable model) {\n" + //
+					"\t\treturn converter.toModel(repository.save(converter.toDbo(model)));\n" + //
 					"\t}\n" + //
 					"\n" + //
-					"\tpublic void delete(ATableSO so) {\n" + //
-					"\t\treturn repository.delete(so.getId());\n" + //
+					"\tpublic void delete(ATable model) {\n" + //
+					"\t\treturn repository.delete(model.getId());\n" + //
 					"\t}\n" + //
 					"\n}";
 			return s;

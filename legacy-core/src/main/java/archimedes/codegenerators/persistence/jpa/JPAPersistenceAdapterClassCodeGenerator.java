@@ -39,8 +39,8 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 		context.put("IdFieldNameCamelCase", getIdFieldNameCamelCase(table));
 		context.put("JPARepositoryClassName", nameGenerator.getJPARepositoryInterfaceName(table));
 		context.put("JPARepositoryPackageName", nameGenerator.getJPARepositoryPackageName(model, table));
-		context.put("SOClassName", serviceNameGenerator.getSOClassName(table));
-		context.put("SOPackageName", serviceNameGenerator.getSOPackageName(model, table));
+		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
+		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
 	}
 

@@ -45,7 +45,7 @@ public class DTOConverterClassCodeGeneratorTest {
 					"import lombok.Generated;\n" + //
 					"\n" + //
 					"import " + BASE_PACKAGE_NAME + ".rest.dto.ATableDTO;\n" + //
-					"import " + BASE_PACKAGE_NAME + ".service.model.ATableSO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * A DTO converter for a_tables.\n" + //
@@ -56,21 +56,21 @@ public class DTOConverterClassCodeGeneratorTest {
 					"@Named\n" + //
 					"public class ATableDTOConverter {\n" + //
 					"\n" + //
-					"	public ATableDTO convert(ATableSO so) {\n" + //
-					"		if (so == null) {\n" + //
+					"	public ATableDTO convert(ATable model) {\n" + //
+					"		if (model == null) {\n" + //
 					"			return null;\n" + //
 					"		}\n" + //
 					"		return new ATableDTO()\n" + //
-					"				.setId(so.getId())\n" + //
-					"				.setADate(so.getADate())\n" + //
-					"				.setDescription(so.getDescription());\n" + //
+					"				.setId(model.getId())\n" + //
+					"				.setADate(model.getADate())\n" + //
+					"				.setDescription(model.getDescription());\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	public List<ATableDTO> convert(List<ATableSO> sos) {\n" + //
-					"		if (sos == null) {\n" + //
+					"	public List<ATableDTO> convert(List<ATable> models) {\n" + //
+					"		if (models == null) {\n" + //
 					"			return null;\n" + //
 					"		}\n" + //
-					"		return sos.stream().map(this::convert).collect(Collectors.toList());\n" + //
+					"		return models.stream().map(this::convert).collect(Collectors.toList());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"}";
@@ -96,7 +96,7 @@ public class DTOConverterClassCodeGeneratorTest {
 					"import lombok.Generated;\n" + //
 					"\n" + //
 					"import " + BASE_PACKAGE_NAME + ".rest.dto.ATableDTO;\n" + //
-					"import " + BASE_PACKAGE_NAME + ".service.model.ATableSO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * A DTO converter for a_tables.\n" + //
@@ -107,21 +107,21 @@ public class DTOConverterClassCodeGeneratorTest {
 					"@Named\n" + //
 					"public class ATableDTOConverter {\n" + //
 					"\n" + //
-					"	public ATableDTO convert(ATableSO so) {\n" + //
-					"		if (so == null) {\n" + //
+					"	public ATableDTO convert(ATable model) {\n" + //
+					"		if (model == null) {\n" + //
 					"			return null;\n" + //
 					"		}\n" + //
 					"		return new ATableDTO()\n" + //
-					"				.setId(so.getId().getKey())\n" + //
-					"				.setADate(so.getADate())\n" + //
-					"				.setDescription(so.getDescription());\n" + //
+					"				.setId(model.getId().getKey())\n" + //
+					"				.setADate(model.getADate())\n" + //
+					"				.setDescription(model.getDescription());\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	public List<ATableDTO> convert(List<ATableSO> sos) {\n" + //
-					"		if (sos == null) {\n" + //
+					"	public List<ATableDTO> convert(List<ATable> models) {\n" + //
+					"		if (models == null) {\n" + //
 					"			return null;\n" + //
 					"		}\n" + //
-					"		return sos.stream().map(this::convert).collect(Collectors.toList());\n" + //
+					"		return models.stream().map(this::convert).collect(Collectors.toList());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"}";
@@ -148,8 +148,7 @@ public class DTOConverterClassCodeGeneratorTest {
 					"import lombok.Generated;\n" + //
 					"\n" + //
 					"import " + BASE_PACKAGE_NAME + ".rest.dto.ATableDTO;\n" + //
-					"import " + BASE_PACKAGE_NAME + ".service.model.ATableSO;\n" + //
-					"\n" + //
+					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + /**/ "\n" + //
 					"/**\n" + //
 					" * A DTO converter for a_tables.\n" + //
 					" *\n" + //
@@ -159,21 +158,21 @@ public class DTOConverterClassCodeGeneratorTest {
 					"@Named\n" + //
 					"public class ATableDTOConverter {\n" + //
 					"\n" + //
-					"	public ATableDTO convert(ATableSO so) {\n" + //
-					"		if (so == null) {\n" + //
+					"	public ATableDTO convert(ATable model) {\n" + //
+					"		if (model == null) {\n" + //
 					"			return null;\n" + //
 					"		}\n" + //
 					"		return new ATableDTO()\n" + //
-					"				.setId(so.getId().getKey())\n" + //
-					"				.setADate(so.getADate())\n" + //
-					"				.setDescription(so.getDescription());\n" + //
+					"				.setId(model.getId().getKey())\n" + //
+					"				.setADate(model.getADate())\n" + //
+					"				.setDescription(model.getDescription());\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	public List<ATableDTO> convert(List<ATableSO> sos) {\n" + //
-					"		if (sos == null) {\n" + //
+					"	public List<ATableDTO> convert(List<ATable> models) {\n" + //
+					"		if (models == null) {\n" + //
 					"			return null;\n" + //
 					"		}\n" + //
-					"		return sos.stream().map(this::convert).collect(Collectors.toList());\n" + //
+					"		return models.stream().map(this::convert).collect(Collectors.toList());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"}";

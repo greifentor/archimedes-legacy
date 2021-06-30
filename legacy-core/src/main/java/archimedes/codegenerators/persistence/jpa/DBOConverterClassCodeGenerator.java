@@ -52,13 +52,13 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
 		context.put("PackageName", getPackageName(model, table));
-		context.put("SOClassName", serviceNameGenerator.getSOClassName(table));
+		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
 		context
 				.put(
-						"SOClassNameQualified",
+						"ModelClassNameQualified",
 						getQualifiedName(
-								serviceNameGenerator.getSOPackageName(model, table),
-								serviceNameGenerator.getSOClassName(table)));
+								serviceNameGenerator.getModelPackageName(model, table),
+								serviceNameGenerator.getModelClassName(table)));
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns, DataModel model) {

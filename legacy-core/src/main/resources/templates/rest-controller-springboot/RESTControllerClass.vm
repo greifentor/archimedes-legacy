@@ -13,7 +13,7 @@ import ${DTOConverterClassNameQualified};
 import ${DTOClassNameQualified};
 import ${ListDTOClassNameQualified};
 #if ($GenerateIdClass)
-import ${IdSOClassNameQualified};
+import ${IdModelClassNameQualified};
 #end
 import ${ServiceClassNameQualified};
 

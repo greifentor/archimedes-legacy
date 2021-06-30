@@ -12,7 +12,7 @@ import ${ImportLocalDate};
 import lombok.Generated;
 
 import ${DTOClassNameQualified};
-import ${SOClassNameQualified};
+import ${ModelClassNameQualified};
 
 /**
  * A DTO converter for ${PluralName}.
@@ -23,21 +23,21 @@ import ${SOClassNameQualified};
 @Named
 public class ${ClassName} {
 
-	public ${DTOClassName} convert(${SOClassName} so) {
-		if (so == null) {
+	public ${DTOClassName} convert(${ModelClassName} model) {
+		if (model == null) {
 			return null;
 		}
 		return new ${DTOClassName}()
 #foreach($Column in $ColumnData)
-				.${Column.getSetterName()}(so.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
+				.${Column.getSetterName()}(model.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
 #end
 	}
 
-	public List<${DTOClassName}> convert(List<${SOClassName}> sos) {
-		if (sos == null) {
+	public List<${DTOClassName}> convert(List<${ModelClassName}> models) {
+		if (models == null) {
 			return null;
 		}
-		return sos.stream().map(this::convert).collect(Collectors.toList());
+		return models.stream().map(this::convert).collect(Collectors.toList());
 	}
 
 }

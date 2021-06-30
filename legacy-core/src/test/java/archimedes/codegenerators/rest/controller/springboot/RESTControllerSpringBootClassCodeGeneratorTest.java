@@ -51,7 +51,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"import base.pack.age.name.rest.converter.ATableDTOConverter;\n" + //
 					"import base.pack.age.name.rest.dto.ATableDTO;\n" + //
 					"import base.pack.age.name.rest.dto.ATableListDTO;\n" + //
-					"import base.pack.age.name.service.ATableService;\n" + //
+					"import base.pack.age.name.core.ATableService;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * A REST controller for a tables.\n" + //
@@ -107,8 +107,8 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"import base.pack.age.name.rest.converter.ATableDTOConverter;\n" + //
 					"import base.pack.age.name.rest.dto.ATableDTO;\n" + //
 					"import base.pack.age.name.rest.dto.ATableListDTO;\n" + //
-					"import base.pack.age.name.service.model.ATableIdSO;\n" + //
-					"import base.pack.age.name.service.ATableService;\n" + //
+					"import base.pack.age.name.core.model.ATableId;\n" + //
+					"import base.pack.age.name.core.ATableService;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * A REST controller for a tables.\n" + //
@@ -134,7 +134,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"		return converter\n" + //
 					"				.convert(\n" + //
 					"						service\n" + //
-					"								.findById(new ATableIdSO().setKey(id))\n" + //
+					"								.findById(new ATableId().setKey(id))\n" + //
 					"								.orElseThrow(() -> new NoSuchElementException(\"a table not found with id:\" + id)));\n"
 					+ //
 					"	}\n" + //
@@ -165,8 +165,8 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"import base.pack.age.name.rest.converter.ATableDTOConverter;\n" + //
 					"import base.pack.age.name.rest.dto.ATableDTO;\n" + //
 					"import base.pack.age.name.rest.dto.ATableListDTO;\n" + //
-					"import base.pack.age.name.service.model.ATableIdSO;\n" + //
-					"import base.pack.age.name.service.ATableService;\n" + //
+					"import base.pack.age.name.core.model.ATableId;\n" + //
+					"import base.pack.age.name.core.ATableService;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * A REST controller for a tables.\n" + //
@@ -192,7 +192,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"		return converter\n" + //
 					"				.convert(\n" + //
 					"						service\n" + //
-					"								.findById(new ATableIdSO().setKey(id))\n" + //
+					"								.findById(new ATableId().setKey(id))\n" + //
 					"								.orElseThrow(() -> new NoSuchElementException(\"a table not found with id:\" + id)));\n"
 					+ //
 					"	}\n" + //

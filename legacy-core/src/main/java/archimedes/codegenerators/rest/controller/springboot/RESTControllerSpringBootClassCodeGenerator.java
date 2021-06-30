@@ -58,10 +58,10 @@ public class RESTControllerSpringBootClassCodeGenerator extends AbstractClassCod
 		context.put("IdCall", getIdCall(model, table));
 		context
 				.put(
-						"IdSOClassNameQualified",
+						"IdModelClassNameQualified",
 						getQualifiedName(
-								serviceNameGenerator.getSOPackageName(model, table),
-								serviceNameGenerator.getIdSOClassName(table)));
+								serviceNameGenerator.getModelPackageName(model, table),
+								serviceNameGenerator.getIdModelClassName(table)));
 		context
 				.put(
 						"ListDTOClassNameQualified",
@@ -88,17 +88,17 @@ public class RESTControllerSpringBootClassCodeGenerator extends AbstractClassCod
 		context.put("SimpleName", nameGenerator.getSimpleName(table));
 		context
 				.put(
-						"SOClassNameQualified",
+						"ModelClassNameQualified",
 						getQualifiedName(
-								serviceNameGenerator.getSOPackageName(model, table),
-								serviceNameGenerator.getSOClassName(table)));
+								serviceNameGenerator.getModelPackageName(model, table),
+								serviceNameGenerator.getModelClassName(table)));
 		context.put("URL", nameGenerator.getURLName(model, table));
 	}
 
 	private String getIdCall(DataModel model, TableModel table) {
 		VelocityContext context = new VelocityContext();
 		context.put("GenerateIdClass", isGenerateIdClass(model, table));
-		context.put("IdSOClass", serviceNameGenerator.getIdSOClassName(table));
+		context.put("IdModelClass", serviceNameGenerator.getIdModelClassName(table));
 		return processTemplate(context, "FindByIdCall.vm");
 	}
 
