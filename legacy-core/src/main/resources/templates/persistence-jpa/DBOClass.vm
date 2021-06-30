@@ -11,6 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 #end
 import javax.persistence.Id;
+#if ($Autoincrement and ${Autoincrement.contains("SEQUENCE")})
+import javax.persistence.SequenceGenerator;
+#end
 import javax.persistence.Table;
 
 #if ($POJOMode == "BUILDER")
@@ -24,11 +27,13 @@ import lombok.Generated;
 import lombok.experimental.Accessors;
 #end
 
+#if (!$CommentsOff )
 /**
  * A DBO for ${PluralName}.
  *
  * ${Generated}
  */
+#end
 #if ($POJOMode == "CHAIN")
 @Accessors(chain = true)
 #elseif ($POJOMode == "BUILDER")
@@ -44,7 +49,7 @@ public class ${ClassName} {
 
 #foreach($Column in $ColumnData)
 #foreach($Annotation in ${Column.getAnnotations()})
-	@${Annotation.getName()}#if (${Annotation.getParameters().isEmpty()} == false)#foreach($Parameter in $Annotation.getParameters())($Parameter.getName() = $Parameter.getValue())#end#end
+	${Annotation.toJavaCode()}
 #end
 	private ${Column.getFieldType()} ${Column.getFieldName()};
 #end

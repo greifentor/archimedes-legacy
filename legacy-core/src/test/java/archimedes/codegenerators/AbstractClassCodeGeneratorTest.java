@@ -1,7 +1,9 @@
 package archimedes.codegenerators;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -118,6 +120,65 @@ public class AbstractClassCodeGeneratorTest {
 			POJOMode returned = unitUnderTest.getPOJOMode(model, table);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class TestOfMethod_isCommentsOff_DataModel_TableModel {
+
+		@Test
+		void passNullValueAsModel_ReturnsFalse() {
+			assertFalse(unitUnderTest.isCommentsOff(null, table));
+		}
+
+		@Test
+		void passNullValueAsTable_ReturnsFalse() {
+			assertFalse(unitUnderTest.isCommentsOff(model, null));
+		}
+
+		@Test
+		void passModelWithNoCOMMENTSOption_ReturnsFalse() {
+			// Prepare
+			when(model.getOptionByName(AbstractClassCodeGenerator.COMMENTS)).thenReturn(null);
+			// Run & Check
+			assertFalse(unitUnderTest.isCommentsOff(model, table));
+		}
+
+		@Test
+		void passModelWithEmptyValueCOMMENTSOption_ReturnsFalse() {
+			// Prepare
+			when(model.getOptionByName(AbstractClassCodeGenerator.COMMENTS))
+					.thenReturn(new Option(AbstractClassCodeGenerator.COMMENTS, ""));
+			// Run & Check
+			assertFalse(unitUnderTest.isCommentsOff(model, table));
+		}
+
+		@Test
+		void passModelWithNullValueCOMMENTSOption_ReturnsFalse() {
+			// Prepare
+			when(model.getOptionByName(AbstractClassCodeGenerator.COMMENTS))
+					.thenReturn(new Option(AbstractClassCodeGenerator.COMMENTS, null));
+			// Run & Check
+			assertFalse(unitUnderTest.isCommentsOff(model, table));
+		}
+
+		@Test
+		void passModelWithNullValueONCOMMENTSOption_ReturnsFalse() {
+			// Prepare
+			when(model.getOptionByName(AbstractClassCodeGenerator.COMMENTS))
+					.thenReturn(new Option(AbstractClassCodeGenerator.COMMENTS, "ON"));
+			// Run & Check
+			assertFalse(unitUnderTest.isCommentsOff(model, table));
+		}
+
+		@Test
+		void passModelWithNullValueOffCOMMENTSOption_ReturnsTrue() {
+			// Prepare
+			when(model.getOptionByName(AbstractClassCodeGenerator.COMMENTS))
+					.thenReturn(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
+			// Run & Check
+			assertTrue(unitUnderTest.isCommentsOff(model, table));
 		}
 
 	}

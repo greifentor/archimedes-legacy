@@ -18,6 +18,10 @@ public class Columns {
 	public static class ParameterData {
 		private String name;
 		private String value;
+
+		public String toJavaCode() {
+			return getName() + " = " + getValue();
+		}
 	}
 
 	@Accessors(chain = true)
@@ -25,6 +29,18 @@ public class Columns {
 	public static class AnnotationData {
 		private String name;
 		private List<ParameterData> parameters = new ArrayList<>();
+
+		public String toJavaCode() {
+			String s = "@" + getName();
+			if (!getParameters().isEmpty()) {
+				s += "(" + getParameters()
+						.stream()
+						.map(ParameterData::toJavaCode)
+						.reduce((s0, s1) -> s0 + ", " + s1)
+						.orElse("") + ")";
+			}
+			return s;
+		}
 	}
 
 	@Accessors(chain = true)

@@ -1,15 +1,20 @@
 package archimedes.codegenerators.persistence.jpa;
 
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
-import archimedes.model.DataModel;
-import archimedes.scheme.xml.ModelXMLReader;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import archimedes.scheme.Option;
+import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
 class JPAPersistenceAdapterClassCodeGeneratorTest {
@@ -30,39 +35,35 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = getExpected("persistence");
+			String expected = getExpected(null, "persistence", false);
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"
-			));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
 		}
 
-		private String getExpected(String packageName) {
-			return getExpected(null, packageName);
-		}
-
-		private String getExpected(String prefix, String packageName) {
-			return "package " + BASE_PACKAGE_NAME + "." + (prefix != null
-					? prefix + "."
-					: "") + packageName + ";\n" + //
-					"\n" + //
-					"import java.util.Optional;\n" + //
-					"\n" + //
-					"import javax.inject.Inject;\n" + //
-					"import javax.inject.Named;\n" + //
-					"\n" + //
-					"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
-					"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
-					"import base.pack.age.name.service.model.ATableSO;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A DBO persistence adapter for a_tables.\n" + //
-					" *\n" + //
-					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-					" */\n" + //
-					"@Named\n" + //
+		private String getExpected(String prefix, String packageName, boolean suppressComment) {
+			String s =
+					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
+							"\n" + //
+							"import java.util.Optional;\n" + //
+							"\n" + //
+							"import javax.inject.Inject;\n" + //
+							"import javax.inject.Named;\n" + //
+							"\n" + //
+							"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
+							"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
+							"import base.pack.age.name.service.model.ATableSO;\n" + //
+							"\n";
+			if (!suppressComment) {
+				s += "/**\n" + //
+						" * A DBO persistence adapter for a_tables.\n" + //
+						" *\n" + //
+						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+						" */\n";
+			}
+			s += "@Named\n" + //
 					"public class ATableJPAPersistenceAdapter {\n" + //
 					"\n" + //
 					"\t@Inject\n" + //
@@ -70,10 +71,37 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 					"\t@Inject\n" + //
 					"\tprivate ATableDBORepository repository;\n" + //
 					"\n" + //
+					"\tpublic ATableSO create(ATableSO so) {\n" + //
+					"\t\tso.setId(null);\n" + //
+					"\t\treturn converter.toSO(repository.save(converter.toDbo(so)));\n" + //
+					"\t}\n" + //
+					"\n" + //
 					"\tpublic Optional<ATableSO> findById(Long key) {\n" + //
 					"\t\treturn repository.findById(key).map(dbo -> converter.toSO(dbo));\n" + //
 					"\t}\n" + //
+					"\n" + //
+					"\tpublic ATableSO update(ATableSO so) {\n" + //
+					"\t\treturn converter.toSO(repository.save(converter.toDbo(so)));\n" + //
+					"\t}\n" + //
+					"\n" + //
+					"\tpublic void delete(ATableSO so) {\n" + //
+					"\t\treturn repository.delete(so.getId());\n" + //
+					"\t}\n" + //
 					"\n}";
+			return s;
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithSuppressedComments() {
+			// Prepare
+			String expected = getExpected(null, "persistence", true);
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
 		}
 
 	}

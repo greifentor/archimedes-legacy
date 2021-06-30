@@ -38,9 +38,10 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		List<ColumnData> columnData = getColumnData(table.getColumns());
-		context.put("Autoincrement", hasAutoincrementField(table));
+		context.put("Autoincrement", getAutoincrementMode(columnData));
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
+		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("EntityName", nameGenerator.getClassName(table));
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
@@ -50,11 +51,26 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		context.put("TableName", table.getName());
 	}
 
-	private boolean hasAutoincrementField(TableModel table) {
-		return Arrays
-				.asList(table.getColumns())
+	private String getAutoincrementMode(List<ColumnData> columnData) {
+		return columnData
 				.stream()
-				.anyMatch(column -> column.getOptionByName(AbstractClassCodeGenerator.AUTOINCREMENT) != null);
+				.filter(
+						column -> column
+								.getAnnotations()
+								.stream()
+								.anyMatch(annotation -> annotation.getName().equals("GeneratedValue")))
+				.map(column -> getGeneratedValueType(column.getAnnotations()))
+				.reduce((s0, s1) -> s0 + "," + s1)
+				.orElse(null);
+	}
+
+	private String getGeneratedValueType(List<AnnotationData> annotations) {
+		return annotations
+				.stream()
+				.filter(annotation -> annotation.getName().equals("GeneratedValue"))
+				.map(annotation -> annotation.getParameters().get(0).toJavaCode().replace("GenerationType.", ""))
+				.findFirst()
+				.orElse(null);
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns) {
@@ -76,16 +92,53 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		}
 		OptionModel autoincrement = column.getOptionByName(AbstractClassCodeGenerator.AUTOINCREMENT);
 		if (autoincrement != null) {
-			annotations
-					.add(
-							new AnnotationData()
-									.setName("GeneratedValue")
-									.setParameters(
-											Arrays
-													.asList(
-															new ParameterData()
-																	.setName("strategy")
-																	.setValue("GenerationType.IDENTITY"))));
+			if (autoincrement.getParameter().equals("IDENTITY")) {
+				annotations
+						.add(
+								new AnnotationData()
+										.setName("GeneratedValue")
+										.setParameters(
+												Arrays
+														.asList(
+																new ParameterData()
+																		.setName("strategy")
+																		.setValue("GenerationType.IDENTITY"))));
+			} else if (autoincrement.getParameter().equals("SEQUENCE")) {
+				String className = nameGenerator.getClassName(column.getTable());
+				String sequenceGeneratorName = className + "Sequence";
+				String sequenceName =
+						column.getTable().getName().toLowerCase() + "_" + column.getName().toLowerCase() + "_seq";
+				annotations
+						.add(
+								new AnnotationData()
+										.setName("SequenceGenerator")
+										.setParameters(
+												Arrays
+														.asList(
+																new ParameterData()
+																		.setName("allocationSize")
+																		.setValue("1"),
+																new ParameterData()
+																		.setName("name")
+																		.setValue("\"" + sequenceGeneratorName + "\""),
+																new ParameterData()
+																		.setName("sequenceName")
+																		.setValue("\"" + sequenceName + "\""))));
+				annotations
+						.add(
+								new AnnotationData()
+										.setName("GeneratedValue")
+										.setParameters(
+												Arrays
+														.asList(
+																new ParameterData()
+																		.setName("strategy")
+																		.setValue("GenerationType.SEQUENCE"),
+																new ParameterData()
+																		.setName("generator")
+																		.setValue(
+																				"\"" + sequenceGeneratorName + "\""))));
+			}
 		}
 		annotations
 				.add(

@@ -9,11 +9,13 @@ import ${DBOConverterPackageName}.${DBOConverterClassName};
 import ${JPARepositoryPackageName}.${JPARepositoryClassName};
 import ${SOPackageName}.${SOClassName};
 
+#if (!$CommentsOff )
 /**
  * A DBO persistence adapter for ${PluralName}.
  *
  * ${Generated}
  */
+#end
 @Named
 public class ${ClassName} {
 
@@ -22,8 +24,21 @@ public class ${ClassName} {
 	@Inject
 	private ${JPARepositoryClassName} repository;
 
+	public ${SOClassName} create(${SOClassName} so) {
+		so.set${IdFieldNameCamelCase}(null);
+		return converter.toSO(repository.save(converter.toDbo(so)));
+	}
+
 	public Optional<${SOClassName}> findById(${IdClassName} key) {
 		return repository.findById(key).map(dbo -> converter.toSO(dbo));
+	}
+
+	public ${SOClassName} update(${SOClassName} so) {
+		return converter.toSO(repository.save(converter.toDbo(so)));
+	}
+
+	public void delete(${SOClassName} so) {
+		return repository.delete(so.getId());
 	}
 
 }

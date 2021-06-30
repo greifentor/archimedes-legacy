@@ -1,15 +1,15 @@
 package archimedes.codegenerators.persistence.jpa;
 
-import archimedes.codegenerators.service.ServiceNameGenerator;
+import java.util.Arrays;
+
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
-
-import java.util.Arrays;
 
 /**
  * A code generator for JPA persistence adapters.
@@ -32,14 +32,25 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		context.put("ClassName", getClassName(table));
+		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DBOConverterClassName", nameGenerator.getDBOConverterClassName(table));
 		context.put("DBOConverterPackageName", nameGenerator.getDBOConverterPackageName(model, table));
+		context.put("IdClassName", getIdClassName(table));
+		context.put("IdFieldNameCamelCase", getIdFieldNameCamelCase(table));
 		context.put("JPARepositoryClassName", nameGenerator.getJPARepositoryInterfaceName(table));
 		context.put("JPARepositoryPackageName", nameGenerator.getJPARepositoryPackageName(model, table));
 		context.put("SOClassName", serviceNameGenerator.getSOClassName(table));
 		context.put("SOPackageName", serviceNameGenerator.getSOPackageName(model, table));
-		context.put("IdClassName", getIdClassName(table));
 		context.put("PackageName", getPackageName(model, table));
+	}
+
+	private String getIdFieldNameCamelCase(TableModel table) {
+		return Arrays
+				.asList(table.getPrimaryKeyColumns())
+				.stream()
+				.findFirst()
+				.map(column -> nameGenerator.getClassName(column.getName()))
+				.orElse("UNKNOWN");
 	}
 
 	private String getIdClassName(TableModel table) {

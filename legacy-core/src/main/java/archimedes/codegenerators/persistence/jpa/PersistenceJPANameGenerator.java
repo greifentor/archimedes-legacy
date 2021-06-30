@@ -13,6 +13,7 @@ import archimedes.model.TableModel;
  */
 public class PersistenceJPANameGenerator extends NameGenerator {
 
+	public static final String ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX = "ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_ADAPTER_PACKAGE_NAME = "ALTERNATE_ADAPTER_PACKAGE_NAME";
 	public static final String ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX = "ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_DBOCONVERTER_PACKAGE_NAME = "ALTERNATE_DBOCONVERTER_PACKAGE_NAME";
@@ -66,7 +67,16 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getJPAPersistenceAdapterClassName(TableModel table) {
-		return table != null ? getClassName(table) + "JPAPersistenceAdapter" : null;
+		return table != null ? getClassName(table) + getJPAPersistenceAdapterClassNameSuffix(table) : null;
+	}
+
+	private String getJPAPersistenceAdapterClassNameSuffix(TableModel table) {
+		return table.getDataModel() == null
+				? "JPAPersistenceAdapter"
+				: OptionGetter
+						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX)
+						.map(s -> s)
+						.orElse("JPAPersistenceAdapter");
 	}
 
 	public String getJPAPersistenceAdapterPackageName(DataModel model, TableModel table) {

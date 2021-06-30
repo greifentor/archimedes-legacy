@@ -22,6 +22,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	public static final String ALTERNATE_MODULE_PREFIX = "ALTERNATE_MODULE_PREFIX";
 	public static final String AUTOINCREMENT = "AUTOINCREMENT";
+	public static final String COMMENTS = "COMMENTS";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
 	public static final String MODULE_MODE = "MODULE_MODE";
 	public static final String MAPPERS = "MAPPERS";
@@ -136,6 +137,16 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	public String getPackageName(DataModel model, TableModel table) {
 		return getPackageName(model, table);
+	}
+
+	protected boolean isCommentsOff(DataModel model, TableModel table) {
+		if ((model == null) || (table == null)) {
+			return false;
+		}
+		return OptionGetter
+				.getOptionByName(model, COMMENTS)
+				.map(option -> "off".equalsIgnoreCase(option.getParameter()))
+				.orElse(false);
 	}
 
 }

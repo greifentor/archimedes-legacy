@@ -319,6 +319,23 @@ public class PersistenceJPANameGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void getJPAPersistenceAdapterClassName_passAValidTableModelWithAlternateClassName_ReturnsACorrectJPAPersistenceAdapterClassName() {
+			// Prepare
+			String expected = "TablePersistenceAdapter";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX,
+									"PersistenceAdapter"));
+			// Run
+			String returned = unitUnderTest.getJPAPersistenceAdapterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 	@DisplayName("tests for DBO package names")

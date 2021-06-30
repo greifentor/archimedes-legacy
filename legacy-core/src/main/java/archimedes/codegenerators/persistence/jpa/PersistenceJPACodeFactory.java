@@ -1,5 +1,8 @@
 package archimedes.codegenerators.persistence.jpa;
 
+import java.util.Arrays;
+import java.util.List;
+
 import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
@@ -9,9 +12,6 @@ import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.model.OptionType;
 import archimedes.model.PredeterminedOptionProvider;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A code factory for JPA persistence ports and adapters for CRUD operations.
@@ -57,6 +57,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 				return new String[]{AbstractClassCodeGenerator.AUTOINCREMENT};
 			case MODEL:
 				return new String[]{
+						PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX,
 						PersistenceJPANameGenerator.ALTERNATE_ADAPTER_PACKAGE_NAME,
 						PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX,
 						PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_PACKAGE_NAME,
@@ -65,6 +66,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 						PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX,
 						PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME,
 						AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
+						AbstractClassCodeGenerator.COMMENTS,
 						AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 						AbstractClassCodeGenerator.MODULE_MODE
 				};

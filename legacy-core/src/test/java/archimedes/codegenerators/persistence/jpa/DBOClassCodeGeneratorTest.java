@@ -45,29 +45,32 @@ public class DBOClassCodeGeneratorTest {
 		}
 
 		private String getExpected(String packageName) {
-			return getExpected(null, packageName);
+			return getExpected(null, packageName, false);
 		}
 
-		private String getExpected(String prefix, String packageName) {
-			return "package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
-					"\n" + //
-					"import java.time.LocalDate;\n" + //
-					"\n" + //
-					"import javax.persistence.Column;\n" + //
-					"import javax.persistence.Entity;\n" + //
-					"import javax.persistence.Id;\n" + //
-					"import javax.persistence.Table;\n" + //
-					"\n" + //
-					"import lombok.Data;\n" + //
-					"import lombok.Generated;\n" + //
-					"import lombok.experimental.Accessors;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A DBO for a_tables.\n" + //
-					" *\n" + //
-					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
-					" */\n" + //
-					"@Accessors(chain = true)\n" + //
+		private String getExpected(String prefix, String packageName, boolean suppressComment) {
+			String s =
+					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
+							"\n" + //
+							"import java.time.LocalDate;\n" + //
+							"\n" + //
+							"import javax.persistence.Column;\n" + //
+							"import javax.persistence.Entity;\n" + //
+							"import javax.persistence.Id;\n" + //
+							"import javax.persistence.Table;\n" + //
+							"\n" + //
+							"import lombok.Data;\n" + //
+							"import lombok.Generated;\n" + //
+							"import lombok.experimental.Accessors;\n" + //
+							"\n";
+			if (!suppressComment) {
+				s += "/**\n" + //
+						" * A DBO for a_tables.\n" + //
+						" *\n" + //
+						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+						" */\n";
+			}
+			s += "@Accessors(chain = true)\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
 					"@Entity(name = \"ATable\")\n" + //
@@ -83,6 +86,7 @@ public class DBOClassCodeGeneratorTest {
 					"	private String description;\n" + //
 					"\n" + //
 					"}";
+			return s;
 		}
 
 		@Test
@@ -121,7 +125,7 @@ public class DBOClassCodeGeneratorTest {
 		void happyRunForASimpleObjectWithModuleForTable() {
 			// Prepare
 			String prefix = "prefix";
-			String expected = getExpected(prefix, "persistence.entity");
+			String expected = getExpected(prefix, "persistence.entity", false);
 			DataModel dataModel = readDataModel("Model.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			table.addOption(new Option(PersistenceJPANameGenerator.MODULE, prefix));
@@ -131,19 +135,35 @@ public class DBOClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
-		private String getExpectedPOJOModeBuilder(String packageName, boolean autoincrement) {
+		@Test
+		void happyRunForASimpleObjectWithSuppressedComment() {
+			// Prepare
+			String expected = getExpected(null, "persistence.entity", true);
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String getExpectedPOJOModeBuilder(String packageName, String generatedValue) {
 			String s = "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
 					"import javax.persistence.Column;\n" + //
 					"import javax.persistence.Entity;\n";
-			if (autoincrement) {
+			if (!generatedValue.equals("")) {
 				s += "import javax.persistence.GeneratedValue;\n" + //
 						"import javax.persistence.GenerationType;\n";
 			}
-			s += "import javax.persistence.Id;\n" + //
-					"import javax.persistence.Table;\n" + //
+			s += "import javax.persistence.Id;\n";
+			if (generatedValue.contains("SEQUENCE")) {
+				s += "import javax.persistence.SequenceGenerator;\n";
+			}
+			s += "import javax.persistence.Table;\n" + //
 					"\n" + //
 					"import lombok.AllArgsConstructor;\n" + //
 					"import lombok.Builder;\n" + //
@@ -166,8 +186,12 @@ public class DBOClassCodeGeneratorTest {
 					"public class ATableDBO {\n" + //
 					"\n" + //
 					"	@Id\n";
-			if (autoincrement) {
+			if (generatedValue.equals("IDENTITY")) {
 				s += "	@GeneratedValue(strategy = GenerationType.IDENTITY)\n";
+			} else if (generatedValue.equals("SEQUENCE")) {
+				s += "	@SequenceGenerator(allocationSize = 1, name = \"ATableSequence\", sequenceName = \"a_table_id_seq\")\n"
+						+ //
+						"	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = \"ATableSequence\")\n";
 			}
 			return s + "	@Column(name = \"ID\")\n" + //
 					"	private long id;\n" + //
@@ -180,9 +204,9 @@ public class DBOClassCodeGeneratorTest {
 		}
 
 		@Test
-		void happyRunForASimpleObjectPOJOModeBUILD() {
+		void happyRunForASimpleObjectPOJOModeBUILDWithIDENTITY() {
 			// Prepare
-			String expected = getExpectedPOJOModeBuilder("persistence.entity", true);
+			String expected = getExpectedPOJOModeBuilder("persistence.entity", "IDENTITY");
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel
 					.addOption(
@@ -193,7 +217,27 @@ public class DBOClassCodeGeneratorTest {
 			dataModel
 					.getTableByName("A_TABLE")
 					.getColumnByName("ID")
-					.addOption(new Option(AbstractClassCodeGenerator.AUTOINCREMENT));
+					.addOption(new Option(AbstractClassCodeGenerator.AUTOINCREMENT, "IDENTITY"));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectPOJOModeBUILDWithSEQUENCE() {
+			// Prepare
+			String expected = getExpectedPOJOModeBuilder("persistence.entity", "SEQUENCE");
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel
+					.addOption(
+							new Option(
+									AbstractClassCodeGenerator.POJO_MODE,
+									AbstractClassCodeGenerator.POJO_MODE_BUILDER));
+			// Run
+			dataModel
+					.getTableByName("A_TABLE")
+					.getColumnByName("ID")
+					.addOption(new Option(AbstractClassCodeGenerator.AUTOINCREMENT, "SEQUENCE"));
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
