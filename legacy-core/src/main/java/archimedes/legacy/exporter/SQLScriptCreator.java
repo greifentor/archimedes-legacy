@@ -12,7 +12,7 @@ import de.ollie.dbcomp.comparator.model.ChangeActionCRO;
 public class SQLScriptCreator extends ScriptCreator {
 
 	@Override
-	protected List<String> createScript(List<ChangeActionCRO> changeActions) {
+	protected List<String> createScript(List<ChangeActionCRO> changeActions, String connectionDataOptions) {
 		return null;
 	}
 

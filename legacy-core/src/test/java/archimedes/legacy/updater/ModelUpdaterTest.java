@@ -263,7 +263,7 @@ public class ModelUpdaterTest {
 				.addUpdateReportAction(
 						new UpdateReportAction()
 								.setMessage(
-										"CreateTableChangeActionCRO(columns=[ColumnDataCRO(name=Id, sqlType=BIGINT, nullable=false), ColumnDataCRO(name=Name, sqlType=VARCHAR(255), nullable=false)], tableName=Bank, schemaName=, primaryKeyMemberNames=[Id])")
+										"CreateTableChangeActionCRO(columns=[ColumnDataCRO(name=Id, sqlType=BIGINT, nullable=false), ColumnDataCRO(name=Name, sqlType=VARCHAR(255), nullable=false)], foreignkeys={}, tableName=Bank, schemaName=, primaryKeyMemberNames=[Id])")
 								.setStatus(Status.DONE)
 								.setType(Type.CREATE_TABLE)
 								.setValues("Bank"));

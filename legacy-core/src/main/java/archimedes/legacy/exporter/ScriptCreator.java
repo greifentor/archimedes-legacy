@@ -65,7 +65,10 @@ public abstract class ScriptCreator {
 																converter.convert(d))
 														.getChangeActions();
 												new FrameTextViewer(
-														new Vector<String>(createScript(changeActions)),
+														new Vector<String>(
+																createScript(
+																		changeActions,
+																		connectionData.getOptions())),
 														DefaultFrameTextViewerComponentFactory.INSTANCE,
 														guiBundle.getInifile(),
 														getViewerTitel(),
@@ -93,7 +96,7 @@ public abstract class ScriptCreator {
 
 	}
 
-	protected abstract List<String> createScript(List<ChangeActionCRO> changeActions);
+	protected abstract List<String> createScript(List<ChangeActionCRO> changeActions, String connectionDataOptions);
 
 	protected abstract String getViewerTitel();
 

@@ -8,6 +8,7 @@ import java.util.List;
 
 import de.ollie.dbcomp.comparator.model.ChangeActionCRO;
 import de.ollie.dbcomp.liquibase.writer.ChangeActionToDatabaseChangeLogConverter;
+import de.ollie.dbcomp.liquibase.writer.processors.ChangeProcessorConfiguration;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.serializer.core.xml.XMLChangeLogSerializer;
 
@@ -19,9 +20,15 @@ import liquibase.serializer.core.xml.XMLChangeLogSerializer;
 public class LiquibaseScriptCreator extends ScriptCreator {
 
 	@Override
-	protected List<String> createScript(List<ChangeActionCRO> changeActions) {
-		DatabaseChangeLog databaseChangeLog = new ChangeActionToDatabaseChangeLogConverter().convert(changeActions);
+	protected List<String> createScript(List<ChangeActionCRO> changeActions, String connectionDataOptions) {
+		DatabaseChangeLog databaseChangeLog = new ChangeActionToDatabaseChangeLogConverter()
+				.convert(changeActions, createConfiguration(connectionDataOptions));
 		return Arrays.asList(exportDatabaseChangeLog(databaseChangeLog).toString());
+	}
+
+	private ChangeProcessorConfiguration createConfiguration(String connectionDataOptions) {
+		return new ChangeProcessorConfiguration()
+				.setSchemeNameToSet(!connectionDataOptions.contains("SUPPRESS_SCHEME_NAME"));
 	}
 
 	@Override
