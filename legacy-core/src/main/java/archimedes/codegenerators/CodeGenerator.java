@@ -18,4 +18,8 @@ public interface CodeGenerator {
 
 	String getPackageName(DataModel model, TableModel table);
 
+	default String getName() {
+		return getClass().getSimpleName();
+	}
+
 }

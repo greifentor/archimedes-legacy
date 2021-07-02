@@ -1,19 +1,18 @@
 package archimedes.codegenerators;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import archimedes.acf.checker.ModelChecker;
 import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEvent;
 import archimedes.legacy.gui.Counter;
 import archimedes.model.TableModel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 /**
  * A base class for class code factories.
@@ -41,15 +40,23 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 				Counter stepCounter = new Counter(1);
 				generators.forEach(codeGenerator -> {
 					String fileName = codeGenerator.getSourceFileName(path, dataModel, tableModel);
-					incrementStepProgress(stepCounter, "- writing file: " + fileName);
+					String generatorName = codeGenerator.getName();
 					if (isReadyToOverride(fileName) && (codeGenerator instanceof AbstractClassCodeGenerator<?>)) {
 						AbstractClassCodeGenerator<?> generator = ((AbstractClassCodeGenerator<?>) codeGenerator);
 						if (!generator.isToIgnoreFor(dataModel, tableModel)) {
+							incrementStepProgress(stepCounter, "- writing file: " + fileName);
 							generator.generate(path, basePackageName, dataModel, tableModel);
 							LOG.info("- wrote file to: {}", fileName);
 						} else {
-							LOG.info("- ignored file to: {}", fileName);
+							incrementStepProgress(stepCounter, "- ignored by generator: " + generatorName);
+							LOG.info("- ignored table '{}' by generator: {}", tableModel.getName(), generatorName);
 						}
+					} else {
+						incrementStepProgress(
+								stepCounter,
+								"- ignored by not ready to override for generator: " + generatorName);
+						LOG.info("- ignored table '{}' by not ready to override: {}", tableModel.getName(),
+								generatorName);
 					}
 				});
 			} else {
@@ -126,7 +133,7 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 
 	@Override
 	public ModelChecker[] getModelCheckers() {
-		return new ModelChecker[] {};
+		return new ModelChecker[]{};
 	}
 
 	@Override
