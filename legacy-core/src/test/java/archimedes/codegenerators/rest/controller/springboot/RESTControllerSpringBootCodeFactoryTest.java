@@ -49,15 +49,15 @@ public class RESTControllerSpringBootCodeFactoryTest {
 			assertTrue(
 					new File(
 							tempDir.toAbsolutePath().toString() + prefix
-									+ "/src/main/java/base/pack/age/name/rest/dto/ATableDTO.java").exists());
+									+ "/src/main/java/base/pack/age/name/rest/v1/dto/ATableDTO.java").exists());
 			assertTrue(
 					new File(
 							tempDir.toAbsolutePath().toString() + prefix
-									+ "/src/main/java/base/pack/age/name/rest/dto/ATableListDTO.java").exists());
+									+ "/src/main/java/base/pack/age/name/rest/v1/dto/ATableListDTO.java").exists());
 			assertTrue(
 					new File(
 							tempDir.toAbsolutePath().toString() + prefix
-									+ "/src/main/java/base/pack/age/name/rest/converter/ATableDTOConverter.java")
+									+ "/src/main/java/base/pack/age/name/rest/v1/converter/ATableDTOConverter.java")
 											.exists());
 			assertTrue(
 					new File(

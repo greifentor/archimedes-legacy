@@ -1,6 +1,10 @@
 package archimedes.codegenerators.persistence.jpa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -66,27 +70,27 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 			s += "@Named\n" + //
 					"public class ATableJPAPersistenceAdapter {\n" + //
 					"\n" + //
-					"\t@Inject\n" + //
-					"\tprivate ATableDBOConverter converter;\n" + //
-					"\t@Inject\n" + //
-					"\tprivate ATableDBORepository repository;\n" + //
+					"	@Inject\n" + //
+					"	private ATableDBOConverter converter;\n" + //
+					"	@Inject\n" + //
+					"	private ATableDBORepository repository;\n" + //
 					"\n" + //
-					"\tpublic ATable create(ATable model) {\n" + //
-					"\t\tmodel.setId(null);\n" + //
-					"\t\treturn converter.toModel(repository.save(converter.toDbo(model)));\n" + //
-					"\t}\n" + //
+					"	public ATable create(ATable model) {\n" + //
+					"		model.setId(null);\n" + //
+					"		return converter.toModel(repository.save(converter.toDbo(model)));\n" + //
+					"	}\n" + //
 					"\n" + //
-					"\tpublic Optional<ATable> findById(Long key) {\n" + //
-					"\t\treturn repository.findById(key).map(dbo -> converter.toModel(dbo));\n" + //
-					"\t}\n" + //
+					"	public Optional<ATable> findById(Long key) {\n" + //
+					"		return repository.findById(key).map(dbo -> converter.toModel(dbo));\n" + //
+					"	}\n" + //
 					"\n" + //
-					"\tpublic ATable update(ATable model) {\n" + //
-					"\t\treturn converter.toModel(repository.save(converter.toDbo(model)));\n" + //
-					"\t}\n" + //
+					"	public ATable update(ATable model) {\n" + //
+					"		return converter.toModel(repository.save(converter.toDbo(model)));\n" + //
+					"	}\n" + //
 					"\n" + //
-					"\tpublic void delete(ATable model) {\n" + //
-					"\t\treturn repository.delete(model.getId());\n" + //
-					"\t}\n" + //
+					"	public void delete(ATable model) {\n" + //
+					"		return repository.delete(model.getId());\n" + //
+					"	}\n" + //
 					"\n}";
 			return s;
 		}
@@ -102,6 +106,40 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_isToIgnoreFo_DataModel_TableModel {
+
+		@Test
+		void passTableModelAsNullValue_ThrowsAnException() {
+			// Prepare
+			DataModel model = mock(DataModel.class);
+			// Run & Check
+			assertThrows(NullPointerException.class, () -> unitUnderTest.isToIgnoreFor(model, null));
+		}
+
+		@Test
+		void passPassAModelWithNoDependentAttribute_ReturnsFalse() {
+			// Prepare
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			// Run & Check
+			assertFalse(unitUnderTest.isToIgnoreFor(dataModel, table));
+		}
+
+		@Test
+		void passPassAModelWithDependentAttribute_ReturnsTrue() {
+			// Prepare
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table
+					.getColumnByName("Description")
+					.addOption(new Option(JPAPersistenceAdapterDependentClassCodeGenerator.DEPENDENT_ATTRIBUTE));
+			// Run & Check
+			assertTrue(unitUnderTest.isToIgnoreFor(dataModel, table));
 		}
 
 	}

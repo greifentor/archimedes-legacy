@@ -9,10 +9,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import archimedes.codegenerators.rest.controller.springboot.ListDTOClassCodeGenerator;
-import archimedes.codegenerators.rest.controller.springboot.RESTControllerNameGenerator;
+import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
+import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +38,16 @@ public class ListDTOClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectWithoutAnyFields() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest.dto;\n" + //
+			String expected = createExpectedCode(false);
+			DataModel dataModel = readDataModel("Model.xml");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String createExpectedCode(boolean suppressComments) {
+			String code = "package " + BASE_PACKAGE_NAME + ".rest.v1.dto;\n" + //
 					"\n" + //
 					"import java.util.ArrayList;\n" + //
 					"import java.util.List;\n" + //
@@ -45,8 +55,15 @@ public class ListDTOClassCodeGeneratorTest {
 					"import lombok.Data;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.experimental.Accessors;\n" + //
-					"\n" + //
-					"@Accessors(chain = true)\n" + //
+					"\n";
+			if (!suppressComments) {
+				code += "/**\n" + //
+						" * A list DTO for a_tables.\n" + //
+						" *\n" + //
+						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+						" */\n";
+			}
+			code += "@Accessors(chain = true)\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
 					"public class ATableListDTO {\n" + //
@@ -54,7 +71,15 @@ public class ListDTOClassCodeGeneratorTest {
 					"	private List<ATableDTO> content = new ArrayList<>();\n" + //
 					"\n" + //
 					"}";
+			return code;
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithoutAnyFields_NoComments() {
+			// Prepare
+			String expected = createExpectedCode(true);
 			DataModel dataModel = readDataModel("Model.xml");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check

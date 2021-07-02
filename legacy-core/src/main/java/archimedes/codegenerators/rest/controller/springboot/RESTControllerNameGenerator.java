@@ -36,7 +36,7 @@ public class RESTControllerNameGenerator extends NameGenerator {
 	}
 
 	public String getDTOPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "rest.dto", ALTERNATE_DTO_PACKAGE_NAME);
+		return createPackageName(model, table, "rest.v1.dto", ALTERNATE_DTO_PACKAGE_NAME);
 	}
 
 	public String getDTOConverterClassName(TableModel table) {
@@ -63,7 +63,7 @@ public class RESTControllerNameGenerator extends NameGenerator {
 	}
 
 	public String getDTOConverterPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "rest.converter", ALTERNATE_DTOCONVERTER_PACKAGE_NAME);
+		return createPackageName(model, table, "rest.v1.converter", ALTERNATE_DTOCONVERTER_PACKAGE_NAME);
 	}
 
 	public String getListDTOClassName(TableModel table) {

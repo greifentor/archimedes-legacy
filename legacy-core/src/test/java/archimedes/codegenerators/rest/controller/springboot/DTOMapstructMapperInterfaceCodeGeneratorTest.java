@@ -41,30 +41,13 @@ public class DTOMapstructMapperInterfaceCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest.mapper;\n" + //
-					"\n" + //
-					"import base.pack.age.name.core.model.ATable;\n" + //
-					"import base.pack.age.name.rest.dto.ATableDTO;\n" + //
-					"\n" + //
-					"import org.mapstruct.Mapper;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A DTO mapper for a_tables.\n" + //
-					" *\n" + //
-					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
-					" */\n" + //
-					"@Mapper(componentModel = \"spring\")\n" + //
-					"public interface ATableDTOMapper {\n" + //
-					"\n" + //
-					"    ATableDTO toDto(ATable model);\n" + //
-					"\n" + //
-					"    ATable toModel(ATableDTO dto);\n" + //
-					"\n" + //
-					"}";
+			String expected = createExpectedCode(false, false);
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel
 					.addOption(
-							new Option(RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_PACKAGE_NAME, "rest.mapper"));
+							new Option(
+									RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_PACKAGE_NAME,
+									"rest.v1.mapper"));
 			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX, ""));
 			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME, "core.model"));
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.MAPPERS, "mapstruct"));
@@ -74,34 +57,69 @@ public class DTOMapstructMapperInterfaceCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
-		@Test
-		void happyRunForASimpleObjectWithConverterExtension() {
-			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest.mapper;\n" + //
+		private String createExpectedCode(boolean suppressComments, boolean addConverterExtension) {
+			String code = "package " + BASE_PACKAGE_NAME + ".rest.v1.mapper;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.ATable;\n" + //
-					"import base.pack.age.name.rest.dto.ATableDTO;\n" + //
+					"import base.pack.age.name.rest.v1.dto.ATableDTO;\n" + //
 					"\n" + //
-					"import org.mapstruct.Mapper;\n" + //
-					"import org.springframework.core.convert.converter.Converter;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A DTO mapper for a_tables.\n" + //
-					" *\n" + //
-					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
-					" */\n" + //
-					"@Mapper(componentModel = \"spring\")\n" + //
-					"public interface ATableDTOMapper extends Converter<ATable, ATableDTO> {\n" + //
+					"import org.mapstruct.Mapper;\n";
+			if (addConverterExtension) {
+				code += "import org.springframework.core.convert.converter.Converter;\n";
+			}
+			code += "\n";
+			if (!suppressComments) {
+				code += "/**\n" + //
+						" * A DTO mapper for a_tables.\n" + //
+						" *\n" + //
+						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+						" */\n";
+			}
+			code += "@Mapper(componentModel = \"spring\")\n" + //
+					"public interface ATableDTOMapper";
+			if (addConverterExtension) {
+				code += " extends Converter<ATable, ATableDTO>";
+			}
+			code += " {\n" + //
 					"\n" + //
 					"    ATableDTO toDto(ATable model);\n" + //
 					"\n" + //
 					"    ATable toModel(ATableDTO dto);\n" + //
 					"\n" + //
 					"}";
+			return code;
+		}
+
+		@Test
+		void happyRunForASimpleObject_NoComments() {
+			// Prepare
+			String expected = createExpectedCode(true, false);
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel
 					.addOption(
-							new Option(RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_PACKAGE_NAME, "rest.mapper"));
+							new Option(
+									RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_PACKAGE_NAME,
+									"rest.v1.mapper"));
+			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX, ""));
+			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME, "core.model"));
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.MAPPERS, "mapstruct"));
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithConverterExtension() {
+			// Prepare
+			String expected = createExpectedCode(false, true);
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel
+					.addOption(
+							new Option(
+									RESTControllerNameGenerator.ALTERNATE_DTOCONVERTER_PACKAGE_NAME,
+									"rest.v1.mapper"));
 			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX, ""));
 			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME, "core.model"));
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.MAPPERS, "mapstruct:converter"));

@@ -33,6 +33,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 						new DBOConverterClassCodeGenerator(this),
 						new DBOMapstructMapperInterfaceCodeGenerator(this),
 						new JPAPersistenceAdapterClassCodeGenerator(this),
+						new JPAPersistenceAdapterDependentClassCodeGenerator(this),
 						new JPARepositoryInterfaceCodeGenerator(this));
 	}
 
@@ -55,7 +56,9 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 	public String[] getSelectableOptions(OptionType optionType) {
 		switch (optionType) {
 			case COLUMN:
-				return new String[]{AbstractClassCodeGenerator.AUTOINCREMENT};
+				return new String[] {
+						AbstractClassCodeGenerator.AUTOINCREMENT,
+						JPAPersistenceAdapterDependentClassCodeGenerator.DEPENDENT_ATTRIBUTE };
 			case MODEL:
 				return new String[]{
 						PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX,
@@ -66,6 +69,8 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 						PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
 						ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
 						ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
+						ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
+						ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
 						PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX,
 						PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME,
 						AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,

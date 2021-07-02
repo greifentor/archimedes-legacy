@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
@@ -33,7 +34,16 @@ public class DTOConverterClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest.converter;\n" + //
+			String expected = createExpectedCodeForSimpleHappyRun(false);
+			DataModel dataModel = readDataModel("Model.xml");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String createExpectedCodeForSimpleHappyRun(boolean suppressComments) {
+			String code = "package " + BASE_PACKAGE_NAME + ".rest.v1.converter;\n" + //
 					"\n" + //
 					"import java.util.List;\n" + //
 					"import java.util.stream.Collectors;\n" + //
@@ -44,15 +54,17 @@ public class DTOConverterClassCodeGeneratorTest {
 					"\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
-					"import " + BASE_PACKAGE_NAME + ".rest.dto.ATableDTO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".rest.v1.dto.ATableDTO;\n" + //
 					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A DTO converter for a_tables.\n" + //
-					" *\n" + //
-					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
-					" */\n" + //
-					"@Generated\n" + //
+					"\n";
+			if (!suppressComments) {
+				code += "/**\n" + //
+						" * A DTO converter for a_tables.\n" + //
+						" *\n" + //
+						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+						" */\n";
+			}
+			code += "@Generated\n" + //
 					"@Named\n" + //
 					"public class ATableDTOConverter {\n" + //
 					"\n" + //
@@ -74,7 +86,15 @@ public class DTOConverterClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"}";
+			return code;
+		}
+
+		@Test
+		void happyRunForASimpleObject_NoComments() {
+			// Prepare
+			String expected = createExpectedCodeForSimpleHappyRun(true);
 			DataModel dataModel = readDataModel("Model.xml");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
@@ -84,7 +104,7 @@ public class DTOConverterClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject_WithIdClassOptionInModel() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest.converter;\n" + //
+			String expected = "package " + BASE_PACKAGE_NAME + ".rest.v1.converter;\n" + //
 					"\n" + //
 					"import java.util.List;\n" + //
 					"import java.util.stream.Collectors;\n" + //
@@ -95,7 +115,7 @@ public class DTOConverterClassCodeGeneratorTest {
 					"\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
-					"import " + BASE_PACKAGE_NAME + ".rest.dto.ATableDTO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".rest.v1.dto.ATableDTO;\n" + //
 					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + //
 					"\n" + //
 					"/**\n" + //
@@ -136,7 +156,7 @@ public class DTOConverterClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject_WithIdClassOptionInTable() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest.converter;\n" + //
+			String expected = "package " + BASE_PACKAGE_NAME + ".rest.v1.converter;\n" + //
 					"\n" + //
 					"import java.util.List;\n" + //
 					"import java.util.stream.Collectors;\n" + //
@@ -147,7 +167,7 @@ public class DTOConverterClassCodeGeneratorTest {
 					"\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
-					"import " + BASE_PACKAGE_NAME + ".rest.dto.ATableDTO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".rest.v1.dto.ATableDTO;\n" + //
 					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + /**/ "\n" + //
 					"/**\n" + //
 					" * A DTO converter for a_tables.\n" + //

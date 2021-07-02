@@ -40,6 +40,7 @@ public class DTOConverterClassCodeGenerator extends AbstractClassCodeGenerator<R
 		List<ColumnData> columnData = getColumnData(table.getColumns(), model);
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
+		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DTOClassName", nameGenerator.getDTOClassName(table));
 		context
 				.put(

@@ -172,13 +172,13 @@ public class RESTControllerNameGeneratorTest {
 
 		@Test
 		void getDTOPackageName_PassANullValueAsTable_ReturnsDefaultPackage() {
-			assertEquals("rest.dto", unitUnderTest.getDTOPackageName(model, null));
+			assertEquals("rest.v1.dto", unitUnderTest.getDTOPackageName(model, null));
 		}
 
 		@Test
 		void getDTOPackageName_PassAValidTableModel_ReturnsACorrecDTOName() {
 			// Prepare
-			String expected = BASE_PACKAGE_NAME + ".rest.dto";
+			String expected = BASE_PACKAGE_NAME + ".rest.v1.dto";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
 			String returned = unitUnderTest.getDTOPackageName(model, table);
@@ -189,7 +189,7 @@ public class RESTControllerNameGeneratorTest {
 		@Test
 		void getDTOPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecDTOName() {
 			// Prepare
-			String expected = "rest.dto";
+			String expected = "rest.v1.dto";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
 			String returned = unitUnderTest.getDTOPackageName(model, table);
@@ -200,7 +200,7 @@ public class RESTControllerNameGeneratorTest {
 		@Test
 		void getDTOPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecDTOName() {
 			// Prepare
-			String expected = "rest.dto";
+			String expected = "rest.v1.dto";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
 			String returned = unitUnderTest.getDTOPackageName(model, table);
@@ -362,13 +362,13 @@ public class RESTControllerNameGeneratorTest {
 
 		@Test
 		void getDTOConverterPackageName_PassANullValueTable_ReturnsDefaultValue() {
-			assertEquals("rest.converter", unitUnderTest.getDTOConverterPackageName(model, null));
+			assertEquals("rest.v1.converter", unitUnderTest.getDTOConverterPackageName(model, null));
 		}
 
 		@Test
 		void getDTOConverterPackageName_PassAValidTableModel_ReturnsACorrecDTOName() {
 			// Prepare
-			String expected = BASE_PACKAGE_NAME + ".rest.converter";
+			String expected = BASE_PACKAGE_NAME + ".rest.v1.converter";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
 			String returned = unitUnderTest.getDTOConverterPackageName(model, table);
@@ -379,7 +379,7 @@ public class RESTControllerNameGeneratorTest {
 		@Test
 		void getDTOConverterPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecDTOName() {
 			// Prepare
-			String expected = "rest.converter";
+			String expected = "rest.v1.converter";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
 			String returned = unitUnderTest.getDTOConverterPackageName(model, table);
@@ -390,7 +390,7 @@ public class RESTControllerNameGeneratorTest {
 		@Test
 		void getDTOConverterPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecDTOName() {
 			// Prepare
-			String expected = "rest.converter";
+			String expected = "rest.v1.converter";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
 			String returned = unitUnderTest.getDTOConverterPackageName(model, table);

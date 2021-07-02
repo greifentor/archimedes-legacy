@@ -39,6 +39,7 @@ public class RESTControllerSpringBootClassCodeGenerator extends AbstractClassCod
 		List<ColumnData> columnData = getColumnData(table.getColumns());
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
+		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DTOConverterClassName", nameGenerator.getDTOConverterClassName(table));
 		context
 				.put(

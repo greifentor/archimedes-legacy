@@ -516,4 +516,220 @@ public class ServiceNameGeneratorTest {
 
 	}
 
+	@DisplayName("Tests for persistence port interface names")
+	@Nested
+	class PersistencePortInterfaceNameTests {
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getPersistencePortInterfaceName(table);
+			});
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getPersistencePortInterfaceName(null));
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelWithNameCamelCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TestTablePersistencePort";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelWithNameUpperCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TablePersistencePort";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TableNamePersistencePort";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TableNamePersistencePort";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TableNamePersistencePort";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelWithNameLowerCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TablePersistencePort";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelNameSingleUpperCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TPersistencePort";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelNameSinglelowerCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TPersistencePort";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TablePP";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX))
+					.thenReturn(
+							new Option(ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX, "PP"));
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelNullAsWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TablePersistencePort";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX))
+					.thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortInterfaceName_PassTableModelEmptyAsWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "Table";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX))
+					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX, ""));
+			// Run
+			String returned = unitUnderTest.getPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("Tests for persistence port package names")
+	@Nested
+	class PersistencePortPackageNameTests {
+
+		@Test
+		void getPersistencePortPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPersistencePortPackageName(null, table));
+		}
+
+		@Test
+		void getPersistencePortPackageName_PassANullValueAsTable_ReturnsDefaultValue() {
+			assertEquals("core.service.port.persistence", unitUnderTest.getPersistencePortPackageName(model, null));
+		}
+
+		@Test
+		void getPersistencePortPackageName_PassAValidDataModel_ReturnsACorrecModelName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".core.service.port.persistence";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getPersistencePortPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortPackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "core.service.port.persistence";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getPersistencePortPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortPackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "core.service.port.persistence";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getPersistencePortPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPersistencePortPackageName_PassAValidDataModelWithSetWithAlternatePackageNameForModelClasses_ReturnsACorrectModelName() {
+			// Prepare
+			String alternatePackageName = "alternate.package.name";
+			String expected = alternatePackageName;
+			OptionModel option = mock(OptionModel.class);
+			when(option.getParameter()).thenReturn(alternatePackageName);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME))
+					.thenReturn(option);
+			// Run
+			String returned = unitUnderTest.getPersistencePortPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 }

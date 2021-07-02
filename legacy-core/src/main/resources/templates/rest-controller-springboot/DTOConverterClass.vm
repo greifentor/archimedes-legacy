@@ -14,11 +14,13 @@ import lombok.Generated;
 import ${DTOClassNameQualified};
 import ${ModelClassNameQualified};
 
+#if (!$CommentsOff )
 /**
  * A DTO converter for ${PluralName}.
  *
  * ${Generated}
  */
+#end
 @Generated
 @Named
 public class ${ClassName} {

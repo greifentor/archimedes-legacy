@@ -36,6 +36,7 @@ public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTContro
 		List<ColumnData> columnData = getColumnData(table.getColumns());
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
+		context.put("CommentsOff", isCommentsOff(model, table));
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}

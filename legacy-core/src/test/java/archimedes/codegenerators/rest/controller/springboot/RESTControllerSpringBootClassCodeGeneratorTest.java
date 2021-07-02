@@ -37,7 +37,16 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = "package " + BASE_PACKAGE_NAME + ".rest.v1;\n" + ////
+			String expected = createExpectedCodeForSimpleHappyRun(false);
+			DataModel dataModel = readDataModel("Model.xml");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String createExpectedCodeForSimpleHappyRun(boolean suppressComments) {
+			String code = "package " + BASE_PACKAGE_NAME + ".rest.v1;\n" + ////
 					"\n" + //
 					"import java.util.NoSuchElementException;\n" + //
 					"\n" + //
@@ -48,19 +57,23 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"import org.springframework.web.bind.annotation.RequestMapping;\n" + //
 					"import org.springframework.web.bind.annotation.RestController;\n" + //
 					"\n" + //
-					"import base.pack.age.name.rest.converter.ATableDTOConverter;\n" + //
-					"import base.pack.age.name.rest.dto.ATableDTO;\n" + //
-					"import base.pack.age.name.rest.dto.ATableListDTO;\n" + //
+					"import base.pack.age.name.rest.v1.converter.ATableDTOConverter;\n" + //
+					"import base.pack.age.name.rest.v1.dto.ATableDTO;\n" + //
+					"import base.pack.age.name.rest.v1.dto.ATableListDTO;\n" + //
 					"import base.pack.age.name.core.ATableService;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A REST controller for a tables.\n" + //
-					" *\n" + //
-					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-					" */\n" + //
-					"@RestController\n" + //
-					"@RequestMapping(\"api/v1/atables\")\n" + //
+					"\n";
+			if (!suppressComments) {
+				code += "/**\n" + //
+						" * A REST controller for a tables.\n" + //
+						" *\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n";
+			}
+			code += "@RestController\n" + //
+					"@RequestMapping(ATableRESTController.BASE_URL)\n" + //
 					"public class ATableRESTController {\n" + //
+					"\n" + //
+					"	public static final String BASE_URL = \"api/v1/atables\";\n" + //
 					"\n" + //
 					"	@Inject\n" + //
 					"	private ATableService service;\n" + //
@@ -80,10 +93,20 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"								.findById(id)\n" + //
 					"								.orElseThrow(() -> new NoSuchElementException(\"a table not found with id:\" + id)));\n"
 					+ //
-					"	}\n" + //
-					"\n" + //
+					"	}\n"
+					+ //
+					"\n"
+					+ //
 					"}";
+			return code;
+		}
+
+		@Test
+		void happyRunForASimpleObject_NoComments() {
+			// Prepare
+			String expected = createExpectedCodeForSimpleHappyRun(true);
 			DataModel dataModel = readDataModel("Model.xml");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
@@ -104,9 +127,9 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"import org.springframework.web.bind.annotation.RequestMapping;\n" + //
 					"import org.springframework.web.bind.annotation.RestController;\n" + //
 					"\n" + //
-					"import base.pack.age.name.rest.converter.ATableDTOConverter;\n" + //
-					"import base.pack.age.name.rest.dto.ATableDTO;\n" + //
-					"import base.pack.age.name.rest.dto.ATableListDTO;\n" + //
+					"import base.pack.age.name.rest.v1.converter.ATableDTOConverter;\n" + //
+					"import base.pack.age.name.rest.v1.dto.ATableDTO;\n" + //
+					"import base.pack.age.name.rest.v1.dto.ATableListDTO;\n" + //
 					"import base.pack.age.name.core.model.ATableId;\n" + //
 					"import base.pack.age.name.core.ATableService;\n" + //
 					"\n" + //
@@ -116,8 +139,10 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
 					"@RestController\n" + //
-					"@RequestMapping(\"api/v1/atables\")\n" + //
+					"@RequestMapping(ATableRESTController.BASE_URL)\n" + //
 					"public class ATableRESTController {\n" + //
+					"\n" + //
+					"	public static final String BASE_URL = \"api/v1/atables\";\n" + //
 					"\n" + //
 					"	@Inject\n" + //
 					"	private ATableService service;\n" + //
@@ -137,8 +162,10 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"								.findById(new ATableId().setKey(id))\n" + //
 					"								.orElseThrow(() -> new NoSuchElementException(\"a table not found with id:\" + id)));\n"
 					+ //
-					"	}\n" + //
-					"\n" + //
+					"	}\n"
+					+ //
+					"\n"
+					+ //
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.GENERATE_ID_CLASS));
@@ -162,9 +189,9 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"import org.springframework.web.bind.annotation.RequestMapping;\n" + //
 					"import org.springframework.web.bind.annotation.RestController;\n" + //
 					"\n" + //
-					"import base.pack.age.name.rest.converter.ATableDTOConverter;\n" + //
-					"import base.pack.age.name.rest.dto.ATableDTO;\n" + //
-					"import base.pack.age.name.rest.dto.ATableListDTO;\n" + //
+					"import base.pack.age.name.rest.v1.converter.ATableDTOConverter;\n" + //
+					"import base.pack.age.name.rest.v1.dto.ATableDTO;\n" + //
+					"import base.pack.age.name.rest.v1.dto.ATableListDTO;\n" + //
 					"import base.pack.age.name.core.model.ATableId;\n" + //
 					"import base.pack.age.name.core.ATableService;\n" + //
 					"\n" + //
@@ -174,8 +201,10 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
 					"@RestController\n" + //
-					"@RequestMapping(\"api/v1/atables\")\n" + //
+					"@RequestMapping(ATableRESTController.BASE_URL)\n" + //
 					"public class ATableRESTController {\n" + //
+					"\n" + //
+					"	public static final String BASE_URL = \"api/v1/atables\";\n" + //
 					"\n" + //
 					"	@Inject\n" + //
 					"	private ATableService service;\n" + //
@@ -195,8 +224,10 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"								.findById(new ATableId().setKey(id))\n" + //
 					"								.orElseThrow(() -> new NoSuchElementException(\"a table not found with id:\" + id)));\n"
 					+ //
-					"	}\n" + //
-					"\n" + //
+					"	}\n"
+					+ //
+					"\n"
+					+ //
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel.getTableByName("A_TABLE").addOption(new Option(AbstractClassCodeGenerator.GENERATE_ID_CLASS));

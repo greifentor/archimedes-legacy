@@ -17,14 +17,18 @@ import ${IdModelClassNameQualified};
 #end
 import ${ServiceClassNameQualified};
 
+#if (!$CommentsOff )
 /**
  * A REST controller for ${SimpleName}s.
  *
  * GENERATED CODE !!! DO NOT CHANGE !!!
  */
+#end
 @RestController
-@RequestMapping("${URL}")
+@RequestMapping(${ClassName}.BASE_URL)
 public class ${ClassName} {
+
+	public static final String BASE_URL = "${URL}";
 
 	@Inject
 	private ${ServiceClassName} service;

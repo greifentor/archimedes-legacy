@@ -14,6 +14,9 @@ public class ServiceNameGenerator extends NameGenerator {
 
 	public static final String ALTERNATE_MODEL_CLASS_NAME_SUFFIX = "ALTERNATE_MODEL_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MODEL_PACKAGE_NAME = "ALTERNATE_MODEL_PACKAGE_NAME";
+	public static final String ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX =
+			"ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX";
+	public static final String ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME = "ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME";
 
 	public String getIdModelClassName(TableModel table) {
 		return table != null ? getClassName(table) + "Id" : null;
@@ -33,10 +36,10 @@ public class ServiceNameGenerator extends NameGenerator {
 	}
 
 	public String getModelClassName(TableModel table) {
-		return table != null ? getClassName(table) + getSOClassNameSuffix(table) : null;
+		return table != null ? getClassName(table) + getModelClassNameSuffix(table) : null;
 	}
 
-	private String getSOClassNameSuffix(TableModel table) {
+	private String getModelClassNameSuffix(TableModel table) {
 		return table.getDataModel() == null
 				? ""
 				: OptionGetter
@@ -47,18 +50,29 @@ public class ServiceNameGenerator extends NameGenerator {
 
 	public String getModelPackageName(DataModel model, TableModel table) {
 		return createPackageName(model, table, "core.model", ALTERNATE_MODEL_PACKAGE_NAME);
-		/*
-		if (model == null) {
-			return null;
-		}
-		String basePackageName = getBasePackageNameWithDotExtension(model, table);
-		OptionModel optionAlternatePackageNameForSOClasses = model.getOptionByName(ALTERNATE_SO_PACKAGE_NAME);
-		String packageName = "core.so";
-		if (optionAlternatePackageNameForSOClasses != null) {
-			packageName = optionAlternatePackageNameForSOClasses.getParameter();
-		}
-		return basePackageName + packageName;
-		*/
+	}
+
+	public String getPersistencePortInterfaceName(TableModel table) {
+		return table != null ? getClassName(table) + getPersistencePortInterfaceNameSuffix(table) : null;
+	}
+
+	private String getPersistencePortInterfaceNameSuffix(TableModel table) {
+		return table.getDataModel() == null
+				? "PersistencePort"
+				: OptionGetter
+						.getParameterOfOptionByName(
+								table.getDataModel(),
+								ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX)
+						.map(s -> s)
+						.orElse("PersistencePort");
+	}
+
+	public String getPersistencePortPackageName(DataModel model, TableModel table) {
+		return createPackageName(
+				model,
+				table,
+				"core.service.port.persistence",
+				ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME);
 	}
 
 }

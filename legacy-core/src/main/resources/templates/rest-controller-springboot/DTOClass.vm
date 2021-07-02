@@ -8,11 +8,13 @@ import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
 
+#if (!$CommentsOff )
 /**
  * A DTO for ${PluralName}.
  *
  * ${Generated}
  */
+#end
 @Accessors(chain = true)
 @Data
 @Generated

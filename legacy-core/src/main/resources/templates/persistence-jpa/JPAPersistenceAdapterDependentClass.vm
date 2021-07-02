@@ -1,0 +1,49 @@
+package ${PackageName};
+
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import ${DBOConverterPackageName}.${DBOConverterClassName};
+import ${JPARepositoryPackageName}.${JPARepositoryClassName};
+import ${ModelPackageName}.${ModelClassName};
+import ${PersistencePortInterfacePackageName}.${PersistencePortInterfaceName};
+
+#if (!$CommentsOff )
+/**
+ * A DBO persistence adapter for ${PluralName}.
+ *
+ * ${Generated}
+ */
+#end
+@Named
+public class ${ClassName} implements ${PersistencePortInterfaceName} {
+
+	@Inject
+	private ${DBOConverterClassName} mapper;
+	@Inject
+	private ${JPARepositoryClassName} repository;
+
+	@Override
+	public ${ModelClassName} create(${ModelClassName} model) {
+		model.set${IdFieldNameCamelCase}(null);
+		return converter.toModel(repository.save(converter.toDbo(model)));
+	}
+
+	@Override
+	public void delete(${IdClassName} id) {
+		return repository.deleteById(id);
+	}
+
+	@Override
+	public Optional<${ModelClassName}> findBy${DependentAttributeNameCamilCase}AndId(${DependentClassName} ${DependentAttributeName}, ${IdClassName} id) {
+		return repository.findBy${DependentAttributeNameCamilCase}AndId(${DependentAttributeName}, id).map(dbo -> mapper.toModel(dbo));
+	}
+
+	@Override
+	public ${ModelClassName} save(${ModelClassName} model) {
+		return mapper.toModel(repository.save(mapper.toDbo(model)));
+	}
+
+}

@@ -27,6 +27,7 @@ public class ListDTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTCo
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		context.put("ClassName", getClassName(table));
+		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DTOClassName", nameGenerator.getDTOClassName(table));
 		context.put("PackageName", getPackageName(model, table));
 	}

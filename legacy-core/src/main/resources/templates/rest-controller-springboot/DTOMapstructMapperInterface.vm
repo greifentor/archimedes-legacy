@@ -8,11 +8,13 @@ import org.mapstruct.Mapper;
 import org.springframework.core.convert.converter.Converter;
 #end
 
+#if (!$CommentsOff )
 /**
  * A DTO mapper for ${PluralName}.
  *
  * ${Generated}
  */
+#end
 @Mapper(componentModel = "spring")
 public interface ${ClassName} #if ($ConverterExtension)extends Converter<${SOClassName}, ${DTOClassName}> #end{
 

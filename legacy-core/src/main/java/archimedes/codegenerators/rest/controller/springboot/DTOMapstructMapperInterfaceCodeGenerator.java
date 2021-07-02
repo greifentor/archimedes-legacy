@@ -30,8 +30,9 @@ public class DTOMapstructMapperInterfaceCodeGenerator extends AbstractClassCodeG
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		context.put("ConverterExtension", isConverterExtensionSet(model, table));
 		context.put("ClassName", getClassName(table));
+		context.put("ConverterExtension", isConverterExtensionSet(model, table));
+		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DTOClassName", nameGenerator.getDTOClassName(table));
 		context.put("DTOPackageName", nameGenerator.getDTOPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
