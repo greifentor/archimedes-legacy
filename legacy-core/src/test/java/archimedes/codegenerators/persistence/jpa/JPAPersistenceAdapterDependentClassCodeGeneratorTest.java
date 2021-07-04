@@ -83,7 +83,7 @@ public class JPAPersistenceAdapterDependentClassCodeGeneratorTest {
 					"	@Override\n" + //
 					"	public ATable create(ATable model) {\n" + //
 					"		model.setId(null);\n" + //
-					"		return converter.toModel(repository.save(converter.toDbo(model)));\n" + //
+					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -99,7 +99,7 @@ public class JPAPersistenceAdapterDependentClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public ATable save(ATable model) {\n" + //
-					"		return mapper.toModel(repository.save(mapper.toDbo(model)));\n" + //
+					"		return mapper.toModel(repository.save(mapper.toDBO(model)));\n" + //
 					"	}\n" + //
 					"\n}";
 			return s;

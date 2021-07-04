@@ -1,11 +1,9 @@
 package archimedes.codegenerators.persistence.jpa;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
-
+import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,10 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import archimedes.scheme.Option;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class PersistenceJPANameGeneratorTest {
@@ -427,6 +426,64 @@ public class PersistenceJPANameGeneratorTest {
 									"persistence.repos"));
 			// Run & Check
 			assertEquals("persistence.repos", unitUnderTest.getJPARepositoryPackageName(model, table));
+		}
+
+	}
+
+	@DisplayName("tests for toDBO method name")
+	@Nested
+	class ToDBOMethodNameTests {
+
+		@Test
+		void getToDBOMethodName_PassANullValueAsTable_ReturnsADefaultName() {
+			assertEquals("toDBO", unitUnderTest.getToDBOMethodName(null));
+		}
+
+		@Test
+		void getToDBOMethodName_PassAValidTable_ReturnsADefaultName() {
+			assertEquals("toDBO", unitUnderTest.getToDBOMethodName(table));
+		}
+
+		@Test
+		void getToDBOMethodName_PassAValidTable_ModelAsAlternateName_ReturnsTheAlternateName() {
+			// Prepare
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_TO_DBO_METHOD_NAME))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_TO_DBO_METHOD_NAME,
+									"toDbo"));
+			// Run & Check
+			assertEquals("toDbo", unitUnderTest.getToDBOMethodName(table));
+		}
+
+	}
+
+	@DisplayName("tests for toModel method name")
+	@Nested
+	class ToModelMethodNameTests {
+
+		@Test
+		void getToModelMethodName_PassANullValueAsTable_ReturnsADefaultName() {
+			assertEquals("toModel", unitUnderTest.getToModelMethodName(null));
+		}
+
+		@Test
+		void getToModelMethodName_PassAValidTable_ReturnsADefaultName() {
+			assertEquals("toModel", unitUnderTest.getToModelMethodName(table));
+		}
+
+		@Test
+		void getToModelMethodName_PassAValidTable_ModelAsAlternateName_ReturnsTheAlternateName() {
+			// Prepare
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME,
+									"toSO"));
+			// Run & Check
+			assertEquals("toSO", unitUnderTest.getToModelMethodName(table));
 		}
 
 	}

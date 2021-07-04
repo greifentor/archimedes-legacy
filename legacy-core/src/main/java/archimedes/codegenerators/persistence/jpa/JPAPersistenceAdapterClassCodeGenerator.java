@@ -43,6 +43,8 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
 		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
+		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
+		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
 	}
 
 	private String getIdFieldNameCamelCase(TableModel table) {

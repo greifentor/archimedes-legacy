@@ -28,7 +28,7 @@ public class ${ClassName} implements ${PersistencePortInterfaceName} {
 	@Override
 	public ${ModelClassName} create(${ModelClassName} model) {
 		model.set${IdFieldNameCamelCase}(null);
-		return converter.toModel(repository.save(converter.toDbo(model)));
+		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
 	}
 
 	@Override
@@ -38,12 +38,12 @@ public class ${ClassName} implements ${PersistencePortInterfaceName} {
 
 	@Override
 	public Optional<${ModelClassName}> findBy${DependentAttributeNameCamilCase}AndId(${DependentClassName} ${DependentAttributeName}, ${IdClassName} id) {
-		return repository.findBy${DependentAttributeNameCamilCase}AndId(${DependentAttributeName}, id).map(dbo -> mapper.toModel(dbo));
+		return repository.findBy${DependentAttributeNameCamilCase}AndId(${DependentAttributeName}, id).map(dbo -> mapper.${ToModelMethodName}(dbo));
 	}
 
 	@Override
 	public ${ModelClassName} save(${ModelClassName} model) {
-		return mapper.toModel(repository.save(mapper.toDbo(model)));
+		return mapper.${ToModelMethodName}(repository.save(mapper.${ToDBOMethodName}(model)));
 	}
 
 }

@@ -51,7 +51,6 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
-		context.put("PackageName", getPackageName(model, table));
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
 		context
 				.put(
@@ -59,6 +58,9 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 						getQualifiedName(
 								serviceNameGenerator.getModelPackageName(model, table),
 								serviceNameGenerator.getModelClassName(table)));
+		context.put("PackageName", getPackageName(model, table));
+		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
+		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns, DataModel model) {

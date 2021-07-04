@@ -77,7 +77,7 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 					"\n" + //
 					"	public ATable create(ATable model) {\n" + //
 					"		model.setId(null);\n" + //
-					"		return converter.toModel(repository.save(converter.toDbo(model)));\n" + //
+					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	public Optional<ATable> findById(Long key) {\n" + //
@@ -85,7 +85,7 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	public ATable update(ATable model) {\n" + //
-					"		return converter.toModel(repository.save(converter.toDbo(model)));\n" + //
+					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	public void delete(ATable model) {\n" + //

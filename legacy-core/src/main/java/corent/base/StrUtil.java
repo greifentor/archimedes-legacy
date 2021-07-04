@@ -119,10 +119,10 @@ public class StrUtil {
 		if (Boolean.getBoolean("corent.base.StrUtil.use.commons")) {
 			return StringEscapeUtils.unescapeHtml4(html);
 		}
-		if (!Boolean.getBoolean("corent.base.StrUtil.suppress.html.note")) {
-			log.warn("Use StringEscapeUtil methods instead of StrUtil.FromHTML(String)!");
-			log.warn("or suppress this note by setting property \"corent.base.StrUtil.suppress." + "html.note\"!");
-		}
+//		if (!Boolean.getBoolean("corent.base.StrUtil.suppress.html.note")) {
+//			log.warn("Use StringEscapeUtil methods instead of StrUtil.FromHTML(String)!");
+//			log.warn("or suppress this note by setting property \"corent.base.StrUtil.suppress." + "html.note\"!");
+//		}
 		String s = html;
 		s = Replace(s, "&amp;", "&");
 		s = Replace(s, "&auml;", "ä");
@@ -284,10 +284,10 @@ public class StrUtil {
 		if (Boolean.getBoolean("corent.base.StrUtil.use.commons")) {
 			return StringEscapeUtils.escapeHtml4(s);
 		}
-		if (!Boolean.getBoolean("corent.base.StrUtil.suppress.html.note")) {
-			log.warn("Use StringEscapeUtil methods instead of StrUtil.ToHTML(String)!");
-			log.warn("or suppress this note by setting property \"corent.base.StrUtil.suppress." + "html.note\"!");
-		}
+//		if (!Boolean.getBoolean("corent.base.StrUtil.suppress.html.note")) {
+//			log.warn("Use StringEscapeUtil methods instead of StrUtil.ToHTML(String)!");
+//			log.warn("or suppress this note by setting property \"corent.base.StrUtil.suppress." + "html.note\"!");
+//		}
 		String html = s;
 		html = Replace(html, "&", "&amp;");
 		html = Replace(html, "ä", "&auml;");

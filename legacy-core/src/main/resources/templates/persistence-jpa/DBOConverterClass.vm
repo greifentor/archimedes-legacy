@@ -23,7 +23,7 @@ import ${ModelClassNameQualified};
 @Named
 public class ${ClassName} {
 
-	public ${DBOClassName} toDBO(${ModelClassName} model) {
+	public ${DBOClassName} ${ToDBOMethodName}(${ModelClassName} model) {
 		if (model == null) {
 			return null;
 		}
@@ -33,7 +33,7 @@ public class ${ClassName} {
 #end
 	}
 
-	public ${ModelClassName} toModel(${DBOClassName} dbo) {
+	public ${ModelClassName} ${ToModelMethodName}(${DBOClassName} dbo) {
 		if (dbo == null) {
 			return null;
 		}

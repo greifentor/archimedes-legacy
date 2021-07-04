@@ -26,15 +26,15 @@ public class ${ClassName} {
 
 	public ${ModelClassName} create(${ModelClassName} model) {
 		model.set${IdFieldNameCamelCase}(null);
-		return converter.toModel(repository.save(converter.toDbo(model)));
+		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
 	}
 
 	public Optional<${ModelClassName}> findById(${IdClassName} key) {
-		return repository.findById(key).map(dbo -> converter.toModel(dbo));
+		return repository.findById(key).map(dbo -> converter.${ToModelMethodName}(dbo));
 	}
 
 	public ${ModelClassName} update(${ModelClassName} model) {
-		return converter.toModel(repository.save(converter.toDbo(model)));
+		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
 	}
 
 	public void delete(${ModelClassName} model) {

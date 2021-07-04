@@ -56,7 +56,7 @@ public class DBOMapstructMapperInterfaceCodeGeneratorTest {
 					"@Mapper(componentModel = \"spring\")\n" + //
 					"public interface ATableDBOMapper {\n" + //
 					"\n" + //
-					"    ATableDBO toDbo(ATable model);\n" + //
+					"    ATableDBO toDBO(ATable model);\n" + //
 					"\n" + //
 					"    ATable toModel(ATableDBO dbo);\n" + //
 					"\n" + //
@@ -95,7 +95,7 @@ public class DBOMapstructMapperInterfaceCodeGeneratorTest {
 					"@Mapper(componentModel = \"spring\")\n" + //
 					"public interface ATableDBOMapper extends Converter<ATable, ATableDBO> {\n" + //
 					"\n" + //
-					"    ATableDBO toDbo(ATable model);\n" + //
+					"    ATableDBO toDBO(ATable model);\n" + //
 					"\n" + //
 					"    ATable toModel(ATableDBO dbo);\n" + //
 					"\n" + //

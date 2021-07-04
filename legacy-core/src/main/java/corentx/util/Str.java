@@ -185,10 +185,10 @@ public class Str {
 		if (Boolean.getBoolean("corentx.util.Str.use.commons")) {
 			return StringEscapeUtils.unescapeHtml3(html);
 		}
-		if (!Boolean.getBoolean("corentx.util.Str.suppress.html.note")) {
-			log.warn("Use StringEscapeUtil methods instead of Str.fromHTML(String)!");
-			log.warn("or suppress this note by setting property \"corentx.util.Str.suppress." + "html.note\"!");
-		}
+//		if (!Boolean.getBoolean("corentx.util.Str.suppress.html.note")) {
+//			log.warn("Use StringEscapeUtil methods instead of Str.fromHTML(String)!");
+//			log.warn("or suppress this note by setting property \"corentx.util.Str.suppress." + "html.note\"!");
+//		}
 		/*
 		 * s = replace(s, "&amp;", "&"); s = replace(s, "&auml;", "�"); s = replace(s, "&Auml;", "�"); s = replace(s,
 		 * "&gt;", ">"); s = replace(s, "&lt;", "<"); s = replace(s, "&nbsp;", " "); s = replace(s, "&ouml;", "�"); s =

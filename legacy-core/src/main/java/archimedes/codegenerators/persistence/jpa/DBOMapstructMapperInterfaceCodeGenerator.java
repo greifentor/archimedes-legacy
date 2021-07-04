@@ -34,9 +34,11 @@ public class DBOMapstructMapperInterfaceCodeGenerator extends AbstractClassCodeG
 		context.put("ClassName", getClassName(table));
 		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
 		context.put("DBOPackageName", nameGenerator.getDBOPackageName(model, table));
+		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
+		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
-		context.put("SOClassName", serviceNameGenerator.getModelClassName(table));
-		context.put("SOPackageName", serviceNameGenerator.getModelPackageName(model, table));
+		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
+		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
 	}
 
 	private boolean isConverterExtensionSet(DataModel model, TableModel table) {

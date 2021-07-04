@@ -56,6 +56,8 @@ public class JPAPersistenceAdapterDependentClassCodeGenerator
 				.put(
 						"PersistencePortInterfacePackageName",
 						serviceNameGenerator.getPersistencePortPackageName(model, table));
+		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
+		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
 	}
 
 	private String getDependentAttributeName(TableModel table) {
