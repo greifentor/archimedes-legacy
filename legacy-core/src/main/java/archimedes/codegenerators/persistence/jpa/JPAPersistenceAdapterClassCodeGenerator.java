@@ -37,6 +37,7 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 		context.put("DBOConverterClassName", nameGenerator.getDBOConverterClassName(table));
 		context.put("DBOConverterPackageName", nameGenerator.getDBOConverterPackageName(model, table));
 		context.put("IdClassName", getIdClassName(table));
+		context.put("IdFieldName", nameGenerator.getAttributeName(getIdFieldNameCamelCase(table)));
 		context.put("IdFieldNameCamelCase", getIdFieldNameCamelCase(table));
 		context.put("JPARepositoryClassName", nameGenerator.getJPARepositoryInterfaceName(table));
 		context.put("JPARepositoryPackageName", nameGenerator.getJPARepositoryPackageName(model, table));
@@ -45,24 +46,6 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
-	}
-
-	private String getIdFieldNameCamelCase(TableModel table) {
-		return Arrays
-				.asList(table.getPrimaryKeyColumns())
-				.stream()
-				.findFirst()
-				.map(column -> nameGenerator.getClassName(column.getName()))
-				.orElse("UNKNOWN");
-	}
-
-	private String getIdClassName(TableModel table) {
-		return Arrays
-				.asList(table.getPrimaryKeyColumns())
-				.stream()
-				.findFirst()
-				.map(column -> typeGenerator.getJavaTypeString(column.getDomain(), true))
-				.orElse("UNKNOWN");
 	}
 
 	@Override

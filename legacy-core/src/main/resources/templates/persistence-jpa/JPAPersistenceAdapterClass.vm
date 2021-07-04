@@ -29,8 +29,8 @@ public class ${ClassName} {
 		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
 	}
 
-	public Optional<${ModelClassName}> findById(${IdClassName} key) {
-		return repository.findById(key).map(dbo -> converter.${ToModelMethodName}(dbo));
+	public Optional<${ModelClassName}> findById(${IdClassName} ${IdFieldName}) {
+		return repository.findById(${IdFieldName}).map(dbo -> converter.${ToModelMethodName}(dbo));
 	}
 
 	public ${ModelClassName} update(${ModelClassName} model) {

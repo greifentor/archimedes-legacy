@@ -76,7 +76,9 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 						AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
 						AbstractClassCodeGenerator.COMMENTS,
 						AbstractClassCodeGenerator.GENERATE_ID_CLASS,
-						AbstractClassCodeGenerator.MODULE_MODE
+						AbstractClassCodeGenerator.MODULE_MODE,
+						PersistenceJPANameGenerator.ALTERNATE_TO_DBO_METHOD_NAME,
+						PersistenceJPANameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME
 				};
 			case TABLE:
 				return new String[]{

@@ -1,0 +1,26 @@
+package ${PackageName};
+
+import java.util.Optional;
+
+import ${ModelPackageName}.${ModelClassName};
+import lombok.Generated;
+
+#if (!$CommentsOff)
+/**
+ * A persistence port interface for ${ContextName} CRUD operations.
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
+#end
+@Generated
+public interface ${ClassName} {
+
+	${ModelClassName} create(${ModelClassName} model);
+
+	Optional<${ModelClassName}> findById(${IdClassName} ${IdFieldName});
+
+	${ModelClassName} update(${ModelClassName} model);
+
+	void delete(${ModelClassName} model);
+
+}

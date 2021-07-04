@@ -80,8 +80,8 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	public Optional<ATable> findById(Long key) {\n" + //
-					"		return repository.findById(key).map(dbo -> converter.toModel(dbo));\n" + //
+					"	public Optional<ATable> findById(Long id) {\n" + //
+					"		return repository.findById(id).map(dbo -> converter.toModel(dbo));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	public ATable update(ATable model) {\n" + //

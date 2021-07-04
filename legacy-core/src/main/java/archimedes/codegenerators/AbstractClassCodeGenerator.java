@@ -1,17 +1,17 @@
 package archimedes.codegenerators;
 
-import static corentx.util.Checks.ensure;
-
-import java.io.File;
-import java.io.FileWriter;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Arrays;
+
+import static corentx.util.Checks.ensure;
 
 /**
  * An abstract code generator for class files.
@@ -23,6 +23,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String ALTERNATE_MODULE_PREFIX = "ALTERNATE_MODULE_PREFIX";
 	public static final String AUTOINCREMENT = "AUTOINCREMENT";
 	public static final String COMMENTS = "COMMENTS";
+	public static final String CONTEXT_NAME = "CONTEXT_NAME";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
 	public static final String MODULE_MODE = "MODULE_MODE";
 	public static final String MAPPERS = "MAPPERS";
@@ -53,11 +54,13 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected String getBaseCodeFolderName(DataModel dataModel) {
-		return (isModuleModeSet(dataModel) && (getModuleName(dataModel) != null) ? getModuleName(dataModel) + "/" : "")
+		return (isModuleModeSet(dataModel) && (getModuleName(dataModel) != null)
+				? getModuleName(dataModel) + "/"
+				: "")
 				+ System
-						.getProperty(
-								PROPERTY_PREFIX + getClass().getSimpleName() + ".base.code.folder.name",
-								System.getProperty(PROPERTY_PREFIX + "base.code.folder.name", "src/main/java"));
+				.getProperty(
+						PROPERTY_PREFIX + getClass().getSimpleName() + ".base.code.folder.name",
+						System.getProperty(PROPERTY_PREFIX + "base.code.folder.name", "src/main/java"));
 	}
 
 	private boolean isModuleModeSet(DataModel dataModel) {
@@ -69,12 +72,23 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		if (getAlternateModuleName(dataModel) != null) {
 			modulePrefix = getAlternateModuleName(dataModel);
 		}
-		return modulePrefix + (modulePrefix.isEmpty() ? "" : "-") + getDefaultModuleName(dataModel);
+		return modulePrefix + (modulePrefix.isEmpty()
+				? ""
+				: "-") + getDefaultModuleName(dataModel);
 	}
 
 	private String getAlternateModuleName(DataModel dataModel) {
 		OptionModel option = dataModel.getOptionByName(AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX);
-		return option != null ? option.getParameter() : null;
+		return option != null
+				? option.getParameter()
+				: null;
+	}
+
+	protected String getContextName(TableModel table) {
+		return table == null
+				? null
+				: OptionGetter.getOptionByName(table, CONTEXT_NAME).map(OptionModel::getParameter)
+						.orElse(nameGenerator.getClassName(table));
 	}
 
 	@Override
@@ -106,7 +120,9 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	private String getAttributeNameFirstLetterUpperCase(ColumnModel column) {
 		String attrName = nameGenerator.getAttributeName(column);
 		return attrName.substring(0, 1).toUpperCase()
-				+ (attrName.length() == 1 ? "" : attrName.substring(1, attrName.length()));
+				+ (attrName.length() == 1
+				? ""
+				: attrName.substring(1, attrName.length()));
 	}
 
 	protected String getSetterName(ColumnModel column) {
@@ -114,7 +130,9 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected String getQualifiedName(String packageName, String className) {
-		return ((packageName != null) && !packageName.isEmpty() ? packageName + "." : "") + className;
+		return ((packageName != null) && !packageName.isEmpty()
+				? packageName + "."
+				: "") + className;
 	}
 
 	protected boolean isGenerateIdClass(DataModel model, TableModel table) {
@@ -147,6 +165,24 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 				.getOptionByName(model, COMMENTS)
 				.map(option -> "off".equalsIgnoreCase(option.getParameter()))
 				.orElse(false);
+	}
+
+	protected String getIdFieldNameCamelCase(TableModel table) {
+		return Arrays
+				.asList(table.getPrimaryKeyColumns())
+				.stream()
+				.findFirst()
+				.map(column -> nameGenerator.getClassName(column.getName()))
+				.orElse("UNKNOWN");
+	}
+
+	protected String getIdClassName(TableModel table) {
+		return Arrays
+				.asList(table.getPrimaryKeyColumns())
+				.stream()
+				.findFirst()
+				.map(column -> typeGenerator.getJavaTypeString(column.getDomain(), true))
+				.orElse("UNKNOWN");
 	}
 
 }

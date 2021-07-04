@@ -35,15 +35,6 @@ public class JPARepositoryInterfaceCodeGenerator extends AbstractClassCodeGenera
 		context.put("PackageName", getPackageName(model, table));
 	}
 
-	private String getIdClassName(TableModel table) {
-		return Arrays
-				.asList(table.getPrimaryKeyColumns())
-				.stream()
-				.findFirst()
-				.map(column -> typeGenerator.getJavaTypeString(column.getDomain(), true))
-				.orElse("UNKNOWN");
-	}
-
 	@Override
 	public String getClassName(TableModel table) {
 		return nameGenerator.getJPARepositoryInterfaceName(table);

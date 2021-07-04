@@ -1,11 +1,8 @@
 package archimedes.codegenerators;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-
+import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,13 +10,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import archimedes.scheme.Option;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AbstractClassCodeGeneratorTest {
 
+	private static final String CLASS_NAME = "ClassName";
 	private static final String TEMPLATE_FILE_NAME = "template-file.name";
 	private static final String TEMPLATE_PATH_NAME = "template/path/name";
 
@@ -42,7 +43,7 @@ public class AbstractClassCodeGeneratorTest {
 				codeFactory) {
 			@Override
 			public String getClassName(TableModel table) {
-				return null;
+				return CLASS_NAME;
 			}
 
 			@Override
@@ -179,6 +180,37 @@ public class AbstractClassCodeGeneratorTest {
 					.thenReturn(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
 			// Run & Check
 			assertTrue(unitUnderTest.isCommentsOff(model, table));
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_getContextName_TableModel {
+
+		@Test
+		void passANullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getContextName(null));
+		}
+
+		@Test
+		void passATableModel_ReturnsTheClassNameOfTheTable() {
+			// Prepare
+			String expected = "Expected";
+			String tableName = "expected";
+			when(table.getName()).thenReturn(tableName);
+			// Run & Check
+			assertEquals(expected, unitUnderTest.getContextName(table));
+		}
+
+		@Test
+		void passATableModel_ReturnsTheConfiguredContextNameForTheTable() {
+			// Prepare
+			String expected = "Expected";
+			when(table.getName()).thenReturn("TableName");
+			when(table.getOptionByName(AbstractClassCodeGenerator.CONTEXT_NAME))
+					.thenReturn(new Option(AbstractClassCodeGenerator.CONTEXT_NAME, expected));
+			// Run & Check
+			assertEquals(expected, unitUnderTest.getContextName(table));
 		}
 
 	}

@@ -78,24 +78,6 @@ public class JPAPersistenceAdapterDependentClassCodeGenerator
 				.orElse("UNKNOWN!!!");
 	}
 
-	private String getIdFieldNameCamelCase(TableModel table) {
-		return Arrays
-				.asList(table.getPrimaryKeyColumns())
-				.stream()
-				.findFirst()
-				.map(column -> nameGenerator.getClassName(column.getName()))
-				.orElse("UNKNOWN");
-	}
-
-	private String getIdClassName(TableModel table) {
-		return Arrays
-				.asList(table.getPrimaryKeyColumns())
-				.stream()
-				.findFirst()
-				.map(column -> typeGenerator.getJavaTypeString(column.getDomain(), true))
-				.orElse("UNKNOWN");
-	}
-
 	@Override
 	public String getClassName(TableModel table) {
 		return nameGenerator.getJPAPersistenceAdapterClassName(table);
