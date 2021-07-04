@@ -38,7 +38,7 @@ public class ${ClassName} {
 	}
 
 	public void delete(${ModelClassName} model) {
-		return repository.delete(model.getId());
+		repository.deleteById(model.get${IdFieldNameCamelCase}());
 	}
 
 }

@@ -179,6 +179,15 @@ public class NameGenerator {
 		return sb.toString().toUpperCase();
 	}
 
+	protected String getNameOrAlternativeFromOption(TableModel table, String defaultName, String alternateOptionName) {
+		return (table == null) || (table.getDataModel() == null)
+				? defaultName
+				: OptionGetter
+						.getParameterOfOptionByName(table.getDataModel(), alternateOptionName)
+						.map(s -> s)
+						.orElse(defaultName);
+	}
+
 	protected String getPluralName(TableModel table) {
 		OptionModel pluralName = table.getOptionByName(PLURAL_NAME);
 		if (pluralName != null) {

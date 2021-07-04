@@ -1,7 +1,6 @@
 package archimedes.codegenerators.service;
 
 import archimedes.codegenerators.NameGenerator;
-import archimedes.codegenerators.OptionGetter;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
@@ -19,11 +18,15 @@ public class ServiceNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME = "ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME";
 
 	public String getIdModelClassName(TableModel table) {
-		return table != null ? getClassName(table) + "Id" : null;
+		return table != null
+				? getClassName(table) + "Id"
+				: null;
 	}
 
 	public String getServiceClassName(TableModel table) {
-		return table != null ? getClassName(table) + "Service" : null;
+		return table != null
+				? getClassName(table) + "Service"
+				: null;
 	}
 
 	public String getServicePackageName(DataModel model, TableModel table) {
@@ -36,16 +39,13 @@ public class ServiceNameGenerator extends NameGenerator {
 	}
 
 	public String getModelClassName(TableModel table) {
-		return table != null ? getClassName(table) + getModelClassNameSuffix(table) : null;
+		return table != null
+				? getClassName(table) + getModelClassNameSuffix(table)
+				: null;
 	}
 
 	private String getModelClassNameSuffix(TableModel table) {
-		return table.getDataModel() == null
-				? ""
-				: OptionGetter
-						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_MODEL_CLASS_NAME_SUFFIX)
-						.map(s -> s)
-						.orElse("");
+		return getNameOrAlternativeFromOption(table, "", ALTERNATE_MODEL_CLASS_NAME_SUFFIX);
 	}
 
 	public String getModelPackageName(DataModel model, TableModel table) {
@@ -53,18 +53,16 @@ public class ServiceNameGenerator extends NameGenerator {
 	}
 
 	public String getPersistencePortInterfaceName(TableModel table) {
-		return table != null ? getClassName(table) + getPersistencePortInterfaceNameSuffix(table) : null;
+		return table != null
+				? getClassName(table) + getPersistencePortInterfaceNameSuffix(table)
+				: null;
 	}
 
 	private String getPersistencePortInterfaceNameSuffix(TableModel table) {
-		return table.getDataModel() == null
-				? "PersistencePort"
-				: OptionGetter
-						.getParameterOfOptionByName(
-								table.getDataModel(),
-								ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX)
-						.map(s -> s)
-						.orElse("PersistencePort");
+		return getNameOrAlternativeFromOption(
+				table,
+				"PersistencePort",
+				ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX);
 	}
 
 	public String getPersistencePortPackageName(DataModel model, TableModel table) {

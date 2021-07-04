@@ -89,7 +89,7 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	public void delete(ATable model) {\n" + //
-					"		return repository.delete(model.getId());\n" + //
+					"		repository.deleteById(model.getId());\n" + //
 					"	}\n" + //
 					"\n}";
 			return s;

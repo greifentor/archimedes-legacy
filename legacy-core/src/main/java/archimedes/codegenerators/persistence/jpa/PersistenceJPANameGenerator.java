@@ -29,12 +29,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	private String getDBOClassNameSuffix(TableModel table) {
-		return table.getDataModel() == null
-				? "DBO"
-				: OptionGetter
-						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_ENTITY_CLASS_NAME_SUFFIX)
-						.map(s -> s)
-						.orElse("DBO");
+		return getNameOrAlternativeFromOption(table, "DBO", ALTERNATE_ENTITY_CLASS_NAME_SUFFIX);
 	}
 
 	public String getDBOConverterClassName(TableModel table) {
@@ -52,12 +47,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	private String getDBOMapperInterfaceNameSuffix(TableModel table) {
-		return table.getDataModel() == null
-				? "DBOMapper"
-				: OptionGetter
-						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX)
-						.map(s -> s)
-						.orElse("DBOMapper");
+		return getNameOrAlternativeFromOption(table, "DBOMapper", ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX);
 	}
 
 	public String getDBOConverterPackageName(DataModel model, TableModel table) {
@@ -73,12 +63,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	private String getJPAPersistenceAdapterClassNameSuffix(TableModel table) {
-		return table.getDataModel() == null
-				? "JPAPersistenceAdapter"
-				: OptionGetter
-						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX)
-						.map(s -> s)
-						.orElse("JPAPersistenceAdapter");
+		return getNameOrAlternativeFromOption(table, "JPAPersistenceAdapter", ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX);
 	}
 
 	public String getJPAPersistenceAdapterPackageName(DataModel model, TableModel table) {
@@ -90,12 +75,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	private String getJPARepositoryInterfaceNameSuffix(TableModel table) {
-		return table.getDataModel() == null
-				? "DBORepository"
-				: OptionGetter
-						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX)
-						.map(s -> s)
-						.orElse("DBORepository");
+		return getNameOrAlternativeFromOption(table, "DBORepository", ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
 	}
 
 	public String getJPARepositoryPackageName(DataModel model, TableModel table) {
@@ -103,21 +83,11 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getToDBOMethodName(TableModel table) {
-		return (table == null) || (table.getDataModel() == null)
-				? "toDBO"
-				: OptionGetter
-						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_TO_DBO_METHOD_NAME)
-						.map(s -> s)
-						.orElse("toDBO");
+		return getNameOrAlternativeFromOption(table, "toDBO", ALTERNATE_TO_DBO_METHOD_NAME);
 	}
 
 	public String getToModelMethodName(TableModel table) {
-		return (table == null) || (table.getDataModel() == null)
-				? "toModel"
-				: OptionGetter
-						.getParameterOfOptionByName(table.getDataModel(), ALTERNATE_TO_MODEL_METHOD_NAME)
-						.map(s -> s)
-						.orElse("toModel");
+		return getNameOrAlternativeFromOption(table, "toModel", ALTERNATE_TO_MODEL_METHOD_NAME);
 	}
 
 }
