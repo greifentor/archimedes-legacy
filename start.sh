@@ -1,6 +1,8 @@
 LIB=./legacy-core/lib
 
-CP=./legacy-core/target/archimedes-legacy-core-2.18.0-executable.jar
+source set-version.sh
+
+CP=./legacy-core/target/archimedes-legacy-core-$ARCHIMEDES_VERSION-executable.jar
 
 CP=$CP:$LIB/baccaraacf.jar
 CP=$CP:$LIB/commons-lang3-3.1.jar
