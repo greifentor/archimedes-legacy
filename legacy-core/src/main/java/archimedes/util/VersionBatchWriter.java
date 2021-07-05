@@ -20,12 +20,13 @@ public class VersionBatchWriter {
 			String content = "";
 			if (osName.equalsIgnoreCase("LINUX")) {
 				completeFileName = folder + "/set-version.sh";
-				content = "EXPORT ARCHIMEDES_VERSION=" + newVersion + "\n";
+				content = "export ARCHIMEDES_VERSION=" + newVersion + "\n";
 			} else if (osName.equalsIgnoreCase("WINDOWS")) {
 				completeFileName = folder + "\\set-version.bat";
 				content = "SET ARCHIMEDES_VERSION=" + newVersion + "\r\n";
 			} else {
 				System.out.println("Illegal OS name '" + osName + "'! Valid is: 'LINUX' or 'WINDOWS'.");
+				return;
 			}
 			try {
 				FileUtil.writeTextToFile(completeFileName, false, content);

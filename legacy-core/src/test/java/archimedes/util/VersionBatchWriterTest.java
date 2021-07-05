@@ -37,7 +37,7 @@ public class VersionBatchWriterTest {
 			VersionBatchWriter.main(new String[] { absolutePath, newVersion, "LINUX" });
 			// Check
 			assertEquals(
-					"EXPORT ARCHIMEDES_VERSION=" + newVersion + "\n",
+					"export ARCHIMEDES_VERSION=" + newVersion + "\n",
 					FileUtil.readTextFromFile(absolutePath + "/set-version.sh").replace("\r", ""));
 		}
 
@@ -67,7 +67,47 @@ public class VersionBatchWriterTest {
 			// Check
 			assertEquals(
 					"SET ARCHIMEDES_VERSION=" + newVersion + "\r\n",
-					FileUtil.readTextFromFile(absolutePath + "\\set-version.bat"));
+					readTextFromFileForWindows(absolutePath + "\\set-version.bat"));
+		}
+
+		private String readTextFromFileForWindows(String file) throws Exception {
+			String s = FileUtil.readTextFromFile(file);
+			return ! s.endsWith("\r\n") ? s.replace("\n", "\r\n") : s;
+		}
+
+	}
+
+	@Nested
+	class TestOfErrors {
+
+		@Test
+		void passedToLessArguments_DoesCreateAnyFile(@TempDir Path tempDir) throws Exception {
+			// Prepare
+			String absolutePath = tempDir.toAbsolutePath().toString();
+			// Run
+			VersionBatchWriter.main(new String[] {});
+			// Check
+			assertTrue(new File(absolutePath).listFiles().length == 0);
+		}
+
+		@Test
+		void passedToManyArguments_DoesCreateAnyFile(@TempDir Path tempDir) throws Exception {
+			// Prepare
+			String absolutePath = tempDir.toAbsolutePath().toString();
+			// Run
+			VersionBatchWriter.main(new String[] {"1", "2", "3", "4"});
+			// Check
+			assertTrue(new File(absolutePath).listFiles().length == 0);
+		}
+
+		@Test
+		void passedAnUnknownOSName_DoesCreateAnyFile(@TempDir Path tempDir) throws Exception {
+			// Prepare
+			String absolutePath = tempDir.toAbsolutePath().toString();
+			// Run
+			VersionBatchWriter.main(new String[] {"1", "2", "NoOS"});
+			// Check
+			assertTrue(new File(absolutePath).listFiles().length == 0);
 		}
 
 	}
