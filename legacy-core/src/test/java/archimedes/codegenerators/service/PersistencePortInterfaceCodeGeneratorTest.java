@@ -24,7 +24,7 @@ public class PersistencePortInterfaceCodeGeneratorTest {
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@Spy
-	private TemporalDataNameGenerator nameGenerator = new TemporalDataNameGenerator();
+	private ServiceNameGenerator nameGenerator = new ServiceNameGenerator();
 
 	@InjectMocks
 	private PersistencePortInterfaceCodeGenerator unitUnderTest;
@@ -65,7 +65,6 @@ public class PersistencePortInterfaceCodeGeneratorTest {
 					"\n" + //
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
-			// dataModel.getTableByName("A_TABLE").addOption(new Option(TemporalDataCodeFactory.TEMPORAL));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check

@@ -60,7 +60,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"import base.pack.age.name.rest.v1.converter.ATableDTOConverter;\n" + //
 					"import base.pack.age.name.rest.v1.dto.ATableDTO;\n" + //
 					"import base.pack.age.name.rest.v1.dto.ATableListDTO;\n" + //
-					"import base.pack.age.name.core.ATableService;\n" + //
+					"import base.pack.age.name.core.service.ATableService;\n" + //
 					"\n";
 			if (!suppressComments) {
 				code += "/**\n" + //
@@ -131,7 +131,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"import base.pack.age.name.rest.v1.dto.ATableDTO;\n" + //
 					"import base.pack.age.name.rest.v1.dto.ATableListDTO;\n" + //
 					"import base.pack.age.name.core.model.ATableId;\n" + //
-					"import base.pack.age.name.core.ATableService;\n" + //
+					"import base.pack.age.name.core.service.ATableService;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * A REST controller for a tables.\n" + //
@@ -193,7 +193,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"import base.pack.age.name.rest.v1.dto.ATableDTO;\n" + //
 					"import base.pack.age.name.rest.v1.dto.ATableListDTO;\n" + //
 					"import base.pack.age.name.core.model.ATableId;\n" + //
-					"import base.pack.age.name.core.ATableService;\n" + //
+					"import base.pack.age.name.core.service.ATableService;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * A REST controller for a tables.\n" + //

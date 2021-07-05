@@ -35,7 +35,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 	protected List<CodeGenerator> getCodeGenerators() {
 		return Arrays
 				.asList(
-						new PersistencePortInterfaceCodeGenerator(this));
+						new PersistencePortInterfaceCodeGenerator(this), new ServiceImplClassCodeGenerator(this));
 	}
 
 	@Override

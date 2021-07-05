@@ -1,0 +1,42 @@
+package ${PackageName};
+
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import ${ModelPackageName}.${ModelClassName};
+import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
+import lombok.Generated;
+
+#if (!$CommentsOff)
+/**
+ * A service interface implementation for ${ContextName} management.
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
+#end
+@Generated
+@Named
+public class ${ClassName} {
+
+	@Inject
+	private ${PersistencePortInterfaceName} persistencePort;
+
+	public ${ModelClassName} create(${ModelClassName} model) {
+		return persistencePort.create(model);
+	}
+
+	public Optional<${ModelClassName}> findById(${IdClassName} ${IdFieldName}) {
+		return persistencePort.findById(${IdFieldName});
+	}
+
+	public ${ModelClassName} update(${ModelClassName} model) {
+		return persistencePort.update(model);
+	}
+
+	public void delete(${ModelClassName} model) {
+		persistencePort.delete(model);
+	}
+
+}
