@@ -1,18 +1,18 @@
 package archimedes.codegenerators.service;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
-import archimedes.model.DataModel;
-import archimedes.scheme.Option;
-import archimedes.scheme.xml.ModelXMLReader;
-import org.junit.jupiter.api.Nested;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.model.DataModel;
+import archimedes.scheme.Option;
+import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
 public class ServiceImplClassCodeGeneratorTest {
@@ -51,6 +51,7 @@ public class ServiceImplClassCodeGeneratorTest {
 				"\n" +
 				"import base.pack.age.name.core.model.ATable;\n" +
 				"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" +
+				"import base.pack.age.name.core.service.ATableService;\n" +
 				"import lombok.Generated;\n" +
 				"\n";
 		if (!suppressComment) {
@@ -62,7 +63,8 @@ public class ServiceImplClassCodeGeneratorTest {
 		}
 		expected += "@Generated\n" +
 				"@Named\n" +
-				"public class ATableServiceImpl {\n" +
+				"public class ATableServiceImpl implements ATableService {\n"
+				+
 				"\n" +
 				"\t@Inject\n" +
 				"\tprivate ATablePersistencePort persistencePort;\n" +

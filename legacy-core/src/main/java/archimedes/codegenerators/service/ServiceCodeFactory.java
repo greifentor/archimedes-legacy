@@ -1,24 +1,17 @@
 package archimedes.codegenerators.service;
 
+import java.util.Arrays;
+import java.util.List;
+
 import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.codegenerators.NameGenerator;
-import archimedes.codegenerators.persistence.jpa.DBOClassCodeGenerator;
-import archimedes.codegenerators.persistence.jpa.DBOConverterClassCodeGenerator;
-import archimedes.codegenerators.persistence.jpa.DBOMapstructMapperInterfaceCodeGenerator;
-import archimedes.codegenerators.persistence.jpa.JPAPersistenceAdapterClassCodeGenerator;
-import archimedes.codegenerators.persistence.jpa.JPAPersistenceAdapterDependentClassCodeGenerator;
-import archimedes.codegenerators.persistence.jpa.JPARepositoryInterfaceCodeGenerator;
-import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.model.OptionType;
 import archimedes.model.PredeterminedOptionProvider;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A code factory for services implementations and interfaces for CRUD operations.
@@ -35,7 +28,9 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 	protected List<CodeGenerator> getCodeGenerators() {
 		return Arrays
 				.asList(
-						new PersistencePortInterfaceCodeGenerator(this), new ServiceImplClassCodeGenerator(this));
+						new PersistencePortInterfaceCodeGenerator(this),
+						new ServiceImplClassCodeGenerator(this),
+						new ServiceInterfaceCodeGenerator(this));
 	}
 
 	@Override

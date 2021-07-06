@@ -19,7 +19,7 @@ public class ServiceNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX = "ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_SERVICE_IMPL_PACKAGE_NAME = "ALTERNATE_SERVICE_IMPL_PACKAGE_NAME";
 	public static final String ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX = "ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX";
-	public static final String ALTERNATE_SERVICE_PACKAGE_NAME = "ALTERNATE_SERVICE_PACKAGE_NAME";
+	public static final String ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME = "ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME";
 
 	public String getIdModelClassName(TableModel table) {
 		return table != null
@@ -27,13 +27,13 @@ public class ServiceNameGenerator extends NameGenerator {
 				: null;
 	}
 
-	public String getServiceClassName(TableModel table) {
+	public String getServiceInterfaceName(TableModel table) {
 		return table != null
-				? getClassName(table) + getServiceImplNameSuffix(table)
+				? getClassName(table) + getServiceInterfaceNameSuffix(table)
 				: null;
 	}
 
-	private String getServiceImplNameSuffix(TableModel table) {
+	private String getServiceInterfaceNameSuffix(TableModel table) {
 		return getNameOrAlternativeFromOption(table, "Service", ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX);
 	}
 
@@ -48,21 +48,11 @@ public class ServiceNameGenerator extends NameGenerator {
 	}
 
 	public String getServiceImplPackageName(DataModel model, TableModel table) {
-		if (model == null) {
-			return null;
-		}
-		String basePackageName = getBasePackageNameWithDotExtension(model, table);
-		String packageName = getNameOrAlternativeFromOption(table, "core.service.impl", ALTERNATE_SERVICE_IMPL_PACKAGE_NAME);
-		return basePackageName + packageName;
+		return createPackageName(model, table, "core.service.impl", ALTERNATE_SERVICE_IMPL_PACKAGE_NAME);
 	}
 
-	public String getServicePackageName(DataModel model, TableModel table) {
-		if (model == null) {
-			return null;
-		}
-		String basePackageName = getBasePackageNameWithDotExtension(model, table);
-		String packageName = getNameOrAlternativeFromOption(table, "core.service", ALTERNATE_SERVICE_PACKAGE_NAME);
-		return basePackageName + packageName;
+	public String getServiceInterfacePackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "core.service", ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME);
 	}
 
 	public String getModelClassName(TableModel table) {

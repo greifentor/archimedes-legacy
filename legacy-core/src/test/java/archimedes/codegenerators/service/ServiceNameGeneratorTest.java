@@ -1,10 +1,11 @@
 package archimedes.codegenerators.service;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.DataModel;
-import archimedes.model.OptionModel;
-import archimedes.model.TableModel;
-import archimedes.scheme.Option;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,11 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
+import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 
 @ExtendWith(MockitoExtension.class)
 public class ServiceNameGeneratorTest {
@@ -143,186 +144,185 @@ public class ServiceNameGeneratorTest {
 
 	}
 
-	@DisplayName("Tests for Service class names")
+	@DisplayName("Tests for Service interface names")
 	@Nested
 	class ServiceClassNameTests {
 
 		@Test
-		void getServiceClassName_PassTableModelWithEmptyName_ThrowsException() {
+		void getServiceInterfaceName_PassTableModelWithEmptyName_ThrowsException() {
 			// Prepare
 			when(table.getName()).thenReturn("");
 			// Run
 			assertThrows(IllegalArgumentException.class, () -> {
-				unitUnderTest.getServiceClassName(table);
+				unitUnderTest.getServiceInterfaceName(table);
 			});
 		}
 
 		@Test
-		void getServiceClassName_PassNullValue_ReturnsNullValue() {
-			assertNull(unitUnderTest.getServiceClassName(null));
+		void getServiceInterfaceName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getServiceInterfaceName(null));
 		}
 
 		@Test
-		void getServiceClassName_PassTableModelWithNameCamelCase_ReturnsACorrectServiceName() {
+		void getServiceInterfaceName_PassTableModelWithNameCamelCase_ReturnsACorrectServiceName() {
 			// Prepare
 			String expected = "TestTableService";
 			when(table.getName()).thenReturn("TestTable");
 			// Run
-			String returned = unitUnderTest.getServiceClassName(table);
+			String returned = unitUnderTest.getServiceInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServiceClassName_PassTableModelWithNameUpperCase_ReturnsACorrectServiceName() {
+		void getServiceInterfaceName_PassTableModelWithNameUpperCase_ReturnsACorrectServiceName() {
 			// Prepare
 			String expected = "TableService";
 			when(table.getName()).thenReturn("TABLE");
 			// Run
-			String returned = unitUnderTest.getServiceClassName(table);
+			String returned = unitUnderTest.getServiceInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServiceClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectServiceName() {
+		void getServiceInterfaceName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectServiceName() {
 			// Prepare
 			String expected = "TableNameService";
 			when(table.getName()).thenReturn("TABLE_NAME");
 			// Run
-			String returned = unitUnderTest.getServiceClassName(table);
+			String returned = unitUnderTest.getServiceInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServiceClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectServiceName() {
+		void getServiceInterfaceName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectServiceName() {
 			// Prepare
 			String expected = "TableNameService";
 			when(table.getName()).thenReturn("table_name");
 			// Run
-			String returned = unitUnderTest.getServiceClassName(table);
+			String returned = unitUnderTest.getServiceInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServiceClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectServiceName() {
+		void getServiceInterfaceName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectServiceName() {
 			// Prepare
 			String expected = "TableNameService";
 			when(table.getName()).thenReturn("Table_Name");
 			// Run
-			String returned = unitUnderTest.getServiceClassName(table);
+			String returned = unitUnderTest.getServiceInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServiceClassName_PassTableModelWithNameLowerCase_ReturnsACorrectServiceName() {
+		void getServiceInterfaceName_PassTableModelWithNameLowerCase_ReturnsACorrectServiceName() {
 			// Prepare
 			String expected = "TableService";
 			when(table.getName()).thenReturn("table");
 			// Run
-			String returned = unitUnderTest.getServiceClassName(table);
+			String returned = unitUnderTest.getServiceInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServiceClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectServiceName() {
+		void getServiceInterfaceName_PassTableModelNameSingleUpperCase_ReturnsACorrectServiceName() {
 			// Prepare
 			String expected = "TService";
 			when(table.getName()).thenReturn("T");
 			// Run
-			String returned = unitUnderTest.getServiceClassName(table);
+			String returned = unitUnderTest.getServiceInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServiceClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectServiceName() {
+		void getServiceInterfaceName_PassTableModelNameSinglelowerCase_ReturnsACorrectServiceName() {
 			// Prepare
 			String expected = "TService";
 			when(table.getName()).thenReturn("t");
 			// Run
-			String returned = unitUnderTest.getServiceClassName(table);
+			String returned = unitUnderTest.getServiceInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServiceClassName_PassTableModelEmptyAsWithAlternateClassSuffix_ReturnsACorrectClassName() {
+		void getServiceInterfaceName_PassTableModelEmptyAsWithAlternateClassSuffix_ReturnsACorrectClassName() {
 			// Prepare
-			String expected = "TableAdapter";
+			String expected = "TablePort";
 			when(table.getName()).thenReturn("Table");
 			when(table.getDataModel()).thenReturn(model);
 			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX))
-					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX, "Adapter"));
+					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX, "Port"));
 			// Run
-			String returned = unitUnderTest.getServiceClassName(table);
+			String returned = unitUnderTest.getServiceInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 	}
 
-	@DisplayName("Tests for Service package names")
+	@DisplayName("Tests for Service interface package names")
 	@Nested
 	class ServicePackageNameTests {
 
 		@Test
-		void getServicePackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getServicePackageName(null, table));
+		void getServiceInterfacePackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getServiceInterfacePackageName(null, table));
 		}
 
 		@Test
-		void getServicePackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("core.service", unitUnderTest.getServicePackageName(model, null));
+		void getServiceInterfacePackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("core.service", unitUnderTest.getServiceInterfacePackageName(model, null));
 		}
 
 		@Test
-		void getServicePackageName_PassAValidDataModel_ReturnsACorrecServiceName() {
+		void getServiceInterfacePackageName_PassAValidDataModel_ReturnsACorrecServiceName() {
 			// Prepare
 			String expected = BASE_PACKAGE_NAME + ".core.service";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
-			String returned = unitUnderTest.getServicePackageName(model, table);
+			String returned = unitUnderTest.getServiceInterfacePackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServicePackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectServiceName() {
+		void getServiceInterfacePackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectServiceName() {
 			// Prepare
 			String expected = "core.service";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
-			String returned = unitUnderTest.getServicePackageName(model, table);
+			String returned = unitUnderTest.getServiceInterfacePackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServicePackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectServiceName() {
+		void getServiceInterfacePackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectServiceName() {
 			// Prepare
 			String expected = "core.service";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
-			String returned = unitUnderTest.getServicePackageName(model, table);
+			String returned = unitUnderTest.getServiceInterfacePackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void getServicePackageName_PassAValidDataModelWithSetWithAlternatePackageName_ReturnsACorrectPackageName() {
+		void getServiceInterfacePackageName_PassAValidDataModelWithSetWithAlternatePackageName_ReturnsACorrectPackageName() {
 			// Prepare
 			String alternatePackageName = "alternate.package.name";
 			String expected = alternatePackageName;
-			when(table.getDataModel()).thenReturn(model);
-			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SERVICE_PACKAGE_NAME))
-					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_SERVICE_PACKAGE_NAME, alternatePackageName));
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME))
+					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME, alternatePackageName));
 			// Run
-			String returned = unitUnderTest.getServicePackageName(model, table);
+			String returned = unitUnderTest.getServiceInterfacePackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -504,7 +504,6 @@ public class ServiceNameGeneratorTest {
 			// Prepare
 			String alternatePackageName = "alternate.package.name";
 			String expected = alternatePackageName;
-			when(table.getDataModel()).thenReturn(model);
 			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_SERVICE_IMPL_PACKAGE_NAME))
 					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_SERVICE_IMPL_PACKAGE_NAME, alternatePackageName));
 			// Run

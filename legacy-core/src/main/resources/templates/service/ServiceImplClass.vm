@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import ${ModelPackageName}.${ModelClassName};
 import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
+import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
 import lombok.Generated;
 
 #if (!$CommentsOff)
@@ -18,7 +19,7 @@ import lombok.Generated;
 #end
 @Generated
 @Named
-public class ${ClassName} {
+public class ${ClassName} implements ${ServiceInterfaceName} {
 
 	@Inject
 	private ${PersistencePortInterfaceName} persistencePort;

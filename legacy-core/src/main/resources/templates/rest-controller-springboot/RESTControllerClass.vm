@@ -15,7 +15,7 @@ import ${ListDTOClassNameQualified};
 #if ($GenerateIdClass)
 import ${IdModelClassNameQualified};
 #end
-import ${ServiceClassNameQualified};
+import ${ServiceInterfaceNameQualified};
 
 #if (!$CommentsOff )
 /**
@@ -31,7 +31,7 @@ public class ${ClassName} {
 	public static final String BASE_URL = "${URL}";
 
 	@Inject
-	private ${ServiceClassName} service;
+	private ${ServiceInterfaceName} service;
 	@Inject
 	private ${DTOConverterClassName} converter;
 

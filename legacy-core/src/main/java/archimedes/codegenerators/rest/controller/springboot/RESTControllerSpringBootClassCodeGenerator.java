@@ -79,13 +79,13 @@ public class RESTControllerSpringBootClassCodeGenerator extends AbstractClassCod
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
 		context.put("PackageName", getPackageName(model, table));
-		context.put("ServiceClassName", serviceNameGenerator.getServiceClassName(table));
+		context.put("ServiceInterfaceName", serviceNameGenerator.getServiceInterfaceName(table));
 		context
 				.put(
-						"ServiceClassNameQualified",
+						"ServiceInterfaceNameQualified",
 						getQualifiedName(
-								serviceNameGenerator.getServicePackageName(model, table),
-								serviceNameGenerator.getServiceClassName(table)));
+								serviceNameGenerator.getServiceInterfacePackageName(model, table),
+								serviceNameGenerator.getServiceInterfaceName(table)));
 		context.put("SimpleName", nameGenerator.getSimpleName(table));
 		context
 				.put(

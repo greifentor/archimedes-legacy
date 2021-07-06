@@ -9,15 +9,15 @@ import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
- * A code generator for service impl classes (port implementations).
+ * A code generator for service interface (port).
  *
  * @author ollie (05.07.2021)
  */
-public class ServiceImplClassCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
+public class ServiceInterfaceCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
 
-	public ServiceImplClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	public ServiceInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"ServiceImplClass.vm",
+				"ServiceInterface.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
 				new ServiceNameGenerator(),
 				new TypeGenerator(),
@@ -34,15 +34,11 @@ public class ServiceImplClassCodeGenerator extends AbstractClassCodeGenerator<Se
 		context.put("ModelClassName", nameGenerator.getModelClassName(table));
 		context.put("ModelPackageName", nameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
-		context.put("PersistencePortInterfaceName", nameGenerator.getPersistencePortInterfaceName(table));
-		context.put("PersistencePortPackageName", nameGenerator.getPersistencePortPackageName(model, table));
-		context.put("ServiceInterfaceName", nameGenerator.getServiceInterfaceName(table));
-		context.put("ServiceInterfacePackageName", nameGenerator.getServiceInterfacePackageName(model, table));
 	}
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getServiceImplClassName(table);
+		return nameGenerator.getServiceInterfaceName(table);
 	}
 
 	@Override
@@ -52,7 +48,7 @@ public class ServiceImplClassCodeGenerator extends AbstractClassCodeGenerator<Se
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getServiceImplPackageName(model, table);
+		return nameGenerator.getServiceInterfacePackageName(model, table);
 	}
 
 }
