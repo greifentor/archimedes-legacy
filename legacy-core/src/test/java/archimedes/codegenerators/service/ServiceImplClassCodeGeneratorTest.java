@@ -42,49 +42,52 @@ public class ServiceImplClassCodeGeneratorTest {
 	}
 
 	private String createExpected(boolean suppressComment) {
-		String expected = "package " + BASE_PACKAGE_NAME + ".core.service.impl;\n" +
-				"\n" +
-				"import java.util.Optional;\n" +
-				"\n" +
-				"import javax.inject.Inject;\n" +
-				"import javax.inject.Named;\n" +
-				"\n" +
-				"import base.pack.age.name.core.model.ATable;\n" +
-				"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" +
-				"import base.pack.age.name.core.service.ATableService;\n" +
-				"import lombok.Generated;\n" +
+		String expected = "package " + BASE_PACKAGE_NAME + ".core.service.impl;\n" + //
+				"\n" + //
+				"import java.util.Optional;\n" + //
+				"\n" + //
+				"import javax.inject.Inject;\n" + //
+				"import javax.inject.Named;\n" + //
+				"\n" + //
+				"import base.pack.age.name.core.model.ATable;\n" + //
+				"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
+				"import base.pack.age.name.core.service.ATableService;\n" + //
+				"import lombok.Generated;\n" + //
 				"\n";
 		if (!suppressComment) {
 			expected += "/**\n" +
-					" * A service interface implementation for ATable management.\n" +
-					" *\n" +
-					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" +
+					" * A service interface implementation for ATable management.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n";
 		}
-		expected += "@Generated\n" +
-				"@Named\n" +
-				"public class ATableServiceImpl implements ATableService {\n"
-				+
-				"\n" +
-				"\t@Inject\n" +
-				"\tprivate ATablePersistencePort persistencePort;\n" +
-				"\n" +
-				"\tpublic ATable create(ATable model) {\n" +
-				"\t\treturn persistencePort.create(model);\n" +
-				"\t}\n" +
-				"\n" +
-				"\tpublic Optional<ATable> findById(Long id) {\n" +
-				"\t\treturn persistencePort.findById(id);\n" +
-				"\t}\n" +
-				"\n" +
-				"\tpublic ATable update(ATable model) {\n" +
-				"\t\treturn persistencePort.update(model);\n" +
-				"\t}\n" +
-				"\n" +
-				"\tpublic void delete(ATable model) {\n" +
-				"\t\tpersistencePort.delete(model);\n" +
-				"\t}\n" +
-				"\n" +
+		expected += "@Generated\n" + //
+				"@Named\n" + //
+				"public class ATableServiceImpl implements ATableService {\n" + //
+				"\n" + //
+				"\t@Inject\n" + //
+				"\tprivate ATablePersistencePort persistencePort;\n" + //
+				"\n" + //
+				"\t@Override\n" + //
+				"\tpublic ATable create(ATable model) {\n" + //
+				"\t\treturn persistencePort.create(model);\n" + //
+				"\t}\n" + //
+				"\n" + //
+				"\t@Override\n" + //
+				"\tpublic Optional<ATable> findById(Long id) {\n" + //
+				"\t\treturn persistencePort.findById(id);\n" + //
+				"\t}\n" + //
+				"\n" + //
+				"\t@Override\n" + //
+				"\tpublic ATable update(ATable model) {\n" + //
+				"\t\treturn persistencePort.update(model);\n" + //
+				"\t}\n" + //
+				"\n" + //
+				"\t@Override\n" + //
+				"\tpublic void delete(ATable model) {\n" + //
+				"\t\tpersistencePort.delete(model);\n" + //
+				"\t}\n" + //
+				"\n" + //
 				"}";
 		return expected;
 	}

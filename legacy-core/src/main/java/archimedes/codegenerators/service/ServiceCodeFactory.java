@@ -59,7 +59,11 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 						ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
 						ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
 						ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
-						ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME
+						ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
+						ServiceNameGenerator.ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX,
+						ServiceNameGenerator.ALTERNATE_SERVICE_IMPL_PACKAGE_NAME,
+						ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX,
+						ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME
 				};
 			case TABLE:
 				return new String[]{
