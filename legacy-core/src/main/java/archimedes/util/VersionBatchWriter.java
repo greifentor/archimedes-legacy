@@ -31,6 +31,7 @@ public class VersionBatchWriter {
 			}
 			try {
 				FileUtil.writeTextToFile(completeFileName, false, content);
+				System.out.println("Wrote file: " + completeFileName);
 			} catch (IOException ioe) {
 				System.out.println("Error while writing 'set-version' file: " + ioe.getMessage());
 			}
