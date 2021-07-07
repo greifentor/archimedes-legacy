@@ -1,5 +1,6 @@
 package archimedes.util;
 
+import java.io.File;
 import java.io.IOException;
 
 import corentx.io.FileUtil;
@@ -13,16 +14,16 @@ public class VersionBatchWriter {
 			System.out.println("- (1) new version.");
 			System.out.println("- (2) operating system name (valid: \"LINUX\", \"WINDOWS\").\n");
 		} else {
-			String folder = args[0];
+			String folder = args[0] + File.separator;
 			String newVersion = args[1];
 			String osName = args[2];
 			String completeFileName = "";
 			String content = "";
 			if (osName.equalsIgnoreCase("LINUX")) {
-				completeFileName = folder + "/set-version.sh";
+				completeFileName = folder + "set-version.sh";
 				content = "export ARCHIMEDES_VERSION=" + newVersion + "\n";
 			} else if (osName.equalsIgnoreCase("WINDOWS")) {
-				completeFileName = folder + "\\set-version.bat";
+				completeFileName = folder + "set-version.bat";
 				content = "SET ARCHIMEDES_VERSION=" + newVersion + "\r\n";
 			} else {
 				System.out.println("Illegal OS name '" + osName + "'! Valid is: 'LINUX' or 'WINDOWS'.");
