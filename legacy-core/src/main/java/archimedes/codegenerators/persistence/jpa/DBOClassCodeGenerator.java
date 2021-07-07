@@ -140,17 +140,17 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 																				"\"" + sequenceGeneratorName + "\""))));
 			}
 		}
-		annotations
-				.add(
-						new AnnotationData()
-								.setName("Column")
-								.setParameters(
-										Arrays
-												.asList(
-														new ParameterData()
-																.setName("name")
-																.setValue("\"" + column.getName() + "\""))));
+		annotations.add(new AnnotationData().setName("Column").setParameters(getColumnAnnotationParameters(column)));
 		return annotations;
+	}
+
+	private List<ParameterData> getColumnAnnotationParameters(ColumnModel column) {
+		List<ParameterData> l = new ArrayList<ParameterData>();
+		l.add(new ParameterData().setName("name").setValue("\"" + column.getName() + "\""));
+		if (column.isNotNull()) {
+			l.add(new ParameterData().setName("nullable").setValue("false"));
+		}
+		return l;
 	}
 
 	@Override

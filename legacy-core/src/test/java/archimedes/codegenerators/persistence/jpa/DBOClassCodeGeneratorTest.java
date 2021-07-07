@@ -49,6 +49,11 @@ public class DBOClassCodeGeneratorTest {
 		}
 
 		private String getExpected(String prefix, String packageName, boolean suppressComment) {
+			return getExpected(prefix, packageName, suppressComment, false);
+		}
+
+		private String getExpected(String prefix, String packageName, boolean suppressComment,
+				boolean descriptionNotNull) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 							"\n" + //
@@ -82,7 +87,7 @@ public class DBOClassCodeGeneratorTest {
 					"	private long id;\n" + //
 					"	@Column(name = \"ADate\")\n" + //
 					"	private LocalDate aDate;\n" + //
-					"	@Column(name = \"Description\")\n" + //
+					"	@Column(name = \"Description\"" + (descriptionNotNull ? ", nullable = false" : "") + ")\n" + //
 					"	private String description;\n" + //
 					"\n" + //
 					"}";
@@ -142,6 +147,19 @@ public class DBOClassCodeGeneratorTest {
 			DataModel dataModel = readDataModel("Model.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithNotNullField() {
+			// Prepare
+			String expected = getExpected(null, "persistence.entity", false, true);
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.getColumnByName("Description").setNotNull(true);
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
