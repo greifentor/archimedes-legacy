@@ -22,6 +22,8 @@ public class DBTypeConverter {
 	public TypeSO convert(int dataType, int length, int precision) {
 		if (dataType == Types.BIGINT) {
 			return new TypeSO().setSqlType(dataType);
+		} else if (dataType == Types.BINARY) {
+			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.BIT) {
 			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.BLOB) {
@@ -38,11 +40,11 @@ public class DBTypeConverter {
 			return new TypeSO().setSqlType(dataType).setLength(length).setPrecision(precision);
 		} else if (dataType == Types.INTEGER) {
 			return new TypeSO().setSqlType(dataType);
-		} else if (dataType == -1) {
+		} else if (dataType == Types.LONGVARCHAR) {
 			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.NUMERIC) {
 			return new TypeSO().setSqlType(dataType).setLength(length).setPrecision(precision);
-		} else if (dataType == 1111) {
+		} else if (dataType == Types.OTHER) {
 			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.ROWID) {
 			return new TypeSO().setSqlType(dataType);

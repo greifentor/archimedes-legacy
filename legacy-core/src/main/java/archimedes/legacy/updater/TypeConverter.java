@@ -21,6 +21,7 @@ public class TypeConverter {
 			Arrays
 					.asList(
 							new TypeInfo(Types.BIGINT, "BIGINT"),
+							new TypeInfo(Types.BINARY, "BINARY"),
 							new TypeInfo(Types.BIT, "BIT"),
 							new TypeInfo(Types.BLOB, "BLOB"),
 							new TypeInfo(Types.BOOLEAN, "BOOLEAN"),

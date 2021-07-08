@@ -92,6 +92,7 @@ public final class DBType {
 	}
 
 	public static final DBType BIGINT = new DBType("BIGINT");
+	public static final DBType BINARY = new DBType("BINARY");
 	public static final DBType BIT = new DBType("BIT");
 	public static final DBType BLOB = new DBType("BLOB");
 	public static final DBType BOOLEAN = new DBType("BOOLEAN");
@@ -119,6 +120,8 @@ public final class DBType {
 		switch (type) {
 		case Types.BIGINT:
 			return BIGINT;
+		case Types.BINARY:
+			return BINARY;
 		case Types.BIT:
 			return BIT;
 		case Types.BLOB:
@@ -170,6 +173,8 @@ public final class DBType {
 	public static int Convert(DBType dbtype) {
 		if (dbtype == BIGINT) {
 			return Types.BIGINT;
+		} else if (dbtype == BINARY) {
+			return Types.BINARY;
 		} else if (dbtype == BIT) {
 			return Types.BIT;
 		} else if (dbtype == BLOB) {
@@ -211,6 +216,8 @@ public final class DBType {
 	public static String GetSQLType(DBType dbtype, DBExecMode dbmode) {
 		if (dbtype == BIGINT) {
 			return "bigint";
+		} else if (dbtype == BINARY) {
+			return "binary";
 		} else if (dbtype == BIT) {
 			return "bit";
 		} else if (dbtype == BLOB) {
