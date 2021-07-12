@@ -1,14 +1,14 @@
 package archimedes.legacy.exporter.sql;
 
-import static corentx.util.Checks.ensure;
+import archimedes.model.ColumnModel;
+import archimedes.model.DomainModel;
 
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.DomainModel;
+import static corentx.util.Checks.ensure;
 
 public class InsertStatementGenerator {
 
@@ -18,22 +18,19 @@ public class InsertStatementGenerator {
 		ensure(values != null, "values array cannot be null.");
 		ensure(values.length > 0, "values array cannot be empty.");
 		ensure(columns.length == values.length, "length of columns and values array should be equal.");
-		final StringBuilder sb = new StringBuilder("INSERT INTO ").append(columns[0].getTable().getName()).append(" (");
+		final StringBuilder sb = new StringBuilder("INSERT INTO ").append(columns[0].getTable().getName()).append(" " +
+				"(");
 		sb
 				.append(
-						Arrays
-								.asList(columns)
-								.stream()
-								.map(column -> column.getName())
+						Arrays.stream(columns)
+								.map(ColumnModel::getName)
 								.reduce((s0, s1) -> s0 + ", " + s1)
 								.orElse(""));
 		sb.append(") VALUES (");
 		sb
 				.append(
-						Arrays
-								.asList(values)
-								.stream()
-								.map(value -> toSQLString(value))
+						Arrays.stream(values)
+								.map(this::toSQLString)
 								.reduce((s0, s1) -> s0 + ", " + s1)
 								.orElse(""));
 		sb.append(");");
@@ -44,7 +41,7 @@ public class InsertStatementGenerator {
 		if (o == null) {
 			return "NULL";
 		} else if (o instanceof String) {
-			return "'" + o.toString() + "'";
+			return "'" + o + "'";
 		}
 		return o.toString();
 	}
@@ -58,8 +55,13 @@ public class InsertStatementGenerator {
 			DomainModel domain = columns[i].getDomain();
 			if (domain.getDataType() == Types.BIGINT) {
 				l.add((long) i);
-			} else if (domain.getDataType() == Types.DOUBLE) {
+			} else if (domain.getDataType() == Types.BOOLEAN) {
+				l.add(false);
+			} else if ((domain.getDataType() == Types.DECIMAL) || (domain.getDataType() == Types.DOUBLE) ||
+					(domain.getDataType() == Types.NUMERIC)) {
 				l.add((double) i);
+			} else if (domain.getDataType() == Types.FLOAT) {
+				l.add((float) i);
 			} else if (domain.getDataType() == Types.INTEGER) {
 				l.add(i);
 			} else if (domain.getDataType() == Types.VARCHAR) {

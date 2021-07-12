@@ -1,23 +1,27 @@
 package archimedes.legacy.exporter.sql;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-
-import java.sql.Types;
-
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import archimedes.legacy.scheme.Domain;
 import archimedes.model.ColumnModel;
 import archimedes.model.DomainModel;
 import archimedes.model.TableModel;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.sql.Types;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class InsertStatementGeneratorTest {
@@ -30,12 +34,61 @@ public class InsertStatementGeneratorTest {
 	private static final String TABLE_NAME = "TableName";
 
 	@Mock
-	private ColumnModel column1, column2, column3;
+	private ColumnModel column1, column2, column3, column4;
 	@Mock
 	private TableModel table;
 
 	@InjectMocks
 	private InsertStatementGenerator unitUnderTest;
+
+	private static Stream<Arguments> getTestArgumentsForCreateDummyData() {
+		return Stream.of(
+				Arguments.of(Types.BIGINT, 0, 0, 0L),
+				Arguments.of(Types.BOOLEAN, 0, 0, false),
+				Arguments.of(Types.DECIMAL, 0, 0, 0.0D),
+				Arguments.of(Types.DOUBLE, 0, 0, 0.0D),
+				Arguments.of(Types.FLOAT, 0, 0, 0.0F),
+				Arguments.of(Types.INTEGER, 0, 0, 0),
+				Arguments.of(Types.NUMERIC, 0, 0, 0.0D),
+				Arguments.of(Types.VARCHAR, 0, 0, "String0"));
+	}
+
+	@Nested
+	class TestsForMethod_createDummyData_ColumnModelArr {
+
+		@Test
+		void passANullValue_returnsANullValue() {
+			assertNull(unitUnderTest.createDummyData(null));
+		}
+
+		@ParameterizedTest
+		@MethodSource("archimedes.legacy.exporter.sql.InsertStatementGeneratorTest#getTestArgumentsForCreateDummyData")
+		void passAColumnsWithDomain_returnsATheCorrectDummyValue(int type, int length, int nks, Object expected) {
+			// Prepare
+			DomainModel domain = new Domain("name", type, length, nks);
+			when(column1.getDomain()).thenReturn(domain);
+			// Run
+			Object[] returned = unitUnderTest.createDummyData(new ColumnModel[]{column1});
+			// Check
+			assertEquals(1, returned.length);
+			assertEquals(expected, returned[0]);
+		}
+
+		@Test
+		void passSomeColumnsWithDomains_returnsCorrectProgressingValues() {
+			// Prepare
+			Object[] expected = new Object[] {false, 1.0D, "String2", 3};
+			when(column1.getDomain()).thenReturn(new Domain("name1",Types.BOOLEAN, 0, 0));
+			when(column2.getDomain()).thenReturn(new Domain("name2", Types.NUMERIC,10, 2));
+			when(column3.getDomain()).thenReturn(new Domain("name3", Types.VARCHAR, 50, 0));
+			when(column4.getDomain()).thenReturn(new Domain("name4", Types.INTEGER, 0, 0));
+			// Run
+			Object[] returned = unitUnderTest.createDummyData(new ColumnModel[] {column1, column2, column3, column4});
+			// Check
+			assertArrayEquals(expected , returned);
+		}
+
+	}
 
 	@Nested
 	class TestsForMethod_generate_ColumnModelArr_ObjectArr {
@@ -44,33 +97,38 @@ public class InsertStatementGeneratorTest {
 		void passAnEmptyArrayForColumns_throwsAnException() {
 			assertThrows(
 					IllegalArgumentException.class,
-					() -> unitUnderTest.generate(new ColumnModel[0], new Object[] { ";op" }));
+					() -> unitUnderTest.generate(new ColumnModel[0], new Object[]{";op"}));
 		}
 
 		@Test
 		void passANullValueAsColumnsArray_throwsAnException() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.generate(null, new Object[] { ";op" }));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.generate(null, new Object[]{";op"}));
 		}
 
 		@Test
 		void passAnEmptyArrayAsValues_throwsAnException() {
 			assertThrows(
 					IllegalArgumentException.class,
-					() -> unitUnderTest.generate(new ColumnModel[] { column1 }, new Object[0]));
+					() -> unitUnderTest.generate(new ColumnModel[]{column1}, new Object[0]));
 		}
 
 		@Test
 		void passANullValueAsValuesArray_throwsAnException() {
 			assertThrows(
 					IllegalArgumentException.class,
-					() -> unitUnderTest.generate(new ColumnModel[] { column1 }, null));
+					() -> unitUnderTest.generate(new ColumnModel[]{column1}, null));
 		}
 
 		@Test
 		void passAArraysWithDifferentLength_throwsAnException() {
 			assertThrows(
 					IllegalArgumentException.class,
-					() -> unitUnderTest.generate(new ColumnModel[] { column1 }, new Object[] { ";op", ":o)" }));
+					() -> unitUnderTest.generate(
+							new ColumnModel[]{column1},
+							new Object[]{
+									";op",
+									":o)"
+							}));
 		}
 
 		@Test
@@ -79,9 +137,10 @@ public class InsertStatementGeneratorTest {
 			when(column1.getName()).thenReturn(COLUMN_NAME_1);
 			when(column1.getTable()).thenReturn(table);
 			when(table.getName()).thenReturn(TABLE_NAME);
-			String expected = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_NAME_1 + ") VALUES ('" + STRING_VALUE + "');";
+			String expected = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_NAME_1 + ") VALUES ('" + STRING_VALUE +
+					"');";
 			// Run
-			String returned = unitUnderTest.generate(new ColumnModel[] { column1 }, new Object[] { STRING_VALUE });
+			String returned = unitUnderTest.generate(new ColumnModel[]{column1}, new Object[]{STRING_VALUE});
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -110,72 +169,18 @@ public class InsertStatementGeneratorTest {
 			// Run
 			String returned = unitUnderTest
 					.generate(
-							new ColumnModel[] { column1, column2, column3 },
-							new Object[] { STRING_VALUE, INT_VALUE, null });
+							new ColumnModel[]{
+									column1,
+									column2,
+									column3
+							},
+							new Object[]{
+									STRING_VALUE,
+									INT_VALUE,
+									null
+							});
 			// Check
 			assertEquals(expected, returned);
-		}
-
-	}
-
-	@Nested
-	class TestsOfMethod_createDummyData_ColumnModelArr {
-
-		@Test
-		void passANullValue_returnsANullValue() {
-			assertNull(unitUnderTest.createDummyData(null));
-		}
-
-		@Test
-		void passAColumnsWithDomainBIGINT_returnsATheCorrectDummyValue() {
-			// Prepare
-			Object expected = 0L;
-			DomainModel domain = new Domain("name", Types.BIGINT, 0, 0);
-			when(column1.getDomain()).thenReturn(domain);
-			// Run
-			Object[] returned = unitUnderTest.createDummyData(new ColumnModel[] { column1 });
-			// Check
-			assertEquals(1, returned.length);
-			assertEquals(expected, returned[0]);
-		}
-
-		@Test
-		void passAColumnsWithDomainDOUBLE_returnsATheCorrectDummyValue() {
-			// Prepare
-			Object expected = 0.0D;
-			DomainModel domain = new Domain("name", Types.DOUBLE, 0, 0);
-			when(column1.getDomain()).thenReturn(domain);
-			// Run
-			Object[] returned = unitUnderTest.createDummyData(new ColumnModel[] { column1 });
-			// Check
-			assertEquals(1, returned.length);
-			assertEquals(expected, returned[0]);
-		}
-
-		@Test
-		void passAColumnsWithDomainINTEGER_returnsATheCorrectDummyValue() {
-			// Prepare
-			Object expected = 0;
-			DomainModel domain = new Domain("name", Types.INTEGER, 0, 0);
-			when(column1.getDomain()).thenReturn(domain);
-			// Run
-			Object[] returned = unitUnderTest.createDummyData(new ColumnModel[] { column1 });
-			// Check
-			assertEquals(1, returned.length);
-			assertEquals(expected, returned[0]);
-		}
-
-		@Test
-		void passAColumnsWithDomainVARCHAR_returnsATheCorrectDummyValue() {
-			// Prepare
-			Object expected = "String0";
-			DomainModel domain = new Domain("name", Types.VARCHAR, 50, 0);
-			when(column1.getDomain()).thenReturn(domain);
-			// Run
-			Object[] returned = unitUnderTest.createDummyData(new ColumnModel[] { column1 });
-			// Check
-			assertEquals(1, returned.length);
-			assertEquals(expected, returned[0]);
 		}
 
 	}
