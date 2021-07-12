@@ -18,6 +18,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -29,6 +30,7 @@ import javax.swing.JComponent;
 
 import archimedes.gui.PaintMode;
 import archimedes.gui.StatusBarOwner;
+import archimedes.legacy.exporter.sql.InsertStatementGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.StereotypeModel;
 import archimedes.model.TableModel;
@@ -128,6 +130,7 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 	private GUIViewModel view = null;
 	private StatusBarOwner statusBarOwner = null;
 	private AdditionalDiagramInfoReplacer additionalDiagramInfoReplacer = new AdditionalDiagramInfoReplacer();
+	private InsertStatementGenerator insertStatementGenerator = new InsertStatementGenerator();
 
 	/**
 	 * Erzeugt eine neue Komponente zur Abbildung eines Diagramms anhand der &uuml;bergebenen Parameter.
@@ -200,6 +203,15 @@ public class ComponentDiagramm<T extends Enum<?>> extends JComponent implements 
 						repaint();
 					} catch (Exception ex) {
 						ex.printStackTrace();
+					}
+				} else if ((e.getButton() == MouseEvent.BUTTON3) && e.isAltDown()) {
+					if ((v.size() > 0) && (v.get(0) instanceof TableModel)) {
+						TableModel tm = (TableModel) v.get(0);
+						Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+						String statement = insertStatementGenerator
+								.generate(tm.getColumns(), insertStatementGenerator.createDummyData(tm.getColumns()));
+						StringSelection stringSelection = new StringSelection(statement);
+						cb.setContents(stringSelection, stringSelection);
 					}
 				}
 				if ((e.getButton() == MouseEvent.BUTTON3)) {
