@@ -1,7 +1,12 @@
 package ${PackageName};
 
+#if ($ImportLocalDate || $ImportLocalDateTime)
 #if ($ImportLocalDate)
 import ${ImportLocalDate};
+#end
+#if ($ImportLocalDateTime)
+import ${ImportLocalDateTime};
+#end
 
 #end
 #if ($POJOMode == "BUILDER")

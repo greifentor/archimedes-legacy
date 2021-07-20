@@ -40,6 +40,9 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
+		if (Columns.containsFieldWithType(columnData, "LocalDateTime")) {
+			context.put("ImportLocalDateTime", "java.time.LocalDateTime");
+		}
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
 		context.put("TableName", table.getName());
