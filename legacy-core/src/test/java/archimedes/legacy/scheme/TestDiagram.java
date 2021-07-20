@@ -53,8 +53,8 @@ public class TestDiagram {
 	// CodeFactoryMock("CodeDefault");
 	private Diagramm dm2 = null;
 	private DiagrammModel dm = null;
-	private JDBCDataSourceRecord jdbcdsr2 = new JDBCDataSourceRecord("org.hsqldb.jdbcDriver",
-			"jdbc:hsqldb:target/test2", "sa", "");
+	private JDBCDataSourceRecord jdbcdsr2 =
+			new JDBCDataSourceRecord("org.hsqldb.jdbcDriver", "jdbc:hsqldb:target/test2", "sa", "");
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -129,21 +129,6 @@ public class TestDiagram {
 	 * @changed OLI 21.06.2016 - Added.
 	 */
 	@Test
-	public void testGenerateCodeUsesPassedFactories() {
-		this.dcfm = new CodeFactoryMock("");
-		this.cleanFiles();
-		this.dm.setCodeFactoryClassName(
-				"archimedes.legacy.scheme.CodeFactoryMockCode01, " + "archimedes.legacy.scheme.CodeFactoryMockCode02");
-		boolean ok = this.dm.generateCode(this.dcfm, "./", null);
-		assertTrue(ok);
-		assertTrue(new File("./Code01.tmp").exists() && new File("./Code02.tmp").exists()
-				&& !new File("./CodeDefault.tmp").exists());
-	}
-
-	/**
-	 * @changed OLI 21.06.2016 - Added.
-	 */
-	@Test
 	public void testGenerateCodePassesNullForDefaultFactory() {
 		this.cleanFiles();
 		this.dm.setCodeFactoryClassName("DefaultCode");
@@ -162,8 +147,9 @@ public class TestDiagram {
 		th.start();
 		boolean ok = this.dm.generateCode(null, "./", null);
 		assertTrue(ok);
-		assertTrue(!new File("./Code01.tmp").exists() && !new File("./Code02.tmp").exists()
-				&& !new File("./CodeDefault.tmp").exists());
+		assertTrue(
+				!new File("./Code01.tmp").exists() && !new File("./Code02.tmp").exists()
+						&& !new File("./CodeDefault.tmp").exists());
 	}
 
 	/**
@@ -177,8 +163,9 @@ public class TestDiagram {
 		this.dm.setCodeFactoryClassName("archimedes.scheme.CodeFactoryMockFantasy");
 		boolean ok = this.dm.generateCode(this.dcfm, "./", null);
 		assertTrue(ok);
-		assertTrue(!new File("./Code01.tmp").exists() && !new File("./Code02.tmp").exists()
-				&& !new File("./CodeDefault.tmp").exists());
+		assertTrue(
+				!new File("./Code01.tmp").exists() && !new File("./Code02.tmp").exists()
+						&& !new File("./CodeDefault.tmp").exists());
 		// Default-Factory auf null und nicht existente Phantasie-Factory.
 		/*
 		 * das laeuft richtig. Allerdings bekommt man dadurch erzeugte Directory "testmodel" nicht mehr weg. Deshalb ist

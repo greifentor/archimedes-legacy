@@ -66,8 +66,6 @@ import archimedes.acf.checker.ModelCheckerThreadObserver;
 import archimedes.acf.event.CodeFactoryEvent;
 import archimedes.acf.event.CodeFactoryEventType;
 import archimedes.acf.event.CodeFactoryListener;
-import archimedes.connections.DatabaseConnection;
-import archimedes.gui.DatabaseConnectionRecord;
 import archimedes.gui.DiagramComponentPanel;
 import archimedes.gui.DiagramComponentPanelEvent;
 import archimedes.gui.DiagramComponentPanelListener;
@@ -89,11 +87,9 @@ import archimedes.legacy.checkers.ModelCheckerNoPrimaryKeySet;
 import archimedes.legacy.checkers.ModelCheckerPotentialForeignKeyNotSet;
 import archimedes.legacy.exporter.LiquibaseScriptCreator;
 import archimedes.legacy.gui.codepath.CodePathProvider;
-import archimedes.legacy.gui.comparision.DataModelComparison;
 import archimedes.legacy.gui.configuration.BaseConfiguration;
 import archimedes.legacy.gui.configuration.BaseConfigurationFrame;
 import archimedes.legacy.gui.configuration.BaseConfigurationFrameEvent;
-import archimedes.legacy.gui.connections.ConnectFrame;
 import archimedes.legacy.gui.connections.ConnectionsMainFrame;
 import archimedes.legacy.gui.diagram.DiagramGUIObjectCreator;
 import archimedes.legacy.gui.indices.ComplexIndicesAdministrationFrame;
@@ -143,7 +139,6 @@ import archimedes.model.gui.GUIObjectModel;
 import archimedes.model.gui.GUIViewModel;
 import archimedes.scheme.xml.DiagramXMLBuilder;
 import archimedes.scheme.xml.ModelXMLReader;
-import archimedes.sql.generator.ScriptGenerator;
 import baccara.files.PropertyFileManager;
 import baccara.gui.GUIBundle;
 import baccara.gui.PropertyResourceManager;
@@ -167,9 +162,7 @@ import corent.files.ExtensionFileFilter;
 import corent.files.Inifile;
 import corent.files.StructuredTextFile;
 import corent.gui.COUtil;
-import corent.gui.DefaultFrameTextViewerComponentFactory;
 import corent.gui.ExtendedColor;
-import corent.gui.FrameTextViewer;
 import corent.gui.JDialogThrowable;
 import corent.gui.JFrameWithInifile;
 import corent.gui.PropertyRessourceManager;
@@ -455,19 +448,6 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			component.doRepaint();
 		}));
 		menu.add(new JSeparator());
-		JMenuItem menuItemUpdateScript = this
-				.createMenuItem(
-						"menu.edit.item.create.update.script",
-						"generate",
-						e -> doBearbeitenUpdateScriptErstellenNeu());
-		menuItemUpdateScript.setEnabled(isSQLLogicEnabled());
-		menu.add(menuItemUpdateScript);
-		menu.addSeparator();
-		JMenuItem menuItemCompareModels = this
-				.createMenuItem("menu.edit.item.compare.models", "compare", e -> doBearbeitenDatenmodellVergleichen());
-		menuItemCompareModels.setEnabled(isSQLLogicEnabled());
-		menu.add(menuItemCompareModels);
-		menu.addSeparator();
 		menu.add(this.createMenuItem("menu.edit.item.run.javascript", "run", e -> doBearbeitenRunJavaScript()));
 		menuBar.add(menu);
 		menu = this.createMenu("menu.zoom", "zoom");
@@ -1537,75 +1517,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		new ConnectionsMainFrame(this, this.guiBundle, this.ini, this.diagramm);
 	}
 
-	/**
-	 * Starts a comparision with another data model.
-	 *
-	 * @changed OLI 19.02.2016 - Added.
-	 */
-	public void doBearbeitenDatenmodellVergleichen() {
-		new DataModelComparison(this.diagramm, this.getInifile());
-	}
-
 	public void doBearbeitenRunJavaScript() {
 		new DialogScriptExecuter(this.getInifile(), this, this.diagramm, "JavaScripts");
-	}
-
-	/**
-	 * Creates a SQL update script for a selected database connection (new way).
-	 *
-	 * @changed OLI 16.12.2015 - Added.
-	 */
-	public void doBearbeitenUpdateScriptErstellenNeu() {
-		final DatabaseConnection dc = this.diagramm
-				.getDatabaseConnection(
-						this
-								.getInifile()
-								.readStr(
-										"Database-Connections",
-										"Update-Preselection-" + this.diagramm.getName(),
-										null));
-		final DatabaseConnectionRecord dcr =
-				new DatabaseConnectionRecord(dc, this.diagramm.getDatabaseConnections(), "");
-		final ConnectFrame cf = new ConnectFrame(dcr, this.guiBundle);
-		cf.addEditorFrameListener(new EditorFrameListener<EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame>>() {
-			@Override
-			public void eventFired(final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
-				if (event.getEventType() == EditorFrameEventType.OK) {
-					try {
-						final DatabaseConnectionRecord dcr = event.getEditedObject();
-						if ((dcr != null) && (dcr.getDatabaseConnection() != null)) {
-							getInifile()
-									.writeStr(
-											"Database-Connections",
-											"Update-Preselection-" + diagramm.getName(),
-											dcr.getDatabaseConnection().getName());
-						}
-						createSQLUpdateScript(dcr);
-					} catch (Exception e) {
-						new JDialogThrowable(
-								e,
-								guiBundle.getResourceText("archimedes.ConnectFrame.error.connection.failed.title"),
-								getInifile(),
-								new PropertyRessourceManager());
-					}
-				}
-			}
-		});
-		cf.setVisible(true);
-	}
-
-	private void createSQLUpdateScript(final DatabaseConnectionRecord dcr) throws Exception {
-		final String script = new ScriptGenerator().generate(this.diagramm, dcr, this.userInformation);
-		if (script != null) {
-			final Vector<String> s = new Vector<String>();
-			s.add(script);
-			new FrameTextViewer(
-					s,
-					DefaultFrameTextViewerComponentFactory.INSTANCE,
-					getInifile(),
-					"SQL Update Script (new)",
-					datenpfad);
-		}
 	}
 
 	/**
