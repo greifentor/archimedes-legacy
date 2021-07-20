@@ -31,6 +31,7 @@ public interface DataModel extends CommentOwner, ComplexIndexListProvider, Datab
 		DiagramGUISupport, GeneratorSupport, GUIDiagramModel, HistoryOwner, ImportSupport, OptionListProvider,
 		SQLGeneratorSupport, StereotypeListProvider, UdschebtiSupport, ViewProvider {
 
+	public static final String ALTERNATE_FK_NAME = "ALTERNATE_FK_NAME";
 	public static final String SCHEMA_NAME = "SCHEMA_NAME";
 
 	/**

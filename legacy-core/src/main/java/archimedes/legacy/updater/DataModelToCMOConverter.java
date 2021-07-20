@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import archimedes.codegenerators.OptionGetter;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.IndexMetaData;
@@ -113,8 +114,7 @@ public class DataModelToCMOConverter {
 								.addForeignKeys(
 										ForeignKeyCMO
 												.of(
-														"FK_TO_" + column.getReferencedTable().getName() + "_"
-																+ column.getReferencedColumn().getName(),
+														getFKConstraintName(column, dataModel),
 														ForeignKeyMemberCMO
 																.of(
 																		table,
@@ -123,6 +123,24 @@ public class DataModelToCMOConverter {
 																		getColumn(
 																				schema,
 																				column.getReferencedColumn())))));
+	}
+
+	private String getFKConstraintName(ColumnModel column, DataModel dataModel) {
+		return OptionGetter
+				.getParameterOfOptionByName(dataModel, DataModel.ALTERNATE_FK_NAME)
+				.map(s -> doReplacements(s, column))
+				.orElse(
+						"FK_TO_" + column.getReferencedTable().getName()
+								+ "_"
+								+ column.getReferencedColumn().getName());
+	}
+
+	private String doReplacements(String s, ColumnModel column) {
+		return s
+				.replace("${BaseColumnName}", column.getName())
+				.replace("${BaseTableName}", column.getTable().getName())
+				.replace("${RefColumnName}", column.getReferencedColumn().getName())
+				.replace("${RefTableName}", column.getReferencedTable().getName());
 	}
 
 	private ColumnCMO getColumn(SchemaCMO schema, ColumnModel column) {
@@ -213,7 +231,8 @@ public class DataModelToCMOConverter {
 	}
 
 	private String createIndexName(String tableName, List<ColumnCMO> columns) {
-		return "ix_" + tableName + "_"
+		return "ix_" + tableName
+				+ "_"
 				+ columns.stream().map(ColumnCMO::getName).reduce((s0, s1) -> s0 + "_" + s1).orElse("");
 	}
 

@@ -72,3 +72,8 @@ TO_UPPER_CASE|SUPPRESS_LENGTH|FK_BY_COLUMNNAME
 ```
 
 Save the results and compare the files via a diff tool.
+
+
+## Exporter
+
+[Liquibase Script](./legacy-core/src/main/java/archimedes/legacy/exporter/README.md)

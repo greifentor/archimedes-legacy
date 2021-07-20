@@ -1505,6 +1505,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						OptionType.COLUMN,
 						new String[] { ModelCheckerPotentialForeignKeyNotSet.SUPPRESS_POTENTIAL_FK_WARNING });
 		compoundOptionProvider
+				.addOptions(OptionType.MODEL, new String[] { DataModel.ALTERNATE_FK_NAME, DataModel.SCHEMA_NAME });
+		compoundOptionProvider
 				.addOptions(OptionType.TABLE, new String[] { ModelCheckerNoPrimaryKeySet.SUPPRESS_NO_PK_WARNING });
 		for (Object cf : getCodeFactories("")) {
 			if (cf instanceof PredeterminedOptionProvider) {
