@@ -9,6 +9,7 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
@@ -43,9 +44,18 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 		context.put("JPARepositoryPackageName", nameGenerator.getJPARepositoryPackageName(model, table));
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
 		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
+		context.put("NoKeyValue", getNoKeyValue(table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
+	}
+
+	private String getNoKeyValue(TableModel table) {
+		ColumnModel[] pks = table.getPrimaryKeyColumns();
+		if (pks.length == 0) {
+			return "NO_KEY_FOUND";
+		}
+		return pks[0].isNotNull() ? "-1" : "null";
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
-import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -34,15 +33,10 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		List<ColumnData> columnData = getColumnData(table.getColumns());
+		commonImportAdder.addCommonImports(context, columnData);
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		context.put("CommentsOff", isCommentsOff(model, table));
-		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
-			context.put("ImportLocalDate", "java.time.LocalDate");
-		}
-		if (Columns.containsFieldWithType(columnData, "LocalDateTime")) {
-			context.put("ImportLocalDateTime", "java.time.LocalDateTime");
-		}
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
 		context.put("TableName", table.getName());

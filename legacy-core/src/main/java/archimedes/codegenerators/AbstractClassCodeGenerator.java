@@ -1,17 +1,18 @@
 package archimedes.codegenerators;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.DataModel;
-import archimedes.model.OptionModel;
-import archimedes.model.TableModel;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import static corentx.util.Checks.ensure;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Arrays;
 
-import static corentx.util.Checks.ensure;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
+import archimedes.model.TableModel;
 
 /**
  * An abstract code generator for class files.
@@ -32,6 +33,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String POJO_MODE_CHAIN = "CHAIN";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
+
+	protected CommonImportAdder commonImportAdder = new CommonImportAdder();
 
 	public AbstractClassCodeGenerator(
 			String templateFileName,

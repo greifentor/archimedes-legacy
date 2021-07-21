@@ -39,7 +39,7 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = getExpected(null, "persistence", false);
+			String expected = getExpected(null, "persistence", false, "null");
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
@@ -47,7 +47,7 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
-		private String getExpected(String prefix, String packageName, boolean suppressComment) {
+		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 							"\n" + //
@@ -76,7 +76,7 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 					"	private ATableDBORepository repository;\n" + //
 					"\n" + //
 					"	public ATable create(ATable model) {\n" + //
-					"		model.setId(null);\n" + //
+					"		model.setId(" + noKeyValue + ");\n" + //
 					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -98,10 +98,23 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectWithSuppressedComments() {
 			// Prepare
-			String expected = getExpected(null, "persistence", true);
+			String expected = getExpected(null, "persistence", true, "null");
 			DataModel dataModel = readDataModel("Model.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithNoSimplePK() {
+			// Prepare
+			String expected = getExpected(null, "persistence", false, "-1");
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.getColumnByName("ID").setNotNull(true);
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
