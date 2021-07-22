@@ -1,0 +1,20 @@
+package ${PackageName};
+
+import lombok.Data;
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * A page parameters to limit page access.
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
+#end
+@Data
+@Generated
+public class ${ClassName} {
+
+	private long start;
+	private int entriesPerPage;
+
+}

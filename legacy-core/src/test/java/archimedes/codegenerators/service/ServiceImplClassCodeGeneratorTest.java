@@ -49,6 +49,8 @@ public class ServiceImplClassCodeGeneratorTest {
 				"import javax.inject.Inject;\n" + //
 				"import javax.inject.Named;\n" + //
 				"\n" + //
+				"import base.pack.age.name.core.model.Page;\n" + //
+				"import base.pack.age.name.core.model.PageParameters;\n" + //
 				"import base.pack.age.name.core.model.ATable;\n" + //
 				"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
 				"import base.pack.age.name.core.service.ATableService;\n" + //
@@ -71,6 +73,11 @@ public class ServiceImplClassCodeGeneratorTest {
 				"\t@Override\n" + //
 				"\tpublic ATable create(ATable model) {\n" + //
 				"\t\treturn persistencePort.create(model);\n" + //
+				"\t}\n" + //
+				"\n" + //
+				"\t@Override\n" + //
+				"\tpublic Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+				"\t\treturn null;\n" + //
 				"\t}\n" + //
 				"\n" + //
 				"\t@Override\n" + //

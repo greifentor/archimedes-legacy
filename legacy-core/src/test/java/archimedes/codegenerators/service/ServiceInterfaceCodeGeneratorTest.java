@@ -46,6 +46,8 @@ public class ServiceInterfaceCodeGeneratorTest {
 				"\n" + //
 				"import java.util.Optional;\n" + //
 				"\n" + //
+				"import base.pack.age.name.core.model.Page;\n" + //
+				"import base.pack.age.name.core.model.PageParameters;\n" + //
 				"import base.pack.age.name.core.model.ATable;\n" + //
 				"import lombok.Generated;\n" + //
 				"\n";
@@ -60,6 +62,8 @@ public class ServiceInterfaceCodeGeneratorTest {
 				"public interface ATableService {\n" + //
 				"\n" + //
 				"\tATable create(ATable model);\n" + //
+				"\n" + //
+				"\tPage<ATable> findAll(PageParameters pageParameters);\n" + //
 				"\n" + //
 				"\tOptional<ATable> findById(Long id);\n" + //
 				"\n" + //

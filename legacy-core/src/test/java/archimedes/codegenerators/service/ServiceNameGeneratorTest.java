@@ -728,6 +728,91 @@ public class ServiceNameGeneratorTest {
 
 	}
 
+	@DisplayName("Tests for page class names")
+	@Nested
+	class PageClassNameTests {
+
+		@Test
+		void getPageClassName_ReturnsACorrectPageClassName() {
+			assertEquals("Page", unitUnderTest.getPageClassName());
+		}
+
+	}
+
+	@DisplayName("Tests for page package names")
+	@Nested
+	class PagePackageNameTests {
+
+		@Test
+		void getPagePackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPagePackageName(null, table));
+		}
+
+		@Test
+		void getPagePackageName_PassANullValueAsTable_ReturnsDefaultValue() {
+			assertEquals("core.model", unitUnderTest.getPagePackageName(model, null));
+		}
+
+		@Test
+		void getPagePackageName_PassAValidDataModel_ReturnsACorrecModelName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".core.model";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getPagePackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPagePackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "core.model";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getPagePackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPagePackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "core.model";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getPagePackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPagePackageName_PassAValidDataModelWithSetWithAlternatePackageNameForModelClasses_ReturnsACorrectModelName() {
+			// Prepare
+			String alternatePackageName = "alternate.package.name";
+			String expected = alternatePackageName;
+			OptionModel option = mock(OptionModel.class);
+			when(option.getParameter()).thenReturn(alternatePackageName);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_PAGE_PACKAGE_NAME)).thenReturn(option);
+			// Run
+			String returned = unitUnderTest.getPagePackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("Tests for page parameters class names")
+	@Nested
+	class PageParametersClassNameTests {
+
+		@Test
+		void getPageParametersClassName_ReturnsACorrectPageParametersClassName() {
+			assertEquals("PageParameters", unitUnderTest.getPageParametersClassName());
+		}
+
+	}
+
 	@DisplayName("Tests for persistence port interface names")
 	@Nested
 	class PersistencePortInterfaceNameTests {

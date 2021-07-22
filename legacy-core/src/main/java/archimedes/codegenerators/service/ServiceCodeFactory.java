@@ -29,6 +29,8 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 		return Arrays
 				.asList(
 						new ModelClassCodeGenerator(this),
+						new PageClassCodeGenerator(this),
+						new PageParametersClassCodeGenerator(this),
 						new PersistencePortInterfaceCodeGenerator(this),
 						new ServiceImplClassCodeGenerator(this),
 						new ServiceInterfaceCodeGenerator(this));
@@ -58,6 +60,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 			return new String[] {
 					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
+					ServiceNameGenerator.ALTERNATE_PAGE_PACKAGE_NAME,
 					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
 					ServiceNameGenerator.ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX,

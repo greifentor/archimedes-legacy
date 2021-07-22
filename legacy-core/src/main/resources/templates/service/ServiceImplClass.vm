@@ -5,6 +5,8 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ${PagePackageName}.${PageClassName};
+import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
 import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
 import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
@@ -27,6 +29,11 @@ public class ${ClassName} implements ${ServiceInterfaceName} {
 	@Override
 	public ${ModelClassName} create(${ModelClassName} model) {
 		return persistencePort.create(model);
+	}
+
+	@Override
+	public ${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters) {
+		return null;
 	}
 
 	@Override
