@@ -1,8 +1,5 @@
 package ${PackageName};
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.inject.Named;
 
 #if ($ImportLocalDate)
@@ -21,7 +18,7 @@ import ${ModelClassNameQualified};
  */
 @Generated
 @Named
-public class ${ClassName} {
+public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOClassName}> {
 
 	public ${DBOClassName} ${ToDBOMethodName}(${ModelClassName} model) {
 		if (model == null) {

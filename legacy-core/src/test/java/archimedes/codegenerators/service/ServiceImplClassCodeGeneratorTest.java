@@ -77,7 +77,7 @@ public class ServiceImplClassCodeGeneratorTest {
 				"\n" + //
 				"\t@Override\n" + //
 				"\tpublic Page<ATable> findAll(PageParameters pageParameters) {\n" + //
-				"\t\treturn null;\n" + //
+				"\t\treturn persistencePort.findAll(pageParameters);\n" + //
 				"\t}\n" + //
 				"\n" + //
 				"\t@Override\n" + //

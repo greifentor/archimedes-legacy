@@ -1,9 +1,5 @@
 package archimedes.codegenerators.persistence.jpa;
 
-import java.util.Arrays;
-
-import org.apache.velocity.VelocityContext;
-
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.OptionGetter;
@@ -12,6 +8,9 @@ import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
+import org.apache.velocity.VelocityContext;
+
+import java.util.Arrays;
 
 /**
  * A code generator for JPA persistence adapters.
@@ -35,6 +34,8 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		context.put("ClassName", getClassName(table));
 		context.put("CommentsOff", isCommentsOff(model, table));
+		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
+		context.put("DBOPackageName", nameGenerator.getDBOPackageName(model, table));
 		context.put("DBOConverterClassName", nameGenerator.getDBOConverterClassName(table));
 		context.put("DBOConverterPackageName", nameGenerator.getDBOConverterPackageName(model, table));
 		context.put("IdClassName", getIdClassName(table));
@@ -46,6 +47,17 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
 		context.put("NoKeyValue", getNoKeyValue(table));
 		context.put("PackageName", getPackageName(model, table));
+		context.put("PageClassName", serviceNameGenerator.getPageClassName());
+		context.put("PageConverterClassName", nameGenerator.getPageConverterClassName(table));
+		context.put("PageConverterPackageName", nameGenerator.getPageConverterPackageName(model, table));
+		context.put("PagePackageName", serviceNameGenerator.getPagePackageName(model, table));
+		context.put("PageParametersClassName", serviceNameGenerator.getPageParametersClassName());
+		context.put(
+				"PageParametersToPageableConverterClassName",
+				nameGenerator.getPageParametersToPageableConverterClassName(table));
+		context.put(
+				"PageParametersToPageableConverterPackageName",
+				nameGenerator.getPageParametersToPageableConverterPackageName(model, table));
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
 	}
@@ -55,7 +67,9 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 		if (pks.length == 0) {
 			return "NO_KEY_FOUND";
 		}
-		return pks[0].isNotNull() ? "-1" : "null";
+		return pks[0].isNotNull()
+				? "-1"
+				: "null";
 	}
 
 	@Override

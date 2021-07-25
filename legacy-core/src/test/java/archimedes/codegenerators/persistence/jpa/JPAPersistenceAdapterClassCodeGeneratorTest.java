@@ -53,10 +53,16 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 							"\n" + //
 							"import java.util.Optional;\n" + //
 							"\n" + //
+							"import javax.annotation.PostConstruct;\n" + //
 							"import javax.inject.Inject;\n" + //
 							"import javax.inject.Named;\n" + //
 							"\n" + //
+							"import base.pack.age.name.core.model.Page;\n" + //
+							"import base.pack.age.name.core.model.PageParameters;\n" + //
+							"import base.pack.age.name.persistence.converter.PageConverter;\n" + //
+							"import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" + //
 							"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
+							"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
 							"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
 							"import base.pack.age.name.core.model.ATable;\n" + //
 							"\n";
@@ -75,9 +81,23 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 					"	@Inject\n" + //
 					"	private ATableDBORepository repository;\n" + //
 					"\n" + //
+					"	@Inject\n" + //
+					"	private PageParametersToPageableConverter pageParametersToPageableConverter;\n" + //
+					"\n" + //
+					"	private PageConverter<ATable, ATableDBO> pageConverter;\n" + //
+					"\n" + //
+					"	@PostConstruct\n" + //
+					"	public void postConstruct() {\n" + //
+					"		pageConverter = new PageConverter<>(converter);\n" + //
+					"	}\n" + //
+					"\n" + //
 					"	public ATable create(ATable model) {\n" + //
 					"		model.setId(" + noKeyValue + ");\n" + //
 					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+					"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	public Optional<ATable> findById(Long id) {\n" + //

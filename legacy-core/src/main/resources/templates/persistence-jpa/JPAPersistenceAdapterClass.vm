@@ -2,10 +2,16 @@ package ${PackageName};
 
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ${PagePackageName}.${PageClassName};
+import ${PagePackageName}.${PageParametersClassName};
+import ${PageConverterPackageName}.${PageConverterClassName};
+import ${PageParametersToPageableConverterPackageName}.${PageParametersToPageableConverterClassName};
 import ${DBOConverterPackageName}.${DBOConverterClassName};
+import ${DBOPackageName}.${DBOClassName};
 import ${JPARepositoryPackageName}.${JPARepositoryClassName};
 import ${ModelPackageName}.${ModelClassName};
 
@@ -24,9 +30,23 @@ public class ${ClassName} {
 	@Inject
 	private ${JPARepositoryClassName} repository;
 
+	@Inject
+	private ${PageParametersToPageableConverterClassName} pageParametersToPageableConverter;
+
+	private PageConverter<${ModelClassName}, ${DBOClassName}> pageConverter;
+
+	@PostConstruct
+	public void postConstruct() {
+		pageConverter = new ${PageConverterClassName}<>(converter);
+	}
+
 	public ${ModelClassName} create(${ModelClassName} model) {
 		model.set${IdFieldNameCamelCase}(${NoKeyValue});
 		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
+	}
+
+	public ${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters) {
+		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));
 	}
 
 	public Optional<${ModelClassName}> findById(${IdClassName} ${IdFieldName}) {

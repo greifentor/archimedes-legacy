@@ -4,6 +4,7 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.Generated;
+import lombok.experimental.Accessors;
 
 #if (!$CommentsOff )
 /**
@@ -14,6 +15,7 @@ import lombok.Generated;
  * GENERATED CODE !!! DO NOT CHANGE !!!
  */
 #end
+@Accessors(chain = true)
 @Data
 @Generated
 public class ${ClassName}<CONTENT> {

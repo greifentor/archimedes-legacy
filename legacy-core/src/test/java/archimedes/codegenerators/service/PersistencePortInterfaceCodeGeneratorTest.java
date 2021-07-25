@@ -44,6 +44,8 @@ public class PersistencePortInterfaceCodeGeneratorTest {
 					"\n" + //
 					"import java.util.Optional;\n" + //
 					"\n" + //
+					"import base.pack.age.name.core.model.Page;\n" + //
+					"import base.pack.age.name.core.model.PageParameters;\n" + //
 					"import base.pack.age.name.core.model.ATable;\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
@@ -56,6 +58,8 @@ public class PersistencePortInterfaceCodeGeneratorTest {
 					"public interface ATablePersistencePort {\n" + //
 					"\n" + //
 					"	ATable create(ATable model);\n" +
+					"\n" +
+					"	Page<ATable> findAll(PageParameters pageParameters);\n" +
 					"\n" +
 					"	Optional<ATable> findById(Long id);\n" +
 					"\n" +
@@ -78,6 +82,8 @@ public class PersistencePortInterfaceCodeGeneratorTest {
 					"\n" + //
 					"import java.util.Optional;\n" + //
 					"\n" + //
+					"import base.pack.age.name.core.model.Page;\n" + //
+					"import base.pack.age.name.core.model.PageParameters;\n" + //
 					"import base.pack.age.name.core.model.ATable;\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
@@ -85,6 +91,8 @@ public class PersistencePortInterfaceCodeGeneratorTest {
 					"public interface ATablePersistencePort {\n" + //
 					"\n" + //
 					"	ATable create(ATable model);\n" +
+					"\n" +
+					"	Page<ATable> findAll(PageParameters pageParameters);\n" +
 					"\n" +
 					"	Optional<ATable> findById(Long id);\n" +
 					"\n" +

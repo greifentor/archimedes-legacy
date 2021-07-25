@@ -19,13 +19,18 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	public static final String ALTERNATE_DBOCONVERTER_PACKAGE_NAME = "ALTERNATE_DBOCONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_ENTITY_CLASS_NAME_SUFFIX = "ALTERNATE_ENTITY_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_ENTITY_PACKAGE_NAME = "ALTERNATE_ENTITY_PACKAGE_NAME";
+	public static final String ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME = "ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME";
+	public static final String ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME =
+			"ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX = "ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_REPOSITORY_PACKAGE_NAME = "ALTERNATE_REPOSITORY_PACKAGE_NAME";
 	public static final String ALTERNATE_TO_DBO_METHOD_NAME = "ALTERNATE_TO_DBO_METHOD_NAME";
 	public static final String ALTERNATE_TO_MODEL_METHOD_NAME = "ALTERNATE_TO_MODEL_METHOD_NAME";
 
 	public String getDBOClassName(TableModel table) {
-		return table != null ? getClassName(table) + getDBOClassNameSuffix(table) : null;
+		return table != null
+				? getClassName(table) + getDBOClassNameSuffix(table)
+				: null;
 	}
 
 	private String getDBOClassNameSuffix(TableModel table) {
@@ -33,7 +38,9 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getDBOConverterClassName(TableModel table) {
-		return table != null ? getClassName(table) + getDBOConverterNameSuffix(table) : null;
+		return table != null
+				? getClassName(table) + getDBOConverterNameSuffix(table)
+				: null;
 	}
 
 	private String getDBOConverterNameSuffix(TableModel table) {
@@ -59,7 +66,9 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getJPAPersistenceAdapterClassName(TableModel table) {
-		return table != null ? getClassName(table) + getJPAPersistenceAdapterClassNameSuffix(table) : null;
+		return table != null
+				? getClassName(table) + getJPAPersistenceAdapterClassNameSuffix(table)
+				: null;
 	}
 
 	private String getJPAPersistenceAdapterClassNameSuffix(TableModel table) {
@@ -71,7 +80,9 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getJPARepositoryInterfaceName(TableModel table) {
-		return table != null ? getClassName(table) + getJPARepositoryInterfaceNameSuffix(table) : null;
+		return table != null
+				? getClassName(table) + getJPARepositoryInterfaceNameSuffix(table)
+				: null;
 	}
 
 	private String getJPARepositoryInterfaceNameSuffix(TableModel table) {
@@ -80,6 +91,30 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 
 	public String getJPARepositoryPackageName(DataModel model, TableModel table) {
 		return createPackageName(model, table, "persistence.repository", ALTERNATE_REPOSITORY_PACKAGE_NAME);
+	}
+
+	public String getPageConverterClassName(TableModel table) {
+		return table != null
+				? "PageConverter"
+				: null;
+	}
+
+	public String getPageConverterPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "persistence.converter", ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME);
+	}
+
+	public String getPageParametersToPageableConverterClassName(TableModel table) {
+		return table != null
+				? "PageParametersToPageableConverter"
+				: null;
+	}
+
+	public String getPageParametersToPageableConverterPackageName(DataModel model, TableModel table) {
+		return createPackageName(
+				model,
+				table,
+				"persistence.converter",
+				ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME);
 	}
 
 	public String getToDBOMethodName(TableModel table) {

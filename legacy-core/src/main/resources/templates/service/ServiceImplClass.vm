@@ -33,7 +33,7 @@ public class ${ClassName} implements ${ServiceInterfaceName} {
 
 	@Override
 	public ${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters) {
-		return null;
+		return persistencePort.findAll(pageParameters);
 	}
 
 	@Override

@@ -34,9 +34,6 @@ public class DBOConverterClassCodeGeneratorTest {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".persistence.converter;\n" + //
 					"\n" + //
-					"import java.util.List;\n" + //
-					"import java.util.stream.Collectors;\n" + //
-					"\n" + //
 					"import javax.inject.Named;\n" + //
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
@@ -53,7 +50,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					" */\n" + //
 					"@Generated\n" + //
 					"@Named\n" + //
-					"public class ATableDBOConverter {\n" + //
+					"public class ATableDBOConverter implements ToModelConverter<ATable, ATableDBO> {\n" + //
 					"\n" + //
 					"	public ATableDBO toDBO(ATable model) {\n" + //
 					"		if (model == null) {\n" + //

@@ -160,7 +160,7 @@ public class PersistenceJPANameGeneratorTest {
 
 	@DisplayName("tests for DBO converter class names")
 	@Nested
-	class DBBConverterClassNameTests {
+	class DBOConverterClassNameTests {
 
 		@Test
 		void getDBOConverterClassName_passANullValueAsTableModel_returnsANullValue() {
@@ -426,6 +426,104 @@ public class PersistenceJPANameGeneratorTest {
 									"persistence.repos"));
 			// Run & Check
 			assertEquals("persistence.repos", unitUnderTest.getJPARepositoryPackageName(model, table));
+		}
+
+	}
+
+	@DisplayName("tests for page converter class names")
+	@Nested
+	class PageConverterClassNameTests {
+
+		@Test
+		void getPageConverterClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getPageConverterClassName(null));
+		}
+
+		@Test
+		void getPageConverterClassName_passAValidTable_ReturnsACorrectDBOConverterClassName() {
+			// Prepare
+			String expected = "PageConverter";
+			// Run
+			String returned = unitUnderTest.getPageConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for page converter package names")
+	@Nested
+	class PageConverterPackageNameTests {
+
+		@Test
+		void getPageConverterPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPageConverterPackageName(null, table));
+		}
+
+		@Test
+		void getPageConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("persistence.converter", unitUnderTest.getPageConverterPackageName(model, null));
+		}
+
+		@Test
+		void getPageConverterPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME,
+									"persistence.mapper"));
+			// Run & Check
+			assertEquals("persistence.mapper", unitUnderTest.getPageConverterPackageName(model, table));
+		}
+
+	}
+
+	@DisplayName("tests for page parameters to pageable converter class names")
+	@Nested
+	class PageParametersToPageableConverterClassNameTests {
+
+		@Test
+		void getPageParametersToPageableConverterClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getPageParametersToPageableConverterClassName(null));
+		}
+
+		@Test
+		void getPageParametersToPageableConverterClassName_passAValidTable_ReturnsACorrectDBOConverterClassName() {
+			// Prepare
+			String expected = "PageParametersToPageableConverter";
+			// Run
+			String returned = unitUnderTest.getPageParametersToPageableConverterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for page parameters to pageable converter package names")
+	@Nested
+	class PageParametersToPageableConverterPackageNameTests {
+
+		@Test
+		void getPageParametersToPageableConverterPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPageParametersToPageableConverterPackageName(null, table));
+		}
+
+		@Test
+		void getPageParametersToPageableConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("persistence.converter", unitUnderTest.getPageParametersToPageableConverterPackageName(model, null));
+		}
+
+		@Test
+		void getPageParametersToPageableConverterPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME,
+									"persistence.mapper"));
+			// Run & Check
+			assertEquals("persistence.mapper", unitUnderTest.getPageParametersToPageableConverterPackageName(model, table));
 		}
 
 	}

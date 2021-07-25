@@ -46,6 +46,7 @@ class PageParametersClassCodeGeneratorTest {
 				"\n" + //
 				"import lombok.Data;\n" + //
 				"import lombok.Generated;\n" + //
+				"import lombok.experimental.Accessors;\n" + //
 				"\n";
 		if (!suppressComment) {
 			expected += "/**\n" + //
@@ -54,11 +55,12 @@ class PageParametersClassCodeGeneratorTest {
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n";
 		}
-		expected += "@Data\n" + //
+		expected += "@Accessors(chain = true)\n" + //
+				"@Data\n" + //
 				"@Generated\n" + //
 				"public class PageParameters {\n" + //
 				"\n" + //
-				"\tprivate long start;\n" + //
+				"\tprivate int pageNumber;\n" + //
 				"\tprivate int entriesPerPage;\n" + //
 				"\n" + //
 				"}";

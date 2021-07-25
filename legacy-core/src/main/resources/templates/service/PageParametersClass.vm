@@ -2,6 +2,7 @@ package ${PackageName};
 
 import lombok.Data;
 import lombok.Generated;
+import lombok.experimental.Accessors;
 
 #if (!$CommentsOff )
 /**
@@ -10,11 +11,12 @@ import lombok.Generated;
  * GENERATED CODE !!! DO NOT CHANGE !!!
  */
 #end
+@Accessors(chain = true)
 @Data
 @Generated
 public class ${ClassName} {
 
-	private long start;
+	private int pageNumber;
 	private int entriesPerPage;
 
 }
