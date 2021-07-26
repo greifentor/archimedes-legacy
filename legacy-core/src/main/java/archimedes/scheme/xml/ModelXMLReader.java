@@ -267,6 +267,7 @@ public class ModelXMLReader {
 		dataModel.setVersion(this.getString(node, "version"));
 		dataModel.setVersionComment(this.getString(node, "versionComment"));
 		dataModel.setVersionDate(this.getPDate(node, "versionDate"));
+		dataModel.setModelCheckerScript(getString(node, "modelCheckerScript"));
 	}
 
 	private void readImportDataSources(DataModel dataModel, NodeList nodes) {

@@ -415,4 +415,22 @@ public interface DataModel extends CommentOwner, ComplexIndexListProvider, Datab
 
 	abstract public void setDomainShowMode(DomainShowMode newMode);
 
+	/**
+	 * Returns the special script for ScriptedModelChecker from the model.
+	 *
+	 * @return The special script for ScriptedModelChecker from the model.
+	 *
+	 * @changed OLI 26.07.2021 - Added.
+	 */
+	String getModelCheckerScript();
+
+	/**
+	 * Sets a special script for the ScriptedModelChecker to the model.
+	 *
+	 * @param script The new model checking script for the data model.
+	 *
+	 * @changed OLI 26.07.2021 - Added.
+	 */
+	void setModelCheckerScript(String script);
+
 }

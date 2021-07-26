@@ -9,53 +9,6 @@
 
 package archimedes.legacy.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EventObject;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
-import javax.swing.AbstractAction;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-
-import org.apache.commons.lang3.StringUtils;
-
 import archimedes.acf.ReadyToGenerateChecker;
 import archimedes.acf.checker.ModelChecker;
 import archimedes.acf.checker.ModelCheckerDomainSetForAllColumns;
@@ -82,6 +35,7 @@ import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.CodeFactoryProgressionFrame;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.legacy.app.ApplicationUtil;
+import archimedes.legacy.checkers.ModelCheckerByScript;
 import archimedes.legacy.checkers.ModelCheckerDomainNotInuse;
 import archimedes.legacy.checkers.ModelCheckerNoPrimaryKeySet;
 import archimedes.legacy.checkers.ModelCheckerPotentialForeignKeyNotSet;
@@ -178,6 +132,36 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.FileSystemResourceAccessor;
 import logging.Logger;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EventObject;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * Diese Klasse bietet das Hauptfenster der Archimedes-Applikation.
@@ -202,6 +186,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		GUIDiagramModelListener, ModelCheckerMessageListFrameListener, ModelCheckerThreadObserver, CodeFactoryListener {
 	private static final Logger LOG = Logger.getLogger(FrameArchimedes.class);
 	private static final String RES_TABLE_FRAME_EDIT_TITLE = "TableFrame.edit.title";
+	private static final String RES_WARNING_MESSAGES_INFOS_DETECTED = "warning.messages.infos.detected.label";
 	private static final String RES_WARNING_MESSAGES_ERRORS_DETECTED = "warning.messages.errors.detected.label";
 	private static final String RES_WARNING_MESSAGES_NO_WARNINGS = "warning.messages.no.warning.label";
 	private static final String RES_WARNING_MESSAGES_WARNINGS_DETECTED = "warning.messages.warnings.detected.label";
@@ -306,7 +291,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						new ModelCheckerDomainNotInuse(guiBundle),
 						new ModelCheckerDomainSetForAllColumns(guiBundle),
 						new ModelCheckerPotentialForeignKeyNotSet(guiBundle),
-						new ModelCheckerNoPrimaryKeySet(guiBundle));
+						new ModelCheckerNoPrimaryKeySet(guiBundle),
+						new ModelCheckerByScript(guiBundle));
 		int i = 0;
 		JMenuItem menuItem = null;
 
@@ -1847,13 +1833,13 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 * @changed OLI 18.05.2016 - Added.
 	 */
 	public void updateWarnings(String message, boolean warning, boolean error) {
-		this.component.updateWarnings(message);
+		component.updateWarnings(message);
 		if (warning && !error) {
-			this.component.setWarningLabelForeGround(new Color(203, 166, 18));
+			component.setWarningLabelForeGround(new Color(203, 166, 18));
 		} else if (error) {
-			this.component.setWarningLabelForeGround(Color.RED);
+			component.setWarningLabelForeGround(Color.RED);
 		} else {
-			this.component.setWarningLabelForeGround(new Color(94, 132, 84));
+			component.setWarningLabelForeGround(new Color(94, 132, 84));
 		}
 	}
 
@@ -2188,9 +2174,14 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	@Override
 	public void notifyModelCheckerResult(final ModelCheckerMessage[] mcms) {
 		if (mcms.length > 0) {
+			final int infoCount = this.getMessageCount(mcms, ModelCheckerMessage.Level.INFO);
 			final int errorCount = this.getMessageCount(mcms, ModelCheckerMessage.Level.ERROR);
 			final int warnCount = this.getMessageCount(mcms, ModelCheckerMessage.Level.WARNING);
 			String s = "";
+			if (infoCount > 0) {
+				s += ((s.length() > 0) ? ", " : "")
+						+ this.guiBundle.getResourceText(RES_WARNING_MESSAGES_INFOS_DETECTED, infoCount);
+			}
 			if (errorCount > 0) {
 				s += this.guiBundle.getResourceText(RES_WARNING_MESSAGES_ERRORS_DETECTED, errorCount);
 			}

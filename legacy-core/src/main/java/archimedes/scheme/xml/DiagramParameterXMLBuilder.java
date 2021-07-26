@@ -69,6 +69,7 @@ public class DiagramParameterXMLBuilder extends AbstractXMLBuilder {
 		this.addAttribute(parameters, "version", diagram.getVersion());
 		this.addAttribute(parameters, "versionComment", diagram.getVersionComment());
 		this.addAttribute(parameters, "versionDate", String.valueOf(diagram.getVersionDate()));
+		this.addAttribute(parameters, "modelCheckerScript", diagram.getModelCheckerScript());
 		return parameters;
 	}
 

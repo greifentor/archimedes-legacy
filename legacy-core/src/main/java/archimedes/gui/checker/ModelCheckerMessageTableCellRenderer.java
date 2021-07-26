@@ -35,9 +35,17 @@ public class ModelCheckerMessageTableCellRenderer extends DefaultTableCellRender
         final Component c = super.getTableCellRendererComponent(table, value, isSelected,
                 hasFocus, row, column);
         Level level = (Level) table.getModel().getValueAt(row, 0);
-        c.setBackground(level == Level.ERROR ? new Color(244, 165, 191) : new Color(255, 245,
-                186));
+        c.setBackground(getBackgroundColor(level));
         return c;
+    }
+
+    private Color getBackgroundColor(Level level) {
+        if (level == Level.ERROR) {
+            return new Color(244, 165, 191);
+        } else if (level == Level.WARNING) {
+            return new Color(255, 245, 186);
+        }
+        return new Color(117, 181, 72);
     }
 
 }
