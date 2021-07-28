@@ -1,0 +1,39 @@
+package ${PackageName};
+
+import java.util.stream.Collectors;
+
+import javax.inject.Named;
+
+import ${PageModelPackageName}.${PageModelClassName};
+
+import lombok.AllArgsConstructor;
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * A class to convert a repository page to a service layer page object.
+ *
+ * @param <CONTENT> The type of the page content.
+ * @param <DBO>     The type of the DBO's which are representing CONTENT objects in the persistence layer.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+@AllArgsConstructor
+@Named
+public class ${ClassName}<CONTENT, DBO> {
+
+	private final ${ToModelConverterInferfaceName}<CONTENT, DBO> toModelConverter;
+
+	public ${PageModelClassName}<CONTENT> convert(org.springframework.data.domain.Page<DBO> page) {
+		if (page == null) {
+			return null;
+		}
+		return new ${PageModelClassName}<CONTENT>()
+				.setEntries(page.getContent().stream().map(toModelConverter::toModel).collect(Collectors.toList()))
+				.setEntriesPerPage(page.getSize())
+				.setEntriesTotal(page.getTotalElements());
+	}
+
+}

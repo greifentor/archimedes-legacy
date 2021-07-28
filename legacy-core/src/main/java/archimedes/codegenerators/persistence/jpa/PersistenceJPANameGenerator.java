@@ -20,8 +20,10 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	public static final String ALTERNATE_ENTITY_CLASS_NAME_SUFFIX = "ALTERNATE_ENTITY_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_ENTITY_PACKAGE_NAME = "ALTERNATE_ENTITY_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME = "ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME";
+	public static final String ALTERNATE_PAGE_MODEL_PACKAGE_NAME = "ALTERNATE_PAGE_MODEL_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME =
 			"ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME";
+	public static final String ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME = "ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME";
 	public static final String ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX = "ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_REPOSITORY_PACKAGE_NAME = "ALTERNATE_REPOSITORY_PACKAGE_NAME";
 	public static final String ALTERNATE_TO_DBO_METHOD_NAME = "ALTERNATE_TO_DBO_METHOD_NAME";
@@ -103,6 +105,30 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 		return createPackageName(model, table, "persistence.converter", ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME);
 	}
 
+	public String getPageModelClassName(TableModel table) {
+		return table != null
+				? "Page"
+				: null;
+	}
+
+	public String getPageModelPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "core.model", ALTERNATE_PAGE_MODEL_PACKAGE_NAME);
+	}
+
+	public String getPageParametersModelClassName(TableModel table) {
+		return table != null
+				? "PageParameters"
+				: null;
+	}
+
+	public String getPageParametersModelPackageName(DataModel model, TableModel table) {
+		return createPackageName(
+				model,
+				table,
+				"core.model",
+				ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME);
+	}
+
 	public String getPageParametersToPageableConverterClassName(TableModel table) {
 		return table != null
 				? "PageParametersToPageableConverter"
@@ -115,6 +141,12 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 				table,
 				"persistence.converter",
 				ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME);
+	}
+
+	public String getToModelConverterInterfaceName(TableModel table) {
+		return table != null
+				? "ToModelConverter"
+				: null;
 	}
 
 	public String getToDBOMethodName(TableModel table) {

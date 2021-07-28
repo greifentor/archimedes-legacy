@@ -1,8 +1,5 @@
 package archimedes.codegenerators.persistence.jpa;
 
-import java.util.Arrays;
-import java.util.List;
-
 import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
@@ -13,6 +10,9 @@ import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.model.OptionType;
 import archimedes.model.PredeterminedOptionProvider;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A code factory for JPA persistence ports and adapters for CRUD operations.
@@ -34,7 +34,10 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 						new DBOMapstructMapperInterfaceCodeGenerator(this),
 						new JPAPersistenceAdapterClassCodeGenerator(this),
 						new JPAPersistenceAdapterDependentClassCodeGenerator(this),
-						new JPARepositoryInterfaceCodeGenerator(this));
+						new JPARepositoryInterfaceCodeGenerator(this),
+						new PageConverterClassCodeGenerator(this),
+						new PageParametersToPageableConverterClassCodeGenerator(this),
+						new ToModelConverterInterfaceCodeGenerator(this));
 	}
 
 	@Override
@@ -56,9 +59,10 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 	public String[] getSelectableOptions(OptionType optionType) {
 		switch (optionType) {
 			case COLUMN:
-				return new String[] {
+				return new String[]{
 						AbstractClassCodeGenerator.AUTOINCREMENT,
-						JPAPersistenceAdapterDependentClassCodeGenerator.DEPENDENT_ATTRIBUTE };
+						JPAPersistenceAdapterDependentClassCodeGenerator.DEPENDENT_ATTRIBUTE
+				};
 			case MODEL:
 				return new String[]{
 						PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX,
@@ -69,6 +73,10 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 						PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
 						ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
 						ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
+						PersistenceJPANameGenerator.ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME,
+						PersistenceJPANameGenerator.ALTERNATE_PAGE_MODEL_PACKAGE_NAME,
+						PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME,
+						PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME,
 						ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
 						ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
 						PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX,

@@ -479,6 +479,104 @@ public class PersistenceJPANameGeneratorTest {
 
 	}
 
+	@DisplayName("tests for page model class names")
+	@Nested
+	class PageModelClassNameTests {
+
+		@Test
+		void getPageModelClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getPageModelClassName(null));
+		}
+
+		@Test
+		void getPageModelClassName_passAValidTable_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "Page";
+			// Run
+			String returned = unitUnderTest.getPageModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for page model package names")
+	@Nested
+	class PageModelPackageNameTests {
+
+		@Test
+		void getPageModelPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPageModelPackageName(null, table));
+		}
+
+		@Test
+		void getPageModelPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("core.model", unitUnderTest.getPageModelPackageName(model, null));
+		}
+
+		@Test
+		void getPageModelPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_PAGE_MODEL_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_PAGE_MODEL_PACKAGE_NAME,
+									"core.page.model"));
+			// Run & Check
+			assertEquals("core.page.model", unitUnderTest.getPageModelPackageName(model, table));
+		}
+
+	}
+
+	@DisplayName("tests for page parameters model class names")
+	@Nested
+	class PageParametersModelClassNameTests {
+
+		@Test
+		void getPageParametersModelClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getPageParametersModelClassName(null));
+		}
+
+		@Test
+		void getPageParametersModelClassName_passAValidTable_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "PageParameters";
+			// Run
+			String returned = unitUnderTest.getPageParametersModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for page parameters model package names")
+	@Nested
+	class PageParametersModelPackageNameTests {
+
+		@Test
+		void getPageParametersModelPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPageParametersModelPackageName(null, table));
+		}
+
+		@Test
+		void getPageParametersModelPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("core.model", unitUnderTest.getPageParametersModelPackageName(model, null));
+		}
+
+		@Test
+		void getPageParametersModelPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME,
+									"core.page.model"));
+			// Run & Check
+			assertEquals("core.page.model", unitUnderTest.getPageParametersModelPackageName(model, table));
+		}
+
+	}
+
 	@DisplayName("tests for page parameters to pageable converter class names")
 	@Nested
 	class PageParametersToPageableConverterClassNameTests {
@@ -524,6 +622,27 @@ public class PersistenceJPANameGeneratorTest {
 									"persistence.mapper"));
 			// Run & Check
 			assertEquals("persistence.mapper", unitUnderTest.getPageParametersToPageableConverterPackageName(model, table));
+		}
+
+	}
+
+	@DisplayName("tests for to model converter interface names")
+	@Nested
+	class ToModelConverterInterfaceNameTests {
+
+		@Test
+		void getToModelConverterInterfaceName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getToModelConverterInterfaceName(null));
+		}
+
+		@Test
+		void getToModelConverterInterfaceName_passAValidTable_ReturnsACorrectInterfaceName() {
+			// Prepare
+			String expected = "ToModelConverter";
+			// Run
+			String returned = unitUnderTest.getToModelConverterInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
 		}
 
 	}

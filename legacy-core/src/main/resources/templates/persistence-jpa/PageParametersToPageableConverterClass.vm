@@ -1,0 +1,30 @@
+package ${PackageName};
+
+import javax.inject.Named;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import ${PageParametersModelPackageName}.${PageParametersModelClassName};
+
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * A converter to create a Pageable from a PageParameters object.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+@Named
+public class ${ClassName} {
+
+	public Pageable convert(${PageParametersModelClassName} pageParameters) {
+		if (pageParameters == null) {
+			return null;
+		}
+		return PageRequest.of(pageParameters.getPageNumber(), pageParameters.getEntriesPerPage());
+	}
+
+}

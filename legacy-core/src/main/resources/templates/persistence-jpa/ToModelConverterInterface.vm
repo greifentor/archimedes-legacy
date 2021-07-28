@@ -1,0 +1,17 @@
+package ${PackageName};
+
+#if (!$CommentsOff )
+/**
+ * An interface for converter which are able to convert DBO to model objects.
+ *
+ * @param <MODEL> The type of the model objects.
+ * @param <DBO>   The type of the DBO's which are representing MODEL objects in the persistence layer.
+ *
+ * ${Generated}
+ */
+#end
+public interface ${ClassName}<MODEL, DBO> {
+
+	MODEL toModel(DBO dbo);
+
+}
