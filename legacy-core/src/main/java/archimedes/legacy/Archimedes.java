@@ -2114,7 +2114,7 @@ public class Archimedes {
 		try {
 			corentx.io.FileUtil.readProperties(System.getProperties(), propfn);
 		} catch (FileNotFoundException e) {
-			log.error("configured properties file not found: " + propfn, e);
+			log.error("configured properties file not found: " + propfn + " in " + new File(".").getAbsolutePath(), e);
 		} catch (IOException e) {
 			log.error("error while loading configured properties file: " + propfn, e);
 		}
