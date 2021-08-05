@@ -59,12 +59,14 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 							"\n" + //
 							"import base.pack.age.name.core.model.Page;\n" + //
 							"import base.pack.age.name.core.model.PageParameters;\n" + //
+							"import base.pack.age.name.core.model.ATable;\n" + //
+							"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
 							"import base.pack.age.name.persistence.converter.PageConverter;\n" + //
 							"import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" + //
 							"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
 							"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
 							"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
-							"import base.pack.age.name.core.model.ATable;\n" + //
+							"import lombok.Generated;\n" + //
 							"\n";
 			if (!suppressComment) {
 				s += "/**\n" + //
@@ -73,8 +75,9 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 						" */\n";
 			}
-			s += "@Named\n" + //
-					"public class ATableJPAPersistenceAdapter {\n" + //
+			s += "@Generated\n" + //
+					"@Named\n" + //
+					"public class ATableJPAPersistenceAdapter implements ATablePersistencePort {\n" + //
 					"\n" + //
 					"	@Inject\n" + //
 					"	private ATableDBOConverter converter;\n" + //

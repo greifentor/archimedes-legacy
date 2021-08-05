@@ -2,8 +2,6 @@ package ${PackageName};
 
 import java.util.stream.Collectors;
 
-import javax.inject.Named;
-
 import ${PageModelPackageName}.${PageModelClassName};
 
 import lombok.AllArgsConstructor;
@@ -21,7 +19,6 @@ import lombok.Generated;
 #end
 @Generated
 @AllArgsConstructor
-@Named
 public class ${ClassName}<CONTENT, DBO> {
 
 	private final ${ToModelConverterInferfaceName}<CONTENT, DBO> toModelConverter;

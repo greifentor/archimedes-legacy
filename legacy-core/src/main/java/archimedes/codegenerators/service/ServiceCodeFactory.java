@@ -28,6 +28,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 	protected List<CodeGenerator> getCodeGenerators() {
 		return Arrays
 				.asList(
+						new ApplicationClassCodeGenerator(this),
 						new ModelClassCodeGenerator(this),
 						new PageClassCodeGenerator(this),
 						new PageParametersClassCodeGenerator(this),
@@ -58,6 +59,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 			return new String[] { AbstractClassCodeGenerator.AUTOINCREMENT };
 		case MODEL:
 			return new String[] {
+					ServiceNameGenerator.ALTERNATE_APPLICATION_PACKAGE_NAME,
 					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
 					ServiceNameGenerator.ALTERNATE_PAGE_PACKAGE_NAME,

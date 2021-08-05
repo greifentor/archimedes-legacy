@@ -58,6 +58,8 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 		context.put(
 				"PageParametersToPageableConverterPackageName",
 				nameGenerator.getPageParametersToPageableConverterPackageName(model, table));
+		context.put("PersistencePortInterfaceName", serviceNameGenerator.getPersistencePortInterfaceName(table));
+		context.put("PersistencePortPackageName", serviceNameGenerator.getPersistencePortPackageName(model, table));
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
 	}

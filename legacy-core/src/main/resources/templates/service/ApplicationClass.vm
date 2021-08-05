@@ -1,0 +1,25 @@
+package ${PackageName};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * Application starter class (service only).
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+@SpringBootApplication
+@ComponentScan("${BasePackageName}")
+public class ${ClassName} {
+
+	public static void main(String[] args) {
+		SpringApplication.run(${ClassName}.class, args);
+	}
+
+}

@@ -8,12 +8,14 @@ import javax.inject.Named;
 
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
+import ${ModelPackageName}.${ModelClassName};
+import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
 import ${PageConverterPackageName}.${PageConverterClassName};
 import ${PageParametersToPageableConverterPackageName}.${PageParametersToPageableConverterClassName};
 import ${DBOConverterPackageName}.${DBOConverterClassName};
 import ${DBOPackageName}.${DBOClassName};
 import ${JPARepositoryPackageName}.${JPARepositoryClassName};
-import ${ModelPackageName}.${ModelClassName};
+import lombok.Generated;
 
 #if (!$CommentsOff )
 /**
@@ -22,8 +24,9 @@ import ${ModelPackageName}.${ModelClassName};
  * ${Generated}
  */
 #end
+@Generated
 @Named
-public class ${ClassName} {
+public class ${ClassName} implements ${PersistencePortInterfaceName} {
 
 	@Inject
 	private ${DBOConverterClassName} converter;

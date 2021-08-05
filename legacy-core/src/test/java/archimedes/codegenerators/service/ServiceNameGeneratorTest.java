@@ -35,6 +35,110 @@ public class ServiceNameGeneratorTest {
 	@InjectMocks
 	private ServiceNameGenerator unitUnderTest;
 
+	@DisplayName("Tests for persistence port interface names")
+	@Nested
+	class ApplicationClassNameTests {
+
+		@Test
+		void passAModelWithAnEmptyApplicationName_ReturnsApplicationOnly() {
+			assertEquals("Application", unitUnderTest.getApplicationClassName(model));
+		}
+
+		@Test
+		void passAModelWithApplicationNameSet_ReturnsApplicationWithApplicationNamePrefix() {
+			// Prepare
+			when(model.getApplicationName()).thenReturn("AppName");
+			// Run & Check
+			assertEquals("AppNameApplication", unitUnderTest.getApplicationClassName(model));
+		}
+
+		@Test
+		void passAModelWithApplicationNameWithSpacesSet_ReturnsApplicationWithApplicationNamePrefix() {
+			// Prepare
+			when(model.getApplicationName()).thenReturn("App Name");
+			// Run & Check
+			assertEquals("AppNameApplication", unitUnderTest.getApplicationClassName(model));
+		}
+
+		@Test
+		void passAModelWithApplicationNameWithNonASCIICharactersSet_ReturnsApplicationWithApplicationNamePrefix() {
+			// Prepare
+			when(model.getApplicationName()).thenReturn("+App-=Name+*/");
+			// Run & Check
+			assertEquals("AppNameApplication", unitUnderTest.getApplicationClassName(model));
+		}
+
+		@Test
+		void passNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getApplicationClassName(null));
+		}
+
+	}
+
+	@DisplayName("Tests for application package names")
+	@Nested
+	class ApplicationPackageNameTests {
+
+		@Test
+		void getApplicationPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getApplicationPackageName(null, table));
+		}
+
+		@Test
+		void getApplicationPackageName_PassANullValueAsTable_ReturnsDefaultValue() {
+			assertEquals("", unitUnderTest.getApplicationPackageName(model, null));
+		}
+
+		@Test
+		void getApplicationPackageName_PassAValidDataModel_ReturnsACorrectPackageName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME;
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getApplicationPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getApplicationPackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectPackageName() {
+			// Prepare
+			String expected = "";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getApplicationPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getApplicationPackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectPAckageName() {
+			// Prepare
+			String expected = "";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getApplicationPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getApplicationPackageName_PassAValidDataModelWithSetWithAlternatePackageNameForModelClasses_ReturnsACorrectPackageName() {
+			// Prepare
+			String alternatePackageName = "alternate.package.name";
+			String expected = alternatePackageName;
+			OptionModel option = mock(OptionModel.class);
+			when(option.getParameter()).thenReturn(alternatePackageName);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_APPLICATION_PACKAGE_NAME))
+					.thenReturn(option);
+			// Run
+			String returned = unitUnderTest.getApplicationPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("Tests for IdModel class names")
 	@Nested
 	class IdModelClassNameTests {
@@ -51,8 +155,8 @@ public class ServiceNameGeneratorTest {
 
 		@Test
 		void getIdModelClassName_PassNullValue_ReturnsNullValue() {
-			assertNull(unitUnderTest.getIdModelClassName(null));
-		}
+				assertNull(unitUnderTest.getIdModelClassName(null));
+			}
 
 		@Test
 		void getIdModelClassName_PassTableModelWithNameCamelCase_ReturnsACorrectIdModelName() {

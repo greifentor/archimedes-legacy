@@ -11,6 +11,7 @@ import archimedes.model.TableModel;
  */
 public class ServiceNameGenerator extends NameGenerator {
 
+	public static final String ALTERNATE_APPLICATION_PACKAGE_NAME = "ALTERNATE_APPLICATION_PACKAGE_NAME";
 	public static final String ALTERNATE_MODEL_CLASS_NAME_SUFFIX = "ALTERNATE_MODEL_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MODEL_PACKAGE_NAME = "ALTERNATE_MODEL_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_PACKAGE_NAME = "ALTERNATE_PAGE_PACKAGE_NAME";
@@ -21,6 +22,25 @@ public class ServiceNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_SERVICE_IMPL_PACKAGE_NAME = "ALTERNATE_SERVICE_IMPL_PACKAGE_NAME";
 	public static final String ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX = "ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX";
 	public static final String ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME = "ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME";
+
+	public String getApplicationClassName(DataModel model) {
+		return model != null
+				? (model.getApplicationName() != null ? deleteNonLetterCharacters(model.getApplicationName()) : "") + "Application"
+				: null;
+	}
+
+	private String deleteNonLetterCharacters(String s) {
+		for (char c = 10; c <= 255; c++) {
+			if (((c < 'a') || (c > 'z')) && ((c < 'A') || (c > 'Z'))) {
+				s = s.replace("" + c, "");
+			}
+		}
+		return s;
+	}
+
+	public String getApplicationPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "", ALTERNATE_APPLICATION_PACKAGE_NAME);
+	}
 
 	public String getIdModelClassName(TableModel table) {
 		return table != null

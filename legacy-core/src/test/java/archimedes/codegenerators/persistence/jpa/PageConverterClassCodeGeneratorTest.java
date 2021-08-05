@@ -49,8 +49,6 @@ class PageConverterClassCodeGeneratorTest {
 							"\n" + //
 							"import java.util.stream.Collectors;\n" + //
 							"\n" + //
-							"import javax.inject.Named;\n" + //
-							"\n" + //
 							"import base.pack.age.name.core.model.Page;\n" + //
 							"\n" + //
 							"import lombok.AllArgsConstructor;\n" + //
@@ -69,7 +67,6 @@ class PageConverterClassCodeGeneratorTest {
 			}
 			s += "@Generated\n" + //
 					"@AllArgsConstructor\n" + //
-					"@Named\n" + //
 					"public class PageConverter<CONTENT, DBO> {\n" + //
 					"\n" + //
 					"	private final ToModelConverter<CONTENT, DBO> toModelConverter;\n" + //

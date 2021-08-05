@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class PageClassCodeGeneratorTest {
+class ApplicationClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
@@ -22,7 +22,7 @@ class PageClassCodeGeneratorTest {
 	private ServiceNameGenerator nameGenerator = new ServiceNameGenerator();
 
 	@InjectMocks
-	private PageClassCodeGenerator unitUnderTest;
+	private ApplicationClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -41,31 +41,29 @@ class PageClassCodeGeneratorTest {
 	}
 
 	private String createExpected(boolean suppressComment) {
-		String expected = "package " + BASE_PACKAGE_NAME + ".core.model;\n" + //
+		String expected = "package " + BASE_PACKAGE_NAME + ";\n" + //
 				"\n" + //
-				"import java.util.List;\n" + //
+				"import org.springframework.boot.SpringApplication;\n" + //
+				"import org.springframework.boot.autoconfigure.SpringBootApplication;\n" + //
+				"import org.springframework.context.annotation.ComponentScan;\n" + //
 				"\n" + //
-				"import lombok.Data;\n" + //
 				"import lombok.Generated;\n" + //
-				"import lombok.experimental.Accessors;\n" + //
 				"\n";
 		if (!suppressComment) {
 			expected += "/**\n" + //
-					" * A page of content objects.\n" + //
-					" *\n" + //
-					" * @param <CONTENT> The type of the objects which are to return with the page.\n" + //
+					" * Application starter class (service only).\n" + //
 					" *\n" + //
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n";
 		}
-		expected += "@Accessors(chain = true)\n" + //
-				"@Data\n" + //
-				"@Generated\n" + //
-				"public class Page<CONTENT> {\n" + //
+		expected += "@Generated\n" + //
+				"@SpringBootApplication\n" + //
+				"@ComponentScan(\"" + BASE_PACKAGE_NAME + "\")\n" + //
+				"public class Application {\n" + //
 				"\n" + //
-				"	private List<CONTENT> entries;\n" + //
-				"	private int entriesPerPage;\n" + //
-				"	private long entriesTotal;\n" + //
+				"	public static void main(String[] args) {\n" + //
+				"		SpringApplication.run(Application.class, args);\n" + //
+				"	}\n" + //
 				"\n" + //
 				"}";
 		return expected;
