@@ -2,9 +2,13 @@
 The good old archimedes (cleaned up).
 
 
-## Ideas
+## History
 
-* Read in Liquibase via a memory database (Liquibase -> memory database -> JDBC -> Archimedes model).
+First lines of code were implemented while baby sitting in March 2004 (if I remember right). Since these times Archimedes has grown, shrunk and grown again for several times. Different idea of generating code and database update scripts were implemented, changed and rejected and added again.
+
+Which was constantly in use were the UI which is very similar to the first approach, perhaps a little bit more colored, and the interface to link different code generators to the data model.
+
+The last major changes were beginning to add a code generator for Java REST server directly to Archimedes and to change the database update scripting from pure SQL to a more variable interface based procedure whose first implementation creates Liquibase scripts.
 
 
 ## Requirements
@@ -44,6 +48,11 @@ This working with Window only in the moment.
 ## News
 
 Will be provided since version 2.1.1 is released.
+
+
+## Open Ideas
+
+* Read in Liquibase via a memory database (Liquibase -> memory database -> JDBC -> Archimedes model).
 
 
 ## Code Factories
