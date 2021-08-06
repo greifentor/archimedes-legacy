@@ -17,6 +17,8 @@ The last major changes were beginning to add a code generator for Java REST serv
 * Maven 3.5
 * Project "dm-comp" from github "Greifentor" in the same super folder than this project.
 
+Ensure that line endings will not be changed while checking out the projects. That could affect the tests.
+
 
 ### Project structure
 
@@ -28,6 +30,7 @@ The last major changes were beginning to add a code generator for Java REST serv
 ## Build
 
 * Type `mvn clean install` in a shell.
+* Tests can be skipped by passing `-Dmaven.test.skip=true` to the shell call above.
 
 
 ## Start
