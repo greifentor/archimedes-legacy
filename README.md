@@ -21,8 +21,8 @@ The last major changes were beginning to add a code generator for Java REST serv
 ### Project structure
 
 * [your work-space folder]
-** archimedes-legacy
-** dm-comp
+* - archimedes-legacy
+* - dm-comp
 
 
 ## Build
