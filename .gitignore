@@ -17,3 +17,4 @@ bin/
 /*.iml
 /archimedes-legacy (2).iml
 /legacy-core/archimedes-legacy-core.iml
+/.run/Archimedes.run.xml
