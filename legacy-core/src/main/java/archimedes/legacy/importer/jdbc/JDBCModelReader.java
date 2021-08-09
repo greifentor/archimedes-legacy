@@ -193,7 +193,7 @@ public class JDBCModelReader implements ModelReader {
 					table.addColumns(factory.createColumn(
 							columnInfo.getColumnName(), typeConverter.convert(columnInfo.getDataType(),
 									columnInfo.getColumnSize(), columnInfo.getDecimalDigits()),
-							columnInfo.isNullable()));
+							columnInfo.isNullable(), columnInfo.isAutoIncrement()));
 				} catch (Exception e) {
 					log.error("Problems while reading column '" + scheme.getName() + "." + table.getName() + "."
 							+ columnInfo.getColumnName() + "' (" + columnInfo.getDataType() + " {"

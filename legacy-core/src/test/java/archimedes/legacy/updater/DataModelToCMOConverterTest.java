@@ -161,4 +161,19 @@ public class DataModelToCMOConverterTest {
 		assertEquals(expected, returned);
 	}
 
+	@Test
+	void passADataModelWithAnAutoIncrementFieldInATable_ReturnsACorrectDataModel() {
+		// Prepare
+		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+		DataModel dataModel = reader.read("src/test/resources/dm/DataModel2DataModelCMO-AutoIncrement-Identity.xml");
+		ColumnCMO idColumn = ColumnCMO.of("Id", TypeCMO.of(Types.BIGINT, 0, 0), true, false);
+		ColumnCMO nameColumn = ColumnCMO.of("Name", TypeCMO.of(Types.VARCHAR, 100, 0), false, true);
+		TableCMO aTable = TableCMO.of("ATable", idColumn, nameColumn).addPrimaryKeys(idColumn.getName());
+		DataModelCMO expected = DataModelCMO.of(SchemaCMO.of("", aTable));
+		// Run
+		DataModelCMO returned = unitUnderTest.convert(dataModel);
+		// Check
+		assertEquals(expected, returned);
+	}
+
 }

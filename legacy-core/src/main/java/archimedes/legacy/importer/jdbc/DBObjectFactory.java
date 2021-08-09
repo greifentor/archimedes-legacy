@@ -22,8 +22,9 @@ public interface DBObjectFactory {
 	 * @param columnName The name of the column.
 	 * @param type       The type for the column.
 	 * @param nullable   Set this flag to create a nullable column.
+	 * @param autoIncrement Set this flag if the column is an auto increment.
 	 */
-	ColumnSO createColumn(String columnName, TypeSO type, boolean nullable);
+	ColumnSO createColumn(String columnName, TypeSO type, boolean nullable, boolean autoIncrement);
 
 	/**
 	 * Creates a database scheme object.

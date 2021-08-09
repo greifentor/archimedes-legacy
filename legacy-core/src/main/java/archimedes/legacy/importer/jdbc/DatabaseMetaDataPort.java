@@ -22,6 +22,7 @@ public interface DatabaseMetaDataPort {
 		private int dataType;
 		private int decimalDigits = -1;
 		private boolean nullable;
+		private boolean autoIncrement;
 		private String typeName;
 	}
 

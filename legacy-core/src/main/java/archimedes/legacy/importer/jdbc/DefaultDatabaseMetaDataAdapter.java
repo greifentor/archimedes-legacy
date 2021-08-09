@@ -29,6 +29,7 @@ public class DefaultDatabaseMetaDataAdapter implements DatabaseMetaDataPort {
 			String typeName = rs.getString("TYPE_NAME");
 			int dataType = rs.getInt("DATA_TYPE");
 			boolean nullable = "YES".equalsIgnoreCase(rs.getString("IS_NULLABLE"));
+			boolean autoIncrement = "YES".equalsIgnoreCase(rs.getString("IS_AUTOINCREMENT"));
 			int columnSize = -1;
 			int decimalDigits = -1;
 			if ((dataType == Types.CHAR) || (dataType == Types.DECIMAL) || (dataType == Types.FLOAT)

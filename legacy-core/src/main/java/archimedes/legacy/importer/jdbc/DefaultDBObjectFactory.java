@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.ollie.archimedes.alexandrian.service.so.ColumnSO;
 import de.ollie.archimedes.alexandrian.service.so.IndexSO;
+import de.ollie.archimedes.alexandrian.service.so.OptionSO;
 import de.ollie.archimedes.alexandrian.service.so.SchemeSO;
 import de.ollie.archimedes.alexandrian.service.so.TableSO;
 import de.ollie.archimedes.alexandrian.service.so.TypeSO;
@@ -17,8 +18,8 @@ import de.ollie.archimedes.alexandrian.service.so.TypeSO;
 public class DefaultDBObjectFactory implements DBObjectFactory {
 
 	@Override
-	public ColumnSO createColumn(String columnName, TypeSO type, boolean nullable) {
-		return new ColumnSO().setName(columnName).setNullable(nullable).setType(type);
+	public ColumnSO createColumn(String columnName, TypeSO type, boolean nullable, boolean autoIncrement) {
+		return new ColumnSO().setName(columnName).setNullable(nullable).setType(type).addOptions(new OptionSO().setName("AUTO_INCREMENT").setValue("IDENTITY"));
 	}
 
 	@Override

@@ -1,10 +1,5 @@
 package archimedes.legacy.updater;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import archimedes.codegenerators.OptionGetter;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -18,6 +13,11 @@ import de.ollie.dbcomp.model.IndexCMO;
 import de.ollie.dbcomp.model.SchemaCMO;
 import de.ollie.dbcomp.model.TableCMO;
 import de.ollie.dbcomp.model.TypeCMO;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A converter which converts a DataModel object into a CMO.
@@ -78,10 +78,17 @@ public class DataModelToCMOConverter {
 														(column.getDomain().getDecimalPlace() < 0
 																? 0
 																: column.getDomain().getDecimalPlace())),
-										false,
+										isAutoIncrementField(column),
 										!column.isNotNull()))
 				.collect(Collectors.toList())
 				.toArray(new ColumnCMO[0]);
+	}
+
+	private boolean isAutoIncrementField(ColumnModel column) {
+		return OptionGetter
+				.getOptionByName(column, "AUTO_INCREMENT")
+				.map(option -> "IDENTITY".equals(option.getParameter()))
+				.orElse(false);
 	}
 
 	private void addForeignKeys(DataModelCMO cmo, DataModel dataModel) {
