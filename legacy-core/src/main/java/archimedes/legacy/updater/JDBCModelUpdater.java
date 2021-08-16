@@ -98,7 +98,8 @@ public class JDBCModelUpdater {
 														guiBundle);
 											}
 										} while ((report != null) && !report.equals(previousReport)
-												&& report.hasAtLeastOneActionInStatus(UpdateReportAction.Status.DONE));
+												&& report.hasAtLeastOneActionInStatus(UpdateReportAction.Status.DONE)
+												&& mrpm.isVisible());
 										if (!reportSummary.isEmpty()) {
 											new FrameTextViewer(
 													reportSummary,
