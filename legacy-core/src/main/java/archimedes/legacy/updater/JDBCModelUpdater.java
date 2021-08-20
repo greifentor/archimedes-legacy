@@ -54,6 +54,7 @@ public class JDBCModelUpdater {
 										UpdateReport report = null;
 										UpdateReport previousReport = null;
 										Vector<String> reportSummary = new Vector<>();
+										int pass = 0;
 										do {
 											try {
 												Diagramm d = (Diagramm) new JDBCImportManager()
@@ -63,6 +64,7 @@ public class JDBCModelUpdater {
 													report = new ModelUpdater(diagramm, d, Archimedes.Factory).update();
 													Counter counter = new Counter(0);
 													int max = report.getActions().size();
+													reportSummary.add("PASS " + pass++);
 													report.getActions().forEach(action -> {
 														mrpm
 																.update(
