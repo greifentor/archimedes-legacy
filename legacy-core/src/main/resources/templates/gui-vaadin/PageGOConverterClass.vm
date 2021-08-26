@@ -1,0 +1,37 @@
+package ${PackageName};
+
+import java.util.stream.Collectors;
+
+import ${PageModelPackageName}.${PageModelClassName};
+import ${PageGOPackageName}.${PageGOClassName};
+
+import lombok.AllArgsConstructor;
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * A class to convert a service page to a GUI web layer page object.
+ *
+ * @param <MODEL> The type of the service layer model class.
+ * @param <GO>    The type of the GO's which are representing model objects in the GUI web layer.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+@AllArgsConstructor
+public class ${ClassName}<MODEL, GO> {
+
+	private final ${ToGOConverterInferfaceName}<MODEL, GO> toGOConverter;
+
+	public ${PageGOClassName}<GO> convert(${PageModelClassName}<MODEL> page) {
+		if (page == null) {
+			return null;
+		}
+		return new ${PageGOClassName}<GO>()
+				.setEntries(page.getContent().stream().map(toGOConverter::${ToGOMethodName}).collect(Collectors.toList()))
+				.setEntriesPerPage(page.getSize())
+				.setEntriesTotal(page.getTotalElements());
+	}
+
+}
