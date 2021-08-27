@@ -19,7 +19,11 @@ public class DefaultDBObjectFactory implements DBObjectFactory {
 
 	@Override
 	public ColumnSO createColumn(String columnName, TypeSO type, boolean nullable, boolean autoIncrement) {
-		return new ColumnSO().setName(columnName).setNullable(nullable).setType(type).addOptions(new OptionSO().setName("AUTO_INCREMENT").setValue("IDENTITY"));
+		ColumnSO column = new ColumnSO().setName(columnName).setNullable(nullable).setType(type);
+		if (autoIncrement) {
+			column.addOptions(new OptionSO().setName("AUTO_INCREMENT").setValue("IDENTITY"));
+		}
+		return column;
 	}
 
 	@Override
