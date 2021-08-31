@@ -47,7 +47,7 @@ public class GUIVaadinCodeFactoryTest {
 
 		public void assertEntityFilesExisting(String prefix, Path tempDir) {
 			String expectedFileName = tempDir.toAbsolutePath().toString() + prefix
-					+ "/src/main/java/base/pack/age/name/persistence/entity/ATableDBO.java";
+					+ "/src/main/java/base/pack/age/name/gui/vaadin/converter/PageGOConverter.java";
 			assertTrue(new File(expectedFileName).exists(), "file does not exists: " + expectedFileName);
 		}
 

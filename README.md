@@ -30,7 +30,7 @@ Ensure that line endings will not be changed while checking out the projects. Th
 ## Build
 
 * Type `mvn clean install` in a shell.
-* Tests can be skipped by passing `-Dmaven.test.skip=true` to the shell call above.
+* Tests should be skipped by passing `-Dmaven.test.skip=true` to the shell call above (it's momentarily a project used by the author only: so it should always be compile clean, but could have ocasionally problems with running the tests!).
 
 
 ## Start

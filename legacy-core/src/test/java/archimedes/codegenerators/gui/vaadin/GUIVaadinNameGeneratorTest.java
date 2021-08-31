@@ -1,6 +1,5 @@
 package archimedes.codegenerators.gui.vaadin;
 
-import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -209,7 +208,7 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getGOConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("persistence.converter", unitUnderTest.getGOConverterPackageName(model, null));
+			assertEquals("gui.vaadin.converter", unitUnderTest.getGOConverterPackageName(model, null));
 		}
 
 		@Test
@@ -237,13 +236,13 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getGOPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("persistence.entity", unitUnderTest.getGOPackageName(model, null));
+			assertEquals("gui.vaadin.go", unitUnderTest.getGOPackageName(model, null));
 		}
 
 		@Test
 		void getGOPackageName_PassAValidTableModel_ReturnsACorrecGOName() {
 			// Prepare
-			String expected = BASE_PACKAGE_NAME + ".persistence.entity";
+			String expected = BASE_PACKAGE_NAME + ".gui.vaadin.go";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
 			String returned = unitUnderTest.getGOPackageName(model, table);
@@ -254,7 +253,7 @@ public class GUIVaadinNameGeneratorTest {
 		@Test
 		void getGOPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecGOName() {
 			// Prepare
-			String expected = "persistence.entity";
+			String expected = "gui.vaadin.go";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
 			String returned = unitUnderTest.getGOPackageName(model, table);
@@ -265,7 +264,7 @@ public class GUIVaadinNameGeneratorTest {
 		@Test
 		void getGOPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecGOName() {
 			// Prepare
-			String expected = "persistence.entity";
+			String expected = "gui.vaadin.go";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
 			String returned = unitUnderTest.getGOPackageName(model, table);
@@ -277,10 +276,12 @@ public class GUIVaadinNameGeneratorTest {
 		void getGOPackageName_PassAValidTableModelWithMODULEOption_ReturnsACorrecGOName() {
 			// Prepare
 			String prefix = "prefix";
-			String expected = "prefix.persistence.entity";
+			String expected = "prefix.gui.vaadin.go";
 			when(model.getBasePackageName()).thenReturn(null);
 			when(table.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
-					.thenReturn(new Option(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE, prefix));
+					.thenReturn(new Option(
+							archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
+							prefix));
 			// Run
 			String returned = unitUnderTest.getGOPackageName(model, table);
 			// Check
@@ -290,358 +291,232 @@ public class GUIVaadinNameGeneratorTest {
 		@Test
 		void getGOPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
 			// Prepare
-			when(model.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME))
-					.thenReturn(
-							new Option(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME, "persistence.GOs"));
-			// Run & Check
-			assertEquals("persistence.GOs", unitUnderTest.getGOPackageName(model, table));
-		}
-
-	}
-
-	@DisplayName("tests of the JPA persistence adapter class names.")
-	@Nested
-	class JPAPersistenceAdapterClassNameTests {
-
-		@Test
-		void getJPAPersistenceAdapterClassName_PassNullValue_ReturnsANullValue() {
-			assertNull(unitUnderTest.getJPAPersistenceAdapterClassName(null));
-		}
-
-		@Test
-		void getJPAPersistenceAdapterClassName_ATableWithName_ReturnsTheCorrectClassName() {
-			// Prepare
-			String expected = "NameJPAPersistenceAdapter";
-			when(table.getName()).thenReturn("Name");
-			// Run
-			String returned = unitUnderTest.getJPAPersistenceAdapterClassName(table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getJPAPersistenceAdapterClassName_passAValidTableModelWithAlternateClassName_ReturnsACorrectJPAPersistenceAdapterClassName() {
-			// Prepare
-			String expected = "TablePersistenceAdapter";
-			when(table.getName()).thenReturn("Table");
-			when(table.getDataModel()).thenReturn(model);
-			when(model.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX))
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_GO_PACKAGE_NAME))
 					.thenReturn(
 							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX,
-									"PersistenceAdapter"));
+									GUIVaadinNameGenerator.ALTERNATE_GO_PACKAGE_NAME,
+									"vaadin.gos"));
+			// Run & Check
+			assertEquals("vaadin.gos", unitUnderTest.getGOPackageName(model, table));
+		}
+
+	}
+
+	@DisplayName("tests for page GO converter class names")
+	@Nested
+	class PageGOConverterClassNameTests {
+
+		@Test
+		void getPageGOConverterClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getPageGOConverterClassName(null));
+		}
+
+		@Test
+		void getPageGOConverterClassName_passAValidTable_ReturnsACorrectGOConverterClassName() {
+			// Prepare
+			String expected = "PageGOConverter";
 			// Run
-			String returned = unitUnderTest.getJPAPersistenceAdapterClassName(table);
+			String returned = unitUnderTest.getPageGOConverterClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 	}
 
-	@DisplayName("tests for GO package names")
+	@DisplayName("tests for page GO converter package names")
 	@Nested
-	class JPAPersistenceAdapterPackageNameTests {
+	class PageGOConverterPackageNameTests {
 
 		@Test
-		void getJPAPersistenceAdapterPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getJPAPersistenceAdapterPackageName(null, table));
+		void getPageGOConverterPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPageGOConverterPackageName(null, table));
 		}
 
 		@Test
-		void getJPAPersistenceAdapterPackageName_PassAValidTable_ReturnsACorrectPackageName() {
-			assertEquals("persistence", unitUnderTest.getJPAPersistenceAdapterPackageName(model, table));
+		void getPageGOConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin.converter", unitUnderTest.getPageGOConverterPackageName(model, null));
 		}
 
 		@Test
-		void getJPAPersistenceAdapterPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+		void getPageGOConverterPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
 			// Prepare
-			when(model.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_ADAPTER_PACKAGE_NAME))
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_CONVERTER_PACKAGE_NAME))
 					.thenReturn(
 							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_ADAPTER_PACKAGE_NAME,
-									"persistence.adapters"));
+									GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_CONVERTER_PACKAGE_NAME,
+									"gui.vaadin.mapper"));
 			// Run & Check
-			assertEquals("persistence.adapters", unitUnderTest.getJPAPersistenceAdapterPackageName(model, table));
+			assertEquals("gui.vaadin.mapper", unitUnderTest.getPageGOConverterPackageName(model, table));
 		}
 
 	}
 
-	@DisplayName("tests of the JPA repository class names.")
+	@DisplayName("tests for page GO class names")
 	@Nested
-	class JPARepositoryInterfaceNameTests {
+	class PageGOClassNameTests {
 
 		@Test
-		void getJPARepositoryInterfaceName_PassNullValue_ReturnsANullValue() {
-			assertNull(unitUnderTest.getJPARepositoryInterfaceName(null));
+		void getPageGOClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getPageGOClassName(null));
 		}
 
 		@Test
-		void getJPARepositoryInterfaceName_ATableWithName_ReturnsTheCorrectClassName() {
+		void getPageGOClassName_passAValidTable_ReturnsACorrectClassName() {
 			// Prepare
-			String expected = "NameGORepository";
-			when(table.getName()).thenReturn("Name");
+			String expected = "PageGO";
 			// Run
-			String returned = unitUnderTest.getJPARepositoryInterfaceName(table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getJPARepositoryInterfaceName_PassDataModelWithALTERNATE_REPOSITORY_CLASS_NAME_SUFFIXOption_ReturnsACorrectGOName() {
-			// Prepare
-			String expected = "TableRepo";
-			when(table.getName()).thenReturn("Table");
-			when(table.getDataModel()).thenReturn(model);
-			doReturn(new Option(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX, "Repo"))
-					.when(model)
-					.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
-			// Run
-			String returned = unitUnderTest.getJPARepositoryInterfaceName(table);
+			String returned = unitUnderTest.getPageGOClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 	}
 
-	@DisplayName("tests for GO package names")
+	@DisplayName("tests for page GO package names")
 	@Nested
-	class JPARepositoryPackageNameTests {
+	class PageGOPackageNameTests {
 
 		@Test
-		void getJPARepositoryPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getJPARepositoryPackageName(null, table));
+		void getPageGOPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPageGOPackageName(null, table));
 		}
 
 		@Test
-		void getJPARepositoryPackageName_PassAValidTable_ReturnsACorrectPackageName() {
-			assertEquals("persistence.repository", unitUnderTest.getJPARepositoryPackageName(model, table));
+		void getPageGOPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin.go", unitUnderTest.getPageGOPackageName(model, null));
 		}
 
 		@Test
-		void getJPARepositoryPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+		void getPageGOPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
 			// Prepare
-			when(model.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME))
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_PACKAGE_NAME))
 					.thenReturn(
 							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME,
-									"persistence.repos"));
+									GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_PACKAGE_NAME,
+									"vaadin.go"));
 			// Run & Check
-			assertEquals("persistence.repos", unitUnderTest.getJPARepositoryPackageName(model, table));
+			assertEquals("vaadin.go", unitUnderTest.getPageGOPackageName(model, table));
 		}
 
 	}
 
-	@DisplayName("tests for page converter class names")
+	@DisplayName("tests for page parameters GO class names")
 	@Nested
-	class PageConverterClassNameTests {
+	class PageParametersGOClassNameTests {
 
 		@Test
-		void getPageConverterClassName_passANullValueAsTableModel_returnsANullValue() {
-			assertNull(unitUnderTest.getPageConverterClassName(null));
+		void getPageParametersGOClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getPageParametersGOClassName(null));
 		}
 
 		@Test
-		void getPageConverterClassName_passAValidTable_ReturnsACorrectGOConverterClassName() {
+		void getPageParametersGOClassName_passAValidTable_ReturnsACorrectClassName() {
 			// Prepare
-			String expected = "PageConverter";
+			String expected = "PageParametersGO";
 			// Run
-			String returned = unitUnderTest.getPageConverterClassName(table);
+			String returned = unitUnderTest.getPageParametersGOClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 	}
 
-	@DisplayName("tests for page converter package names")
+	@DisplayName("tests for page parameters GO package names")
 	@Nested
-	class PageConverterPackageNameTests {
+	class PageParametersGOPackageNameTests {
 
 		@Test
-		void getPageConverterPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getPageConverterPackageName(null, table));
+		void getPageParametersGOPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPageParametersGOPackageName(null, table));
 		}
 
 		@Test
-		void getPageConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("persistence.converter", unitUnderTest.getPageConverterPackageName(model, null));
+		void getPageParametersGOPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin.go", unitUnderTest.getPageParametersGOPackageName(model, null));
 		}
 
 		@Test
-		void getPageConverterPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+		void getPageParametersGOPackageName_PassAValidTableButModelAsAlternateGONameOption_ReturnsACorrectPackageName() {
 			// Prepare
-			when(model.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME))
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME))
 					.thenReturn(
 							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME,
-									"persistence.mapper"));
+									GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME,
+									"vaadin.go"));
 			// Run & Check
-			assertEquals("persistence.mapper", unitUnderTest.getPageConverterPackageName(model, table));
+			assertEquals("vaadin.go", unitUnderTest.getPageParametersGOPackageName(model, table));
 		}
 
 	}
 
-	@DisplayName("tests for page model class names")
+	@DisplayName("tests for page parameters GO to page parameters converter class names")
 	@Nested
-	class PageModelClassNameTests {
+	class PageParametersGOToPageParametersConverterClassNameTests {
 
 		@Test
-		void getPageModelClassName_passANullValueAsTableModel_returnsANullValue() {
-			assertNull(unitUnderTest.getPageModelClassName(null));
+		void getPageParametersGOToPageParametersConverterClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getPageParametersGOToPageParametersConverterClassName(null));
 		}
 
 		@Test
-		void getPageModelClassName_passAValidTable_ReturnsACorrectClassName() {
+		void getPageParametersGOToPageParametersConverterClassName_passAValidTable_ReturnsACorrectGOConverterClassName() {
 			// Prepare
-			String expected = "Page";
+			String expected = "PageParametersGOToPageParametersConverter";
 			// Run
-			String returned = unitUnderTest.getPageModelClassName(table);
+			String returned = unitUnderTest.getPageParametersGOToPageParametersConverterClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 	}
 
-	@DisplayName("tests for page model package names")
+	@DisplayName("tests for page parameters GO to page parameters converter package names")
 	@Nested
-	class PageModelPackageNameTests {
+	class PageParametersGOToPageParametersConverterPackageNameTests {
 
 		@Test
-		void getPageModelPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getPageModelPackageName(null, table));
+		void getPageParametersGOToPageParametersConverterPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPageParametersGOToPageParametersConverterPackageName(null, table));
 		}
 
 		@Test
-		void getPageModelPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("core.model", unitUnderTest.getPageModelPackageName(model, null));
+		void getPageParametersGOToPageParametersConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals(
+					"gui.vaadin.converter",
+					unitUnderTest.getPageParametersGOToPageParametersConverterPackageName(model, null));
 		}
 
 		@Test
-		void getPageModelPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+		void getPageParametersGOToPageParametersConverterPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
 			// Prepare
-			when(model.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_PAGE_MODEL_PACKAGE_NAME))
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME))
 					.thenReturn(
 							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_PAGE_MODEL_PACKAGE_NAME,
-									"core.page.model"));
+									GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME,
+									"vaadin.mapper"));
 			// Run & Check
-			assertEquals("core.page.model", unitUnderTest.getPageModelPackageName(model, table));
+			assertEquals(
+					"vaadin.mapper",
+					unitUnderTest.getPageParametersGOToPageParametersConverterPackageName(model, table));
 		}
 
 	}
 
-	@DisplayName("tests for page parameters model class names")
+	@DisplayName("tests for to GO converter interface names")
 	@Nested
-	class PageParametersModelClassNameTests {
+	class ToGOConverterInterfaceNameTests {
 
 		@Test
-		void getPageParametersModelClassName_passANullValueAsTableModel_returnsANullValue() {
-			assertNull(unitUnderTest.getPageParametersModelClassName(null));
+		void getToGOConverterInterfaceName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getToGOConverterInterfaceName(null));
 		}
 
 		@Test
-		void getPageParametersModelClassName_passAValidTable_ReturnsACorrectClassName() {
+		void getToGOConverterInterfaceName_passAValidTable_ReturnsACorrectInterfaceName() {
 			// Prepare
-			String expected = "PageParameters";
+			String expected = "ToGOConverter";
 			// Run
-			String returned = unitUnderTest.getPageParametersModelClassName(table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-	}
-
-	@DisplayName("tests for page parameters model package names")
-	@Nested
-	class PageParametersModelPackageNameTests {
-
-		@Test
-		void getPageParametersModelPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getPageParametersModelPackageName(null, table));
-		}
-
-		@Test
-		void getPageParametersModelPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("core.model", unitUnderTest.getPageParametersModelPackageName(model, null));
-		}
-
-		@Test
-		void getPageParametersModelPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
-			// Prepare
-			when(model.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME))
-					.thenReturn(
-							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME,
-									"core.page.model"));
-			// Run & Check
-			assertEquals("core.page.model", unitUnderTest.getPageParametersModelPackageName(model, table));
-		}
-
-	}
-
-	@DisplayName("tests for page parameters to pageable converter class names")
-	@Nested
-	class PageParametersToPageableConverterClassNameTests {
-
-		@Test
-		void getPageParametersToPageableConverterClassName_passANullValueAsTableModel_returnsANullValue() {
-			assertNull(unitUnderTest.getPageParametersToPageableConverterClassName(null));
-		}
-
-		@Test
-		void getPageParametersToPageableConverterClassName_passAValidTable_ReturnsACorrectGOConverterClassName() {
-			// Prepare
-			String expected = "PageParametersToPageableConverter";
-			// Run
-			String returned = unitUnderTest.getPageParametersToPageableConverterClassName(table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-	}
-
-	@DisplayName("tests for page parameters to pageable converter package names")
-	@Nested
-	class PageParametersToPageableConverterPackageNameTests {
-
-		@Test
-		void getPageParametersToPageableConverterPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getPageParametersToPageableConverterPackageName(null, table));
-		}
-
-		@Test
-		void getPageParametersToPageableConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("persistence.converter", unitUnderTest.getPageParametersToPageableConverterPackageName(model, null));
-		}
-
-		@Test
-		void getPageParametersToPageableConverterPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
-			// Prepare
-			when(model.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME))
-					.thenReturn(
-							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME,
-									"persistence.mapper"));
-			// Run & Check
-			assertEquals("persistence.mapper", unitUnderTest.getPageParametersToPageableConverterPackageName(model, table));
-		}
-
-	}
-
-	@DisplayName("tests for to model converter interface names")
-	@Nested
-	class ToModelConverterInterfaceNameTests {
-
-		@Test
-		void getToModelConverterInterfaceName_passANullValueAsTableModel_returnsANullValue() {
-			assertNull(unitUnderTest.getToModelConverterInterfaceName(null));
-		}
-
-		@Test
-		void getToModelConverterInterfaceName_passAValidTable_ReturnsACorrectInterfaceName() {
-			// Prepare
-			String expected = "ToModelConverter";
-			// Run
-			String returned = unitUnderTest.getToModelConverterInterfaceName(table);
+			String returned = unitUnderTest.getToGOConverterInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -666,10 +541,10 @@ public class GUIVaadinNameGeneratorTest {
 		void getToGOMethodName_PassAValidTable_ModelAsAlternateName_ReturnsTheAlternateName() {
 			// Prepare
 			when(table.getDataModel()).thenReturn(model);
-			when(model.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_TO_GO_METHOD_NAME))
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME))
 					.thenReturn(
 							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
+									GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
 									"toGO"));
 			// Run & Check
 			assertEquals("toGO", unitUnderTest.getToGOMethodName(table));
@@ -695,10 +570,10 @@ public class GUIVaadinNameGeneratorTest {
 		void getToModelMethodName_PassAValidTable_ModelAsAlternateName_ReturnsTheAlternateName() {
 			// Prepare
 			when(table.getDataModel()).thenReturn(model);
-			when(model.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME))
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME))
 					.thenReturn(
 							new Option(
-									PersistenceJPANameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME,
+									GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME,
 									"toSO"));
 			// Run & Check
 			assertEquals("toSO", unitUnderTest.getToModelMethodName(table));
