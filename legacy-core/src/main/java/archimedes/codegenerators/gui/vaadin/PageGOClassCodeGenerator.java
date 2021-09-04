@@ -1,26 +1,25 @@
 package archimedes.codegenerators.gui.vaadin;
 
-import org.apache.velocity.VelocityContext;
-
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
+import org.apache.velocity.VelocityContext;
 
 /**
- * A page converter class code generator for graphic user interface objects (GO's).
+ * A page class code generator for  objects (GO's).
  *
- * @author ollie (28.07.2021)
+ * @author ollie (04.09.2021)
  */
-public class PageGOConverterClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
+public class PageGOClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
 
 	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
-	public PageGOConverterClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	public PageGOClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"PageGOConverterClass.vm",
+				"PageGOClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				new GUIVaadinNameGenerator(),
 				new TypeGenerator(),
@@ -42,7 +41,7 @@ public class PageGOConverterClassCodeGenerator extends AbstractClassCodeGenerato
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getPageGOConverterClassName(table);
+		return nameGenerator.getPageGOClassName(table);
 	}
 
 	@Override
@@ -52,7 +51,7 @@ public class PageGOConverterClassCodeGenerator extends AbstractClassCodeGenerato
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getPageGOConverterPackageName(model, table);
+		return nameGenerator.getPageGOPackageName(model, table);
 	}
 
 	@Override

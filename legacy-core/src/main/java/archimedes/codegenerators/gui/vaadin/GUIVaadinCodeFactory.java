@@ -27,7 +27,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 
 	@Override
 	protected List<CodeGenerator> getCodeGenerators() {
-		return Arrays.asList(new PageGOConverterClassCodeGenerator(this));
+		return Arrays.asList(new PageGOClassCodeGenerator(this), new PageGOConverterClassCodeGenerator(this));
 	}
 
 	@Override
