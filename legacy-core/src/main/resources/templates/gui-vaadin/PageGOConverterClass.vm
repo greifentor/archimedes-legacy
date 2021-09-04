@@ -12,26 +12,26 @@ import lombok.Generated;
 /**
  * A class to convert a service page to a GUI web layer page object.
  *
- * @param <MODEL> The type of the service layer model class.
  * @param <GO>    The type of the GO's which are representing model objects in the GUI web layer.
+ * @param <MODEL> The type of the service layer model class.
  *
  * ${Generated}
  */
 #end
 @Generated
 @AllArgsConstructor
-public class ${ClassName}<MODEL, GO> {
+public class ${ClassName}<GO, MODEL> {
 
-	private final ${ToGOConverterInferfaceName}<MODEL, GO> toGOConverter;
+	private final ${ToGOConverterInferfaceName}<GO, MODEL> toGOConverter;
 
-	public ${PageGOClassName}<GO> convert(${PageModelClassName}<MODEL> page) {
+	public ${PageGOClassName}<GO> toGO(${PageModelClassName}<MODEL> page) {
 		if (page == null) {
 			return null;
 		}
 		return new ${PageGOClassName}<GO>()
-				.setEntries(page.getContent().stream().map(toGOConverter::${ToGOMethodName}).collect(Collectors.toList()))
-				.setEntriesPerPage(page.getSize())
-				.setEntriesTotal(page.getTotalElements());
+				.setEntries(page.getEntries().stream().map(toGOConverter::${ToGOMethodName}).collect(Collectors.toList()))
+				.setEntriesPerPage(page.getEntriesPerPage())
+				.setEntriesTotal(page.getEntriesTotal());
 	}
 
 }

@@ -57,13 +57,11 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected String getBaseCodeFolderName(DataModel dataModel) {
-		return (isModuleModeSet(dataModel) && (getModuleName(dataModel) != null)
-				? getModuleName(dataModel) + "/"
-				: "")
+		return (isModuleModeSet(dataModel) && (getModuleName(dataModel) != null) ? getModuleName(dataModel) + "/" : "")
 				+ System
-				.getProperty(
-						PROPERTY_PREFIX + getClass().getSimpleName() + ".base.code.folder.name",
-						System.getProperty(PROPERTY_PREFIX + "base.code.folder.name", "src/main/java"));
+						.getProperty(
+								PROPERTY_PREFIX + getClass().getSimpleName() + ".base.code.folder.name",
+								System.getProperty(PROPERTY_PREFIX + "base.code.folder.name", "src/main/java"));
 	}
 
 	private boolean isModuleModeSet(DataModel dataModel) {
@@ -72,25 +70,32 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	protected String getModuleName(DataModel dataModel) {
 		String modulePrefix = dataModel.getApplicationName().toLowerCase();
-		if (getAlternateModuleName(dataModel) != null) {
-			modulePrefix = getAlternateModuleName(dataModel);
+		if (getAlternateModuleNamePrefix(dataModel) != null) {
+			modulePrefix = getAlternateModuleNamePrefix(dataModel);
 		}
-		return modulePrefix + (modulePrefix.isEmpty()
-				? ""
-				: "-") + getDefaultModuleName(dataModel);
+		return modulePrefix + (modulePrefix.isEmpty() ? "" : "-") + buildModuleName(dataModel);
 	}
 
-	private String getAlternateModuleName(DataModel dataModel) {
+	private String buildModuleName(DataModel dataModel) {
+		OptionModel option = dataModel.getOptionByName(getAlternateModule());
+		return option != null ? option.getParameter() : getDefaultModuleName(dataModel);
+	}
+
+	private String getAlternateModuleNamePrefix(DataModel dataModel) {
 		OptionModel option = dataModel.getOptionByName(AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX);
-		return option != null
-				? option.getParameter()
-				: null;
+		return option != null ? option.getParameter() : null;
+	}
+
+	protected String getAlternateModule() {
+		return "-";
 	}
 
 	protected String getContextName(TableModel table) {
 		return table == null
 				? null
-				: OptionGetter.getOptionByName(table, CONTEXT_NAME).map(OptionModel::getParameter)
+				: OptionGetter
+						.getOptionByName(table, CONTEXT_NAME)
+						.map(OptionModel::getParameter)
 						.orElse(nameGenerator.getClassName(table));
 	}
 
@@ -123,9 +128,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	private String getAttributeNameFirstLetterUpperCase(ColumnModel column) {
 		String attrName = nameGenerator.getAttributeName(column);
 		return attrName.substring(0, 1).toUpperCase()
-				+ (attrName.length() == 1
-				? ""
-				: attrName.substring(1, attrName.length()));
+				+ (attrName.length() == 1 ? "" : attrName.substring(1, attrName.length()));
 	}
 
 	protected String getSetterName(ColumnModel column) {
@@ -133,9 +136,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected String getQualifiedName(String packageName, String className) {
-		return ((packageName != null) && !packageName.isEmpty()
-				? packageName + "."
-				: "") + className;
+		return ((packageName != null) && !packageName.isEmpty() ? packageName + "." : "") + className;
 	}
 
 	protected boolean isGenerateIdClass(DataModel model, TableModel table) {

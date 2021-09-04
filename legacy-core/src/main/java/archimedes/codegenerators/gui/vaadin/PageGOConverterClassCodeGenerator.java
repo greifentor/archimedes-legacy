@@ -1,12 +1,13 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import org.apache.velocity.VelocityContext;
+
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
-import org.apache.velocity.VelocityContext;
 
 /**
  * A page converter class code generator for JPA database objects (DBO's).
@@ -46,12 +47,17 @@ public class PageGOConverterClassCodeGenerator extends AbstractClassCodeGenerato
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
-		return "service";
+		return "gui";
 	}
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
 		return nameGenerator.getPageGOConverterPackageName(model, table);
+	}
+
+	@Override
+	protected String getAlternateModule() {
+		return GUIVaadinNameGenerator.ALTERNATE_GUI_VAADIN_MODULE_PREFIX;
 	}
 
 }

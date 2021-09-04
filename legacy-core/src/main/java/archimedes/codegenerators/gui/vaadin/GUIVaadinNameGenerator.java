@@ -13,6 +13,7 @@ import archimedes.model.TableModel;
  */
 public class GUIVaadinNameGenerator extends NameGenerator {
 
+	public static final String ALTERNATE_GUI_VAADIN_MODULE_PREFIX = "ALTERNATE_GUI_VAADIN_MODULE_PREFIX";
 	public static final String ALTERNATE_TO_GO_METHOD_NAME = "ALTERNATE_TO_GO_METHOD_NAME";
 	public static final String ALTERNATE_TO_MODEL_METHOD_NAME = "ALTERNATE_TO_MODEL_METHOD_NAME";
 	public static final String ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX = "ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX";
@@ -26,9 +27,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME = "ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME";
 
 	public String getGOClassName(TableModel table) {
-		return table != null
-				? getClassName(table) + getGOClassNameSuffix(table)
-				: null;
+		return table != null ? getClassName(table) + getGOClassNameSuffix(table) : null;
 	}
 
 	private String getGOClassNameSuffix(TableModel table) {
@@ -36,9 +35,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	public String getGOConverterClassName(TableModel table) {
-		return table != null
-				? getClassName(table) + getGOConverterNameSuffix(table)
-				: null;
+		return table != null ? getClassName(table) + getGOConverterNameSuffix(table) : null;
 	}
 
 	private String getGOConverterNameSuffix(TableModel table) {
@@ -64,9 +61,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	public String getPageGOConverterClassName(TableModel table) {
-		return table != null
-				? "PageGOConverter"
-				: null;
+		return table != null ? "PageGOConverter" : null;
 	}
 
 	public String getPageGOConverterPackageName(DataModel model, TableModel table) {
@@ -74,33 +69,23 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	public String getPageGOClassName(TableModel table) {
-		return table != null
-				? "PageGO"
-				: null;
+		return table != null ? "PageGO" : null;
 	}
 
 	public String getPageGOPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "gui.vaadin.go", ALTERNATE_PAGE_GO_PACKAGE_NAME);
+		return createPackageName(model, table, "gui.vaadin.go.converter", ALTERNATE_PAGE_GO_PACKAGE_NAME);
 	}
 
 	public String getPageParametersGOClassName(TableModel table) {
-		return table != null
-				? "PageParametersGO"
-				: null;
+		return table != null ? "PageParametersGO" : null;
 	}
 
 	public String getPageParametersGOPackageName(DataModel model, TableModel table) {
-		return createPackageName(
-				model,
-				table,
-				"gui.vaadin.go",
-				ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME);
+		return createPackageName(model, table, "gui.vaadin.go", ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME);
 	}
 
 	public String getPageParametersGOToPageParametersConverterClassName(TableModel table) {
-		return table != null
-				? "PageParametersGOToPageParametersConverter"
-				: null;
+		return table != null ? "PageParametersGOToPageParametersConverter" : null;
 	}
 
 	public String getPageParametersGOToPageParametersConverterPackageName(DataModel model, TableModel table) {
@@ -112,9 +97,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	public String getToGOConverterInterfaceName(TableModel table) {
-		return table != null
-				? "ToGOConverter"
-				: null;
+		return table != null ? "ToGOConverter" : null;
 	}
 
 	public String getToGOMethodName(TableModel table) {
