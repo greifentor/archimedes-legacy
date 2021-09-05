@@ -1,16 +1,12 @@
 package ${PackageName};
 
-import java.util.List;
-
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
 
 #if (!$CommentsOff )
 /**
- * A page of content objects.
- *
- * @param <CONTENT> The type of the objects which are to return with the page.
+ * A page parameters to limit page access.
  *
  * ${Generated}
  */
@@ -18,10 +14,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class ${ClassName}<CONTENT> {
+public class ${ClassName} {
 
-	private List<CONTENT> entries;
+	private int pageNumber;
 	private int entriesPerPage;
-	private long entriesTotal;
 
 }

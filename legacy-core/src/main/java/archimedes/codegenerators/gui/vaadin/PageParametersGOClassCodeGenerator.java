@@ -9,17 +9,17 @@ import archimedes.model.TableModel;
 import org.apache.velocity.VelocityContext;
 
 /**
- * A page class code generator for  objects (GO's).
+ * A page parameters class code generator for objects (GO's).
  *
- * @author ollie (04.09.2021)
+ * @author ollie (05.09.2021)
  */
-public class PageGOClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
+public class PageParametersGOClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
 
 	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
-	public PageGOClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	public PageParametersGOClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"PageGOClass.vm",
+				"PageParametersGOClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				new GUIVaadinNameGenerator(),
 				new TypeGenerator(),
@@ -35,7 +35,7 @@ public class PageGOClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaad
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getPageGOClassName(table);
+		return nameGenerator.getPageParametersGOClassName(table);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class PageGOClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaad
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getPageGOPackageName(model, table);
+		return nameGenerator.getPageParametersGOPackageName(model, table);
 	}
 
 	@Override

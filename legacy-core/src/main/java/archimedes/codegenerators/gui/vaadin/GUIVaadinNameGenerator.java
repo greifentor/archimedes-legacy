@@ -81,7 +81,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	public String getPageParametersGOPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "gui.vaadin.go", ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME);
+		return createPackageName(model, table, "gui.vaadin.go.converter", ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME);
 	}
 
 	public String getPageParametersGOToPageParametersConverterClassName(TableModel table) {
