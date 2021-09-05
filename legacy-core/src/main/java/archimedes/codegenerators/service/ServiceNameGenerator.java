@@ -15,6 +15,7 @@ public class ServiceNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_MODEL_CLASS_NAME_SUFFIX = "ALTERNATE_MODEL_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MODEL_PACKAGE_NAME = "ALTERNATE_MODEL_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_PACKAGE_NAME = "ALTERNATE_PAGE_PACKAGE_NAME";
+	public static final String ALTERNATE_PAGE_PARAMETERS_PACKAGE_NAME = "ALTERNATE_PAGE_PARAMETERS_PACKAGE_NAME";
 	public static final String ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX =
 			"ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX";
 	public static final String ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME = "ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME";
@@ -100,6 +101,10 @@ public class ServiceNameGenerator extends NameGenerator {
 
 	public String getPageParametersClassName() {
 		return "PageParameters";
+	}
+
+	public String getPageParametersPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "core.model", ALTERNATE_PAGE_PARAMETERS_PACKAGE_NAME);
 	}
 
 	public String getPersistencePortInterfaceName(TableModel table) {

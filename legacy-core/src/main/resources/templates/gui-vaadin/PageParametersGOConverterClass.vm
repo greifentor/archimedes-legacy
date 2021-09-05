@@ -1,0 +1,25 @@
+package ${PackageName};
+
+import javax.inject.Named;
+
+import ${PageParametersPackageName}.${PageParametersClassName};
+import ${PageParametersGOPackageName}.${PageParametersGOClassName};
+
+#if (!$CommentsOff )
+/**
+ * A converter for the page parameters GO.
+ *
+ * ${Generated}
+ */
+#end
+@Named
+public class ${ClassName} {
+
+	public ${PageParametersClassName} toModel(${PageParametersGOClassName} go) {
+		if (go == null) {
+			return null;
+		}
+		return new ${PageParametersClassName}().setEntriesPerPage(go.getEntriesPerPage()).setPageNumber(go.getPageNumber());
+	}
+
+}

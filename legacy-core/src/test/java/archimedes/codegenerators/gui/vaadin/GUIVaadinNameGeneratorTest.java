@@ -383,7 +383,7 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getPageGOPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("gui.vaadin.go", unitUnderTest.getPageGOPackageName(model, null));
+			assertEquals("gui.vaadin.go.converter", unitUnderTest.getPageGOPackageName(model, null));
 		}
 
 		@Test
@@ -432,7 +432,7 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getPageParametersGOPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("gui.vaadin.go", unitUnderTest.getPageParametersGOPackageName(model, null));
+			assertEquals("gui.vaadin.go.converter", unitUnderTest.getPageParametersGOPackageName(model, null));
 		}
 
 		@Test
@@ -451,19 +451,19 @@ public class GUIVaadinNameGeneratorTest {
 
 	@DisplayName("tests for page parameters GO to page parameters converter class names")
 	@Nested
-	class PageParametersGOToPageParametersConverterClassNameTests {
+	class PageParametersGOConverterClassNameTests {
 
 		@Test
-		void getPageParametersGOToPageParametersConverterClassName_passANullValueAsTableModel_returnsANullValue() {
-			assertNull(unitUnderTest.getPageParametersGOToPageParametersConverterClassName(null));
+		void getPageParametersGOConverterClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getPageParametersGOConverterClassName(null));
 		}
 
 		@Test
-		void getPageParametersGOToPageParametersConverterClassName_passAValidTable_ReturnsACorrectGOConverterClassName() {
+		void getPageParametersGOConverterClassName_passAValidTable_ReturnsACorrectGOConverterClassName() {
 			// Prepare
-			String expected = "PageParametersGOToPageParametersConverter";
+			String expected = "PageParametersGOConverter";
 			// Run
-			String returned = unitUnderTest.getPageParametersGOToPageParametersConverterClassName(table);
+			String returned = unitUnderTest.getPageParametersGOConverterClassName(table);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -472,22 +472,22 @@ public class GUIVaadinNameGeneratorTest {
 
 	@DisplayName("tests for page parameters GO to page parameters converter package names")
 	@Nested
-	class PageParametersGOToPageParametersConverterPackageNameTests {
+	class PageParametersGOConverterPackageNameTests {
 
 		@Test
-		void getPageParametersGOToPageParametersConverterPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getPageParametersGOToPageParametersConverterPackageName(null, table));
+		void getPageParametersGOConverterPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPageParametersGOConverterPackageName(null, table));
 		}
 
 		@Test
-		void getPageParametersGOToPageParametersConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
+		void getPageParametersGOConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
 			assertEquals(
 					"gui.vaadin.converter",
-					unitUnderTest.getPageParametersGOToPageParametersConverterPackageName(model, null));
+					unitUnderTest.getPageParametersGOConverterPackageName(model, null));
 		}
 
 		@Test
-		void getPageParametersGOToPageParametersConverterPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
+		void getPageParametersGOConverterPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
 			// Prepare
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME))
 					.thenReturn(
@@ -497,7 +497,7 @@ public class GUIVaadinNameGeneratorTest {
 			// Run & Check
 			assertEquals(
 					"vaadin.mapper",
-					unitUnderTest.getPageParametersGOToPageParametersConverterPackageName(model, table));
+					unitUnderTest.getPageParametersGOConverterPackageName(model, table));
 		}
 
 	}
