@@ -1,0 +1,17 @@
+package ${PackageName};
+
+#if (!$CommentsOff )
+/**
+ * An interface for to GO converters.
+ *
+ * @param <GO>    The type of the GO's.
+ * @param <MODEL> The type of the models.
+ *
+ * ${Generated}
+ */
+#end
+public interface ${ClassName}<GO, MODEL> {
+
+	GO toGO(MODEL model);
+
+}

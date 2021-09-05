@@ -30,7 +30,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 		return Arrays.asList(
 				new PageGOClassCodeGenerator(this),
 				new PageParametersGOClassCodeGenerator(this),
-				new PageGOConverterClassCodeGenerator(this));
+				new PageGOConverterClassCodeGenerator(this), new ToGOConverterInterfaceCodeGenerator(this));
 	}
 
 	@Override
