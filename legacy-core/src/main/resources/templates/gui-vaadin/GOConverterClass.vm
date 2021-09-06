@@ -1,0 +1,43 @@
+package ${PackageName};
+
+import javax.inject.Named;
+
+#if ($ImportLocalDate)
+import ${ImportLocalDate};
+
+#end
+import lombok.Generated;
+
+import ${GOClassNameQualified};
+import ${ModelClassNameQualified};
+
+/**
+ * A GO converter for ${PluralName}.
+ *
+ * ${Generated}
+ */
+@Generated
+@Named
+public class ${ClassName} implements ToGOConverter<${GOClassName}, ${ModelClassName}> {
+
+	public ${GOClassName} ${ToGOMethodName}(${ModelClassName} model) {
+		if (model == null) {
+			return null;
+		}
+		return new ${GOClassName}()
+#foreach($Column in $ColumnData)
+				.${Column.getSetterName()}(model.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
+#end
+	}
+
+	public ${ModelClassName} ${ToModelMethodName}(${GOClassName} go) {
+		if (go == null) {
+			return null;
+		}
+		return new ${ModelClassName}()
+#foreach($Column in $ColumnData)
+				.${Column.getSetterName()}(go.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
+#end
+	}
+
+}
