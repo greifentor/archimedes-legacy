@@ -1,22 +1,21 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.velocity.VelocityContext;
+
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.TypeGenerator;
-import archimedes.codegenerators.persistence.jpa.PersistenceJPACodeFactory;
-import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
-import org.apache.velocity.VelocityContext;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A code generator for GO converters.
@@ -97,7 +96,7 @@ public class GOConverterClassCodeGenerator extends AbstractClassCodeGenerator<GU
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
-		return "gui";
+		return "gui-web";
 	}
 
 	@Override

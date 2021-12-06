@@ -25,6 +25,15 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME =
 			"ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME = "ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME";
+	public static final String ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME = "ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME";
+
+	public String getAbstractMasterDataDetailLayoutClassName(TableModel table) {
+		return "AbstractMasterDataDetailLayout";
+	}
+
+	public String getVaadinComponentPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "gui.vaadin.component", ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME);
+	}
 
 	public String getGOClassName(TableModel table) {
 		return table != null ? getClassName(table) + getGOClassNameSuffix(table) : null;

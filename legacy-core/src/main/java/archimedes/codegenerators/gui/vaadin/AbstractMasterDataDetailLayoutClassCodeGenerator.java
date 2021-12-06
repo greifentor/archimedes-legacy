@@ -10,17 +10,17 @@ import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
- * A page converter class code generator for graphic user interface objects (GO's).
+ * A class code generator for the abstract master data detail layout.
  *
- * @author ollie (28.07.2021)
+ * @author ollie (14.09.2021)
  */
-public class PageGOConverterClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
+public class AbstractMasterDataDetailLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
 
 	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
-	public PageGOConverterClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	public AbstractMasterDataDetailLayoutClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"PageGOConverterClass.vm",
+				"AbstractMasterDataDetailLayoutClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				new GUIVaadinNameGenerator(),
 				new TypeGenerator(),
@@ -31,18 +31,12 @@ public class PageGOConverterClassCodeGenerator extends AbstractClassCodeGenerato
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		context.put("ClassName", getClassName(table));
 		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("PageGOClassName", nameGenerator.getPageGOClassName(table));
-		context.put("PageGOPackageName", nameGenerator.getPageGOPackageName(model, table));
-		context.put("PageModelClassName", serviceNameGenerator.getPageClassName());
-		context.put("PageModelPackageName", serviceNameGenerator.getPagePackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
-		context.put("ToGOConverterInferfaceName", nameGenerator.getToGOConverterInterfaceName(table));
-		context.put("ToGOMethodName", nameGenerator.getToGOMethodName(table));
 	}
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getPageGOConverterClassName(table);
+		return nameGenerator.getAbstractMasterDataDetailLayoutClassName(table);
 	}
 
 	@Override
@@ -52,7 +46,7 @@ public class PageGOConverterClassCodeGenerator extends AbstractClassCodeGenerato
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getPageGOConverterPackageName(model, table);
+		return nameGenerator.getVaadinComponentPackageName(model, table);
 	}
 
 	@Override

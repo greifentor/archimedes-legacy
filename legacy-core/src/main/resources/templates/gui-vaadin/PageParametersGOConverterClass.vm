@@ -2,6 +2,8 @@ package ${PackageName};
 
 import javax.inject.Named;
 
+import lombok.Generated;
+
 import ${PageParametersPackageName}.${PageParametersClassName};
 import ${PageParametersGOPackageName}.${PageParametersGOClassName};
 
@@ -12,6 +14,7 @@ import ${PageParametersGOPackageName}.${PageParametersGOClassName};
  * ${Generated}
  */
 #end
+@Generated
 @Named
 public class ${ClassName} {
 

@@ -1,12 +1,13 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import org.apache.velocity.VelocityContext;
+
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
-import org.apache.velocity.VelocityContext;
 
 /**
  * A page parameters converter class code generator for graphic user interface objects (GO's).
@@ -44,7 +45,7 @@ public class PageParametersGOConverterClassCodeGenerator extends AbstractClassCo
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
-		return "gui";
+		return "gui-web";
 	}
 
 	@Override

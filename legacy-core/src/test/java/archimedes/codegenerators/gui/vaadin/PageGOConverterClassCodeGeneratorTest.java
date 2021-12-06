@@ -1,20 +1,20 @@
 package archimedes.codegenerators.gui.vaadin;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
-import archimedes.codegenerators.AbstractCodeGenerator;
-import archimedes.codegenerators.persistence.jpa.PageConverterClassCodeGenerator;
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import archimedes.scheme.Option;
-import archimedes.scheme.xml.ModelXMLReader;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import archimedes.scheme.Option;
+import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
 class PageGOConverterClassCodeGeneratorTest {
@@ -47,10 +47,12 @@ class PageGOConverterClassCodeGeneratorTest {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 							"\n" + //
+							"import javax.inject.Named;\n" + //
+							"\n" + //
 							"import java.util.stream.Collectors;\n" + //
 							"\n" + //
 							"import base.pack.age.name.core.model.Page;\n" + //
-							"import base.pack.age.name.gui.vaadin.go.PageGO;\n" + //
+							"import base.pack.age.name.gui.vaadin.go.converter.PageGO;\n" + //
 							"\n" + //
 							"import lombok.AllArgsConstructor;\n" + //
 							"import lombok.Generated;\n" + //
@@ -59,28 +61,30 @@ class PageGOConverterClassCodeGeneratorTest {
 				s += "/**\n" + //
 						" * A class to convert a service page to a GUI web layer page object.\n" + //
 						" *\n" + //
-						" * @param <MODEL> The type of the service layer model class.\n" + //
 						" * @param <GO>    The type of the GO's which are representing model objects in the " + //
 						"GUI web layer.\n" + //
+						" * @param <MODEL> The type of the service layer model class.\n" + //
 						" *\n" + //
 						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 						" */\n";
 			}
-			s += "@Generated\n" + //
-					"@AllArgsConstructor\n" + //
-					"public class PageGOConverter<MODEL, GO> {\n" + //
+			s += "@AllArgsConstructor\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"public class PageGOConverter<GO, MODEL> {\n" + //
 					"\n" + //
-					"	private final ToGOConverter<MODEL, GO> toGOConverter;\n" + //
+					"	private final ToGOConverter<GO, MODEL> toGOConverter;\n" + //
 					"\n" + //
-					"	public PageGO<GO> convert(Page<MODEL> page) {\n" + //
+					"	public PageGO<GO> toGO(Page<MODEL> page) {\n" + //
 					"		if (page == null) {\n" + //
 					"			return null;\n" + //
 					"		}\n" + //
 					"		return new PageGO<GO>()\n" + //
-					"				.setEntries(page.getContent().stream().map(toGOConverter::toGO).collect(Collectors" + //
+					"				.setEntries(page.getEntries().stream().map(toGOConverter::toGO).collect(Collectors"
+					+ //
 					".toList()))\n" + //
-					"				.setEntriesPerPage(page.getSize())\n" + //
-					"				.setEntriesTotal(page.getTotalElements());\n" + //
+					"				.setEntriesPerPage(page.getEntriesPerPage())\n" + //
+					"				.setEntriesTotal(page.getEntriesTotal());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"}";

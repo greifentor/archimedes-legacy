@@ -1,11 +1,10 @@
 package archimedes.codegenerators.gui.vaadin;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
-import archimedes.codegenerators.persistence.jpa.PersistenceJPACodeFactory;
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
-import archimedes.model.DataModel;
-import archimedes.scheme.Option;
-import archimedes.scheme.xml.ModelXMLReader;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.File;
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,10 +12,11 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.File;
-import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.model.DataModel;
+import archimedes.scheme.Option;
+import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
 public class GUIVaadinCodeFactoryTest {
@@ -61,7 +61,7 @@ public class GUIVaadinCodeFactoryTest {
 			// Run
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
-			assertEntityFilesExisting("/app-service", tempDir);
+			assertEntityFilesExisting("/app-gui-web", tempDir);
 		}
 
 		@Test
@@ -73,7 +73,7 @@ public class GUIVaadinCodeFactoryTest {
 			// Run
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
-			assertEntityFilesExisting("/service", tempDir);
+			assertEntityFilesExisting("/gui-web", tempDir);
 		}
 
 		@Test
@@ -87,7 +87,7 @@ public class GUIVaadinCodeFactoryTest {
 			// Run
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
-			assertEntityFilesExisting("/alt-service", tempDir);
+			assertEntityFilesExisting("/alt-gui-web", tempDir);
 		}
 
 		@Test
@@ -101,7 +101,7 @@ public class GUIVaadinCodeFactoryTest {
 			// Run
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check
-			assertEntityFilesExisting("/service", tempDir);
+			assertEntityFilesExisting("/gui-web", tempDir);
 		}
 
 	}

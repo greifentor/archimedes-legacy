@@ -1,12 +1,13 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import org.apache.velocity.VelocityContext;
+
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
-import org.apache.velocity.VelocityContext;
 
 /**
  * A page class code generator for  objects (GO's).
@@ -40,7 +41,7 @@ public class PageGOClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaad
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
-		return "gui";
+		return "gui-web";
 	}
 
 	@Override

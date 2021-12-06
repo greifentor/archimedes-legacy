@@ -1,19 +1,18 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.velocity.VelocityContext;
+
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.TypeGenerator;
-import archimedes.codegenerators.service.ServiceCodeFactory;
-import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
-import org.apache.velocity.VelocityContext;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A class code generator for GO's.
@@ -61,7 +60,7 @@ public class GOClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNa
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
-		return "gui";
+		return "gui-web";
 	}
 
 	@Override

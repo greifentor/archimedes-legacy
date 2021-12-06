@@ -1,3 +1,6 @@
+#!/bin/bash
+
+
 LIB=./legacy-core/lib
 
 source set-version.sh

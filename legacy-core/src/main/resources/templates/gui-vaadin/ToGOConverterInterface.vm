@@ -1,5 +1,7 @@
 package ${PackageName};
 
+import lombok.Generated;
+
 #if (!$CommentsOff )
 /**
  * An interface for to GO converters.
@@ -10,6 +12,7 @@ package ${PackageName};
  * ${Generated}
  */
 #end
+@Generated
 public interface ${ClassName}<GO, MODEL> {
 
 	GO toGO(MODEL model);

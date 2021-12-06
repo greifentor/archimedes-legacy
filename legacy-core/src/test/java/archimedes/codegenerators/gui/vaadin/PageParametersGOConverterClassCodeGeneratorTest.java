@@ -1,5 +1,13 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
@@ -7,13 +15,6 @@ import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class PageParametersGOConverterClassCodeGeneratorTest {
 
@@ -45,7 +46,9 @@ class PageParametersGOConverterClassCodeGeneratorTest {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 							"\n" + //
-							"import javax.inject.Named;\n" + //base.pack.age.name
+							"import javax.inject.Named;\n" + //
+							"\n" + //
+							"import lombok.Generated;\n" + //
 							"\n" + //
 							"import base.pack.age.name.core.model.PageParameters;\n" + //
 							"import base.pack.age.name.gui.vaadin.go.converter.PageParametersGO;\n" + //
@@ -57,7 +60,8 @@ class PageParametersGOConverterClassCodeGeneratorTest {
 						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 						" */\n";
 			}
-			s += "@Named\n" + //
+			s += "@Generated\n" + //
+					"@Named\n" + //
 					"public class PageParametersGOConverter {\n" + //
 					"\n" + //
 					"	public PageParameters toModel(PageParametersGO go) {\n" + //

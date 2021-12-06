@@ -34,6 +34,43 @@ public class GUIVaadinNameGeneratorTest {
 	@InjectMocks
 	private GUIVaadinNameGenerator unitUnderTest;
 
+	@Nested
+	class AbstractMasterDataDetailLayoutClassNameTests {
+
+		@Test
+		void getAbstractMasterDataDetailLayoutClassName_returnsTheCorrectClassName() {
+			assertEquals("AbstractMasterDataDetailLayout", unitUnderTest.getAbstractMasterDataDetailLayoutClassName(null));
+		}
+
+	}
+
+	@Nested
+	class VaadinComponentPackageNameTests {
+
+		@Test
+		void getVaadinComponentPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getVaadinComponentPackageName(null, table));
+		}
+
+		@Test
+		void getVaadinComponentPackageName_PassANullValueAsTable_ReturnsADefaultValue() {
+			assertEquals("gui.vaadin.component", unitUnderTest.getVaadinComponentPackageName(model, null));
+		}
+
+		@Test
+		void getVaadinComponentPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME,
+									"web.components"));
+			// Run & Check
+			assertEquals("web.components", unitUnderTest.getVaadinComponentPackageName(model, table));
+		}
+
+	}
+
 	@DisplayName("tests for GO class names")
 	@Nested
 	class GOClassNameTests {

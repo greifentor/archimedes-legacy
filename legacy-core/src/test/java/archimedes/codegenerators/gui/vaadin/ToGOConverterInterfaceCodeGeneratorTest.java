@@ -1,5 +1,13 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
@@ -7,13 +15,6 @@ import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class ToGOConverterInterfaceCodeGeneratorTest {
@@ -45,6 +46,8 @@ class ToGOConverterInterfaceCodeGeneratorTest {
 		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
+							"\n" + //
+							"import lombok.Generated;\n" + //
 							"\n";
 			if (!suppressComment) {
 				s += "/**\n" + //
@@ -56,7 +59,8 @@ class ToGOConverterInterfaceCodeGeneratorTest {
 						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 						" */\n";
 			}
-			s += "public interface ToGOConverter<GO, MODEL> {\n" + //
+			s += "@Generated\n" + //
+					"public interface ToGOConverter<GO, MODEL> {\n" + //
 					"\n" + //
 					"	GO toGO(MODEL model);\n" + //
 					"\n" + //
