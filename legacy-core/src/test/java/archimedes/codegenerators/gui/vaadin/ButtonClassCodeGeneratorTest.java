@@ -17,12 +17,12 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-class PageGOConverterClassCodeGeneratorTest {
+public class ButtonClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
-	private PageGOConverterClassCodeGenerator unitUnderTest;
+	private ButtonClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -35,7 +35,7 @@ class PageGOConverterClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = getExpected(null, "gui.vaadin.converter", false, "null");
+			String expected = getExpected(null, "gui.vaadin.component", false, "null");
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
@@ -45,53 +45,58 @@ class PageGOConverterClassCodeGeneratorTest {
 
 		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
 			String s =
-					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
-							"\n" + //
-							"import java.util.stream.Collectors;\n" + //
-							"\n" + //
-							"import base.pack.age.name.core.model.Page;\n" + //
-							"import base.pack.age.name.gui.vaadin.go.converter.PageGO;\n" + //
-							"\n" + //
-							"import lombok.AllArgsConstructor;\n" + //
-							"import lombok.Generated;\n" + //
-							"\n";
+					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" //
+							+ "\n" //
+							+ "import lombok.Generated;\n" //
+							+ "\n";
 			if (!suppressComment) {
 				s += "/**\n" + //
-						" * A class to convert a service page to a GUI web layer page object.\n" + //
-						" *\n" + //
-						" * @param <GO>    The type of the GO's which are representing model objects in the " + //
-						"GUI web layer.\n" + //
-						" * @param <MODEL> The type of the service layer model class.\n" + //
+						" * An extended button for easy configuration.\n" + //
 						" *\n" + //
 						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 						" */\n";
 			}
-			s += "@AllArgsConstructor\n" + //
-					"@Generated\n" + //
-					"public class PageGOConverter<GO, MODEL> {\n" + //
-					"\n" + //
-					"	private final ToGOConverter<GO, MODEL> toGOConverter;\n" + //
-					"\n" + //
-					"	public PageGO<GO> toGO(Page<MODEL> page) {\n" + //
-					"		if (page == null) {\n" + //
-					"			return null;\n" + //
-					"		}\n" + //
-					"		return new PageGO<GO>()\n" + //
-					"				.setEntries(page.getEntries().stream().map(toGOConverter::toGO).collect(Collectors"
-					+ //
-					".toList()))\n" + //
-					"				.setEntriesPerPage(page.getEntriesPerPage())\n" + //
-					"				.setEntriesTotal(page.getEntriesTotal());\n" + //
-					"	}\n" + //
-					"\n" + //
-					"}";
+			s +=
+					"@Generated\n" //
+							+ "public class Button extends com.vaadin.flow.component.button.Button {\n" //
+							+ "\n" //
+							+ "	public Button(String text) {\n" //
+							+ "		super(text);\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private Button setStyle(String name, String value) {\n" //
+							+ "		getStyle().set(name, value);\n" //
+							+ "		return this;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	public Button setBackgroundColor(String backgroundColor) {\n" //
+							+ "		return setStyle(\"background-color\", backgroundColor);\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	public Button setBackgroundImage(String imageFileName) {\n" //
+							+ "		return setStyle(\"background-image\", \"url('\" + imageFileName + \"')\");\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	public Button setBorder(String border) {\n" //
+							+ "		return setStyle(\"border\", border);\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	public Button setBorderColor(String borderColor) {\n" //
+							+ "		return setStyle(\"border-color\", borderColor);\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	public Button setColor(String color) {\n" //
+							+ "		return setStyle(\"color\", color);\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "}";
 			return s;
 		}
 
 		@Test
 		void happyRunForASimpleObjectWithSuppressedComments() {
 			// Prepare
-			String expected = getExpected(null, "gui.vaadin.converter", true, "null");
+			String expected = getExpected(null, "gui.vaadin.component", true, "null");
 			DataModel dataModel = readDataModel("Model.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));

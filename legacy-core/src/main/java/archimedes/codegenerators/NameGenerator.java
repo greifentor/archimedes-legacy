@@ -1,12 +1,13 @@
 package archimedes.codegenerators;
 
+import static de.ollie.dbcomp.util.Check.ensure;
+
+import org.apache.commons.lang3.StringUtils;
+
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
-import org.apache.commons.lang3.StringUtils;
-
-import static de.ollie.dbcomp.util.Check.ensure;
 
 /**
  * A class which is responsible for name generation during code is generated.
@@ -27,9 +28,7 @@ public class NameGenerator {
 		if (column == null) {
 			return null;
 		}
-		String columnName = (useQualifiedColumnName
-				? column.getTable().getName() + "_"
-				: "") + column.getName();
+		String columnName = (useQualifiedColumnName ? column.getTable().getName() + "_" : "") + column.getName();
 		ensure(!columnName.isEmpty(), "column name cannot be empty.");
 		return getAttributeName(columnName);
 	}
@@ -52,9 +51,7 @@ public class NameGenerator {
 	}
 
 	private String firstCharToLowerCase(String s) {
-		return StringUtils.left(s, 1).toLowerCase() + (s.length() > 1
-				? s.substring(1)
-				: "");
+		return StringUtils.left(s, 1).toLowerCase() + (s.length() > 1 ? s.substring(1) : "");
 	}
 
 	public String getClassName(TableModel tableSO) {
@@ -101,9 +98,7 @@ public class NameGenerator {
 	}
 
 	private String firstCharToUpperCase(String s) {
-		return StringUtils.left(s, 1).toUpperCase() + (s.length() > 1
-				? s.substring(1)
-				: "");
+		return StringUtils.left(s, 1).toUpperCase() + (s.length() > 1 ? s.substring(1) : "");
 	}
 
 	protected String getBasePackageNameWithDotExtension(DataModel model, TableModel table) {
@@ -111,19 +106,19 @@ public class NameGenerator {
 	}
 
 	protected String getBasePackageNameWithDotExtension(DataModel model, TableModel table, boolean followedByEmpty) {
-		String technicalContextName = getTechnicalContextName(table);
+		String technicalContextName = "";
+		if (table != null) {
+			technicalContextName = getTechnicalContextName(table);
+		}
 		return (model.getBasePackageName() == null) || model.getBasePackageName().isEmpty()
 				? ""
-				: addDotIfNecessary(model.getBasePackageName(), followedByEmpty)
-						+ (technicalContextName.isEmpty()
+				: addDotIfNecessary(model.getBasePackageName(), followedByEmpty) + (technicalContextName.isEmpty()
 						? ""
 						: addDotIfNecessary(technicalContextName, followedByEmpty));
 	}
 
 	private String addDotIfNecessary(String s, boolean followedByEmpty) {
-		return s + ((s != null) && !s.isEmpty() && !followedByEmpty
-				? "."
-				: "");
+		return s + ((s != null) && !s.isEmpty() && !followedByEmpty ? "." : "");
 	}
 
 	private String getTechnicalContextName(TableModel table) {
@@ -157,9 +152,7 @@ public class NameGenerator {
 	}
 
 	private String getFirstCharToLowerCaseOnTwoDoublesPassed(char c0, char c1) {
-		return isUpperCase(c0) && isUpperCase(c1)
-				? String.valueOf(c0).toLowerCase()
-				: String.valueOf(c0);
+		return isUpperCase(c0) && isUpperCase(c1) ? String.valueOf(c0).toLowerCase() : String.valueOf(c0);
 	}
 
 	public String getDescriptionName(String s) {
@@ -201,10 +194,13 @@ public class NameGenerator {
 	protected String getNameOrAlternativeFromOption(TableModel table, String defaultName, String alternateOptionName) {
 		return (table == null) || (table.getDataModel() == null)
 				? defaultName
-				: OptionGetter
-						.getParameterOfOptionByName(table.getDataModel(), alternateOptionName)
-						.map(s -> s)
-						.orElse(defaultName);
+				: getNameOrAlternativeFromOption(table.getDataModel(), defaultName, alternateOptionName);
+	}
+
+	protected String getNameOrAlternativeFromOption(DataModel model, String defaultName, String alternateOptionName) {
+		return model == null
+				? null
+				: OptionGetter.getParameterOfOptionByName(model, alternateOptionName).map(s -> s).orElse(defaultName);
 	}
 
 	protected String getPluralName(TableModel table) {
@@ -233,7 +229,7 @@ public class NameGenerator {
 	}
 
 	protected String createPackageName(DataModel model, TableModel table, String packageName,
-	                                   String alternatePackageNameOption) {
+			String alternatePackageNameOption) {
 		String prefix = "";
 		if ((model != null) && (alternatePackageNameOption != null)) {
 			OptionModel option = model.getOptionByName(alternatePackageNameOption);
@@ -243,12 +239,25 @@ public class NameGenerator {
 		}
 		if (table != null) {
 			prefix =
-					OptionGetter.getOptionByName(table, MODULE).map(option -> addDotIfNecessary(option.getParameter(), false))
-					.orElse("");
+					OptionGetter
+							.getOptionByName(table, MODULE)
+							.map(option -> addDotIfNecessary(option.getParameter(), false))
+							.orElse("");
 		}
 		return model != null
-				? getBasePackageNameWithDotExtension(model, table, prefix.isEmpty() && packageName.isEmpty()) + prefix + packageName
+				? getBasePackageNameWithDotExtension(model, table, prefix.isEmpty() && packageName.isEmpty()) + prefix
+						+ packageName
 				: null;
+	}
+
+	protected String createPackageName(DataModel model, String packageName, String alternatePackageNameOption) {
+		if ((model != null) && (alternatePackageNameOption != null)) {
+			OptionModel option = model.getOptionByName(alternatePackageNameOption);
+			if ((option != null) && (option.getParameter() != null) && !option.getParameter().isEmpty()) {
+				packageName = option.getParameter();
+			}
+		}
+		return getBasePackageNameWithDotExtension(model, null, false) + packageName;
 	}
 
 }

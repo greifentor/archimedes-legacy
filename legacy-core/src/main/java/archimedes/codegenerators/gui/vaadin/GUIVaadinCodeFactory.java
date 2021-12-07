@@ -1,5 +1,8 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import java.util.Arrays;
+import java.util.List;
+
 import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
@@ -10,9 +13,6 @@ import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.model.OptionType;
 import archimedes.model.PredeterminedOptionProvider;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A code factory for JPA persistence ports and adapters for CRUD operations.
@@ -28,6 +28,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 	@Override
 	protected List<CodeGenerator> getCodeGenerators() {
 		return Arrays.asList(
+				new ButtonClassCodeGenerator(this),
 				new GOClassCodeGenerator(this),
 				new GOConverterClassCodeGenerator(this),
 				new PageGOClassCodeGenerator(this),

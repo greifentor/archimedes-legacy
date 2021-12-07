@@ -49,6 +49,7 @@ public class GUIVaadinCodeFactoryTest {
 			String expectedFileName = tempDir.toAbsolutePath().toString() + prefix
 					+ "/src/main/java/base/pack/age/name/gui/vaadin/converter/PageGOConverter.java";
 			assertTrue(new File(expectedFileName).exists(), "file does not exists: " + expectedFileName);
+			// TODO: Check completely.
 		}
 
 		@Test

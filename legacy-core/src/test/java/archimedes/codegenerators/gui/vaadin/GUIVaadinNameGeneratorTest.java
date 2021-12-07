@@ -1,9 +1,11 @@
 package archimedes.codegenerators.gui.vaadin;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import archimedes.scheme.Option;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,11 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 
 @ExtendWith(MockitoExtension.class)
 public class GUIVaadinNameGeneratorTest {
@@ -39,7 +40,9 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getAbstractMasterDataDetailLayoutClassName_returnsTheCorrectClassName() {
-			assertEquals("AbstractMasterDataDetailLayout", unitUnderTest.getAbstractMasterDataDetailLayoutClassName(null));
+			assertEquals(
+					"AbstractMasterDataDetailLayout",
+					unitUnderTest.getAbstractMasterDataDetailLayoutClassName(null));
 		}
 
 	}
@@ -67,6 +70,26 @@ public class GUIVaadinNameGeneratorTest {
 									"web.components"));
 			// Run & Check
 			assertEquals("web.components", unitUnderTest.getVaadinComponentPackageName(model, table));
+		}
+
+	}
+
+	@Nested
+	class ButtonClassNameTests {
+
+		@Test
+		void getButtonClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getButtonClassName(null));
+		}
+
+		@Test
+		void getButtonClassName_passAValidTable_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "Button";
+			// Run
+			String returned = unitUnderTest.getButtonClassName(model);
+			// Check
+			assertEquals(expected, returned);
 		}
 
 	}
@@ -223,9 +246,7 @@ public class GUIVaadinNameGeneratorTest {
 			when(table.getName()).thenReturn("Table");
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX))
 					.thenReturn(
-							new Option(
-									GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX,
-									"GOMapper"));
+							new Option(GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX, "GOMapper"));
 			// Run
 			String returned = unitUnderTest.getGOConverterClassName(table);
 			// Check
@@ -316,9 +337,10 @@ public class GUIVaadinNameGeneratorTest {
 			String expected = "prefix.gui.vaadin.go";
 			when(model.getBasePackageName()).thenReturn(null);
 			when(table.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
-					.thenReturn(new Option(
-							archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
-							prefix));
+					.thenReturn(
+							new Option(
+									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
+									prefix));
 			// Run
 			String returned = unitUnderTest.getGOPackageName(model, table);
 			// Check
@@ -329,10 +351,7 @@ public class GUIVaadinNameGeneratorTest {
 		void getGOPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
 			// Prepare
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_GO_PACKAGE_NAME))
-					.thenReturn(
-							new Option(
-									GUIVaadinNameGenerator.ALTERNATE_GO_PACKAGE_NAME,
-									"vaadin.gos"));
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_GO_PACKAGE_NAME, "vaadin.gos"));
 			// Run & Check
 			assertEquals("vaadin.gos", unitUnderTest.getGOPackageName(model, table));
 		}
@@ -427,10 +446,7 @@ public class GUIVaadinNameGeneratorTest {
 		void getPageGOPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
 			// Prepare
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_PACKAGE_NAME))
-					.thenReturn(
-							new Option(
-									GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_PACKAGE_NAME,
-									"vaadin.go"));
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_PACKAGE_NAME, "vaadin.go"));
 			// Run & Check
 			assertEquals("vaadin.go", unitUnderTest.getPageGOPackageName(model, table));
 		}
@@ -477,9 +493,7 @@ public class GUIVaadinNameGeneratorTest {
 			// Prepare
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME))
 					.thenReturn(
-							new Option(
-									GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME,
-									"vaadin.go"));
+							new Option(GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME, "vaadin.go"));
 			// Run & Check
 			assertEquals("vaadin.go", unitUnderTest.getPageParametersGOPackageName(model, table));
 		}
@@ -518,9 +532,7 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getPageParametersGOConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals(
-					"gui.vaadin.converter",
-					unitUnderTest.getPageParametersGOConverterPackageName(model, null));
+			assertEquals("gui.vaadin.converter", unitUnderTest.getPageParametersGOConverterPackageName(model, null));
 		}
 
 		@Test
@@ -532,9 +544,7 @@ public class GUIVaadinNameGeneratorTest {
 									GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME,
 									"vaadin.mapper"));
 			// Run & Check
-			assertEquals(
-					"vaadin.mapper",
-					unitUnderTest.getPageParametersGOConverterPackageName(model, table));
+			assertEquals("vaadin.mapper", unitUnderTest.getPageParametersGOConverterPackageName(model, table));
 		}
 
 	}
@@ -579,10 +589,7 @@ public class GUIVaadinNameGeneratorTest {
 			// Prepare
 			when(table.getDataModel()).thenReturn(model);
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME))
-					.thenReturn(
-							new Option(
-									GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
-									"toGO"));
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME, "toGO"));
 			// Run & Check
 			assertEquals("toGO", unitUnderTest.getToGOMethodName(table));
 		}
@@ -608,10 +615,7 @@ public class GUIVaadinNameGeneratorTest {
 			// Prepare
 			when(table.getDataModel()).thenReturn(model);
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME))
-					.thenReturn(
-							new Option(
-									GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME,
-									"toSO"));
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME, "toSO"));
 			// Run & Check
 			assertEquals("toSO", unitUnderTest.getToModelMethodName(table));
 		}
