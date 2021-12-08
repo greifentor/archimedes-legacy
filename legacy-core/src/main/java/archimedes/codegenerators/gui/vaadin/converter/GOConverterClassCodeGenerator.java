@@ -1,4 +1,4 @@
-package archimedes.codegenerators.gui.vaadin;
+package archimedes.codegenerators.gui.vaadin.converter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +12,8 @@ import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -28,7 +30,7 @@ public class GOConverterClassCodeGenerator extends AbstractClassCodeGenerator<GU
 
 	public GOConverterClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"GOConverterClass.vm",
+				"converter/GOConverterClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				new GUIVaadinNameGenerator(),
 				new TypeGenerator(),
@@ -86,7 +88,7 @@ public class GOConverterClassCodeGenerator extends AbstractClassCodeGenerator<GU
 		} else {
 			context.put("KeyFromIdClass", "false");
 		}
-		return processTemplate(context, "GOKeyGetter.vm");
+		return processTemplate(context, "converter/GOKeyGetter.vm");
 	}
 
 	@Override

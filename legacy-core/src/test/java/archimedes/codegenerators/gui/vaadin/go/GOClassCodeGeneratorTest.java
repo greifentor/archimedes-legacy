@@ -1,8 +1,10 @@
-package archimedes.codegenerators.gui.vaadin;
+package archimedes.codegenerators.gui.vaadin.go;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.NameGenerator;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
+import archimedes.codegenerators.gui.vaadin.go.GOClassCodeGenerator;
 import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
 import archimedes.codegenerators.service.ModelClassCodeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;

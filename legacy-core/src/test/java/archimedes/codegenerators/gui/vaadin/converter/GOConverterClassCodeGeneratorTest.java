@@ -1,17 +1,17 @@
-package archimedes.codegenerators.gui.vaadin;
+package archimedes.codegenerators.gui.vaadin.converter;
 
-import archimedes.codegenerators.AbstractCodeGenerator;
-import archimedes.codegenerators.persistence.jpa.DBOConverterClassCodeGenerator;
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
-import archimedes.model.DataModel;
-import archimedes.scheme.xml.ModelXMLReader;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.model.DataModel;
+import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
 public class GOConverterClassCodeGeneratorTest {

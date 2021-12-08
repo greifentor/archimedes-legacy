@@ -1,4 +1,4 @@
-package archimedes.codegenerators.gui.vaadin;
+package archimedes.codegenerators.gui.vaadin.go;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +10,8 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -23,7 +25,7 @@ public class GOClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNa
 
 	public GOClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"GOClass.vm",
+				"go/GOClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				new GUIVaadinNameGenerator(),
 				new TypeGenerator(),

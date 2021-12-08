@@ -1,0 +1,36 @@
+package ${PackageName};
+
+import com.vaadin.flow.server.StreamResource;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * A component for a file based image.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public class ${ClassName} extends com.vaadin.flow.component.html.Image {
+
+	public ${ClassName}(File file) {
+		this(file, "alt text");
+	}
+
+	public ${ClassName}(File file, String altText) {
+		super(new StreamResource(file.getName(), () -> {
+			try {
+				return new FileInputStream(file);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}), altText);
+	}
+
+}

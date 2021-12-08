@@ -1,0 +1,23 @@
+package ${PackageName};
+
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * An extended TextField or easy configuration.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public class ${ClassName} extends com.vaadin.flow.component.textfield.TextField {
+
+	public ${ClassName}() {
+		super();
+	}
+
+	public ${ClassName}(String label) {
+		super(label);
+	}
+
+}

@@ -1,23 +1,25 @@
-package archimedes.codegenerators.gui.vaadin;
+package archimedes.codegenerators.gui.vaadin.component;
 
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
- * A code generator for button classes.
+ * A code generator for button factory classes.
  *
- * @author ollie (07.12.2021)
+ * @author ollie (08.12.2021)
  */
-public class ButtonClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
+public class ImageClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
 
-	public ButtonClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	public ImageClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"component/ButtonClass.vm",
+				"component/ImageClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				new GUIVaadinNameGenerator(),
 				new TypeGenerator(),
@@ -33,7 +35,7 @@ public class ButtonClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaad
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getButtonClassName(table.getDataModel());
+		return nameGenerator.getImageClassName(table.getDataModel());
 	}
 
 	@Override

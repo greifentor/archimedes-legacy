@@ -1,26 +1,25 @@
-package archimedes.codegenerators.gui.vaadin;
+package archimedes.codegenerators.gui.vaadin.component;
 
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.TypeGenerator;
-import archimedes.codegenerators.service.ServiceNameGenerator;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
- * A to GO interface code generator.
+ * A code generator for button factory classes.
  *
- * @author ollie (05.09.2021)
+ * @author ollie (08.12.2021)
  */
-public class ToGOConverterInterfaceCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
+public class TextFieldClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
 
-	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
-
-	public ToGOConverterInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
+	public TextFieldClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"ToGOConverterInterface.vm",
+				"component/TextFieldClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				new GUIVaadinNameGenerator(),
 				new TypeGenerator(),
@@ -36,7 +35,7 @@ public class ToGOConverterInterfaceCodeGenerator extends AbstractClassCodeGenera
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getToGOConverterInterfaceName(table);
+		return nameGenerator.getTextFieldClassName(table.getDataModel());
 	}
 
 	@Override
@@ -46,7 +45,7 @@ public class ToGOConverterInterfaceCodeGenerator extends AbstractClassCodeGenera
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getPageGOConverterPackageName(model, table);
+		return nameGenerator.getVaadinComponentPackageName(model, table);
 	}
 
 	@Override

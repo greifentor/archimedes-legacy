@@ -92,6 +92,18 @@ public class GUIVaadinNameGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void getButtonClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherButton";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_BUTTON_CLASS_NAME_SUFFIX))
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_BUTTON_CLASS_NAME_SUFFIX, expected));
+			// Run
+			String returned = unitUnderTest.getButtonClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 	@DisplayName("tests for GO class names")
@@ -358,6 +370,38 @@ public class GUIVaadinNameGeneratorTest {
 
 	}
 
+	@Nested
+	class ImageClassNameTests {
+
+		@Test
+		void getImageClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getImageClassName(null));
+		}
+
+		@Test
+		void getImageClassName_passAValidTable_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "Image";
+			// Run
+			String returned = unitUnderTest.getImageClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getImageClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherImage";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_IMAGE_CLASS_NAME_SUFFIX))
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_IMAGE_CLASS_NAME_SUFFIX, expected));
+			// Run
+			String returned = unitUnderTest.getImageClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("tests for page GO converter class names")
 	@Nested
 	class PageGOConverterClassNameTests {
@@ -545,6 +589,38 @@ public class GUIVaadinNameGeneratorTest {
 									"vaadin.mapper"));
 			// Run & Check
 			assertEquals("vaadin.mapper", unitUnderTest.getPageParametersGOConverterPackageName(model, table));
+		}
+
+	}
+
+	@Nested
+	class TextFieldClassNameTests {
+
+		@Test
+		void getTextFieldClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getTextFieldClassName(null));
+		}
+
+		@Test
+		void getTextFieldClassName_passAValidModel_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TextField";
+			// Run
+			String returned = unitUnderTest.getTextFieldClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getTextFieldClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherTextField";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX))
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX, expected));
+			// Run
+			String returned = unitUnderTest.getTextFieldClassName(model);
+			// Check
+			assertEquals(expected, returned);
 		}
 
 	}
