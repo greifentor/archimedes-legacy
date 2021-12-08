@@ -12,32 +12,32 @@ import lombok.Generated;
 @Generated
 public class ${ClassName} extends com.vaadin.flow.component.button.Button {
 
-	public Button(String text) {
+	public ${ClassName}(String text) {
 		super(text);
 	}
 
-	private Button setStyle(String name, String value) {
+	private ${ClassName} setStyle(String name, String value) {
 		getStyle().set(name, value);
 		return this;
 	}
 
-	public Button setBackgroundColor(String backgroundColor) {
+	public ${ClassName} setBackgroundColor(String backgroundColor) {
 		return setStyle("background-color", backgroundColor);
 	}
 
-	public Button setBackgroundImage(String imageFileName) {
+	public ${ClassName} setBackgroundImage(String imageFileName) {
 		return setStyle("background-image", "url('" + imageFileName + "')");
 	}
 
-	public Button setBorder(String border) {
+	public ${ClassName} setBorder(String border) {
 		return setStyle("border", border);
 	}
 
-	public Button setBorderColor(String borderColor) {
+	public ${ClassName} setBorderColor(String borderColor) {
 		return setStyle("border-color", borderColor);
 	}
 
-	public Button setColor(String color) {
+	public ${ClassName} setColor(String color) {
 		return setStyle("color", color);
 	}
 
