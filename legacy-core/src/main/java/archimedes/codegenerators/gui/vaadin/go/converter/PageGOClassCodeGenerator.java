@@ -1,10 +1,12 @@
-package archimedes.codegenerators.gui.vaadin;
+package archimedes.codegenerators.gui.vaadin.go.converter;
 
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
+import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -20,7 +22,7 @@ public class PageGOClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaad
 
 	public PageGOClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"PageGOClass.vm",
+				"go/converter/PageGOClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				new GUIVaadinNameGenerator(),
 				new TypeGenerator(),

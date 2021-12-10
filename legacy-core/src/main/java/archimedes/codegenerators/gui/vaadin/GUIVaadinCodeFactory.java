@@ -16,6 +16,8 @@ import archimedes.codegenerators.gui.vaadin.converter.PageGOConverterClassCodeGe
 import archimedes.codegenerators.gui.vaadin.converter.PageParametersGOConverterClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.converter.ToGOConverterInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.go.GOClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.go.converter.PageGOClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.go.converter.PageParametersGOClassCodeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;

@@ -1,7 +1,8 @@
-package archimedes.codegenerators.gui.vaadin;
+package archimedes.codegenerators.gui.vaadin.go.converter;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.go.converter.PageParametersGOClassCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
