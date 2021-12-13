@@ -1,9 +1,11 @@
 package archimedes.codegenerators.persistence.jpa;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import archimedes.scheme.Option;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,11 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 
 @ExtendWith(MockitoExtension.class)
 public class PersistenceJPANameGeneratorTest {
@@ -33,6 +34,37 @@ public class PersistenceJPANameGeneratorTest {
 
 	@InjectMocks
 	private PersistenceJPANameGenerator unitUnderTest;
+
+	@Nested
+	class CompositeKeyDBOClassName {
+
+		@Test
+		void getCompositeKeyDBOClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getCompositeKeyDBOClassName(table);
+			});
+		}
+
+		@Test
+		void getCompositeKeyDBOClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getCompositeKeyDBOClassName(null));
+		}
+
+		@Test
+		void getCompositeKeyDBOClassName_PassTableModelWithNameCamelCase_ReturnsACorrectDBOName() {
+			// Prepare
+			String expected = "TestTableIdDBO";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getCompositeKeyDBOClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
 
 	@DisplayName("tests for DBO class names")
 	@Nested

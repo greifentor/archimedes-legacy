@@ -12,6 +12,7 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.Columns.ParameterData;
+import archimedes.codegenerators.TableUtil;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -42,6 +43,10 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		context.put("CommentsOff", isCommentsOff(model, table));
+		if (TableUtil.hasCompositeKey(table)) {
+			context.put("CompositeKey", TableUtil.hasCompositeKey(table));
+			context.put("CompositeKeyDBOClassName", nameGenerator.getCompositeKeyDBOClassName(table));
+		}
 		context.put("EntityName", nameGenerator.getClassName(table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());

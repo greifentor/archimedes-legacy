@@ -16,6 +16,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 #end
 import javax.persistence.Id;
+#if ($CompositeKey)
+import javax.persistence.IdClass;
+#end
 #if ($Autoincrement and ${Autoincrement.contains("SEQUENCE")})
 import javax.persistence.SequenceGenerator;
 #end
@@ -49,6 +52,9 @@ import lombok.experimental.Accessors;
 @Data
 @Generated
 @Entity(name = "${EntityName}")
+#if ($CompositeKey)
+@IdClass(${CompositeKeyDBOClassName}.class)
+#end
 @Table(name = "${TableName}")
 public class ${ClassName} {
 

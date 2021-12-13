@@ -29,6 +29,10 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	public static final String ALTERNATE_TO_DBO_METHOD_NAME = "ALTERNATE_TO_DBO_METHOD_NAME";
 	public static final String ALTERNATE_TO_MODEL_METHOD_NAME = "ALTERNATE_TO_MODEL_METHOD_NAME";
 
+	public String getCompositeKeyDBOClassName(TableModel table) {
+		return table != null ? getClassName(table) + "IdDBO" : null;
+	}
+
 	public String getDBOClassName(TableModel table) {
 		return table != null
 				? getClassName(table) + getDBOClassNameSuffix(table)
