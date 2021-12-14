@@ -157,6 +157,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 								.orElse(POJOMode.CHAIN));
 	}
 
+	@Override
 	public String getPackageName(DataModel model, TableModel table) {
 		return getPackageName(model, table);
 	}
@@ -181,12 +182,19 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected String getIdClassName(TableModel table) {
+		if (TableUtil.hasCompositeKey(table)) {
+			return getCompositeKeyClassName(table);
+		}
 		return Arrays
 				.asList(table.getPrimaryKeyColumns())
 				.stream()
 				.findFirst()
 				.map(column -> typeGenerator.getJavaTypeString(column.getDomain(), true))
 				.orElse("UNKNOWN");
+	}
+
+	protected String getCompositeKeyClassName(TableModel table) {
+		return "OVERRIDE_GET_COMPOSITE_KEY_CLASS_NAME_METHOD";
 	}
 
 }

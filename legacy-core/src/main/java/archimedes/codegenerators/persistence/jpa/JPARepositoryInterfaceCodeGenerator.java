@@ -1,11 +1,10 @@
 package archimedes.codegenerators.persistence.jpa;
 
-import java.util.Arrays;
-
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.TableUtil;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -28,6 +27,9 @@ public class JPARepositoryInterfaceCodeGenerator extends AbstractClassCodeGenera
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		if (TableUtil.hasCompositeKey(table)) {
+			context.put("ImportIdClassName", getIdClassName(table));
+		}
 		context.put("ClassName", getClassName(table));
 		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
 		context.put("DBOPackageName", nameGenerator.getDBOPackageName(model, table));
@@ -48,6 +50,11 @@ public class JPARepositoryInterfaceCodeGenerator extends AbstractClassCodeGenera
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
 		return nameGenerator.getJPARepositoryPackageName(model, table);
+	}
+
+	@Override
+	protected String getCompositeKeyClassName(TableModel table) {
+		return nameGenerator.getCompositeKeyDBOClassName(table);
 	}
 
 }

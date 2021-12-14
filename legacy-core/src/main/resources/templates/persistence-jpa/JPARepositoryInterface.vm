@@ -4,6 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import ${DBOPackageName}.${DBOClassName};
+#if (${ImportIdClassName})
+import ${DBOPackageName}.${ImportIdClassName};
+#end 
 
 /**
  * A JPA repository for ${PluralName}.
