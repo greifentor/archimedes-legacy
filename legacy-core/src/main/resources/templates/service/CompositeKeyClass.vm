@@ -1,0 +1,42 @@
+package ${PackageName};
+
+#if ($ImportLocalDate || $ImportLocalDateTime)
+#if ($ImportLocalDate)
+import ${ImportLocalDate};
+#end
+#if ($ImportLocalDateTime)
+import ${ImportLocalDateTime};
+#end
+
+#end
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Generated;
+import lombok.NoArgsConstructor;
+#if ($POJOMode == "CHAIN")
+import lombok.experimental.Accessors;
+#end
+
+#if (!$CommentsOff )
+/**
+ * A composite key class for ${PluralName}.
+ *
+ * ${Generated}
+ */
+#end
+#if ($POJOMode == "CHAIN")
+@Accessors(chain = true)
+#end
+@AllArgsConstructor
+@Data
+@Generated
+@NoArgsConstructor
+public class ${ClassName} implements Serializable {
+
+#foreach($Column in $ColumnData)
+	private ${Column.getFieldType()} ${Column.getFieldName()};
+#end
+
+}
