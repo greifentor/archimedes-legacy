@@ -173,6 +173,9 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected String getIdFieldNameCamelCase(TableModel table) {
+		if (TableUtil.hasCompositeKey(table)) {
+			return nameGenerator.getAttributeName(getCompositeKeyClassName(table));
+		}
 		return Arrays
 				.asList(table.getPrimaryKeyColumns())
 				.stream()

@@ -5,6 +5,9 @@ import java.util.Optional;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#if (${ImportIdClassName})
+import ${ModelPackageName}.${ImportIdClassName};
+#end 
 import lombok.Generated;
 
 #if (!$CommentsOff)

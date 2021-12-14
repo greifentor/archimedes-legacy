@@ -43,6 +43,10 @@ public class ServiceNameGenerator extends NameGenerator {
 		return createPackageName(model, table, "", ALTERNATE_APPLICATION_PACKAGE_NAME);
 	}
 
+	public String getCompositeKeyClassName(TableModel table) {
+		return table != null ? getClassName(table) + "Id" : null;
+	}
+
 	public String getIdModelClassName(TableModel table) {
 		return table != null
 				? getClassName(table) + "Id"

@@ -1,11 +1,13 @@
 package archimedes.codegenerators.service;
 
+import org.apache.velocity.VelocityContext;
+
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.TableUtil;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
-import org.apache.velocity.VelocityContext;
 
 /**
  * A code generator for persistence port interfaces.
@@ -25,6 +27,9 @@ public class PersistencePortInterfaceCodeGenerator extends AbstractClassCodeGene
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		if (TableUtil.hasCompositeKey(table)) {
+			context.put("ImportIdClassName", getIdClassName(table));
+		}
 		context.put("ClassName", getClassName(table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("ContextName", getContextName(table));
@@ -52,6 +57,11 @@ public class PersistencePortInterfaceCodeGenerator extends AbstractClassCodeGene
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
 		return nameGenerator.getPersistencePortPackageName(model, table);
+	}
+
+	@Override
+	protected String getCompositeKeyClassName(TableModel table) {
+		return nameGenerator.getCompositeKeyClassName(table);
 	}
 
 }

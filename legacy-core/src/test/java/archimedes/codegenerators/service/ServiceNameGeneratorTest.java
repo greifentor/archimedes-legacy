@@ -139,6 +139,37 @@ public class ServiceNameGeneratorTest {
 
 	}
 
+	@Nested
+	class CompositeKeyClassName {
+
+		@Test
+		void getCompositeKeyClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getCompositeKeyClassName(table);
+			});
+		}
+
+		@Test
+		void getCompositeKeyClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getCompositeKeyClassName(null));
+		}
+
+		@Test
+		void getCompositeKeyClassName_PassTableModelWithNameCamelCase_ReturnsACorrectName() {
+			// Prepare
+			String expected = "TestTableId";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getCompositeKeyClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("Tests for IdModel class names")
 	@Nested
 	class IdModelClassNameTests {
