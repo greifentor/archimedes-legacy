@@ -9,6 +9,9 @@ import javax.inject.Named;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#if (${ImportIdClassName})
+import ${ModelPackageName}.${IdClassName};
+#end 
 import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
 import ${PageConverterPackageName}.${PageConverterClassName};
 import ${PageParametersToPageableConverterPackageName}.${PageParametersToPageableConverterClassName};

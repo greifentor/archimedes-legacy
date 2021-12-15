@@ -36,112 +36,213 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 	@Nested
 	class TestsOfMethod_generate_String_TableModel {
 
-		@Test
-		void happyRunForASimpleObject() {
-			// Prepare
-			String expected = getExpected(null, "persistence", false, "null");
-			DataModel dataModel = readDataModel("Model.xml");
-			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
-			// Check
-			assertEquals(expected, returned);
-		}
+		@Nested
+		class SimplePrimaryKey {
 
-		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
-			String s =
-					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
-							"\n" + //
-							"import java.util.Optional;\n" + //
-							"\n" + //
-							"import javax.annotation.PostConstruct;\n" + //
-							"import javax.inject.Inject;\n" + //
-							"import javax.inject.Named;\n" + //
-							"\n" + //
-							"import base.pack.age.name.core.model.Page;\n" + //
-							"import base.pack.age.name.core.model.PageParameters;\n" + //
-							"import base.pack.age.name.core.model.ATable;\n" + //
-							"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
-							"import base.pack.age.name.persistence.converter.PageConverter;\n" + //
-							"import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" + //
-							"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
-							"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
-							"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
-							"import lombok.Generated;\n" + //
-							"\n";
-			if (!suppressComment) {
-				s += "/**\n" + //
-						" * A DBO persistence adapter for a_tables.\n" + //
-						" *\n" + //
-						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
-						" */\n";
+			@Test
+			void happyRunForASimpleObject() {
+				// Prepare
+				String expected = getExpected(null, "persistence", false, "null");
+				DataModel dataModel = readDataModel("Model.xml");
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+				// Check
+				assertEquals(expected, returned);
 			}
-			s += "@Generated\n" + //
-					"@Named\n" + //
-					"public class ATableJPAPersistenceAdapter implements ATablePersistencePort {\n" + //
-					"\n" + //
-					"	@Inject\n" + //
-					"	private ATableDBOConverter converter;\n" + //
-					"	@Inject\n" + //
-					"	private ATableDBORepository repository;\n" + //
-					"\n" + //
-					"	@Inject\n" + //
-					"	private PageParametersToPageableConverter pageParametersToPageableConverter;\n" + //
-					"\n" + //
-					"	private PageConverter<ATable, ATableDBO> pageConverter;\n" + //
-					"\n" + //
-					"	@PostConstruct\n" + //
-					"	public void postConstruct() {\n" + //
-					"		pageConverter = new PageConverter<>(converter);\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	public ATable create(ATable model) {\n" + //
-					"		model.setId(" + noKeyValue + ");\n" + //
-					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
-					"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	public Optional<ATable> findById(Long id) {\n" + //
-					"		return repository.findById(id).map(dbo -> converter.toModel(dbo));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	public ATable update(ATable model) {\n" + //
-					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	public void delete(ATable model) {\n" + //
-					"		repository.deleteById(model.getId());\n" + //
-					"	}\n" + //
-					"\n}";
-			return s;
+
+			private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
+				String s =
+						"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName
+								+ ";\n" + //
+								"\n" + //
+								"import java.util.Optional;\n" + //
+								"\n" + //
+								"import javax.annotation.PostConstruct;\n" + //
+								"import javax.inject.Inject;\n" + //
+								"import javax.inject.Named;\n" + //
+								"\n" + //
+								"import base.pack.age.name.core.model.Page;\n" + //
+								"import base.pack.age.name.core.model.PageParameters;\n" + //
+								"import base.pack.age.name.core.model.ATable;\n" + //
+								"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
+								"import base.pack.age.name.persistence.converter.PageConverter;\n" + //
+								"import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" + //
+								"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
+								"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+								"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
+								"import lombok.Generated;\n" + //
+								"\n";
+				if (!suppressComment) {
+					s += "/**\n" + //
+							" * A DBO persistence adapter for a_tables.\n" + //
+							" *\n" + //
+							" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+							" */\n";
+				}
+				s += "@Generated\n" + //
+						"@Named\n" + //
+						"public class ATableJPAPersistenceAdapter implements ATablePersistencePort {\n" + //
+						"\n" + //
+						"	@Inject\n" + //
+						"	private ATableDBOConverter converter;\n" + //
+						"	@Inject\n" + //
+						"	private ATableDBORepository repository;\n" + //
+						"\n" + //
+						"	@Inject\n" + //
+						"	private PageParametersToPageableConverter pageParametersToPageableConverter;\n" + //
+						"\n" + //
+						"	private PageConverter<ATable, ATableDBO> pageConverter;\n" + //
+						"\n" + //
+						"	@PostConstruct\n" + //
+						"	public void postConstruct() {\n" + //
+						"		pageConverter = new PageConverter<>(converter);\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public ATable create(ATable model) {\n" + //
+						"		model.setId(" + noKeyValue + ");\n" + //
+						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+						"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n"
+						+ //
+						"	}\n" + //
+						"\n" + //
+						"	public Optional<ATable> findById(Long id) {\n" + //
+						"		return repository.findById(id).map(dbo -> converter.toModel(dbo));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public ATable update(ATable model) {\n" + //
+						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public void delete(ATable model) {\n" + //
+						"		repository.deleteById(model.getId());\n" + //
+						"	}\n" + //
+						"\n}";
+				return s;
+			}
+
+			@Test
+			void happyRunForASimpleObjectWithSuppressedComments() {
+				// Prepare
+				String expected = getExpected(null, "persistence", true, "null");
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel table = dataModel.getTableByName("A_TABLE");
+				dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			@Test
+			void happyRunForASimpleObjectWithNoSimplePK() {
+				// Prepare
+				String expected = getExpected(null, "persistence", false, "-1");
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel table = dataModel.getTableByName("A_TABLE");
+				table.getColumnByName("ID").setNotNull(true);
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
 		}
 
-		@Test
-		void happyRunForASimpleObjectWithSuppressedComments() {
-			// Prepare
-			String expected = getExpected(null, "persistence", true, "null");
-			DataModel dataModel = readDataModel("Model.xml");
-			TableModel table = dataModel.getTableByName("A_TABLE");
-			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
-			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
-			// Check
-			assertEquals(expected, returned);
-		}
+		@Nested
+		class CompositePrimaryKey {
 
-		@Test
-		void happyRunForASimpleObjectWithNoSimplePK() {
-			// Prepare
-			String expected = getExpected(null, "persistence", false, "-1");
-			DataModel dataModel = readDataModel("Model.xml");
-			TableModel table = dataModel.getTableByName("A_TABLE");
-			table.getColumnByName("ID").setNotNull(true);
-			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
-			// Check
-			assertEquals(expected, returned);
+			@Test
+			void happyRunForASimpleObject() {
+				// Prepare
+				String expected = getExpected(null, "persistence", false, "null");
+				DataModel dataModel = readDataModel("Model-CompositeKey.xml");
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
+				String s =
+						"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName
+								+ ";\n" + //
+								"\n" + //
+								"import java.util.Optional;\n" + //
+								"\n" + //
+								"import javax.annotation.PostConstruct;\n" + //
+								"import javax.inject.Inject;\n" + //
+								"import javax.inject.Named;\n" + //
+								"\n" + //
+								"import base.pack.age.name.core.model.Page;\n" + //
+								"import base.pack.age.name.core.model.PageParameters;\n" + //
+								"import base.pack.age.name.core.model.ATable;\n" + //
+								"import base.pack.age.name.core.model.ATableId;\n" + //
+								"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
+								"import base.pack.age.name.persistence.converter.PageConverter;\n" + //
+								"import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" + //
+								"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
+								"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+								"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
+								"import lombok.Generated;\n" + //
+								"\n";
+				if (!suppressComment) {
+					s += "/**\n" + //
+							" * A DBO persistence adapter for a_tables.\n" + //
+							" *\n" + //
+							" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+							" */\n";
+				}
+				s += "@Generated\n" + //
+						"@Named\n" + //
+						"public class ATableJPAPersistenceAdapter implements ATablePersistencePort {\n" + //
+						"\n" + //
+						"	@Inject\n" + //
+						"	private ATableDBOConverter converter;\n" + //
+						"	@Inject\n" + //
+						"	private ATableDBORepository repository;\n" + //
+						"\n" + //
+						"	@Inject\n" + //
+						"	private PageParametersToPageableConverter pageParametersToPageableConverter;\n" + //
+						"\n" + //
+						"	private PageConverter<ATable, ATableDBO> pageConverter;\n" + //
+						"\n" + //
+						"	@PostConstruct\n" + //
+						"	public void postConstruct() {\n" + //
+						"		pageConverter = new PageConverter<>(converter);\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public ATable create(ATable model) {\n" + //
+						"		model.setATableId(" + noKeyValue + ");\n" + //
+						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+						"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n"
+						+ //
+						"	}\n" + //
+						"\n" + //
+						"	public Optional<ATable> findById(ATableId aTableId) {\n" + //
+						"		return repository.findById(aTableId).map(dbo -> converter.toModel(dbo));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public ATable update(ATable model) {\n" + //
+						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public void delete(ATable model) {\n" + //
+						"		repository.deleteById(model.getATableId());\n" + //
+						"	}\n" + //
+						"\n}";
+				return s;
+			}
+
 		}
 
 	}
