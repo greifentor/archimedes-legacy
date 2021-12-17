@@ -99,24 +99,29 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 						"		pageConverter = new PageConverter<>(converter);\n" + //
 						"	}\n" + //
 						"\n" + //
+						"	@Override\n" + //
 						"	public ATable create(ATable model) {\n" + //
 						"		model.setId(" + noKeyValue + ");\n" + //
 						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 						"	}\n" + //
 						"\n" + //
+						"	@Override\n" + //
 						"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
 						"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n"
 						+ //
 						"	}\n" + //
 						"\n" + //
+						"	@Override\n" + //
 						"	public Optional<ATable> findById(Long id) {\n" + //
 						"		return repository.findById(id).map(dbo -> converter.toModel(dbo));\n" + //
 						"	}\n" + //
 						"\n" + //
+						"	@Override\n" + //
 						"	public ATable update(ATable model) {\n" + //
 						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 						"	}\n" + //
 						"\n" + //
+						"	@Override\n" + //
 						"	public void delete(ATable model) {\n" + //
 						"		repository.deleteById(model.getId());\n" + //
 						"	}\n" + //
@@ -218,24 +223,29 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 						"		pageConverter = new PageConverter<>(converter);\n" + //
 						"	}\n" + //
 						"\n" + //
+						"	@Override\n" + //
 						"	public ATable create(ATable model) {\n" + //
 						"		model.setATableId(" + noKeyValue + ");\n" + //
 						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 						"	}\n" + //
 						"\n" + //
+						"	@Override\n" + //
 						"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
 						"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n"
 						+ //
 						"	}\n" + //
 						"\n" + //
+						"	@Override\n" + //
 						"	public Optional<ATable> findById(ATableId aTableId) {\n" + //
 						"		return repository.findById(aTableId).map(dbo -> converter.toModel(dbo));\n" + //
 						"	}\n" + //
 						"\n" + //
+						"	@Override\n" + //
 						"	public ATable update(ATable model) {\n" + //
 						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 						"	}\n" + //
 						"\n" + //
+						"	@Override\n" + //
 						"	public void delete(ATable model) {\n" + //
 						"		repository.deleteById(model.getATableId());\n" + //
 						"	}\n" + //
