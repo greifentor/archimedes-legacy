@@ -50,6 +50,10 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
+							"\n" + //
+							"import javax.inject.Named;\n" + //
+							"\n" + //
+							"import lombok.Generated;\n" + //
 							"\n";
 			if (!suppressComment) {
 				s += "/**\n" + //

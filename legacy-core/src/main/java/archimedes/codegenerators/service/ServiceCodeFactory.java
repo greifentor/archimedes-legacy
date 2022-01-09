@@ -29,6 +29,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 		return Arrays
 				.asList(
 						new ApplicationClassCodeGenerator(this),
+						new GeneratedPersistencePortInterfaceCodeGenerator(this),
 						new GeneratedServiceImplClassCodeGenerator(this),
 						new GeneratedServiceInterfaceCodeGenerator(this),
 						new ModelClassCodeGenerator(this),
@@ -62,6 +63,9 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 		case MODEL:
 			return new String[] {
 					ServiceNameGenerator.ALTERNATE_APPLICATION_PACKAGE_NAME,
+					ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
+					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX,
+					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_INTERFACE_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
 					ServiceNameGenerator.ALTERNATE_PAGE_PACKAGE_NAME,

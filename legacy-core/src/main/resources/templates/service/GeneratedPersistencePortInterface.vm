@@ -1,0 +1,30 @@
+package ${PackageName};
+
+import java.util.Optional;
+
+import ${PagePackageName}.${PageClassName};
+import ${PagePackageName}.${PageParametersClassName};
+import ${ModelPackageName}.${ModelClassName};
+import lombok.Generated;
+
+#if (!$CommentsOff)
+/**
+ * A generated persistence port interface for ${ContextName} CRUD operations.
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
+#end
+@Generated
+public interface ${ClassName} {
+
+	${ModelClassName} create(${ModelClassName} model);
+
+	${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters);
+
+	Optional<${ModelClassName}> findById(${IdClassName} ${IdFieldName});
+
+	${ModelClassName} update(${ModelClassName} model);
+
+	void delete(${ModelClassName} model);
+
+}

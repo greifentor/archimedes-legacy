@@ -139,6 +139,163 @@ public class ServiceNameGeneratorTest {
 
 	}
 
+	@DisplayName("Tests for generated persistence port interface names")
+	@Nested
+	class GeneratedPersistencePortInterfaceNameTests {
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			});
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getGeneratedPersistencePortInterfaceName(null));
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelWithNameCamelCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TestTableGeneratedPersistencePort";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelWithNameUpperCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TableGeneratedPersistencePort";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TableNameGeneratedPersistencePort";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TableNameGeneratedPersistencePort";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TableNameGeneratedPersistencePort";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelWithNameLowerCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TableGeneratedPersistencePort";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelNameSingleUpperCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TGeneratedPersistencePort";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelNameSinglelowerCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TGeneratedPersistencePort";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TablePP";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX))
+					.thenReturn(
+							new Option(
+									ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
+									"PP"));
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelNullAsWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "TableGeneratedPersistencePort";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX))
+					.thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedPersistencePortInterfaceName_PassTableModelEmptyAsWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "Table";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX))
+					.thenReturn(
+							new Option(
+									ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
+									""));
+			// Run
+			String returned = unitUnderTest.getGeneratedPersistencePortInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("Tests for Service impl class names")
 	@Nested
 	class GeneratedServiceImplClassNameTests {

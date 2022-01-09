@@ -22,7 +22,7 @@ import lombok.Generated;
 public abstract class ${ClassName} implements ${ServiceInterfaceName} {
 
 	@Inject
-	private ${PersistencePortInterfaceName} persistencePort;
+	protected ${PersistencePortInterfaceName} persistencePort;
 
 	@Override
 	public ${ModelClassName} create(${ModelClassName} model) {

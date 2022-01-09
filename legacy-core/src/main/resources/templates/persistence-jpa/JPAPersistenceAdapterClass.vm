@@ -1,5 +1,9 @@
 package ${PackageName};
 
+import javax.inject.Named;
+
+import lombok.Generated;
+
 #if (!$CommentsOff )
 /**
  * A JPA persistence adapter for ${PluralName}.

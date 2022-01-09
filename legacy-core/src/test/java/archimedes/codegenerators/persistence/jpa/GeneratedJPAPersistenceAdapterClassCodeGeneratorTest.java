@@ -78,9 +78,9 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 					"public abstract class ATableGeneratedJPAPersistenceAdapter implements ATablePersistencePort {\n" + //
 					"\n" + //
 					"	@Inject\n" + //
-					"	private ATableDBOConverter converter;\n" + //
+					"	protected ATableDBOConverter converter;\n" + //
 					"	@Inject\n" + //
-					"	private ATableDBORepository repository;\n" + //
+					"	protected ATableDBORepository repository;\n" + //
 					"\n" + //
 					"	@Inject\n" + //
 					"	private PageParametersToPageableConverter pageParametersToPageableConverter;\n" + //

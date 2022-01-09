@@ -43,6 +43,10 @@ public class ServiceImplClassCodeGeneratorTest {
 
 	private String createExpected(boolean suppressComment) {
 		String expected = "package " + BASE_PACKAGE_NAME + ".core.service.impl;\n" + //
+				"\n" + //
+				"import javax.inject.Named;\n" + //
+				"\n" + //
+				"import lombok.Generated;\n" + //
 				"\n";
 		if (!suppressComment) {
 			expected += "/**\n" +

@@ -66,7 +66,7 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 				"public abstract class ATableGeneratedServiceImpl implements ATableService {\n" + //
 				"\n" + //
 				"\t@Inject\n" + //
-				"\tprivate ATablePersistencePort persistencePort;\n" + //
+				"\tprotected ATablePersistencePort persistencePort;\n" + //
 				"\n" + //
 				"\t@Override\n" + //
 				"\tpublic ATable create(ATable model) {\n" + //

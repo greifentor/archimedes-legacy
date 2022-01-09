@@ -1,5 +1,7 @@
 package ${PackageName};
 
+import lombok.Generated;
+
 #if (!$CommentsOff)
 /**
  * A service interface for ${ContextName} management.

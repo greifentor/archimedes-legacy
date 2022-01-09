@@ -13,11 +13,11 @@ import archimedes.model.TableModel;
  *
  * @author ollie (04.07.2021)
  */
-public class PersistencePortInterfaceCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
+public class GeneratedPersistencePortInterfaceCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
 
-	public PersistencePortInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
+	public GeneratedPersistencePortInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"PersistencePortInterface.vm",
+				"GeneratedPersistencePortInterface.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
 				new ServiceNameGenerator(),
 				new TypeGenerator(),
@@ -29,16 +29,20 @@ public class PersistencePortInterfaceCodeGenerator extends AbstractClassCodeGene
 		context.put("ClassName", getClassName(table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("ContextName", getContextName(table));
-		context
-				.put(
-						"GeneratedPersistencePortInterfaceName",
-						nameGenerator.getGeneratedPersistencePortInterfaceName(table));
+		context.put("IdClassName", getIdClassName(table));
+		context.put("IdFieldName", nameGenerator.getAttributeName(getIdFieldNameCamelCase(table)));
+		context.put("IdFieldNameCamelCase", getIdFieldNameCamelCase(table));
+		context.put("ModelClassName", nameGenerator.getModelClassName(table));
+		context.put("ModelPackageName", nameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
+		context.put("PageClassName", nameGenerator.getPageClassName());
+		context.put("PagePackageName", nameGenerator.getPagePackageName(model, table));
+		context.put("PageParametersClassName", nameGenerator.getPageParametersClassName());
 	}
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getPersistencePortInterfaceName(table);
+		return nameGenerator.getGeneratedPersistencePortInterfaceName(table);
 	}
 
 	@Override

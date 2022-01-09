@@ -17,7 +17,7 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class PersistencePortInterfaceCodeGeneratorTest {
+public class GeneratedPersistencePortInterfaceCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
@@ -25,7 +25,7 @@ public class PersistencePortInterfaceCodeGeneratorTest {
 	private ServiceNameGenerator nameGenerator = new ServiceNameGenerator();
 
 	@InjectMocks
-	private PersistencePortInterfaceCodeGenerator unitUnderTest;
+	private GeneratedPersistencePortInterfaceCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -40,15 +40,31 @@ public class PersistencePortInterfaceCodeGeneratorTest {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".core.service.port.persistence;\n" + //
 					"\n" + //
+					"import java.util.Optional;\n" + //
+					"\n" + //
+					"import base.pack.age.name.core.model.Page;\n" + //
+					"import base.pack.age.name.core.model.PageParameters;\n" + //
+					"import base.pack.age.name.core.model.ATable;\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
 					"/**\n" + //
-					" * A persistence port interface for ATable CRUD operations.\n" + //
+					" * A generated persistence port interface for ATable CRUD operations.\n" + //
 					" *\n" + //
 					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 					" */\n" + //
 					"@Generated\n" + //
-					"public interface ATablePersistencePort extends ATableGeneratedPersistencePort {\n" + //
+					"public interface ATableGeneratedPersistencePort {\n" + //
+					"\n" + //
+					"	ATable create(ATable model);\n" +
+					"\n" +
+					"	Page<ATable> findAll(PageParameters pageParameters);\n" +
+					"\n" +
+					"	Optional<ATable> findById(Long id);\n" +
+					"\n" +
+					"	ATable update(ATable model);\n" +
+					"\n" +
+					"	void delete(ATable model);\n" + //
+					"\n" + //
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
@@ -62,10 +78,26 @@ public class PersistencePortInterfaceCodeGeneratorTest {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".core.service.port.persistence;\n" + //
 					"\n" + //
+					"import java.util.Optional;\n" + //
+					"\n" + //
+					"import base.pack.age.name.core.model.Page;\n" + //
+					"import base.pack.age.name.core.model.PageParameters;\n" + //
+					"import base.pack.age.name.core.model.ATable;\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
 					"@Generated\n" + //
-					"public interface ATablePersistencePort extends ATableGeneratedPersistencePort {\n" + //
+					"public interface ATableGeneratedPersistencePort {\n" + //
+					"\n" + //
+					"	ATable create(ATable model);\n" +
+					"\n" +
+					"	Page<ATable> findAll(PageParameters pageParameters);\n" +
+					"\n" +
+					"	Optional<ATable> findById(Long id);\n" +
+					"\n" +
+					"	ATable update(ATable model);\n" +
+					"\n" +
+					"	void delete(ATable model);\n" + //
+					"\n" + //
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));

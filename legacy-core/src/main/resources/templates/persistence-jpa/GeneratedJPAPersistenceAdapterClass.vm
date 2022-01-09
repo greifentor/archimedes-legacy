@@ -27,9 +27,9 @@ import lombok.Generated;
 public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 
 	@Inject
-	private ${DBOConverterClassName} converter;
+	protected ${DBOConverterClassName} converter;
 	@Inject
-	private ${JPARepositoryClassName} repository;
+	protected ${JPARepositoryClassName} repository;
 
 	@Inject
 	private ${PageParametersToPageableConverterClassName} pageParametersToPageableConverter;

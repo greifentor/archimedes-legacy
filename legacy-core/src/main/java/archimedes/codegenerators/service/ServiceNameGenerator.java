@@ -12,6 +12,8 @@ import archimedes.model.TableModel;
 public class ServiceNameGenerator extends NameGenerator {
 
 	public static final String ALTERNATE_APPLICATION_PACKAGE_NAME = "ALTERNATE_APPLICATION_PACKAGE_NAME";
+	public static final String ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX =
+			"ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX";
 	public static final String ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX =
 			"ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_GENERATED_SERVICE_INTERFACE_NAME_SUFFIX =
@@ -45,6 +47,17 @@ public class ServiceNameGenerator extends NameGenerator {
 
 	public String getApplicationPackageName(DataModel model, TableModel table) {
 		return createPackageName(model, table, "", ALTERNATE_APPLICATION_PACKAGE_NAME);
+	}
+
+	public String getGeneratedPersistencePortInterfaceName(TableModel table) {
+		return table != null ? getClassName(table) + getGeneratedPersistencePortInterfaceNameSuffix(table) : null;
+	}
+
+	private String getGeneratedPersistencePortInterfaceNameSuffix(TableModel table) {
+		return getNameOrAlternativeFromOption(
+				table,
+				"GeneratedPersistencePort",
+				ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX);
 	}
 
 	public String getGeneratedServiceInterfaceName(TableModel table) {
