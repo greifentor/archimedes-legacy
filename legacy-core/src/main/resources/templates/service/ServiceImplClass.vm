@@ -1,17 +1,5 @@
 package ${PackageName};
 
-import java.util.Optional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import ${PagePackageName}.${PageClassName};
-import ${PagePackageName}.${PageParametersClassName};
-import ${ModelPackageName}.${ModelClassName};
-import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
-import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
-import lombok.Generated;
-
 #if (!$CommentsOff)
 /**
  * A service interface implementation for ${ContextName} management.
@@ -21,34 +9,5 @@ import lombok.Generated;
 #end
 @Generated
 @Named
-public class ${ClassName} implements ${ServiceInterfaceName} {
-
-	@Inject
-	private ${PersistencePortInterfaceName} persistencePort;
-
-	@Override
-	public ${ModelClassName} create(${ModelClassName} model) {
-		return persistencePort.create(model);
-	}
-
-	@Override
-	public ${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters) {
-		return persistencePort.findAll(pageParameters);
-	}
-
-	@Override
-	public Optional<${ModelClassName}> findById(${IdClassName} ${IdFieldName}) {
-		return persistencePort.findById(${IdFieldName});
-	}
-
-	@Override
-	public ${ModelClassName} update(${ModelClassName} model) {
-		return persistencePort.update(model);
-	}
-
-	@Override
-	public void delete(${ModelClassName} model) {
-		persistencePort.delete(model);
-	}
-
+public class ${ClassName} extends ${GeneratedServiceClassName} {
 }

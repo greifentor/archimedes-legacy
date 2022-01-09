@@ -29,18 +29,8 @@ public class ServiceImplClassCodeGenerator extends AbstractClassCodeGenerator<Se
 		context.put("ClassName", getClassName(table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("ContextName", getContextName(table));
-		context.put("IdClassName", getIdClassName(table));
-		context.put("IdFieldName", nameGenerator.getAttributeName(getIdFieldNameCamelCase(table)));
-		context.put("ModelClassName", nameGenerator.getModelClassName(table));
-		context.put("ModelPackageName", nameGenerator.getModelPackageName(model, table));
+		context.put("GeneratedServiceClassName", nameGenerator.getGeneratedServiceImplClassName(table));
 		context.put("PackageName", getPackageName(model, table));
-		context.put("PageClassName", nameGenerator.getPageClassName());
-		context.put("PagePackageName", nameGenerator.getPagePackageName(model, table));
-		context.put("PageParametersClassName", nameGenerator.getPageParametersClassName());
-		context.put("PersistencePortInterfaceName", nameGenerator.getPersistencePortInterfaceName(table));
-		context.put("PersistencePortPackageName", nameGenerator.getPersistencePortPackageName(model, table));
-		context.put("ServiceInterfaceName", nameGenerator.getServiceInterfaceName(table));
-		context.put("ServiceInterfacePackageName", nameGenerator.getServiceInterfacePackageName(model, table));
 	}
 
 	@Override

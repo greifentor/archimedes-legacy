@@ -21,12 +21,12 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-class JPAPersistenceAdapterClassCodeGeneratorTest {
+class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
-	private JPAPersistenceAdapterClassCodeGenerator unitUnderTest;
+	private GeneratedJPAPersistenceAdapterClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -50,18 +50,69 @@ class JPAPersistenceAdapterClassCodeGeneratorTest {
 		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
+							"\n" + //
+							"import java.util.Optional;\n" + //
+							"\n" + //
+							"import javax.annotation.PostConstruct;\n" + //
+							"import javax.inject.Inject;\n" + //
+							"\n" + //
+							"import base.pack.age.name.core.model.Page;\n" + //
+							"import base.pack.age.name.core.model.PageParameters;\n" + //
+							"import base.pack.age.name.core.model.ATable;\n" + //
+							"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
+							"import base.pack.age.name.persistence.converter.PageConverter;\n" + //
+							"import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" + //
+							"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
+							"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+							"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
+							"import lombok.Generated;\n" + //
 							"\n";
 			if (!suppressComment) {
 				s += "/**\n" + //
-						" * A JPA persistence adapter for a_tables.\n" + //
+						" * A generated JPA persistence adapter for a_tables.\n" + //
 						" *\n" + //
 						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 						" */\n";
 			}
 			s += "@Generated\n" + //
-					"@Named\n" + //
-					"public class ATableJPAPersistenceAdapter extends ATableGeneratedJPAPersistenceAdapter {\n" + //
-					"}";
+					"public abstract class ATableGeneratedJPAPersistenceAdapter implements ATablePersistencePort {\n" + //
+					"\n" + //
+					"	@Inject\n" + //
+					"	private ATableDBOConverter converter;\n" + //
+					"	@Inject\n" + //
+					"	private ATableDBORepository repository;\n" + //
+					"\n" + //
+					"	@Inject\n" + //
+					"	private PageParametersToPageableConverter pageParametersToPageableConverter;\n" + //
+					"\n" + //
+					"	private PageConverter<ATable, ATableDBO> pageConverter;\n" + //
+					"\n" + //
+					"	@PostConstruct\n" + //
+					"	public void postConstruct() {\n" + //
+					"		pageConverter = new PageConverter<>(converter);\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public ATable create(ATable model) {\n" + //
+					"		model.setId(" + noKeyValue + ");\n" + //
+					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+					"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public Optional<ATable> findById(Long id) {\n" + //
+					"		return repository.findById(id).map(dbo -> converter.toModel(dbo));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public ATable update(ATable model) {\n" + //
+					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public void delete(ATable model) {\n" + //
+					"		repository.deleteById(model.getId());\n" + //
+					"	}\n" + //
+					"\n}";
 			return s;
 		}
 

@@ -1,9 +1,11 @@
 package archimedes.codegenerators.persistence.jpa;
 
-import archimedes.model.ColumnModel;
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import archimedes.scheme.Option;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,11 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 
 @ExtendWith(MockitoExtension.class)
 public class PersistenceJPANameGeneratorTest {
@@ -294,6 +295,45 @@ public class PersistenceJPANameGeneratorTest {
 							new Option(PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME, "persistence.dbos"));
 			// Run & Check
 			assertEquals("persistence.dbos", unitUnderTest.getDBOPackageName(model, table));
+		}
+
+	}
+
+	@DisplayName("tests of the JPA persistence adapter class names.")
+	@Nested
+	class GeneratedJPAPersistenceAdapterClassNameTests {
+
+		@Test
+		void getGeneratedJPAPersistenceAdapterClassName_PassNullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getGeneratedJPAPersistenceAdapterClassName(null));
+		}
+
+		@Test
+		void getGeneratedJPAPersistenceAdapterClassName_ATableWithName_ReturnsTheCorrectClassName() {
+			// Prepare
+			String expected = "NameGeneratedJPAPersistenceAdapter";
+			when(table.getName()).thenReturn("Name");
+			// Run
+			String returned = unitUnderTest.getGeneratedJPAPersistenceAdapterClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedJPAPersistenceAdapterClassName_passAValidTableModelWithAlternateClassName_ReturnsACorrectGeneratedJPAPersistenceAdapterClassName() {
+			// Prepare
+			String expected = "TablePersistenceAdapter";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_GENERATED_ADAPTER_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_GENERATED_ADAPTER_CLASS_NAME_SUFFIX,
+									"PersistenceAdapter"));
+			// Run
+			String returned = unitUnderTest.getGeneratedJPAPersistenceAdapterClassName(table);
+			// Check
+			assertEquals(expected, returned);
 		}
 
 	}

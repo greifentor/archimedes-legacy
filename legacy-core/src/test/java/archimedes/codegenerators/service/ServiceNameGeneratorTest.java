@@ -139,6 +139,132 @@ public class ServiceNameGeneratorTest {
 
 	}
 
+	@DisplayName("Tests for Service impl class names")
+	@Nested
+	class GeneratedServiceImplClassNameTests {
+
+		@Test
+		void getGeneratedServiceImplClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getGeneratedServiceImplClassName(table);
+			});
+		}
+
+		@Test
+		void getGeneratedServiceImplClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getGeneratedServiceImplClassName(null));
+		}
+
+		@Test
+		void getGeneratedServiceImplClassName_PassTableModelWithNameCamelCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TestTableGeneratedServiceImpl";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceImplClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceImplClassName_PassTableModelWithNameUpperCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TableGeneratedServiceImpl";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceImplClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceImplClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TableNameGeneratedServiceImpl";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceImplClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceImplClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TableNameGeneratedServiceImpl";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceImplClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceImplClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TableNameGeneratedServiceImpl";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceImplClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceImplClassName_PassTableModelWithNameLowerCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TableGeneratedServiceImpl";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceImplClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceImplClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TGeneratedServiceImpl";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceImplClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceImplClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TGeneratedServiceImpl";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceImplClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceImplClassName_PassTableModelEmptyAsWithAlternateClassSuffix_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableAdapter";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(
+									ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX,
+									"Adapter"));
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceImplClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("Tests for IdModel class names")
 	@Nested
 	class IdModelClassNameTests {
@@ -250,7 +376,7 @@ public class ServiceNameGeneratorTest {
 
 	@DisplayName("Tests for Service interface names")
 	@Nested
-	class ServiceClassNameTests {
+	class ServiceInterfaceNameTests {
 
 		@Test
 		void getServiceInterfaceName_PassTableModelWithEmptyName_ThrowsException() {

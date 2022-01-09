@@ -1,67 +1,13 @@
 package ${PackageName};
 
-import java.util.Optional;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import ${PagePackageName}.${PageClassName};
-import ${PagePackageName}.${PageParametersClassName};
-import ${ModelPackageName}.${ModelClassName};
-import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
-import ${PageConverterPackageName}.${PageConverterClassName};
-import ${PageParametersToPageableConverterPackageName}.${PageParametersToPageableConverterClassName};
-import ${DBOConverterPackageName}.${DBOConverterClassName};
-import ${DBOPackageName}.${DBOClassName};
-import ${JPARepositoryPackageName}.${JPARepositoryClassName};
-import lombok.Generated;
-
 #if (!$CommentsOff )
 /**
- * A DBO persistence adapter for ${PluralName}.
+ * A JPA persistence adapter for ${PluralName}.
  *
  * ${Generated}
  */
 #end
 @Generated
 @Named
-public class ${ClassName} implements ${PersistencePortInterfaceName} {
-
-	@Inject
-	private ${DBOConverterClassName} converter;
-	@Inject
-	private ${JPARepositoryClassName} repository;
-
-	@Inject
-	private ${PageParametersToPageableConverterClassName} pageParametersToPageableConverter;
-
-	private PageConverter<${ModelClassName}, ${DBOClassName}> pageConverter;
-
-	@PostConstruct
-	public void postConstruct() {
-		pageConverter = new ${PageConverterClassName}<>(converter);
-	}
-
-	public ${ModelClassName} create(${ModelClassName} model) {
-		model.set${IdFieldNameCamelCase}(${NoKeyValue});
-		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
-	}
-
-	public ${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters) {
-		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));
-	}
-
-	public Optional<${ModelClassName}> findById(${IdClassName} ${IdFieldName}) {
-		return repository.findById(${IdFieldName}).map(dbo -> converter.${ToModelMethodName}(dbo));
-	}
-
-	public ${ModelClassName} update(${ModelClassName} model) {
-		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
-	}
-
-	public void delete(${ModelClassName} model) {
-		repository.deleteById(model.get${IdFieldNameCamelCase}());
-	}
-
+public class ${ClassName} extends ${GeneratedJPAPersistenceAdapterClassName} {
 }

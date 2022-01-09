@@ -15,7 +15,7 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class ServiceImplClassCodeGeneratorTest {
+public class GeneratedServiceImplClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
@@ -23,7 +23,7 @@ public class ServiceImplClassCodeGeneratorTest {
 	private ServiceNameGenerator nameGenerator = new ServiceNameGenerator();
 
 	@InjectMocks
-	private ServiceImplClassCodeGenerator unitUnderTest;
+	private GeneratedServiceImplClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -43,17 +43,56 @@ public class ServiceImplClassCodeGeneratorTest {
 
 	private String createExpected(boolean suppressComment) {
 		String expected = "package " + BASE_PACKAGE_NAME + ".core.service.impl;\n" + //
+				"\n" + //
+				"import java.util.Optional;\n" + //
+				"\n" + //
+				"import javax.inject.Inject;\n" + //
+				"\n" + //
+				"import base.pack.age.name.core.model.Page;\n" + //
+				"import base.pack.age.name.core.model.PageParameters;\n" + //
+				"import base.pack.age.name.core.model.ATable;\n" + //
+				"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
+				"import base.pack.age.name.core.service.ATableService;\n" + //
+				"import lombok.Generated;\n" + //
 				"\n";
 		if (!suppressComment) {
 			expected += "/**\n" +
-					" * A service interface implementation for ATable management.\n" + //
+					" * A generated service interface implementation for ATable management.\n" + //
 					" *\n" + //
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n";
 		}
 		expected += "@Generated\n" + //
-				"@Named\n" + //
-				"public class ATableServiceImpl extends ATableGeneratedServiceImpl {\n" + //
+				"public abstract class ATableGeneratedServiceImpl implements ATableService {\n" + //
+				"\n" + //
+				"\t@Inject\n" + //
+				"\tprivate ATablePersistencePort persistencePort;\n" + //
+				"\n" + //
+				"\t@Override\n" + //
+				"\tpublic ATable create(ATable model) {\n" + //
+				"\t\treturn persistencePort.create(model);\n" + //
+				"\t}\n" + //
+				"\n" + //
+				"\t@Override\n" + //
+				"\tpublic Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+				"\t\treturn persistencePort.findAll(pageParameters);\n" + //
+				"\t}\n" + //
+				"\n" + //
+				"\t@Override\n" + //
+				"\tpublic Optional<ATable> findById(Long id) {\n" + //
+				"\t\treturn persistencePort.findById(id);\n" + //
+				"\t}\n" + //
+				"\n" + //
+				"\t@Override\n" + //
+				"\tpublic ATable update(ATable model) {\n" + //
+				"\t\treturn persistencePort.update(model);\n" + //
+				"\t}\n" + //
+				"\n" + //
+				"\t@Override\n" + //
+				"\tpublic void delete(ATable model) {\n" + //
+				"\t\tpersistencePort.delete(model);\n" + //
+				"\t}\n" + //
+				"\n" + //
 				"}";
 		return expected;
 	}

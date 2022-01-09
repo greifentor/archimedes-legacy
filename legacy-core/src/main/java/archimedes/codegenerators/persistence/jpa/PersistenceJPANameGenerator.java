@@ -19,6 +19,8 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	public static final String ALTERNATE_DBOCONVERTER_PACKAGE_NAME = "ALTERNATE_DBOCONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_ENTITY_CLASS_NAME_SUFFIX = "ALTERNATE_ENTITY_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_ENTITY_PACKAGE_NAME = "ALTERNATE_ENTITY_PACKAGE_NAME";
+	public static final String ALTERNATE_GENERATED_ADAPTER_CLASS_NAME_SUFFIX =
+			"ALTERNATE_GENERATED_ADAPTER_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME = "ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_MODEL_PACKAGE_NAME = "ALTERNATE_PAGE_MODEL_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME =
@@ -65,6 +67,17 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 
 	public String getDBOPackageName(DataModel model, TableModel table) {
 		return createPackageName(model, table, "persistence.entity", ALTERNATE_ENTITY_PACKAGE_NAME);
+	}
+
+	public String getGeneratedJPAPersistenceAdapterClassName(TableModel table) {
+		return table != null ? getClassName(table) + getGeneratedJPAPersistenceAdapterClassNameSuffix(table) : null;
+	}
+
+	private String getGeneratedJPAPersistenceAdapterClassNameSuffix(TableModel table) {
+		return getNameOrAlternativeFromOption(
+				table,
+				"GeneratedJPAPersistenceAdapter",
+				ALTERNATE_GENERATED_ADAPTER_CLASS_NAME_SUFFIX);
 	}
 
 	public String getJPAPersistenceAdapterClassName(TableModel table) {
