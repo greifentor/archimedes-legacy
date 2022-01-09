@@ -1,0 +1,35 @@
+package ${PackageName};
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
+import ${LocalizationSOPackageName}.${LocalizationSOClassName};
+import lombok.Getter;
+
+#if (!$CommentsOff )
+/**
+ * A Configuration for the file based resource manager.
+ *
+ * ${Generated}
+ */
+#end
+@Configuration
+@Getter
+public class FileBasedResourceManagerConfiguration {
+
+	@Value("${Dollar}{localization.resource.file.name.prefix:${AppResourcePrefix}}")
+	private String fileNamePrefix;
+
+	@Value("${Dollar}{localization.resource.file.name.de:}")
+	private String resourceFileNameDE;
+
+	public String getResourceFileName(${LocalizationSOClassName} localization) {
+		switch (localization) {
+		case DE:
+			return resourceFileNameDE;
+		default:
+			return "";
+		}
+	}
+
+}

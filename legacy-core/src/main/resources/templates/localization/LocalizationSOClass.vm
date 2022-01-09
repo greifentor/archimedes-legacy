@@ -1,0 +1,14 @@
+package ${PackageName};
+
+#if (!$CommentsOff )
+/**
+ * Identifiers for valid localizations.
+ *
+ * ${Generated}
+ */
+#end
+public enum ${ClassName} {
+
+	DE;
+
+}
