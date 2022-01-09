@@ -265,6 +265,130 @@ public class ServiceNameGeneratorTest {
 
 	}
 
+	@DisplayName("Tests for generated service interface names")
+	@Nested
+	class GeneratedServiceInterfaceNameTests {
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getGeneratedServiceInterfaceName(table);
+			});
+		}
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getGeneratedServiceInterfaceName(null));
+		}
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassTableModelWithNameCamelCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TestTableGeneratedService";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassTableModelWithNameUpperCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TableGeneratedService";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TableNameGeneratedService";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TableNameGeneratedService";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TableNameGeneratedService";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassTableModelWithNameLowerCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TableGeneratedService";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassTableModelNameSingleUpperCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TGeneratedService";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassTableModelNameSinglelowerCase_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "TGeneratedService";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedServiceInterfaceName_PassTableModelEmptyAsWithAlternateClassSuffix_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TablePort";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_INTERFACE_NAME_SUFFIX))
+					.thenReturn(
+							new Option(ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_INTERFACE_NAME_SUFFIX, "Port"));
+			// Run
+			String returned = unitUnderTest.getGeneratedServiceInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("Tests for IdModel class names")
 	@Nested
 	class IdModelClassNameTests {

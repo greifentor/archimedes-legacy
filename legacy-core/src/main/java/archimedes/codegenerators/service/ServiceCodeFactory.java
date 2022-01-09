@@ -30,6 +30,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 				.asList(
 						new ApplicationClassCodeGenerator(this),
 						new GeneratedServiceImplClassCodeGenerator(this),
+						new GeneratedServiceInterfaceCodeGenerator(this),
 						new ModelClassCodeGenerator(this),
 						new PageClassCodeGenerator(this),
 						new PageParametersClassCodeGenerator(this),

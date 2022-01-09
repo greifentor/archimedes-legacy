@@ -13,11 +13,11 @@ import archimedes.model.TableModel;
  *
  * @author ollie (05.07.2021)
  */
-public class ServiceInterfaceCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
+public class GeneratedServiceInterfaceCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
 
-	public ServiceInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
+	public GeneratedServiceInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"ServiceInterface.vm",
+				"GeneratedServiceInterface.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
 				new ServiceNameGenerator(),
 				new TypeGenerator(),
@@ -29,13 +29,19 @@ public class ServiceInterfaceCodeGenerator extends AbstractClassCodeGenerator<Se
 		context.put("ClassName", getClassName(table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("ContextName", getContextName(table));
-		context.put("GeneratedServiceInterfaceName", nameGenerator.getGeneratedServiceInterfaceName(table));
+		context.put("IdClassName", getIdClassName(table));
+		context.put("IdFieldName", nameGenerator.getAttributeName(getIdFieldNameCamelCase(table)));
+		context.put("ModelClassName", nameGenerator.getModelClassName(table));
+		context.put("ModelPackageName", nameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
+		context.put("PageClassName", nameGenerator.getPageClassName());
+		context.put("PagePackageName", nameGenerator.getPagePackageName(model, table));
+		context.put("PageParametersClassName", nameGenerator.getPageParametersClassName());
 	}
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getServiceInterfaceName(table);
+		return nameGenerator.getGeneratedServiceInterfaceName(table);
 	}
 
 	@Override
