@@ -49,8 +49,12 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 				.map(
 						column -> new ColumnData()
 								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false)))
+								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), isNullable(column))))
 				.collect(Collectors.toList());
+	}
+
+	private boolean isNullable(ColumnModel column) {
+		return !column.isNotNull();
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import archimedes.model.TableModel;
 public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extends AbstractCodeGenerator<N> {
 
 	public static final String ALTERNATE_MODULE_PREFIX = "ALTERNATE_MODULE_PREFIX";
-	public static final String AUTOINCREMENT = "AUTOINCREMENT";
+	public static final String AUTO_INCREMENT = "AUTO_INCREMENT";
 	public static final String COMMENTS = "COMMENTS";
 	public static final String CONTEXT_NAME = "CONTEXT_NAME";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
@@ -157,6 +157,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 								.orElse(POJOMode.CHAIN));
 	}
 
+	@Override
 	public String getPackageName(DataModel model, TableModel table) {
 		return getPackageName(model, table);
 	}

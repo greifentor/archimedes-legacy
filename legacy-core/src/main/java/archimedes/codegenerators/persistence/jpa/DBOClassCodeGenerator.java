@@ -78,8 +78,12 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 						column -> new ColumnData()
 								.setAnnotations(getAnnotations(column))
 								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false)))
+								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), isNullable(column))))
 				.collect(Collectors.toList());
+	}
+
+	private boolean isNullable(ColumnModel column) {
+		return !column.isNotNull();
 	}
 
 	private List<AnnotationData> getAnnotations(ColumnModel column) {
@@ -87,7 +91,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		if (column.isPrimaryKey()) {
 			annotations.add(new AnnotationData().setName("Id"));
 		}
-		OptionModel autoincrement = column.getOptionByName(AbstractClassCodeGenerator.AUTOINCREMENT);
+		OptionModel autoincrement = column.getOptionByName(AbstractClassCodeGenerator.AUTO_INCREMENT);
 		if (autoincrement != null) {
 			if (autoincrement.getParameter().equals("IDENTITY")) {
 				annotations

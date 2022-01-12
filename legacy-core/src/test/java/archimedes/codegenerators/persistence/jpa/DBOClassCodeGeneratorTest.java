@@ -84,7 +84,7 @@ public class DBOClassCodeGeneratorTest {
 					"\n" + //
 					"	@Id\n" + //
 					"	@Column(name = \"ID\")\n" + //
-					"	private long id;\n" + //
+					"	private Long id;\n" + //
 					"	@Column(name = \"ADate\")\n" + //
 					"	private LocalDate aDate;\n" + //
 					"	@Column(name = \"Description\"" + (descriptionNotNull ? ", nullable = false" : "") + ")\n" + //
@@ -212,7 +212,7 @@ public class DBOClassCodeGeneratorTest {
 						"	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = \"ATableSequence\")\n";
 			}
 			return s + "	@Column(name = \"ID\")\n" + //
-					"	private long id;\n" + //
+					"	private Long id;\n" + //
 					"	@Column(name = \"ADate\")\n" + //
 					"	private LocalDate aDate;\n" + //
 					"	@Column(name = \"Description\")\n" + //
@@ -235,7 +235,7 @@ public class DBOClassCodeGeneratorTest {
 			dataModel
 					.getTableByName("A_TABLE")
 					.getColumnByName("ID")
-					.addOption(new Option(AbstractClassCodeGenerator.AUTOINCREMENT, "IDENTITY"));
+					.addOption(new Option(AbstractClassCodeGenerator.AUTO_INCREMENT, "IDENTITY"));
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
@@ -255,7 +255,7 @@ public class DBOClassCodeGeneratorTest {
 			dataModel
 					.getTableByName("A_TABLE")
 					.getColumnByName("ID")
-					.addOption(new Option(AbstractClassCodeGenerator.AUTOINCREMENT, "SEQUENCE"));
+					.addOption(new Option(AbstractClassCodeGenerator.AUTO_INCREMENT, "SEQUENCE"));
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);

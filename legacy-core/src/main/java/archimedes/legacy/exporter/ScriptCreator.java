@@ -48,22 +48,33 @@ public abstract class ScriptCreator {
 									final Thread t = new Thread(() -> {
 										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 5);
 										try {
-											Diagramm d = (Diagramm) new JDBCImportManager()
-													.importDiagram(connectionData, mrpm::update);
+											Diagramm d =
+													(Diagramm) new JDBCImportManager()
+															.importDiagram(connectionData, mrpm::update);
 											mrpm.enableCloseButton();
 											if (d != null) {
 												DataModelToCMOConverter converter = new DataModelToCMOConverter();
-												DataModelComparator comparator = new DataModelComparator();
-												List<ChangeActionCRO> changeActions = comparator
-														.compare(
-																converter
+												LOG
+														.debug(
+																"model: " + converter
 																		.convert(
 																				diagramm,
 																				table -> table
 																						.getOptionByName(
-																								"NO_DB") != null),
-																converter.convert(d))
-														.getChangeActions();
+																								"NO_DB") != null));
+												LOG.debug("db:    " + converter.convert(d));
+												DataModelComparator comparator = new DataModelComparator();
+												List<ChangeActionCRO> changeActions =
+														comparator
+																.compare(
+																		converter
+																				.convert(
+																						diagramm,
+																						table -> table
+																								.getOptionByName(
+																										"NO_DB") != null),
+																		converter.convert(d))
+																.getChangeActions();
 												new FrameTextViewer(
 														new Vector<String>(
 																createScript(

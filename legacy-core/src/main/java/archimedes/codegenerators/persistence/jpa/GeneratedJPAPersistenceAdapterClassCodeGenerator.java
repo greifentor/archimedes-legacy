@@ -70,9 +70,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator extends AbstractCl
 		if (pks.length == 0) {
 			return "NO_KEY_FOUND";
 		}
-		return pks[0].isNotNull()
-				? "-1"
-				: "null";
+		return pks[0].isNotNull() ? "-1" : "null";
 	}
 
 	@Override

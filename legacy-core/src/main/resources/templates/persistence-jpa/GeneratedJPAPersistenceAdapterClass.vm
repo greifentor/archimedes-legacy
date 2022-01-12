@@ -32,32 +32,37 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 	protected ${JPARepositoryClassName} repository;
 
 	@Inject
-	private ${PageParametersToPageableConverterClassName} pageParametersToPageableConverter;
+	protected ${PageParametersToPageableConverterClassName} pageParametersToPageableConverter;
 
-	private PageConverter<${ModelClassName}, ${DBOClassName}> pageConverter;
+	protected PageConverter<${ModelClassName}, ${DBOClassName}> pageConverter;
 
 	@PostConstruct
 	public void postConstruct() {
 		pageConverter = new ${PageConverterClassName}<>(converter);
 	}
 
+	@Override
 	public ${ModelClassName} create(${ModelClassName} model) {
 		model.set${IdFieldNameCamelCase}(${NoKeyValue});
 		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
 	}
 
+	@Override
 	public ${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters) {
 		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));
 	}
 
+	@Override
 	public Optional<${ModelClassName}> findById(${IdClassName} ${IdFieldName}) {
 		return repository.findById(${IdFieldName}).map(dbo -> converter.${ToModelMethodName}(dbo));
 	}
 
+	@Override
 	public ${ModelClassName} update(${ModelClassName} model) {
 		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
 	}
 
+	@Override
 	public void delete(${ModelClassName} model) {
 		repository.deleteById(model.get${IdFieldNameCamelCase}());
 	}

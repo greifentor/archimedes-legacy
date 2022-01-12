@@ -62,6 +62,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					"				.setDescription(model.getDescription());\n" + //
 					"	}\n" + //
 					"\n" + //
+					"	@Override\n" + //
 					"	public ATable toModel(ATableDBO dbo) {\n" + //
 					"		if (dbo == null) {\n" + //
 					"			return null;\n" + //

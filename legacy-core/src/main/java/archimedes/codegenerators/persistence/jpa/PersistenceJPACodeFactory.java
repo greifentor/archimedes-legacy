@@ -61,7 +61,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 		switch (optionType) {
 			case COLUMN:
 				return new String[]{
-						AbstractClassCodeGenerator.AUTOINCREMENT,
+						AbstractClassCodeGenerator.AUTO_INCREMENT,
 						JPAPersistenceAdapterDependentClassCodeGenerator.DEPENDENT_ATTRIBUTE
 				};
 			case MODEL:

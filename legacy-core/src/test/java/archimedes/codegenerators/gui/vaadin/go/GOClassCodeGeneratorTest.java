@@ -199,7 +199,7 @@ class GOClassCodeGeneratorTest {
 			dataModel
 					.getTableByName("A_TABLE")
 					.getColumnByName("ID")
-					.addOption(new Option(AbstractClassCodeGenerator.AUTOINCREMENT, "IDENTITY"));
+					.addOption(new Option(AbstractClassCodeGenerator.AUTO_INCREMENT, "IDENTITY"));
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
@@ -219,7 +219,7 @@ class GOClassCodeGeneratorTest {
 			dataModel
 					.getTableByName("A_TABLE")
 					.getColumnByName("ID")
-					.addOption(new Option(AbstractClassCodeGenerator.AUTOINCREMENT, "SEQUENCE"));
+					.addOption(new Option(AbstractClassCodeGenerator.AUTO_INCREMENT, "SEQUENCE"));
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
