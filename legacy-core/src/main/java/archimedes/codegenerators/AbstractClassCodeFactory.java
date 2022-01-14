@@ -1,18 +1,19 @@
 package archimedes.codegenerators;
 
-import archimedes.acf.checker.ModelChecker;
-import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
-import archimedes.legacy.acf.event.CodeFactoryProgressionEvent;
-import archimedes.legacy.gui.Counter;
-import archimedes.model.TableModel;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import archimedes.acf.checker.ModelChecker;
+import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
+import archimedes.legacy.acf.event.CodeFactoryProgressionEvent;
+import archimedes.legacy.gui.Counter;
+import archimedes.model.TableModel;
 
 /**
  * A base class for class code factories.
@@ -21,7 +22,8 @@ import java.util.List;
  */
 public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 
-	public static final String GENERATE_ONLY_FOR = "GENERATE_ONLY_FOR";
+    public static final String NO_GENERATION = "NO_GENERATION";
+    public static final String GENERATE_ONLY_FOR = "GENERATE_ONLY_FOR";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeFactory.class);
 
@@ -113,7 +115,7 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 	}
 
 	protected boolean isInCodeGeneration(TableModel tableModel) {
-		return !tableModel.isOptionSet(GENERATE_ONLY_FOR);
+        return !tableModel.isOptionSet(GENERATE_ONLY_FOR) && !tableModel.isOptionSet(NO_GENERATION);
 	}
 
 	private boolean isReadyToOverride(String fileName) {

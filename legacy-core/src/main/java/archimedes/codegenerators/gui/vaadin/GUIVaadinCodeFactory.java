@@ -94,6 +94,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 				};
 			case TABLE:
 				return new String[]{
+                        AbstractClassCodeFactory.NO_GENERATION,
 						AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 						NameGenerator.MODULE,
 						AbstractClassCodeGenerator.POJO_MODE

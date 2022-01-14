@@ -62,7 +62,10 @@ public class TemporalDataCodeFactory extends AbstractClassCodeFactory implements
 	public String[] getSelectableOptions(OptionType optionType) {
 		switch (optionType) {
 		case TABLE:
-			return new String[] { AbstractClassCodeFactory.GENERATE_ONLY_FOR, TEMPORAL };
+            return new String[] {
+                    AbstractClassCodeFactory.NO_GENERATION,
+                    AbstractClassCodeFactory.GENERATE_ONLY_FOR,
+                    TEMPORAL };
 		default:
 			return new String[0];
 		}

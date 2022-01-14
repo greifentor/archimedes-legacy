@@ -94,6 +94,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 				return new String[]{
 						AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 						NameGenerator.MODULE,
+                        AbstractClassCodeFactory.NO_GENERATION,
 						AbstractClassCodeGenerator.POJO_MODE
 				};
 			default:

@@ -72,6 +72,7 @@ public class RESTControllerSpringBootCodeFactory extends AbstractClassCodeFactor
 		case TABLE:
 			return new String[] {
 					NameGenerator.MODULE,
+                    AbstractClassCodeFactory.NO_GENERATION,
 					NameGenerator.PLURAL_NAME,
 					RESTControllerNameGenerator.REST_URL_PREFIX };
 		default:

@@ -79,6 +79,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 			return new String[] {
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 					NameGenerator.MODULE,
+                    AbstractClassCodeFactory.NO_GENERATION,
 					AbstractClassCodeGenerator.POJO_MODE };
 		default:
 			return new String[0];
