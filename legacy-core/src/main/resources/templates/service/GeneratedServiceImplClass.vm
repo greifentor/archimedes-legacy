@@ -1,5 +1,6 @@
 package ${PackageName};
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -27,6 +28,11 @@ public abstract class ${ClassName} implements ${ServiceInterfaceName} {
 	@Override
 	public ${ModelClassName} create(${ModelClassName} model) {
 		return persistencePort.create(model);
+	}
+
+	@Override
+	public List<${ModelClassName}> findAll() {
+		return persistencePort.findAll();
 	}
 
 	@Override

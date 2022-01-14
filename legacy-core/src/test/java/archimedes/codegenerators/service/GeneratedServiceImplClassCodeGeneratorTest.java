@@ -44,7 +44,8 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 	private String createExpected(boolean suppressComment) {
 		String expected = "package " + BASE_PACKAGE_NAME + ".core.service.impl;\n" + //
 				"\n" + //
-				"import java.util.Optional;\n" + //
+                "import java.util.List;\n" + //
+                "import java.util.Optional;\n" + //
 				"\n" + //
 				"import javax.inject.Inject;\n" + //
 				"\n" + //
@@ -73,6 +74,11 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 				"\t\treturn persistencePort.create(model);\n" + //
 				"\t}\n" + //
 				"\n" + //
+                "\t@Override\n" + //
+                "\tpublic List<ATable> findAll() {\n" + //
+                "\t\treturn persistencePort.findAll();\n" + //
+                "\t}\n" + //
+                "\n" + //
 				"\t@Override\n" + //
 				"\tpublic Page<ATable> findAll(PageParameters pageParameters) {\n" + //
 				"\t\treturn persistencePort.findAll(pageParameters);\n" + //

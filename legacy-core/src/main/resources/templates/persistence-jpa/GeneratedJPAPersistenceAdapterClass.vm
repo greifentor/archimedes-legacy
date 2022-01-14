@@ -1,5 +1,6 @@
 package ${PackageName};
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -45,6 +46,11 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 	public ${ModelClassName} create(${ModelClassName} model) {
 		model.set${IdFieldNameCamelCase}(${NoKeyValue});
 		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
+	}
+
+	@Override
+	public List<${ModelClassName}> findAll() {
+		return pageConverter.convert(repository.findAll());
 	}
 
 	@Override

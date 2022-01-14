@@ -28,10 +28,18 @@ import baccara.gui.generics.EditorFrameEventType;
 public class JDBCImportManagerConfigurationDialog extends
 		AbstractEditorFrame<JDBCImportConnectionData, JFrame, EditorFrameEvent<JDBCImportConnectionData, JFrame>, String> {
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JDBCImportManagerConfigurationDialog(JDBCImportConnectionData object, GUIBundle guiBundle) {
+    public JDBCImportManagerConfigurationDialog(JDBCImportConnectionData object, GUIBundle guiBundle) {
+        this(object, guiBundle, null);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public JDBCImportManagerConfigurationDialog(JDBCImportConnectionData object, GUIBundle guiBundle, String alternativeTitle) {
 		super(object, "", guiBundle, new EditorFrameConfiguration(true, false, true));
-		this.setTitle(guiBundle.getResourceText(this.getMainResourceIdentifierPrefix() + ".title"));
+        this
+                .setTitle(
+                        alternativeTitle != null
+                                ? alternativeTitle
+                                : guiBundle.getResourceText(this.getMainResourceIdentifierPrefix() + ".title"));
 		((JComboBox) this.getEditorComponent(JDBCImportConnectionData.FIELD_ADJUSTMENT))
 				.setRenderer(new AdjustmentListCellRenderer(guiBundle));
 	}

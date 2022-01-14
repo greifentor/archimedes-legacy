@@ -44,7 +44,8 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 	private String createExpected(boolean suppressComment) {
 		String expected = "package " + BASE_PACKAGE_NAME + ".core.service;\n" + //
 				"\n" + //
-				"import java.util.Optional;\n" + //
+                "import java.util.List;\n" + //
+                "import java.util.Optional;\n" + //
 				"\n" + //
 				"import base.pack.age.name.core.model.Page;\n" + //
 				"import base.pack.age.name.core.model.PageParameters;\n" + //
@@ -63,8 +64,10 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 				"\n" + //
 				"\tATable create(ATable model);\n" + //
 				"\n" + //
-				"\tPage<ATable> findAll(PageParameters pageParameters);\n" + //
-				"\n" + //
+                "\tList<ATable> findAll();\n" + //
+                "\n" + //
+                "\tPage<ATable> findAll(PageParameters pageParameters);\n" + //
+                "\n" + //
 				"\tOptional<ATable> findById(Long id);\n" + //
 				"\n" + //
 				"\tATable update(ATable model);\n" + //

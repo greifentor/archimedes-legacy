@@ -1,5 +1,6 @@
 package ${PackageName};
 
+import java.util.List;
 import java.util.Optional;
 
 import ${PagePackageName}.${PageClassName};
@@ -18,6 +19,8 @@ import lombok.Generated;
 public interface ${ClassName} {
 
 	${ModelClassName} create(${ModelClassName} model);
+
+	List<${ModelClassName}> findAll();
 
 	${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters);
 

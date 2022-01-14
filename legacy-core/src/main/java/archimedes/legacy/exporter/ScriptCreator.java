@@ -36,7 +36,10 @@ public abstract class ScriptCreator {
 		JDBCImportConnectionData connectionData =
 				new JDBCImportConnectionData().setConnections(diagramm.getDatabaseConnections());
 		JDBCImportManagerConfigurationDialog connectionDialog =
-				new JDBCImportManagerConfigurationDialog(connectionData, guiBundle);
+                new JDBCImportManagerConfigurationDialog(
+                        connectionData,
+                        guiBundle,
+                        guiBundle.getResourceText("LiquibaseImportConfigurationDialog.title"));
 		connectionDialog.setVisible(true);
 		connectionDialog
 				.addEditorFrameListener(

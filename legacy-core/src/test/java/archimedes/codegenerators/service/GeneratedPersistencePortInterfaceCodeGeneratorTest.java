@@ -40,6 +40,7 @@ public class GeneratedPersistencePortInterfaceCodeGeneratorTest {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".core.service.port.persistence;\n" + //
 					"\n" + //
+			        "import java.util.List;\n" + //
 					"import java.util.Optional;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.Page;\n" + //
@@ -55,14 +56,16 @@ public class GeneratedPersistencePortInterfaceCodeGeneratorTest {
 					"@Generated\n" + //
 					"public interface ATableGeneratedPersistencePort {\n" + //
 					"\n" + //
-					"	ATable create(ATable model);\n" +
-					"\n" +
-					"	Page<ATable> findAll(PageParameters pageParameters);\n" +
-					"\n" +
-					"	Optional<ATable> findById(Long id);\n" +
-					"\n" +
-					"	ATable update(ATable model);\n" +
-					"\n" +
+			        "	ATable create(ATable model);\n" + //
+			        "\n" + //
+			        "	List<ATable> findAll();\n" + //
+			        "\n" + //
+			        "	Page<ATable> findAll(PageParameters pageParameters);\n" + //
+			        "\n" + //
+			        "	Optional<ATable> findById(Long id);\n" + //
+			        "\n" + //
+			        "	ATable update(ATable model);\n" + //
+			        "\n" + //
 					"	void delete(ATable model);\n" + //
 					"\n" + //
 					"}";
@@ -78,6 +81,7 @@ public class GeneratedPersistencePortInterfaceCodeGeneratorTest {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".core.service.port.persistence;\n" + //
 					"\n" + //
+			        "import java.util.List;\n" + //
 					"import java.util.Optional;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.Page;\n" + //
@@ -88,14 +92,16 @@ public class GeneratedPersistencePortInterfaceCodeGeneratorTest {
 					"@Generated\n" + //
 					"public interface ATableGeneratedPersistencePort {\n" + //
 					"\n" + //
-					"	ATable create(ATable model);\n" +
-					"\n" +
-					"	Page<ATable> findAll(PageParameters pageParameters);\n" +
-					"\n" +
-					"	Optional<ATable> findById(Long id);\n" +
-					"\n" +
-					"	ATable update(ATable model);\n" +
-					"\n" +
+			        "	ATable create(ATable model);\n" + //
+			        "\n" + //
+			        "	List<ATable> findAll();\n" + //
+			        "\n" + //
+			        "	Page<ATable> findAll(PageParameters pageParameters);\n" + //
+			        "\n" + //
+			        "	Optional<ATable> findById(Long id);\n" + //
+			        "\n" + //
+			        "	ATable update(ATable model);\n" + //
+			        "\n" + //
 					"	void delete(ATable model);\n" + //
 					"\n" + //
 					"}";
