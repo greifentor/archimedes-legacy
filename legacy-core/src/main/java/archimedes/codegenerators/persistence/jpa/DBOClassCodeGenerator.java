@@ -12,6 +12,7 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.Columns.ParameterData;
+import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -36,7 +37,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		List<ColumnData> columnData = getColumnData(table.getColumns());
+		List<ColumnData> columnData = getColumnData(table.getColumns(), getReferenceMode(model, table));
 		commonImportAdder.addCommonImports(context, columnData);
 		context.put("Autoincrement", getAutoincrementMode(columnData));
 		context.put("ClassName", getClassName(table));
@@ -70,23 +71,30 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 				.orElse(null);
 	}
 
-	private List<ColumnData> getColumnData(ColumnModel[] columns) {
+	private List<ColumnData> getColumnData(ColumnModel[] columns, ReferenceMode referenceMode) {
 		return Arrays
 				.asList(columns)
 				.stream()
 				.map(
 						column -> new ColumnData()
-								.setAnnotations(getAnnotations(column))
+								.setAnnotations(getAnnotations(column, referenceMode))
 								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), isNullable(column))))
+								.setFieldType(getType(column, referenceMode)))
 				.collect(Collectors.toList());
+	}
+
+	private String getType(ColumnModel column, ReferenceMode referenceMode) {
+		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
+			return nameGenerator.getDBOClassName(column.getReferencedTable());
+		}
+		return typeGenerator.getJavaTypeString(column.getDomain(), isNullable(column));
 	}
 
 	private boolean isNullable(ColumnModel column) {
 		return !column.isNotNull();
 	}
 
-	private List<AnnotationData> getAnnotations(ColumnModel column) {
+	private List<AnnotationData> getAnnotations(ColumnModel column, ReferenceMode referenceMode) {
 		List<AnnotationData> annotations = new ArrayList<>();
 		if (column.isPrimaryKey()) {
 			annotations.add(new AnnotationData().setName("Id"));
@@ -141,7 +149,25 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 																				"\"" + sequenceGeneratorName + "\""))));
 			}
 		}
-		annotations.add(new AnnotationData().setName("Column").setParameters(getColumnAnnotationParameters(column)));
+		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
+			AnnotationData annotationData =
+					new AnnotationData().setName("JoinColumn").setParameters(getColumnAnnotationParameters(column));
+			annotationData
+					.addParameter(
+							new ParameterData()
+									.setName("referencedColumnName")
+									.setValue("\"" + column.getReferencedColumn().getName() + "\""));
+			annotations.add(annotationData);
+			annotationData =
+					new AnnotationData()
+							.setName("OneToOne")
+							.addParameter(new ParameterData().setName("fetch").setValue("FetchType.EAGER"))
+							.addParameter(new ParameterData().setName("optional").setValue("false"));
+			annotations.add(annotationData);
+		} else {
+			annotations
+					.add(new AnnotationData().setName("Column").setParameters(getColumnAnnotationParameters(column)));
+		}
 		return annotations;
 	}
 

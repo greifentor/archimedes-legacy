@@ -30,6 +30,11 @@ public class Columns {
 		private String name;
 		private List<ParameterData> parameters = new ArrayList<>();
 
+		public AnnotationData addParameter(ParameterData parameterData) {
+			parameters.add(parameterData);
+			return this;
+		}
+
 		public String toJavaCode() {
 			String s = "@" + getName();
 			if (!getParameters().isEmpty()) {

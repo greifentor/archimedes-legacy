@@ -51,7 +51,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 							"\n" + //
-			                "import java.util.List;\n" + //
+							"import java.util.List;\n" + //
 							"import java.util.Optional;\n" + //
 							"\n" + //
 							"import javax.annotation.PostConstruct;\n" + //
@@ -100,13 +100,14 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
-			        "	public List<ATable> findAll() {\n" + //
-			        "		return pageConverter.convert(repository.findAll());\n" + //
-			        "	}\n" + //
-			        "\n" + //
-			        "	@Override\n" + //
+					"	public List<ATable> findAll() {\n" + //
+					"		return converter.toModel(repository.findAll());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
 					"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
-					"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n" + //
+					"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n"
+					+ //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //

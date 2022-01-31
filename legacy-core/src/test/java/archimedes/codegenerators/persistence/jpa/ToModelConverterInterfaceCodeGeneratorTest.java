@@ -1,5 +1,13 @@
 package archimedes.codegenerators.persistence.jpa;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
@@ -7,13 +15,6 @@ import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class ToModelConverterInterfaceCodeGeneratorTest {
@@ -45,6 +46,8 @@ class ToModelConverterInterfaceCodeGeneratorTest {
 		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
+							"\n" + //
+							"import java.util.List;\n" + //
 							"\n";
 			if (!suppressComment) {
 				s += "/**\n" + //
@@ -60,6 +63,8 @@ class ToModelConverterInterfaceCodeGeneratorTest {
 			s += "public interface ToModelConverter<MODEL, DBO> {\n" + //
 					"\n" + //
 					"	MODEL toModel(DBO dbo);\n" + //
+					"\n" + //
+					"	List<MODEL> toModel(List<DBO> dbos);\n" + //
 					"\n" + //
 					"}";
 			return s;

@@ -20,6 +20,7 @@ import ${ModelClassNameQualified};
 @Named
 public class ${ClassName} implements ToGOConverter<${GOClassName}, ${ModelClassName}> {
 
+	@Override
 	public ${GOClassName} ${ToGOMethodName}(${ModelClassName} model) {
 		if (model == null) {
 			return null;

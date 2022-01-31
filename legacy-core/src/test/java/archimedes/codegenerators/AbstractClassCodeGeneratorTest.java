@@ -1,8 +1,12 @@
 package archimedes.codegenerators;
 
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import archimedes.scheme.Option;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,12 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 
 @ExtendWith(MockitoExtension.class)
 public class AbstractClassCodeGeneratorTest {
@@ -119,6 +120,79 @@ public class AbstractClassCodeGeneratorTest {
 			when(table.getOptionByName(AbstractClassCodeGenerator.POJO_MODE)).thenReturn(optionTable);
 			// Run
 			POJOMode returned = unitUnderTest.getPOJOMode(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class TestOfMethod_getReferenceMode_DataModel_TableModel {
+
+		@Test
+		void passDataModelAsNullValue_throwsAnException() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.getReferenceMode(null, table));
+		}
+
+		@Test
+		void passTableModelAsNullValue_throwsAnException() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.getReferenceMode(model, null));
+		}
+
+		@Test
+		void passTableModelAndDataModelWithoutOption_ReturnsModeID() {
+			// Prepare
+			ReferenceMode expected = ReferenceMode.ID;
+			// Run
+			ReferenceMode returned = unitUnderTest.getReferenceMode(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void passTableModelAndDataModel_ModeIsSetInDataModelOnly_ReturnsModeOBJECT() {
+			// Prepare
+			ReferenceMode expected = ReferenceMode.OBJECT;
+			Option option =
+					new Option(
+							AbstractClassCodeGenerator.REFERENCE_MODE,
+							AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT);
+			when(model.getOptionByName(AbstractClassCodeGenerator.REFERENCE_MODE)).thenReturn(option);
+			// Run
+			ReferenceMode returned = unitUnderTest.getReferenceMode(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void passTableModelAndDataModel_ModeIsSetInTableModelOnly_ReturnsModeOBJECT() {
+			// Prepare
+			ReferenceMode expected = ReferenceMode.OBJECT;
+			Option option =
+					new Option(
+							AbstractClassCodeGenerator.REFERENCE_MODE,
+							AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT);
+			when(table.getOptionByName(AbstractClassCodeGenerator.REFERENCE_MODE)).thenReturn(option);
+			// Run
+			ReferenceMode returned = unitUnderTest.getReferenceMode(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void passTableModelAndDataModel_ModeIsSetDifferentInModelAndTable_ReturnsTableSetting() {
+			// Prepare
+			ReferenceMode expected = ReferenceMode.OBJECT;
+			Option optionModel =
+					new Option(AbstractClassCodeGenerator.REFERENCE_MODE, AbstractClassCodeGenerator.REFERENCE_MODE_ID);
+			Option optionTable =
+					new Option(
+							AbstractClassCodeGenerator.REFERENCE_MODE,
+							AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT);
+			when(model.getOptionByName(AbstractClassCodeGenerator.REFERENCE_MODE)).thenReturn(optionModel);
+			when(table.getOptionByName(AbstractClassCodeGenerator.REFERENCE_MODE)).thenReturn(optionTable);
+			// Run
+			ReferenceMode returned = unitUnderTest.getReferenceMode(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}

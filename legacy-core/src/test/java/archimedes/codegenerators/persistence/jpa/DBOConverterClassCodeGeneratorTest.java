@@ -34,6 +34,9 @@ public class DBOConverterClassCodeGeneratorTest {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".persistence.converter;\n" + //
 					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.stream.Collectors;\n" + //
+					"\n" + //
 					"import javax.inject.Named;\n" + //
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
@@ -71,6 +74,14 @@ public class DBOConverterClassCodeGeneratorTest {
 					"				.setId(dbo.getId())\n" + //
 					"				.setADate(dbo.getADate())\n" + //
 					"				.setDescription(dbo.getDescription());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public List<ATable> toModel(List<ATableDBO> dbos) {\n" + //
+					"		if (dbos == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"}";

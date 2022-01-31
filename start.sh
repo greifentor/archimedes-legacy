@@ -11,7 +11,7 @@ CP=$CP:$LIB/baccaraacf.jar
 CP=$CP:$LIB/commons-lang3-3.1.jar
 CP=$CP:$LIB/log4j-1.2.13.jar
 
-FILE=./archimedes-legacy-additions.sh
+FILE=../archimedes-legacy-additions/archimedes-legacy-additions.sh
 
 DEBUG_OPTIONS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n"
 
