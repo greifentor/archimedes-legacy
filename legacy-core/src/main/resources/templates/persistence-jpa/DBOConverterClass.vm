@@ -10,7 +10,7 @@ import ${ImportLocalDate};
 
 #end
 import lombok.Generated;
-#if (${ReferenceMode} == "OBJECT")
+#if (${ReferenceMode} == "OBJECT" && ${HasReferences})
 import lombok.RequiredArgsConstructor;
 #end
 

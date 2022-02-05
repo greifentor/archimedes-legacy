@@ -224,6 +224,11 @@ public class DBOConverterClassCodeGeneratorTest {
 					"\n" + //
 					"}";
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
+			dataModel
+					.addOption(
+							new Option(
+									AbstractClassCodeGenerator.REFERENCE_MODE,
+									AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT));
 			TableModel table = dataModel.getTableByName("ANOTHER_TABLE");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
