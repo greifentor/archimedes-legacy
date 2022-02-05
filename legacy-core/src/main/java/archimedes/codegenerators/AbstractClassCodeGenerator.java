@@ -5,9 +5,11 @@ import static corentx.util.Checks.ensure;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.velocity.VelocityContext;
 
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -31,6 +33,9 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String POJO_MODE = "POJO_MODE";
 	public static final String POJO_MODE_BUILDER = "BUILDER";
 	public static final String POJO_MODE_CHAIN = "CHAIN";
+	public static final String REFERENCE_MODE = "REFERENCE_MODE";
+	public static final String REFERENCE_MODE_ID = "ID";
+	public static final String REFERENCE_MODE_OBJECT = "OBJECT";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
@@ -62,6 +67,10 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 						.getProperty(
 								PROPERTY_PREFIX + getClass().getSimpleName() + ".base.code.folder.name",
 								System.getProperty(PROPERTY_PREFIX + "base.code.folder.name", "src/main/java"));
+	}
+	
+	protected boolean hasReferences(ColumnModel[] columns) {
+		return List.of(columns).stream().anyMatch(column -> column.getReferencedTable() != null);
 	}
 
 	private boolean isModuleModeSet(DataModel dataModel) {
@@ -122,7 +131,11 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected String getGetterName(ColumnModel column) {
-		return "get" + getAttributeNameFirstLetterUpperCase(column);
+		VelocityContext context = new VelocityContext();
+		context.put("FieldName", getAttributeNameFirstLetterUpperCase(column));
+		context.put("NotNull", column.isNotNull());
+		context.put("BooleanType", "boolean".equalsIgnoreCase(column.getDomain().getName()));
+		return processTemplate(context, "JavaGetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
 	}
 
 	private String getAttributeNameFirstLetterUpperCase(ColumnModel column) {
@@ -132,7 +145,11 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected String getSetterName(ColumnModel column) {
-		return "set" + getAttributeNameFirstLetterUpperCase(column);
+		VelocityContext context = new VelocityContext();
+		context.put("FieldName", getAttributeNameFirstLetterUpperCase(column));
+		context.put("NotNull", column.isNotNull());
+		context.put("BooleanType", "boolean".equalsIgnoreCase(column.getDomain().getName()));
+		return processTemplate(context, "JavaSetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
 	}
 
 	protected String getQualifiedName(String packageName, String className) {
@@ -188,6 +205,19 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 				.findFirst()
 				.map(column -> typeGenerator.getJavaTypeString(column.getDomain(), true))
 				.orElse("UNKNOWN");
+	}
+
+	protected ReferenceMode getReferenceMode(DataModel model, TableModel table) {
+		ensure(model != null, "data model cannot be null.");
+		ensure(table != null, "table model cannot be null.");
+		return OptionGetter
+				.getOptionByName(table, REFERENCE_MODE)
+				.map(option -> ReferenceMode.valueOf(option.getParameter()))
+				.orElse(
+						OptionGetter
+								.getOptionByName(model, REFERENCE_MODE)
+								.map(option -> ReferenceMode.valueOf(option.getParameter()))
+								.orElse(ReferenceMode.ID));
 	}
 
 }

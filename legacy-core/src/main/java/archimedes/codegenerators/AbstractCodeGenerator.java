@@ -65,6 +65,10 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 	}
 
 	protected String processTemplate(VelocityContext context, String templateFileName) {
+		return processTemplate(context, templateFileName, templatePathName);
+	}
+
+	protected String processTemplate(VelocityContext context, String templateFileName, String templatePathName) {
 		Velocity.init();
 		VelocityEngine velocityEngine = new VelocityEngine();
 		velocityEngine.setProperty("resource.loaders", "file");

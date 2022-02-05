@@ -1,5 +1,7 @@
 package ${PackageName};
 
+import java.util.List;
+
 #if (!$CommentsOff )
 /**
  * An interface for converter which are able to convert DBO to model objects.
@@ -13,5 +15,7 @@ package ${PackageName};
 public interface ${ClassName}<MODEL, DBO> {
 
 	MODEL toModel(DBO dbo);
+
+	List<MODEL> toModel(List<DBO> dbos);
 
 }

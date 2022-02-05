@@ -11,13 +11,6 @@ import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
-import archimedes.codegenerators.gui.vaadin.converter.GOConverterClassCodeGenerator;
-import archimedes.codegenerators.gui.vaadin.converter.PageGOConverterClassCodeGenerator;
-import archimedes.codegenerators.gui.vaadin.converter.PageParametersGOConverterClassCodeGenerator;
-import archimedes.codegenerators.gui.vaadin.converter.ToGOConverterInterfaceCodeGenerator;
-import archimedes.codegenerators.gui.vaadin.go.GOClassCodeGenerator;
-import archimedes.codegenerators.gui.vaadin.go.converter.PageGOClassCodeGenerator;
-import archimedes.codegenerators.gui.vaadin.go.converter.PageParametersGOClassCodeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
@@ -39,15 +32,16 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 	protected List<CodeGenerator> getCodeGenerators() {
 		return Arrays.asList(
 				new ButtonClassCodeGenerator(this),
-				new GOClassCodeGenerator(this),
-				new GOConverterClassCodeGenerator(this),
+				// new GOClassCodeGenerator(this),
+				// new GOConverterClassCodeGenerator(this),
 				new ImageClassCodeGenerator(this),
-				new PageGOClassCodeGenerator(this),
-				new PageParametersGOClassCodeGenerator(this),
-				new PageParametersGOConverterClassCodeGenerator(this),
-				new PageGOConverterClassCodeGenerator(this),
-				new TextFieldClassCodeGenerator(this),
-				new ToGOConverterInterfaceCodeGenerator(this));
+				// new PageGOClassCodeGenerator(this),
+				// new PageParametersGOClassCodeGenerator(this),
+				// new PageParametersGOConverterClassCodeGenerator(this),
+				// new PageGOConverterClassCodeGenerator(this),
+				new TextFieldClassCodeGenerator(this)
+		// new ToGOConverterInterfaceCodeGenerator(this)
+		);
 	}
 
 	@Override
