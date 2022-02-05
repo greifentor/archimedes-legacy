@@ -35,10 +35,10 @@ Creates a prefix for the output files with the module name of the code generator
 
 Allow to choose the method of reference processing:
 
-* **ID**: No object references will be generated in the DBO's. They will be represented as fields of the column type.
-These method keep the foreign keys away from the DBO logic.
-* **OBJECT**: References are represented by object references with the necessary JPA annotations. This will also take an
-effect to the generated converters.
+* **ID**: No object references will be generated in the model classes. They will be represented as fields of the column
+type. These method keep the foreign keys away from the model logic.
+* **OBJECT**: References are represented by object references. This will also take an effect to the generated 
+converters.
 
 
 ### Table
