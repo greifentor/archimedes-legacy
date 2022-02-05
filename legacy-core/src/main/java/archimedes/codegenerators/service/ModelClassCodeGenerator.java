@@ -9,6 +9,7 @@ import org.apache.velocity.VelocityContext;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
+import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -32,25 +33,33 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		List<ColumnData> columnData = getColumnData(table.getColumns());
+		List<ColumnData> columnData = getColumnData(table.getColumns(), getReferenceMode(model, table));
 		commonImportAdder.addCommonImports(context, columnData);
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
+		context.put("ReferenceMode", getReferenceMode(model, table).name());
 		context.put("TableName", table.getName());
 	}
 
-	private List<ColumnData> getColumnData(ColumnModel[] columns) {
+	private List<ColumnData> getColumnData(ColumnModel[] columns, ReferenceMode referenceMode) {
 		return Arrays
 				.asList(columns)
 				.stream()
 				.map(
 						column -> new ColumnData()
 								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), isNullable(column))))
+								.setFieldType(getType(column, referenceMode)))
 				.collect(Collectors.toList());
+	}
+
+	private String getType(ColumnModel column, ReferenceMode referenceMode) {
+		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
+			return nameGenerator.getModelClassName(column.getReferencedTable());
+		}
+		return typeGenerator.getJavaTypeString(column.getDomain(), isNullable(column));
 	}
 
 	private boolean isNullable(ColumnModel column) {

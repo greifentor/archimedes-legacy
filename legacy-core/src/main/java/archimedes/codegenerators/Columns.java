@@ -30,6 +30,11 @@ public class Columns {
 		private String name;
 		private List<ParameterData> parameters = new ArrayList<>();
 
+		public AnnotationData addParameter(ParameterData parameterData) {
+			parameters.add(parameterData);
+			return this;
+		}
+
 		public String toJavaCode() {
 			String s = "@" + getName();
 			if (!getParameters().isEmpty()) {
@@ -47,6 +52,7 @@ public class Columns {
 	@Data
 	public static class ColumnData {
 		private List<AnnotationData> annotations = new ArrayList<>();
+		private String converterAttributeName;
 		private String descriptionName;
 		private String enumIdentifier;
 		private String fieldName;
@@ -54,6 +60,7 @@ public class Columns {
 		private String getterCall;
 		private String getterName;
 		private boolean pkMember;
+		private boolean reference;
 		private String setterName;
 		private String simpleName;
 	}

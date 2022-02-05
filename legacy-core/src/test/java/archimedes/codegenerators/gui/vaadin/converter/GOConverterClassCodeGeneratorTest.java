@@ -52,6 +52,7 @@ public class GOConverterClassCodeGeneratorTest {
 					"@Named\n" + //
 					"public class ATableGOConverter implements ToGOConverter<ATableGO, ATable> {\n" + //
 					"\n" + //
+					"	@Override\n" + //
 					"	public ATableGO toGO(ATable model) {\n" + //
 					"		if (model == null) {\n" + //
 					"			return null;\n" + //
@@ -76,6 +77,105 @@ public class GOConverterClassCodeGeneratorTest {
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithSimpleBoolean() {
+			// Prepare
+			String expected = "package " + BASE_PACKAGE_NAME + ".gui.vaadin.converter;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
+					"\n" + //
+					"import " + BASE_PACKAGE_NAME + ".gui.vaadin.go.AnotherTableGO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".core.model.AnotherTable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A GO converter for another_tables.\n" + //
+					" *\n" + //
+					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"public class AnotherTableGOConverter implements ToGOConverter<AnotherTableGO, AnotherTable> {\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public AnotherTableGO toGO(AnotherTable model) {\n" + //
+					"		if (model == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new AnotherTableGO()\n" + //
+					"				.setId(model.getId())\n" + //
+					"				.setValid(model.isValid());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public AnotherTable toModel(AnotherTableGO go) {\n" + //
+					"		if (go == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new AnotherTable()\n" + //
+					"				.setId(go.getId())\n" + //
+					"				.setValid(go.isValid());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel.getTableByName("ANOTHER_TABLE").getColumnByName("VALID").setNotNull(true);
+			// Run
+			String returned =
+					unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("ANOTHER_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithBoolean() {
+			// Prepare
+			String expected = "package " + BASE_PACKAGE_NAME + ".gui.vaadin.converter;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
+					"\n" + //
+					"import " + BASE_PACKAGE_NAME + ".gui.vaadin.go.AnotherTableGO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".core.model.AnotherTable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A GO converter for another_tables.\n" + //
+					" *\n" + //
+					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"public class AnotherTableGOConverter implements ToGOConverter<AnotherTableGO, AnotherTable> {\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public AnotherTableGO toGO(AnotherTable model) {\n" + //
+					"		if (model == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new AnotherTableGO()\n" + //
+					"				.setId(model.getId())\n" + //
+					"				.setValid(model.getValid());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public AnotherTable toModel(AnotherTableGO go) {\n" + //
+					"		if (go == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new AnotherTable()\n" + //
+					"				.setId(go.getId())\n" + //
+					"				.setValid(go.getValid());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model.xml");
+			// Run
+			String returned =
+					unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("ANOTHER_TABLE"));
 			// Check
 			assertEquals(expected, returned);
 		}

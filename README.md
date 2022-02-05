@@ -48,6 +48,14 @@ into the file.
 This working with Window only in the moment.
 
 
+## Specials
+
+### mySQL and mariaDB
+
+Working with ```mySQL``` or ```mariaDB``` requires to set the SCHEMA_NAME and to fill the 'Schema Name' field with
+the same name in all dialogs which act with the database.
+
+
 ## News
 
 Will be provided since version 2.1.1 is released.

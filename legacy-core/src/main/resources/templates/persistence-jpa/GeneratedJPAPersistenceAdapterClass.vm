@@ -50,7 +50,7 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 
 	@Override
 	public List<${ModelClassName}> findAll() {
-		return pageConverter.convert(repository.findAll());
+		return converter.${ToModelMethodName}(repository.findAll());
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.nio.file.Path;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,7 @@ public class GUIVaadinCodeFactoryTest {
 		return reader.read("src/test/resources/dm/codegenerators/" + fileName);
 	}
 
+	@Disabled("OLI: Those classes will currently not used. So the generators has been disabled.")
 	@Nested
 	class TestsOfMethod_generate_String {
 
