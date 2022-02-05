@@ -11,11 +11,18 @@ import ${ImportLocalDateTime};
 #end
 import javax.persistence.Column;
 import javax.persistence.Entity;
+#if ($ReferenceMode == "OBJECT" && ${HasReferences})
+import javax.persistence.FetchType;
+#end
 #if ($Autoincrement)
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 #end
 import javax.persistence.Id;
+#if ($ReferenceMode == "OBJECT" && ${HasReferences})
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+#end
 #if ($Autoincrement and ${Autoincrement.contains("SEQUENCE")})
 import javax.persistence.SequenceGenerator;
 #end

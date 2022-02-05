@@ -50,11 +50,11 @@ class ModelClassCodeGeneratorTest {
 		}
 
 		private String getExpected(String prefix, String packageName, boolean suppressComment) {
-			return getExpected(prefix, packageName, suppressComment, false);
+			return getExpected(prefix, packageName, suppressComment, false, false);
 		}
 
 		private String getExpected(String prefix, String packageName, boolean suppressComment,
-				boolean descriptionNotNull) {
+				boolean descriptionNotNull, boolean refMode) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 							"\n" + //
@@ -142,7 +142,7 @@ class ModelClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectWithNotNullField() {
 			// Prepare
-			String expected = getExpected(null, "core.model", false, true);
+			String expected = getExpected(null, "core.model", false, true, false);
 			DataModel dataModel = readDataModel("Model.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			table.getColumnByName("Description").setNotNull(true);

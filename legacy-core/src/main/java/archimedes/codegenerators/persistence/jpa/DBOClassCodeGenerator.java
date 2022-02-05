@@ -44,8 +44,10 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		context.put("ColumnData", columnData);
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("EntityName", nameGenerator.getClassName(table));
+		context.put("HasReferences", hasReferences(table.getColumns()));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
+		context.put("ReferenceMode", getReferenceMode(model, table).name());
 		context.put("TableName", table.getName());
 	}
 

@@ -5,6 +5,7 @@ import static corentx.util.Checks.ensure;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -66,6 +67,10 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 						.getProperty(
 								PROPERTY_PREFIX + getClass().getSimpleName() + ".base.code.folder.name",
 								System.getProperty(PROPERTY_PREFIX + "base.code.folder.name", "src/main/java"));
+	}
+	
+	protected boolean hasReferences(ColumnModel[] columns) {
+		return List.of(columns).stream().anyMatch(column -> column.getReferencedTable() != null);
 	}
 
 	private boolean isModuleModeSet(DataModel dataModel) {

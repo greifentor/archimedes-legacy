@@ -1,4 +1,4 @@
-package archimedes.codegenerators.persistence.jpa;
+package archimedes.codegenerators.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.NameGenerator;
+import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -18,12 +19,12 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class DBOClassCodeGeneratorWithReferenceTest {
+class ModelClassCodeGeneratorWithReferenceTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
-	private DBOClassCodeGenerator unitUnderTest;
+	private ModelClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -36,7 +37,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = getExpected("persistence.entity");
+			String expected = getExpected("core.model");
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
@@ -57,26 +58,13 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 							"\n" + //
-							"import javax.persistence.Column;\n" + //
-							"import javax.persistence.Entity;\n";
-			if (refMode) {
-				s += "import javax.persistence.FetchType;\n";
-			}
-			s += "import javax.persistence.Id;\n";
-			if (refMode) {
-				s +=
-							"import javax.persistence.JoinColumn;\n" + //
-								"import javax.persistence.OneToOne;\n";
-			}
-			s += "import javax.persistence.Table;\n" + //
-							"\n" + //
 							"import lombok.Data;\n" + //
 							"import lombok.Generated;\n" + //
 							"import lombok.experimental.Accessors;\n" + //
 							"\n";
 			if (!suppressComment) {
 				s += "/**\n" + //
-						" * A DBO for a_tables.\n" + //
+						" * A model for a_tables.\n" + //
 						" *\n" + //
 						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 						" */\n";
@@ -84,21 +72,13 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 			s += "@Accessors(chain = true)\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
-					"@Entity(name = \"ATable\")\n" + //
-					"@Table(name = \"A_TABLE\")\n" + //
-					"public class ATableDBO {\n" + //
+					"public class ATable {\n" + //
 					"\n" + //
-					"	@Id\n" + //
-					"	@Column(name = \"ID\")\n" + //
 					"	private Long id;\n";
-			if (!refMode) {
-				s += "	@Column(name = \"REF\"" + (refNotNull ? ", nullable = false" : "") + ")\n" + //
-						"	private " + (refNotNull ? "long" : "Long") + " ref;\n";
+			if (refMode) {
+				s += "	private AnotherTable ref;\n";
 			} else {
-				s += "	@JoinColumn(name = \"REF\"" + //
-						(refNotNull ? ", nullable = false" : "") + ", referencedColumnName = \"ID\")\n" + //
-						"	@OneToOne(fetch = FetchType.EAGER, optional = false)\n" + //
-						"	private AnotherTableDBO ref;\n";
+				s += "	private " + (refNotNull ? "long" : "Long") + " ref;\n";
 			}
 			s += "\n" + //
 					"}";
@@ -111,11 +91,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 			String alternatePackageName = "alternate.name";
 			String expected = getExpected(alternatePackageName);
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
-			dataModel
-					.addOption(
-							new Option(
-									PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
-									alternatePackageName));
+			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME, alternatePackageName));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
@@ -126,7 +102,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 		void happyRunForASimpleObjectAndTechnicalPackageName() {
 			// Prepare
 			String technicalContextName = "technical";
-			String expected = getExpected(technicalContextName + ".persistence.entity");
+			String expected = getExpected(technicalContextName + ".core.model");
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			dataModel
 					.getTableByName("A_TABLE")
@@ -141,7 +117,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 		void happyRunForASimpleObjectWithModuleForTable() {
 			// Prepare
 			String prefix = "prefix";
-			String expected = getExpected(prefix, "persistence.entity", false);
+			String expected = getExpected(prefix, "core.model", false);
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			table.addOption(new Option(PersistenceJPANameGenerator.MODULE, prefix));
@@ -154,7 +130,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 		@Test
 		void happyRunForASimpleObjectWithSuppressedComment() {
 			// Prepare
-			String expected = getExpected(null, "persistence.entity", true);
+			String expected = getExpected(null, "core.model", true);
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
@@ -167,7 +143,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 		@Test
 		void happyRunForASimpleObjectWithNotNullField() {
 			// Prepare
-			String expected = getExpected(null, "persistence.entity", false, true, false);
+			String expected = getExpected(null, "core.model", false, true, false);
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			table.getColumnByName("REF").setNotNull(true);
@@ -180,7 +156,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 		@Test
 		void happyRunForASimpleObjectWithAReferenceField() {
 			// Prepare
-			String expected = getExpected(null, "persistence.entity", false, true, true);
+			String expected = getExpected(null, "core.model", false, true, true);
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			dataModel
 					.addOption(
@@ -195,66 +171,8 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 			assertEquals(expected, returned);
 		}
 
-		@Test
-		void happyRunForASimpleObjectWithNoReferenceField() {
-			// Prepare
-			String expected = "package base.pack.age.name.persistence.entity;\n" + //
-					"\n" + //
-					"import javax.persistence.Column;\n" + //
-					"import javax.persistence.Entity;\n" + //
-					"import javax.persistence.Id;\n" + //
-					"import javax.persistence.Table;\n" + //
-					"\n" + //
-					"import lombok.Data;\n" + //
-					"import lombok.Generated;\n" + //
-					"import lombok.experimental.Accessors;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A DBO for another_tables.\n" + //
-					" *\n" + //
-					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-					" */\n" + //
-					"@Accessors(chain = true)\n" + //
-					"@Data\n" + //
-					"@Generated\n" + //
-					"@Entity(name = \"AnotherTable\")\n" + //
-					"@Table(name = \"ANOTHER_TABLE\")\n" + //
-					"public class AnotherTableDBO {\n" + //
-					"\n" + //
-					"	@Id\n" + //
-					"	@Column(name = \"ID\", nullable = false)\n" + //
-					"	private long id;\n" + //
-					"	@Column(name = \"NAME\")\n" + //
-					"	private String name;\n" + //
-					"\n" + //
-					"}";
-			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
-			dataModel
-					.addOption(
-							new Option(
-									AbstractClassCodeGenerator.REFERENCE_MODE,
-									AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT));
-			TableModel table = dataModel.getTableByName("ANOTHER_TABLE");
-			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
 		private String getExpectedPOJOModeBuilder(String packageName, String generatedValue) {
-			String s = "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
-					"\n" + //
-					"import javax.persistence.Column;\n" + //
-					"import javax.persistence.Entity;\n";
-			if (!generatedValue.equals("")) {
-				s += "import javax.persistence.GeneratedValue;\n" + //
-						"import javax.persistence.GenerationType;\n";
-			}
-			s += "import javax.persistence.Id;\n";
-			if (generatedValue.contains("SEQUENCE")) {
-				s += "import javax.persistence.SequenceGenerator;\n";
-			}
-			s += "import javax.persistence.Table;\n" + //
+			return "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
 					"\n" + //
 					"import lombok.AllArgsConstructor;\n" + //
 					"import lombok.Builder;\n" + //
@@ -263,7 +181,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 					"import lombok.Generated;\n" + //
 					"\n" + //
 					"/**\n" + //
-					" * A DBO for a_tables.\n" + //
+					" * A model for a_tables.\n" + //
 					" *\n" + //
 					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 					" */\n" + //
@@ -272,22 +190,9 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 					"@NoArgsConstructor\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
-					"@Entity(name = \"ATable\")\n" + //
-					"@Table(name = \"A_TABLE\")\n" + //
-					"public class ATableDBO {\n" + //
+					"public class ATable {\n" + //
 					"\n" + //
-					"	@Id\n";
-			if (generatedValue.equals("IDENTITY")) {
-				s += "	@GeneratedValue(strategy = GenerationType.IDENTITY)\n";
-			} else if (generatedValue.equals("SEQUENCE")) {
-				s +=
-						"	@SequenceGenerator(allocationSize = 1, name = \"ATableSequence\", sequenceName = \"a_table_id_seq\")\n"
-								+ //
-								"	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = \"ATableSequence\")\n";
-			}
-			return s + "	@Column(name = \"ID\")\n" + //
 					"	private Long id;\n" + //
-					"	@Column(name = \"REF\")\n" + //
 					"	private Long ref;\n" + //
 					"\n" + //
 					"}";
@@ -296,7 +201,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 		@Test
 		void happyRunForASimpleObjectPOJOModeBUILDWithIDENTITY() {
 			// Prepare
-			String expected = getExpectedPOJOModeBuilder("persistence.entity", "IDENTITY");
+			String expected = getExpectedPOJOModeBuilder("core.model", "IDENTITY");
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			dataModel
 					.addOption(
@@ -316,7 +221,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 		@Test
 		void happyRunForASimpleObjectPOJOModeBUILDWithSEQUENCE() {
 			// Prepare
-			String expected = getExpectedPOJOModeBuilder("persistence.entity", "SEQUENCE");
+			String expected = getExpectedPOJOModeBuilder("core.model", "SEQUENCE");
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			dataModel
 					.addOption(
