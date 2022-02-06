@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 import archimedes.scheme.Option;
@@ -48,6 +49,11 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 		}
 
 		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
+			return getExpected(prefix, packageName, suppressComment, noKeyValue, null);
+		}
+
+		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue,
+				Boolean findByDescriptionUnique) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 							"\n" + //
@@ -123,8 +129,24 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 					"	@Override\n" + //
 					"	public void delete(ATable model) {\n" + //
 					"		repository.deleteById(model.getId());\n" + //
-					"	}\n" + //
-					"\n}";
+					"	}\n";
+			if (findByDescriptionUnique != null) {
+				if (findByDescriptionUnique) {
+					s += "\n" + //
+							"	@Override\n" + //
+							"	public Optional<ATable> findByDescription(String description) {\n" + //
+							"		return Optional.ofNullable(converter.toModel(repository.findByDescription(description).orElse(null)));\n"
+							+ //
+							"	}\n";
+				} else {
+					s += "\n" + //
+							"	@Override\n" + //
+							"	public List<ATable> findAllByDescription(String description) {\n" + //
+							"		return converter.toModel(repository.findAllByDescription(description));\n" + //
+							"	}\n";
+				}
+			}
+			s += "\n}";
 			return s;
 		}
 
@@ -136,8 +158,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
-			// Check
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			assertEquals(expected, returned);
 		}
 
@@ -149,7 +170,171 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			table.getColumnByName("ID").setNotNull(true);
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithAFindByOptionSet() {
+			// Prepare
+			String expected = getExpected(null, "persistence", false, null, true);
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			ColumnModel column = table.getColumnByName("Description");
+			column.addOption(new Option("FIND_BY"));
+			column.setUnique(true);
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithAFindByOptionSetWithoutUnique() {
+			// Prepare
+			String expected = getExpected(null, "persistence", false, null, false);
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			ColumnModel column = table.getColumnByName("Description");
+			column.addOption(new Option("FIND_BY"));
+			column.setUnique(false);
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String getExpectedForObjectReferences(boolean unique) {
+			String expected = "package base.pack.age.name.persistence;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.Optional;\n" + //
+					"\n" + //
+					"import javax.annotation.PostConstruct;\n" + //
+					"import javax.inject.Inject;\n" + //
+					"\n" + //
+					"import base.pack.age.name.core.model.Page;\n" + //
+					"import base.pack.age.name.core.model.PageParameters;\n" + //
+					"import base.pack.age.name.core.model.ATable;\n" + //
+					"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
+					"import base.pack.age.name.persistence.converter.PageConverter;\n" + //
+					"import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" + //
+					"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
+					"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+					"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
+					"import base.pack.age.name.persistence.converter.AnotherTableDBOConverter;\n" + //
+					"import lombok.Generated;\n" + //
+					"\n" + //
+					"import base.pack.age.name.core.model.AnotherTable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A generated JPA persistence adapter for a_tables.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"public abstract class ATableGeneratedJPAPersistenceAdapter implements ATablePersistencePort {\n" + //
+					"\n" + //
+					"	@Inject\n" + //
+					"	protected ATableDBOConverter converter;\n" + //
+					"	@Inject\n" + //
+					"	protected ATableDBORepository repository;\n" + //
+					"	@Inject\n" + //
+					"	protected AnotherTableDBOConverter anotherTableDBOConverter;\n" + //
+					"\n" + //
+					"	@Inject\n" + //
+					"	protected PageParametersToPageableConverter pageParametersToPageableConverter;\n" + //
+					"\n" + //
+					"	protected PageConverter<ATable, ATableDBO> pageConverter;\n" + //
+					"\n" + //
+					"	@PostConstruct\n" + //
+					"	public void postConstruct() {\n" + //
+					"		pageConverter = new PageConverter<>(converter);\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public ATable create(ATable model) {\n" + //
+					"		model.setId(null);\n" + //
+					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public List<ATable> findAll() {\n" + //
+					"		return converter.toModel(repository.findAll());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+					"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n"
+					+ //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public Optional<ATable> findById(Long id) {\n" + //
+					"		return repository.findById(id).map(dbo -> converter.toModel(dbo));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public ATable update(ATable model) {\n" + //
+					"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void delete(ATable model) {\n" + //
+					"		repository.deleteById(model.getId());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n";
+			if (unique) {
+				expected += "	public Optional<ATable> findByRef(AnotherTable ref) {\n" + //
+						"		return Optional.ofNullable(converter.toModel(repository.findByRef(anotherTableDBOConverter.toDBO(ref)).orElse(null)));\n";
+			} else {
+				expected += "	public List<ATable> findAllByRef(AnotherTable ref) {\n" + //
+						"		return converter.toModel(repository.findAllByRef(anotherTableDBOConverter.toDBO(ref)));\n";
+			}
+			expected += "	}\n" + //
+					"\n" + //
+					"}";
+			return expected;
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithFindByOptionSetAnObjectReference() {
+			// Prepare
+			String expected = getExpectedForObjectReferences(false);
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
+			dataModel
+					.addOption(
+							new Option(
+									AbstractClassCodeGenerator.REFERENCE_MODE,
+									AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT));
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			ColumnModel column = table.getColumnByName("REF");
+			column.addOption(new Option("FIND_BY"));
+			column.setUnique(false);
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithFindByOptionSetAnObjectReferenceUnique() {
+			// Prepare
+			String expected = getExpectedForObjectReferences(true);
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
+			dataModel
+					.addOption(
+							new Option(
+									AbstractClassCodeGenerator.REFERENCE_MODE,
+									AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT));
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			ColumnModel column = table.getColumnByName("REF");
+			column.addOption(new Option("FIND_BY"));
+			column.setUnique(true);
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
 			assertEquals(expected, returned);
 		}

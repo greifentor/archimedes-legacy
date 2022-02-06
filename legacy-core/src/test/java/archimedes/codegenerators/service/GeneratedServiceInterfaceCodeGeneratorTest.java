@@ -10,7 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
@@ -42,10 +44,14 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 	}
 
 	private String createExpected(boolean suppressComment) {
+		return createExpected(suppressComment, null);
+	}
+
+	private String createExpected(boolean suppressComment, Boolean findByUnique) {
 		String expected = "package " + BASE_PACKAGE_NAME + ".core.service;\n" + //
 				"\n" + //
-                "import java.util.List;\n" + //
-                "import java.util.Optional;\n" + //
+				"import java.util.List;\n" + //
+				"import java.util.Optional;\n" + //
 				"\n" + //
 				"import base.pack.age.name.core.model.Page;\n" + //
 				"import base.pack.age.name.core.model.PageParameters;\n" + //
@@ -64,16 +70,24 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 				"\n" + //
 				"\tATable create(ATable model);\n" + //
 				"\n" + //
-                "\tList<ATable> findAll();\n" + //
-                "\n" + //
-                "\tPage<ATable> findAll(PageParameters pageParameters);\n" + //
-                "\n" + //
+				"\tList<ATable> findAll();\n" + //
+				"\n" + //
+				"\tPage<ATable> findAll(PageParameters pageParameters);\n" + //
+				"\n" + //
 				"\tOptional<ATable> findById(Long id);\n" + //
 				"\n" + //
 				"\tATable update(ATable model);\n" + //
 				"\n" + //
-				"\tvoid delete(ATable model);\n" + //
-				"\n" + //
+				"\tvoid delete(ATable model);\n";
+		if (findByUnique != null) {
+			expected += "\n";
+			if (findByUnique) {
+				expected += "	Optional<ATable> findByDescription(String description);\n";
+			} else {
+				expected += "	List<ATable> findAllByDescription(String description);\n";
+			}
+		}
+		expected += "\n" + //
 				"}";
 		return expected;
 	}
@@ -84,6 +98,36 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 		String expected = createExpected(true);
 		DataModel dataModel = readDataModel("Model.xml");
 		dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void happyRunForASimpleObject_FindBy() {
+		// Prepare
+		String expected = createExpected(false, true);
+		DataModel dataModel = readDataModel("Model.xml");
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		ColumnModel column = table.getColumnByName("Description");
+		column.addOption(new Option("FIND_BY"));
+		column.setUnique(true);
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void happyRunForASimpleObject_FindByNotUnique() {
+		// Prepare
+		String expected = createExpected(false, false);
+		DataModel dataModel = readDataModel("Model.xml");
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		ColumnModel column = table.getColumnByName("Description");
+		column.addOption(new Option("FIND_BY"));
+		column.setUnique(false);
 		// Run
 		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 		// Check

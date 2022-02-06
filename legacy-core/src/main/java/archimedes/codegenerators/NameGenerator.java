@@ -34,7 +34,9 @@ public class NameGenerator {
 	}
 
 	public String getAttributeName(String s) {
-		if (containsUnderScores(s)) {
+		if (s == null) {
+			return null;
+		} else if (containsUnderScores(s)) {
 			s = buildTableNameFromUnderScoreString(s);
 		} else if (allCharactersAreUpperCase(s)) {
 			s = s.toLowerCase();

@@ -8,6 +8,12 @@ import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
 import lombok.Generated;
 
+#if (${HasObjectReferences})
+#foreach($FindBy in $FindBys)
+import ${FindBy.getTypePackageName()}.${FindBy.getTypeName()};
+#end
+
+#end
 #if (!$CommentsOff)
 /**
  * A generated service interface for ${ContextName} management.
@@ -29,5 +35,9 @@ public interface ${ClassName} {
 	${ModelClassName} update(${ModelClassName} model);
 
 	void delete(${ModelClassName} model);
+#foreach($FindBy in $FindBys)
+
+#if (${FindBy.isUnique()})	Optional#{else}	List#{end}<${ModelClassName}> find#if (!${FindBy.isUnique()})All#{end}By${FindBy.getColumnName()}(${FindBy.getTypeName()} ${FindBy.getAttributeName()});
+#end
 
 }

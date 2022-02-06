@@ -92,10 +92,6 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		return typeGenerator.getJavaTypeString(column.getDomain(), isNullable(column));
 	}
 
-	private boolean isNullable(ColumnModel column) {
-		return !column.isNotNull();
-	}
-
 	private List<AnnotationData> getAnnotations(ColumnModel column, ReferenceMode referenceMode) {
 		List<AnnotationData> annotations = new ArrayList<>();
 		if (column.isPrimaryKey()) {

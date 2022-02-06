@@ -161,6 +161,11 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 				|| (table.getOptionByName(AbstractClassCodeGenerator.GENERATE_ID_CLASS) != null);
 	}
 
+	@Deprecated
+	protected boolean isNullable(ColumnModel column) {
+		return NullableUtils.isNullable(column);
+	}
+
 	protected POJOMode getPOJOMode(DataModel model, TableModel table) {
 		ensure(model != null, "data model cannot be null.");
 		ensure(table != null, "table model cannot be null.");

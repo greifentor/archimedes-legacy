@@ -1,4 +1,4 @@
-package archimedes.codegenerators.service;
+package archimedes.codegenerators.persistence.jpa;
 
 import org.apache.velocity.VelocityContext;
 
@@ -11,17 +11,18 @@ import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
 /**
- * A code generator for service interface (port).
+ * A JPA repository code generator for JPA database objects (DBO's).
  *
- * @author ollie (05.07.2021)
+ * @author ollie (27.06.2021)
  */
-public class GeneratedServiceInterfaceCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
+public class GeneratedJPARepositoryInterfaceCodeGenerator
+		extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
 
-	public GeneratedServiceInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
+	public GeneratedJPARepositoryInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"GeneratedServiceInterface.vm",
-				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
-				new ServiceNameGenerator(),
+				"GeneratedJPARepositoryInterface.vm",
+				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
+				new PersistenceJPANameGenerator(),
 				new TypeGenerator(),
 				codeFactory);
 	}
@@ -30,8 +31,8 @@ public class GeneratedServiceInterfaceCodeGenerator extends AbstractClassCodeGen
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		ReferenceMode referenceMode = getReferenceMode(model, table);
 		context.put("ClassName", getClassName(table));
-		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("ContextName", getContextName(table));
+		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
+		context.put("DBOPackageName", nameGenerator.getDBOPackageName(model, table));
 		context
 				.put(
 						"FindBys",
@@ -40,8 +41,8 @@ public class GeneratedServiceInterfaceCodeGenerator extends AbstractClassCodeGen
 										table.getColumns(),
 										referenceMode,
 										nameGenerator,
-										nameGenerator::getModelClassName,
-										t -> nameGenerator.getModelPackageName(model, t),
+										nameGenerator::getDBOClassName,
+										t -> nameGenerator.getDBOPackageName(model, t),
 										typeGenerator));
 		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
 		context.put("HasNoUniques", FindByUtils.hasNoUniques(table.getColumns()));
@@ -50,18 +51,12 @@ public class GeneratedServiceInterfaceCodeGenerator extends AbstractClassCodeGen
 						"HasObjectReferences",
 						FindByUtils.hasObjectReferences(table.getColumns()) && (referenceMode == ReferenceMode.OBJECT));
 		context.put("IdClassName", getIdClassName(table));
-		context.put("IdFieldName", nameGenerator.getAttributeName(getIdFieldNameCamelCase(table)));
-		context.put("ModelClassName", nameGenerator.getModelClassName(table));
-		context.put("ModelPackageName", nameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
-		context.put("PageClassName", nameGenerator.getPageClassName());
-		context.put("PagePackageName", nameGenerator.getPagePackageName(model, table));
-		context.put("PageParametersClassName", nameGenerator.getPageParametersClassName());
 	}
 
 	@Override
 	public String getClassName(TableModel table) {
-		return nameGenerator.getGeneratedServiceInterfaceName(table);
+		return nameGenerator.getGeneratedJPARepositoryInterfaceName(table);
 	}
 
 	@Override
@@ -71,7 +66,7 @@ public class GeneratedServiceInterfaceCodeGenerator extends AbstractClassCodeGen
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getServiceInterfacePackageName(model, table);
+		return nameGenerator.getGeneratedJPARepositoryPackageName(model, table);
 	}
 
 }

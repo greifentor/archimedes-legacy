@@ -7,6 +7,7 @@ import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
+import archimedes.codegenerators.FindByUtils;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
@@ -36,6 +37,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 						new DBOConverterClassCodeGenerator(this),
 						new DBOMapstructMapperInterfaceCodeGenerator(this),
 						new GeneratedJPAPersistenceAdapterClassCodeGenerator(this),
+						new GeneratedJPARepositoryInterfaceCodeGenerator(this),
 						new JPAPersistenceAdapterClassCodeGenerator(this),
 						new JPAPersistenceAdapterDependentClassCodeGenerator(this),
 						new JPARepositoryInterfaceCodeGenerator(this),
@@ -65,6 +67,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 		case COLUMN:
 			return new String[] {
 					AbstractClassCodeGenerator.AUTO_INCREMENT,
+					FindByUtils.FIND_BY,
 					JPAPersistenceAdapterDependentClassCodeGenerator.DEPENDENT_ATTRIBUTE };
 		case MODEL:
 			return new String[] {

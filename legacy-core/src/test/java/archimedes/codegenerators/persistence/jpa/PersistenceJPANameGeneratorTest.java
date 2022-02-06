@@ -338,6 +338,71 @@ public class PersistenceJPANameGeneratorTest {
 
 	}
 
+	@DisplayName("tests of the generated JPA repository class names.")
+	@Nested
+	class GeneratedJPARepositoryInterfaceNameTests {
+
+		@Test
+		void getGeneratedJPARepositoryInterfaceName_PassNullValue_ReturnsANullValue() {
+			assertNull(unitUnderTest.getGeneratedJPARepositoryInterfaceName(null));
+		}
+
+		@Test
+		void getGeneratedJPARepositoryInterfaceName_ATableWithName_ReturnsTheCorrectClassName() {
+			// Prepare
+			String expected = "NameGeneratedDBORepository";
+			when(table.getName()).thenReturn("Name");
+			// Run
+			String returned = unitUnderTest.getGeneratedJPARepositoryInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedJPARepositoryInterfaceName_PassDataModelWithALTERNATE_REPOSITORY_CLASS_NAME_SUFFIXOption_ReturnsACorrectDBOName() {
+			// Prepare
+			String expected = "TableGeneratedRepo";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			doReturn(new Option(PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX, "Repo"))
+					.when(model)
+					.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
+			// Run
+			String returned = unitUnderTest.getGeneratedJPARepositoryInterfaceName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("tests for generated DBO package names")
+	@Nested
+	class GeneratedJPARepositoryPackageNameTests {
+
+		@Test
+		void getGeneratedJPARepositoryPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getGeneratedJPARepositoryPackageName(null, table));
+		}
+
+		@Test
+		void getGeneratedJPARepositoryPackageName_PassAValidTable_ReturnsACorrectPackageName() {
+			assertEquals("persistence.repository", unitUnderTest.getGeneratedJPARepositoryPackageName(model, table));
+		}
+
+		@Test
+		void getGeneratedJPARepositoryPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME,
+									"persistence.repos"));
+			// Run & Check
+			assertEquals("persistence.repos", unitUnderTest.getGeneratedJPARepositoryPackageName(model, table));
+		}
+
+	}
+
 	@DisplayName("tests of the JPA persistence adapter class names.")
 	@Nested
 	class JPAPersistenceAdapterClassNameTests {
