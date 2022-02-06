@@ -4,6 +4,8 @@ import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.FindByUtils;
+import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -26,9 +28,27 @@ public class GeneratedPersistencePortInterfaceCodeGenerator extends AbstractClas
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		ReferenceMode referenceMode = getReferenceMode(model, table);
 		context.put("ClassName", getClassName(table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("ContextName", getContextName(table));
+		context
+				.put(
+						"FindBys",
+						FindByUtils
+								.getFindBys(
+										table.getColumns(),
+										referenceMode,
+										nameGenerator,
+										nameGenerator::getModelClassName,
+										t -> nameGenerator.getModelPackageName(model, t),
+										typeGenerator));
+		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
+		context.put("HasNoUniques", FindByUtils.hasNoUniques(table.getColumns()));
+		context
+				.put(
+						"HasObjectReferences",
+						FindByUtils.hasObjectReferences(table.getColumns()) && (referenceMode == ReferenceMode.OBJECT));
 		context.put("IdClassName", getIdClassName(table));
 		context.put("IdFieldName", nameGenerator.getAttributeName(getIdFieldNameCamelCase(table)));
 		context.put("IdFieldNameCamelCase", getIdFieldNameCamelCase(table));

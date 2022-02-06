@@ -46,18 +46,7 @@ public class JPARepositoryInterfaceCodeGeneratorTest {
 		private String getExpected(String prefix, String packageName) {
 			return "package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 					"\n" + //
-					"import org.springframework.data.jpa.repository.JpaRepository;\n" + //
-					"import org.springframework.stereotype.Repository;\n" + //
-					"\n" + //
-					"import " + BASE_PACKAGE_NAME + ".persistence.entity.ATableDBO;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A JPA repository for a_tables.\n" + //
-					" *\n" + //
-					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-					" */\n" + //
-					"@Repository\n" + //
-					"public interface ATableDBORepository extends JpaRepository<ATableDBO, Long> {\n" + //
+					"public interface ATableDBORepository extends ATableGeneratedDBORepository {\n" + //
 					"}";
 		}
 

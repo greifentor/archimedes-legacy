@@ -6,7 +6,9 @@ import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.FindByUtils;
 import archimedes.codegenerators.OptionGetter;
+import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
@@ -18,7 +20,8 @@ import archimedes.model.TableModel;
  *
  * @author ollie (28.06.2021)
  */
-public class GeneratedJPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
+public class GeneratedJPAPersistenceAdapterClassCodeGenerator
+		extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
 
 	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
@@ -33,12 +36,32 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator extends AbstractCl
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		ReferenceMode referenceMode = getReferenceMode(model, table);
 		context.put("ClassName", getClassName(table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
 		context.put("DBOPackageName", nameGenerator.getDBOPackageName(model, table));
 		context.put("DBOConverterClassName", nameGenerator.getDBOConverterClassName(table));
 		context.put("DBOConverterPackageName", nameGenerator.getDBOConverterPackageName(model, table));
+		context
+				.put(
+						"FindBys",
+						FindByUtils
+								.getFindBys(
+										table.getColumns(),
+										referenceMode,
+										nameGenerator,
+										serviceNameGenerator::getModelClassName,
+										t -> serviceNameGenerator.getModelPackageName(model, t),
+										nameGenerator::getDBOConverterClassName,
+										t -> nameGenerator.getDBOConverterPackageName(model, t),
+										typeGenerator));
+		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
+		context.put("HasNoUniques", FindByUtils.hasNoUniques(table.getColumns()));
+		context
+				.put(
+						"HasObjectReferences",
+						FindByUtils.hasObjectReferences(table.getColumns()) && (referenceMode == ReferenceMode.OBJECT));
 		context.put("IdClassName", getIdClassName(table));
 		context.put("IdFieldName", nameGenerator.getAttributeName(getIdFieldNameCamelCase(table)));
 		context.put("IdFieldNameCamelCase", getIdFieldNameCamelCase(table));

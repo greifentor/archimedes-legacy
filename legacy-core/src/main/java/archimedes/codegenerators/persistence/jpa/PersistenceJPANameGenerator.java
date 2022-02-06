@@ -80,6 +80,21 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 				ALTERNATE_GENERATED_ADAPTER_CLASS_NAME_SUFFIX);
 	}
 
+	public String getGeneratedJPARepositoryInterfaceName(TableModel table) {
+		return table != null
+				? getClassName(table) + getGeneratedJPARepositoryInterfaceNameSuffix(table)
+				: null;
+	}
+
+	private String getGeneratedJPARepositoryInterfaceNameSuffix(TableModel table) {
+		return "Generated"
+				+ getNameOrAlternativeFromOption(table, "DBORepository", ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
+	}
+
+	public String getGeneratedJPARepositoryPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "persistence.repository", ALTERNATE_REPOSITORY_PACKAGE_NAME);
+	}
+
 	public String getJPAPersistenceAdapterClassName(TableModel table) {
 		return table != null
 				? getClassName(table) + getJPAPersistenceAdapterClassNameSuffix(table)

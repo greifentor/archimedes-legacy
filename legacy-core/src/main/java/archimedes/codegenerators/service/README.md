@@ -46,3 +46,23 @@ converters.
 #### REFERENCE_MODE
 
 Allow to choose the method of reference processing for a specific table. Description of the feature see above.
+
+
+### Column
+
+#### FIND_BY
+
+Creates a specific method to find objects of the table by values of the column. If the unique flag is set for the column
+the method returns an optional:
+
+```
+Signature: Optional<TableClass> findByColumnName(ColumnClass)
+```
+
+If the unique flag is not set, the method returns a list of table class objects.
+
+```
+Signature: List<TableClass> findAllByColumnName(ColumnClass)
+```
+
+All classes will be model classes.

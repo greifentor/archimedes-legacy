@@ -62,10 +62,6 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 		return typeGenerator.getJavaTypeString(column.getDomain(), isNullable(column));
 	}
 
-	private boolean isNullable(ColumnModel column) {
-		return !column.isNotNull();
-	}
-
 	@Override
 	public String getClassName(TableModel table) {
 		return nameGenerator.getModelClassName(table);

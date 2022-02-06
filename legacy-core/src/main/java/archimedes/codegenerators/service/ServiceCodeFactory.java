@@ -7,6 +7,7 @@ import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
+import archimedes.codegenerators.FindByUtils;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
@@ -21,8 +22,9 @@ import archimedes.model.PredeterminedOptionProvider;
 public class ServiceCodeFactory extends AbstractClassCodeFactory implements CodeFactoryProgressionEventProvider,
 		PredeterminedOptionProvider, StandardCodeFactoryProgressionFrameUser {
 
-	public static final String TEMPLATE_FOLDER_PATH = AbstractCodeFactory.TEMPLATE_PATH
-			+ System.getProperty(ServiceCodeFactory.class.getSimpleName() + ".templates.folder", "/service");
+	public static final String TEMPLATE_FOLDER_PATH =
+			AbstractCodeFactory.TEMPLATE_PATH
+					+ System.getProperty(ServiceCodeFactory.class.getSimpleName() + ".templates.folder", "/service");
 
 	@Override
 	protected List<CodeGenerator> getCodeGenerators() {
@@ -59,7 +61,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 	public String[] getSelectableOptions(OptionType optionType) {
 		switch (optionType) {
 		case COLUMN:
-			return new String[] { AbstractClassCodeGenerator.AUTO_INCREMENT };
+			return new String[] { AbstractClassCodeGenerator.AUTO_INCREMENT, FindByUtils.FIND_BY };
 		case MODEL:
 			return new String[] {
 					ServiceNameGenerator.ALTERNATE_APPLICATION_PACKAGE_NAME,
@@ -79,7 +81,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 			return new String[] {
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 					NameGenerator.MODULE,
-                    AbstractClassCodeFactory.NO_GENERATION,
+					AbstractClassCodeFactory.NO_GENERATION,
 					AbstractClassCodeGenerator.POJO_MODE };
 		default:
 			return new String[0];

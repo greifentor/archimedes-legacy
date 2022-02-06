@@ -15,8 +15,21 @@ import ${PageParametersToPageableConverterPackageName}.${PageParametersToPageabl
 import ${DBOConverterPackageName}.${DBOConverterClassName};
 import ${DBOPackageName}.${DBOClassName};
 import ${JPARepositoryPackageName}.${JPARepositoryClassName};
+#if (${HasObjectReferences})
+#foreach($FindBy in $FindBys)
+#if (${FindBy.isObjectReference()})
+import ${FindBy.getConverterPackageName()}.${FindBy.getConverterClassName()};
+#end
+#end
+#end
 import lombok.Generated;
 
+#if (${HasObjectReferences})
+#foreach($FindBy in $FindBys)
+import ${FindBy.getTypePackageName()}.${FindBy.getTypeName()};
+#end
+
+#end
 #if (!$CommentsOff )
 /**
  * A generated JPA persistence adapter for ${PluralName}.
@@ -31,6 +44,14 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 	protected ${DBOConverterClassName} converter;
 	@Inject
 	protected ${JPARepositoryClassName} repository;
+#if (${HasObjectReferences})
+#foreach($FindBy in $FindBys)
+#if (${FindBy.isObjectReference()})
+	@Inject
+	protected ${FindBy.getConverterClassName()} ${FindBy.getConverterAttributeName()};
+#end
+#end
+#end
 
 	@Inject
 	protected ${PageParametersToPageableConverterClassName} pageParametersToPageableConverter;
@@ -72,5 +93,24 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 	public void delete(${ModelClassName} model) {
 		repository.deleteById(model.get${IdFieldNameCamelCase}());
 	}
+#foreach($FindBy in $FindBys)
+
+	@Override
+	public #if (${FindBy.isUnique()})Optional#{else}List#{end}<${ModelClassName}> find#if (!${FindBy.isUnique()})All#{end}By${FindBy.getColumnName()}(${FindBy.getTypeName()} ${FindBy.getAttributeName()}) {
+#if (${FindBy.isUnique()})
+	#if (${FindBy.isObjectReference()})
+		return Optional.ofNullable(converter.toModel(repository.findBy${FindBy.getColumnName()}($FindBy.getConverterAttributeName().${ToDBOMethodName}(${FindBy.getAttributeName()})).orElse(null)));
+	#else
+		return Optional.ofNullable(converter.toModel(repository.findBy${FindBy.getColumnName()}(${FindBy.getAttributeName()}).orElse(null)));
+	#end
+#else
+	#if (${FindBy.isObjectReference()})
+		return converter.${ToModelMethodName}(repository.findAllBy${FindBy.getColumnName()}($FindBy.getConverterAttributeName().${ToDBOMethodName}(${FindBy.getAttributeName()})));
+	#else
+		return converter.${ToModelMethodName}(repository.findAllBy${FindBy.getColumnName()}(${FindBy.getAttributeName()}));
+	#end
+#end
+	}
+#end
 
 }

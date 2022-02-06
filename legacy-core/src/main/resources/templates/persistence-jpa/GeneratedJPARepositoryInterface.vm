@@ -1,0 +1,38 @@
+package ${PackageName};
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import ${DBOPackageName}.${DBOClassName};
+import lombok.Generated;
+#if ($FindBys)
+#if ($HasNoUniques)
+import java.util.List;
+#end
+#if ($HasUniques)
+import java.util.Optional;
+#end
+#end
+
+#if (${HasObjectReferences})
+#foreach($FindBy in $FindBys)
+import ${FindBy.getTypePackageName()}.${FindBy.getTypeName()};
+#end
+
+#end
+/**
+ * A generated JPA repository for ${PluralName}.
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
+@Generated
+@Repository
+public interface ${ClassName} extends JpaRepository<${DBOClassName}, ${IdClassName}> {
+#foreach($FindBy in $FindBys)
+
+	#if (${FindBy.isUnique()})	Optional#{else}	List#{end}<${DBOClassName}> find#if (!${FindBy.isUnique()})All#{end}By${FindBy.getColumnName()}(${FindBy.getTypeName()} ${FindBy.getAttributeName()});
+#if ( !$foreach.hasNext )
+
+#end
+#end
+}

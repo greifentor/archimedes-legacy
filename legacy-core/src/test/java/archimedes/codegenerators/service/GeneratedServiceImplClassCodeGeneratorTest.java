@@ -10,7 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
@@ -42,10 +44,14 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 	}
 
 	private String createExpected(boolean suppressComment) {
+		return createExpected(suppressComment, null);
+	}
+
+	private String createExpected(boolean suppressComment, Boolean findByUnique) {
 		String expected = "package " + BASE_PACKAGE_NAME + ".core.service.impl;\n" + //
 				"\n" + //
-                "import java.util.List;\n" + //
-                "import java.util.Optional;\n" + //
+				"import java.util.List;\n" + //
+				"import java.util.Optional;\n" + //
 				"\n" + //
 				"import javax.inject.Inject;\n" + //
 				"\n" + //
@@ -57,8 +63,7 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 				"import lombok.Generated;\n" + //
 				"\n";
 		if (!suppressComment) {
-			expected += "/**\n" +
-					" * A generated service interface implementation for ATable management.\n" + //
+			expected += "/**\n" + " * A generated service interface implementation for ATable management.\n" + //
 					" *\n" + //
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n";
@@ -66,40 +71,52 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 		expected += "@Generated\n" + //
 				"public abstract class ATableGeneratedServiceImpl implements ATableService {\n" + //
 				"\n" + //
-				"\t@Inject\n" + //
-				"\tprotected ATablePersistencePort persistencePort;\n" + //
+				"	@Inject\n" + //
+				"	protected ATablePersistencePort persistencePort;\n" + //
 				"\n" + //
-				"\t@Override\n" + //
-				"\tpublic ATable create(ATable model) {\n" + //
-				"\t\treturn persistencePort.create(model);\n" + //
-				"\t}\n" + //
+				"	@Override\n" + //
+				"	public ATable create(ATable model) {\n" + //
+				"		return persistencePort.create(model);\n" + //
+				"	}\n" + //
 				"\n" + //
-                "\t@Override\n" + //
-                "\tpublic List<ATable> findAll() {\n" + //
-                "\t\treturn persistencePort.findAll();\n" + //
-                "\t}\n" + //
-                "\n" + //
-				"\t@Override\n" + //
-				"\tpublic Page<ATable> findAll(PageParameters pageParameters) {\n" + //
-				"\t\treturn persistencePort.findAll(pageParameters);\n" + //
-				"\t}\n" + //
+				"	@Override\n" + //
+				"	public List<ATable> findAll() {\n" + //
+				"		return persistencePort.findAll();\n" + //
+				"	}\n" + //
 				"\n" + //
-				"\t@Override\n" + //
-				"\tpublic Optional<ATable> findById(Long id) {\n" + //
-				"\t\treturn persistencePort.findById(id);\n" + //
-				"\t}\n" + //
+				"	@Override\n" + //
+				"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+				"		return persistencePort.findAll(pageParameters);\n" + //
+				"	}\n" + //
 				"\n" + //
-				"\t@Override\n" + //
-				"\tpublic ATable update(ATable model) {\n" + //
-				"\t\treturn persistencePort.update(model);\n" + //
-				"\t}\n" + //
+				"	@Override\n" + //
+				"	public Optional<ATable> findById(Long id) {\n" + //
+				"		return persistencePort.findById(id);\n" + //
+				"	}\n" + //
 				"\n" + //
-				"\t@Override\n" + //
-				"\tpublic void delete(ATable model) {\n" + //
-				"\t\tpersistencePort.delete(model);\n" + //
-				"\t}\n" + //
+				"	@Override\n" + //
+				"	public ATable update(ATable model) {\n" + //
+				"		return persistencePort.update(model);\n" + //
+				"	}\n" + //
 				"\n" + //
-				"}";
+				"	@Override\n" + //
+				"	public void delete(ATable model) {\n" + //
+				"		persistencePort.delete(model);\n" + //
+				"	}\n";
+		if (findByUnique != null) {
+			expected += "\n" + //
+					"	@Override\n";
+			if (findByUnique) {
+				expected += "	public Optional<ATable> findByDescription(String description) {\n" + //
+						"		return persistencePort.findByDescription(description);\n" + //
+						"	}\n";
+			} else {
+				expected += "	public List<ATable> findAllByDescription(String description) {\n" + //
+						"		return persistencePort.findAllByDescription(description);\n" + //
+						"	}\n";
+			}
+		}
+		expected += "\n}";
 		return expected;
 	}
 
@@ -109,6 +126,38 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 		String expected = createExpected(true);
 		DataModel dataModel = readDataModel("Model.xml");
 		dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void happyRunForASimpleObject_FindBy() {
+		// Prepare
+		String expected = createExpected(true, true);
+		DataModel dataModel = readDataModel("Model.xml");
+		dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		ColumnModel column = table.getColumnByName("Description");
+		column.addOption(new Option("FIND_BY"));
+		column.setUnique(true);
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void happyRunForASimpleObject_FindByNotUnique() {
+		// Prepare
+		String expected = createExpected(true, false);
+		DataModel dataModel = readDataModel("Model.xml");
+		dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		ColumnModel column = table.getColumnByName("Description");
+		column.addOption(new Option("FIND_BY"));
+		column.setUnique(false);
 		// Run
 		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 		// Check
