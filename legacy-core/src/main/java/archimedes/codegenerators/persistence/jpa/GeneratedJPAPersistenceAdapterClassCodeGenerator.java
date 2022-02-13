@@ -1,12 +1,17 @@
 package archimedes.codegenerators.persistence.jpa;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.FindByUtils;
+import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
@@ -37,7 +42,9 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		ReferenceMode referenceMode = getReferenceMode(model, table);
+		List<ColumnData> columnData = getColumnData(table.getColumns(), model, getReferenceMode(model, table));
 		context.put("ClassName", getClassName(table));
+		context.put("ColumnData", columnData);
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
 		context.put("DBOPackageName", nameGenerator.getDBOPackageName(model, table));
@@ -57,6 +64,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 										t -> nameGenerator.getDBOConverterPackageName(model, t),
 										typeGenerator));
 		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
+		context.put("HasNotNulls", FindByUtils.hasNotNulls(table.getColumns()));
 		context.put("HasNoUniques", FindByUtils.hasNoUniques(table.getColumns()));
 		context
 				.put(
@@ -69,6 +77,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		context.put("JPARepositoryPackageName", nameGenerator.getJPARepositoryPackageName(model, table));
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
 		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
+		context.put("ExceptionsPackageName", serviceNameGenerator.getExceptionsPackageName(model, table));
 		context.put("NoKeyValue", getNoKeyValue(table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("PageClassName", serviceNameGenerator.getPageClassName());
@@ -76,16 +85,20 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		context.put("PageConverterPackageName", nameGenerator.getPageConverterPackageName(model, table));
 		context.put("PagePackageName", serviceNameGenerator.getPagePackageName(model, table));
 		context.put("PageParametersClassName", serviceNameGenerator.getPageParametersClassName());
-		context.put(
-				"PageParametersToPageableConverterClassName",
-				nameGenerator.getPageParametersToPageableConverterClassName(table));
-		context.put(
-				"PageParametersToPageableConverterPackageName",
-				nameGenerator.getPageParametersToPageableConverterPackageName(model, table));
+		context
+				.put(
+						"PageParametersToPageableConverterClassName",
+						nameGenerator.getPageParametersToPageableConverterClassName(table));
+		context
+				.put(
+						"PageParametersToPageableConverterPackageName",
+						nameGenerator.getPageParametersToPageableConverterPackageName(model, table));
 		context.put("PersistencePortInterfaceName", serviceNameGenerator.getPersistencePortInterfaceName(table));
 		context.put("PersistencePortPackageName", serviceNameGenerator.getPersistencePortPackageName(model, table));
+		context.put("TableName", table.getName());
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
+		context.put("UtilPackageName", serviceNameGenerator.getUtilPackageName(model, table));
 	}
 
 	private String getNoKeyValue(TableModel table) {
@@ -99,6 +112,45 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 	@Override
 	public String getClassName(TableModel table) {
 		return nameGenerator.getGeneratedJPAPersistenceAdapterClassName(table);
+	}
+
+	private List<ColumnData> getColumnData(ColumnModel[] columns, DataModel model, ReferenceMode referenceMode) {
+		return Arrays
+				.asList(columns)
+				.stream()
+				.map(
+						column -> new ColumnData()
+								.setFieldName(nameGenerator.getAttributeName(column))
+								.setFieldType(getType(column, referenceMode))
+								.setGetterCall(getGetterCall(column, model, referenceMode))
+								.setNotNull(column.isNotNull())
+								.setPkMember(column.isPrimaryKey())
+								.setSimpleType(isSimpleType(getType(column, referenceMode))))
+				.collect(Collectors.toList());
+	}
+
+	private String getType(ColumnModel column, ReferenceMode referenceMode) {
+		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
+			return serviceNameGenerator.getModelClassName(column.getReferencedTable());
+		}
+		return typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column));
+	}
+
+	private boolean isSimpleType(String typeName) {
+		return Set.of("boolean", "byte", "char", "double", "float", "int", "long", "short").contains(typeName);
+	}
+
+	private String getGetterCall(ColumnModel column, DataModel model, ReferenceMode referenceMode) {
+		String getterName = super.getGetterName(column);
+		VelocityContext context = new VelocityContext();
+		context.put("GetterName", getterName);
+		context.put("ReferenceMode", referenceMode.name());
+		if (isGenerateIdClass(model, column.getTable())) {
+			context.put("KeyFromIdClass", column.isPrimaryKey());
+		} else {
+			context.put("KeyFromIdClass", "false");
+		}
+		return processTemplate(context, "DBOKeyGetter.vm");
 	}
 
 	@Override

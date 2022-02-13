@@ -139,6 +139,69 @@ public class ServiceNameGeneratorTest {
 
 	}
 
+	@DisplayName("Tests for exceptions package names")
+	@Nested
+	class ExceptionsPackageNameTests {
+
+		@Test
+		void getExceptionsPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getExceptionsPackageName(null, table));
+		}
+
+		@Test
+		void getExceptionsPackageName_PassANullValueAsTable_ReturnsDefaultValue() {
+			assertEquals("core.service.exception", unitUnderTest.getExceptionsPackageName(model, null));
+		}
+
+		@Test
+		void getExceptionsPackageName_PassAValidDataModel_ReturnsACorrectPackageName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME;
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getApplicationPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getExceptionsPackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectPackageName() {
+			// Prepare
+			String expected = "core.service.exception";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getExceptionsPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getExceptionsPackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectPAckageName() {
+			// Prepare
+			String expected = "core.service.exception";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getExceptionsPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getExceptionsPackageName_PassAValidDataModelWithSetWithAlternatePackageNameForModelClasses_ReturnsACorrectPackageName() {
+			// Prepare
+			String alternatePackageName = "alternate.package.name";
+			String expected = alternatePackageName;
+			OptionModel option = mock(OptionModel.class);
+			when(option.getParameter()).thenReturn(alternatePackageName);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_EXCEPTIONS_PACKAGE_NAME)).thenReturn(option);
+			// Run
+			String returned = unitUnderTest.getExceptionsPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("Tests for generated persistence port interface names")
 	@Nested
 	class GeneratedPersistencePortInterfaceNameTests {
@@ -1597,6 +1660,69 @@ public class ServiceNameGeneratorTest {
 					.thenReturn(option);
 			// Run
 			String returned = unitUnderTest.getPersistencePortPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@DisplayName("Tests for util package names")
+	@Nested
+	class UtilPackageNameTests {
+
+		@Test
+		void getUtilPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getUtilPackageName(null, table));
+		}
+
+		@Test
+		void getUtilPackageName_PassANullValueAsTable_ReturnsDefaultValue() {
+			assertEquals("util", unitUnderTest.getUtilPackageName(model, null));
+		}
+
+		@Test
+		void getUtilPackageName_PassAValidDataModel_ReturnsACorrectPackageName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME;
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getApplicationPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getUtilPackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectPackageName() {
+			// Prepare
+			String expected = "util";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getUtilPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getUtilPackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectPAckageName() {
+			// Prepare
+			String expected = "util";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getUtilPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getUtilPackageName_PassAValidDataModelWithSetWithAlternatePackageNameForModelClasses_ReturnsACorrectPackageName() {
+			// Prepare
+			String alternatePackageName = "alternate.package.name";
+			String expected = alternatePackageName;
+			OptionModel option = mock(OptionModel.class);
+			when(option.getParameter()).thenReturn(alternatePackageName);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_UTIL_PACKAGE_NAME)).thenReturn(option);
+			// Run
+			String returned = unitUnderTest.getUtilPackageName(model, table);
 			// Check
 			assertEquals(expected, returned);
 		}

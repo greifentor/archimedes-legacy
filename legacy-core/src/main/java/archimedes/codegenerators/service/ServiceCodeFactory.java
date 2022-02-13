@@ -65,6 +65,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 		case MODEL:
 			return new String[] {
 					ServiceNameGenerator.ALTERNATE_APPLICATION_PACKAGE_NAME,
+					ServiceNameGenerator.ALTERNATE_EXCEPTIONS_PACKAGE_NAME,
 					ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_INTERFACE_NAME_SUFFIX,

@@ -20,6 +20,10 @@ public class FindByUtils {
 				.anyMatch(ColumnModel::isUnique);
 	}
 
+	public static boolean hasNotNulls(ColumnModel[] columns) {
+		return List.of(columns).stream().anyMatch(column -> !column.isPrimaryKey() && column.isNotNull());
+	}
+
 	public static boolean hasNoUniques(ColumnModel[] columns) {
 		return List
 				.of(columns)

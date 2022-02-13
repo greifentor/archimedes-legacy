@@ -1,5 +1,9 @@
 package ${PackageName};
 
+#if (${HasNotNulls})
+import static ${UtilPackageName}.Check.ensure;
+
+#end
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +13,9 @@ import javax.inject.Inject;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#if (${HasNotNulls})
+import ${ExceptionsPackageName}.NotNullConstraintViolationException;
+#end
 import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
 import ${PageConverterPackageName}.${PageConverterClassName};
 import ${PageParametersToPageableConverterPackageName}.${PageParametersToPageableConverterClassName};
@@ -86,6 +93,15 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 
 	@Override
 	public ${ModelClassName} update(${ModelClassName} model) {
+#if (${HasNotNulls})
+#foreach ($Column in $ColumnData)
+#if (${Column.isSimpleType()} == false and ${Column.isNotNull()} == true and ${Column.isPkMember()} == false)
+		ensure(
+				model.${Column.getGetterCall()} != null,
+				() -> new NotNullConstraintViolationException("${ModelClassName} field ${Column.getFieldName()} cannot be null.", "${ModelClassName}", "${Column.getFieldName()}"));
+#end
+#end
+#end
 		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
 	}
 

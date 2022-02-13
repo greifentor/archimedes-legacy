@@ -59,10 +59,12 @@ public class Columns {
 		private String fieldType;
 		private String getterCall;
 		private String getterName;
+		private boolean notNull;
 		private boolean pkMember;
 		private boolean reference;
 		private String setterName;
 		private String simpleName;
+		private boolean simpleType;
 	}
 
 	public static boolean containsFieldWithType(List<ColumnData> columnData, String typeName) {

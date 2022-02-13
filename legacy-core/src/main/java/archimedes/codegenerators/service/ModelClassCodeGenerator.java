@@ -9,6 +9,7 @@ import org.apache.velocity.VelocityContext;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
+import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -59,7 +60,7 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
 			return nameGenerator.getModelClassName(column.getReferencedTable());
 		}
-		return typeGenerator.getJavaTypeString(column.getDomain(), isNullable(column));
+		return typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column));
 	}
 
 	@Override

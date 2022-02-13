@@ -12,6 +12,7 @@ import archimedes.model.TableModel;
 public class ServiceNameGenerator extends NameGenerator {
 
 	public static final String ALTERNATE_APPLICATION_PACKAGE_NAME = "ALTERNATE_APPLICATION_PACKAGE_NAME";
+	public static final String ALTERNATE_EXCEPTIONS_PACKAGE_NAME = "ALTERNATE_EXCEPTIONS_PACKAGE_NAME";
 	public static final String ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX =
 			"ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX";
 	public static final String ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX =
@@ -29,6 +30,7 @@ public class ServiceNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_SERVICE_IMPL_PACKAGE_NAME = "ALTERNATE_SERVICE_IMPL_PACKAGE_NAME";
 	public static final String ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX = "ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX";
 	public static final String ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME = "ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME";
+	public static final String ALTERNATE_UTIL_PACKAGE_NAME = "ALTERNATE_UTILITIES_PACKAGE_NAME";
 
 	public String getApplicationClassName(DataModel model) {
 		return model != null
@@ -47,6 +49,10 @@ public class ServiceNameGenerator extends NameGenerator {
 
 	public String getApplicationPackageName(DataModel model, TableModel table) {
 		return createPackageName(model, table, "", ALTERNATE_APPLICATION_PACKAGE_NAME);
+	}
+
+	public String getExceptionsPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "core.service.exception", ALTERNATE_EXCEPTIONS_PACKAGE_NAME);
 	}
 
 	public String getGeneratedPersistencePortInterfaceName(TableModel table) {
@@ -86,34 +92,6 @@ public class ServiceNameGenerator extends NameGenerator {
 		return table != null
 				? getClassName(table) + "Id"
 				: null;
-	}
-
-	public String getServiceInterfaceName(TableModel table) {
-		return table != null
-				? getClassName(table) + getServiceInterfaceNameSuffix(table)
-				: null;
-	}
-
-	private String getServiceInterfaceNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "Service", ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX);
-	}
-
-	public String getServiceImplClassName(TableModel table) {
-		return table != null
-				? getClassName(table) + getServiceImplClassNameSuffix(table)
-				: null;
-	}
-
-	private String getServiceImplClassNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "ServiceImpl", ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX);
-	}
-
-	public String getServiceImplPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "core.service.impl", ALTERNATE_SERVICE_IMPL_PACKAGE_NAME);
-	}
-
-	public String getServiceInterfacePackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "core.service", ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME);
 	}
 
 	public String getModelClassName(TableModel table) {
@@ -165,6 +143,34 @@ public class ServiceNameGenerator extends NameGenerator {
 				table,
 				"core.service.port.persistence",
 				ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME);
+	}
+
+	public String getServiceInterfaceName(TableModel table) {
+		return table != null ? getClassName(table) + getServiceInterfaceNameSuffix(table) : null;
+	}
+
+	private String getServiceInterfaceNameSuffix(TableModel table) {
+		return getNameOrAlternativeFromOption(table, "Service", ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX);
+	}
+
+	public String getServiceImplClassName(TableModel table) {
+		return table != null ? getClassName(table) + getServiceImplClassNameSuffix(table) : null;
+	}
+
+	private String getServiceImplClassNameSuffix(TableModel table) {
+		return getNameOrAlternativeFromOption(table, "ServiceImpl", ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX);
+	}
+
+	public String getServiceImplPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "core.service.impl", ALTERNATE_SERVICE_IMPL_PACKAGE_NAME);
+	}
+
+	public String getServiceInterfacePackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "core.service", ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME);
+	}
+
+	public String getUtilPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "util", ALTERNATE_UTIL_PACKAGE_NAME);
 	}
 
 }

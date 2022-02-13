@@ -77,6 +77,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 					PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_PACKAGE_NAME,
 					PersistenceJPANameGenerator.ALTERNATE_ENTITY_CLASS_NAME_SUFFIX,
 					PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
+					ServiceNameGenerator.ALTERNATE_EXCEPTIONS_PACKAGE_NAME,
 					PersistenceJPANameGenerator.ALTERNATE_GENERATED_ADAPTER_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,

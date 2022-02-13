@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.legacy.scheme.Tabellenspalte;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -337,6 +338,114 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+		@Nested
+		class NotNullConstraints {
+
+			private String getExpected(String packageName) {
+				String s = "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
+						"\n" + //
+						"import static base.pack.age.name.util.Check.ensure;\n" + //
+						"\n" + //
+						"import java.util.List;\n" + //
+						"import java.util.Optional;\n" + //
+						"\n" + //
+						"import javax.annotation.PostConstruct;\n" + //
+						"import javax.inject.Inject;\n" + //
+						"\n" + //
+						"import base.pack.age.name.core.model.Page;\n" + //
+						"import base.pack.age.name.core.model.PageParameters;\n" + //
+						"import base.pack.age.name.core.model.ATable;\n" + //
+						"import base.pack.age.name.core.service.exception.NotNullConstraintViolationException;\n" + //
+						"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
+						"import base.pack.age.name.persistence.converter.PageConverter;\n" + //
+						"import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" + //
+						"import base.pack.age.name.persistence.converter.ATableDBOConverter;\n" + //
+						"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+						"import base.pack.age.name.persistence.repository.ATableDBORepository;\n" + //
+						"import lombok.Generated;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * A generated JPA persistence adapter for a_tables.\n" + //
+						" *\n" + //
+						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+						" */\n" + //
+						"@Generated\n" + //
+						"public abstract class ATableGeneratedJPAPersistenceAdapter implements ATablePersistencePort {\n"
+						+ //
+						"\n" + //
+						"	@Inject\n" + //
+						"	protected ATableDBOConverter converter;\n" + //
+						"	@Inject\n" + //
+						"	protected ATableDBORepository repository;\n" + //
+						"\n" + //
+						"	@Inject\n" + //
+						"	protected PageParametersToPageableConverter pageParametersToPageableConverter;\n" + //
+						"\n" + //
+						"	protected PageConverter<ATable, ATableDBO> pageConverter;\n" + //
+						"\n" + //
+						"	@PostConstruct\n" + //
+						"	public void postConstruct() {\n" + //
+						"		pageConverter = new PageConverter<>(converter);\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public ATable create(ATable model) {\n" + //
+						"		model.setId(-1);\n" + //
+						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public List<ATable> findAll() {\n" + //
+						"		return converter.toModel(repository.findAll());\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+						"		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n"
+						+ //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public Optional<ATable> findById(Long id) {\n" + //
+						"		return repository.findById(id).map(dbo -> converter.toModel(dbo));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public ATable update(ATable model) {\n" + //
+						"		ensure(\n" + //
+						"				model.getDescription() != null,\n" + //
+						"				() -> new NotNullConstraintViolationException(\"ATable field description cannot be null.\", \"ATable\", \"description\"));\n"
+						+ //
+						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public void delete(ATable model) {\n" + //
+						"		repository.deleteById(model.getId());\n" + //
+						"	}\n";
+				s += "\n}";
+				return s;
+			}
+
+			@Test
+			void happyRunForASimpleObjectWithNotNullSet() {
+				// Prepare
+				String expected = getExpected("persistence");
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel table = dataModel.getTableByName("A_TABLE");
+				table.getColumnByName("ID").setNotNull(true);
+				table.getColumnByName("Description").setNotNull(true);
+				ColumnModel column = new Tabellenspalte("order", table.getColumnByName("ID").getDomain());
+				column.setNotNull(true);
+				table.addColumn(column);
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+				// Check
+				assertEquals(expected, returned);
+			}
+
 		}
 
 	}
