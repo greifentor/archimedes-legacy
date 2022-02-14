@@ -96,6 +96,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		context.put("PersistencePortInterfaceName", serviceNameGenerator.getPersistencePortInterfaceName(table));
 		context.put("PersistencePortPackageName", serviceNameGenerator.getPersistencePortPackageName(model, table));
 		context.put("TableName", table.getName());
+		context.put("TableAttributeName", nameGenerator.getAttributeName(table.getName()));
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
 		context.put("UtilPackageName", serviceNameGenerator.getUtilPackageName(model, table));
@@ -120,12 +121,14 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 				.stream()
 				.map(
 						column -> new ColumnData()
+								.setColumnName(nameGenerator.getCamelCase(column.getName()))
 								.setFieldName(nameGenerator.getAttributeName(column))
 								.setFieldType(getType(column, referenceMode))
 								.setGetterCall(getGetterCall(column, model, referenceMode))
 								.setNotNull(column.isNotNull())
 								.setPkMember(column.isPrimaryKey())
-								.setSimpleType(isSimpleType(getType(column, referenceMode))))
+								.setSimpleType(isSimpleType(getType(column, referenceMode)))
+								.setUnique(column.isUnique()))
 				.collect(Collectors.toList());
 	}
 

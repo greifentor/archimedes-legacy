@@ -52,6 +52,7 @@ public class Columns {
 	@Data
 	public static class ColumnData {
 		private List<AnnotationData> annotations = new ArrayList<>();
+		private String columnName;
 		private String converterAttributeName;
 		private String descriptionName;
 		private String enumIdentifier;
@@ -65,6 +66,7 @@ public class Columns {
 		private String setterName;
 		private String simpleName;
 		private boolean simpleType;
+		private boolean unique;
 	}
 
 	public static boolean containsFieldWithType(List<ColumnData> columnData, String typeName) {

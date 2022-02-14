@@ -16,7 +16,6 @@ public class FindByUtils {
 		return List
 				.of(columns)
 				.stream()
-				.filter(column -> column.getOptionByName(FIND_BY) != null)
 				.anyMatch(ColumnModel::isUnique);
 	}
 
@@ -62,7 +61,7 @@ public class FindByUtils {
 		return List
 				.of(columns)
 				.stream()
-				.filter(column -> column.getOptionByName(FIND_BY) != null)
+				.filter(column -> (column.getOptionByName(FIND_BY) != null) || column.isUnique())
 				.map(
 						column -> new FindByData()
 								.setAttributeName(nameGenerator.getAttributeName(column))

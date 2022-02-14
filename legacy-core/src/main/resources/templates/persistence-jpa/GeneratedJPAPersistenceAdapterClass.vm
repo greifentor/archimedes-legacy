@@ -1,6 +1,6 @@
 package ${PackageName};
 
-#if (${HasNotNulls})
+#if (${HasNotNulls} || ${HasUniques})
 import static ${UtilPackageName}.Check.ensure;
 
 #end
@@ -15,6 +15,9 @@ import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
 #if (${HasNotNulls})
 import ${ExceptionsPackageName}.NotNullConstraintViolationException;
+#end
+#if (${HasUniques})
+import ${ExceptionsPackageName}.UniqueConstraintViolationException;
 #end
 import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
 import ${PageConverterPackageName}.${PageConverterClassName};
@@ -100,6 +103,15 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 				model.${Column.getGetterCall()} != null,
 				() -> new NotNullConstraintViolationException("${ModelClassName} field ${Column.getFieldName()} cannot be null.", "${ModelClassName}", "${Column.getFieldName()}"));
 #end
+#end
+#end
+#foreach ($Column in $ColumnData)
+#if (${Column.isUnique()})
+		ensure(
+				findBy${Column.getColumnName()}(model.${Column.getGetterCall()})
+						.filter(${TableAttributeName} -> ${TableAttributeName}.${Column.getGetterCall()}.equals(model.${Column.getGetterCall()}))
+						.isEmpty(),
+				() -> new UniqueConstraintViolationException("${Column.getFieldName()} is already set for another record", "${ModelClassName}", "${Column.getFieldName()}"));
 #end
 #end
 		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));
