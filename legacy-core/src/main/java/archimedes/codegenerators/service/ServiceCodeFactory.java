@@ -31,15 +31,18 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 		return Arrays
 				.asList(
 						new ApplicationClassCodeGenerator(this),
+						new CheckClassCodeGenerator(this),
 						new GeneratedPersistencePortInterfaceCodeGenerator(this),
 						new GeneratedServiceImplClassCodeGenerator(this),
 						new GeneratedServiceInterfaceCodeGenerator(this),
 						new ModelClassCodeGenerator(this),
+						new NotNullConstraintViolationExceptionClassCodeGenerator(this),
 						new PageClassCodeGenerator(this),
 						new PageParametersClassCodeGenerator(this),
 						new PersistencePortInterfaceCodeGenerator(this),
 						new ServiceImplClassCodeGenerator(this),
-						new ServiceInterfaceCodeGenerator(this));
+						new ServiceInterfaceCodeGenerator(this),
+						new UniqueConstraintViolationExceptionClassCodeGenerator(this));
 	}
 
 	@Override

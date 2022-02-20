@@ -59,7 +59,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 		VelocityContext context = new VelocityContext();
 		context.put("BasePackageName", basePackageName);
 		context.put("Generated", GENERATED_CODE);
-		context.put("PluralName", table.getName().toLowerCase() + "s");
+		context.put("PluralName", table != null ? table.getName().toLowerCase() + "s" : "");
 		extendVelocityContext(context, model, table);
 		return processTemplate(context, templateFileName);
 	}
