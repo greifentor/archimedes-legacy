@@ -43,6 +43,7 @@ public class DefaultDatabaseMetaDataAdapter implements DatabaseMetaDataPort {
 			columnImportInfos
 					.add(
 							new ColumnImportInfo()
+									.setAutoIncrement(autoIncrement)
 									.setColumnName(columnName)
 									.setColumnSize(columnSize)
 									.setDataType(dataType)
