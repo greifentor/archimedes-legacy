@@ -28,7 +28,7 @@ public class NotNullConstraintViolationExceptionClassCodeGenerator
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		context.put("BasePackageName", model.getBasePackageName());
-		context.put("ClassName", getClassName(table));
+		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("PackageName", getPackageName(model, table));
 	}
