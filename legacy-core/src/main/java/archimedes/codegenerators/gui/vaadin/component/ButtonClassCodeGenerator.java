@@ -34,7 +34,7 @@ public class ButtonClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaad
 	}
 
 	@Override
-	public String getClassName(TableModel table) {
+	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getButtonClassName(table.getDataModel());
 	}
 

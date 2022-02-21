@@ -56,7 +56,7 @@ public class GOClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNa
 	}
 
 	@Override
-	public String getClassName(TableModel table) {
+	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getGOClassName(table);
 	}
 

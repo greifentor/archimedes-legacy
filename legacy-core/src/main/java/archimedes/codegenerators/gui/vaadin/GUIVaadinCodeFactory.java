@@ -29,7 +29,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 			+ System.getProperty(GUIVaadinCodeFactory.class.getSimpleName() + ".templates.folder", "/gui-vaadin");
 
 	@Override
-	protected List<CodeGenerator> getCodeGenerators() {
+	protected List<CodeGenerator<?>> getCodeGenerators() {
 		return Arrays.asList(
 				new ButtonClassCodeGenerator(this),
 				// new GOClassCodeGenerator(this),

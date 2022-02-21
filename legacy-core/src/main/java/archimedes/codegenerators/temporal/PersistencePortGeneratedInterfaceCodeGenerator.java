@@ -60,7 +60,7 @@ public class PersistencePortGeneratedInterfaceCodeGenerator
 	}
 
 	@Override
-	public String getClassName(TableModel table) {
+	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getPersistencePortGeneratedInterfaceName(table);
 	}
 

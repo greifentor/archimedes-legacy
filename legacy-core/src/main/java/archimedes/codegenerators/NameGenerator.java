@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionListProvider;
 import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
@@ -103,14 +104,15 @@ public class NameGenerator {
 		return StringUtils.left(s, 1).toUpperCase() + (s.length() > 1 ? s.substring(1) : "");
 	}
 
-	protected String getBasePackageNameWithDotExtension(DataModel model, TableModel table) {
-		return getBasePackageNameWithDotExtension(model, table, false);
+	protected String getBasePackageNameWithDotExtension(DataModel model, OptionListProvider optionListProvider) {
+		return getBasePackageNameWithDotExtension(model, optionListProvider, false);
 	}
 
-	protected String getBasePackageNameWithDotExtension(DataModel model, TableModel table, boolean followedByEmpty) {
+	protected String getBasePackageNameWithDotExtension(DataModel model, OptionListProvider optionListProvider,
+			boolean followedByEmpty) {
 		String technicalContextName = "";
-		if (table != null) {
-			technicalContextName = getTechnicalContextName(table);
+		if (optionListProvider != null) {
+			technicalContextName = getTechnicalContextName(optionListProvider);
 		}
 		return (model.getBasePackageName() == null) || model.getBasePackageName().isEmpty()
 				? ""
@@ -123,10 +125,13 @@ public class NameGenerator {
 		return s + ((s != null) && !s.isEmpty() && !followedByEmpty ? "." : "");
 	}
 
-	private String getTechnicalContextName(TableModel table) {
-		return table == null
+	private String getTechnicalContextName(OptionListProvider optionListProvider) {
+		return optionListProvider == null
 				? ""
-				: OptionGetter.getOptionByName(table, TECHNICAL_CONTEXT).map(OptionModel::getParameter).orElse("");
+				: OptionGetter
+						.getOptionByName(optionListProvider, TECHNICAL_CONTEXT)
+						.map(OptionModel::getParameter)
+						.orElse("");
 	}
 
 	public String getCamelCase(String s) {
@@ -193,15 +198,9 @@ public class NameGenerator {
 		return sb.toString().toUpperCase();
 	}
 
-	protected String getNameOrAlternativeFromOption(TableModel table, String defaultName, String alternateOptionName) {
-		return (table == null) || (table.getDataModel() == null)
-				? defaultName
-				: getNameOrAlternativeFromOption(table.getDataModel(), defaultName, alternateOptionName);
-	}
-
 	protected String getNameOrAlternativeFromOption(DataModel model, String defaultName, String alternateOptionName) {
 		return model == null
-				? null
+				? defaultName
 				: OptionGetter.getParameterOfOptionByName(model, alternateOptionName).map(s -> s).orElse(defaultName);
 	}
 
@@ -230,7 +229,7 @@ public class NameGenerator {
 		return table.getName().replace("_", " ").toLowerCase();
 	}
 
-	protected String createPackageName(DataModel model, TableModel table, String packageName,
+	protected String createPackageName(DataModel model, OptionListProvider optionListProvider, String packageName,
 			String alternatePackageNameOption) {
 		String prefix = "";
 		if ((model != null) && (alternatePackageNameOption != null)) {
@@ -239,15 +238,18 @@ public class NameGenerator {
 				packageName = option.getParameter();
 			}
 		}
-		if (table != null) {
+		if (optionListProvider != null) {
 			prefix =
 					OptionGetter
-							.getOptionByName(table, MODULE)
+							.getOptionByName(optionListProvider, MODULE)
 							.map(option -> addDotIfNecessary(option.getParameter(), false))
 							.orElse("");
 		}
 		return model != null
-				? getBasePackageNameWithDotExtension(model, table, prefix.isEmpty() && packageName.isEmpty()) + prefix
+				? getBasePackageNameWithDotExtension(
+						model,
+						optionListProvider,
+						prefix.isEmpty() && packageName.isEmpty()) + prefix
 						+ packageName
 				: null;
 	}

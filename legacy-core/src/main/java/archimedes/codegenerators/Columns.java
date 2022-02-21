@@ -20,7 +20,7 @@ public class Columns {
 		private String value;
 
 		public String toJavaCode() {
-			return getName() + " = " + getValue();
+			return (getName() != null ? getName() + " = " : "") + getValue();
 		}
 	}
 

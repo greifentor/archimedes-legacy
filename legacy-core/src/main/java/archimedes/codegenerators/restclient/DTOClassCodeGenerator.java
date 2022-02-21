@@ -54,7 +54,7 @@ public class DTOClassCodeGenerator extends AbstractClassCodeGenerator<RESTClient
 	}
 
 	@Override
-	public String getClassName(TableModel table) {
+	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getDTOClassName(table);
 	}
 

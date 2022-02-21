@@ -32,7 +32,7 @@ public class ApplicationClassCodeGenerator extends AbstractClassCodeGenerator<Se
 	}
 
 	@Override
-	public String getClassName(TableModel table) { return nameGenerator.getApplicationClassName(table.getDataModel()); }
+	public String getClassName(DataModel model, TableModel table) { return nameGenerator.getApplicationClassName(table.getDataModel()); }
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {

@@ -12,6 +12,7 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.Columns.ParameterData;
+import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -37,13 +38,14 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		List<ColumnData> columnData = getColumnData(table.getColumns(), getReferenceMode(model, table));
+		List<ColumnData> columnData = getColumnData(table.getColumns(), model, getReferenceMode(model, table));
 		commonImportAdder.addCommonImports(context, columnData);
 		context.put("Autoincrement", getAutoincrementMode(columnData));
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("EntityName", nameGenerator.getClassName(table));
+		context.put("HasEnums", hasEnums(table.getColumns()));
 		context.put("HasReferences", hasReferences(table.getColumns()));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
@@ -73,7 +75,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 				.orElse(null);
 	}
 
-	private List<ColumnData> getColumnData(ColumnModel[] columns, ReferenceMode referenceMode) {
+	private List<ColumnData> getColumnData(ColumnModel[] columns, DataModel model, ReferenceMode referenceMode) {
 		return Arrays
 				.asList(columns)
 				.stream()
@@ -81,15 +83,17 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 						column -> new ColumnData()
 								.setAnnotations(getAnnotations(column, referenceMode))
 								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(getType(column, referenceMode)))
+								.setFieldType(getType(column, model, referenceMode)))
 				.collect(Collectors.toList());
 	}
 
-	private String getType(ColumnModel column, ReferenceMode referenceMode) {
+	private String getType(ColumnModel column, DataModel model, ReferenceMode referenceMode) {
 		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
 			return nameGenerator.getDBOClassName(column.getReferencedTable());
+		} else if (isEnum(column)) {
+			return nameGenerator.getDBOClassName(column.getDomain(), model);
 		}
-		return typeGenerator.getJavaTypeString(column.getDomain(), isNullable(column));
+		return typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column));
 	}
 
 	private List<AnnotationData> getAnnotations(ColumnModel column, ReferenceMode referenceMode) {
@@ -147,6 +151,13 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 																				"\"" + sequenceGeneratorName + "\""))));
 			}
 		}
+		if (column.getDomain().isOptionSet(AbstractClassCodeGenerator.ENUM)) {
+			annotations
+					.add(
+							new AnnotationData()
+									.setName("Enumerated")
+									.addParameter(new ParameterData().setValue("EnumType.STRING")));
+		}
 		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
 			AnnotationData annotationData =
 					new AnnotationData().setName("JoinColumn").setParameters(getColumnAnnotationParameters(column));
@@ -179,7 +190,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 	}
 
 	@Override
-	public String getClassName(TableModel table) {
+	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getDBOClassName(table);
 	}
 

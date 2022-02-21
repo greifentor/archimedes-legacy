@@ -28,7 +28,7 @@ public class RESTControllerSpringBootCodeFactory extends AbstractClassCodeFactor
 					"/rest-controller-springboot");
 
 	@Override
-	protected List<CodeGenerator> getCodeGenerators() {
+	protected List<CodeGenerator<?>> getCodeGenerators() {
 		return Arrays
 				.asList(
 						new DTOClassCodeGenerator(this),

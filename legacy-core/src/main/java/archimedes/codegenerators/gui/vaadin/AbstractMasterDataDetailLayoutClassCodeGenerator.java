@@ -35,7 +35,7 @@ public class AbstractMasterDataDetailLayoutClassCodeGenerator extends AbstractCl
 	}
 
 	@Override
-	public String getClassName(TableModel table) {
+	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getAbstractMasterDataDetailLayoutClassName(table);
 	}
 

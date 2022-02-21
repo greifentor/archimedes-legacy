@@ -11,6 +11,10 @@ import ${ImportLocalDateTime};
 #end
 import javax.persistence.Column;
 import javax.persistence.Entity;
+#if (${HasEnums})
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+#end
 #if ($ReferenceMode == "OBJECT" && ${HasReferences})
 import javax.persistence.FetchType;
 #end

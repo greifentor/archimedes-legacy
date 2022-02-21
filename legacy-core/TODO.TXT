@@ -1,0 +1,15 @@
+GUI
+
+- New table dialog with one tab only and a table view for the options.
+- New column dialog with one tab only and a table view for the options.
+- New domain dialog with one tab only and a table view for the options.
+
+
+Model
+
+- Version 3
+- Column options as option well as in the table tag.
+- Domain options as option well as in the table tag.
+- Remove history field from both.
+- Check fields of column for remove from the model and shift them to the options.
+- Also for tables.

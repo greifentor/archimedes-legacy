@@ -13,6 +13,7 @@ import archimedes.acf.checker.ModelChecker;
 import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEvent;
 import archimedes.legacy.gui.Counter;
+import archimedes.model.DomainModel;
 import archimedes.model.TableModel;
 
 /**
@@ -22,8 +23,8 @@ import archimedes.model.TableModel;
  */
 public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 
-    public static final String NO_GENERATION = "NO_GENERATION";
-    public static final String GENERATE_ONLY_FOR = "GENERATE_ONLY_FOR";
+	public static final String NO_GENERATION = "NO_GENERATION";
+	public static final String GENERATE_ONLY_FOR = "GENERATE_ONLY_FOR";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeFactory.class);
 
@@ -32,35 +33,78 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 		LOG.info("Started code generation for: {}", getClass().getSimpleName());
 		new File(path).mkdirs();
 		String basePackageName = dataModel.getBasePackageName();
-		List<CodeGenerator> generators = getCodeGenerators();
+		List<CodeGenerator<?>> generators = getCodeGenerators();
 		Counter processCounter = new Counter(1);
 		initializeProgress(generators.size());
+		for (DomainModel domainModel : dataModel.getAllDomains()) {
+			generators
+					.stream()
+					.filter(codeGenerator -> codeGenerator instanceof AbstractDomainCodeGenerator<?>)
+					.map(codeGenerator -> (AbstractDomainCodeGenerator<?>) codeGenerator)
+					.forEach(codeGenerator -> {
+						String fileName = codeGenerator.getSourceFileName(path, dataModel, domainModel);
+						String generatorName = codeGenerator.getName();
+						if (isReadyToOverride(fileName)) {
+							if (!codeGenerator.isToIgnoreFor(dataModel, domainModel)) {
+								// incrementStepProgress(stepCounter, "- writing file: " + fileName);
+								codeGenerator.generate(path, basePackageName, dataModel, domainModel);
+								LOG.info("- wrote file to: {}", fileName);
+							} else {
+								// incrementStepProgress(stepCounter, "- ignored by generator: " + generatorName);
+								LOG
+										.info(
+												"- ignored domain '{}' by generator: {}",
+												domainModel.getName(),
+												generatorName);
+							}
+						} else {
+							// incrementStepProgress(
+							// stepCounter,
+							// "- ignored by not ready to override for generator: " + generatorName);
+							LOG
+									.info(
+											"- ignored domain '{}' by not ready to override: {}",
+											domainModel.getName(),
+											generatorName);
+						}
+					});
+		}
 		for (TableModel tableModel : dataModel.getTables()) {
 			incrementProcessProgress(processCounter, "processing table: " + tableModel.getName());
 			if (tableModel.isGenerateCode() && isInCodeGeneration(tableModel)) {
 				initializeStepProgress(null);
 				Counter stepCounter = new Counter(1);
-				generators.forEach(codeGenerator -> {
-					String fileName = codeGenerator.getSourceFileName(path, dataModel, tableModel);
-					String generatorName = codeGenerator.getName();
-					if (isReadyToOverride(fileName) && (codeGenerator instanceof AbstractClassCodeGenerator<?>)) {
-						AbstractClassCodeGenerator<?> generator = ((AbstractClassCodeGenerator<?>) codeGenerator);
-						if (!generator.isToIgnoreFor(dataModel, tableModel)) {
-							incrementStepProgress(stepCounter, "- writing file: " + fileName);
-							generator.generate(path, basePackageName, dataModel, tableModel);
-							LOG.info("- wrote file to: {}", fileName);
-						} else {
-							incrementStepProgress(stepCounter, "- ignored by generator: " + generatorName);
-							LOG.info("- ignored table '{}' by generator: {}", tableModel.getName(), generatorName);
-						}
-					} else {
-						incrementStepProgress(
-								stepCounter,
-								"- ignored by not ready to override for generator: " + generatorName);
-						LOG.info("- ignored table '{}' by not ready to override: {}", tableModel.getName(),
-								generatorName);
-					}
-				});
+				generators
+						.stream()
+						.filter(codeGenerator -> codeGenerator instanceof AbstractClassCodeGenerator<?>)
+						.map(codeGenerator -> (AbstractClassCodeGenerator<?>) codeGenerator)
+						.forEach(codeGenerator -> {
+							String fileName = codeGenerator.getSourceFileName(path, dataModel, tableModel);
+							String generatorName = codeGenerator.getName();
+							if (isReadyToOverride(fileName)) {
+								if (!codeGenerator.isToIgnoreFor(dataModel, tableModel)) {
+									incrementStepProgress(stepCounter, "- writing file: " + fileName);
+									codeGenerator.generate(path, basePackageName, dataModel, tableModel);
+									LOG.info("- wrote file to: {}", fileName);
+								} else {
+									incrementStepProgress(stepCounter, "- ignored by generator: " + generatorName);
+									LOG
+											.info(
+													"- ignored table '{}' by generator: {}",
+													tableModel.getName(),
+													generatorName);
+								}
+							} else {
+								incrementStepProgress(
+										stepCounter,
+										"- ignored by not ready to override for generator: " + generatorName);
+								LOG
+										.info(
+												"- ignored table '{}' by not ready to override: {}",
+												tableModel.getName(),
+												generatorName);
+							}
+						});
 			} else {
 				LOG
 						.warn(
@@ -115,7 +159,7 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 	}
 
 	protected boolean isInCodeGeneration(TableModel tableModel) {
-        return !tableModel.isOptionSet(GENERATE_ONLY_FOR) && !tableModel.isOptionSet(NO_GENERATION);
+		return !tableModel.isOptionSet(GENERATE_ONLY_FOR) && !tableModel.isOptionSet(NO_GENERATION);
 	}
 
 	private boolean isReadyToOverride(String fileName) {
@@ -131,11 +175,11 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 		return true;
 	}
 
-	protected abstract List<CodeGenerator> getCodeGenerators();
+	protected abstract List<CodeGenerator<?>> getCodeGenerators();
 
 	@Override
 	public ModelChecker[] getModelCheckers() {
-		return new ModelChecker[]{};
+		return new ModelChecker[] {};
 	}
 
 	@Override

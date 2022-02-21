@@ -22,7 +22,7 @@ public class RESTClientCodeFactory extends AbstractClassCodeFactory
 			+ System.getProperty(RESTClientCodeFactory.class.getSimpleName() + ".templates.folder", "/restclient");
 
 	@Override
-	protected List<CodeGenerator> getCodeGenerators() {
+	protected List<CodeGenerator<?>> getCodeGenerators() {
 		return Arrays
 				.asList(
 						new DTOClassCodeGenerator(this),

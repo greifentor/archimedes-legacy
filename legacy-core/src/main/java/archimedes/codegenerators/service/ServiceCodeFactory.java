@@ -27,9 +27,12 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 					+ System.getProperty(ServiceCodeFactory.class.getSimpleName() + ".templates.folder", "/service");
 
 	@Override
-	protected List<CodeGenerator> getCodeGenerators() {
+	protected List<CodeGenerator<?>> getCodeGenerators() {
 		return Arrays
 				.asList(
+						// Domain
+						new ModelEnumCodeGenerator(this),
+						// Table
 						new ApplicationClassCodeGenerator(this),
 						new CheckClassCodeGenerator(this),
 						new GeneratedPersistencePortInterfaceCodeGenerator(this),

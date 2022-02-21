@@ -4,6 +4,7 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.model.DataModel;
+import archimedes.model.DomainModel;
 import archimedes.model.TableModel;
 
 /**
@@ -33,12 +34,16 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 
 	public String getDBOClassName(TableModel table) {
 		return table != null
-				? getClassName(table) + getDBOClassNameSuffix(table)
+				? getClassName(table) + getDBOClassNameSuffix(table.getDataModel())
 				: null;
 	}
 
-	private String getDBOClassNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "DBO", ALTERNATE_ENTITY_CLASS_NAME_SUFFIX);
+	public String getDBOClassName(DomainModel domain, DataModel model) {
+		return domain != null ? getClassName(domain.getName()) + getDBOClassNameSuffix(model) : null;
+	}
+
+	private String getDBOClassNameSuffix(DataModel model) {
+		return getNameOrAlternativeFromOption(model, "DBO", ALTERNATE_ENTITY_CLASS_NAME_SUFFIX);
 	}
 
 	public String getDBOConverterClassName(TableModel table) {
@@ -58,7 +63,10 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	private String getDBOMapperInterfaceNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "DBOMapper", ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(
+				table.getDataModel(),
+				"DBOMapper",
+				ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX);
 	}
 
 	public String getDBOConverterPackageName(DataModel model, TableModel table) {
@@ -75,7 +83,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 
 	private String getGeneratedJPAPersistenceAdapterClassNameSuffix(TableModel table) {
 		return getNameOrAlternativeFromOption(
-				table,
+				table.getDataModel(),
 				"GeneratedJPAPersistenceAdapter",
 				ALTERNATE_GENERATED_ADAPTER_CLASS_NAME_SUFFIX);
 	}
@@ -88,7 +96,10 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 
 	private String getGeneratedJPARepositoryInterfaceNameSuffix(TableModel table) {
 		return "Generated"
-				+ getNameOrAlternativeFromOption(table, "DBORepository", ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
+				+ getNameOrAlternativeFromOption(
+						table.getDataModel(),
+						"DBORepository",
+						ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
 	}
 
 	public String getGeneratedJPARepositoryPackageName(DataModel model, TableModel table) {
@@ -102,7 +113,10 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	private String getJPAPersistenceAdapterClassNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "JPAPersistenceAdapter", ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(
+				table.getDataModel(),
+				"JPAPersistenceAdapter",
+				ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX);
 	}
 
 	public String getJPAPersistenceAdapterPackageName(DataModel model, TableModel table) {
@@ -116,7 +130,10 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	private String getJPARepositoryInterfaceNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "DBORepository", ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(
+				table.getDataModel(),
+				"DBORepository",
+				ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
 	}
 
 	public String getJPARepositoryPackageName(DataModel model, TableModel table) {
@@ -178,11 +195,17 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getToDBOMethodName(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "toDBO", ALTERNATE_TO_DBO_METHOD_NAME);
+		return getNameOrAlternativeFromOption(
+				table != null ? table.getDataModel() : null,
+				"toDBO",
+				ALTERNATE_TO_DBO_METHOD_NAME);
 	}
 
 	public String getToModelMethodName(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "toModel", ALTERNATE_TO_MODEL_METHOD_NAME);
+		return getNameOrAlternativeFromOption(
+				table != null ? table.getDataModel() : null,
+				"toModel",
+				ALTERNATE_TO_MODEL_METHOD_NAME);
 	}
 
 }

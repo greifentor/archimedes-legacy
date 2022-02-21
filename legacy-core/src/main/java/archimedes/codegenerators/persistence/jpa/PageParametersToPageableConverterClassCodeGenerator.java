@@ -33,7 +33,7 @@ public class PageParametersToPageableConverterClassCodeGenerator extends Abstrac
 	}
 
 	@Override
-	public String getClassName(TableModel table) { return nameGenerator.getPageParametersToPageableConverterClassName(table); }
+	public String getClassName(DataModel model, TableModel table) { return nameGenerator.getPageParametersToPageableConverterClassName(table); }
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {

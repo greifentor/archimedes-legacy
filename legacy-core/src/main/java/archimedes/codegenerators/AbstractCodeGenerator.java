@@ -1,5 +1,6 @@
 package archimedes.codegenerators;
 
+import java.io.File;
 import java.io.StringWriter;
 import java.nio.file.Paths;
 
@@ -12,6 +13,8 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
 
 import archimedes.model.DataModel;
+import archimedes.model.NamedObject;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -19,9 +22,14 @@ import archimedes.model.TableModel;
  *
  * @author ollie (03.03.2021)
  */
-public abstract class AbstractCodeGenerator<N extends NameGenerator> implements CodeGenerator {
+public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends NamedObject>
+		implements CodeGenerator<T> {
 
 	public static final String GENERATED_CODE = "GENERATED CODE !!! DO NOT CHANGE !!!";
+
+	public static final String ENUM = "ENUM";
+	public static final String CONTEXT_NAME = "CONTEXT_NAME";
+	public static final String MODULE_MODE = "MODULE_MODE";
 
 	protected static final String PROPERTY_PREFIX = "archimdes.code.generators.";
 	protected static final String SLASH = "/";
@@ -55,12 +63,12 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 	}
 
 	@Override
-	public String generate(String basePackageName, DataModel model, TableModel table) {
+	public String generate(String basePackageName, DataModel model, T t) {
 		VelocityContext context = new VelocityContext();
 		context.put("BasePackageName", basePackageName);
 		context.put("Generated", GENERATED_CODE);
-		context.put("PluralName", table != null ? table.getName().toLowerCase() + "s" : "");
-		extendVelocityContext(context, model, table);
+		context.put("PluralName", t != null ? t.getName().toLowerCase() + "s" : "");
+		extendVelocityContext(context, model, t);
 		return processTemplate(context, templateFileName);
 	}
 
@@ -87,11 +95,75 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator> implements 
 		return writer.toString();
 	}
 
-	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+	protected void extendVelocityContext(VelocityContext context, DataModel model, T t) {
 	}
 
-	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
+	protected abstract String getDefaultModuleName(DataModel dataModel);
+
+	protected boolean isToIgnoreFor(DataModel model, T t) {
 		return false;
+	}
+
+	@Override
+	public String getSourceFileName(String path, DataModel dataModel, T t) {
+		String pathName =
+				path + SLASH + getBaseCodeFolderName(dataModel) + SLASH
+						+ getPackageName(dataModel, t).replace(".", SLASH);
+		File packagePath = new File(pathName);
+		if (!packagePath.exists()) {
+			packagePath.mkdirs();
+		}
+		return pathName + SLASH + getClassName(dataModel, t) + getClassFileExtension(dataModel);
+	}
+
+	protected String getBaseCodeFolderName(DataModel dataModel) {
+		return (isModuleModeSet(dataModel) && (getModuleName(dataModel) != null) ? getModuleName(dataModel) + "/" : "")
+				+ System
+						.getProperty(
+								PROPERTY_PREFIX + getClass().getSimpleName() + ".base.code.folder.name",
+								System.getProperty(PROPERTY_PREFIX + "base.code.folder.name", "src/main/java"));
+	}
+
+	protected String getClassFileExtension(DataModel dataModel) {
+		return System
+				.getProperty(
+						PROPERTY_PREFIX + getClass().getSimpleName() + "class.file.extension",
+						System.getProperty(PROPERTY_PREFIX + "class.file.extension", ".java"));
+	}
+
+	private boolean isModuleModeSet(DataModel dataModel) {
+		return dataModel.getOptionByName(MODULE_MODE) != null;
+	}
+
+	protected String getModuleName(DataModel dataModel) {
+		String modulePrefix = dataModel.getApplicationName().toLowerCase();
+		if (getAlternateModuleNamePrefix(dataModel) != null) {
+			modulePrefix = getAlternateModuleNamePrefix(dataModel);
+		}
+		return modulePrefix + (modulePrefix.isEmpty() ? "" : "-") + buildModuleName(dataModel);
+	}
+
+	private String buildModuleName(DataModel dataModel) {
+		OptionModel option = dataModel.getOptionByName(getAlternateModule());
+		return option != null ? option.getParameter() : getDefaultModuleName(dataModel);
+	}
+
+	private String getAlternateModuleNamePrefix(DataModel dataModel) {
+		OptionModel option = dataModel.getOptionByName(AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX);
+		return option != null ? option.getParameter() : null;
+	}
+
+	protected String getAlternateModule() {
+		return "-";
+	}
+
+	protected String getContextName(TableModel table) {
+		return table == null
+				? null
+				: OptionGetter
+						.getOptionByName(table, CONTEXT_NAME)
+						.map(OptionModel::getParameter)
+						.orElse(nameGenerator.getClassName(table));
 	}
 
 }

@@ -24,7 +24,7 @@ public class LocalizationCodeFactory extends AbstractClassCodeFactory implements
 					.getProperty(LocalizationCodeFactory.class.getSimpleName() + ".templates.folder", "/localization");
 
 	@Override
-	protected List<CodeGenerator> getCodeGenerators() {
+	protected List<CodeGenerator<?>> getCodeGenerators() {
 		return Arrays
 				.asList(
 						new LocalizationSOClassCodeGenerator(this),

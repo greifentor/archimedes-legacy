@@ -34,7 +34,7 @@ public class CheckClassCodeGenerator
 	}
 
 	@Override
-	public String getClassName(TableModel table) {
+	public String getClassName(DataModel model, TableModel table) {
 		return "Check";
 	}
 

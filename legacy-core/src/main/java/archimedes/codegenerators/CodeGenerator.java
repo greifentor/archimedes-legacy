@@ -1,25 +1,34 @@
 package archimedes.codegenerators;
 
 import archimedes.model.DataModel;
-import archimedes.model.TableModel;
+import archimedes.model.NamedObject;
 
 /**
  * An interface for the code generator.
  *
  * @author ollie (14.03.2021)
  */
-public interface CodeGenerator {
+public interface CodeGenerator<T extends NamedObject> {
 
-	String getSourceFileName(String basePackageName, DataModel model, TableModel table);
+	public enum Type {
+		DOMAIN,
+		TABLE;
+	}
 
-	String generate(String basePackageName, DataModel model, TableModel table);
+	String getSourceFileName(String basePackageName, DataModel model, T t);
 
-	String getClassName(TableModel table);
+	String generate(String basePackageName, DataModel model, T t);
 
-	String getPackageName(DataModel model, TableModel table);
+	String getClassName(DataModel model, T t);
+
+	String getPackageName(DataModel model, T t);
 
 	default String getName() {
 		return getClass().getSimpleName();
+	}
+
+	default Type getType() {
+		return Type.TABLE;
 	}
 
 }

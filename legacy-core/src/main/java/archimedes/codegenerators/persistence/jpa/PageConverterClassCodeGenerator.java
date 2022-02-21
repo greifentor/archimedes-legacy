@@ -34,7 +34,7 @@ public class PageConverterClassCodeGenerator extends AbstractClassCodeGenerator<
 	}
 
 	@Override
-	public String getClassName(TableModel table) {
+	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getPageConverterClassName(table);
 	}
 

@@ -8,7 +8,6 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.TypeGenerator;
-import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
@@ -18,8 +17,6 @@ import archimedes.model.TableModel;
  * @author ollie (28.06.2021)
  */
 public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
-
-	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
 	public JPAPersistenceAdapterClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
@@ -42,7 +39,7 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 	}
 
 	@Override
-	public String getClassName(TableModel table) {
+	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getJPAPersistenceAdapterClassName(table);
 	}
 

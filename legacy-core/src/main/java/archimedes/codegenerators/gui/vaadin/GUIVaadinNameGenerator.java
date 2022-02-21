@@ -39,7 +39,9 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	public String getButtonClassName(DataModel model) {
-		return getNameOrAlternativeFromOption(model, "Button", ALTERNATE_BUTTON_CLASS_NAME_SUFFIX);
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(model, "Button", ALTERNATE_BUTTON_CLASS_NAME_SUFFIX);
 	}
 
 	public String getGOClassName(TableModel table) {
@@ -47,7 +49,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	private String getGOClassNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "GO", ALTERNATE_GO_CLASS_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(table.getDataModel(), "GO", ALTERNATE_GO_CLASS_NAME_SUFFIX);
 	}
 
 	public String getGOConverterClassName(TableModel table) {
@@ -65,7 +67,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	private String getGOMapperInterfaceNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "GOMapper", ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(
+				table.getDataModel(),
+				"GOMapper",
+				ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX);
 	}
 
 	public String getGOConverterPackageName(DataModel model, TableModel table) {
@@ -77,7 +82,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	public String getImageClassName(DataModel model) {
-		return getNameOrAlternativeFromOption(model, "Image", ALTERNATE_IMAGE_CLASS_NAME_SUFFIX);
+		return model == null ? null : getNameOrAlternativeFromOption(model, "Image", ALTERNATE_IMAGE_CLASS_NAME_SUFFIX);
 	}
 
 	public String getPageGOConverterClassName(TableModel table) {
@@ -117,7 +122,9 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	public String getTextFieldClassName(DataModel model) {
-		return getNameOrAlternativeFromOption(model, "TextField", ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX);
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(model, "TextField", ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX);
 	}
 
 	public String getToGOConverterInterfaceName(TableModel table) {
@@ -125,11 +132,17 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	public String getToGOMethodName(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "toGO", ALTERNATE_TO_GO_METHOD_NAME);
+		return getNameOrAlternativeFromOption(
+				table == null ? null : table.getDataModel(),
+				"toGO",
+				ALTERNATE_TO_GO_METHOD_NAME);
 	}
 
 	public String getToModelMethodName(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "toModel", ALTERNATE_TO_MODEL_METHOD_NAME);
+		return getNameOrAlternativeFromOption(
+				table == null ? null : table.getDataModel(),
+				"toModel",
+				ALTERNATE_TO_MODEL_METHOD_NAME);
 	}
 
 }

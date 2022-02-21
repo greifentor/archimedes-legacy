@@ -30,9 +30,12 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 							"/persistence-jpa");
 
 	@Override
-	protected List<CodeGenerator> getCodeGenerators() {
+	protected List<CodeGenerator<?>> getCodeGenerators() {
 		return Arrays
 				.asList(
+						// Domains
+						new DBOEnumCodeGenerator(this),
+						// Tables
 						new DBOClassCodeGenerator(this),
 						new DBOConverterClassCodeGenerator(this),
 						new DBOMapstructMapperInterfaceCodeGenerator(this),

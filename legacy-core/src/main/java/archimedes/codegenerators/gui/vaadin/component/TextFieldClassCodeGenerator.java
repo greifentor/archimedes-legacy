@@ -34,7 +34,7 @@ public class TextFieldClassCodeGenerator extends AbstractClassCodeGenerator<GUIV
 	}
 
 	@Override
-	public String getClassName(TableModel table) {
+	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getTextFieldClassName(table.getDataModel());
 	}
 

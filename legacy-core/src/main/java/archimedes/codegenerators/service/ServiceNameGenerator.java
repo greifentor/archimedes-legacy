@@ -2,6 +2,7 @@ package archimedes.codegenerators.service;
 
 import archimedes.codegenerators.NameGenerator;
 import archimedes.model.DataModel;
+import archimedes.model.DomainModel;
 import archimedes.model.TableModel;
 
 /**
@@ -61,7 +62,7 @@ public class ServiceNameGenerator extends NameGenerator {
 
 	private String getGeneratedPersistencePortInterfaceNameSuffix(TableModel table) {
 		return getNameOrAlternativeFromOption(
-				table,
+				table.getDataModel(),
 				"GeneratedPersistencePort",
 				ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX);
 	}
@@ -72,7 +73,7 @@ public class ServiceNameGenerator extends NameGenerator {
 
 	private String getGeneratedServiceInterfaceNameSuffix(TableModel table) {
 		return getNameOrAlternativeFromOption(
-				table,
+				table.getDataModel(),
 				"GeneratedService",
 				ALTERNATE_GENERATED_SERVICE_INTERFACE_NAME_SUFFIX);
 	}
@@ -83,7 +84,7 @@ public class ServiceNameGenerator extends NameGenerator {
 
 	private String getGeneratedServiceImplClassNameSuffix(TableModel table) {
 		return getNameOrAlternativeFromOption(
-				table,
+				table.getDataModel(),
 				"GeneratedServiceImpl",
 				ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX);
 	}
@@ -94,14 +95,18 @@ public class ServiceNameGenerator extends NameGenerator {
 				: null;
 	}
 
+	public String getModelClassName(DomainModel domain, DataModel model) {
+		return domain != null ? getClassName(domain.getName()) + getModelClassNameSuffix(model) : null;
+	}
+
 	public String getModelClassName(TableModel table) {
 		return table != null
-				? getClassName(table) + getModelClassNameSuffix(table)
+				? getClassName(table) + getModelClassNameSuffix(table.getDataModel())
 				: null;
 	}
 
-	private String getModelClassNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "", ALTERNATE_MODEL_CLASS_NAME_SUFFIX);
+	private String getModelClassNameSuffix(DataModel model) {
+		return getNameOrAlternativeFromOption(model, "", ALTERNATE_MODEL_CLASS_NAME_SUFFIX);
 	}
 
 	public String getModelPackageName(DataModel model, TableModel table) {
@@ -132,7 +137,7 @@ public class ServiceNameGenerator extends NameGenerator {
 
 	private String getPersistencePortInterfaceNameSuffix(TableModel table) {
 		return getNameOrAlternativeFromOption(
-				table,
+				table.getDataModel(),
 				"PersistencePort",
 				ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX);
 	}
@@ -150,7 +155,7 @@ public class ServiceNameGenerator extends NameGenerator {
 	}
 
 	private String getServiceInterfaceNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "Service", ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(table.getDataModel(), "Service", ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX);
 	}
 
 	public String getServiceImplClassName(TableModel table) {
@@ -158,7 +163,10 @@ public class ServiceNameGenerator extends NameGenerator {
 	}
 
 	private String getServiceImplClassNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "ServiceImpl", ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(
+				table.getDataModel(),
+				"ServiceImpl",
+				ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX);
 	}
 
 	public String getServiceImplPackageName(DataModel model, TableModel table) {

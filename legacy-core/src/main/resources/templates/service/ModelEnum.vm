@@ -1,0 +1,20 @@
+package ${PackageName};
+
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * An enum for ${PluralName}.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public enum ${ClassName} {
+#if ($Identifiers)
+
+#foreach ($Identifier in ${Identifiers})
+	${Identifier}#if ( $foreach.hasNext ),#{else};#{end}
+#end
+
+#{end}}

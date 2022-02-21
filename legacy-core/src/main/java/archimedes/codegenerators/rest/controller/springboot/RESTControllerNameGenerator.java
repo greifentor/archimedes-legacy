@@ -27,7 +27,7 @@ public class RESTControllerNameGenerator extends NameGenerator {
 	}
 
 	private String getDTOClassNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "DTO", ALTERNATE_DTO_CLASS_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(table.getDataModel(), "DTO", ALTERNATE_DTO_CLASS_NAME_SUFFIX);
 	}
 
 	public String getDTOPackageName(DataModel model, TableModel table) {
@@ -49,7 +49,10 @@ public class RESTControllerNameGenerator extends NameGenerator {
 	}
 
 	private String getDTOMapperInterfaceNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "DTOMapper", ALTERNATE_DTOCONVERTER_CLASS_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(
+				table.getDataModel(),
+				"DTOMapper",
+				ALTERNATE_DTOCONVERTER_CLASS_NAME_SUFFIX);
 	}
 
 	public String getDTOConverterPackageName(DataModel model, TableModel table) {
@@ -65,7 +68,10 @@ public class RESTControllerNameGenerator extends NameGenerator {
 	}
 
 	private String getRESTControllerClassNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(table, "RESTController", ALTERNATE_RESTCONTROLLER_CLASS_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(
+				table.getDataModel(),
+				"RESTController",
+				ALTERNATE_RESTCONTROLLER_CLASS_NAME_SUFFIX);
 	}
 
 	public String getRESTControllerPackageName(DataModel model, TableModel table) {

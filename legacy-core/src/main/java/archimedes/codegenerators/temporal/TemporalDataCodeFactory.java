@@ -26,7 +26,7 @@ public class TemporalDataCodeFactory extends AbstractClassCodeFactory implements
 			+ System.getProperty(TemporalDataCodeFactory.class.getSimpleName() + ".templates.folder", "/temporal");
 
 	@Override
-	protected List<CodeGenerator> getCodeGenerators() {
+	protected List<CodeGenerator<?>> getCodeGenerators() {
 		return Arrays
 				.asList(
 						new PersistencePortGeneratedInterfaceCodeGenerator(this),

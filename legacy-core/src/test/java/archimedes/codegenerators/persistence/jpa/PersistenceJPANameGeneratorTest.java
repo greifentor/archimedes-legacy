@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Disabled;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.DomainModel;
 import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 
@@ -35,9 +37,29 @@ public class PersistenceJPANameGeneratorTest {
 	@InjectMocks
 	private PersistenceJPANameGenerator unitUnderTest;
 
-	@DisplayName("tests for DBO class names")
 	@Nested
-	class DBOClassNameTests {
+	class DBOClassNameTests_forDomains {
+
+		@Test
+		void passANullValue_returnsANullValue() {
+			assertNull(unitUnderTest.getDBOClassName((DomainModel) null, null));
+		}
+
+		@Test
+		void passADomainModel_returnsTheDomainNameAsClassNameWithDBOExtension() {
+			// Prepare
+			String domainName = "DomainName";
+			DomainModel domain = mock(DomainModel.class);
+			when(domain.getName()).thenReturn(domainName);
+			// Run & Check
+			assertEquals(domainName + "DBO", unitUnderTest.getDBOClassName(domain, model));
+		}
+
+	}
+
+	@DisplayName("tests for DBO class names for tables")
+	@Nested
+	class DBOClassNameTests_forTables {
 
 		@Test
 		void getDBOClassName_PassTableModelWithEmptyName_ThrowsException() {
@@ -51,7 +73,7 @@ public class PersistenceJPANameGeneratorTest {
 
 		@Test
 		void getDBOClassName_PassNullValue_ReturnsNullValue() {
-			assertNull(unitUnderTest.getDBOClassName(null));
+			assertNull(unitUnderTest.getDBOClassName((TableModel) null));
 		}
 
 		@Test
