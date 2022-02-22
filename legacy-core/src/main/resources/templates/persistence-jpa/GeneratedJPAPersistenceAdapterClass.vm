@@ -119,7 +119,7 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 
 	@Override
 	public void delete(${ModelClassName} model) {
-		repository.deleteById(model.get${IdFieldNameCamelCase}());
+		repository.deleteById(model.get${IdFieldNameCamelCase}()#if(${IdFieldIsEnum}).name()#end);
 	}
 #foreach($FindBy in $FindBys)
 

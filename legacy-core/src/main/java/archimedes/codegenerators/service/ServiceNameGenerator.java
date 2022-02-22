@@ -3,6 +3,7 @@ package archimedes.codegenerators.service;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
+import archimedes.model.OptionListProvider;
 import archimedes.model.TableModel;
 
 /**
@@ -109,8 +110,8 @@ public class ServiceNameGenerator extends NameGenerator {
 		return getNameOrAlternativeFromOption(model, "", ALTERNATE_MODEL_CLASS_NAME_SUFFIX);
 	}
 
-	public String getModelPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "core.model", ALTERNATE_MODEL_PACKAGE_NAME);
+	public String getModelPackageName(DataModel model, OptionListProvider domain) {
+		return createPackageName(model, domain, "core.model", ALTERNATE_MODEL_PACKAGE_NAME);
 	}
 
 	public String getPageClassName() {

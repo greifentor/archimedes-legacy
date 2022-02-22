@@ -91,10 +91,6 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		return processTemplate(context, "JavaSetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
 	}
 
-	protected String getQualifiedName(String packageName, String className) {
-		return ((packageName != null) && !packageName.isEmpty() ? packageName + "." : "") + className;
-	}
-
 	protected boolean isGenerateIdClass(DataModel model, TableModel table) {
 		return (model.getOptionByName(AbstractClassCodeGenerator.GENERATE_ID_CLASS) != null)
 				|| (table.getOptionByName(AbstractClassCodeGenerator.GENERATE_ID_CLASS) != null);
@@ -144,6 +140,15 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 				.findFirst()
 				.map(column -> nameGenerator.getClassName(column.getName()))
 				.orElse("UNKNOWN");
+	}
+
+	protected boolean getIdFieldIsEnum(TableModel table) {
+		return Arrays
+				.asList(table.getPrimaryKeyColumns())
+				.stream()
+				.findFirst()
+				.map(column -> isEnum(column))
+				.orElse(false);
 	}
 
 	protected String getIdClassName(TableModel table) {

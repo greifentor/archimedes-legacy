@@ -15,12 +15,12 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class DBOEnumCodeGeneratorTest {
+public class DBOEnumConverterClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
-	private DBOEnumCodeGenerator unitUnderTest;
+	private DBOEnumConverterClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -46,21 +46,31 @@ public class DBOEnumCodeGeneratorTest {
 		}
 
 		private String getExpected() {
-			String s = "package base.pack.age.name.persistence.entity;\n" + //
+			String s = "package base.pack.age.name.persistence.converter;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
 					"\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
+					"import base.pack.age.name.persistence.entity.DescriptionDBO;\n" + //
+					"import base.pack.age.name.core.model.Description;\n" + //
+					"\n" + //
 					"/**\n" + //
-					" * A DBO enum for descriptions.\n" + //
+					" * A DBO enum converter for descriptions.\n" + //
 					" *\n" + //
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
 					"@Generated\n" + //
-					"public enum DescriptionDBO {\n" + //
+					"@Named\n" + //
+					"public class DescriptionDBOConverter {\n" + //
 					"\n" + //
-					"	ONE,\n" + //
-					"	TWO,\n" + //
-					"	THREE;\n" + //
+					"	public DescriptionDBO toDBO(Description model) {\n" + //
+					"		return model == null ? null : DescriptionDBO.valueOf(model.name());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public Description toModel(DescriptionDBO dbo) {\n" + //
+					"		return dbo == null ? null : Description.valueOf(dbo.name());\n" + //
+					"	}\n" + //
 					"\n" + //
 					"}";
 			return s;

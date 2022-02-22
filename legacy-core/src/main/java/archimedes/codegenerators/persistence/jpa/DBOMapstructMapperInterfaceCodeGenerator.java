@@ -52,7 +52,7 @@ public class DBOMapstructMapperInterfaceCodeGenerator extends AbstractClassCodeG
 
 	@Override
 	public String getClassName(DataModel model, TableModel table) {
-		return nameGenerator.getDBOConverterClassName(table);
+		return nameGenerator.getDBOConverterClassName(table.getName(), model);
 	}
 
 	@Override

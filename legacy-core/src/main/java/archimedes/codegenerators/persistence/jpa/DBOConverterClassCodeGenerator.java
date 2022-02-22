@@ -42,7 +42,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 		List<ColumnData> columnData = getColumnData(table.getColumns(), model, referenceMode);
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
-		context.put("ConverterData", getConverterData(table.getColumns(), referenceMode));
+		context.put("ConverterData", getConverterData(table.getColumns(), model, referenceMode));
 		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
 		context
 				.put(
@@ -54,6 +54,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 		if (Columns.containsFieldWithType(columnData, "LocalDate")) {
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
+		context.put("HasEnums", hasEnums(table.getColumns()));
 		context.put("HasReferences", hasReferences(table.getColumns()));
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
 		context
@@ -64,8 +65,8 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 								serviceNameGenerator.getModelClassName(table)));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ReferenceMode", referenceMode);
-		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
-		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
+		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(model));
+		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(model));
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns, DataModel model, ReferenceMode referenceMode) {
@@ -74,7 +75,8 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 				.stream()
 				.map(
 						column -> new ColumnData()
-								.setConverterAttributeName(getDboConverterAttributeName(column))
+								.setConverterAttributeName(getDboConverterAttributeName(column, model))
+								.setEnumType(isEnum(column))
 								.setFieldName(nameGenerator.getAttributeName(column))
 								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false))
 								.setGetterCall(getGetterCall(column, model, referenceMode))
@@ -84,10 +86,14 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 				.collect(Collectors.toList());
 	}
 
-	private String getDboConverterAttributeName(ColumnModel column) {
-		return (column.getReferencedColumn() == null)
-				? "UNKNOWN"
-				: nameGenerator.getAttributeName(getClassName(column.getReferencedTable()));
+	private String getDboConverterAttributeName(ColumnModel column, DataModel model) {
+		return (column.getReferencedColumn() != null)
+				? nameGenerator.getAttributeName(getClassName(column.getReferencedTable()))
+				: (isEnum(column)
+						? nameGenerator
+								.getAttributeName(
+										nameGenerator.getDBOConverterClassName(column.getDomain().getName(), model))
+						: "UNKNOWN");
 	}
 
 	private String getGetterCall(ColumnModel column, DataModel model, ReferenceMode referenceMode) {
@@ -103,21 +109,24 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 		return processTemplate(context, "DBOKeyGetter.vm");
 	}
 
-	private List<ConverterData> getConverterData(ColumnModel[] columns, ReferenceMode referenceMode) {
-		if (referenceMode != ReferenceMode.OBJECT) {
+	private List<ConverterData> getConverterData(ColumnModel[] columns, DataModel model, ReferenceMode referenceMode) {
+		if ((referenceMode != ReferenceMode.OBJECT) && !hasEnums(columns)) {
 			return List.of();
 		}
 		return List
 				.of(columns)
 				.stream()
-				.filter(column -> column.getReferencedColumn() != null)
-				.map(this::toConverterData)
+				.filter(column -> (column.getReferencedColumn() != null) || isEnum(column))
+				.map(column -> toConverterData(column, model))
 				.sorted((cd0, cd1) -> cd0.getClassName().compareTo(cd1.getClassName()))
 				.collect(Collectors.toList());
 	}
 
-	private ConverterData toConverterData(ColumnModel column) {
-		String dboConverterClassName = getClassName(column.getReferencedTable());
+	private ConverterData toConverterData(ColumnModel column, DataModel model) {
+		String dboConverterClassName =
+				isEnum(column)
+						? nameGenerator.getDBOConverterClassName(column.getDomain().getName(), model)
+						: getClassName(column.getReferencedTable());
 		return new ConverterData()
 				.setAttributeName(nameGenerator.getAttributeName(dboConverterClassName))
 				.setClassName(dboConverterClassName);
@@ -125,7 +134,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 
 	@Override
 	public String getClassName(DataModel model, TableModel table) {
-		return nameGenerator.getDBOConverterClassName(table);
+		return nameGenerator.getDBOConverterClassName(table.getName(), model);
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import ${ImportLocalDate};
 
 #end
 import lombok.Generated;
-#if (${ReferenceMode} == "OBJECT" && ${HasReferences})
+#if ((${ReferenceMode} == "OBJECT" && ${HasReferences}) or ${HasEnums})
 import lombok.RequiredArgsConstructor;
 #end
 
@@ -29,7 +29,7 @@ import ${ModelClassNameQualified};
 #end
 public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOClassName}> {
 
-#if (${ReferenceMode} == "OBJECT" && ${HasReferences})
+#if ((${ReferenceMode} == "OBJECT" && ${HasReferences}) or ${HasEnums})
 #foreach($Converter in $ConverterData)
 	private final ${Converter.getClassName()} ${Converter.getAttributeName()};
 #if ( !$foreach.hasNext )
@@ -43,7 +43,7 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 		}
 		return new ${DBOClassName}()
 #foreach($Column in $ColumnData)
-#if (${Column.isReference()} && ${ReferenceMode} == "OBJECT")
+#if ((${Column.isReference()} && ${ReferenceMode} == "OBJECT") or ${Column.isEnumType()})
 				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(model.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
 #else
 				.${Column.getSetterName()}(model.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
@@ -58,7 +58,7 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 		}
 		return new ${ModelClassName}()
 #foreach($Column in $ColumnData)
-#if (${Column.isReference()} && ${ReferenceMode} == "OBJECT")
+#if ((${Column.isReference()} && ${ReferenceMode} == "OBJECT") or ${Column.isEnumType()})
 				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToModelMethodName}(dbo.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
 #else
 				.${Column.getSetterName()}(dbo.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end

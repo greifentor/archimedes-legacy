@@ -56,6 +56,7 @@ public class Columns {
 		private String converterAttributeName;
 		private String descriptionName;
 		private String enumIdentifier;
+		private boolean enumType;
 		private String fieldName;
 		private String fieldType;
 		private String getterCall;

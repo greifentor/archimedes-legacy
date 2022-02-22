@@ -187,7 +187,7 @@ public class PersistenceJPANameGeneratorTest {
 
 		@Test
 		void getDBOConverterClassName_passANullValueAsTableModel_returnsANullValue() {
-			assertNull(unitUnderTest.getDBOConverterClassName(null));
+			assertNull(unitUnderTest.getDBOConverterClassName(null, model));
 		}
 
 		@Test
@@ -196,7 +196,7 @@ public class PersistenceJPANameGeneratorTest {
 			String expected = "TableDBOConverter";
 			when(table.getName()).thenReturn("Table");
 			// Run
-			String returned = unitUnderTest.getDBOConverterClassName(table);
+			String returned = unitUnderTest.getDBOConverterClassName(table.getName(), model);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -213,7 +213,7 @@ public class PersistenceJPANameGeneratorTest {
 									PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX,
 									"DBOMapper"));
 			// Run
-			String returned = unitUnderTest.getDBOConverterClassName(table);
+			String returned = unitUnderTest.getDBOConverterClassName(table.getName(), model);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -780,7 +780,7 @@ public class PersistenceJPANameGeneratorTest {
 
 		@Test
 		void getToDBOMethodName_PassANullValueAsTable_ReturnsADefaultName() {
-			assertEquals("toDBO", unitUnderTest.getToDBOMethodName(null));
+			assertEquals("toDBO", unitUnderTest.getToDBOMethodName((DataModel) null));
 		}
 
 		@Test
@@ -809,7 +809,7 @@ public class PersistenceJPANameGeneratorTest {
 
 		@Test
 		void getToModelMethodName_PassANullValueAsTable_ReturnsADefaultName() {
-			assertEquals("toModel", unitUnderTest.getToModelMethodName(null));
+			assertEquals("toModel", unitUnderTest.getToModelMethodName((DataModel) null));
 		}
 
 		@Test

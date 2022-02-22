@@ -42,7 +42,7 @@ public class JPAPersistenceAdapterDependentClassCodeGenerator
 		context.put("DependentAttributeName", getDependentAttributeName(table));
 		context.put("DependentAttributeNameCamilCase", nameGenerator.getClassName(getDependentAttributeName(table)));
 		context.put("DependentClassName", getDependentClassName(table));
-		context.put("DBOConverterClassName", nameGenerator.getDBOConverterClassName(table));
+		context.put("DBOConverterClassName", nameGenerator.getDBOConverterClassName(table.getName(), model));
 		context.put("DBOConverterPackageName", nameGenerator.getDBOConverterPackageName(model, table));
 		context.put("IdClassName", getIdClassName(table));
 		context.put("IdFieldNameCamelCase", getIdFieldNameCamelCase(table));
@@ -56,8 +56,8 @@ public class JPAPersistenceAdapterDependentClassCodeGenerator
 				.put(
 						"PersistencePortInterfacePackageName",
 						serviceNameGenerator.getPersistencePortPackageName(model, table));
-		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
-		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
+		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(model));
+		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(model));
 	}
 
 	private String getDependentAttributeName(TableModel table) {

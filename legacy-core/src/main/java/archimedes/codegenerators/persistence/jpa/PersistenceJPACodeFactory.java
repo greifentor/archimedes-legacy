@@ -35,6 +35,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 				.asList(
 						// Domains
 						new DBOEnumCodeGenerator(this),
+						new DBOEnumConverterClassCodeGenerator(this),
 						// Tables
 						new DBOClassCodeGenerator(this),
 						new DBOConverterClassCodeGenerator(this),

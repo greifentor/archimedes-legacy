@@ -48,7 +48,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
 		context.put("DBOPackageName", nameGenerator.getDBOPackageName(model, table));
-		context.put("DBOConverterClassName", nameGenerator.getDBOConverterClassName(table));
+		context.put("DBOConverterClassName", nameGenerator.getDBOConverterClassName(table.getName(), model));
 		context.put("DBOConverterPackageName", nameGenerator.getDBOConverterPackageName(model, table));
 		context
 				.put(
@@ -60,7 +60,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 										nameGenerator,
 										serviceNameGenerator::getModelClassName,
 										t -> serviceNameGenerator.getModelPackageName(model, t),
-										nameGenerator::getDBOConverterClassName,
+										t -> nameGenerator.getDBOConverterClassName(t.getName(), model),
 										t -> nameGenerator.getDBOConverterPackageName(model, t),
 										typeGenerator));
 		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
@@ -73,6 +73,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		context.put("IdClassName", getIdClassName(table));
 		context.put("IdFieldName", nameGenerator.getAttributeName(getIdFieldNameCamelCase(table)));
 		context.put("IdFieldNameCamelCase", getIdFieldNameCamelCase(table));
+		context.put("IdFieldIsEnum", getIdFieldIsEnum(table));
 		context.put("JPARepositoryClassName", nameGenerator.getJPARepositoryInterfaceName(table));
 		context.put("JPARepositoryPackageName", nameGenerator.getJPARepositoryPackageName(model, table));
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));

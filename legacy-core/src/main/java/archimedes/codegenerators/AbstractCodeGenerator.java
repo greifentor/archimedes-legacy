@@ -72,6 +72,10 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 		return processTemplate(context, templateFileName);
 	}
 
+	protected String getQualifiedName(String packageName, String className) {
+		return ((packageName != null) && !packageName.isEmpty() ? packageName + "." : "") + className;
+	}
+
 	protected String processTemplate(VelocityContext context, String templateFileName) {
 		return processTemplate(context, templateFileName, templatePathName);
 	}

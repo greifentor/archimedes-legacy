@@ -309,4 +309,80 @@ public class DBOConverterClassCodeGeneratorTest {
 
 	}
 
+	@Nested
+	class TestsOfMethod_generate_String_TableModel_WithEnumAttribute {
+
+		@Test
+		void happyRunFor() {
+			// Prepare
+			String expected = "package " + BASE_PACKAGE_NAME + ".persistence.converter;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.stream.Collectors;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import java.time.LocalDate;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
+					"\n" + //
+					"import " + BASE_PACKAGE_NAME + ".persistence.entity.ATableDBO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A DBO converter for a_tables.\n" + //
+					" *\n" + //
+					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"public class ATableDBOConverter implements ToModelConverter<ATable, ATableDBO> {\n"
+					+ //
+					"\n" + //
+					"	private final DescriptionDBOConverter descriptionDBOConverter;\n" + //
+					"\n" + //
+					"	public ATableDBO toDBO(ATable model) {\n" + //
+					"		if (model == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new ATableDBO()\n" + //
+					"				.setId(model.getId())\n" + //
+					"				.setADate(model.getADate())\n" + //
+					"				.setDescription(descriptionDBOConverter.toDBO(model.getDescription()));\n"
+					+ //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public ATable toModel(ATableDBO dbo) {\n" + //
+					"		if (dbo == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new ATable()\n" + //
+					"				.setId(dbo.getId())\n" + //
+					"				.setADate(dbo.getADate())\n" + //
+					"				.setDescription(descriptionDBOConverter.toModel(dbo.getDescription()));\n"
+					+ //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public List<ATable> toModel(List<ATableDBO> dbos) {\n" + //
+					"		if (dbos == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel.getDomainByName("Description").addOption(new Option("ENUM:ONE,TWO,THREE"));
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 }

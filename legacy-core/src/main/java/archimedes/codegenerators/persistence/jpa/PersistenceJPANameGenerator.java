@@ -5,6 +5,7 @@ import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
+import archimedes.model.OptionListProvider;
 import archimedes.model.TableModel;
 
 /**
@@ -26,16 +27,15 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	public static final String ALTERNATE_PAGE_MODEL_PACKAGE_NAME = "ALTERNATE_PAGE_MODEL_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME =
 			"ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME";
-	public static final String ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME = "ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME";
+	public static final String ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME =
+			"ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME";
 	public static final String ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX = "ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_REPOSITORY_PACKAGE_NAME = "ALTERNATE_REPOSITORY_PACKAGE_NAME";
 	public static final String ALTERNATE_TO_DBO_METHOD_NAME = "ALTERNATE_TO_DBO_METHOD_NAME";
 	public static final String ALTERNATE_TO_MODEL_METHOD_NAME = "ALTERNATE_TO_MODEL_METHOD_NAME";
 
 	public String getDBOClassName(TableModel table) {
-		return table != null
-				? getClassName(table) + getDBOClassNameSuffix(table.getDataModel())
-				: null;
+		return table != null ? getClassName(table) + getDBOClassNameSuffix(table.getDataModel()) : null;
 	}
 
 	public String getDBOClassName(DomainModel domain, DataModel model) {
@@ -46,35 +46,30 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 		return getNameOrAlternativeFromOption(model, "DBO", ALTERNATE_ENTITY_CLASS_NAME_SUFFIX);
 	}
 
-	public String getDBOConverterClassName(TableModel table) {
-		return table != null
-				? getClassName(table) + getDBOConverterNameSuffix(table)
-				: null;
+	public String getDBOConverterClassName(String tableName, DataModel model) {
+		return tableName != null ? getClassName(tableName) + getDBOConverterNameSuffix(model) : null;
 	}
 
-	private String getDBOConverterNameSuffix(TableModel table) {
-		return table.getDataModel() == null
+	private String getDBOConverterNameSuffix(DataModel model) {
+		return model == null
 				? "DBOConverter"
 				: OptionGetter
-						.getParameterOfOptionByName(table.getDataModel(), AbstractClassCodeGenerator.MAPPERS)
+						.getParameterOfOptionByName(model, AbstractClassCodeGenerator.MAPPERS)
 						.filter(s -> s.toLowerCase().startsWith("mapstruct"))
-						.map(s -> getDBOMapperInterfaceNameSuffix(table))
+						.map(s -> getDBOMapperInterfaceNameSuffix(model))
 						.orElse("DBOConverter");
 	}
 
-	private String getDBOMapperInterfaceNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(
-				table.getDataModel(),
-				"DBOMapper",
-				ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX);
+	private String getDBOMapperInterfaceNameSuffix(DataModel model) {
+		return getNameOrAlternativeFromOption(model, "DBOMapper", ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX);
 	}
 
 	public String getDBOConverterPackageName(DataModel model, TableModel table) {
 		return createPackageName(model, table, "persistence.converter", ALTERNATE_DBOCONVERTER_PACKAGE_NAME);
 	}
 
-	public String getDBOPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "persistence.entity", ALTERNATE_ENTITY_PACKAGE_NAME);
+	public String getDBOPackageName(DataModel model, OptionListProvider options) {
+		return createPackageName(model, options, "persistence.entity", ALTERNATE_ENTITY_PACKAGE_NAME);
 	}
 
 	public String getGeneratedJPAPersistenceAdapterClassName(TableModel table) {
@@ -89,17 +84,14 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getGeneratedJPARepositoryInterfaceName(TableModel table) {
-		return table != null
-				? getClassName(table) + getGeneratedJPARepositoryInterfaceNameSuffix(table)
-				: null;
+		return table != null ? getClassName(table) + getGeneratedJPARepositoryInterfaceNameSuffix(table) : null;
 	}
 
 	private String getGeneratedJPARepositoryInterfaceNameSuffix(TableModel table) {
-		return "Generated"
-				+ getNameOrAlternativeFromOption(
-						table.getDataModel(),
-						"DBORepository",
-						ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
+		return "Generated" + getNameOrAlternativeFromOption(
+				table.getDataModel(),
+				"DBORepository",
+				ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX);
 	}
 
 	public String getGeneratedJPARepositoryPackageName(DataModel model, TableModel table) {
@@ -107,9 +99,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getJPAPersistenceAdapterClassName(TableModel table) {
-		return table != null
-				? getClassName(table) + getJPAPersistenceAdapterClassNameSuffix(table)
-				: null;
+		return table != null ? getClassName(table) + getJPAPersistenceAdapterClassNameSuffix(table) : null;
 	}
 
 	private String getJPAPersistenceAdapterClassNameSuffix(TableModel table) {
@@ -124,9 +114,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getJPARepositoryInterfaceName(TableModel table) {
-		return table != null
-				? getClassName(table) + getJPARepositoryInterfaceNameSuffix(table)
-				: null;
+		return table != null ? getClassName(table) + getJPARepositoryInterfaceNameSuffix(table) : null;
 	}
 
 	private String getJPARepositoryInterfaceNameSuffix(TableModel table) {
@@ -141,9 +129,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getPageConverterClassName(TableModel table) {
-		return table != null
-				? "PageConverter"
-				: null;
+		return table != null ? "PageConverter" : null;
 	}
 
 	public String getPageConverterPackageName(DataModel model, TableModel table) {
@@ -151,9 +137,7 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getPageModelClassName(TableModel table) {
-		return table != null
-				? "Page"
-				: null;
+		return table != null ? "Page" : null;
 	}
 
 	public String getPageModelPackageName(DataModel model, TableModel table) {
@@ -161,23 +145,15 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getPageParametersModelClassName(TableModel table) {
-		return table != null
-				? "PageParameters"
-				: null;
+		return table != null ? "PageParameters" : null;
 	}
 
 	public String getPageParametersModelPackageName(DataModel model, TableModel table) {
-		return createPackageName(
-				model,
-				table,
-				"core.model",
-				ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME);
+		return createPackageName(model, table, "core.model", ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME);
 	}
 
 	public String getPageParametersToPageableConverterClassName(TableModel table) {
-		return table != null
-				? "PageParametersToPageableConverter"
-				: null;
+		return table != null ? "PageParametersToPageableConverter" : null;
 	}
 
 	public String getPageParametersToPageableConverterPackageName(DataModel model, TableModel table) {
@@ -189,23 +165,23 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 	}
 
 	public String getToModelConverterInterfaceName(TableModel table) {
-		return table != null
-				? "ToModelConverter"
-				: null;
+		return table != null ? "ToModelConverter" : null;
 	}
 
 	public String getToDBOMethodName(TableModel table) {
-		return getNameOrAlternativeFromOption(
-				table != null ? table.getDataModel() : null,
-				"toDBO",
-				ALTERNATE_TO_DBO_METHOD_NAME);
+		return table == null ? null : getToDBOMethodName(table.getDataModel());
+	}
+
+	public String getToDBOMethodName(DataModel model) {
+		return getNameOrAlternativeFromOption(model != null ? model : null, "toDBO", ALTERNATE_TO_DBO_METHOD_NAME);
 	}
 
 	public String getToModelMethodName(TableModel table) {
-		return getNameOrAlternativeFromOption(
-				table != null ? table.getDataModel() : null,
-				"toModel",
-				ALTERNATE_TO_MODEL_METHOD_NAME);
+		return table == null ? null : getToModelMethodName(table.getDataModel());
+	}
+
+	public String getToModelMethodName(DataModel model) {
+		return getNameOrAlternativeFromOption(model != null ? model : null, "toModel", ALTERNATE_TO_MODEL_METHOD_NAME);
 	}
 
 }

@@ -1,0 +1,27 @@
+package ${PackageName};
+
+import javax.inject.Named;
+
+import lombok.Generated;
+
+import ${DBOClassNameQualified};
+import ${ModelClassNameQualified};
+
+/**
+ * A DBO enum converter for ${PluralName}.
+ *
+ * ${Generated}
+ */
+@Generated
+@Named
+public class ${ClassName} {
+
+	public ${DBOClassName} ${ToDBOMethodName}(${ModelClassName} model) {
+		return model == null ? null : ${DBOClassName}.valueOf(model.name());
+	}
+
+	public ${ModelClassName} ${ToModelMethodName}(${DBOClassName} dbo) {
+		return dbo == null ? null : ${ModelClassName}.valueOf(dbo.name());
+	}
+
+}
