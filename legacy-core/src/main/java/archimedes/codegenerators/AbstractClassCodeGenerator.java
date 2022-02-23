@@ -25,6 +25,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String AUTO_INCREMENT = "AUTO_INCREMENT";
 	public static final String COMMENTS = "COMMENTS";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
+	public static final String LIST_ACCESS = "LIST_ACCESS";
 	public static final String MAPPERS = "MAPPERS";
 	public static final String POJO_MODE = "POJO_MODE";
 	public static final String POJO_MODE_BUILDER = "BUILDER";

@@ -157,6 +157,39 @@ public class GeneratedJPARepositoryInterfaceCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void happyRunForASimpleObjectWithListAccess() {
+			// Prepare
+			String expected = "package base.pack.age.name.persistence.repository;\n" + //
+					"\n" + //
+					"import org.springframework.data.jpa.repository.JpaRepository;\n" + //
+					"import org.springframework.stereotype.Repository;\n" + //
+					"\n" + //
+					"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+					"import lombok.Generated;\n" + //
+					"import java.util.List;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A generated JPA repository for a_tables.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Repository\n" + //
+					"public interface ATableGeneratedDBORepository extends JpaRepository<ATableDBO, Long> {\n" + //
+					"\n" + //
+					"	List<ATableDBO> findAllByDescription(String description);\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.getColumnByName("Description").addOption(new Option("LIST_ACCESS"));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 }

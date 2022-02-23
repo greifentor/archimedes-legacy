@@ -1,12 +1,18 @@
 package archimedes.codegenerators.persistence.jpa;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.FindByUtils;
+import archimedes.codegenerators.ListAccess.ListAccessData;
+import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
@@ -51,7 +57,30 @@ public class GeneratedJPARepositoryInterfaceCodeGenerator
 						"HasObjectReferences",
 						FindByUtils.hasObjectReferences(table.getColumns()) && (referenceMode == ReferenceMode.OBJECT));
 		context.put("IdClassName", getIdClassName(table));
+		context.put("ListAccess", getListAccesses(model, table));
 		context.put("PackageName", getPackageName(model, table));
+	}
+
+	private List<ListAccessData> getListAccesses(DataModel model, TableModel table) {
+		return List
+				.of(table.getColumns())
+				.stream()
+				.filter(column -> column.isOptionSet(LIST_ACCESS))
+				.map(
+						column -> new ListAccessData()
+								.setFieldName(nameGenerator.getAttributeName(column.getName()))
+								.setFieldNameCamelCase(nameGenerator.getClassName(column.getName()))
+								.setTypeName(getType(column, model, getReferenceMode(model, table))))
+				.collect(Collectors.toList());
+	}
+
+	private String getType(ColumnModel column, DataModel model, ReferenceMode referenceMode) {
+		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
+			return nameGenerator.getDBOClassName(column.getReferencedTable());
+		} else if (isEnum(column)) {
+			return nameGenerator.getDBOClassName(column.getDomain(), model);
+		}
+		return typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column));
 	}
 
 	@Override
