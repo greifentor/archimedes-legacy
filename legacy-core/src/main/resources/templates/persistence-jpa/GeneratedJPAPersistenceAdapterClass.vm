@@ -13,6 +13,11 @@ import javax.inject.Inject;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#foreach($ListAccessData in $ListAccess)
+#if($ListAccessData.getTypeQualifiedName())
+import ${ListAccessData.getTypeQualifiedName()};
+#end
+#end
 #if (${HasNotNulls})
 import ${ExceptionsPackageName}.NotNullConstraintViolationException;
 #end
@@ -23,6 +28,11 @@ import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
 import ${PageConverterPackageName}.${PageConverterClassName};
 import ${PageParametersToPageableConverterPackageName}.${PageParametersToPageableConverterClassName};
 import ${DBOConverterPackageName}.${DBOConverterClassName};
+#foreach($ListAccessData in $ListAccess)
+#if($ListAccessData.getConverterData())
+import ${ListAccessData.getConverterData().getQualifiedClassName()};
+#end
+#end
 import ${DBOPackageName}.${DBOClassName};
 import ${JPARepositoryPackageName}.${JPARepositoryClassName};
 #if (${HasObjectReferences})
@@ -52,6 +62,12 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 
 	@Inject
 	protected ${DBOConverterClassName} converter;
+#foreach($ListAccessData in $ListAccess)
+#if($ListAccessData.getConverterData())
+	@Inject
+	protected ${ListAccessData.getConverterData().getClassName()} ${ListAccessData.getConverterData().getAttributeName()};
+#end
+#end
 	@Inject
 	protected ${JPARepositoryClassName} repository;
 #if (${HasObjectReferences})
@@ -137,6 +153,17 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 	#else
 		return converter.${ToModelMethodName}(repository.findAllBy${FindBy.getColumnName()}(${FindBy.getAttributeName()}));
 	#end
+#end
+	}
+#end
+#foreach($ListAccessData in $ListAccess)
+
+	@Override
+	public List<${ModelClassName}> findAllBy${ListAccessData.getFieldNameCamelCase()}(${ListAccessData.getTypeName()} ${ListAccessData.getFieldName()}) {
+#if($ListAccessData.getConverterData())
+		return converter.${ToModelMethodName}(repository.findAllBy${ListAccessData.getFieldNameCamelCase()}(${ListAccessData.getConverterData().getAttributeName()}.${ToDBOMethodName}(${ListAccessData.getFieldName()})));
+#else
+		return converter.${ToModelMethodName}(repository.findAllBy${ListAccessData.getFieldNameCamelCase()}(${ListAccessData.getFieldName()}));
 #end
 	}
 #end

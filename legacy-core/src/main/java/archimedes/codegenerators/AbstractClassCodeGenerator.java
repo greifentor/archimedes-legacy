@@ -5,11 +5,16 @@ import static corentx.util.Checks.ensure;
 import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 
+import archimedes.codegenerators.ListAccess.ListAccessConverterData;
+import archimedes.codegenerators.ListAccess.ListAccessData;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -38,12 +43,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	protected CommonImportAdder commonImportAdder = new CommonImportAdder();
 
-	public AbstractClassCodeGenerator(
-			String templateFileName,
-			String templatePathName,
-			N nameGenerator,
-			TypeGenerator typeGenerator,
-			AbstractCodeFactory codeFactory) {
+	public AbstractClassCodeGenerator(String templateFileName, String templatePathName, N nameGenerator,
+			TypeGenerator typeGenerator, AbstractCodeFactory codeFactory) {
 		super(templateFileName, templatePathName, nameGenerator, typeGenerator, codeFactory);
 	}
 
@@ -172,6 +173,63 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 								.getOptionByName(model, REFERENCE_MODE)
 								.map(option -> ReferenceMode.valueOf(option.getParameter()))
 								.orElse(ReferenceMode.ID));
+	}
+
+	protected List<ListAccessData> getListAccesses(DataModel model, TableModel table,
+			Function<ColumnModel, String> referencedClassNameProvider,
+			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider,
+			Function<ColumnModel, String> referencedClassQualifiedNameProvider,
+			BiFunction<ColumnModel, DataModel, String> enumClassQualifiedNameProvider,
+			Function<ColumnModel, ListAccessConverterData> listAccessConverterDataProvider) {
+		return List
+				.of(table.getColumns())
+				.stream()
+				.filter(column -> column.isOptionSet(LIST_ACCESS))
+				.map(
+						column -> new ListAccessData()
+								.setConverterData(
+										listAccessConverterDataProvider != null
+												? listAccessConverterDataProvider.apply(column)
+												: null)
+								.setFieldName(nameGenerator.getAttributeName(column.getName()))
+								.setFieldNameCamelCase(nameGenerator.getClassName(column.getName()))
+								.setTypeQualifiedName(
+										getTypeQualifiedName(
+												column,
+												model,
+												getReferenceMode(model, table),
+												referencedClassQualifiedNameProvider,
+												enumClassQualifiedNameProvider))
+								.setTypeName(
+										getType(
+												column,
+												model,
+												getReferenceMode(model, table),
+												referencedClassNameProvider,
+												enumClassNameProvider)))
+				.collect(Collectors.toList());
+	}
+
+	protected String getTypeQualifiedName(ColumnModel column, DataModel model, ReferenceMode referenceMode,
+			Function<ColumnModel, String> referencedClassQualifiedNameProvider,
+			BiFunction<ColumnModel, DataModel, String> enumClassQualifiedNameProvider) {
+		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
+			return referencedClassQualifiedNameProvider.apply(column);
+		} else if (isEnum(column)) {
+			return enumClassQualifiedNameProvider.apply(column, model);
+		}
+		return null;
+	}
+
+	protected String getType(ColumnModel column, DataModel model, ReferenceMode referenceMode,
+			Function<ColumnModel, String> referencedClassNameProvider,
+			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider) {
+		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
+			return referencedClassNameProvider.apply(column);
+		} else if (isEnum(column)) {
+			return enumClassNameProvider.apply(column, model);
+		}
+		return typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column));
 	}
 
 }

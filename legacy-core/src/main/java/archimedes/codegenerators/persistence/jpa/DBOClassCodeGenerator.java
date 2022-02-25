@@ -12,7 +12,6 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.Columns.ParameterData;
-import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -83,17 +82,14 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 						column -> new ColumnData()
 								.setAnnotations(getAnnotations(column, referenceMode))
 								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(getType(column, model, referenceMode)))
+								.setFieldType(
+										getType(
+												column,
+												model,
+												referenceMode,
+												c -> nameGenerator.getDBOClassName(c.getReferencedTable()),
+												(c, m) -> nameGenerator.getDBOClassName(c.getDomain(), model))))
 				.collect(Collectors.toList());
-	}
-
-	private String getType(ColumnModel column, DataModel model, ReferenceMode referenceMode) {
-		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
-			return nameGenerator.getDBOClassName(column.getReferencedTable());
-		} else if (isEnum(column)) {
-			return nameGenerator.getDBOClassName(column.getDomain(), model);
-		}
-		return typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column));
 	}
 
 	private List<AnnotationData> getAnnotations(ColumnModel column, ReferenceMode referenceMode) {

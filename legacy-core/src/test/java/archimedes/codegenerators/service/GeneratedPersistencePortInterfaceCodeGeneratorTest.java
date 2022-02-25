@@ -150,6 +150,7 @@ public class GeneratedPersistencePortInterfaceCodeGeneratorTest {
 					"}";
 			return s;
 		}
+
 		@Test
 		void happyRunForASimpleObject_FindBy() {
 			// Prepare
@@ -180,6 +181,63 @@ public class GeneratedPersistencePortInterfaceCodeGeneratorTest {
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+		@Nested
+		class ListAccess {
+
+			private String getExpectedForListAccess() {
+				String s = "package " + BASE_PACKAGE_NAME + ".core.service.port.persistence;\n" + //
+						"\n" + //
+						"import java.util.List;\n" + //
+						"import java.util.Optional;\n" + //
+						"\n" + //
+						"import base.pack.age.name.core.model.Page;\n" + //
+						"import base.pack.age.name.core.model.PageParameters;\n" + //
+						"import base.pack.age.name.core.model.ATable;\n" + //
+						"import base.pack.age.name.core.model.AnotherTable;\n" + //
+						"import lombok.Generated;\n" + //
+						"\n" + //
+						"@Generated\n" + //
+						"public interface ATableGeneratedPersistencePort {\n" + //
+						"\n" + //
+						"	ATable create(ATable model);\n" + //
+						"\n" + //
+						"	List<ATable> findAll();\n" + //
+						"\n" + //
+						"	Page<ATable> findAll(PageParameters pageParameters);\n" + //
+						"\n" + //
+						"	Optional<ATable> findById(Long id);\n" + //
+						"\n" + //
+						"	ATable update(ATable model);\n" + //
+						"\n" + //
+						"	void delete(ATable model);\n" + //
+						"\n" + //
+						"	List<ATable> findAllByRef(AnotherTable ref);\n" + //
+						"\n" + //
+						"}";
+				return s;
+			}
+
+			@Test
+			void happyRunForASimpleObject_ListAccess() {
+				// Prepare
+				String expected = getExpectedForListAccess();
+				DataModel dataModel = readDataModel("Model-ForeignKey.xml");
+				dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
+				TableModel table = dataModel.getTableByName("A_TABLE");
+				dataModel
+						.addOption(
+								new Option(
+										AbstractClassCodeGenerator.REFERENCE_MODE,
+										AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT));
+				table.getColumnByName("REF").addOption(new Option(AbstractClassCodeGenerator.LIST_ACCESS));
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+				// Check
+				assertEquals(expected, returned);
+			}
+
 		}
 
 	}

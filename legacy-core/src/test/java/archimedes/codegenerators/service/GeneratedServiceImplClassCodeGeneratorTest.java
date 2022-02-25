@@ -44,10 +44,10 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 	}
 
 	private String createExpected(boolean suppressComment) {
-		return createExpected(suppressComment, null);
+		return createExpected(suppressComment, null, false);
 	}
 
-	private String createExpected(boolean suppressComment, Boolean findByUnique) {
+	private String createExpected(boolean suppressComment, Boolean findByUnique, boolean listAccess) {
 		String expected = "package " + BASE_PACKAGE_NAME + ".core.service.impl;\n" + //
 				"\n" + //
 				"import java.util.List;\n" + //
@@ -57,8 +57,11 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 				"\n" + //
 				"import base.pack.age.name.core.model.Page;\n" + //
 				"import base.pack.age.name.core.model.PageParameters;\n" + //
-				"import base.pack.age.name.core.model.ATable;\n" + //
-				"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
+				"import base.pack.age.name.core.model.ATable;\n";
+		if (listAccess) {
+			expected += "import base.pack.age.name.core.model.AnotherTable;\n";
+		}
+		expected += "import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
 				"import base.pack.age.name.core.service.ATableService;\n" + //
 				"import lombok.Generated;\n" + //
 				"\n";
@@ -116,6 +119,13 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 						"	}\n";
 			}
 		}
+		if (listAccess) {
+			expected += "\n" + //
+					"	@Override\n" + //
+					"	public List<ATable> findAllByRef(AnotherTable ref) {\n" + //
+					"		return persistencePort.findAllByRef(ref);\n" + //
+					"	}\n";
+		}
 		expected += "\n}";
 		return expected;
 	}
@@ -135,7 +145,7 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 	@Test
 	void happyRunForASimpleObject_FindBy() {
 		// Prepare
-		String expected = createExpected(true, true);
+		String expected = createExpected(true, true, false);
 		DataModel dataModel = readDataModel("Model.xml");
 		dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
 		TableModel table = dataModel.getTableByName("A_TABLE");
@@ -143,7 +153,7 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 		column.addOption(new Option("FIND_BY"));
 		column.setUnique(true);
 		// Run
-		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 		// Check
 		assertEquals(expected, returned);
 	}
@@ -151,7 +161,7 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 	@Test
 	void happyRunForASimpleObject_FindByNotUnique() {
 		// Prepare
-		String expected = createExpected(true, false);
+		String expected = createExpected(true, false, false);
 		DataModel dataModel = readDataModel("Model.xml");
 		dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
 		TableModel table = dataModel.getTableByName("A_TABLE");
@@ -159,7 +169,26 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 		column.addOption(new Option("FIND_BY"));
 		column.setUnique(false);
 		// Run
-		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void happyRunForASimpleObject_ListAccess() {
+		// Prepare
+		String expected = createExpected(true, null, true);
+		DataModel dataModel = readDataModel("Model-ForeignKey.xml");
+		dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
+		dataModel
+				.addOption(
+						new Option(
+								AbstractClassCodeGenerator.REFERENCE_MODE,
+								AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT));
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		table.getColumnByName("REF").addOption(new Option(AbstractClassCodeGenerator.LIST_ACCESS));
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 		// Check
 		assertEquals(expected, returned);
 	}

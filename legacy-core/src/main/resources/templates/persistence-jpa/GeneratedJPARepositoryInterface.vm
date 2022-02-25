@@ -4,6 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import ${DBOPackageName}.${DBOClassName};
+#foreach($ListAccessData in $ListAccess)
+#if($ListAccessData.getTypeQualifiedName())
+import ${ListAccessData.getTypeQualifiedName()};
+#end
+#end
 import lombok.Generated;
 #if (($FindBys && $HasNoUniques) || ${ListAccess})
 import java.util.List;
@@ -38,6 +43,6 @@ public interface ${ClassName} extends JpaRepository<${DBOClassName}, ${IdClassNa
 	List<${DBOClassName}> findAllBy${ListAccessData.getFieldNameCamelCase()}(${ListAccessData.getTypeName()} ${ListAccessData.getFieldName()});
 #if ( !$foreach.hasNext )
 
-#end	
+#end
 #end
 }

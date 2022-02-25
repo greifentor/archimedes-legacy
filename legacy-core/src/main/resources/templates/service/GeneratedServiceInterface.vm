@@ -6,6 +6,11 @@ import java.util.Optional;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#foreach($ListAccessData in $ListAccess)
+#if($ListAccessData.getTypeQualifiedName())
+import ${ListAccessData.getTypeQualifiedName()};
+#end
+#end
 import lombok.Generated;
 
 #if (${HasObjectReferences})
@@ -38,6 +43,10 @@ public interface ${ClassName} {
 #foreach($FindBy in $FindBys)
 
 #if (${FindBy.isUnique()})	Optional#{else}	List#{end}<${ModelClassName}> find#if (!${FindBy.isUnique()})All#{end}By${FindBy.getColumnName()}(${FindBy.getTypeName()} ${FindBy.getAttributeName()});
+#end
+#foreach($ListAccessData in $ListAccess)
+
+	List<${ModelClassName}> findAllBy${ListAccessData.getFieldNameCamelCase()}(${ListAccessData.getTypeName()} ${ListAccessData.getFieldName()});
 #end
 
 }

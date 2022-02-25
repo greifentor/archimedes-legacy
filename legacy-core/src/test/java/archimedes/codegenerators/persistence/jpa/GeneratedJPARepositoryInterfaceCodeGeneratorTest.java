@@ -166,6 +166,7 @@ public class GeneratedJPARepositoryInterfaceCodeGeneratorTest {
 					"import org.springframework.stereotype.Repository;\n" + //
 					"\n" + //
 					"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+					"import base.pack.age.name.persistence.entity.AnotherTableDBO;\n" + //
 					"import lombok.Generated;\n" + //
 					"import java.util.List;\n" + //
 					"\n" + //
@@ -178,12 +179,17 @@ public class GeneratedJPARepositoryInterfaceCodeGeneratorTest {
 					"@Repository\n" + //
 					"public interface ATableGeneratedDBORepository extends JpaRepository<ATableDBO, Long> {\n" + //
 					"\n" + //
-					"	List<ATableDBO> findAllByDescription(String description);\n" + //
+					"	List<ATableDBO> findAllByRef(AnotherTableDBO ref);\n" + //
 					"\n" + //
 					"}";
-			DataModel dataModel = readDataModel("Model.xml");
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
-			table.getColumnByName("Description").addOption(new Option("LIST_ACCESS"));
+			dataModel
+					.addOption(
+							new Option(
+									AbstractClassCodeGenerator.REFERENCE_MODE,
+									AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT));
+			table.getColumnByName("REF").addOption(new Option("LIST_ACCESS"));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check

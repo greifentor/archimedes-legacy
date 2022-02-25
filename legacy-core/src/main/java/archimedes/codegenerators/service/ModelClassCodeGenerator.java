@@ -9,7 +9,6 @@ import org.apache.velocity.VelocityContext;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
-import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -55,17 +54,14 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 				.map(
 						column -> new ColumnData()
 								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(getType(column, model, referenceMode)))
+								.setFieldType(
+										getType(
+												column,
+												model,
+												referenceMode,
+												c -> nameGenerator.getModelClassName(c.getReferencedTable()),
+												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model))))
 				.collect(Collectors.toList());
-	}
-
-	private String getType(ColumnModel column, DataModel model, ReferenceMode referenceMode) {
-		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
-			return nameGenerator.getModelClassName(column.getReferencedTable());
-		} else if (isEnum(column)) {
-			return nameGenerator.getModelClassName(column.getDomain(), model);
-		}
-		return typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column));
 	}
 
 	@Override

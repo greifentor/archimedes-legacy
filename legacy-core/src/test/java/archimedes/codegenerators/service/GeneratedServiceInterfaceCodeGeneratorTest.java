@@ -44,10 +44,10 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 	}
 
 	private String createExpected(boolean suppressComment) {
-		return createExpected(suppressComment, null);
+		return createExpected(suppressComment, null, null);
 	}
 
-	private String createExpected(boolean suppressComment, Boolean findByUnique) {
+	private String createExpected(boolean suppressComment, Boolean findByUnique, Boolean listAccessReference) {
 		String expected = "package " + BASE_PACKAGE_NAME + ".core.service;\n" + //
 				"\n" + //
 				"import java.util.List;\n" + //
@@ -55,8 +55,11 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 				"\n" + //
 				"import base.pack.age.name.core.model.Page;\n" + //
 				"import base.pack.age.name.core.model.PageParameters;\n" + //
-				"import base.pack.age.name.core.model.ATable;\n" + //
-				"import lombok.Generated;\n" + //
+				"import base.pack.age.name.core.model.ATable;\n";
+		if ((listAccessReference != null) && (listAccessReference == true)) {
+			expected += "import base.pack.age.name.core.model.AnotherTable;\n";
+		}
+		expected += "import lombok.Generated;\n" + //
 				"\n";
 		if (!suppressComment) {
 			expected += "/**\n" + //
@@ -87,6 +90,15 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 				expected += "	List<ATable> findAllByDescription(String description);\n";
 			}
 		}
+		if (listAccessReference != null) {
+			if (listAccessReference) {
+				expected += "\n" + //
+						"	List<ATable> findAllByRef(AnotherTable ref);\n";
+			} else {
+				expected += "\n" + //
+						"	List<ATable> findAllByDescription(String description);\n";
+			}
+		}
 		expected += "\n" + //
 				"}";
 		return expected;
@@ -107,14 +119,14 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 	@Test
 	void happyRunForASimpleObject_FindBy() {
 		// Prepare
-		String expected = createExpected(false, true);
+		String expected = createExpected(false, true, null);
 		DataModel dataModel = readDataModel("Model.xml");
 		TableModel table = dataModel.getTableByName("A_TABLE");
 		ColumnModel column = table.getColumnByName("Description");
 		column.addOption(new Option("FIND_BY"));
 		column.setUnique(true);
 		// Run
-		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 		// Check
 		assertEquals(expected, returned);
 	}
@@ -122,14 +134,45 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 	@Test
 	void happyRunForASimpleObject_FindByNotUnique() {
 		// Prepare
-		String expected = createExpected(false, false);
+		String expected = createExpected(false, false, null);
 		DataModel dataModel = readDataModel("Model.xml");
 		TableModel table = dataModel.getTableByName("A_TABLE");
 		ColumnModel column = table.getColumnByName("Description");
 		column.addOption(new Option("FIND_BY"));
 		column.setUnique(false);
 		// Run
-		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void happyRunForASimpleObject_ListAccess() {
+		// Prepare
+		String expected = createExpected(false, null, false);
+		DataModel dataModel = readDataModel("Model.xml");
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		table.getColumnByName("Description").addOption(new Option(AbstractClassCodeGenerator.LIST_ACCESS));
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void happyRunForASimpleObject_ListAccess_ReferenceMode() {
+		// Prepare
+		String expected = createExpected(false, null, true);
+		DataModel dataModel = readDataModel("Model-ForeignKey.xml");
+		dataModel
+				.addOption(
+						new Option(
+								AbstractClassCodeGenerator.REFERENCE_MODE,
+								AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT));
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		table.getColumnByName("REF").addOption(new Option(AbstractClassCodeGenerator.LIST_ACCESS));
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 		// Check
 		assertEquals(expected, returned);
 	}

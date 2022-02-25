@@ -51,6 +51,19 @@ public class GeneratedServiceImplClassCodeGenerator extends AbstractClassCodeGen
 						FindByUtils.hasObjectReferences(table.getColumns()) && (referenceMode == ReferenceMode.OBJECT));
 		context.put("IdClassName", getIdClassName(table));
 		context.put("IdFieldName", nameGenerator.getAttributeName(getIdFieldNameCamelCase(table)));
+		context
+				.put(
+						"ListAccess",
+						getListAccesses(
+								model,
+								table,
+								c -> nameGenerator.getModelClassName(c.getReferencedTable()),
+								(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model),
+								c -> nameGenerator.getModelPackageName(model, table) + "."
+										+ nameGenerator.getModelClassName(c.getReferencedTable()),
+								(c, m) -> nameGenerator.getModelPackageName(model, table) + "."
+										+ nameGenerator.getModelClassName(c.getDomain(), model),
+								null));
 		context.put("ModelClassName", nameGenerator.getModelClassName(table));
 		context.put("ModelPackageName", nameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));

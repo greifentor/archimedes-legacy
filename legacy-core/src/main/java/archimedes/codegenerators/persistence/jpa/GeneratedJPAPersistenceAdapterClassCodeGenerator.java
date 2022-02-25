@@ -11,6 +11,7 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.FindByUtils;
+import archimedes.codegenerators.ListAccess.ListAccessConverterData;
 import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.ReferenceMode;
@@ -79,6 +80,34 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
 		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
 		context.put("ExceptionsPackageName", serviceNameGenerator.getExceptionsPackageName(model, table));
+		context
+				.put(
+						"ListAccess",
+						getListAccesses(
+								model,
+								table,
+								c -> serviceNameGenerator.getModelClassName(c.getReferencedTable()),
+								(c, m) -> serviceNameGenerator.getModelClassName(c.getDomain(), model),
+								c -> serviceNameGenerator.getModelPackageName(model, table) + "."
+										+ serviceNameGenerator.getModelClassName(c.getReferencedTable()),
+								(c, m) -> serviceNameGenerator.getModelPackageName(model, table) + "."
+										+ serviceNameGenerator.getModelClassName(c.getDomain(), model),
+								(c) -> new ListAccessConverterData()
+										.setAttributeName(
+												nameGenerator
+														.getAttributeName(
+																nameGenerator
+																		.getDBOConverterClassName(
+																				c.getReferencedTable().getName(),
+																				model)))
+										.setClassName(
+												nameGenerator
+														.getDBOConverterClassName(
+																c.getReferencedTable().getName(),
+																model))
+										.setPackageName(
+												nameGenerator
+														.getDBOConverterPackageName(model, c.getReferencedTable()))));
 		context.put("NoKeyValue", getNoKeyValue(table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("PageClassName", serviceNameGenerator.getPageClassName());

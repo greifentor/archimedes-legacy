@@ -8,6 +8,11 @@ import javax.inject.Inject;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#foreach($ListAccessData in $ListAccess)
+#if($ListAccessData.getTypeQualifiedName())
+import ${ListAccessData.getTypeQualifiedName()};
+#end
+#end
 import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
 import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
 import lombok.Generated;
@@ -65,6 +70,13 @@ public abstract class ${ClassName} implements ${ServiceInterfaceName} {
 	@Override
 	public #if (${FindBy.isUnique()})Optional#{else}List#{end}<${ModelClassName}> find#if (!${FindBy.isUnique()})All#{end}By${FindBy.getColumnName()}(${FindBy.getTypeName()} ${FindBy.getAttributeName()}) {
 		return persistencePort.find#if (!${FindBy.isUnique()})All#{end}By${FindBy.getColumnName()}(${FindBy.getAttributeName()});
+	}
+#end
+#foreach($ListAccessData in $ListAccess)
+
+	@Override
+	public List<${ModelClassName}> findAllBy${ListAccessData.getFieldNameCamelCase()}(${ListAccessData.getTypeName()} ${ListAccessData.getFieldName()}) {
+		return persistencePort.findAllBy${ListAccessData.getFieldNameCamelCase()}(${ListAccessData.getFieldName()});
 	}
 #end
 
