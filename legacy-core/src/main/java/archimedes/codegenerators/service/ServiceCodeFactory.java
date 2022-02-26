@@ -67,7 +67,12 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 	public String[] getSelectableOptions(OptionType optionType) {
 		switch (optionType) {
 		case COLUMN:
-			return new String[] { AbstractClassCodeGenerator.AUTO_INCREMENT, FindByUtils.FIND_BY };
+			return new String[] {
+					AbstractClassCodeGenerator.AUTO_INCREMENT,
+					FindByUtils.FIND_BY,
+					AbstractClassCodeGenerator.LIST_ACCESS };
+		case DOMAIN:
+			return new String[] { AbstractClassCodeGenerator.ENUM };
 		case MODEL:
 			return new String[] {
 					ServiceNameGenerator.ALTERNATE_APPLICATION_PACKAGE_NAME,

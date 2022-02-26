@@ -71,8 +71,11 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 		case COLUMN:
 			return new String[] {
 					AbstractClassCodeGenerator.AUTO_INCREMENT,
+					JPAPersistenceAdapterDependentClassCodeGenerator.DEPENDENT_ATTRIBUTE,
 					FindByUtils.FIND_BY,
-					JPAPersistenceAdapterDependentClassCodeGenerator.DEPENDENT_ATTRIBUTE };
+					AbstractClassCodeGenerator.LIST_ACCESS };
+		case DOMAIN:
+			return new String[] { AbstractClassCodeGenerator.ENUM };
 		case MODEL:
 			return new String[] {
 					PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX,
