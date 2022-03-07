@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 
+import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.ListAccess.ListAccessConverterData;
 import archimedes.codegenerators.ListAccess.ListAccessData;
 import archimedes.model.ColumnModel;
@@ -30,6 +31,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String AUTO_INCREMENT = "AUTO_INCREMENT";
 	public static final String COMMENTS = "COMMENTS";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
+	public static final String INHERITANCE_MODE_JOINED = "JOINED";
 	public static final String LIST_ACCESS = "LIST_ACCESS";
 	public static final String MAPPERS = "MAPPERS";
 	public static final String POJO_MODE = "POJO_MODE";
@@ -38,6 +40,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String REFERENCE_MODE = "REFERENCE_MODE";
 	public static final String REFERENCE_MODE_ID = "ID";
 	public static final String REFERENCE_MODE_OBJECT = "OBJECT";
+	public static final String SUBCLASS = "SUBCLASS";
+	public static final String SUPERCLASS = "SUPERCLASS";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
@@ -60,7 +64,11 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected boolean hasEnums(ColumnModel[] columns) {
-		return List.of(columns).stream().anyMatch(column -> column.getDomain().isOptionSet(ENUM));
+		return hasEnums(List.of(columns));
+	}
+
+	protected boolean hasEnums(List<ColumnModel> columns) {
+		return columns.stream().anyMatch(column -> column.getDomain().isOptionSet(ENUM));
 	}
 
 	protected boolean hasReferences(ColumnModel[] columns) {
@@ -153,6 +161,13 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 				.orElse(false);
 	}
 
+	protected boolean hasSimpleTypeId(List<ColumnData> columns) {
+		return columns
+				.stream()
+				.filter(column -> column.isPkMember())
+				.anyMatch(column -> typeGenerator.isSimpleType(column.getFieldType()));
+	}
+
 	protected String getIdClassName(TableModel table) {
 		return Arrays
 				.asList(table.getPrimaryKeyColumns())
@@ -230,6 +245,25 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 			return enumClassNameProvider.apply(column, model);
 		}
 		return typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column));
+	}
+
+	protected boolean isSubclass(TableModel table) {
+		return table != null ? table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS) : false;
+	}
+
+	protected String getSuperclassName(TableModel table, Function<TableModel, String> classNameProvider) {
+		TableModel referencedTable = getSuperclassTable(table);
+		if (referencedTable != null) {
+			return classNameProvider.apply(referencedTable);
+		}
+		return null;
+	}
+
+	protected TableModel getSuperclassTable(TableModel table) {
+		if (table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)) {
+			return table.getPrimaryKeyColumns()[0].getReferencedTable();
+		}
+		return null;
 	}
 
 }

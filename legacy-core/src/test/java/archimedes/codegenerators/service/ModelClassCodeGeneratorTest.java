@@ -13,10 +13,14 @@ import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.legacy.scheme.Relation;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
+import archimedes.model.ViewModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
+import corent.base.Direction;
 
 @ExtendWith(MockitoExtension.class)
 class ModelClassCodeGeneratorTest {
@@ -220,6 +224,98 @@ class ModelClassCodeGeneratorTest {
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
+		}
+
+		@Nested
+		class Subclass {
+
+			@Test
+			void modelWithSubclass() {
+				// Prepare
+				String expected = "package base.pack.age.name.core.model;\n" + //
+						"\n" + //
+						"import java.time.LocalDate;\n" + //
+						"\n" + //
+						"import lombok.Data;\n" + //
+						"import lombok.EqualsAndHashCode;\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.ToString;\n" + //
+						"import lombok.experimental.Accessors;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * A model for a_tables.\n" + //
+						" *\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n" + //
+						"@Accessors(chain = true)\n" + //
+						"@Data\n" + //
+						"@EqualsAndHashCode(callSuper = true)\n" + //
+						"@Generated\n" + //
+						"@ToString(callSuper = true)\n" + //
+						"public class ATable extends AnotherTable {\n" + //
+						"\n" + //
+						"	private LocalDate aDate;\n" + //
+						"	private String description;\n" + //
+						"\n" + //
+						"}";
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel table = dataModel.getTableByName("A_TABLE");
+				table.addOption(new Option(AbstractClassCodeGenerator.SUBCLASS));
+				TableModel tableRef = dataModel.getTableByName("ANOTHER_TABLE");
+				ColumnModel columnRef = tableRef.getColumnByName("ID");
+				ColumnModel column = table.getColumnByName("ID");
+				column
+						.setRelation(
+								new Relation(
+										(ViewModel) dataModel.getMainView(),
+										column,
+										Direction.UP,
+										0,
+										columnRef,
+										Direction.LEFT,
+										0));
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			@Test
+			void modelNoSubclass() {
+				// Prepare
+				String expected =
+						"package base.pack.age.name.core.model;\n" + //
+								"\n" + //
+								"import java.time.LocalDate;\n" + //
+								"\n" + //
+								"import lombok.Data;\n" + //
+								"import lombok.Generated;\n" + //
+								"import lombok.experimental.Accessors;\n" + //
+								"\n" + //
+								"/**\n" + //
+								" * A model for a_tables.\n" + //
+								" *\n" + //
+								" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+								" */\n" + //
+								"@Accessors(chain = true)\n" + //
+								"@Data\n" + //
+								"@Generated\n" + //
+								"public class ATable {\n" + //
+								"\n" + //
+								"	private Long id;\n" + //
+								"	private LocalDate aDate;\n" + //
+								"	private String description;\n" + //
+								"\n" + //
+								"}";
+				DataModel dataModel = readDataModel("Model.xml");
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
 		}
 
 	}

@@ -177,7 +177,7 @@ public class ModelUpdaterTest {
 				.addUpdateReportAction(
 						new UpdateReportAction()
 								.setMessage(
-										"Account.Owner -> Customer.Id - DropForeignKeyCRO(tableName=Account, schemaName=, constraintName=FK_TO_Customer_Id, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
+										"Account.Owner -> Customer.Id - DropForeignKeyCRO(tableName=Account, schemaName=, constraintName=FK_Account_Owner_TO_Customer, members=[ForeignKeyMemberCRO(baseColumnName=Owner, baseTableName=Account, referencedColumnName=Id, referencedTableName=Customer)])")
 								.setStatus(Status.DONE)
 								.setType(Type.DROP_FOREIGN_KEY)
 								.setValues(

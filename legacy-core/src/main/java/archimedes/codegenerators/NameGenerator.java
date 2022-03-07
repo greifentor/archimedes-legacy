@@ -217,7 +217,9 @@ public class NameGenerator {
 		if (tn.length() < 1) {
 			return tn;
 		}
-		if (tn.toLowerCase().endsWith("y")) {
+		if (tn.toLowerCase().endsWith("sh")) {
+			tn = tn + "es";
+		} else if (tn.toLowerCase().endsWith("y")) {
 			tn = tn.substring(0, tn.length() - 1) + "ies";
 		} else {
 			tn += "s";

@@ -125,7 +125,11 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 #if (${Column.isUnique()})
 		ensure(
 				findBy${Column.getColumnName()}(model.${Column.getGetterCall()})
-						.filter(${TableAttributeName} -> ${TableAttributeName}.${Column.getGetterCall()}.equals(model.${Column.getGetterCall()}))
+#if (${HasSimpleTypeId})
+						.filter(${TableAttributeName} -> ${TableAttributeName}.get${IdFieldNameCamelCase}() != model.get${IdFieldNameCamelCase}())
+#else
+						.filter(${TableAttributeName} -> !${TableAttributeName}.get${IdFieldNameCamelCase}().equals(model.get${IdFieldNameCamelCase}()))
+#end
 						.isEmpty(),
 				() -> new UniqueConstraintViolationException("${Column.getFieldName()} is already set for another record", "${ModelClassName}", "${Column.getFieldName()}"));
 #end

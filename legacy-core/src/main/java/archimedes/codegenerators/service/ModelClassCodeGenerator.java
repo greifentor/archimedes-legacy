@@ -44,6 +44,9 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
 		context.put("ReferenceMode", getReferenceMode(model, table).name());
+		context.put("Subclass", table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS));
+		context.put("Superclass", table.isOptionSet(AbstractClassCodeGenerator.SUPERCLASS));
+		context.put("SuperclassName", getSuperclassName(table, nameGenerator::getModelClassName));
 		context.put("TableName", table.getName());
 	}
 
@@ -60,7 +63,8 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 												model,
 												referenceMode,
 												c -> nameGenerator.getModelClassName(c.getReferencedTable()),
-												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model))))
+												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model)))
+								.setPkMember(column.isPrimaryKey()))
 				.collect(Collectors.toList());
 	}
 

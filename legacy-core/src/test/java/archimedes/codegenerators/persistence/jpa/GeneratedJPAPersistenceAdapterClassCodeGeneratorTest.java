@@ -134,7 +134,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 			if (findByDescriptionUnique == Boolean.TRUE) {
 				s += "		ensure(\n" + //
 						"				findByDescription(model.getDescription())\n" + //
-						"						.filter(aTable -> aTable.getDescription().equals(model.getDescription()))\n"
+						"						.filter(aTable -> !aTable.getId().equals(model.getId()))\n"
 						+ //
 						"						.isEmpty(),\n" + //
 						"				() -> new UniqueConstraintViolationException(\"description is already set for another record\", \"ATable\", \"description\"));\n";
@@ -303,8 +303,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 			if (unique) {
 				expected += "		ensure(\n" + //
 						"				findByRef(model.getRef())\n" + //
-						"						.filter(aTable -> aTable.getRef().equals(model.getRef()))\n"
-						+ //
+						"						.filter(aTable -> !aTable.getId().equals(model.getId()))\n" + //
 						"						.isEmpty(),\n" + //
 						"				() -> new UniqueConstraintViolationException(\"ref is already set for another record\", \"ATable\", \"ref\"));\n";
 			}
@@ -481,7 +480,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 		@Nested
 		class UniqueConstraints {
 
-			private String getExpected(String packageName) {
+			private String getExpected(String packageName, boolean simpleTypeId) {
 				String s = "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
 						"\n" + //
 						"import static base.pack.age.name.util.Check.ensure;\n" + //
@@ -530,7 +529,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	public ATable create(ATable model) {\n" + //
-						"		model.setId(null);\n" + //
+						"		model.setId(" + (simpleTypeId ? "-1" : "null") + ");\n" + //
 						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -553,9 +552,13 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 						"	@Override\n" + //
 						"	public ATable update(ATable model) {\n" + //
 						"		ensure(\n" + //
-						"				findByDescription(model.getDescription())\n" + //
-						"						.filter(aTable -> aTable.getDescription().equals(model.getDescription()))\n"
-						+ //
+						"				findByDescription(model.getDescription())\n";
+				if (simpleTypeId) {
+					s += "						.filter(aTable -> aTable.getId() != model.getId())\n";
+				} else {
+					s += "						.filter(aTable -> !aTable.getId().equals(model.getId()))\n";
+				}
+				s +=
 						"						.isEmpty(),\n" + //
 						"				() -> new UniqueConstraintViolationException(\"description is already set for another record\", \"ATable\", \"description\"));\n"
 						+ //
@@ -580,9 +583,23 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 			@Test
 			void happyRunForASimpleObjectWithUniqueSet() {
 				// Prepare
-				String expected = getExpected("persistence");
+				String expected = getExpected("persistence", false);
 				DataModel dataModel = readDataModel("Model.xml");
 				TableModel table = dataModel.getTableByName("A_TABLE");
+				table.getColumnByName("Description").setUnique(true);
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			@Test
+			void happyRunForASimpleObjectWithUniqueSet_SimpleIdType() {
+				// Prepare
+				String expected = getExpected("persistence", true);
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel table = dataModel.getTableByName("A_TABLE");
+				table.getColumnByName("ID").setNotNull(true);
 				table.getColumnByName("Description").setUnique(true);
 				// Run
 				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);

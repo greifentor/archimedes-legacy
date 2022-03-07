@@ -55,16 +55,19 @@ public class DataModelToCMOConverterTest {
 						ColumnCMO.of("Name", TypeCMO.of(Types.VARCHAR, 100, 0), false, true))
 				.addPrimaryKeys(idColumnAnotherTable.getName());
 		aTable
+
 				.addForeignKeys(
 						ForeignKeyCMO
 								.of(
-										"FK_TO_" + anotherTable.getName() + "_" + idColumnAnotherTable.getName(),
-										ForeignKeyMemberCMO
-												.of(aTable, refAnotherTableId, anotherTable, idColumnAnotherTable)),
+										"FK_" + aTable.getName() + "_" + refTableB.getName() + "_TO_"
+												+ tableB.getName(),
+										ForeignKeyMemberCMO.of(aTable, refTableB, tableB, idColumnB)),
 						ForeignKeyCMO
 								.of(
-										"FK_TO_" + tableB.getName() + "_" + idColumnB.getName(),
-										ForeignKeyMemberCMO.of(aTable, refTableB, tableB, idColumnB)));
+										"FK_" + aTable.getName() + "_" + refAnotherTableId.getName() + "_TO_"
+												+ anotherTable.getName(),
+										ForeignKeyMemberCMO
+												.of(aTable, refAnotherTableId, anotherTable, idColumnAnotherTable)));
 		TableCMO ignoredTable = TableCMO
 				.of(
 						"IgnoredTable",
@@ -108,13 +111,15 @@ public class DataModelToCMOConverterTest {
 				.addForeignKeys(
 						ForeignKeyCMO
 								.of(
-										"FK_TO_" + anotherTable.getName() + "_" + idColumnAnotherTable.getName(),
-										ForeignKeyMemberCMO
-												.of(aTable, refAnotherTableId, anotherTable, idColumnAnotherTable)),
+										"FK_" + aTable.getName() + "_" + refTableB.getName() + "_TO_"
+												+ tableB.getName(),
+										ForeignKeyMemberCMO.of(aTable, refTableB, tableB, idColumnB)),
 						ForeignKeyCMO
 								.of(
-										"FK_TO_" + tableB.getName() + "_" + idColumnB.getName(),
-										ForeignKeyMemberCMO.of(aTable, refTableB, tableB, idColumnB)));
+										"FK_" + aTable.getName() + "_" + refAnotherTableId.getName() + "_TO_"
+												+ anotherTable.getName(),
+										ForeignKeyMemberCMO
+												.of(aTable, refAnotherTableId, anotherTable, idColumnAnotherTable)));
 		DataModelCMO expected = DataModelCMO.of(SchemaCMO.of("", anotherTable, aTable, tableB));
 		// Run
 		DataModelCMO returned = unitUnderTest.convert(dataModel, table -> table.getOptionByName("NO_DB") != null);

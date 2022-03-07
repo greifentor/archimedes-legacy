@@ -178,6 +178,17 @@ public class NameGeneratorTest {
 		}
 
 		@Test
+		void getPluralName_ModelWithNoConfigurationTableNameEndWithY_ReturnsPluralOfTableNameEndingOnEs() {
+			// Prepare
+			String expected = "Brushes";
+			when(table.getName()).thenReturn("Brush");
+			// Run
+			String returned = unitUnderTest.getPluralName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
 		void getPluralName_TableIsNull_ThrowsAnException() {
 			assertThrows(NullPointerException.class, () -> unitUnderTest.getPluralName((TableModel) null));
 		}

@@ -88,4 +88,9 @@ public class GeneratedPersistencePortInterfaceCodeGenerator extends AbstractClas
 		return nameGenerator.getPersistencePortPackageName(model, table);
 	}
 
+	@Override
+	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
+		return super.isToIgnoreFor(model, table) || isSubclass(table);
+	}
+
 }

@@ -46,9 +46,13 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		context.put("EntityName", nameGenerator.getClassName(table));
 		context.put("HasEnums", hasEnums(table.getColumns()));
 		context.put("HasReferences", hasReferences(table.getColumns()));
+		context.put("IdColumnName", table.getPrimaryKeyColumns()[0].getName());
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
 		context.put("ReferenceMode", getReferenceMode(model, table).name());
+		context.put("Subclass", table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS));
+		context.put("Superclass", table.isOptionSet(AbstractClassCodeGenerator.SUPERCLASS));
+		context.put("SuperclassName", getSuperclassName(table, nameGenerator::getDBOClassName));
 		context.put("TableName", table.getName());
 	}
 
@@ -88,7 +92,8 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 												model,
 												referenceMode,
 												c -> nameGenerator.getDBOClassName(c.getReferencedTable()),
-												(c, m) -> nameGenerator.getDBOClassName(c.getDomain(), model))))
+												(c, m) -> nameGenerator.getDBOClassName(c.getDomain(), model)))
+								.setPkMember(column.isPrimaryKey()))
 				.collect(Collectors.toList());
 	}
 
@@ -99,7 +104,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		}
 		OptionModel autoincrement = column.getOptionByName(AbstractClassCodeGenerator.AUTO_INCREMENT);
 		if (autoincrement != null) {
-			if (autoincrement.getParameter().equals("IDENTITY")) {
+			if ("IDENTITY".equals(autoincrement.getParameter())) {
 				annotations
 						.add(
 								new AnnotationData()
@@ -110,7 +115,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 																new ParameterData()
 																		.setName("strategy")
 																		.setValue("GenerationType.IDENTITY"))));
-			} else if (autoincrement.getParameter().equals("SEQUENCE")) {
+			} else if ("SEQUENCE".equals(autoincrement.getParameter())) {
 				String className = nameGenerator.getClassName(column.getTable());
 				String sequenceGeneratorName = className + "Sequence";
 				String sequenceName =
@@ -145,6 +150,10 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 																		.setName("generator")
 																		.setValue(
 																				"\"" + sequenceGeneratorName + "\""))));
+			} else {
+				System.out
+						.println(
+								"\n\nAUTOINCREMENT: invalid parameter value: " + autoincrement.getParameter() + "\n\n");
 			}
 		}
 		if (column.getDomain().isOptionSet(AbstractClassCodeGenerator.ENUM)) {

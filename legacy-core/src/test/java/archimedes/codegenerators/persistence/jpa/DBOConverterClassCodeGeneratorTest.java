@@ -11,10 +11,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.legacy.scheme.Relation;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
+import archimedes.model.ViewModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
+import corent.base.Direction;
 
 @ExtendWith(MockitoExtension.class)
 public class DBOConverterClassCodeGeneratorTest {
@@ -313,7 +317,7 @@ public class DBOConverterClassCodeGeneratorTest {
 	class TestsOfMethod_generate_String_TableModel_WithEnumAttribute {
 
 		@Test
-		void happyRunFor() {
+		void happyRun() {
 			// Prepare
 			String expected = "package " + BASE_PACKAGE_NAME + ".persistence.converter;\n" + //
 					"\n" + //
@@ -337,8 +341,8 @@ public class DBOConverterClassCodeGeneratorTest {
 					" */\n" + //
 					"@Generated\n" + //
 					"@Named\n" + //
-					"public class ATableDBOConverter implements ToModelConverter<ATable, ATableDBO> {\n"
-					+ //
+					"@RequiredArgsConstructor\n" + //
+					"public class ATableDBOConverter implements ToModelConverter<ATable, ATableDBO> {\n" + //
 					"\n" + //
 					"	private final DescriptionDBOConverter descriptionDBOConverter;\n" + //
 					"\n" + //
@@ -349,8 +353,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					"		return new ATableDBO()\n" + //
 					"				.setId(model.getId())\n" + //
 					"				.setADate(model.getADate())\n" + //
-					"				.setDescription(descriptionDBOConverter.toDBO(model.getDescription()));\n"
-					+ //
+					"				.setDescription(descriptionDBOConverter.toDBO(model.getDescription()));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -361,8 +364,350 @@ public class DBOConverterClassCodeGeneratorTest {
 					"		return new ATable()\n" + //
 					"				.setId(dbo.getId())\n" + //
 					"				.setADate(dbo.getADate())\n" + //
-					"				.setDescription(descriptionDBOConverter.toModel(dbo.getDescription()));\n"
+					"				.setDescription(descriptionDBOConverter.toModel(dbo.getDescription()));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public List<ATable> toModel(List<ATableDBO> dbos) {\n" + //
+					"		if (dbos == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel.getDomainByName("Description").addOption(new Option("ENUM:ONE,TWO,THREE"));
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_generate_String_TableModel_Subclass {
+
+		@Test
+		void happyRun() {
+			// Prepare
+			String expected = "package base.pack.age.name.persistence.converter;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.stream.Collectors;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import java.time.LocalDate;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
+					"\n" + //
+					"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+					"import base.pack.age.name.core.model.ATable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A DBO converter for a_tables.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"public class ATableDBOConverter implements ToModelConverter<ATable, ATableDBO> {\n" + //
+					"\n" + //
+					"	public ATableDBO toDBO(ATable model) {\n" + //
+					"		if (model == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		ATableDBO dbo = new ATableDBO();\n" + //
+					"		dbo.setId(model.getId());\n" + //
+					"		dbo.setADate(model.getADate());\n" + //
+					"		dbo.setDescription(model.getDescription());\n" + //
+					"		dbo.setValid(model.getValid());\n" + //
+					"		return dbo;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public ATable toModel(ATableDBO dbo) {\n" + //
+					"		if (dbo == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		ATable model = new ATable();\n" + //
+					"		model.setId(dbo.getId());\n" + //
+					"		model.setADate(dbo.getADate());\n" + //
+					"		model.setDescription(dbo.getDescription());\n" + //
+					"		model.setValid(dbo.getValid());\n" + //
+					"		return model;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public List<ATable> toModel(List<ATableDBO> dbos) {\n" + //
+					"		if (dbos == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.addOption(new Option(AbstractClassCodeGenerator.SUBCLASS));
+			TableModel tableRef = dataModel.getTableByName("ANOTHER_TABLE");
+			tableRef.addOption(new Option(AbstractClassCodeGenerator.SUPERCLASS));
+			ColumnModel columnRef = tableRef.getColumnByName("ID");
+			ColumnModel column = table.getColumnByName("ID");
+			column
+					.setRelation(
+							new Relation(
+									(ViewModel) dataModel.getMainView(),
+									column,
+									Direction.UP,
+									0,
+									columnRef,
+									Direction.LEFT,
+									0));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRun_withInheritedEnum() {
+			// Prepare
+			String expected = "package base.pack.age.name.persistence.converter;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.stream.Collectors;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import java.time.LocalDate;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
+					"\n" + //
+					"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+					"import base.pack.age.name.core.model.ATable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A DBO converter for a_tables.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"@RequiredArgsConstructor\n" + //
+					"public class ATableDBOConverter implements ToModelConverter<ATable, ATableDBO> {\n" + //
+					"\n" + //
+					"	private final BooleanDBOConverter booleanDBOConverter;\n" + //
+					"\n" + //
+					"	public ATableDBO toDBO(ATable model) {\n" + //
+					"		if (model == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		ATableDBO dbo = new ATableDBO();\n" + //
+					"		dbo.setId(model.getId());\n" + //
+					"		dbo.setADate(model.getADate());\n" + //
+					"		dbo.setDescription(model.getDescription());\n" + //
+					"		dbo.setValid(booleanDBOConverter.toDBO(model.getValid()));\n" + //
+					"		return dbo;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public ATable toModel(ATableDBO dbo) {\n" + //
+					"		if (dbo == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		ATable model = new ATable();\n" + //
+					"		model.setId(dbo.getId());\n" + //
+					"		model.setADate(dbo.getADate());\n" + //
+					"		model.setDescription(dbo.getDescription());\n" + //
+					"		model.setValid(booleanDBOConverter.toModel(dbo.getValid()));\n" + //
+					"		return model;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public List<ATable> toModel(List<ATableDBO> dbos) {\n" + //
+					"		if (dbos == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel.getDomainByName("Boolean").addOption(new Option("ENUM:TRUE,FALSE"));
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.addOption(new Option(AbstractClassCodeGenerator.SUBCLASS));
+			TableModel tableRef = dataModel.getTableByName("ANOTHER_TABLE");
+			tableRef.addOption(new Option(AbstractClassCodeGenerator.SUPERCLASS));
+			ColumnModel columnRef = tableRef.getColumnByName("ID");
+			ColumnModel column = table.getColumnByName("ID");
+			column
+					.setRelation(
+							new Relation(
+									(ViewModel) dataModel.getMainView(),
+									column,
+									Direction.UP,
+									0,
+									columnRef,
+									Direction.LEFT,
+									0));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_generate_String_TableModel_Superclass {
+
+		@Test
+		void happyRun() {
+			// Prepare
+			String expected = "package base.pack.age.name.persistence.converter;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.stream.Collectors;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
+					"\n" + //
+					"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
+					"import base.pack.age.name.persistence.entity.AnotherTableDBO;\n" + //
+					"import base.pack.age.name.core.model.ATable;\n" + //
+					"import base.pack.age.name.core.model.AnotherTable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A DBO converter for another_tables.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"@RequiredArgsConstructor\n" + //
+					"public class AnotherTableDBOConverter implements ToModelConverter<AnotherTable, AnotherTableDBO> {\n"
 					+ //
+					"\n" + //
+					"	private final ATableDBOConverter aTableDBOConverter;\n" + //
+					"\n" + //
+					"	public AnotherTableDBO toDBO(AnotherTable model) {\n" + //
+					"		if (model == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		if (model instanceof ATable) {\n" + //
+					"			return aTableDBOConverter.toDBO((ATable) model);\n" + //
+					"		}\n" + //
+					"		return new AnotherTableDBO()\n" + //
+					"				.setId(model.getId())\n" + //
+					"				.setValid(model.getValid());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public AnotherTable toModel(AnotherTableDBO dbo) {\n" + //
+					"		if (dbo == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		if (dbo instanceof ATableDBO) {\n" + //
+					"			return aTableDBOConverter.toModel((ATableDBO) dbo);\n" + //
+					"		}\n" + //
+					"		return new AnotherTable()\n" + //
+					"				.setId(dbo.getId())\n" + //
+					"				.setValid(dbo.getValid());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public List<AnotherTable> toModel(List<AnotherTableDBO> dbos) {\n" + //
+					"		if (dbos == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.addOption(new Option(AbstractClassCodeGenerator.SUBCLASS));
+			TableModel tableRef = dataModel.getTableByName("ANOTHER_TABLE");
+			tableRef.addOption(new Option(AbstractClassCodeGenerator.SUPERCLASS));
+			ColumnModel columnRef = tableRef.getColumnByName("ID");
+			ColumnModel column = table.getColumnByName("ID");
+			column
+					.setRelation(
+							new Relation(
+									(ViewModel) dataModel.getMainView(),
+									column,
+									Direction.UP,
+									0,
+									columnRef,
+									Direction.LEFT,
+									0));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableRef);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_generate_String_TableModel_WithElementListAttribute {
+
+		@Test
+		void happyRun() {
+			// Prepare
+			String expected = "package " + BASE_PACKAGE_NAME + ".persistence.converter;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.stream.Collectors;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import java.time.LocalDate;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
+					"\n" + //
+					"import " + BASE_PACKAGE_NAME + ".persistence.entity.ATableDBO;\n" + //
+					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A DBO converter for a_tables.\n" + //
+					" *\n" + //
+					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"@RequiredArgsConstructor\n" + //
+					"public class ATableDBOConverter implements ToModelConverter<ATable, ATableDBO> {\n" + //
+					"\n" + //
+					"	private final DescriptionDBOConverter descriptionDBOConverter;\n" + //
+					"\n" + //
+					"	public ATableDBO toDBO(ATable model) {\n" + //
+					"		if (model == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new ATableDBO()\n" + //
+					"				.setId(model.getId())\n" + //
+					"				.setADate(model.getADate())\n" + //
+					"				.setDescription(descriptionDBOConverter.toDBO(model.getDescription()));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public ATable toModel(ATableDBO dbo) {\n" + //
+					"		if (dbo == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new ATable()\n" + //
+					"				.setId(dbo.getId())\n" + //
+					"				.setADate(dbo.getADate())\n" + //
+					"				.setDescription(descriptionDBOConverter.toModel(dbo.getDescription()));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //

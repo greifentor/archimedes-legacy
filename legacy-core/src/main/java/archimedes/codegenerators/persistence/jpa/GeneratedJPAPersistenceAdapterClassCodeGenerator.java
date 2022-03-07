@@ -71,6 +71,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 				.put(
 						"HasObjectReferences",
 						FindByUtils.hasObjectReferences(table.getColumns()) && (referenceMode == ReferenceMode.OBJECT));
+		context.put("HasSimpleTypeId", hasSimpleTypeId(columnData));
 		context.put("IdClassName", getIdClassName(table));
 		context.put("IdFieldName", nameGenerator.getAttributeName(getIdFieldNameCamelCase(table)));
 		context.put("IdFieldNameCamelCase", getIdFieldNameCamelCase(table));
@@ -198,6 +199,10 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
+		return hasDependentAttribute(model, table) || isSubclass(table);
+	}
+
+	private boolean hasDependentAttribute(DataModel model, TableModel table) {
 		return Arrays
 				.asList(table.getColumns())
 				.stream()

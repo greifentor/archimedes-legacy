@@ -23,9 +23,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 #end
 import javax.persistence.Id;
+#if ($Superclass)
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+#end
 #if ($ReferenceMode == "OBJECT" && ${HasReferences})
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+#end
+#if ($Subclass)
+import javax.persistence.PrimaryKeyJoinColumn;
 #end
 #if ($Autoincrement and ${Autoincrement.contains("SEQUENCE")})
 import javax.persistence.SequenceGenerator;
@@ -38,7 +45,13 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 #end
 import lombok.Data;
+#if ($Subclass)
+import lombok.EqualsAndHashCode;
+#end
 import lombok.Generated;
+#if ($Subclass)
+import lombok.ToString;
+#end
 #if ($POJOMode == "CHAIN")
 import lombok.experimental.Accessors;
 #end
@@ -60,14 +73,26 @@ import lombok.experimental.Accessors;
 @Data
 @Generated
 @Entity(name = "${EntityName}")
+#if ($Superclass)
+@Inheritance(strategy = InheritanceType.JOINED)
+#end
+#if ($Subclass)
+@EqualsAndHashCode(callSuper = true)
+@PrimaryKeyJoinColumn(name = "${IdColumnName}")
+#end
 @Table(name = "${TableName}")
-public class ${ClassName} {
+#if ($Subclass)
+@ToString(callSuper = true)
+#end
+public class ${ClassName} #if($Subclass)extends ${SuperclassName} #end{
 
 #foreach($Column in $ColumnData)
+#if(!${Subclass} or !${Column.isPkMember()})
 #foreach($Annotation in ${Column.getAnnotations()})
 	${Annotation.toJavaCode()}
 #end
 	private ${Column.getFieldType()} ${Column.getFieldName()};
+#end
 #end
 
 }

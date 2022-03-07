@@ -1,5 +1,10 @@
 package archimedes.legacy.updater;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import archimedes.codegenerators.OptionGetter;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -13,11 +18,6 @@ import de.ollie.dbcomp.model.IndexCMO;
 import de.ollie.dbcomp.model.SchemaCMO;
 import de.ollie.dbcomp.model.TableCMO;
 import de.ollie.dbcomp.model.TypeCMO;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A converter which converts a DataModel object into a CMO.
@@ -33,8 +33,13 @@ public class DataModelToCMOConverter {
 	}
 
 	public DataModelCMO convert(DataModel dataModel, TableIgnore tableIgnore) {
-		DataModelCMO cmo = DataModelCMO
-				.of(SchemaCMO.of(getSchemaName(dataModel, DEFAULT_SCHEMA_NAME), getTables(dataModel, tableIgnore)));
+		DataModelCMO cmo =
+				DataModelCMO
+						.of(
+								SchemaCMO
+										.of(
+												getSchemaName(dataModel, DEFAULT_SCHEMA_NAME),
+												getTables(dataModel, tableIgnore)));
 		addForeignKeys(cmo, dataModel);
 		addPrimaryKeys(cmo, dataModel);
 		addIndices(cmo, dataModel);
@@ -136,10 +141,14 @@ public class DataModelToCMOConverter {
 		return OptionGetter
 				.getParameterOfOptionByName(dataModel, DataModel.ALTERNATE_FK_NAME)
 				.map(s -> doReplacements(s, column))
-				.orElse(
-						"FK_TO_" + column.getReferencedTable().getName()
-								+ "_"
-								+ column.getReferencedColumn().getName());
+				.orElse(createFKConstraintName(column));
+	}
+
+	private String createFKConstraintName(ColumnModel column) {
+		String fkName =
+				"FK_" + column.getTable().getName() + "_" + column.getName() + "_TO_"
+						+ column.getReferencedTable().getName();
+		return fkName.substring(0, fkName.length() > 64 ? 64 : fkName.length());
 	}
 
 	private String doReplacements(String s, ColumnModel column) {
@@ -238,8 +247,7 @@ public class DataModelToCMOConverter {
 	}
 
 	private String createIndexName(String tableName, List<ColumnCMO> columns) {
-		return "ix_" + tableName
-				+ "_"
+		return "ix_" + tableName + "_"
 				+ columns.stream().map(ColumnCMO::getName).reduce((s0, s1) -> s0 + "_" + s1).orElse("");
 	}
 

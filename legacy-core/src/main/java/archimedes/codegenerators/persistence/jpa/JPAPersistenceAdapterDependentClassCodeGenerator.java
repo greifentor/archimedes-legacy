@@ -95,6 +95,10 @@ public class JPAPersistenceAdapterDependentClassCodeGenerator
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
+		return hasNoDependentAttribute(model, table) || isSubclass(table);
+	}
+
+	private boolean hasNoDependentAttribute(DataModel model, TableModel table) {
 		return !Arrays
 				.asList(table.getColumns())
 				.stream()

@@ -68,7 +68,7 @@ public class DBOMapstructMapperInterfaceCodeGenerator extends AbstractClassCodeG
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
 		String mapper = getMappersParameter(model, table);
-		return (mapper == null) || !mapper.toLowerCase().startsWith("mapstruct");
+		return (mapper == null) || !mapper.toLowerCase().startsWith("mapstruct") || isSubclass(table);
 	}
 
 }

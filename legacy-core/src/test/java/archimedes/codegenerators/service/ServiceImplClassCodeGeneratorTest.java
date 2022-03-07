@@ -1,7 +1,10 @@
 package archimedes.codegenerators.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
+import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
@@ -72,6 +76,35 @@ public class ServiceImplClassCodeGeneratorTest {
 		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 		// Check
 		assertEquals(expected, returned);
+	}
+
+	@Nested
+	class TestsOfMethod_isToIgnoreFor_DataModel_TableModel {
+
+		@Nested
+		class Subclasses {
+
+			@Test
+			void passASubclassModel_returnsTrue() {
+				// Prepare
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel table = dataModel.getTableByName("A_TABLE");
+				table.addOption(new Option(AbstractClassCodeGenerator.SUBCLASS));
+				// Run & Check
+				assertTrue(unitUnderTest.isToIgnoreFor(dataModel, table));
+			}
+
+			@Test
+			void passANoSubnlassModel_returnsFalse() {
+				// Prepare
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel table = dataModel.getTableByName("A_TABLE");
+				// Run & Check
+				assertFalse(unitUnderTest.isToIgnoreFor(dataModel, table));
+			}
+
+		}
+
 	}
 
 }

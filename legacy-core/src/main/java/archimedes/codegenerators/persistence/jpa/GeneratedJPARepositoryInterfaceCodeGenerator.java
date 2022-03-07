@@ -82,4 +82,9 @@ public class GeneratedJPARepositoryInterfaceCodeGenerator
 		return nameGenerator.getGeneratedJPARepositoryPackageName(model, table);
 	}
 
+	@Override
+	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
+		return isSubclass(t);
+	}
+
 }

@@ -15,7 +15,13 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 #end
 import lombok.Data;
+#if ($Subclass)
+import lombok.EqualsAndHashCode;
+#end
 import lombok.Generated;
+#if ($Subclass)
+import lombok.ToString;
+#end
 #if ($POJOMode == "CHAIN")
 import lombok.experimental.Accessors;
 #end
@@ -35,11 +41,19 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 #end
 @Data
+#if ($Subclass)
+@EqualsAndHashCode(callSuper = true)
+#end
 @Generated
-public class ${ClassName} {
+#if ($Subclass)
+@ToString(callSuper = true)
+#end
+public class ${ClassName} #if($Subclass)extends ${SuperclassName} #end{
 
 #foreach($Column in $ColumnData)
+#if(!${Subclass} or !${Column.isPkMember()})
 	private ${Column.getFieldType()} ${Column.getFieldName()};
+#end
 #end
 
 }

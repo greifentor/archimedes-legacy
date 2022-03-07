@@ -1,6 +1,7 @@
 package archimedes.codegenerators;
 
 import java.sql.Types;
+import java.util.List;
 
 import archimedes.model.DomainModel;
 
@@ -54,6 +55,13 @@ public class TypeGenerator {
 			return wrapperTypeName;
 		}
 		return simpleTypeName;
+	}
+
+	private static final List<String> SIMPLE_TYPE_NAMES =
+			List.of("boolean", "byte", "char", "double", "float", "int", "long", "short");
+
+	public boolean isSimpleType(String typeName) {
+		return SIMPLE_TYPE_NAMES.contains(typeName);
 	}
 
 }

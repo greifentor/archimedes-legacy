@@ -10,9 +10,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.legacy.scheme.Relation;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import archimedes.model.ViewModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
+import corent.base.Direction;
 
 @ExtendWith(MockitoExtension.class)
 public class DBOClassCodeGeneratorTest {
@@ -33,7 +38,7 @@ public class DBOClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = getExpected();
+			String expected = getExpected(false, false);
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel
 					.getDomainByName("Description")
@@ -44,7 +49,7 @@ public class DBOClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
-		private String getExpected() {
+		private String getExpected(boolean isSuperclass, boolean isExtends) {
 			String s = "package base.pack.age.name.persistence.entity;\n" + //
 					"\n" + //
 					"import java.time.LocalDate;\n" + //
@@ -53,11 +58,18 @@ public class DBOClassCodeGeneratorTest {
 					"import javax.persistence.Entity;\n" + //
 					"import javax.persistence.EnumType;\n" + //
 					"import javax.persistence.Enumerated;\n" + //
-					"import javax.persistence.Id;\n" + //
+					"import javax.persistence.Id;\n";
+			if (isSuperclass) {
+				s += "import javax.persistence.Inheritance;\n" + //
+						"import javax.persistence.InheritanceType;\n";
+			}
+			s += (isExtends ? "import javax.persistence.PrimaryKeyJoinColumn;\n" : "") + //
 					"import javax.persistence.Table;\n" + //
 					"\n" + //
 					"import lombok.Data;\n" + //
+					(isExtends ? "import lombok.EqualsAndHashCode;\n" : "") + //
 					"import lombok.Generated;\n" + //
+					(isExtends ? "import lombok.ToString;\n" : "") + //
 					"import lombok.experimental.Accessors;\n" + //
 					"\n" + //
 					"/**\n" + //
@@ -69,13 +81,19 @@ public class DBOClassCodeGeneratorTest {
 					"@Data\n" + //
 					"@Generated\n" + //
 					"@Entity(name = \"ATable\")\n" + //
+					(isExtends ? "@EqualsAndHashCode(callSuper = true)\n" : "") + //
+					(isExtends ? "@PrimaryKeyJoinColumn(name = \"ID\")\n" : "") + //
+					(isSuperclass ? "@Inheritance(strategy = InheritanceType.JOINED)\n" : "") + //
 					"@Table(name = \"A_TABLE\")\n" + //
-					"public class ATableDBO {\n" + //
-					"\n" + //
-					"	@Id\n" + //
+					(isExtends ? "@ToString(callSuper = true)\n" : "") + //
+					"public class ATableDBO" + (isExtends ? " extends AnotherTableDBO" : "") + " {\n" + //
+					"\n";
+			if (!isExtends) {
+				s += "	@Id\n" + //
 					"	@Column(name = \"ID\")\n" + //
-					"	private Long id;\n" + //
-					"	@Column(name = \"ADate\")\n" + //
+						"	private Long id;\n";
+			}
+			s += "	@Column(name = \"ADate\")\n" + //
 					"	private LocalDate aDate;\n" + //
 					"	@Enumerated(EnumType.STRING)\n" + //
 					"	@Column(name = \"Description\")\n" + //
@@ -83,6 +101,55 @@ public class DBOClassCodeGeneratorTest {
 					"\n" + //
 					"}";
 			return s;
+		}
+
+		@Test
+		void happyRunForASuperclassObject() {
+			// Prepare
+			String expected = getExpected(true, false);
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel
+					.getDomainByName("Description")
+					.addOption(new Option(AbstractClassCodeGenerator.ENUM, "ONE,TWO,THREE"));
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table
+					.addOption(
+							new Option(
+									AbstractClassCodeGenerator.SUPERCLASS,
+									AbstractClassCodeGenerator.INHERITANCE_MODE_JOINED));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASubclassObject() {
+			// Prepare
+			String expected = getExpected(false, true);
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel
+					.getDomainByName("Description")
+					.addOption(new Option(AbstractClassCodeGenerator.ENUM, "ONE,TWO,THREE"));
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.addOption(new Option(AbstractClassCodeGenerator.SUBCLASS));
+			TableModel tableRef = dataModel.getTableByName("ANOTHER_TABLE");
+			ColumnModel columnRef = tableRef.getColumnByName("ID");
+			ColumnModel column = table.getColumnByName("ID");
+			column
+					.setRelation(
+							new Relation(
+									(ViewModel) dataModel.getMainView(),
+									column,
+									Direction.UP,
+									0,
+									columnRef,
+									Direction.LEFT,
+									0));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
 		}
 
 	}

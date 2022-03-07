@@ -55,6 +55,10 @@ public class JPAPersistenceAdapterClassCodeGenerator extends AbstractClassCodeGe
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
+		return hasDependentAttribute(model, table) || isSubclass(table);
+	}
+
+	private boolean hasDependentAttribute(DataModel model, TableModel table) {
 		return Arrays
 				.asList(table.getColumns())
 				.stream()
