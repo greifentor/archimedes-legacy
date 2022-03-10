@@ -654,6 +654,81 @@ public class DBOConverterClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void happyRun_NonSuperclassReferencesASubclass() {
+			// Prepare
+			String expected = "package base.pack.age.name.persistence.converter;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.stream.Collectors;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
+					"\n" + //
+					"import base.pack.age.name.persistence.entity.AnotherTableDBO;\n" + //
+					"import base.pack.age.name.core.model.AnotherTable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A DBO converter for another_tables.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"public class AnotherTableDBOConverter implements ToModelConverter<AnotherTable, AnotherTableDBO> {\n"
+					+ //
+					"\n" + //
+					"	public AnotherTableDBO toDBO(AnotherTable model) {\n" + //
+					"		if (model == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new AnotherTableDBO()\n" + //
+					"				.setId(model.getId())\n" + //
+					"				.setValid(model.getValid());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public AnotherTable toModel(AnotherTableDBO dbo) {\n" + //
+					"		if (dbo == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new AnotherTable()\n" + //
+					"				.setId(dbo.getId())\n" + //
+					"				.setValid(dbo.getValid());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public List<AnotherTable> toModel(List<AnotherTableDBO> dbos) {\n" + //
+					"		if (dbos == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.addOption(new Option(AbstractClassCodeGenerator.SUBCLASS));
+			TableModel tableRef = dataModel.getTableByName("ANOTHER_TABLE");
+			ColumnModel columnRef = tableRef.getColumnByName("ID");
+			ColumnModel column = table.getColumnByName("ID");
+			column
+					.setRelation(
+							new Relation(
+									(ViewModel) dataModel.getMainView(),
+									column,
+									Direction.UP,
+									0,
+									columnRef,
+									Direction.LEFT,
+									0));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableRef);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 	@Nested

@@ -164,6 +164,9 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 	}
 
 	private List<ColumnData> getInheritedColumns(TableModel table, DataModel model, ReferenceMode referenceMode) {
+		if (!table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)) {
+			return List.of();
+		}
 		TableModel superclassTable = getSuperclassTable(table);
 		return superclassTable == null
 				? List.of()
@@ -185,6 +188,9 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 	}
 
 	private List<SubclassData> getSubclassData(DataModel model, TableModel table) {
+		if (!table.isOptionSet(AbstractClassCodeGenerator.SUPERCLASS)) {
+			return List.of();
+		}
 		Set<TableModel> subclassTables =
 				List
 						.of(model.getAllColumns())
