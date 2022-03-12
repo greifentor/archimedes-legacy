@@ -34,25 +34,24 @@ public class ModelCheckerDomainNotInuse implements ModelChecker {
 	public ModelCheckerMessage[] check(DataModel model) {
 		ensure(model != null, "data model cannot be null.");
 		List<DomainModel> domains = getDomainList(model);
-		Arrays.asList(model.getTables()).stream() //
-				.flatMap(t -> Arrays.asList(t.getColumns()).stream()) //
-				.forEach(column -> domains.remove(column.getDomain())) //
-		;
-		return domains //
-				.stream() //
-				.map(d -> new ModelCheckerMessage( //
-						Level.WARNING, //
-						guiBundle.getResourceText(RES_MODEL_CHECKER_UNUSED_DOMAIN_PRIMARY_KEY, d.getName()), //
-						d)) //
-				.collect(Collectors.toList()) //
+		Arrays
+				.asList(model.getTables())
+				.stream()
+				.flatMap(t -> Arrays.asList(t.getColumns()).stream())
+				.forEach(column -> domains.remove(column.getDomain()));
+		return domains
+				.stream()
+				.map(
+						d -> new ModelCheckerMessage(
+								Level.WARNING,
+								guiBundle.getResourceText(RES_MODEL_CHECKER_UNUSED_DOMAIN_PRIMARY_KEY, d.getName()),
+								d))
+				.collect(Collectors.toList())
 				.toArray(new ModelCheckerMessage[0]);
 	}
 
 	private List<DomainModel> getDomainList(DataModel model) {
-		return Arrays.asList(model.getAllDomains()) //
-				.stream() //
-				.collect(Collectors.toList()) //
-		;
+		return Arrays.asList(model.getAllDomains()).stream().collect(Collectors.toList());
 	}
 
 }

@@ -9,13 +9,16 @@
 
 package archimedes.acf.checker;
 
-import archimedes.model.*;
+import static corentx.util.Checks.ensure;
 
-import baccara.gui.*;
+import java.util.LinkedList;
+import java.util.List;
 
-import static corentx.util.Checks.*;
-
-import java.util.*;
+import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
+import archimedes.model.NReferenceModel;
+import archimedes.model.TableModel;
+import baccara.gui.GUIBundle;
 
 
 /**
@@ -54,6 +57,9 @@ public class ModelCheckerNReferencesAreSetProperly implements ModelChecker {
     @Override public ModelCheckerMessage[] check(DataModel model) {
         List<ModelCheckerMessage> l = new LinkedList<ModelCheckerMessage>();
         for (TableModel t : model.getTables()) {
+			if (t.isOptionSet(IGNORE_CHECKER_OPTION)) {
+				continue;
+			}
             for (NReferenceModel nm : t.getNReferences()) {
                 if ((nm.getColumn() == null) || this.isColumnRemoved(nm.getColumn())) {
                     l.add(new ModelCheckerMessage(ModelCheckerMessage.Level.ERROR,

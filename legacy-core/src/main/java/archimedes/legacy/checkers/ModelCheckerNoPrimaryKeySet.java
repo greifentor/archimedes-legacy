@@ -37,6 +37,7 @@ public class ModelCheckerNoPrimaryKeySet implements ModelChecker {
 		return Arrays
 				.asList(model.getTables())
 				.stream()
+				.filter(table -> !table.isOptionSet(IGNORE_CHECKER_OPTION))
 				.filter(
 						table -> (table.getPrimaryKeyColumns().length == 0)
 								&& !table.isOptionSet(SUPPRESS_NO_PK_WARNING))

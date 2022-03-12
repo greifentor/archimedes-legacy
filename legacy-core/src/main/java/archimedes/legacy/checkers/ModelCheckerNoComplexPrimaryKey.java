@@ -40,13 +40,17 @@ public class ModelCheckerNoComplexPrimaryKey implements ModelChecker {
 	@Override
 	public ModelCheckerMessage[] check(DataModel model) {
 		ensure(model != null, "data model cannot be null.");
-		return Arrays.asList(model.getTables()).stream() //
-				.filter(t -> (t.getPrimaryKeyColumns().length > 1 && !t.isManyToManyRelation())) //
-				.map(t -> new ModelCheckerMessage( //
-						Level.ERROR, //
-						guiBundle.getResourceText(RES_MODEL_CHECKER_NO_COMPLEX_PRIMARY_KEY, t.getName()), //
-						t)) //
-				.collect(Collectors.toList()) //
+		return Arrays
+				.asList(model.getTables())
+				.stream()
+				.filter(t -> !t.isOptionSet(IGNORE_CHECKER_OPTION))
+				.filter(t -> (t.getPrimaryKeyColumns().length > 1 && !t.isManyToManyRelation()))
+				.map(
+						t -> new ModelCheckerMessage(
+								Level.ERROR,
+								guiBundle.getResourceText(RES_MODEL_CHECKER_NO_COMPLEX_PRIMARY_KEY, t.getName()),
+								t))
+				.collect(Collectors.toList())
 				.toArray(new ModelCheckerMessage[0]);
 	}
 

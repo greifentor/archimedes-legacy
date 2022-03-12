@@ -9,12 +9,14 @@
 
 package archimedes.acf.checker;
 
-import static corentx.util.Checks.*;
+import static corentx.util.Checks.ensure;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
-import archimedes.model.*;
-import baccara.gui.*;
+import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import baccara.gui.GUIBundle;
 
 /**
  * A model checker which checks table names for special characters.
@@ -51,6 +53,9 @@ public class ModelCheckerTableNameDoesNotContainSpecialCharacters implements Mod
     @Override public ModelCheckerMessage[] check(DataModel model) {
         List<ModelCheckerMessage> l = new LinkedList<ModelCheckerMessage>();
         for (TableModel t : model.getTables()) {
+			if (t.isOptionSet(IGNORE_CHECKER_OPTION)) {
+				continue;
+			}
             for (int i = 0, leni = t.getName().length(); i < leni; i++) {
                 char c = t.getName().charAt(i);
                 if ((c <= '/') || (":;<=>?@[\\]^`{|}~".indexOf(c) > -1)) {

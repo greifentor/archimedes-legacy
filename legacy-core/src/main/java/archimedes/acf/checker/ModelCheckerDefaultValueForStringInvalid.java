@@ -9,13 +9,17 @@
 
 package archimedes.acf.checker;
 
-import static corentx.util.Checks.*;
+import static corentx.util.Checks.ensure;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Types;
+import java.util.LinkedList;
+import java.util.List;
 
-import archimedes.model.*;
-import baccara.gui.*;
+import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
+import archimedes.model.DomainModel;
+import archimedes.model.TableModel;
+import baccara.gui.GUIBundle;
 
 /**
  * A checker for the validity of default values for string fields.
@@ -53,6 +57,9 @@ public class ModelCheckerDefaultValueForStringInvalid implements ModelChecker {
     @Override public ModelCheckerMessage[] check(DataModel model) {
         List<ModelCheckerMessage> l = new LinkedList<ModelCheckerMessage>();
         for (TableModel t : model.getTables()) {
+			if (t.isOptionSet(IGNORE_CHECKER_OPTION)) {
+				continue;
+			}
             for (ColumnModel c : t.getColumns()) {
                 if (this.isStringType(c.getDomain())) {
                     String dv = c.getDefaultValue();

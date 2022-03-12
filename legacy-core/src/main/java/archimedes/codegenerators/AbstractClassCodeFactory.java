@@ -57,6 +57,7 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 												domainModel.getName(),
 												generatorName);
 							}
+							System.gc();
 						} else {
 							// incrementStepProgress(
 							// stepCounter,
@@ -67,6 +68,7 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 											domainModel.getName(),
 											generatorName);
 						}
+
 					});
 		}
 		for (TableModel tableModel : dataModel.getTables()) {
@@ -94,6 +96,7 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 													tableModel.getName(),
 													generatorName);
 								}
+								System.gc();
 							} else {
 								incrementStepProgress(
 										stepCounter,
@@ -114,6 +117,7 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 								isInCodeGeneration(tableModel));
 			}
 		}
+		System.gc();
 		return true;
 	}
 

@@ -9,6 +9,53 @@
 
 package archimedes.legacy.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EventObject;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import javax.swing.AbstractAction;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import org.apache.commons.lang3.StringUtils;
+
 import archimedes.acf.ReadyToGenerateChecker;
 import archimedes.acf.checker.ModelChecker;
 import archimedes.acf.checker.ModelCheckerDomainSetForAllColumns;
@@ -132,36 +179,6 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.FileSystemResourceAccessor;
 import logging.Logger;
-import org.apache.commons.lang3.StringUtils;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EventObject;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * Diese Klasse bietet das Hauptfenster der Archimedes-Applikation.
@@ -1473,7 +1490,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		compoundOptionProvider
 				.addOptions(OptionType.MODEL, new String[] { DataModel.ALTERNATE_FK_NAME, DataModel.SCHEMA_NAME });
 		compoundOptionProvider
-				.addOptions(OptionType.TABLE, new String[] { ModelCheckerNoPrimaryKeySet.SUPPRESS_NO_PK_WARNING });
+				.addOptions(
+						OptionType.TABLE,
+						new String[] {
+								ModelCheckerNoPrimaryKeySet.SUPPRESS_NO_PK_WARNING,
+								ModelChecker.IGNORE_CHECKER_OPTION });
 		for (Object cf : getCodeFactories("")) {
 			if (cf instanceof PredeterminedOptionProvider) {
 				for (OptionType optionType : OptionType.values()) {

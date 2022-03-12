@@ -9,13 +9,14 @@
 
 package archimedes.acf.checker;
 
-import static corentx.util.Checks.*;
+import static corentx.util.Checks.ensure;
 
-import baccara.gui.*;
+import java.util.LinkedList;
+import java.util.List;
 
-import java.util.*;
-
-import archimedes.model.*;
+import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import baccara.gui.GUIBundle;
 
 
 /**
@@ -53,6 +54,9 @@ public class ModelCheckerCodeGeneratorOptionFieldNotEmpty implements ModelChecke
     @Override public ModelCheckerMessage[] check(DataModel model) {
         List<ModelCheckerMessage> l = new LinkedList<ModelCheckerMessage>();
         for (TableModel t : model.getTables()) {
+			if (t.isOptionSet(IGNORE_CHECKER_OPTION)) {
+				continue;
+			}
             if ((t.getGenerateCodeOptions() != null) && !t.getGenerateCodeOptions().isEmpty()) {
                 l.add(new ModelCheckerMessage(ModelCheckerMessage.Level.WARNING,
                         this.guiBundle.getResourceText(

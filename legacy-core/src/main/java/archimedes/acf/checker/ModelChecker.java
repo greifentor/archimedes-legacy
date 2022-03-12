@@ -1,16 +1,6 @@
-/*
- * ModelChecker.java
- *
- * 28.01.2016
- *
- * (c) by HealthCarion
- *
- */
-
 package archimedes.acf.checker;
 
-import archimedes.model.*;
-
+import archimedes.model.DataModel;
 
 /**
  * An interface for checker which are executed before code generation.
@@ -23,6 +13,8 @@ import archimedes.model.*;
  */
 
 public interface ModelChecker {
+
+	public static final String IGNORE_CHECKER_OPTION = "IGNORE_CHECKER_OPTION";
 
     /**
      * Checks a special problem an returns a string with a HTML problem description in case of
