@@ -17,8 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import logging.Logger;
-
+import archimedes.legacy.Archimedes;
 import archimedes.legacy.app.ApplicationUtil;
 import archimedes.legacy.model.DiagrammModel;
 import corent.base.Constants;
@@ -33,6 +32,7 @@ import corent.gui.RessourceManager;
 import corentx.io.FileUtil;
 import corentx.script.JScriptRunner;
 import corentx.util.Str;
+import logging.Logger;
 
 /**
  * A dialog for edit and run JavaScripts on the Archimedes database model.
@@ -107,8 +107,9 @@ public class DialogScriptExecuter extends JDialogWithInifile implements ActionLi
 	public void executeScript() {
 		try {
 			LOG.info("executing script");
-			Map<String, Object> params = new Hashtable<String, Object>();
+            Map<String, Object> params = new Hashtable<>();
 			params.put("model", this.dm);
+            params.put("factory", Archimedes.Factory);
 			new JScriptRunner(this.textAreaScript.getText(), params, null).exec();
 		} catch (Exception e) {
 			new JDialogThrowable(e, Str.fromHTML("Fehler beim Ausf&uuml;hren des Scripts."), this.getInifile(),
