@@ -68,9 +68,36 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 											domainModel.getName(),
 											generatorName);
 						}
-
 					});
 		}
+		generators
+		        .stream()
+		        .filter(codeGenerator -> codeGenerator instanceof AbstractModelCodeGenerator<?>)
+		        .map(codeGenerator -> (AbstractModelCodeGenerator<?>) codeGenerator)
+		        .forEach(codeGenerator -> {
+			        String fileName = codeGenerator.getSourceFileName(path, dataModel, dataModel);
+			        String generatorName = codeGenerator.getName();
+			        if (isReadyToOverride(fileName)) {
+				        if (!codeGenerator.isToIgnoreFor(dataModel, dataModel)) {
+					        // incrementStepProgress(stepCounter, "- writing file: " + fileName);
+					        codeGenerator.generate(path, basePackageName, dataModel);
+					        LOG.info("- wrote file to: {}", fileName);
+				        } else {
+					        // incrementStepProgress(stepCounter, "- ignored by generator: " + generatorName);
+					        LOG.info("- ignored model '{}' by generator: {}", dataModel.getName(), generatorName);
+				        }
+				        System.gc();
+			        } else {
+				        // incrementStepProgress(
+				        // stepCounter,
+				        // "- ignored by not ready to override for generator: " + generatorName);
+				        LOG
+				                .info(
+				                        "- ignored model '{}' by not ready to override: {}",
+				                        dataModel.getName(),
+				                        generatorName);
+			        }
+		        });
 		for (TableModel tableModel : dataModel.getTables()) {
 			incrementProcessProgress(processCounter, "processing table: " + tableModel.getName());
 			if (tableModel.isGenerateCode() && isInCodeGeneration(tableModel)) {

@@ -12,6 +12,8 @@ import archimedes.model.DomainModel;
  */
 public class TypeGenerator {
 
+	public static final TypeGenerator INSTANCE = new TypeGenerator();
+
 	public String getJavaTypeString(DomainModel domain, boolean nullable) {
 		if (domain == null) {
 			return null;

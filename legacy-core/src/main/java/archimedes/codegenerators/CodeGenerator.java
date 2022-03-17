@@ -12,6 +12,7 @@ public interface CodeGenerator<T extends NamedObject> {
 
 	public enum Type {
 		DOMAIN,
+		MODEL,
 		TABLE;
 	}
 

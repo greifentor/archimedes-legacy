@@ -28,7 +28,8 @@ import corent.db.JDBCDataSourceRecord;
  */
 
 public interface DataModel extends CommentOwner, ComplexIndexListProvider, DatabaseConnectionProvider,
-		DiagramGUISupport, GeneratorSupport, GUIDiagramModel, HistoryOwner, ImportSupport, OptionListProvider,
+        DiagramGUISupport, GeneratorSupport, GUIDiagramModel, HistoryOwner, ImportSupport, NamedObject,
+        OptionListProvider,
 		SQLGeneratorSupport, StereotypeListProvider, UdschebtiSupport, ViewProvider {
 
 	public static final String ALTERNATE_FK_NAME = "ALTERNATE_FK_NAME";

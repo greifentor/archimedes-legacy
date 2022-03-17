@@ -562,16 +562,11 @@ public class PersistenceJPANameGeneratorTest {
 	class PageConverterClassNameTests {
 
 		@Test
-		void getPageConverterClassName_passANullValueAsTableModel_returnsANullValue() {
-			assertNull(unitUnderTest.getPageConverterClassName(null));
-		}
-
-		@Test
 		void getPageConverterClassName_passAValidTable_ReturnsACorrectDBOConverterClassName() {
 			// Prepare
 			String expected = "PageConverter";
 			// Run
-			String returned = unitUnderTest.getPageConverterClassName(table);
+			String returned = unitUnderTest.getPageConverterClassName();
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -584,12 +579,12 @@ public class PersistenceJPANameGeneratorTest {
 
 		@Test
 		void getPageConverterPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getPageConverterPackageName(null, table));
+			assertNull(unitUnderTest.getPageConverterPackageName(null));
 		}
 
 		@Test
 		void getPageConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("persistence.converter", unitUnderTest.getPageConverterPackageName(model, null));
+			assertEquals("persistence.converter", unitUnderTest.getPageConverterPackageName(model));
 		}
 
 		@Test
@@ -601,7 +596,7 @@ public class PersistenceJPANameGeneratorTest {
 									PersistenceJPANameGenerator.ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME,
 									"persistence.mapper"));
 			// Run & Check
-			assertEquals("persistence.mapper", unitUnderTest.getPageConverterPackageName(model, table));
+			assertEquals("persistence.mapper", unitUnderTest.getPageConverterPackageName(model));
 		}
 
 	}
@@ -611,16 +606,11 @@ public class PersistenceJPANameGeneratorTest {
 	class PageModelClassNameTests {
 
 		@Test
-		void getPageModelClassName_passANullValueAsTableModel_returnsANullValue() {
-			assertNull(unitUnderTest.getPageModelClassName(null));
-		}
-
-		@Test
 		void getPageModelClassName_passAValidTable_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "Page";
 			// Run
-			String returned = unitUnderTest.getPageModelClassName(table);
+			String returned = unitUnderTest.getPageModelClassName();
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -633,12 +623,7 @@ public class PersistenceJPANameGeneratorTest {
 
 		@Test
 		void getPageModelPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getPageModelPackageName(null, table));
-		}
-
-		@Test
-		void getPageModelPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("core.model", unitUnderTest.getPageModelPackageName(model, null));
+			assertNull(unitUnderTest.getPageModelPackageName(null));
 		}
 
 		@Test
@@ -650,7 +635,7 @@ public class PersistenceJPANameGeneratorTest {
 									PersistenceJPANameGenerator.ALTERNATE_PAGE_MODEL_PACKAGE_NAME,
 									"core.page.model"));
 			// Run & Check
-			assertEquals("core.page.model", unitUnderTest.getPageModelPackageName(model, table));
+			assertEquals("core.page.model", unitUnderTest.getPageModelPackageName(model));
 		}
 
 	}
@@ -758,16 +743,11 @@ public class PersistenceJPANameGeneratorTest {
 	class ToModelConverterInterfaceNameTests {
 
 		@Test
-		void getToModelConverterInterfaceName_passANullValueAsTableModel_returnsANullValue() {
-			assertNull(unitUnderTest.getToModelConverterInterfaceName(null));
-		}
-
-		@Test
 		void getToModelConverterInterfaceName_passAValidTable_ReturnsACorrectInterfaceName() {
 			// Prepare
 			String expected = "ToModelConverter";
 			// Run
-			String returned = unitUnderTest.getToModelConverterInterfaceName(table);
+			String returned = unitUnderTest.getToModelConverterInterfaceName();
 			// Check
 			assertEquals(expected, returned);
 		}

@@ -15,6 +15,8 @@ import archimedes.model.TableModel;
  */
 public class PersistenceJPANameGenerator extends NameGenerator {
 
+	public static final PersistenceJPANameGenerator INSTANCE = new PersistenceJPANameGenerator();
+
 	public static final String ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX = "ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_ADAPTER_PACKAGE_NAME = "ALTERNATE_ADAPTER_PACKAGE_NAME";
 	public static final String ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX = "ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX";
@@ -128,20 +130,20 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 		return createPackageName(model, table, "persistence.repository", ALTERNATE_REPOSITORY_PACKAGE_NAME);
 	}
 
-	public String getPageConverterClassName(TableModel table) {
-		return table != null ? "PageConverter" : null;
+	public String getPageConverterClassName() {
+		return "PageConverter";
 	}
 
-	public String getPageConverterPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "persistence.converter", ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME);
+	public String getPageConverterPackageName(DataModel model) {
+		return createPackageName(model, null, "persistence.converter", ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME);
 	}
 
-	public String getPageModelClassName(TableModel table) {
-		return table != null ? "Page" : null;
+	public String getPageModelClassName() {
+		return "Page";
 	}
 
-	public String getPageModelPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "core.model", ALTERNATE_PAGE_MODEL_PACKAGE_NAME);
+	public String getPageModelPackageName(DataModel model) {
+		return createPackageName(model, null, "core.model", ALTERNATE_PAGE_MODEL_PACKAGE_NAME);
 	}
 
 	public String getPageParametersModelClassName(TableModel table) {
@@ -164,8 +166,8 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 				ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME);
 	}
 
-	public String getToModelConverterInterfaceName(TableModel table) {
-		return table != null ? "ToModelConverter" : null;
+	public String getToModelConverterInterfaceName() {
+		return "ToModelConverter";
 	}
 
 	public String getToDBOMethodName(TableModel table) {

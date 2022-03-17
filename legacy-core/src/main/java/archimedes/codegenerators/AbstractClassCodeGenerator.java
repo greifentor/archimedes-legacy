@@ -266,4 +266,9 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		return null;
 	}
 
+	@Override
+	public Type getType() {
+		return Type.TABLE;
+	}
+
 }

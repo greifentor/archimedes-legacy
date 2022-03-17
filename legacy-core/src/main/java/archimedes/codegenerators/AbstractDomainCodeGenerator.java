@@ -29,4 +29,9 @@ public abstract class AbstractDomainCodeGenerator<N extends NameGenerator>
 		}
 	}
 
+	@Override
+	public Type getType() {
+		return Type.DOMAIN;
+	}
+
 }
