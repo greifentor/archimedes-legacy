@@ -38,7 +38,7 @@ class ToModelConverterInterfaceCodeGeneratorTest {
 			String expected = getExpected(null, "persistence.converter", false, "null");
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -78,7 +78,7 @@ class ToModelConverterInterfaceCodeGeneratorTest {
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel);
 			// Check
 			assertEquals(expected, returned);
 		}

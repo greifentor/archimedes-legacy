@@ -13,6 +13,8 @@ import archimedes.model.TableModel;
  */
 public class ServiceNameGenerator extends NameGenerator {
 
+	public static final ServiceNameGenerator INSTANCE = new ServiceNameGenerator();
+
 	public static final String ALTERNATE_APPLICATION_PACKAGE_NAME = "ALTERNATE_APPLICATION_PACKAGE_NAME";
 	public static final String ALTERNATE_EXCEPTIONS_PACKAGE_NAME = "ALTERNATE_EXCEPTIONS_PACKAGE_NAME";
 	public static final String ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX =

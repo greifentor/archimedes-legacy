@@ -146,22 +146,22 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 		return createPackageName(model, null, "core.model", ALTERNATE_PAGE_MODEL_PACKAGE_NAME);
 	}
 
-	public String getPageParametersModelClassName(TableModel table) {
-		return table != null ? "PageParameters" : null;
+	public String getPageParametersModelClassName() {
+		return "PageParameters";
 	}
 
-	public String getPageParametersModelPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "core.model", ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME);
+	public String getPageParametersModelPackageName(DataModel model) {
+		return createPackageName(model, null, "core.model", ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME);
 	}
 
-	public String getPageParametersToPageableConverterClassName(TableModel table) {
-		return table != null ? "PageParametersToPageableConverter" : null;
+	public String getPageParametersToPageableConverterClassName() {
+		return "PageParametersToPageableConverter";
 	}
 
-	public String getPageParametersToPageableConverterPackageName(DataModel model, TableModel table) {
+	public String getPageParametersToPageableConverterPackageName(DataModel model) {
 		return createPackageName(
 				model,
-				table,
+		        null,
 				"persistence.converter",
 				ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME);
 	}

@@ -9,6 +9,7 @@ import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.Columns.ParameterData;
@@ -30,8 +31,8 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		super(
 				"DBOClass.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-				new PersistenceJPANameGenerator(),
-				new TypeGenerator(),
+		        PersistenceJPANameGenerator.INSTANCE,
+		        TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
@@ -156,7 +157,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 								"\n\nAUTOINCREMENT: invalid parameter value: " + autoincrement.getParameter() + "\n\n");
 			}
 		}
-		if (column.getDomain().isOptionSet(AbstractClassCodeGenerator.ENUM)) {
+		if (column.getDomain().isOptionSet(AbstractCodeGenerator.ENUM)) {
 			annotations
 					.add(
 							new AnnotationData()
@@ -186,7 +187,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 	}
 
 	private List<ParameterData> getColumnAnnotationParameters(ColumnModel column) {
-		List<ParameterData> l = new ArrayList<ParameterData>();
+		List<ParameterData> l = new ArrayList<>();
 		l.add(new ParameterData().setName("name").setValue("\"" + column.getName() + "\""));
 		if (column.isNotNull()) {
 			l.add(new ParameterData().setName("nullable").setValue("false"));

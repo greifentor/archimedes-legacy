@@ -17,14 +17,14 @@ import archimedes.model.TableModel;
  */
 public class DBOMapstructMapperInterfaceCodeGenerator extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
 
-	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
+	private static final ServiceNameGenerator SERVICE_NAME_GENERATOR = ServiceNameGenerator.INSTANCE;
 
 	public DBOMapstructMapperInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"DBOMapstructMapperInterface.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-				new PersistenceJPANameGenerator(),
-				new TypeGenerator(),
+		        PersistenceJPANameGenerator.INSTANCE,
+		        TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
@@ -34,8 +34,8 @@ public class DBOMapstructMapperInterfaceCodeGenerator extends AbstractClassCodeG
 		context.put("ClassName", getClassName(table));
 		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
 		context.put("DBOPackageName", nameGenerator.getDBOPackageName(model, table));
-		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
-		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
+		context.put("ModelClassName", SERVICE_NAME_GENERATOR.getModelClassName(table));
+		context.put("ModelPackageName", SERVICE_NAME_GENERATOR.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));

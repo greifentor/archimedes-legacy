@@ -6,6 +6,7 @@ import java.util.List;
 import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.codegenerators.FindByUtils;
 import archimedes.codegenerators.NameGenerator;
@@ -75,7 +76,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 					FindByUtils.FIND_BY,
 					AbstractClassCodeGenerator.LIST_ACCESS };
 		case DOMAIN:
-			return new String[] { AbstractClassCodeGenerator.ENUM };
+			return new String[] { AbstractCodeGenerator.ENUM };
 		case MODEL:
 			return new String[] {
 					PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX,
@@ -99,7 +100,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
-					AbstractClassCodeGenerator.MODULE_MODE,
+			        AbstractCodeGenerator.MODULE_MODE,
 					AbstractClassCodeGenerator.REFERENCE_MODE,
 					PersistenceJPANameGenerator.ALTERNATE_TO_DBO_METHOD_NAME,
 					PersistenceJPANameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME };

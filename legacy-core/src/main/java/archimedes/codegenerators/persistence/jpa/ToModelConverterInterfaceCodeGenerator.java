@@ -1,38 +1,38 @@
 package archimedes.codegenerators.persistence.jpa;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
+import org.apache.velocity.VelocityContext;
+
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import org.apache.velocity.VelocityContext;
 
 /**
  * A to model converter interface code generator for JPA database objects (DBO's).
  *
  * @author ollie (28.07.2021)
  */
-public class ToModelConverterInterfaceCodeGenerator extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
+public class ToModelConverterInterfaceCodeGenerator extends AbstractModelCodeGenerator<PersistenceJPANameGenerator> {
 
 	public ToModelConverterInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"ToModelConverterInterface.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-				new PersistenceJPANameGenerator(),
-				new TypeGenerator(),
+		        PersistenceJPANameGenerator.INSTANCE,
+		        TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
 	@Override
-	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		context.put("ClassName", getClassName(table));
-		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("PackageName", getPackageName(model, table));
+	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
+		context.put("ClassName", getClassName(model, sameModel));
+		context.put("CommentsOff", isCommentsOff(model));
+		context.put("PackageName", getPackageName(model, sameModel));
 	}
 
 	@Override
-	public String getClassName(DataModel model, TableModel table) {
-		return nameGenerator.getToModelConverterInterfaceName(table);
+	public String getClassName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getToModelConverterInterfaceName();
 	}
 
 	@Override
@@ -41,8 +41,8 @@ public class ToModelConverterInterfaceCodeGenerator extends AbstractClassCodeGen
 	}
 
 	@Override
-	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getDBOConverterPackageName(model, table);
+	public String getPackageName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getDBOConverterPackageName(model, null);
 	}
 
 }

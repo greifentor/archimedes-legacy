@@ -1,39 +1,42 @@
 package archimedes.codegenerators.persistence.jpa;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
+import org.apache.velocity.VelocityContext;
+
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import org.apache.velocity.VelocityContext;
 
 /**
  * A page parameters to pageable converter class code generator for JPA database objects (DBO's).
  *
  * @author ollie (28.07.2021)
  */
-public class PageParametersToPageableConverterClassCodeGenerator extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
+public class PageParametersToPageableConverterClassCodeGenerator
+        extends AbstractModelCodeGenerator<PersistenceJPANameGenerator> {
 
 	public PageParametersToPageableConverterClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"PageParametersToPageableConverterClass.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-				new PersistenceJPANameGenerator(),
-				new TypeGenerator(),
+		        PersistenceJPANameGenerator.INSTANCE,
+		        TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
 	@Override
-	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		context.put("ClassName", getClassName(table));
-		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("PageParametersModelClassName", nameGenerator.getPageParametersModelClassName(table));
-		context.put("PageParametersModelPackageName", nameGenerator.getPageParametersModelPackageName(model, table));
-		context.put("PackageName", getPackageName(model, table));
+	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
+		context.put("ClassName", getClassName(model, model));
+		context.put("CommentsOff", isCommentsOff(model));
+		context.put("PageParametersModelClassName", nameGenerator.getPageParametersModelClassName());
+		context.put("PageParametersModelPackageName", nameGenerator.getPageParametersModelPackageName(model));
+		context.put("PackageName", getPackageName(model, sameModel));
 	}
 
 	@Override
-	public String getClassName(DataModel model, TableModel table) { return nameGenerator.getPageParametersToPageableConverterClassName(table); }
+	public String getClassName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getPageParametersToPageableConverterClassName();
+	}
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
@@ -41,8 +44,8 @@ public class PageParametersToPageableConverterClassCodeGenerator extends Abstrac
 	}
 
 	@Override
-	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getPageParametersToPageableConverterPackageName(model, table);
+	public String getPackageName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getPageParametersToPageableConverterPackageName(model);
 	}
 
 }

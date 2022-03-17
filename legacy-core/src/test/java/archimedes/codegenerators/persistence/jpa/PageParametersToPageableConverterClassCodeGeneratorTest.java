@@ -1,5 +1,13 @@
 package archimedes.codegenerators.persistence.jpa;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
@@ -7,13 +15,6 @@ import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class PageParametersToPageableConverterClassCodeGeneratorTest {
@@ -37,7 +38,7 @@ class PageParametersToPageableConverterClassCodeGeneratorTest {
 			String expected = getExpected(null, "persistence.converter", false, "null");
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -86,7 +87,7 @@ class PageParametersToPageableConverterClassCodeGeneratorTest {
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel);
 			// Check
 			assertEquals(expected, returned);
 		}

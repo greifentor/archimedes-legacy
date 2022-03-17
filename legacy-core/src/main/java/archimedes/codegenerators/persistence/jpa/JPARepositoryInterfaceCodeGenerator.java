@@ -19,8 +19,8 @@ public class JPARepositoryInterfaceCodeGenerator extends AbstractClassCodeGenera
 		super(
 				"JPARepositoryInterface.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-				new PersistenceJPANameGenerator(),
-				new TypeGenerator(),
+		        PersistenceJPANameGenerator.INSTANCE,
+		        TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 

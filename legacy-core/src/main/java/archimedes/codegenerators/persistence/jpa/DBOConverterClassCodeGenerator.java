@@ -28,15 +28,14 @@ import archimedes.model.TableModel;
  */
 public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
 
-	private PersistenceJPANameGenerator persistenceNameGenerator = new PersistenceJPANameGenerator();
-	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
+	private static final ServiceNameGenerator SERVICE_NAME_GENERATOR = ServiceNameGenerator.INSTANCE;
 
 	public DBOConverterClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"DBOConverterClass.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-				new PersistenceJPANameGenerator(),
-				new TypeGenerator(),
+		        PersistenceJPANameGenerator.INSTANCE,
+		        TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
@@ -75,21 +74,21 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 		}
 		context.put("HasEnums", hasEnums(getColumnsIncludingInherited(table)));
 		context.put("HasReferences", hasReferences(table, model));
-		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
+		context.put("ModelClassName", SERVICE_NAME_GENERATOR.getModelClassName(table));
 		context
 				.put(
 						"ModelClassNameQualified",
 						getQualifiedName(
-								serviceNameGenerator.getModelPackageName(model, table),
-								serviceNameGenerator.getModelClassName(table)));
-		context.put("ModelSuperclassName", getSuperclassName(table, serviceNameGenerator::getModelClassName));
+		                        SERVICE_NAME_GENERATOR.getModelPackageName(model, table),
+		                        SERVICE_NAME_GENERATOR.getModelClassName(table)));
+		context.put("ModelSuperclassName", getSuperclassName(table, SERVICE_NAME_GENERATOR::getModelClassName));
 		context
 				.put(
 						"ModelSuperclassNameQualified",
 						getSuperclassName(
 								table,
-								t -> serviceNameGenerator.getModelPackageName(model, t) + "."
-										+ serviceNameGenerator.getModelClassName(t)));
+		                        t -> SERVICE_NAME_GENERATOR.getModelPackageName(model, t) + "."
+		                                + SERVICE_NAME_GENERATOR.getModelClassName(t)));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ReferenceMode", referenceMode);
 		context.put("Subclasses", getSubclassData(model, table));
@@ -117,11 +116,14 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 	private String getDBOConverterAttributeName(ColumnModel column, DataModel model) {
 		return (column.getReferencedColumn() != null)
 				? nameGenerator.getAttributeName(getClassName(column.getReferencedTable()))
-				: (isEnum(column)
-						? nameGenerator
-								.getAttributeName(
-										nameGenerator.getDBOConverterClassName(column.getDomain().getName(), model))
-						: "UNKNOWN");
+		        : getEnumAttributeName(column, model);
+	}
+
+	private String getEnumAttributeName(ColumnModel column, DataModel model) {
+		return isEnum(column)
+		        ? nameGenerator
+		                .getAttributeName(nameGenerator.getDBOConverterClassName(column.getDomain().getName(), model))
+		        : "UNKNOWN";
 	}
 
 	private String getGetterCall(ColumnModel column, DataModel model, ReferenceMode referenceMode) {
@@ -197,7 +199,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 						.stream()
 						.filter(column -> column.getTable().isOptionSet(AbstractClassCodeGenerator.SUBCLASS))
 						.filter(column -> column.getReferencedTable() == table)
-						.map(column -> column.getTable())
+		                .map(ColumnModel::getTable)
 						.collect(Collectors.toSet());
 		return subclassTables
 				.stream()
@@ -206,14 +208,14 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 						t -> new SubclassData()
 								.setConverterAttributeName(nameGenerator.getAttributeName(getClassName(t)))
 								.setConverterClassName(getClassName(t))
-								.setDboClassName(persistenceNameGenerator.getDBOClassName(t))
+		                        .setDboClassName(nameGenerator.getDBOClassName(t))
 								.setDboClassNameQualified(
-										persistenceNameGenerator.getDBOPackageName(model, t) + "."
-												+ persistenceNameGenerator.getDBOClassName(t))
-								.setModelClassName(serviceNameGenerator.getModelClassName(t))
+		                                nameGenerator.getDBOPackageName(model, t) + "."
+		                                        + nameGenerator.getDBOClassName(t))
+		                        .setModelClassName(SERVICE_NAME_GENERATOR.getModelClassName(t))
 								.setModelClassNameQualified(
-										serviceNameGenerator.getModelPackageName(model, t) + "."
-												+ serviceNameGenerator.getModelClassName(t)))
+		                                SERVICE_NAME_GENERATOR.getModelPackageName(model, t) + "."
+		                                        + SERVICE_NAME_GENERATOR.getModelClassName(t)))
 				.collect(Collectors.toList());
 	}
 

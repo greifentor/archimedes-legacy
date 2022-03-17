@@ -23,8 +23,8 @@ public class DBOEnumCodeGenerator extends AbstractDomainCodeGenerator<Persistenc
 		super(
 				"DBOEnum.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-				new PersistenceJPANameGenerator(),
-				new TypeGenerator(),
+		        PersistenceJPANameGenerator.INSTANCE,
+		        TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 

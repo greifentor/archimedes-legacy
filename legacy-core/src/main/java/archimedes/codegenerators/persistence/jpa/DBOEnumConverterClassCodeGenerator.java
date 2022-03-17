@@ -20,14 +20,14 @@ import archimedes.model.DomainModel;
  */
 public class DBOEnumConverterClassCodeGenerator extends AbstractDomainCodeGenerator<PersistenceJPANameGenerator> {
 
-	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
+	private static final ServiceNameGenerator SERVICE_NAME_GENERATOR = ServiceNameGenerator.INSTANCE;
 
 	public DBOEnumConverterClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"DBOEnumConverterClass.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-				new PersistenceJPANameGenerator(),
-				new TypeGenerator(),
+		        PersistenceJPANameGenerator.INSTANCE,
+		        TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
@@ -42,13 +42,13 @@ public class DBOEnumConverterClassCodeGenerator extends AbstractDomainCodeGenera
 								nameGenerator.getDBOPackageName(model, domain),
 								nameGenerator.getDBOClassName(domain, model)));
 		context.put("Identifiers", getIdentifier(domain));
-		context.put("ModelClassName", serviceNameGenerator.getModelClassName(domain, model));
+		context.put("ModelClassName", SERVICE_NAME_GENERATOR.getModelClassName(domain, model));
 		context
 				.put(
 						"ModelClassNameQualified",
 						getQualifiedName(
-								serviceNameGenerator.getModelPackageName(model, domain),
-								serviceNameGenerator.getModelClassName(domain, model)));
+		                        SERVICE_NAME_GENERATOR.getModelPackageName(model, domain),
+		                        SERVICE_NAME_GENERATOR.getModelClassName(domain, model)));
 		context.put("PackageName", getPackageName(model, domain));
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(model));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(model));
