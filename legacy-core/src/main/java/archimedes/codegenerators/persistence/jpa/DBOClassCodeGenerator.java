@@ -175,9 +175,8 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 			annotations.add(annotationData);
 			annotationData =
 					new AnnotationData()
-							.setName("OneToOne")
-							.addParameter(new ParameterData().setName("fetch").setValue("FetchType.EAGER"))
-							.addParameter(new ParameterData().setName("optional").setValue("false"));
+			                .setName("ManyToOne")
+			                .addParameter(new ParameterData().setName("fetch").setValue("FetchType.EAGER"));
 			annotations.add(annotationData);
 		} else {
 			annotations

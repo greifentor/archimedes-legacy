@@ -66,7 +66,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 			if (refMode) {
 				s +=
 							"import javax.persistence.JoinColumn;\n" + //
-								"import javax.persistence.OneToOne;\n";
+				                "import javax.persistence.ManyToOne;\n";
 			}
 			s += "import javax.persistence.Table;\n" + //
 							"\n" + //
@@ -97,7 +97,7 @@ public class DBOClassCodeGeneratorWithReferenceTest {
 			} else {
 				s += "	@JoinColumn(name = \"REF\"" + //
 						(refNotNull ? ", nullable = false" : "") + ", referencedColumnName = \"ID\")\n" + //
-						"	@OneToOne(fetch = FetchType.EAGER, optional = false)\n" + //
+				        "	@ManyToOne(fetch = FetchType.EAGER)\n" + //
 						"	private AnotherTableDBO ref;\n";
 			}
 			s += "\n" + //

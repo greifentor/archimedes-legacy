@@ -29,7 +29,7 @@ import javax.persistence.InheritanceType;
 #end
 #if ($ReferenceMode == "OBJECT" && ${HasReferences})
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 #end
 #if ($Subclass)
 import javax.persistence.PrimaryKeyJoinColumn;
