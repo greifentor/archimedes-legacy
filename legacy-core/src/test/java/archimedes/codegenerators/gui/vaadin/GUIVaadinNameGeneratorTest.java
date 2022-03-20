@@ -42,7 +42,7 @@ public class GUIVaadinNameGeneratorTest {
 		void getAbstractMasterDataDetailLayoutClassName_returnsTheCorrectClassName() {
 			assertEquals(
 					"AbstractMasterDataDetailLayout",
-					unitUnderTest.getAbstractMasterDataDetailLayoutClassName(null));
+					unitUnderTest.getAbstractMasterDataDetailLayoutClassName());
 		}
 
 	}
@@ -52,12 +52,7 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getVaadinComponentPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getVaadinComponentPackageName(null, table));
-		}
-
-		@Test
-		void getVaadinComponentPackageName_PassANullValueAsTable_ReturnsADefaultValue() {
-			assertEquals("gui.vaadin.component", unitUnderTest.getVaadinComponentPackageName(model, null));
+			assertNull(unitUnderTest.getVaadinComponentPackageName(null));
 		}
 
 		@Test
@@ -69,7 +64,7 @@ public class GUIVaadinNameGeneratorTest {
 									GUIVaadinNameGenerator.ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME,
 									"web.components"));
 			// Run & Check
-			assertEquals("web.components", unitUnderTest.getVaadinComponentPackageName(model, table));
+			assertEquals("web.components", unitUnderTest.getVaadinComponentPackageName(model));
 		}
 
 	}

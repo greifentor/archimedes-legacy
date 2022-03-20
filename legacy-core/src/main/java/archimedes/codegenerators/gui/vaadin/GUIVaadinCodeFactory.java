@@ -25,23 +25,25 @@ import archimedes.model.PredeterminedOptionProvider;
 public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements CodeFactoryProgressionEventProvider,
 		PredeterminedOptionProvider, StandardCodeFactoryProgressionFrameUser {
 
-	public static final String TEMPLATE_FOLDER_PATH = AbstractCodeFactory.TEMPLATE_PATH
-			+ System.getProperty(GUIVaadinCodeFactory.class.getSimpleName() + ".templates.folder", "/gui-vaadin");
+	public static final String TEMPLATE_FOLDER_PATH =
+			AbstractCodeFactory.TEMPLATE_PATH + System
+					.getProperty(GUIVaadinCodeFactory.class.getSimpleName() + ".templates.folder", "/gui-vaadin");
 
 	@Override
 	protected List<CodeGenerator<?>> getCodeGenerators() {
-		return Arrays.asList(
-				new ButtonClassCodeGenerator(this),
-				// new GOClassCodeGenerator(this),
-				// new GOConverterClassCodeGenerator(this),
-				new ImageClassCodeGenerator(this),
-				// new PageGOClassCodeGenerator(this),
-				// new PageParametersGOClassCodeGenerator(this),
-				// new PageParametersGOConverterClassCodeGenerator(this),
-				// new PageGOConverterClassCodeGenerator(this),
-				new TextFieldClassCodeGenerator(this)
-		// new ToGOConverterInterfaceCodeGenerator(this)
-		);
+		return Arrays
+				.asList(
+						new ButtonClassCodeGenerator(this),
+						// new GOClassCodeGenerator(this),
+						// new GOConverterClassCodeGenerator(this),
+						new ImageClassCodeGenerator(this),
+						// new PageGOClassCodeGenerator(this),
+						// new PageParametersGOClassCodeGenerator(this),
+						// new PageParametersGOConverterClassCodeGenerator(this),
+						// new PageGOConverterClassCodeGenerator(this),
+						new TextFieldClassCodeGenerator(this)
+				// new ToGOConverterInterfaceCodeGenerator(this)
+				);
 	}
 
 	@Override
@@ -51,7 +53,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 
 	@Override
 	public String[] getResourceBundleNames() {
-		return new String[]{"gui-vaadin-code-factory"};
+		return new String[] { "gui-vaadin-code-factory" };
 	}
 
 	@Override
@@ -62,39 +64,37 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 	@Override
 	public String[] getSelectableOptions(OptionType optionType) {
 		switch (optionType) {
-			case COLUMN:
-				return new String[0];
-			case MODEL:
-				return new String[]{
-						GUIVaadinNameGenerator.ALTERNATE_GUI_VAADIN_MODULE_PREFIX,
-						GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX,
-						GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_PACKAGE_NAME,
-						GUIVaadinNameGenerator.ALTERNATE_GO_CLASS_NAME_SUFFIX,
-						GUIVaadinNameGenerator.ALTERNATE_GO_PACKAGE_NAME,
-						ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
-						ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
-						GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_CONVERTER_PACKAGE_NAME,
-						GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_PACKAGE_NAME,
-						GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME,
-						GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME,
-						ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
-						ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
-						AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
-						AbstractClassCodeGenerator.COMMENTS,
-						AbstractClassCodeGenerator.GENERATE_ID_CLASS,
-						AbstractClassCodeGenerator.MODULE_MODE,
-						GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
-						GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME
-				};
-			case TABLE:
-				return new String[]{
-                        AbstractClassCodeFactory.NO_GENERATION,
-						AbstractClassCodeGenerator.GENERATE_ID_CLASS,
-						NameGenerator.MODULE,
-						AbstractClassCodeGenerator.POJO_MODE
-				};
-			default:
-				return new String[0];
+		case COLUMN:
+			return new String[0];
+		case MODEL:
+			return new String[] {
+					GUIVaadinNameGenerator.ALTERNATE_GUI_VAADIN_MODULE_PREFIX,
+					GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX,
+					GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_PACKAGE_NAME,
+					GUIVaadinNameGenerator.ALTERNATE_GO_CLASS_NAME_SUFFIX,
+					GUIVaadinNameGenerator.ALTERNATE_GO_PACKAGE_NAME,
+					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
+					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
+					GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_CONVERTER_PACKAGE_NAME,
+					GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_PACKAGE_NAME,
+					GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME,
+					GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME,
+					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
+					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
+					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
+					AbstractClassCodeGenerator.COMMENTS,
+					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
+					AbstractClassCodeGenerator.MODULE_MODE,
+					GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
+					GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME };
+		case TABLE:
+			return new String[] {
+					AbstractClassCodeFactory.NO_GENERATION,
+					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
+					NameGenerator.MODULE,
+					AbstractClassCodeGenerator.POJO_MODE };
+		default:
+			return new String[0];
 		}
 	}
 

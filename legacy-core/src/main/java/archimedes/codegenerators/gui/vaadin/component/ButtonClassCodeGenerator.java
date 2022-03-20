@@ -2,40 +2,39 @@ package archimedes.codegenerators.gui.vaadin.component;
 
 import org.apache.velocity.VelocityContext;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.TableModel;
 
 /**
  * A code generator for button classes.
  *
  * @author ollie (07.12.2021)
  */
-public class ButtonClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
+public class ButtonClassCodeGenerator extends AbstractModelCodeGenerator<GUIVaadinNameGenerator> {
 
 	public ButtonClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"component/ButtonClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
-				new GUIVaadinNameGenerator(),
-				new TypeGenerator(),
+				GUIVaadinNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
 	@Override
-	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		context.put("ClassName", getClassName(table));
-		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("PackageName", getPackageName(model, table));
+	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
+		context.put("ClassName", getClassName(model, model));
+		context.put("CommentsOff", isCommentsOff(model));
+		context.put("PackageName", getPackageName(model, model));
 	}
 
 	@Override
-	public String getClassName(DataModel model, TableModel table) {
-		return nameGenerator.getButtonClassName(table.getDataModel());
+	public String getClassName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getButtonClassName(model);
 	}
 
 	@Override
@@ -44,8 +43,8 @@ public class ButtonClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaad
 	}
 
 	@Override
-	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getVaadinComponentPackageName(model, table);
+	public String getPackageName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getVaadinComponentPackageName(model);
 	}
 
 	@Override

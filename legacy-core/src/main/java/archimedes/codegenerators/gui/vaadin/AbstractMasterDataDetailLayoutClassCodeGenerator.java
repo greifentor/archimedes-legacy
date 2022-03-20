@@ -2,41 +2,38 @@ package archimedes.codegenerators.gui.vaadin;
 
 import org.apache.velocity.VelocityContext;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
-import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.TableModel;
 
 /**
  * A class code generator for the abstract master data detail layout.
  *
  * @author ollie (14.09.2021)
  */
-public class AbstractMasterDataDetailLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
-
-	private ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
+public class AbstractMasterDataDetailLayoutClassCodeGenerator
+		extends AbstractModelCodeGenerator<GUIVaadinNameGenerator> {
 
 	public AbstractMasterDataDetailLayoutClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"AbstractMasterDataDetailLayoutClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
-				new GUIVaadinNameGenerator(),
-				new TypeGenerator(),
+				GUIVaadinNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
 	@Override
-	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		context.put("ClassName", getClassName(table));
-		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("PackageName", getPackageName(model, table));
+	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
+		context.put("ClassName", getClassName(model, model));
+		context.put("CommentsOff", isCommentsOff(model));
+		context.put("PackageName", getPackageName(model, model));
 	}
 
 	@Override
-	public String getClassName(DataModel model, TableModel table) {
-		return nameGenerator.getAbstractMasterDataDetailLayoutClassName(table);
+	public String getClassName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getAbstractMasterDataDetailLayoutClassName();
 	}
 
 	@Override
@@ -45,8 +42,8 @@ public class AbstractMasterDataDetailLayoutClassCodeGenerator extends AbstractCl
 	}
 
 	@Override
-	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getVaadinComponentPackageName(model, table);
+	public String getPackageName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getVaadinComponentPackageName(model);
 	}
 
 	@Override

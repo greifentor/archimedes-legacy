@@ -2,40 +2,39 @@ package archimedes.codegenerators.gui.vaadin.component;
 
 import org.apache.velocity.VelocityContext;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.TableModel;
 
 /**
  * A code generator for button factory classes.
  *
  * @author ollie (08.12.2021)
  */
-public class TextFieldClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
+public class TextFieldClassCodeGenerator extends AbstractModelCodeGenerator<GUIVaadinNameGenerator> {
 
 	public TextFieldClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"component/TextFieldClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
-				new GUIVaadinNameGenerator(),
-				new TypeGenerator(),
+				GUIVaadinNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
 	@Override
-	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		context.put("ClassName", getClassName(table));
-		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("PackageName", getPackageName(model, table));
+	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
+		context.put("ClassName", getClassName(model, model));
+		context.put("CommentsOff", isCommentsOff(model));
+		context.put("PackageName", getPackageName(model, model));
 	}
 
 	@Override
-	public String getClassName(DataModel model, TableModel table) {
-		return nameGenerator.getTextFieldClassName(table.getDataModel());
+	public String getClassName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getTextFieldClassName(model);
 	}
 
 	@Override
@@ -44,8 +43,8 @@ public class TextFieldClassCodeGenerator extends AbstractClassCodeGenerator<GUIV
 	}
 
 	@Override
-	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getVaadinComponentPackageName(model, table);
+	public String getPackageName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getVaadinComponentPackageName(model);
 	}
 
 	@Override

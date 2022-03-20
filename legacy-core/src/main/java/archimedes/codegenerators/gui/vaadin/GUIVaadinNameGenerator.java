@@ -13,6 +13,8 @@ import archimedes.model.TableModel;
  */
 public class GUIVaadinNameGenerator extends NameGenerator {
 
+	public static final GUIVaadinNameGenerator INSTANCE = new GUIVaadinNameGenerator();
+
 	public static final String ALTERNATE_BUTTON_CLASS_NAME_SUFFIX = "ALTERNATE_BUTTON_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_GUI_VAADIN_MODULE_PREFIX = "ALTERNATE_GUI_VAADIN_MODULE_PREFIX";
 	public static final String ALTERNATE_TO_GO_METHOD_NAME = "ALTERNATE_TO_GO_METHOD_NAME";
@@ -30,12 +32,12 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX = "ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME = "ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME";
 
-	public String getAbstractMasterDataDetailLayoutClassName(TableModel table) {
+	public String getAbstractMasterDataDetailLayoutClassName() {
 		return "AbstractMasterDataDetailLayout";
 	}
 
-	public String getVaadinComponentPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "gui.vaadin.component", ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME);
+	public String getVaadinComponentPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin.component", ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME);
 	}
 
 	public String getButtonClassName(DataModel model) {
