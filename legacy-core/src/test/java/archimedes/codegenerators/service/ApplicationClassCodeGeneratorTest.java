@@ -1,17 +1,18 @@
 package archimedes.codegenerators.service;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
-import archimedes.model.DataModel;
-import archimedes.scheme.Option;
-import archimedes.scheme.xml.ModelXMLReader;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.model.DataModel;
+import archimedes.scheme.Option;
+import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
 class ApplicationClassCodeGeneratorTest {
@@ -35,7 +36,7 @@ class ApplicationClassCodeGeneratorTest {
 		String expected = createExpected(false);
 		DataModel dataModel = readDataModel("Model.xml");
 		// Run
-		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel);
 		// Check
 		assertEquals(expected, returned);
 	}
@@ -76,7 +77,7 @@ class ApplicationClassCodeGeneratorTest {
 		DataModel dataModel = readDataModel("Model.xml");
 		dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "Off"));
 		// Run
-		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel);
 		// Check
 		assertEquals(expected, returned);
 	}

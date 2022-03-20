@@ -36,7 +36,7 @@ public class PageGOConverterClassCodeGenerator extends AbstractClassCodeGenerato
 		context.put("PageGOClassName", nameGenerator.getPageGOClassName(table));
 		context.put("PageGOPackageName", nameGenerator.getPageGOPackageName(model, table));
 		context.put("PageModelClassName", serviceNameGenerator.getPageClassName());
-		context.put("PageModelPackageName", serviceNameGenerator.getPagePackageName(model, table));
+		context.put("PageModelPackageName", serviceNameGenerator.getPagePackageName(model));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ToGOConverterInferfaceName", nameGenerator.getToGOConverterInterfaceName(table));
 		context.put("ToGOMethodName", nameGenerator.getToGOMethodName(table));

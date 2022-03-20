@@ -1,37 +1,37 @@
 package archimedes.codegenerators.service;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
+import org.apache.velocity.VelocityContext;
+
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import org.apache.velocity.VelocityContext;
 
 /**
  * A class code generator for page parameters.
  *
  * @author ollie (22.07.2021)
  */
-public class PageParametersClassCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
+public class PageParametersClassCodeGenerator extends AbstractModelCodeGenerator<ServiceNameGenerator> {
 
 	public PageParametersClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"PageParametersClass.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
-				new ServiceNameGenerator(),
-				new TypeGenerator(),
+				ServiceNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
 	@Override
-	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		context.put("ClassName", getClassName(table));;
-		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("PackageName", getPackageName(model, table));
+	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
+		context.put("ClassName", getClassName(model, model));
+		context.put("CommentsOff", isCommentsOff(model));
+		context.put("PackageName", getPackageName(model, model));
 	}
 
 	@Override
-	public String getClassName(DataModel model, TableModel table) {
+	public String getClassName(DataModel model, DataModel sameModel) {
 		return nameGenerator.getPageParametersClassName();
 	}
 
@@ -41,8 +41,8 @@ public class PageParametersClassCodeGenerator extends AbstractClassCodeGenerator
 	}
 
 	@Override
-	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getPagePackageName(model, table);
+	public String getPackageName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getPagePackageName(model);
 	}
 
 }

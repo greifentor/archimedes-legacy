@@ -2,39 +2,37 @@ package archimedes.codegenerators.service;
 
 import org.apache.velocity.VelocityContext;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.TableModel;
 
 /**
  * A class code generator for the NotNullConstraintViolationException.
  *
  * @author ollie (20.02.2022)
  */
-public class CheckClassCodeGenerator
-		extends AbstractClassCodeGenerator<ServiceNameGenerator> {
+public class CheckClassCodeGenerator extends AbstractModelCodeGenerator<ServiceNameGenerator> {
 
 	public CheckClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"CheckClass.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
-				new ServiceNameGenerator(),
-				new TypeGenerator(),
+				ServiceNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
 	@Override
-	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
 		context.put("BasePackageName", model.getBasePackageName());
-		context.put("ClassName", getClassName(model, table));
-		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("PackageName", getPackageName(model, table));
+		context.put("ClassName", getClassName(model, model));
+		context.put("CommentsOff", isCommentsOff(model));
+		context.put("PackageName", getPackageName(model, model));
 	}
 
 	@Override
-	public String getClassName(DataModel model, TableModel table) {
+	public String getClassName(DataModel model, DataModel sameModel) {
 		return "Check";
 	}
 
@@ -44,8 +42,8 @@ public class CheckClassCodeGenerator
 	}
 
 	@Override
-	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getUtilPackageName(model, table);
+	public String getPackageName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getUtilPackageName(model);
 	}
 
 }

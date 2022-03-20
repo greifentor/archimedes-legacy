@@ -26,8 +26,8 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 		super(
 				"ModelClass.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
-				new ServiceNameGenerator(),
-				new TypeGenerator(),
+				ServiceNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 

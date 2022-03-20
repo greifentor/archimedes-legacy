@@ -21,8 +21,8 @@ public class GeneratedServiceImplClassCodeGenerator extends AbstractClassCodeGen
 		super(
 				"GeneratedServiceImplClass.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
-				new ServiceNameGenerator(),
-				new TypeGenerator(),
+				ServiceNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
@@ -68,7 +68,7 @@ public class GeneratedServiceImplClassCodeGenerator extends AbstractClassCodeGen
 		context.put("ModelPackageName", nameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("PageClassName", nameGenerator.getPageClassName());
-		context.put("PagePackageName", nameGenerator.getPagePackageName(model, table));
+		context.put("PagePackageName", nameGenerator.getPagePackageName(model));
 		context.put("PageParametersClassName", nameGenerator.getPageParametersClassName());
 		context.put("PersistencePortInterfaceName", nameGenerator.getPersistencePortInterfaceName(table));
 		context.put("PersistencePortPackageName", nameGenerator.getPersistencePortPackageName(model, table));

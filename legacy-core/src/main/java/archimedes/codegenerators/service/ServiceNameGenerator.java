@@ -51,12 +51,12 @@ public class ServiceNameGenerator extends NameGenerator {
 		return s;
 	}
 
-	public String getApplicationPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "", ALTERNATE_APPLICATION_PACKAGE_NAME);
+	public String getApplicationPackageName(DataModel model) {
+		return createPackageName(model, null, "", ALTERNATE_APPLICATION_PACKAGE_NAME);
 	}
 
-	public String getExceptionsPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "core.service.exception", ALTERNATE_EXCEPTIONS_PACKAGE_NAME);
+	public String getExceptionsPackageName(DataModel model) {
+		return createPackageName(model, null, "core.service.exception", ALTERNATE_EXCEPTIONS_PACKAGE_NAME);
 	}
 
 	public String getGeneratedPersistencePortInterfaceName(TableModel table) {
@@ -120,8 +120,8 @@ public class ServiceNameGenerator extends NameGenerator {
 		return "Page";
 	}
 
-	public String getPagePackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "core.model", ALTERNATE_PAGE_PACKAGE_NAME);
+	public String getPagePackageName(DataModel model) {
+		return createPackageName(model, model, "core.model", ALTERNATE_PAGE_PACKAGE_NAME);
 	}
 
 	public String getPageParametersClassName() {
@@ -180,8 +180,8 @@ public class ServiceNameGenerator extends NameGenerator {
 		return createPackageName(model, table, "core.service", ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME);
 	}
 
-	public String getUtilPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "util", ALTERNATE_UTIL_PACKAGE_NAME);
+	public String getUtilPackageName(DataModel model) {
+		return createPackageName(model, null, "util", ALTERNATE_UTIL_PACKAGE_NAME);
 	}
 
 }

@@ -1,43 +1,37 @@
 package archimedes.codegenerators.service;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
-import archimedes.codegenerators.AbstractCodeFactory;
-import archimedes.codegenerators.Columns.ColumnData;
-import archimedes.codegenerators.TypeGenerator;
-import archimedes.model.ColumnModel;
-import archimedes.model.DataModel;
-import archimedes.model.TableModel;
 import org.apache.velocity.VelocityContext;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
+import archimedes.codegenerators.TypeGenerator;
+import archimedes.model.DataModel;
 
 /**
  * A class code generator for page of model objects.
  *
  * @author ollie (22.07.2021)
  */
-public class PageClassCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
+public class PageClassCodeGenerator extends AbstractModelCodeGenerator<ServiceNameGenerator> {
 
 	public PageClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"PageClass.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
-				new ServiceNameGenerator(),
-				new TypeGenerator(),
+				ServiceNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
 	@Override
-	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		context.put("ClassName", getClassName(table));;
-		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("PackageName", getPackageName(model, table));
+	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
+		context.put("ClassName", getClassName(model, model));
+		context.put("CommentsOff", isCommentsOff(model));
+		context.put("PackageName", getPackageName(model, model));
 	}
 
 	@Override
-	public String getClassName(DataModel model, TableModel table) {
+	public String getClassName(DataModel model, DataModel sameModel) {
 		return nameGenerator.getPageClassName();
 	}
 
@@ -47,8 +41,8 @@ public class PageClassCodeGenerator extends AbstractClassCodeGenerator<ServiceNa
 	}
 
 	@Override
-	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getPagePackageName(model, table);
+	public String getPackageName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getPagePackageName(model);
 	}
 
 }

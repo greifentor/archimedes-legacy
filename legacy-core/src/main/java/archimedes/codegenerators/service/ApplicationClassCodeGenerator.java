@@ -1,38 +1,40 @@
 package archimedes.codegenerators.service;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
+import org.apache.velocity.VelocityContext;
+
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.TableModel;
-import org.apache.velocity.VelocityContext;
 
 /**
  * A class code generator for application classes.
  *
  * @author ollie (03.08.2021)
  */
-public class ApplicationClassCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
+public class ApplicationClassCodeGenerator extends AbstractModelCodeGenerator<ServiceNameGenerator> {
 
 	public ApplicationClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"ApplicationClass.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
-				new ServiceNameGenerator(),
-				new TypeGenerator(),
+				ServiceNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
 	@Override
-	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
 		context.put("BasePackageName", model.getBasePackageName());
-		context.put("ClassName", getClassName(table));;
-		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("PackageName", getPackageName(model, table));
+		context.put("ClassName", getClassName(model, model));
+		context.put("CommentsOff", isCommentsOff(model));
+		context.put("PackageName", getPackageName(model, model));
 	}
 
 	@Override
-	public String getClassName(DataModel model, TableModel table) { return nameGenerator.getApplicationClassName(table.getDataModel()); }
+	public String getClassName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getApplicationClassName(model);
+	}
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
@@ -40,8 +42,8 @@ public class ApplicationClassCodeGenerator extends AbstractClassCodeGenerator<Se
 	}
 
 	@Override
-	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getApplicationPackageName(model, table);
+	public String getPackageName(DataModel model, DataModel sameModel) {
+		return nameGenerator.getApplicationPackageName(model);
 	}
 
 }

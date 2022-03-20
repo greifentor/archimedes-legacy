@@ -23,8 +23,8 @@ public class ModelEnumCodeGenerator extends AbstractDomainCodeGenerator<ServiceN
 		super(
 				"ModelEnum.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
-				new ServiceNameGenerator(),
-				new TypeGenerator(),
+				ServiceNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 

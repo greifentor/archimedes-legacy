@@ -19,8 +19,8 @@ public class ServiceInterfaceCodeGenerator extends AbstractClassCodeGenerator<Se
 		super(
 				"ServiceInterface.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
-				new ServiceNameGenerator(),
-				new TypeGenerator(),
+				ServiceNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 

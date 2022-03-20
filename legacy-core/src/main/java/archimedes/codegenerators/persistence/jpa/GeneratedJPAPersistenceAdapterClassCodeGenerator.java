@@ -33,8 +33,8 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		super(
 				"GeneratedJPAPersistenceAdapterClass.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-		        PersistenceJPANameGenerator.INSTANCE,
-		        TypeGenerator.INSTANCE,
+				PersistenceJPANameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
@@ -57,8 +57,8 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 										table.getColumns(),
 										referenceMode,
 										nameGenerator,
-		                                ServiceNameGenerator.INSTANCE::getModelClassName,
-		                                t -> ServiceNameGenerator.INSTANCE.getModelPackageName(model, t),
+										ServiceNameGenerator.INSTANCE::getModelClassName,
+										t -> ServiceNameGenerator.INSTANCE.getModelPackageName(model, t),
 										t -> nameGenerator.getDBOConverterClassName(t.getName(), model),
 										t -> nameGenerator.getDBOConverterPackageName(model, t),
 										typeGenerator));
@@ -78,20 +78,20 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		context.put("JPARepositoryPackageName", nameGenerator.getJPARepositoryPackageName(model, table));
 		context.put("ModelClassName", ServiceNameGenerator.INSTANCE.getModelClassName(table));
 		context.put("ModelPackageName", ServiceNameGenerator.INSTANCE.getModelPackageName(model, table));
-		context.put("ExceptionsPackageName", ServiceNameGenerator.INSTANCE.getExceptionsPackageName(model, table));
+		context.put("ExceptionsPackageName", ServiceNameGenerator.INSTANCE.getExceptionsPackageName(model));
 		context
 				.put(
 						"ListAccess",
 						getListAccesses(
 								model,
 								table,
-		                        c -> ServiceNameGenerator.INSTANCE.getModelClassName(c.getReferencedTable()),
-		                        (c, m) -> ServiceNameGenerator.INSTANCE.getModelClassName(c.getDomain(), model),
-		                        c -> ServiceNameGenerator.INSTANCE.getModelPackageName(model, table) + "."
-		                                + ServiceNameGenerator.INSTANCE.getModelClassName(c.getReferencedTable()),
-		                        (c, m) -> ServiceNameGenerator.INSTANCE.getModelPackageName(model, table) + "."
-		                                + ServiceNameGenerator.INSTANCE.getModelClassName(c.getDomain(), model),
-		                        c -> new ListAccessConverterData()
+								c -> ServiceNameGenerator.INSTANCE.getModelClassName(c.getReferencedTable()),
+								(c, m) -> ServiceNameGenerator.INSTANCE.getModelClassName(c.getDomain(), model),
+								c -> ServiceNameGenerator.INSTANCE.getModelPackageName(model, table) + "."
+										+ ServiceNameGenerator.INSTANCE.getModelClassName(c.getReferencedTable()),
+								(c, m) -> ServiceNameGenerator.INSTANCE.getModelPackageName(model, table) + "."
+										+ ServiceNameGenerator.INSTANCE.getModelClassName(c.getDomain(), model),
+								c -> new ListAccessConverterData()
 										.setAttributeName(
 												nameGenerator
 														.getAttributeName(
@@ -112,29 +112,29 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		context.put("PageClassName", ServiceNameGenerator.INSTANCE.getPageClassName());
 		context.put("PageConverterClassName", nameGenerator.getPageConverterClassName());
 		context.put("PageConverterPackageName", nameGenerator.getPageConverterPackageName(model));
-		context.put("PagePackageName", ServiceNameGenerator.INSTANCE.getPagePackageName(model, table));
+		context.put("PagePackageName", ServiceNameGenerator.INSTANCE.getPagePackageName(model));
 		context.put("PageParametersClassName", ServiceNameGenerator.INSTANCE.getPageParametersClassName());
 		context
 				.put(
 						"PageParametersToPageableConverterClassName",
-		                nameGenerator.getPageParametersToPageableConverterClassName());
+						nameGenerator.getPageParametersToPageableConverterClassName());
 		context
 				.put(
 						"PageParametersToPageableConverterPackageName",
-		                nameGenerator.getPageParametersToPageableConverterPackageName(model));
+						nameGenerator.getPageParametersToPageableConverterPackageName(model));
 		context
-		        .put(
-		                "PersistencePortInterfaceName",
-		                ServiceNameGenerator.INSTANCE.getPersistencePortInterfaceName(table));
+				.put(
+						"PersistencePortInterfaceName",
+						ServiceNameGenerator.INSTANCE.getPersistencePortInterfaceName(table));
 		context
-		        .put(
-		                "PersistencePortPackageName",
-		                ServiceNameGenerator.INSTANCE.getPersistencePortPackageName(model, table));
+				.put(
+						"PersistencePortPackageName",
+						ServiceNameGenerator.INSTANCE.getPersistencePortPackageName(model, table));
 		context.put("TableName", table.getName());
 		context.put("TableAttributeName", nameGenerator.getAttributeName(table.getName()));
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
-		context.put("UtilPackageName", ServiceNameGenerator.INSTANCE.getUtilPackageName(model, table));
+		context.put("UtilPackageName", ServiceNameGenerator.INSTANCE.getUtilPackageName(model));
 	}
 
 	private String getNoKeyValue(TableModel table) {

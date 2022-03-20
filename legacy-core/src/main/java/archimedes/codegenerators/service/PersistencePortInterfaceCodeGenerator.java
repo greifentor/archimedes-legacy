@@ -19,8 +19,8 @@ public class PersistencePortInterfaceCodeGenerator extends AbstractClassCodeGene
 		super(
 				"PersistencePortInterface.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
-				new ServiceNameGenerator(),
-				new TypeGenerator(),
+				ServiceNameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 

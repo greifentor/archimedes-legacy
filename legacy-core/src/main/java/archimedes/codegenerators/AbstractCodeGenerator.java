@@ -3,6 +3,8 @@ package archimedes.codegenerators;
 import java.io.File;
 import java.io.StringWriter;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +44,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 
 	private String templateFileName;
 	private String templatePathName;
+	private Map<String, Template> templateCache = new HashMap<>();
 
 	public AbstractCodeGenerator(
 			String templateFileName,
@@ -88,12 +91,23 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 		velocityEngine
 				.setProperty("resource.loader.file.path", Paths.get(templatePathName).toAbsolutePath().toString());
 		velocityEngine.init();
-		LOG
-				.info(
-						"loading template: {} -> {}",
-						Paths.get(templatePathName).toAbsolutePath().toString(),
-						templateFileName);
-		Template t = velocityEngine.getTemplate(templateFileName);
+		Template t = null;
+		if (templateCache.containsKey(templateFileName)) {
+			LOG
+					.info(
+							"loading template from cache: {} -> {}",
+							Paths.get(templatePathName).toAbsolutePath().toString(),
+							templateFileName);
+			t = templateCache.get(templateFileName);
+		} else {
+			LOG
+					.info(
+							"loading template: {} -> {}",
+							Paths.get(templatePathName).toAbsolutePath().toString(),
+							templateFileName);
+			t = velocityEngine.getTemplate(templateFileName);
+			templateCache.put(templateFileName, t);
+		}
 		StringWriter writer = new StringWriter();
 		t.merge(context, writer);
 		return writer.toString();
