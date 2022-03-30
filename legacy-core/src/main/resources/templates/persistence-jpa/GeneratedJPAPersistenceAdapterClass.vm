@@ -131,7 +131,7 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 						.filter(${TableAttributeName} -> !${TableAttributeName}.get${IdFieldNameCamelCase}().equals(model.get${IdFieldNameCamelCase}()))
 #end
 						.isEmpty(),
-				() -> new UniqueConstraintViolationException("${Column.getFieldName()} is already set for another record", "${ModelClassName}", "${Column.getFieldName()}"));
+				() -> new UniqueConstraintViolationException("${Column.getFieldName()} '" + model.${Column.getGetterCall()} + "' is already set for another record", "${ModelClassName}", "${Column.getFieldName()}"));
 #end
 #end
 		return converter.${ToModelMethodName}(repository.save(converter.${ToDBOMethodName}(model)));

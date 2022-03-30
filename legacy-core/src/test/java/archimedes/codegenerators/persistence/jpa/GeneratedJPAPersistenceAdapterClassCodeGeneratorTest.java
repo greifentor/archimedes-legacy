@@ -137,7 +137,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 						"						.filter(aTable -> !aTable.getId().equals(model.getId()))\n"
 						+ //
 						"						.isEmpty(),\n" + //
-						"				() -> new UniqueConstraintViolationException(\"description is already set for another record\", \"ATable\", \"description\"));\n";
+				        "				() -> new UniqueConstraintViolationException(\"description '\" + model.getDescription() + \"' is already set for another record\", \"ATable\", \"description\"));\n";
 			}
 			s += "		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 					"	}\n" + //
@@ -305,7 +305,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 						"				findByRef(model.getRef())\n" + //
 						"						.filter(aTable -> !aTable.getId().equals(model.getId()))\n" + //
 						"						.isEmpty(),\n" + //
-						"				() -> new UniqueConstraintViolationException(\"ref is already set for another record\", \"ATable\", \"ref\"));\n";
+				        "				() -> new UniqueConstraintViolationException(\"ref '\" + model.getRef() + \"' is already set for another record\", \"ATable\", \"ref\"));\n";
 			}
 			expected += "		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 					"	}\n" + //
@@ -560,7 +560,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 				}
 				s +=
 						"						.isEmpty(),\n" + //
-						"				() -> new UniqueConstraintViolationException(\"description is already set for another record\", \"ATable\", \"description\"));\n"
+				                "				() -> new UniqueConstraintViolationException(\"description '\" + model.getDescription() + \"' is already set for another record\", \"ATable\", \"description\"));\n"
 						+ //
 						"		return converter.toModel(repository.save(converter.toDBO(model)));\n" + //
 						"	}\n" + //
