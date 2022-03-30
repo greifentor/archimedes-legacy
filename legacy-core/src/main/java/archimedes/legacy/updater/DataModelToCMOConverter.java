@@ -91,9 +91,10 @@ public class DataModelToCMOConverter {
 
 	private boolean isAutoIncrementField(ColumnModel column) {
 		return OptionGetter
-				.getOptionByName(column, "AUTO_INCREMENT")
-				.map(option -> "IDENTITY".equals(option.getParameter()))
-				.orElse(false);
+		        .getOptionByName(column, "AUTO_INCREMENT")
+		        .filter(option -> option.getParameter() != null)
+		        .map(option -> "IDENTITY".equals(option.getParameter()) || option.getParameter().startsWith("SEQUENCE"))
+		        .orElse(false);
 	}
 
 	private void addForeignKeys(DataModelCMO cmo, DataModel dataModel) {
