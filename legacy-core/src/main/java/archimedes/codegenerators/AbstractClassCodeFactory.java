@@ -37,6 +37,7 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 		Counter processCounter = new Counter(1);
 		initializeProgress(generators.size());
 		for (DomainModel domainModel : dataModel.getAllDomains()) {
+			try {
 			generators
 					.stream()
 					.filter(codeGenerator -> codeGenerator instanceof AbstractDomainCodeGenerator<?>)
@@ -69,6 +70,10 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 											generatorName);
 						}
 					});
+			} catch (RuntimeException e) {
+				LOG.error("error while creating code for domain: " + domainModel.getName(), e);
+				throw e;
+			}
 		}
 		generators
 				.stream()
@@ -99,49 +104,54 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 					}
 				});
 		for (TableModel tableModel : dataModel.getTables()) {
-			incrementProcessProgress(processCounter, "processing table: " + tableModel.getName());
-			if (tableModel.isGenerateCode() && isInCodeGeneration(tableModel)) {
-				initializeStepProgress(null);
-				Counter stepCounter = new Counter(1);
-				generators
-						.stream()
-						.filter(codeGenerator -> codeGenerator instanceof AbstractClassCodeGenerator<?>)
-						.map(codeGenerator -> (AbstractClassCodeGenerator<?>) codeGenerator)
-						.forEach(codeGenerator -> {
-							String fileName = codeGenerator.getSourceFileName(path, dataModel, tableModel);
-							String generatorName = codeGenerator.getName();
-							if (isReadyToOverride(fileName)) {
-								if (!codeGenerator.isToIgnoreFor(dataModel, tableModel)) {
-									incrementStepProgress(stepCounter, null);
-									codeGenerator.generate(path, basePackageName, dataModel, tableModel);
-									LOG.info("- wrote file to: {}", fileName);
+			try {
+				incrementProcessProgress(processCounter, "processing table: " + tableModel.getName());
+				if (tableModel.isGenerateCode() && isInCodeGeneration(tableModel)) {
+					initializeStepProgress(null);
+					Counter stepCounter = new Counter(1);
+					generators
+							.stream()
+							.filter(codeGenerator -> codeGenerator instanceof AbstractClassCodeGenerator<?>)
+							.map(codeGenerator -> (AbstractClassCodeGenerator<?>) codeGenerator)
+							.forEach(codeGenerator -> {
+								String fileName = codeGenerator.getSourceFileName(path, dataModel, tableModel);
+								String generatorName = codeGenerator.getName();
+								if (isReadyToOverride(fileName)) {
+									if (!codeGenerator.isToIgnoreFor(dataModel, tableModel)) {
+										incrementStepProgress(stepCounter, null);
+										codeGenerator.generate(path, basePackageName, dataModel, tableModel);
+										LOG.info("- wrote file to: {}", fileName);
+									} else {
+										incrementStepProgress(stepCounter, null);
+										LOG
+												.info(
+														"- ignored table '{}' by generator: {}",
+														tableModel.getName(),
+														generatorName);
+									}
+									System.gc();
 								} else {
-									incrementStepProgress(stepCounter, null);
+									incrementStepProgress(
+											stepCounter,
+											"- ignored by not ready to override for generator: " + generatorName);
 									LOG
 											.info(
-													"- ignored table '{}' by generator: {}",
+													"- ignored table '{}' by not ready to override: {}",
 													tableModel.getName(),
 													generatorName);
 								}
-								System.gc();
-							} else {
-								incrementStepProgress(
-										stepCounter,
-										"- ignored by not ready to override for generator: " + generatorName);
-								LOG
-										.info(
-												"- ignored table '{}' by not ready to override: {}",
-												tableModel.getName(),
-												generatorName);
-							}
-						});
-			} else {
-				LOG
-						.warn(
-								"- suppressed for table '{}' - isGeneratorCode: {}, isInCodeGeneration: {}",
-								tableModel.getName(),
-								tableModel.isGenerateCode(),
-								isInCodeGeneration(tableModel));
+							});
+				} else {
+					LOG
+							.warn(
+									"- suppressed for table '{}' - isGeneratorCode: {}, isInCodeGeneration: {}",
+									tableModel.getName(),
+									tableModel.isGenerateCode(),
+									isInCodeGeneration(tableModel));
+				}
+			} catch (RuntimeException e) {
+				LOG.error("error while creating code for table: " + tableModel.getName(), e);
+				throw e;
 			}
 		}
 		System.gc();

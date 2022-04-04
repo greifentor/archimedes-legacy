@@ -22,8 +22,8 @@ public class GeneratedJPARepositoryInterfaceCodeGenerator
 		super(
 				"GeneratedJPARepositoryInterface.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-		        PersistenceJPANameGenerator.INSTANCE,
-		        TypeGenerator.INSTANCE,
+				PersistenceJPANameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 

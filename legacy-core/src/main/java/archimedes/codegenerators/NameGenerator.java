@@ -155,7 +155,7 @@ public class NameGenerator {
 	}
 
 	private boolean isUpperCase(char c) {
-		return (c >= 'A') && (c < 'Z');
+		return (c >= 'A') && (c <= 'Z');
 	}
 
 	private String getFirstCharToLowerCaseOnTwoDoublesPassed(char c0, char c1) {

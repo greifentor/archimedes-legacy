@@ -273,6 +273,17 @@ public class NameGeneratorTest {
 			assertEquals("SimpleString", unitUnderTest.getCamelCase("SIMPLE_STRING"));
 		}
 
+		@Nested
+		class SpecialCases {
+
+			@Test
+			void passMERKMAL_ZAUBERWIRKEN_KLERIKER_returnsMerkmalZauberwirkenKleriker() {
+				assertEquals(
+						"MerkmalZauberwirkenKleriker",
+						unitUnderTest.getCamelCase("MERKMAL_ZAUBERWIRKEN_KLERIKER"));
+			}
+
+		}
 	}
 
 	@Nested
