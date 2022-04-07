@@ -1,0 +1,171 @@
+package ${PackageName};
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.selection.SelectionEvent;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.router.QueryParameters;
+import com.vaadin.flow.router.Route;
+
+import ${ModelPackageName}.${ModelClassName};
+import ${PageParametersPackageName}.${PageParametersClassName};
+import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
+import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
+import ${SessionDataPackageName}.${SessionDataClassName};
+import ${HeaderLayoutPackageName}.${HeaderLayoutClassName};
+import ${HeaderLayoutPackageName}.${HeaderLayoutClassName}.HeaderLayoutMode;
+import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};
+import ${ButtonPackageName}.${ButtonClassName};
+import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
+import ${MasterDataButtonLayoutPackageName}.${MasterDataButtonLayoutClassName};
+import lombok.RequiredArgsConstructor;
+
+#if (!$CommentsOff )
+/**
+ * A view for paginated ${ModelClassName.toLowerCase()} lists.
+ *
+ * ${Generated}
+ */
+#end
+@Route(${ClassName}.URL)
+@RequiredArgsConstructor
+public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {
+
+	public static final String URL = "${BaseURL}/masterdata/${URLSuffix}";
+
+	private static final Logger logger = LogManager.getLogger(${ClassName}.class);
+
+	private final ${ResourceManagerInterfaceName} resourceManager;
+	private final ${ServiceInterfaceName} service;
+	private final ${SessionDataClassName} session;
+
+	private ${ButtonClassName} buttonAdd;
+	private ${ButtonClassName} buttonEdit;
+	private ${ButtonClassName} buttonRemove;
+	private Grid<${ModelClassName}> grid;
+
+	@Override
+	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
+		logger.debug("setParameter");
+	}
+
+	@Override
+	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+		${UserAuthorizationCheckerClassName}.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);
+		getStyle().set("background-image", "url('${BackgroundImageName}')");
+		buttonAdd = ${ButtonFactoryClassName}.createAddButton(resourceManager, event -> addRecord(), session);
+		buttonEdit = ${ButtonFactoryClassName}.createEditButton(resourceManager, event -> editRecord(), session);
+		buttonRemove = ${ButtonFactoryClassName}.createRemoveButton(resourceManager, event -> removeRecord(), session);
+		grid = new Grid<>();
+#foreach($Column in $GridData)
+		grid
+				.addColumn(${ModelClassName}::get${FieldNameCamilCase})
+				.setHeader(resourceManager.getLocalizedString("${PluralName}.toLowerCase().grid.header.${ResourceName}", session.getLocalization()));
+#end
+		grid.setWidthFull();
+		grid.addSelectionListener(this::enabledButtons);
+		${MasterDataButtonLayoutClassName} buttonLayout = new ${MasterDataButtonLayoutClassName}(buttonAdd, buttonEdit, buttonRemove);
+		buttonLayout.setMargin(false);
+		buttonLayout.setWidthFull();
+		setMargin(false);
+		setWidthFull();
+		VerticalLayout dataLayout = new VerticalLayout();
+		dataLayout.getStyle().set("-moz-border-radius", "4px");
+		dataLayout.getStyle().set("-webkit-border-radius", "4px");
+		dataLayout.getStyle().set("border-radius", "4px");
+		dataLayout.getStyle().set("border", "1px solid gray");
+		dataLayout
+				.getStyle()
+				.set(
+						"box-shadow",
+						"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4");
+		dataLayout.setMargin(false);
+		dataLayout.setWidthFull();
+		dataLayout.add(grid, buttonLayout);
+		add(
+				new ${HeaderLayoutClassName}(
+						${ButtonFactoryClassName}.createBackButton(resourceManager, this::getUI, ${MasterDataLayoutClassName}.URL, session),
+						${ButtonFactoryClassName}.createLogoutButton(resourceManager, this::getUI, session, logger),
+						"${PluralName}",
+						HeaderLayoutMode.PLAIN),
+				dataLayout);
+		updateGrid(0);
+		setButtonEnabled(buttonEdit, false);
+		setButtonEnabled(buttonRemove, false);
+	}
+
+	private void enabledButtons(SelectionEvent<Grid<${ModelClassName}>, ${ModelClassName}> event) {
+		if (event.getFirstSelectedItem().isEmpty()) {
+			setButtonEnabled(buttonAdd, true);
+			setButtonEnabled(buttonEdit, false);
+			setButtonEnabled(buttonRemove, false);
+		} else {
+			setButtonEnabled(buttonAdd, false);
+			setButtonEnabled(buttonEdit, true);
+			setButtonEnabled(buttonRemove, true);
+		}
+	}
+
+	private void setButtonEnabled(${ButtonClassName} button, boolean enabled) {
+		button.setEnabled(enabled);
+		if (enabled) {
+			button.setBackgroundImage("${ButtonBackGround}");
+			button.setBorderColor("${ButtonBorderColor}");
+		} else {
+			button.setBackgroundImage("${ButtonBackGroundDisabled}");
+			button.setBorderColor("${ButtonBorderColorDisabled}");
+		}
+	}
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		logger.info("${ModelClassName} page layout opened for user '{}'.", session.getUserName());
+		super.onAttach(attachEvent);
+	}
+
+	@Override
+	protected void onDetach(DetachEvent detachEvent) {
+		logger.info("onDetach");
+		super.onDetach(detachEvent);
+		getElement().removeFromTree();
+	}
+
+	private void updateGrid(int pageNumber) {
+		grid
+				.setItems(
+						service
+								.findAll(new ${PageParametersClassName}().setEntriesPerPage(10).setPageNumber(pageNumber))
+								.getEntries());
+	}
+
+	private void addRecord() {
+		getUI().ifPresent(ui -> ui.navigate(${MaintenanceLayoutClassName}.URL));
+	}
+
+	private void editRecord() {
+		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
+			QueryParameters parameters = new QueryParameters(Map.of("id", List.of("" + model.getId())));
+			getUI().ifPresent(ui -> ui.navigate(${MaintenanceLayoutClassName}.URL, parameters));
+		});
+	}
+
+	private void removeRecord() {
+		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
+			service.delete(model);
+			updateGrid(0);
+		});
+	}
+
+}

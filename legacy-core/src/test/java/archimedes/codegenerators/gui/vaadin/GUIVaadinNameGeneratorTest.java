@@ -101,6 +101,39 @@ public class GUIVaadinNameGeneratorTest {
 
 	}
 
+	@Nested
+	class ButtonFactoryClassNameTests {
+
+		@Test
+		void getButtonFactoryClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getButtonFactoryClassName(null));
+		}
+
+		@Test
+		void getButtonFactoryClassName_passAValidTable_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "ButtonFactory";
+			// Run
+			String returned = unitUnderTest.getButtonFactoryClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getButtonFactoryClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherButtonFactory";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(GUIVaadinNameGenerator.ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX, expected));
+			// Run
+			String returned = unitUnderTest.getButtonFactoryClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("tests for GO class names")
 	@Nested
 	class GOClassNameTests {
@@ -488,6 +521,203 @@ public class GUIVaadinNameGeneratorTest {
 					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_PACKAGE_NAME, "vaadin.go"));
 			// Run & Check
 			assertEquals("vaadin.go", unitUnderTest.getPageGOPackageName(model, table));
+		}
+
+	}
+
+	@Nested
+	class PageLayoutClassNameTests {
+
+		@Test
+		void getPageLayoutClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getPageLayoutClassName(table);
+			});
+		}
+
+		@Test
+		void getPageLayoutClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getPageLayoutClassName(null));
+		}
+
+		@Test
+		void getPageLayoutClassName_PassTableModelWithNameCamelCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TestTablePageLayout";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getPageLayoutClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutClassName_PassTableModelWithNameUpperCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TablePageLayout";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getPageLayoutClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNamePageLayout";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getPageLayoutClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNamePageLayout";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getPageLayoutClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNamePageLayout";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getPageLayoutClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutClassName_PassTableModelWithNameLowerCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TablePageLayout";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getPageLayoutClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TPageLayout";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getPageLayoutClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TPageLayout";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getPageLayoutClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutClassName_PassDataModelWithALTERNATE_PAGE_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableGO";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			doReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_PAGE_LAYOUT_CLASS_NAME_SUFFIX, "GO"))
+					.when(model)
+					.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_PAGE_LAYOUT_CLASS_NAME_SUFFIX);
+			// Run
+			String returned = unitUnderTest.getPageLayoutClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class PageLayoutPackageNameTests {
+
+		@Test
+		void getPageLayoutPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getPageLayoutPackageName(null, table));
+		}
+
+		@Test
+		void getPageLayoutPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin.masterdata", unitUnderTest.getPageLayoutPackageName(model, null));
+		}
+
+		@Test
+		void getPageLayoutPackageName_PassAValidTableModel_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getPageLayoutPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = "gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getPageLayoutPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = "gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getPageLayoutPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutPackageName_PassAValidTableModelWithMODULEOption_ReturnsACorrecGOName() {
+			// Prepare
+			String prefix = "prefix";
+			String expected = "prefix.gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn(null);
+			when(table.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
+					.thenReturn(
+							new Option(
+									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
+									prefix));
+			// Run
+			String returned = unitUnderTest.getPageLayoutPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getPageLayoutPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_PAGE_LAYOUT_PACKAGE_NAME))
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_PAGE_LAYOUT_PACKAGE_NAME, "vaadin.gos"));
+			// Run & Check
+			assertEquals("vaadin.gos", unitUnderTest.getPageLayoutPackageName(model, table));
 		}
 
 	}
