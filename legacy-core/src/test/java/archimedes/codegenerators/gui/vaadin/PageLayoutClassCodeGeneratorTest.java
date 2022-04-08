@@ -56,13 +56,13 @@ public class PageLayoutClassCodeGeneratorTest {
 					"import base.pack.age.name.core.model.PageParameters;\n" + //
 					"import base.pack.age.name.core.service.ATableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
-					"import ${SessionDataPackageName}.${SessionDataClassName};\n" + //
-					"import ${HeaderLayoutPackageName}.${HeaderLayoutClassName};\n" + //
-					"import ${HeaderLayoutPackageName}.${HeaderLayoutClassName}.HeaderLayoutMode;\n" + //
+			        "import base.pack.age.name.gui.vaadin.SessionData;\n" + //
+			        "import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
+			        "import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};\n" + //
 					"import base.pack.age.name.gui.vaadin.component.Button;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
-					"import ${MasterDataButtonLayoutPackageName}.${MasterDataButtonLayoutClassName};\n" + //
+			        "import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
 					"/**\n" + //
@@ -81,7 +81,8 @@ public class PageLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final ATableService service;\n" + //
-					"	private final ${SessionDataClassName} session;\n" + //
+			        "	private final SessionData session;\n"
+			        + //
 					"\n" + //
 					"	private Button buttonAdd;\n" + //
 					"	private Button buttonEdit;\n" + //
@@ -107,7 +108,7 @@ public class PageLayoutClassCodeGeneratorTest {
 					"		grid = new Grid<>();\n" + //
 					"		grid.setWidthFull();\n" + //
 					"		grid.addSelectionListener(this::enabledButtons);\n" + //
-					"		${MasterDataButtonLayoutClassName} buttonLayout = new ${MasterDataButtonLayoutClassName}(buttonAdd, buttonEdit, buttonRemove);\n"
+			        "		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonRemove);\n"
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
 					"		buttonLayout.setWidthFull();\n" + //
@@ -128,7 +129,8 @@ public class PageLayoutClassCodeGeneratorTest {
 					"		dataLayout.setWidthFull();\n" + //
 					"		dataLayout.add(grid, buttonLayout);\n" + //
 					"		add(\n" + //
-					"				new ${HeaderLayoutClassName}(\n" + //
+			        "				new HeaderLayout(\n"
+			        + //
 					"						ButtonFactory.createBackButton(resourceManager, this::getUI, ${MasterDataLayoutClassName}.URL, session),\n"
 					+ //
 					"						ButtonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
