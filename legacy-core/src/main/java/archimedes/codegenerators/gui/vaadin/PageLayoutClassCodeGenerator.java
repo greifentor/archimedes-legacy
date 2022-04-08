@@ -32,6 +32,7 @@ public class PageLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUI
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		String plural = serviceNameGenerator.getModelClassName(table).toLowerCase() + "s";
+		context.put("BaseURL", model.getApplicationName().toLowerCase());
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));
 		context.put("ButtonPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("ButtonFactoryClassName", nameGenerator.getButtonFactoryClassName(model));
@@ -51,7 +52,7 @@ public class PageLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUI
 						localizationNameGenerator.getResourceManagerPackageName(model, table));
 		context.put("ServiceInterfaceName", serviceNameGenerator.getServiceInterfaceName(table));
 		context.put("ServiceInterfacePackageName", serviceNameGenerator.getServiceInterfacePackageName(model, table));
-		context.put("URLSuffix", plural);
+		context.put("URLSuffix", plural.toLowerCase());
 	}
 
 	@Override

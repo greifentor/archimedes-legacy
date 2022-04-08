@@ -75,7 +75,7 @@ public class PageLayoutClassCodeGeneratorTest {
 					"public class ATablePageLayout extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 					+ //
 					"\n" + //
-					"	public static final String URL = \"${BaseURL}/masterdata/atables\";\n" + //
+					"	public static final String URL = \"carp-dnd/masterdata/atables\";\n" + //
 					"\n" + //
 					"	private static final Logger logger = LogManager.getLogger(ATablePageLayout.class);\n" + //
 					"\n" + //
