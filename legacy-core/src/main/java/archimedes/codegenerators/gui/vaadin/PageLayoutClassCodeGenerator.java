@@ -38,6 +38,10 @@ public class PageLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUI
 		context.put("ButtonFactoryPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
+		context.put("HeaderLayoutClassName", nameGenerator.getHeaderLayoutClassName(model));
+		context.put("HeaderLayoutPackageName", nameGenerator.getHeaderLayoutPackageName(model));
+		context.put("MasterDataButtonLayoutClassName", nameGenerator.getMasterDataButtonLayoutClassName(model));
+		context.put("MasterDataButtonLayoutPackageName", nameGenerator.getMasterDataButtonLayoutPackageName(model));
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
 		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
@@ -49,6 +53,8 @@ public class PageLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUI
 				.put(
 						"ResourceManagerPackageName",
 						localizationNameGenerator.getResourceManagerPackageName(model, table));
+		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
+		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
 		context.put("ServiceInterfaceName", serviceNameGenerator.getServiceInterfaceName(table));
 		context.put("ServiceInterfacePackageName", serviceNameGenerator.getServiceInterfacePackageName(model, table));
 		context.put("URLSuffix", plural);

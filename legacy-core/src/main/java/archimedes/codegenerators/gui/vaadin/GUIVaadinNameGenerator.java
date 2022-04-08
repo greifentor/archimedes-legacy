@@ -25,7 +25,13 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_GO_CONVERTER_PACKAGE_NAME = "ALTERNATE_GO_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_GO_CLASS_NAME_SUFFIX = "ALTERNATE_GO_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_GO_PACKAGE_NAME = "ALTERNATE_GO_PACKAGE_NAME";
+	public static final String ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX = "ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME = "ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME";
 	public static final String ALTERNATE_IMAGE_CLASS_NAME_SUFFIX = "ALTERNATE_IMAGE_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX =
+	        "ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME =
+	        "ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_GO_CONVERTER_PACKAGE_NAME = "ALTERNATE_PAGE_GO_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_GO_PACKAGE_NAME = "ALTERNATE_PAGE_GO_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_LAYOUT_PACKAGE_NAME = "ALTERNATE_PAGE_LAYOUT_PACKAGE_NAME";
@@ -33,6 +39,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME =
 			"ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME = "ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME";
+	public static final String ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX = "ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_SESSION_DATA_PACKAGE_NAME = "ALTERNATE_SESSION_DATA_PACKAGE_NAME";
 	public static final String ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX = "ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME = "ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME";
 
@@ -93,8 +101,31 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return createPackageName(model, table, "gui.vaadin.go", ALTERNATE_GO_PACKAGE_NAME);
 	}
 
+	public String getHeaderLayoutClassName(DataModel model) {
+		return model == null
+		        ? null
+		        : getNameOrAlternativeFromOption(model, "HeaderLayout", ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX);
+	}
+
+	public String getHeaderLayoutPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin.component", ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME);
+	}
+
 	public String getImageClassName(DataModel model) {
 		return model == null ? null : getNameOrAlternativeFromOption(model, "Image", ALTERNATE_IMAGE_CLASS_NAME_SUFFIX);
+	}
+
+	public String getMasterDataButtonLayoutClassName(DataModel model) {
+		return model == null
+		        ? null
+		        : getNameOrAlternativeFromOption(
+		                model,
+		                "MasterDataButtonLayout",
+		                ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX);
+	}
+
+	public String getMasterDataButtonLayoutPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin.component", ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME);
 	}
 
 	public String getPageGOConverterClassName(TableModel table) {
@@ -146,6 +177,16 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 				table,
 				"gui.vaadin.converter",
 				ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME);
+	}
+
+	public String getSessionDataClassName(DataModel model) {
+		return model == null
+		        ? null
+		        : getNameOrAlternativeFromOption(model, "SessionData", ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX);
+	}
+
+	public String getSessionDataPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin", ALTERNATE_SESSION_DATA_PACKAGE_NAME);
 	}
 
 	public String getTextFieldClassName(DataModel model) {
