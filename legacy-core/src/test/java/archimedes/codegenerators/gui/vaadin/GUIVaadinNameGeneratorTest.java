@@ -133,6 +133,129 @@ public class GUIVaadinNameGeneratorTest {
 
 	}
 
+	@Nested
+	class DetailsLayoutClassNameTests {
+
+		@Test
+		void getDetailsLayoutClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getDetailsLayoutClassName(model, table);
+			});
+		}
+
+		@Test
+		void getDetailsLayoutClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getDetailsLayoutClassName(model, null));
+		}
+
+		@Test
+		void getDetailsLayoutClassName_PassTableModelWithNameCamelCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TestTableDetailsLayout";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsLayoutClassName_PassTableModelWithNameUpperCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableDetailsLayout";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNameDetailsLayout";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNameDetailsLayout";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNameDetailsLayout";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsLayoutClassName_PassTableModelWithNameLowerCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableDetailsLayout";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsLayoutClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TDetailsLayout";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsLayoutClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TDetailsLayout";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsLayoutClassName_PassDataModelWithALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableGO";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			doReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX, "GO"))
+					.when(model)
+					.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX);
+			// Run
+			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("tests for GO class names")
 	@Nested
 	class GOClassNameTests {

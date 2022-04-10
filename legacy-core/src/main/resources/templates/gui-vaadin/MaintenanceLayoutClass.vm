@@ -1,0 +1,120 @@
+package ${PackageName};
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.Route;
+
+import ${ModelPackageName}.${ModelClassName};
+import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
+import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
+import ${SessionDataPackageName}.${SessionDataClassName};
+import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};
+import ${AbstractMasterDataBaseLayoutPackageName}.${AbstractMasterDataBaseLayoutClassName};
+import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
+import ${HeaderLayoutPackageName}.${HeaderLayoutClassName};
+import ${HeaderLayoutPackageName}.${HeaderLayoutClassName}.HeaderLayoutMode;
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * A dialog to edit ${ModelClassName} details.
+ *
+ * ${Generated}
+ */
+@Generated
+@Route(${ClassName}.URL)
+@RequiredArgsConstructor
+public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} implements ${DetailsLayoutClassName}.Observer {
+
+	public static final String URL = "${BaseURL}/masterdata/${PluralName}/details";
+
+	private static final Logger logger = LogManager.getLogger(${ClassName}.class);
+
+	private final ${ButtonFactoryClassName} buttonFactory;
+	private final ${ResourceManagerInterfaceName} resourceManager;
+	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
+	private final ${ServiceInterfaceName} service;
+	private final ${SessionDataClassName} session;
+
+	private ${ModelClassName} model;
+
+	@Override
+	protected ${ButtonFactoryClassName} getButtonFactory() {
+		return buttonFactory;
+	}
+
+	@Override
+	protected ${ResourceManagerInterfaceName} getResourceManager() {
+		return resourceManager;
+	}
+
+	@Override
+	protected ${SessionDataClassName} getSessionData() {
+		return session;
+	}
+
+	@Override
+	protected String getTextFieldResourceId() {
+		return "${ClassName}.details.field.{}.label";
+	}
+
+	@Override
+	public void doSetParameter(BeforeEvent event) {
+		long id = parametersMap.containsKey("id") && (parametersMap.get("id").size() > 0)
+				? Long.parseLong(parametersMap.get("id").get(0))
+				: -1;
+		model = service.findById(id).orElse(new ${ModelClassName}());
+	}
+
+	@Override
+	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {
+		${UserAuthorizationCheckerClassName}.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);
+		getStyle().set("background-image", "url('" + guiConfiguration.getBackgroundFileName() + "')");
+		setMargin(false);
+		setWidthFull();
+		${DetailsLayoutClassName} fieldsLayout =
+				new ${DetailsLayoutClassName}(buttonFactory, model, service, resourceManager, session, this);
+		add(
+				new ${HeaderLayoutClassName}(
+						buttonFactory
+										.createBackButton(
+												resourceManager,
+												this::getUI,
+												${PageLayoutClassName}.URL,
+												session),
+						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
+								resourceManager.getLocalizedString("${ClassName}.header.prefix.label", session.getLocalization()) + model.get${HeaderAttributeName}(),
+								HeaderLayoutMode.PLAIN),
+				fieldsLayout);
+	}
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		logger.info("onAttach");
+		super.onAttach(attachEvent);
+	}
+
+	@Override
+	protected void onDetach(DetachEvent detachEvent) {
+		logger.info("onDetach");
+		super.onDetach(detachEvent);
+		getElement().removeFromTree();
+	}
+
+	@Override
+	public void save() {
+		getUI().ifPresent(ui -> ui.navigate(${PageLayoutClassName}.URL));
+	}
+
+	@Override
+	public void remove() {
+		service.delete(model);
+		getUI().ifPresent(ui -> ui.navigate(${PageLayoutClassName}.URL));
+	}
+
+}

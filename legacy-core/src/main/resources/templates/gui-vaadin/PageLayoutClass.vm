@@ -33,6 +33,7 @@ import ${ButtonPackageName}.${ButtonClassName};
 import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
 import ${MasterDataButtonLayoutPackageName}.${MasterDataButtonLayoutClassName};
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
 #if (!$CommentsOff )
@@ -42,6 +43,7 @@ import lombok.RequiredArgsConstructor;
  * ${Generated}
  */
 #end
+@Generated
 @Route(${ClassName}.URL)
 @RequiredArgsConstructor
 public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {
@@ -84,6 +86,10 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 #end
 		grid.setWidthFull();
 		grid.addSelectionListener(this::enabledButtons);
+		grid.getStyle().set("-moz-border-radius", "4px");
+		grid.getStyle().set("-webkit-border-radius", "4px");
+		grid.getStyle().set("border-radius", "4px");
+		grid.getStyle().set("border", "1px solid black");
 		${MasterDataButtonLayoutClassName} buttonLayout = new ${MasterDataButtonLayoutClassName}(buttonAdd, buttonEdit, buttonRemove);
 		buttonLayout.setMargin(false);
 		buttonLayout.setWidthFull();
@@ -106,7 +112,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 				new ${HeaderLayoutClassName}(
 						buttonFactory.createBackButton(resourceManager, this::getUI, ${MasterDataLayoutClassName}.URL, session),
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
-						"${PluralName}",
+						resourceManager.getLocalizedString("${ClassName}.header.label", session.getLocalization()),
 						HeaderLayoutMode.PLAIN),
 				dataLayout);
 		updateGrid(0);

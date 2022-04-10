@@ -64,6 +64,7 @@ public class PageLayoutClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
 					"/**\n" + //
@@ -71,6 +72,7 @@ public class PageLayoutClassCodeGeneratorTest {
 					" *\n" + //
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
+					"@Generated\n" + //
 					"@Route(ATablePageLayout.URL)\n" + //
 					"@RequiredArgsConstructor\n" + //
 					"public class ATablePageLayout extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
@@ -119,6 +121,10 @@ public class PageLayoutClassCodeGeneratorTest {
 					+ //
 					"		grid.setWidthFull();\n" + //
 					"		grid.addSelectionListener(this::enabledButtons);\n" + //
+					"		grid.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
+					"		grid.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
+					"		grid.getStyle().set(\"border-radius\", \"4px\");\n" + //
+					"		grid.getStyle().set(\"border\", \"1px solid black\");\n" + //
 					"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonRemove);\n"
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
@@ -145,7 +151,8 @@ public class PageLayoutClassCodeGeneratorTest {
 					+ //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
-					"						\"atabellen\",\n" + //
+					"						resourceManager.getLocalizedString(\"ATablePageLayout.header.label\", session.getLocalization()),\n"
+					+ //
 					"						HeaderLayoutMode.PLAIN),\n" + //
 					"				dataLayout);\n" + //
 					"		updateGrid(0);\n" + //

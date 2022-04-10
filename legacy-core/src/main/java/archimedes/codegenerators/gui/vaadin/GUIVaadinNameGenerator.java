@@ -18,6 +18,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_BUTTON_CLASS_NAME_SUFFIX = "ALTERNATE_BUTTON_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX =
 			"ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX =
+			"ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_GUI_VAADIN_MODULE_PREFIX = "ALTERNATE_GUI_VAADIN_MODULE_PREFIX";
 	public static final String ALTERNATE_TO_GO_METHOD_NAME = "ALTERNATE_TO_GO_METHOD_NAME";
 	public static final String ALTERNATE_TO_MODEL_METHOD_NAME = "ALTERNATE_TO_MODEL_METHOD_NAME";
@@ -58,6 +60,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 			"ALTERNATE_USER_AUTHORIZATION_CHECKER_PACKAGE_NAME";
 	public static final String ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME = "ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME";
 
+	public String getAbstractMasterDataBaseLayoutClassName() {
+		return "AbstractMasterDataBaseLayout";
+	}
+
 	public String getAbstractMasterDataDetailLayoutClassName() {
 		return "AbstractMasterDataDetailLayout";
 	}
@@ -76,6 +82,17 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return model == null
 				? null
 				: getNameOrAlternativeFromOption(model, "ButtonFactory", ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX);
+	}
+
+	public String getDetailsLayoutClassName(DataModel model, TableModel table) {
+		return table != null ? getClassName(table) + getDetailsLayoutClassNameSuffix(table) : null;
+	}
+
+	private String getDetailsLayoutClassNameSuffix(TableModel table) {
+		return getNameOrAlternativeFromOption(
+				table.getDataModel(),
+				"DetailsLayout",
+				ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX);
 	}
 
 	public String getGOClassName(TableModel table) {
