@@ -2,9 +2,11 @@ package ${PackageName};
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
@@ -30,6 +32,7 @@ import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassNam
 import ${ButtonPackageName}.${ButtonClassName};
 import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
 import ${MasterDataButtonLayoutPackageName}.${MasterDataButtonLayoutClassName};
+import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
 import lombok.RequiredArgsConstructor;
 
 #if (!$CommentsOff )
@@ -43,11 +46,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {
 
-	public static final String URL = "${BaseURL}/masterdata/${URLSuffix}";
+	public static final String URL = "${BaseURL}/masterdata/${PluralName}";
 
 	private static final Logger logger = LogManager.getLogger(${ClassName}.class);
 
+	@Autowired(required = false)
+	private MasterDataGridFieldRenderer<${ModelClassName}> masterDataGridFieldRenderer;
+
+	private final ${ButtonFactoryClassName} buttonFactory;
 	private final ${ResourceManagerInterfaceName} resourceManager;
+	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final ${ServiceInterfaceName} service;
 	private final ${SessionDataClassName} session;
 
@@ -64,15 +72,15 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	@Override
 	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
 		${UserAuthorizationCheckerClassName}.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);
-		getStyle().set("background-image", "url('${BackgroundImageName}')");
-		buttonAdd = ${ButtonFactoryClassName}.createAddButton(resourceManager, event -> addRecord(), session);
-		buttonEdit = ${ButtonFactoryClassName}.createEditButton(resourceManager, event -> editRecord(), session);
-		buttonRemove = ${ButtonFactoryClassName}.createRemoveButton(resourceManager, event -> removeRecord(), session);
+		getStyle().set("background-image", "url('" + guiConfiguration.getBackgroundFileName() + "')");
+		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);
+		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);
+		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);
 		grid = new Grid<>();
 #foreach($Column in $GridData)
 		grid
-				.addColumn(${ModelClassName}::get${FieldNameCamilCase})
-				.setHeader(resourceManager.getLocalizedString("${PluralName}.toLowerCase().grid.header.${ResourceName}", session.getLocalization()));
+				.addColumn(model -> getHeaderString("${Column.getFieldNameCamelCase().toUpperCase()}", model, () -> model.get${Column.getFieldNameCamelCase()}()))
+				.setHeader(resourceManager.getLocalizedString("${ClassName}.grid.header.${Column.getResourceName()}.label", session.getLocalization()));
 #end
 		grid.setWidthFull();
 		grid.addSelectionListener(this::enabledButtons);
@@ -96,14 +104,20 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		dataLayout.add(grid, buttonLayout);
 		add(
 				new ${HeaderLayoutClassName}(
-						${ButtonFactoryClassName}.createBackButton(resourceManager, this::getUI, ${MasterDataLayoutClassName}.URL, session),
-						${ButtonFactoryClassName}.createLogoutButton(resourceManager, this::getUI, session, logger),
+						buttonFactory.createBackButton(resourceManager, this::getUI, ${MasterDataLayoutClassName}.URL, session),
+						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
 						"${PluralName}",
 						HeaderLayoutMode.PLAIN),
 				dataLayout);
 		updateGrid(0);
 		setButtonEnabled(buttonEdit, false);
 		setButtonEnabled(buttonRemove, false);
+	}
+
+	private Object getHeaderString(String fieldName, ${ModelClassName} aTable, Supplier<?> f) {
+		return masterDataGridFieldRenderer != null && masterDataGridFieldRenderer.hasRenderingFor(fieldName)
+				? masterDataGridFieldRenderer.getHeaderString(fieldName, aTable)
+				: f.get();
 	}
 
 	private void enabledButtons(SelectionEvent<Grid<${ModelClassName}>, ${ModelClassName}> event) {
@@ -121,11 +135,11 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	private void setButtonEnabled(${ButtonClassName} button, boolean enabled) {
 		button.setEnabled(enabled);
 		if (enabled) {
-			button.setBackgroundImage("${ButtonBackGround}");
-			button.setBorderColor("${ButtonBorderColor}");
+			button.setBackgroundImage(guiConfiguration.getButtonEnabledBackgroundFileName());
+			button.setBorderColor(guiConfiguration.getButtonEnabledBorderColor());
 		} else {
-			button.setBackgroundImage("${ButtonBackGroundDisabled}");
-			button.setBorderColor("${ButtonBorderColorDisabled}");
+			button.setBackgroundImage(guiConfiguration.getButtonDisabledBackgroundFileName());
+			button.setBorderColor(guiConfiguration.getButtonDisabledBorderColor());
 		}
 	}
 

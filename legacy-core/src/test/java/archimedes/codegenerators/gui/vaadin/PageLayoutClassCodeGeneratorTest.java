@@ -14,7 +14,7 @@ import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
 public class PageLayoutClassCodeGeneratorTest {
-	
+
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
@@ -28,16 +28,16 @@ public class PageLayoutClassCodeGeneratorTest {
 	@Nested
 	class TestsOfMethod_generate_String_TableModel {
 
-		@Test
-		void happyRunForASimpleObject() {
-			// Prepare
-			String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+		private String getExpected() {
+			return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 					"\n" + //
 					"import java.util.List;\n" + //
 					"import java.util.Map;\n" + //
+					"import java.util.function.Supplier;\n" + //
 					"\n" + //
 					"import org.apache.logging.log4j.LogManager;\n" + //
 					"import org.apache.logging.log4j.Logger;\n" + //
+					"import org.springframework.beans.factory.annotation.Autowired;\n" + //
 					"\n" + //
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
@@ -56,13 +56,14 @@ public class PageLayoutClassCodeGeneratorTest {
 					"import base.pack.age.name.core.model.PageParameters;\n" + //
 					"import base.pack.age.name.core.service.ATableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
-			        "import base.pack.age.name.gui.vaadin.SessionData;\n" + //
-			        "import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
-			        "import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
-					"import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};\n" + //
+					"import base.pack.age.name.gui.SessionData;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
+					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.Button;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
-			        "import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
+					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
 					"/**\n" + //
@@ -75,14 +76,18 @@ public class PageLayoutClassCodeGeneratorTest {
 					"public class ATablePageLayout extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 					+ //
 					"\n" + //
-					"	public static final String URL = \"carp-dnd/masterdata/atables\";\n" + //
+					"	public static final String URL = \"carp-dnd/masterdata/atabellen\";\n" + //
 					"\n" + //
 					"	private static final Logger logger = LogManager.getLogger(ATablePageLayout.class);\n" + //
 					"\n" + //
+					"	@Autowired(required = false)\n" + //
+					"	private MasterDataGridFieldRenderer<ATable> masterDataGridFieldRenderer;\n" + //
+					"\n" + //
+					"	private final ButtonFactory buttonFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
+					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 					"	private final ATableService service;\n" + //
-			        "	private final SessionData session;\n"
-			        + //
+					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private Button buttonAdd;\n" + //
 					"	private Button buttonEdit;\n" + //
@@ -96,19 +101,25 @@ public class PageLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
-					"		${UserAuthorizationCheckerClassName}.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n"
+					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n"
 					+ //
-					"		getStyle().set(\"background-image\", \"url('${BackgroundImageName}')\");\n" + //
-					"		buttonAdd = ButtonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
+					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
-					"		buttonEdit = ButtonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
+					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
-					"		buttonRemove = ButtonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);\n"
+					"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
+					+ //
+					"		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);\n"
 					+ //
 					"		grid = new Grid<>();\n" + //
+					"		grid\n" + //
+					"				.addColumn(model -> getHeaderString(\"DESCRIPTION\", model, () -> model.getDescription()))\n"
+					+ //
+					"				.setHeader(resourceManager.getLocalizedString(\"ATablePageLayout.grid.header.description.label\", session.getLocalization()));\n"
+					+ //
 					"		grid.setWidthFull();\n" + //
 					"		grid.addSelectionListener(this::enabledButtons);\n" + //
-			        "		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonRemove);\n"
+					"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonRemove);\n"
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
 					"		buttonLayout.setWidthFull();\n" + //
@@ -129,13 +140,12 @@ public class PageLayoutClassCodeGeneratorTest {
 					"		dataLayout.setWidthFull();\n" + //
 					"		dataLayout.add(grid, buttonLayout);\n" + //
 					"		add(\n" + //
-			        "				new HeaderLayout(\n"
-			        + //
-					"						ButtonFactory.createBackButton(resourceManager, this::getUI, ${MasterDataLayoutClassName}.URL, session),\n"
+					"				new HeaderLayout(\n" + //
+					"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataLayout.URL, session),\n"
 					+ //
-					"						ButtonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
+					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
-					"						\"atables\",\n" + //
+					"						\"atabellen\",\n" + //
 					"						HeaderLayoutMode.PLAIN),\n" + //
 					"				dataLayout);\n" + //
 					"		updateGrid(0);\n" + //
@@ -143,8 +153,14 @@ public class PageLayoutClassCodeGeneratorTest {
 					"		setButtonEnabled(buttonRemove, false);\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	private void enabledButtons(SelectionEvent<Grid<ATable>, ATable> event) {\n"
+					"	private Object getHeaderString(String fieldName, ATable aTable, Supplier<?> f) {\n" + //
+					"		return masterDataGridFieldRenderer != null && masterDataGridFieldRenderer.hasRenderingFor(fieldName)\n"
 					+ //
+					"				? masterDataGridFieldRenderer.getHeaderString(fieldName, aTable)\n" + //
+					"				: f.get();\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private void enabledButtons(SelectionEvent<Grid<ATable>, ATable> event) {\n" + //
 					"		if (event.getFirstSelectedItem().isEmpty()) {\n" + //
 					"			setButtonEnabled(buttonAdd, true);\n" + //
 					"			setButtonEnabled(buttonEdit, false);\n" + //
@@ -159,18 +175,17 @@ public class PageLayoutClassCodeGeneratorTest {
 					"	private void setButtonEnabled(Button button, boolean enabled) {\n" + //
 					"		button.setEnabled(enabled);\n" + //
 					"		if (enabled) {\n" + //
-					"			button.setBackgroundImage(\"${ButtonBackGround}\");\n" + //
-					"			button.setBorderColor(\"${ButtonBorderColor}\");\n" + //
+					"			button.setBackgroundImage(guiConfiguration.getButtonEnabledBackgroundFileName());\n" + //
+					"			button.setBorderColor(guiConfiguration.getButtonEnabledBorderColor());\n" + //
 					"		} else {\n" + //
-					"			button.setBackgroundImage(\"${ButtonBackGroundDisabled}\");\n" + //
-					"			button.setBorderColor(\"${ButtonBorderColorDisabled}\");\n" + //
+					"			button.setBackgroundImage(guiConfiguration.getButtonDisabledBackgroundFileName());\n" + //
+					"			button.setBorderColor(guiConfiguration.getButtonDisabledBorderColor());\n" + //
 					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
 					"	protected void onAttach(AttachEvent attachEvent) {\n" + //
-					"		logger.info(\"ATable page layout opened for user '{}'.\", session.getUserName());\n"
-					+ //
+					"		logger.info(\"ATable page layout opened for user '{}'.\", session.getUserName());\n" + //
 					"		super.onAttach(attachEvent);\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -191,14 +206,14 @@ public class PageLayoutClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private void addRecord() {\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(${MaintenanceLayoutClassName}.URL));\n" + //
+					"		getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceLayout.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private void editRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
 					"			QueryParameters parameters = new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId())));\n"
 					+ //
-					"			getUI().ifPresent(ui -> ui.navigate(${MaintenanceLayoutClassName}.URL, parameters));\n"
+					"			getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceLayout.URL, parameters));\n"
 					+ //
 					"		});\n" + //
 					"	}\n" + //
@@ -211,6 +226,12 @@ public class PageLayoutClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"}";
+		}
+
+		@Test
+		void happyRunForASimpleObject() {
+			// Prepare
+			String expected = getExpected();
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));

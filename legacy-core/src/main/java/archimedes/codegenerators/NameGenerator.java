@@ -204,6 +204,21 @@ public class NameGenerator {
 				: OptionGetter.getParameterOfOptionByName(model, alternateOptionName).map(s -> s).orElse(defaultName);
 	}
 
+	protected String getNameOrAlternativeFromOption(OptionListProvider optionListProvider, String defaultName,
+			String alternateOptionName) {
+		return optionListProvider == null
+				? defaultName
+				: OptionGetter
+						.getParameterOfOptionByName(optionListProvider, alternateOptionName)
+						.map(s -> s)
+						.orElse(defaultName);
+	}
+
+	public String getOptionValueOrDefault(DataModel model, TableModel table, String defaultName, String optionName) {
+		defaultName = getNameOrAlternativeFromOption(model, defaultName, optionName);
+		return table == null ? defaultName : getNameOrAlternativeFromOption(table, defaultName, optionName);
+	}
+
 	protected String getPluralName(TableModel table) {
 		OptionModel pluralName = table.getOptionByName(PLURAL_NAME);
 		if (pluralName != null) {
@@ -251,8 +266,7 @@ public class NameGenerator {
 				? getBasePackageNameWithDotExtension(
 						model,
 						optionListProvider,
-						prefix.isEmpty() && packageName.isEmpty()) + prefix
-						+ packageName
+						prefix.isEmpty() && packageName.isEmpty()) + prefix + packageName
 				: null;
 	}
 

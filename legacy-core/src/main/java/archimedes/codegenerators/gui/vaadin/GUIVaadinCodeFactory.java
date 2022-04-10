@@ -37,6 +37,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new GOClassCodeGenerator(this),
 						// new GOConverterClassCodeGenerator(this),
 						new ImageClassCodeGenerator(this),
+						new PageLayoutClassCodeGenerator(null),
 						// new PageGOClassCodeGenerator(this),
 						// new PageParametersGOClassCodeGenerator(this),
 						// new PageParametersGOConverterClassCodeGenerator(this),
@@ -91,6 +92,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 			return new String[] {
 					AbstractClassCodeFactory.NO_GENERATION,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
+					PageLayoutClassCodeGenerator.GENERATE_MASTER_DATA_GUI,
 					NameGenerator.MODULE,
 					AbstractClassCodeGenerator.POJO_MODE };
 		default:

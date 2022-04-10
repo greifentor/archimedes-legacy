@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import archimedes.codegenerators.NameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -40,9 +41,7 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getAbstractMasterDataDetailLayoutClassName_returnsTheCorrectClassName() {
-			assertEquals(
-					"AbstractMasterDataDetailLayout",
-					unitUnderTest.getAbstractMasterDataDetailLayoutClassName());
+			assertEquals("AbstractMasterDataDetailLayout", unitUnderTest.getAbstractMasterDataDetailLayoutClassName());
 		}
 
 	}
@@ -421,7 +420,7 @@ public class GUIVaadinNameGeneratorTest {
 			// Prepare
 			String expected = "AnotherHeaderLayout";
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX))
-			        .thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX, expected));
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX, expected));
 			// Run
 			String returned = unitUnderTest.getHeaderLayoutClassName(model);
 			// Check
@@ -447,8 +446,8 @@ public class GUIVaadinNameGeneratorTest {
 		void getHeaderLayoutPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
 			// Prepare
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME))
-			        .thenReturn(
-			                new Option(GUIVaadinNameGenerator.ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME, "vaadin.mapper"));
+					.thenReturn(
+							new Option(GUIVaadinNameGenerator.ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME, "vaadin.mapper"));
 			// Run & Check
 			assertEquals("vaadin.mapper", unitUnderTest.getHeaderLayoutPackageName(model));
 		}
@@ -488,6 +487,204 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class MaintenanceLayoutClassNameTests {
+
+		@Test
+		void getMaintenanceLayoutClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getMaintenanceLayoutClassName(model, table);
+			});
+		}
+
+		@Test
+		void getMaintenanceLayoutClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getMaintenanceLayoutClassName(model, null));
+		}
+
+		@Test
+		void getMaintenanceLayoutClassName_PassTableModelWithNameCamelCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TestTableMaintenanceLayout";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutClassName_PassTableModelWithNameUpperCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableMaintenanceLayout";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNameMaintenanceLayout";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNameMaintenanceLayout";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNameMaintenanceLayout";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutClassName_PassTableModelWithNameLowerCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableMaintenanceLayout";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TMaintenanceLayout";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TMaintenanceLayout";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutClassName_PassDataModelWithALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableGO";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			doReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIX, "GO"))
+					.when(model)
+					.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIX);
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class MaintenanceLayoutPackageNameTests {
+
+		@Test
+		void getMaintenanceLayoutPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getMaintenanceLayoutPackageName(null, table));
+		}
+
+		@Test
+		void getMaintenanceLayoutPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin.masterdata", unitUnderTest.getMaintenanceLayoutPackageName(model, null));
+		}
+
+		@Test
+		void getMaintenanceLayoutPackageName_PassAValidTableModel_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = "gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = "gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutPackageName_PassAValidTableModelWithMODULEOption_ReturnsACorrecGOName() {
+			// Prepare
+			String prefix = "prefix";
+			String expected = "prefix.gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn(null);
+			when(table.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
+					.thenReturn(
+							new Option(
+									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
+									prefix));
+			// Run
+			String returned = unitUnderTest.getMaintenanceLayoutPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceLayoutPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MAINTENANCE_LAYOUT_PACKAGE_NAME))
+					.thenReturn(
+							new Option(GUIVaadinNameGenerator.ALTERNATE_MAINTENANCE_LAYOUT_PACKAGE_NAME, "vaadin.gos"));
+			// Run & Check
+			assertEquals("vaadin.gos", unitUnderTest.getMaintenanceLayoutPackageName(model, table));
+		}
+
+	}
+
+	@Nested
 	class MasterDataButtonLayoutClassNameTests {
 
 		@Test
@@ -510,10 +707,10 @@ public class GUIVaadinNameGeneratorTest {
 			// Prepare
 			String expected = "AnotherMasterDataButtonLayout";
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX))
-			        .thenReturn(
-			                new Option(
-			                        GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX,
-			                        expected));
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX,
+									expected));
 			// Run
 			String returned = unitUnderTest.getMasterDataButtonLayoutClassName(model);
 			// Check
@@ -539,10 +736,10 @@ public class GUIVaadinNameGeneratorTest {
 		void getMasterDataButtonLayoutPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
 			// Prepare
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME))
-			        .thenReturn(
-			                new Option(
-			                        GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME,
-			                        "vaadin.mapper"));
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME,
+									"vaadin.mapper"));
 			// Run & Check
 			assertEquals("vaadin.mapper", unitUnderTest.getMasterDataButtonLayoutPackageName(model));
 		}
@@ -594,6 +791,130 @@ public class GUIVaadinNameGeneratorTest {
 									"gui.vaadin.mapper"));
 			// Run & Check
 			assertEquals("gui.vaadin.mapper", unitUnderTest.getPageGOConverterPackageName(model, table));
+		}
+
+	}
+
+	@Nested
+	class MasterDataGUIConfigurationClassNameTests {
+
+		@Test
+		void getMasterDataGUIConfigurationClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getMasterDataGUIConfigurationClassName(null));
+		}
+
+		@Test
+		void getMasterDataGUIConfigurationClassName_passAValidModel_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "MasterDataGUIConfiguration";
+			// Run
+			String returned = unitUnderTest.getMasterDataGUIConfigurationClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMasterDataGUIConfigurationClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherMasterDataGUIConfiguration";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_CLASS_NAME))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_CLASS_NAME,
+									expected));
+			// Run
+			String returned = unitUnderTest.getMasterDataGUIConfigurationClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class MasterDataGUIConfigurationPackageNameTests {
+
+		@Test
+		void getMasterDataGUIConfigurationPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getMasterDataGUIConfigurationPackageName(null));
+		}
+
+		@Test
+		void getMasterDataGUIConfigurationPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin.masterdata", unitUnderTest.getMasterDataGUIConfigurationPackageName(model));
+		}
+
+		@Test
+		void getMasterDataGUIConfigurationPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_PACKAGE_NAME,
+									"vaadin.mapper"));
+			// Run & Check
+			assertEquals("vaadin.mapper", unitUnderTest.getMasterDataGUIConfigurationPackageName(model));
+		}
+
+	}
+
+	@Nested
+	class MasterDataLayoutClassNameTests {
+
+		@Test
+		void getMasterDataLayoutClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getMasterDataLayoutClassName(null));
+		}
+
+		@Test
+		void getMasterDataLayoutClassName_passAValidModel_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "MasterDataLayout";
+			// Run
+			String returned = unitUnderTest.getMasterDataLayoutClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMasterDataLayoutClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherMasterDataLayout";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_LAYOUT_CLASS_NAME))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_LAYOUT_CLASS_NAME,
+									expected));
+			// Run
+			String returned = unitUnderTest.getMasterDataLayoutClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class MasterDataLayoutPackageNameTests {
+
+		@Test
+		void getMasterDataLayoutPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getMasterDataLayoutPackageName(null));
+		}
+
+		@Test
+		void getMasterDataLayoutPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin.masterdata", unitUnderTest.getMasterDataLayoutPackageName(model));
+		}
+
+		@Test
+		void getMasterDataLayoutPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_LAYOUT_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_LAYOUT_PACKAGE_NAME,
+									"vaadin.mapper"));
+			// Run & Check
+			assertEquals("vaadin.mapper", unitUnderTest.getMasterDataLayoutPackageName(model));
 		}
 
 	}
@@ -938,6 +1259,45 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class PluralNameClassNameTests {
+
+		@Test
+		void passANullValue_returnsANullValue() {
+			assertNull(unitUnderTest.getPluralName(null));
+		}
+
+		@Test
+		void passATableWithNoConfiguration_returnsAnEnglishDefault() {
+			// Prepare
+			String name = "name";
+			when(table.getName()).thenReturn(name);
+			// Run & Check
+			assertEquals(name + "s", unitUnderTest.getPluralName(table));
+		}
+
+		@Test
+		void passATableWithNoConfiguration_nameEndsOnY_returnsACorrectEnglishPlural() {
+			// Prepare
+			String name = "bunny";
+			when(table.getName()).thenReturn(name);
+			// Run & Check
+			assertEquals(name.replace("y", "ies"), unitUnderTest.getPluralName(table));
+		}
+
+		@Test
+		void passATableWithConfiguration_returnsTheConfiguredValue() {
+			// Prepare
+			String name = "configuredValue";
+			when(table.isOptionSet(NameGenerator.PLURAL_NAME)).thenReturn(true);
+			when(table.getOptionByName(NameGenerator.PLURAL_NAME))
+					.thenReturn(new Option(NameGenerator.PLURAL_NAME, name));
+			// Run & Check
+			assertEquals(name, unitUnderTest.getPluralName(table));
+		}
+
+	}
+
+	@Nested
 	class SessionDataClassNameTests {
 
 		@Test
@@ -960,7 +1320,7 @@ public class GUIVaadinNameGeneratorTest {
 			// Prepare
 			String expected = "AnotherSessionData";
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX))
-			        .thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX, expected));
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX, expected));
 			// Run
 			String returned = unitUnderTest.getSessionDataClassName(model);
 			// Check
@@ -979,15 +1339,15 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getSessionDataPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("gui.vaadin", unitUnderTest.getSessionDataPackageName(model));
+			assertEquals("gui", unitUnderTest.getSessionDataPackageName(model));
 		}
 
 		@Test
 		void getSessionDataPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
 			// Prepare
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_SESSION_DATA_PACKAGE_NAME))
-			        .thenReturn(
-			                new Option(GUIVaadinNameGenerator.ALTERNATE_SESSION_DATA_PACKAGE_NAME, "vaadin.mapper"));
+					.thenReturn(
+							new Option(GUIVaadinNameGenerator.ALTERNATE_SESSION_DATA_PACKAGE_NAME, "vaadin.mapper"));
 			// Run & Check
 			assertEquals("vaadin.mapper", unitUnderTest.getSessionDataPackageName(model));
 		}
@@ -1043,6 +1403,68 @@ public class GUIVaadinNameGeneratorTest {
 			String returned = unitUnderTest.getToGOConverterInterfaceName(table);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class UserAuthorizationCheckerClassNameTests {
+
+		@Test
+		void getUserAuthorizationCheckerClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getUserAuthorizationCheckerClassName(null));
+		}
+
+		@Test
+		void getUserAuthorizationCheckerClassName_passAValidModel_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "UserAuthorizationChecker";
+			// Run
+			String returned = unitUnderTest.getUserAuthorizationCheckerClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getUserAuthorizationCheckerClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherUserAuthorizationChecker";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_USER_AUTHORIZATION_CHECKER_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_USER_AUTHORIZATION_CHECKER_CLASS_NAME_SUFFIX,
+									expected));
+			// Run
+			String returned = unitUnderTest.getUserAuthorizationCheckerClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class UserAuthorizationCheckerPackageNameTests {
+
+		@Test
+		void getUserAuthorizationCheckerPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getUserAuthorizationCheckerPackageName(null));
+		}
+
+		@Test
+		void getUserAuthorizationCheckerPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin", unitUnderTest.getUserAuthorizationCheckerPackageName(model));
+		}
+
+		@Test
+		void getUserAuthorizationCheckerPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_USER_AUTHORIZATION_CHECKER_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_USER_AUTHORIZATION_CHECKER_PACKAGE_NAME,
+									"vaadin.mapper"));
+			// Run & Check
+			assertEquals("vaadin.mapper", unitUnderTest.getUserAuthorizationCheckerPackageName(model));
 		}
 
 	}
