@@ -1,0 +1,115 @@
+package ${PackageName};
+
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextField;
+
+import ${ModelPackageName}.${ModelClassName};
+import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
+import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
+import ${SessionDataPackageName}.${SessionDataClassName};
+import ${AbstractMasterDataBaseLayoutPackageName}.${AbstractMasterDataBaseLayoutClassName};
+import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * ${Generated}
+ */
+@Generated
+@RequiredArgsConstructor
+public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
+
+	public interface Observer {
+		void save();
+
+		void remove();
+	}
+
+	private final ${ButtonFactoryClassName} buttonFactory;
+	private final ${ModelClassName} model;
+	private final ${ServiceInterfaceName} service;
+	private final ${ResourceManagerInterfaceName} resourceManager;
+	private final ${SessionDataClassName} session;
+	private final Observer observer;
+
+#foreach ($Column in $GUIColumnData)
+#if (${Column.getType()} == "INTEGER")
+	private IntegerField integerField${Column.getFieldNameCamelCase()};
+#else
+	private TextField textField${Column.getFieldNameCamelCase()};
+#end
+#end
+
+	@Override
+	public void onAttach(AttachEvent attachEvent) {
+		super.onAttach(attachEvent);
+		createButtons();
+#foreach ($Column in $GUIColumnData)
+#if (${Column.getType()} == "INTEGER")
+		integerField${Column.getFieldNameCamelCase()} = createIntegerField("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}(), ${Column.getMin()}, ${Column.getMax()});
+#else
+		textField${Column.getFieldNameCamelCase()} = createTextField("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}());
+#end
+#end
+		getStyle().set("-moz-border-radius", "4px");
+		getStyle().set("-webkit-border-radius", "4px");
+		getStyle().set("border-radius", "4px");
+		getStyle().set("border", "1px solid gray");
+		getStyle()
+				.set(
+						"box-shadow",
+						"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4");
+		setMargin(false);
+		setWidthFull();
+		add(
+#foreach ($Column in $GUIColumnData)
+#if (${Column.getType()} == "INTEGER")
+				integerField${Column.getFieldNameCamelCase()},
+#else
+				textField${Column.getFieldNameCamelCase()},
+#end
+#end
+				getMasterDataButtonLayout(model.getId() > 0));
+	}
+
+	@Override
+	protected ${ButtonFactoryClassName} getButtonFactory() {
+		return buttonFactory;
+	}
+
+	@Override
+	protected ${ResourceManagerInterfaceName} getResourceManager() {
+		return resourceManager;
+	}
+
+	@Override
+	protected ${SessionDataClassName} getSessionData() {
+		return session;
+	}
+
+	@Override
+	protected String getTextFieldResourceId() {
+		return "${ClassName}.details.field.{}.label";
+	}
+
+	@Override
+	protected void remove() {
+		service.delete(model);
+		observer.remove();
+	}
+
+	@Override
+	protected void save() {
+#foreach ($Column in $GUIColumnData)
+#if (${Column.getType()} == "INTEGER")
+		model.set${Column.getFieldNameCamelCase()}(integerField${Column.getFieldNameCamelCase()}.getValue());
+#else
+		model.set${Column.getFieldNameCamelCase()}(textField${Column.getFieldNameCamelCase()}.getValue());
+#end
+#end
+		service.update(model);
+		observer.save();
+	}
+
+}

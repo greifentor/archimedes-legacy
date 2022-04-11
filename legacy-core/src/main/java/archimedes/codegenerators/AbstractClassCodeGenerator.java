@@ -34,6 +34,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String INHERITANCE_MODE_JOINED = "JOINED";
 	public static final String LIST_ACCESS = "LIST_ACCESS";
 	public static final String MAPPERS = "MAPPERS";
+	public static final String MAX = "MAX";
+	public static final String MIN = "MIN";
 	public static final String POJO_MODE = "POJO_MODE";
 	public static final String POJO_MODE_BUILDER = "BUILDER";
 	public static final String POJO_MODE_CHAIN = "CHAIN";
