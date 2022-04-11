@@ -36,9 +36,10 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new ButtonClassCodeGenerator(this),
 						// new GOClassCodeGenerator(this),
 						// new GOConverterClassCodeGenerator(this),
+						new DetailsLayoutClassCodeGenerator(this),
 						new ImageClassCodeGenerator(this),
-						new MaintenanceLayoutClassCodeGenerator(null),
-						new PageLayoutClassCodeGenerator(null),
+						new MaintenanceLayoutClassCodeGenerator(this),
+						new PageLayoutClassCodeGenerator(this),
 						// new PageGOClassCodeGenerator(this),
 						// new PageParametersGOClassCodeGenerator(this),
 						// new PageParametersGOConverterClassCodeGenerator(this),
@@ -67,7 +68,8 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 	public String[] getSelectableOptions(OptionType optionType) {
 		switch (optionType) {
 		case COLUMN:
-			return new String[0];
+			return new String[] {
+					PageLayoutClassCodeGenerator.GUI_EDITOR_POS};
 		case MODEL:
 			return new String[] {
 					GUIVaadinNameGenerator.ALTERNATE_GUI_VAADIN_MODULE_PREFIX,

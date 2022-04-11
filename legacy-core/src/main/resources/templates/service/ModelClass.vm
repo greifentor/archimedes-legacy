@@ -52,6 +52,12 @@ public class ${ClassName} #if($Subclass)extends ${SuperclassName} #end{
 
 #foreach($Column in $ColumnData)
 #if(!${Subclass} or !${Column.isPkMember()})
+	public static final String ${Column.getFieldName().toUpperCase()} = "${Column.getFieldName().toUpperCase()}";
+#end
+#end
+
+#foreach($Column in $ColumnData)
+#if(!${Subclass} or !${Column.isPkMember()})
 	private ${Column.getFieldType()} ${Column.getFieldName()};
 #end
 #end

@@ -80,6 +80,10 @@ class ModelClassCodeGeneratorTest {
 					"@Generated\n" + //
 					"public class ATable {\n" + //
 					"\n" + //
+					"	public static final String ID = \"ID\";\n" + //
+					"	public static final String ADATE = \"ADATE\";\n" + //
+					"	public static final String DESCRIPTION = \"DESCRIPTION\";\n" + //
+					"\n" + //
 					"	private Long id;\n" + //
 					"	private LocalDate aDate;\n" + //
 					"	private String description;\n" + //
@@ -179,6 +183,10 @@ class ModelClassCodeGeneratorTest {
 					"@Generated\n" + //
 					"public class ATable {\n" + //
 					"\n" + //
+					"	public static final String ID = \"ID\";\n" + //
+					"	public static final String ADATE = \"ADATE\";\n" + //
+					"	public static final String DESCRIPTION = \"DESCRIPTION\";\n" + //
+					"\n" + //
 					"	private Long id;\n" + //
 					"	private LocalDate aDate;\n" + //
 					"	private String description;\n" + //
@@ -254,6 +262,9 @@ class ModelClassCodeGeneratorTest {
 						"@ToString(callSuper = true)\n" + //
 						"public class ATable extends AnotherTable {\n" + //
 						"\n" + //
+						"	public static final String ADATE = \"ADATE\";\n" + //
+						"	public static final String DESCRIPTION = \"DESCRIPTION\";\n" + //
+						"\n" + //
 						"	private LocalDate aDate;\n" + //
 						"	private String description;\n" + //
 						"\n" + //
@@ -302,6 +313,10 @@ class ModelClassCodeGeneratorTest {
 								"@Data\n" + //
 								"@Generated\n" + //
 								"public class ATable {\n" + //
+								"\n" + //
+								"	public static final String ID = \"ID\";\n" + //
+								"	public static final String ADATE = \"ADATE\";\n" + //
+								"	public static final String DESCRIPTION = \"DESCRIPTION\";\n" + //
 								"\n" + //
 								"	private Long id;\n" + //
 								"	private LocalDate aDate;\n" + //
