@@ -73,7 +73,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"@RequestMapping(ATableRESTController.BASE_URL)\n" + //
 					"public class ATableRESTController {\n" + //
 					"\n" + //
-					"	public static final String BASE_URL = \"api/v1/atables\";\n" + //
+			        "	public static final String BASE_URL = \"api/v1/atabellen\";\n" + //
 					"\n" + //
 					"	@Inject\n" + //
 					"	private ATableService service;\n" + //
@@ -142,7 +142,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"@RequestMapping(ATableRESTController.BASE_URL)\n" + //
 					"public class ATableRESTController {\n" + //
 					"\n" + //
-					"	public static final String BASE_URL = \"api/v1/atables\";\n" + //
+			        "	public static final String BASE_URL = \"api/v1/atabellen\";\n" + //
 					"\n" + //
 					"	@Inject\n" + //
 					"	private ATableService service;\n" + //
@@ -204,7 +204,7 @@ public class RESTControllerSpringBootClassCodeGeneratorTest {
 					"@RequestMapping(ATableRESTController.BASE_URL)\n" + //
 					"public class ATableRESTController {\n" + //
 					"\n" + //
-					"	public static final String BASE_URL = \"api/v1/atables\";\n" + //
+			        "	public static final String BASE_URL = \"api/v1/atabellen\";\n" + //
 					"\n" + //
 					"	@Inject\n" + //
 					"	private ATableService service;\n" + //
