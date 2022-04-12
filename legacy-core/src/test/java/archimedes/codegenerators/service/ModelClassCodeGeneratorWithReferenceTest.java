@@ -74,6 +74,9 @@ class ModelClassCodeGeneratorWithReferenceTest {
 					"@Generated\n" + //
 					"public class ATable {\n" + //
 					"\n" + //
+					"	public static final String ID = \"ID\";\n" + //
+					"	public static final String REF = \"REF\";\n" + //
+					"\n" + //
 					"	private Long id;\n";
 			if (refMode) {
 				s += "	private AnotherTable ref;\n";
@@ -191,6 +194,9 @@ class ModelClassCodeGeneratorWithReferenceTest {
 					"@Data\n" + //
 					"@Generated\n" + //
 					"public class ATable {\n" + //
+					"\n" + //
+					"	public static final String ID = \"ID\";\n" + //
+					"	public static final String REF = \"REF\";\n" + //
 					"\n" + //
 					"	private Long id;\n" + //
 					"	private Long ref;\n" + //

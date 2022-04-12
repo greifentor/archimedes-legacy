@@ -5,11 +5,7 @@ import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
-import archimedes.codegenerators.TypeGenerator;
-import archimedes.codegenerators.localization.LocalizationNameGenerator;
-import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -19,33 +15,17 @@ import archimedes.model.TableModel;
  *
  * @author ollie (07.04.2022)
  */
-public class MaintenanceLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
-
-	public static final String NAME_FIELD = "NAME_FIELD";
-
-	private static final LocalizationNameGenerator localizationNameGenerator = new LocalizationNameGenerator();
-	private static final ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
+public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
 
 	public MaintenanceLayoutClassCodeGenerator(AbstractCodeFactory codeFactory) {
-		super(
-				"MaintenanceLayoutClass.vm",
-				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
-				GUIVaadinNameGenerator.INSTANCE,
-				TypeGenerator.INSTANCE,
-				codeFactory);
+		super("MaintenanceLayoutClass.vm", codeFactory);
 	}
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		context.put("BaseURL", getBaseURL(model, table));
-		context
-				.put(
-						"AbstractMasterDataBaseLayoutClassName",
-						nameGenerator.getAbstractMasterDataBaseLayoutClassName());
-		context
-				.put(
-						"AbstractMasterDataBaseLayoutPackageName",
-						nameGenerator.getVaadinComponentPackageName(model));
+		context.put("AbstractMasterDataBaseLayoutClassName", nameGenerator.getAbstractMasterDataBaseLayoutClassName());
+		context.put("AbstractMasterDataBaseLayoutPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));
 		context.put("ButtonFactoryClassName", nameGenerator.getButtonFactoryClassName(model));
 		context.put("ButtonFactoryPackageName", nameGenerator.getVaadinComponentPackageName(model));
@@ -54,14 +34,12 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractClassCodeGenera
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DetailsLayoutClassName", nameGenerator.getDetailsLayoutClassName(model, table));
 		context.put("GridData", getGridData(table));
+		context.put("GUIReferences", getGUIReferenceData(table));
 		context.put("HeaderLayoutClassName", nameGenerator.getHeaderLayoutClassName(model));
 		context.put("HeaderLayoutPackageName", nameGenerator.getHeaderLayoutPackageName(model));
-		context.put("HeaderAttributeName", getHeaderAttributeName(table));
+		context.put("HeaderAttributeName", getNameFieldName(table));
 		context.put("MaintenanceLayoutClassName", nameGenerator.getMaintenanceLayoutClassName(model, table));
-		context
-				.put(
-						"MasterDataGUIConfigurationClassName",
-						nameGenerator.getMasterDataGUIConfigurationClassName(model));
+		context.put("MasterDataGUIConfigurationClassName", nameGenerator.getMasterDataGUIConfigurationClassName(model));
 		context
 				.put(
 						"MasterDataGUIConfigurationPackageName",
@@ -119,16 +97,6 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractClassCodeGenera
 
 	private String getResourceName(ColumnModel column) {
 		return nameGenerator.getCamelCase(column.getName()).toLowerCase();
-	}
-
-	private String getHeaderAttributeName(TableModel table) {
-		return List
-				.of(table.getColumns())
-				.stream()
-				.filter(column -> column.isOptionSet(NAME_FIELD))
-				.map(column -> nameGenerator.getCamelCase(column.getName()))
-				.findFirst()
-				.orElse("FIELD_NAME");
 	}
 
 	@Override

@@ -1,11 +1,20 @@
 package ${PackageName};
 
 import com.vaadin.flow.component.AttachEvent;
+#if ($GUIReferences && $GUIReferences.size() > 0)
+import com.vaadin.flow.component.combobox.ComboBox;
+#end
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 
 import ${ModelPackageName}.${ModelClassName};
+#foreach ($Reference in $GUIReferences)
+import ${Reference.getReferencedModelPackageName()}.${Reference.getReferencedModelClassName()};
+#end
 import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
+#foreach ($Reference in $GUIReferences)
+import ${Reference.getServicePackageName()}.${Reference.getServiceInterfaceName()};
+#end
 import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
 import ${AbstractMasterDataBaseLayoutPackageName}.${AbstractMasterDataBaseLayoutClassName};
@@ -29,12 +38,19 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	private final ${ButtonFactoryClassName} buttonFactory;
 	private final ${ModelClassName} model;
 	private final ${ServiceInterfaceName} service;
+#foreach ($Reference in $GUIReferences)
+	private final ${Reference.getServiceInterfaceName()} ${Reference.getServiceAttributeName()};
+#end
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${SessionDataClassName} session;
 	private final Observer observer;
 
+#foreach ($Reference in $GUIReferences)
+	private ComboBox<${Reference.getReferencedModelClassName()}> comboBox${Reference.getFieldNameCamelCase()};
+#end
 #foreach ($Column in $GUIColumnData)
-#if (${Column.getType()} == "INTEGER")
+#if (${Column.getType()} == "COMBOBOX")
+#elseif (${Column.getType()} == "INTEGER")
 	private IntegerField integerField${Column.getFieldNameCamelCase()};
 #else
 	private TextField textField${Column.getFieldNameCamelCase()};
@@ -45,8 +61,15 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	public void onAttach(AttachEvent attachEvent) {
 		super.onAttach(attachEvent);
 		createButtons();
+#foreach ($Reference in $GUIReferences)
+		comboBox${Reference.getFieldNameCamelCase()} = new ComboBox<>("${Reference.getReferencedModelClassName()}", ${Reference.getServiceAttributeName()}.findAll());
+		comboBox${Reference.getFieldNameCamelCase()}.setValue(model.get${Reference.getReferencedModelClassName()}());
+		comboBox${Reference.getFieldNameCamelCase()}.setItemLabelGenerator(${Reference.getReferencedModelClassName()}::get${Reference.getReferencedModelNameFieldName()});
+		comboBox${Reference.getFieldNameCamelCase()}.setWidthFull();
+#end
 #foreach ($Column in $GUIColumnData)
-#if (${Column.getType()} == "INTEGER")
+#if (${Column.getType()} == "COMBOBOX")
+#elseif (${Column.getType()} == "INTEGER")
 		integerField${Column.getFieldNameCamelCase()} = createIntegerField("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}(), ${Column.getMin()}, ${Column.getMax()});
 #else
 		textField${Column.getFieldNameCamelCase()} = createTextField("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}());
@@ -66,6 +89,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 #foreach ($Column in $GUIColumnData)
 #if (${Column.getType()} == "INTEGER")
 				integerField${Column.getFieldNameCamelCase()},
+#elseif (${Column.getType()} == "COMBOBOX")
+				comboBox${Column.getFieldNameCamelCase()},
 #else
 				textField${Column.getFieldNameCamelCase()},
 #end
@@ -104,6 +129,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 #foreach ($Column in $GUIColumnData)
 #if (${Column.getType()} == "INTEGER")
 		model.set${Column.getFieldNameCamelCase()}(integerField${Column.getFieldNameCamelCase()}.getValue());
+#elseif (${Column.getType()} == "COMBOBOX")
+		model.set${Column.getFieldNameCamelCase()}(comboBox${Column.getFieldNameCamelCase()}.getValue());
 #else
 		model.set${Column.getFieldNameCamelCase()}(textField${Column.getFieldNameCamelCase()}.getValue());
 #end

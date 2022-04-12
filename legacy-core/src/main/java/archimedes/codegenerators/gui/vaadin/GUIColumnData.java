@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 @Data
 public class GUIColumnData {
 
+	public static final String TYPE_COMBOBOX = "COMBOBOX";
 	public static final String TYPE_INTEGER = "INTEGER";
 	public static final String TYPE_STRING = "STRING";
 

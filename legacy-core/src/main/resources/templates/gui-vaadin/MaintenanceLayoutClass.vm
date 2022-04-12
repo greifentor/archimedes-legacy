@@ -11,6 +11,9 @@ import com.vaadin.flow.router.Route;
 
 import ${ModelPackageName}.${ModelClassName};
 import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
+#foreach ($Reference in $GUIReferences)
+import ${Reference.getServicePackageName()}.${Reference.getServiceInterfaceName()};
+#end
 import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
 import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};
@@ -39,6 +42,9 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final ${ServiceInterfaceName} service;
+#foreach ($Reference in $GUIReferences)
+	private final ${Reference.getServiceInterfaceName()} ${Reference.getServiceAttributeName()};
+#end
 	private final ${SessionDataClassName} session;
 
 	private ${ModelClassName} model;
@@ -78,7 +84,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 		setMargin(false);
 		setWidthFull();
 		${DetailsLayoutClassName} fieldsLayout =
-				new ${DetailsLayoutClassName}(buttonFactory, model, service, resourceManager, session, this);
+				new ${DetailsLayoutClassName}(buttonFactory, model, service,#foreach ($Reference in $GUIReferences) ${Reference.getServiceAttributeName()},#end resourceManager, session, this);
 		add(
 				new ${HeaderLayoutClassName}(
 						buttonFactory

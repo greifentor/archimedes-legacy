@@ -8,9 +8,6 @@ import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
-import archimedes.codegenerators.TypeGenerator;
-import archimedes.codegenerators.localization.LocalizationNameGenerator;
-import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -20,18 +17,10 @@ import archimedes.model.TableModel;
  *
  * @author ollie (11.04.2022)
  */
-public class DetailsLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
-
-	private static final LocalizationNameGenerator localizationNameGenerator = new LocalizationNameGenerator();
-	private static final ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
+public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
 
 	public DetailsLayoutClassCodeGenerator(AbstractCodeFactory codeFactory) {
-		super(
-				"DetailsLayoutClass.vm",
-				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
-				GUIVaadinNameGenerator.INSTANCE,
-				TypeGenerator.INSTANCE,
-				codeFactory);
+		super("DetailsLayoutClass.vm", codeFactory);
 	}
 
 	@Override
@@ -44,6 +33,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractClassCodeGenerator<
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("GUIColumnData", getGUIColumnData(table));
+		context.put("GUIReferences", getGUIReferenceData(table));
 		context.put("MasterDataButtonLayoutClassName", nameGenerator.getMasterDataButtonLayoutClassName(model));
 		context.put("MasterDataButtonLayoutPackageName", nameGenerator.getMasterDataButtonLayoutPackageName(model));
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
@@ -64,29 +54,29 @@ public class DetailsLayoutClassCodeGenerator extends AbstractClassCodeGenerator<
 		return List
 				.of(table.getColumns())
 				.stream()
-		        .filter(column -> column.isOptionSet(PageLayoutClassCodeGenerator.GUI_EDITOR_POS))
+				.filter(column -> column.isOptionSet(PageLayoutClassCodeGenerator.GUI_EDITOR_POS))
 				.map(
-		                column -> new GUIColumnData()
+						column -> new GUIColumnData()
 								.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
-		                        .setMax(getMax(column))
-		                        .setMin(getMin(column))
+								.setMax(getMax(column))
+								.setMin(getMin(column))
 								.setPosition(getPosition(column))
-		                        .setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
-		                        .setType(getType(column)))
+								.setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
+								.setType(getType(column)))
 				.sorted((gd0, gd1) -> gd0.getPosition() - gd1.getPosition())
 				.collect(Collectors.toList());
 	}
 
 	private String getMax(ColumnModel column) {
 		return column.isOptionSet(AbstractClassCodeGenerator.MAX)
-		        ? column.getOptionByName(AbstractClassCodeGenerator.MAX).getParameter()
-		        : "null";
+				? column.getOptionByName(AbstractClassCodeGenerator.MAX).getParameter()
+				: "null";
 	}
 
 	private String getMin(ColumnModel column) {
 		return column.isOptionSet(AbstractClassCodeGenerator.MIN)
-		        ? column.getOptionByName(AbstractClassCodeGenerator.MIN).getParameter()
-		        : "null";
+				? column.getOptionByName(AbstractClassCodeGenerator.MIN).getParameter()
+				: "null";
 	}
 
 	private int getPosition(ColumnModel column) {
@@ -96,7 +86,9 @@ public class DetailsLayoutClassCodeGenerator extends AbstractClassCodeGenerator<
 	}
 
 	private String getType(ColumnModel column) {
-		if (column.getDomain().getDataType() == Types.INTEGER) {
+		if (column.getReferencedTable() != null) {
+			return GUIColumnData.TYPE_COMBOBOX;
+		} else if (column.getDomain().getDataType() == Types.INTEGER) {
 			return GUIColumnData.TYPE_INTEGER;
 		}
 		return GUIColumnData.TYPE_STRING;
