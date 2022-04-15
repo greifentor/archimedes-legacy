@@ -33,7 +33,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("ButtonPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("GUIColumnDataCollection", getGUIColumnDataCollection(table, getReferenceMode(model, table)));
+		context.put("GUIColumnDataCollection", getGUIColumnDataCollection(new GUIColumnDataCollection(), table));
 		context.put("GUIReferences", getGUIReferenceData(table));
 		context.put("MasterDataButtonLayoutClassName", nameGenerator.getMasterDataButtonLayoutClassName(model));
 		context.put("MasterDataButtonLayoutPackageName", nameGenerator.getMasterDataButtonLayoutPackageName(model));
@@ -47,36 +47,43 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 						localizationNameGenerator.getResourceManagerPackageName(model, table));
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
-		context.put("ServiceInterfaceName", serviceNameGenerator.getServiceInterfaceName(table));
+		context.put("ServiceInterfaceName", getServiceInterfaceName(table));
 		context.put("ServiceInterfacePackageName", serviceNameGenerator.getServiceInterfacePackageName(model, table));
 	}
 
-	private GUIColumnDataCollection getGUIColumnDataCollection(TableModel table, ReferenceMode referenceMode) {
+	private GUIColumnDataCollection getGUIColumnDataCollection(GUIColumnDataCollection collection, TableModel table) {
+		if (table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)) {
+			collection = getGUIColumnDataCollection(collection, getSuperclassTable(table));
+		}
 		DataModel model = table.getDataModel();
-		return new GUIColumnDataCollection(
-				List
-						.of(table.getColumns())
-						.stream()
-						.filter(column -> column.isOptionSet(PageLayoutClassCodeGenerator.GUI_EDITOR_POS))
-						.map(
-								column -> new GUIColumnData()
-										.setFieldTypeName(
-												getType(
-														column,
-														model,
-														referenceMode,
-														c -> serviceNameGenerator
-																.getModelClassName(c.getReferencedTable()),
-														(c, m) -> serviceNameGenerator
-																.getModelClassName(c.getDomain(), model)))
-										.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
-										.setMax(getMax(column))
-										.setMin(getMin(column))
-										.setPosition(getPosition(column))
-										.setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
-										.setType(getType(column)))
-						.sorted((gd0, gd1) -> gd0.getPosition() - gd1.getPosition())
-						.collect(Collectors.toList()));
+		ReferenceMode referenceMode = getReferenceMode(model, table);
+		collection
+				.addGUIColumnData(
+						List
+								.of(table.getColumns())
+								.stream()
+								.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
+								.map(
+										column -> new GUIColumnData()
+												.setFieldTypeName(
+														getType(
+																column,
+																model,
+																referenceMode,
+																c -> serviceNameGenerator
+																		.getModelClassName(c.getReferencedTable()),
+																(c, m) -> serviceNameGenerator
+																		.getModelClassName(c.getDomain(), model)))
+												.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
+												.setMax(getMax(column))
+												.setMin(getMin(column))
+												.setPosition(getPosition(column))
+												.setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
+												.setSimpleBoolean(isSimpleBoolean(column))
+												.setType(getType(column))
+												.setTypePackage(getTypePackage(column)))
+								.collect(Collectors.toList()));
+		return collection;
 	}
 
 	private String getMax(ColumnModel column) {
@@ -92,8 +99,8 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 	}
 
 	private int getPosition(ColumnModel column) {
-		return column.isOptionSet(PageLayoutClassCodeGenerator.GUI_EDITOR_POS)
-				? Integer.valueOf(column.getOptionByName(PageLayoutClassCodeGenerator.GUI_EDITOR_POS).getParameter())
+		return column.isOptionSet(GUI_EDITOR_POS)
+				? Integer.valueOf(column.getOptionByName(GUI_EDITOR_POS).getParameter())
 				: 0;
 	}
 
@@ -108,6 +115,17 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 			return GUIColumnData.TYPE_INTEGER;
 		}
 		return GUIColumnData.TYPE_STRING;
+	}
+
+	private String getTypePackage(ColumnModel column) {
+		return column.getDomain().isOptionSet(ENUM)
+				? serviceNameGenerator.getModelPackageName(column.getTable().getDataModel(), column)
+				: null;
+	}
+
+	private String getServiceInterfaceName(TableModel table) {
+		TableModel supertable = getSuperclassTable(table);
+		return serviceNameGenerator.getServiceInterfaceName(supertable != null ? supertable : table);
 	}
 
 	@Override
@@ -132,7 +150,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(PageLayoutClassCodeGenerator.GENERATE_MASTER_DATA_GUI);
+		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI);
 	}
 
 }

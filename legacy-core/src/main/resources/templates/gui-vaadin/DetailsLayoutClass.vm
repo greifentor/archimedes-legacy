@@ -29,6 +29,11 @@ import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
 import ${AbstractMasterDataBaseLayoutPackageName}.${AbstractMasterDataBaseLayoutClassName};
 import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+	#if (${Column.getType()} == "ENUM")
+import ${Column.getTypePackage()}.${Column.getFieldTypeName()};
+	#end
+#end
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -59,16 +64,16 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	private ComboBox<${Reference.getReferencedModelClassName()}> comboBox${Reference.getFieldNameCamelCase()};
 #end
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
-#if (${Column.getType()} == "BOOLEAN")
-	private CheckBox checkBox${Column.getFieldNameCamelCase()};
-#elseif (${Column.getType()} == "COMBOBOX")
-#elseif (${Column.getType()} == "ENUM")
+	#if (${Column.getType()} == "BOOLEAN")
+	private Checkbox checkbox${Column.getFieldNameCamelCase()};
+	#elseif (${Column.getType()} == "COMBOBOX")
+	#elseif (${Column.getType()} == "ENUM")
 	private ComboBox<${Column.getFieldTypeName()}> comboBox${Column.getFieldNameCamelCase()};
-#elseif (${Column.getType()} == "INTEGER")
+	#elseif (${Column.getType()} == "INTEGER")
 	private IntegerField integerField${Column.getFieldNameCamelCase()};
-#else
+	#else
 	private TextField textField${Column.getFieldNameCamelCase()};
-#end
+	#end
 #end
 
 	@Override
@@ -82,16 +87,22 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		comboBox${Reference.getFieldNameCamelCase()}.setWidthFull();
 #end
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
-#if (${Column.getType()} == "BOOLEAN")
-		checkBox${Column.getFieldNameCamelCase()} = createCheckBox("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}());
-#elseif (${Column.getType()} == "COMBOBOX")
-#elseif (${Column.getType()} == "ENUM")
-		comboBox${Column.getFieldNameCamelCase()} = createComboBox("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}(), ${Column.getFieldTypeName()}.values());
-#elseif (${Column.getType()} == "INTEGER")
-		integerField${Column.getFieldNameCamelCase()} = createIntegerField("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}(), ${Column.getMin()}, ${Column.getMax()});
-#else
-		textField${Column.getFieldNameCamelCase()} = createTextField("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}());
-#end
+	#set($FieldName = "${Column.getFieldNameCamelCase()}")
+	#if (${Column.getType()} == "BOOLEAN")
+		#if(${Column.isSimpleBoolean()} == "true")
+			#set($GetterPrefix = "is")
+		#else
+			#set($GetterPrefix = "get")
+		#end
+		checkbox${FieldName} = createCheckbox("${Column.getResourceName()}", model.${GetterPrefix}${FieldName}());
+	#elseif (${Column.getType()} == "COMBOBOX")
+	#elseif (${Column.getType()} == "ENUM")
+		comboBox${FieldName} = createComboBox("${Column.getResourceName()}", model.get${FieldName}(), ${Column.getFieldTypeName()}.values());
+	#elseif (${Column.getType()} == "INTEGER")
+		integerField${FieldName} = createIntegerField("${Column.getResourceName()}", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()});
+	#else
+		textField${FieldName} = createTextField("${Column.getResourceName()}", model.get${FieldName}());
+	#end
 #end
 		getStyle().set("-moz-border-radius", "4px");
 		getStyle().set("-webkit-border-radius", "4px");
@@ -106,7 +117,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		add(
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
 #if (${Column.getType()} == "BOOLEAN")
-				checkBox${Column.getFieldNameCamelCase()},
+				checkbox${Column.getFieldNameCamelCase()},
 #elseif (${Column.getType()} == "COMBOBOX")
 				comboBox${Column.getFieldNameCamelCase()},
 #elseif (${Column.getType()} == "ENUM")
@@ -150,7 +161,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	protected void save() {
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
 #if (${Column.getType()} == "BOOLEAN")
-		model.set${Column.getFieldNameCamelCase()}(checkBox${Column.getFieldNameCamelCase()}.getValue());
+		model.set${Column.getFieldNameCamelCase()}(checkbox${Column.getFieldNameCamelCase()}.getValue());
 #elseif (${Column.getType()} == "COMBOBOX")
 		model.set${Column.getFieldNameCamelCase()}(comboBox${Column.getFieldNameCamelCase()}.getValue());
 #elseif (${Column.getType()} == "ENUM")

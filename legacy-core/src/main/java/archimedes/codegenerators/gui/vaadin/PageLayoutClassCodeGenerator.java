@@ -1,5 +1,9 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import static archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI;
+import static archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator.GUI_BASE_URL;
+import static archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator.GUI_EDITOR_POS;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,11 +24,6 @@ import archimedes.model.TableModel;
  * @author ollie (07.04.2022)
  */
 public class PageLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
-
-	public static final String GENERATE_MASTER_DATA_GUI = "GENERATE_MASTER_DATA_GUI";
-	public static final String GUI_BASE_URL = "GUI_BASE_URL";
-	public static final String GUI_EDITOR_POS = "GUI_EDITOR_POS";
-	public static final String GUI_LABEL_TEXT = "GUI_LABEL_TEXT";
 
 	private static final LocalizationNameGenerator localizationNameGenerator = new LocalizationNameGenerator();
 	private static final ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
@@ -98,7 +97,8 @@ public class PageLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUI
 						column -> new GridData()
 								.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
 								.setPosition(getPosition(column))
-								.setResourceName(getResourceName(column)))
+								.setResourceName(getResourceName(column))
+								.setSimpleBoolean(isSimpleBoolean(column)))
 				.sorted((gd0, gd1) -> gd0.getPosition() - gd1.getPosition())
 				.collect(Collectors.toList());
 	}

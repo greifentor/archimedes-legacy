@@ -3,6 +3,7 @@ package archimedes.codegenerators;
 import static corentx.util.Checks.ensure;
 
 import java.io.FileWriter;
+import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -247,6 +248,10 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 			return enumClassNameProvider.apply(column, model);
 		}
 		return typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column));
+	}
+
+	protected boolean isSimpleBoolean(ColumnModel column) {
+		return (column.getDomain().getDataType() == Types.BOOLEAN) && column.isNotNull();
 	}
 
 	protected boolean isSubclass(TableModel table) {

@@ -1,5 +1,6 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import static archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator.GUI_EDITOR_POS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Types;
@@ -143,13 +144,9 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				String expected = getExpected();
 				DataModel dataModel = readDataModel("Model.xml");
 				TableModel tableModel = dataModel.getTableByName("A_TABLE");
-				tableModel
-						.getColumnByName("Description")
-						.addOption(new Option(PageLayoutClassCodeGenerator.GUI_EDITOR_POS, "1"));
+				tableModel.getColumnByName("Description").addOption(new Option(GUI_EDITOR_POS, "1"));
 				tableModel.addColumn(new Tabellenspalte("COUNT", new Domain("Counts", Types.INTEGER, -1, -1)));
-				tableModel
-						.getColumnByName("COUNT")
-						.addOption(new Option(PageLayoutClassCodeGenerator.GUI_EDITOR_POS, "0"));
+				tableModel.getColumnByName("COUNT").addOption(new Option(GUI_EDITOR_POS, "0"));
 				tableModel.getColumnByName("COUNT").addOption(new Option(AbstractClassCodeGenerator.MAX, "10"));
 				tableModel.getColumnByName("COUNT").addOption(new Option(AbstractClassCodeGenerator.MIN, "1"));
 				// Run
@@ -280,7 +277,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 		@Nested
 		class Specials {
 
-			private String getExpected() {
+			private String getExpected(boolean flagIsNullable) {
 				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
@@ -293,6 +290,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.core.model.EnumType;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -317,7 +315,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"\n" + //
 						"	private ComboBox<EnumType> comboBoxEnumField;\n" + //
-						"	private CheckBox checkBoxFlag;\n" + //
+						"	private Checkbox checkboxFlag;\n" + //
 						"\n" + //
 						"	@Override\n" + //
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
@@ -325,7 +323,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		createButtons();\n" + //
 						"		comboBoxEnumField = createComboBox(\"enumfield\", model.getEnumField(), EnumType.values());\n"
 						+ //
-						"		checkBoxFlag = createCheckBox(\"flag\", model.getFlag());\n" + //
+						"		checkboxFlag = createCheckbox(\"flag\", model." + (flagIsNullable ? "get" : "is")
+						+ "Flag());\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -339,7 +338,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		setWidthFull();\n" + //
 						"		add(\n" + //
 						"				comboBoxEnumField,\n" + //
-						"				checkBoxFlag,\n" + //
+						"				checkboxFlag,\n" + //
 						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -372,7 +371,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	@Override\n" + //
 						"	protected void save() {\n" + //
 						"		model.setEnumField(comboBoxEnumField.getValue());\n" + //
-						"		model.setFlag(checkBoxFlag.getValue());\n" + //
+						"		model.setFlag(checkboxFlag.getValue());\n" + //
 						"		service.update(model);\n" + //
 						"		observer.save();\n" + //
 						"	}\n" + //
@@ -383,9 +382,263 @@ public class DetailsLayoutClassCodeGeneratorTest {
 			@Test
 			void happyRunForASimpleObject() {
 				// Prepare
-				String expected = getExpected();
+				String expected = getExpected(true);
 				DataModel dataModel = readDataModel("Model.xml");
 				TableModel tableModel = dataModel.getTableByName("TABLE_WITH_SPECIALS");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			@Test
+			void happyRunForASimpleObject_withNotNullBoolean() {
+				// Prepare
+				String expected = getExpected(false);
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel tableModel = dataModel.getTableByName("TABLE_WITH_SPECIALS");
+				tableModel.getColumnByName("Flag").setNotNull(true);
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+		}
+
+	}
+
+	@Nested
+	class Inheritance {
+
+		@Nested
+		class Superclass {
+
+			private String getExpected() {
+				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+						"\n" + //
+						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.checkbox.Checkbox;\n" + //
+						"import com.vaadin.flow.component.textfield.TextField;\n" + //
+						"\n" + //
+						"import base.pack.age.name.core.model.ATable;\n" + //
+						"import base.pack.age.name.core.service.ATableService;\n" + //
+						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
+						"import base.pack.age.name.gui.SessionData;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.RequiredArgsConstructor;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n" + //
+						"@Generated\n" + //
+						"@RequiredArgsConstructor\n" + //
+						"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
+						"\n" + //
+						"	public interface Observer {\n" + //
+						"		void save();\n" + //
+						"\n" + //
+						"		void remove();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ATable model;\n" + //
+						"	private final ATableService service;\n" + //
+						"	private final ResourceManager resourceManager;\n" + //
+						"	private final SessionData session;\n" + //
+						"	private final Observer observer;\n" + //
+						"\n" + //
+						"	private TextField textFieldDescription;\n" + //
+						"	private Checkbox checkboxFlag;\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public void onAttach(AttachEvent attachEvent) {\n" + //
+						"		super.onAttach(attachEvent);\n" + //
+						"		createButtons();\n" + //
+						"		textFieldDescription = createTextField(\"description\", model.getDescription());\n" + //
+						"		checkboxFlag = createCheckbox(\"flag\", model.isFlag());\n" + //
+						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid gray\");\n" + //
+						"		getStyle()\n" + //
+						"				.set(\n" + //
+						"						\"box-shadow\",\n" + //
+						"						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n"
+						+ //
+						"		setMargin(false);\n" + //
+						"		setWidthFull();\n" + //
+						"		add(\n" + //
+						"				textFieldDescription,\n" + //
+						"				checkboxFlag,\n" + //
+						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ButtonFactory getButtonFactory() {\n" + //
+						"		return buttonFactory;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ResourceManager getResourceManager() {\n" + //
+						"		return resourceManager;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected SessionData getSessionData() {\n" + //
+						"		return session;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected String getTextFieldResourceId() {\n" + //
+						"		return \"ATableDetailsLayout.details.field.{}.label\";\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void remove() {\n" + //
+						"		service.delete(model);\n" + //
+						"		observer.remove();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void save() {\n" + //
+						"		model.setDescription(textFieldDescription.getValue());\n" + //
+						"		model.setFlag(checkboxFlag.getValue());\n" + //
+						"		service.update(model);\n" + //
+						"		observer.save();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"}";
+			}
+
+			@Test
+			void happyRun() {
+				// Prepare
+				String expected = getExpected();
+				DataModel dataModel = readDataModel("Model-Inheritance.xml");
+				TableModel tableModel = dataModel.getTableByName("A_TABLE");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+		}
+
+		@Nested
+		class Subclass {
+
+			private String getExpected() {
+				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+						"\n" + //
+						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.checkbox.Checkbox;\n" + //
+						"import com.vaadin.flow.component.textfield.TextField;\n" + //
+						"\n" + //
+						"import base.pack.age.name.core.model.AnotherTable;\n" + //
+						"import base.pack.age.name.core.service.ATableService;\n" + //
+						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
+						"import base.pack.age.name.gui.SessionData;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.RequiredArgsConstructor;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n" + //
+						"@Generated\n" + //
+						"@RequiredArgsConstructor\n" + //
+						"public class AnotherTableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
+						"\n" + //
+						"	public interface Observer {\n" + //
+						"		void save();\n" + //
+						"\n" + //
+						"		void remove();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final AnotherTable model;\n" + //
+						"	private final ATableService service;\n" + //
+						"	private final ResourceManager resourceManager;\n" + //
+						"	private final SessionData session;\n" + //
+						"	private final Observer observer;\n" + //
+						"\n" + //
+						"	private TextField textFieldDescription;\n" + //
+						"	private TextField textFieldName;\n" + //
+						"	private Checkbox checkboxFlag;\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public void onAttach(AttachEvent attachEvent) {\n" + //
+						"		super.onAttach(attachEvent);\n" + //
+						"		createButtons();\n" + //
+						"		textFieldDescription = createTextField(\"description\", model.getDescription());\n" + //
+						"		textFieldName = createTextField(\"name\", model.getName());\n" + //
+						"		checkboxFlag = createCheckbox(\"flag\", model.isFlag());\n" + //
+						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid gray\");\n" + //
+						"		getStyle()\n" + //
+						"				.set(\n" + //
+						"						\"box-shadow\",\n" + //
+						"						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n"
+						+ //
+						"		setMargin(false);\n" + //
+						"		setWidthFull();\n" + //
+						"		add(\n" + //
+						"				textFieldDescription,\n" + //
+						"				textFieldName,\n" + //
+						"				checkboxFlag,\n" + //
+						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ButtonFactory getButtonFactory() {\n" + //
+						"		return buttonFactory;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ResourceManager getResourceManager() {\n" + //
+						"		return resourceManager;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected SessionData getSessionData() {\n" + //
+						"		return session;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected String getTextFieldResourceId() {\n" + //
+						"		return \"AnotherTableDetailsLayout.details.field.{}.label\";\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void remove() {\n" + //
+						"		service.delete(model);\n" + //
+						"		observer.remove();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void save() {\n" + //
+						"		model.setDescription(textFieldDescription.getValue());\n" + //
+						"		model.setName(textFieldName.getValue());\n" + //
+						"		model.setFlag(checkboxFlag.getValue());\n" + //
+						"		service.update(model);\n" + //
+						"		observer.save();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"}";
+			}
+
+			@Test
+			void happyRun() {
+				// Prepare
+				String expected = getExpected();
+				DataModel dataModel = readDataModel("Model-Inheritance.xml");
+				TableModel tableModel = dataModel.getTableByName("ANOTHER_TABLE");
 				// Run
 				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
 				// Check

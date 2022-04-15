@@ -69,10 +69,10 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 	}
 
 	private String getBaseURL(DataModel model, TableModel table) {
-		return table.isOptionSet(PageLayoutClassCodeGenerator.GUI_BASE_URL)
-				? table.getOptionByName(PageLayoutClassCodeGenerator.GUI_BASE_URL).getParameter()
-				: model.isOptionSet(PageLayoutClassCodeGenerator.GUI_BASE_URL)
-						? model.getOptionByName(PageLayoutClassCodeGenerator.GUI_BASE_URL).getParameter()
+		return table.isOptionSet(GUI_BASE_URL)
+				? table.getOptionByName(GUI_BASE_URL).getParameter()
+				: model.isOptionSet(GUI_BASE_URL)
+						? model.getOptionByName(GUI_BASE_URL).getParameter()
 						: model.getApplicationName().toLowerCase();
 	}
 
@@ -80,7 +80,7 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 		return List
 				.of(table.getColumns())
 				.stream()
-				.filter(column -> column.isOptionSet(PageLayoutClassCodeGenerator.GUI_EDITOR_POS))
+				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
 				.map(
 						column -> new GridData()
 								.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
@@ -91,8 +91,8 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 	}
 
 	private int getPosition(ColumnModel column) {
-		return column.isOptionSet(PageLayoutClassCodeGenerator.GUI_EDITOR_POS)
-				? Integer.valueOf(column.getOptionByName(PageLayoutClassCodeGenerator.GUI_EDITOR_POS).getParameter())
+		return column.isOptionSet(GUI_EDITOR_POS)
+				? Integer.valueOf(column.getOptionByName(GUI_EDITOR_POS).getParameter())
 				: 0;
 	}
 
@@ -122,7 +122,7 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(PageLayoutClassCodeGenerator.GENERATE_MASTER_DATA_GUI)
+		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI)
 				|| t.isOptionSet(AbstractClassCodeGenerator.SUBCLASS);
 	}
 

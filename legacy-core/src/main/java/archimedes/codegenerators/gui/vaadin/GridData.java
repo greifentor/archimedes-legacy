@@ -10,5 +10,6 @@ public class GridData {
 	private String fieldNameCamelCase;
 	private int position;
 	private String resourceName;
+	private boolean simpleBoolean;
 
 }

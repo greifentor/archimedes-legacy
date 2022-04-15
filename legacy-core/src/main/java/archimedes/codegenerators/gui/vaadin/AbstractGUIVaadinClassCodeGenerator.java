@@ -15,6 +15,10 @@ import archimedes.model.TableModel;
 public abstract class AbstractGUIVaadinClassCodeGenerator
 		extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
 
+	public static final String GENERATE_MASTER_DATA_GUI = "GENERATE_MASTER_DATA_GUI";
+	public static final String GUI_BASE_URL = "GUI_BASE_URL";
+	public static final String GUI_EDITOR_POS = "GUI_EDITOR_POS";
+	public static final String GUI_LABEL_TEXT = "GUI_LABEL_TEXT";
 	public static final String NAME_FIELD = "NAME_FIELD";
 
 	protected static final LocalizationNameGenerator localizationNameGenerator = new LocalizationNameGenerator();
@@ -31,6 +35,7 @@ public abstract class AbstractGUIVaadinClassCodeGenerator
 		return List
 				.of(table.getColumns())
 				.stream()
+				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
 				.filter(column -> column.getReferencedTable() != null)
 				.map(this::createGUIReferenceData)
 				.collect(Collectors.toList());

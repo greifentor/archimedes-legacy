@@ -80,8 +80,14 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);
 		grid = new Grid<>();
 #foreach($Column in $GridData)
+	#set($FieldName = "${Column.getFieldNameCamelCase()}")
+	#if(${Column.isSimpleBoolean()} == "true")
+		#set($GetterPrefix = "is")
+	#else
+		#set($GetterPrefix = "get")
+	#end
 		grid
-				.addColumn(model -> getHeaderString("${Column.getFieldNameCamelCase().toUpperCase()}", model, () -> model.get${Column.getFieldNameCamelCase()}()))
+				.addColumn(model -> getHeaderString("${FieldName.toUpperCase()}", model, () -> model.${GetterPrefix}${FieldName}()))
 				.setHeader(resourceManager.getLocalizedString("${ClassName}.grid.header.${Column.getResourceName()}.label", session.getLocalization()));
 #end
 		grid.setWidthFull();

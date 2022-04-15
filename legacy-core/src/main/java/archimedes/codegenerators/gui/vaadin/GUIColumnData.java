@@ -19,6 +19,8 @@ public class GUIColumnData {
 	private String min;
 	private int position;
 	private String resourceName;
+	private boolean simpleBoolean;
 	private String type;
+	private String typePackage;
 
 }

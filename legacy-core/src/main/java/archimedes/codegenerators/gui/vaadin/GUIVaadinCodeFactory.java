@@ -3,6 +3,7 @@ package archimedes.codegenerators.gui.vaadin;
 import java.util.Arrays;
 import java.util.List;
 
+import archimedes.acf.checker.ModelChecker;
 import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
@@ -11,6 +12,7 @@ import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.modelcheckers.ModelCheckerGuiEditorPosHasAValue;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
@@ -70,7 +72,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 		case COLUMN:
 			return new String[] {
 					AbstractGUIVaadinClassCodeGenerator.NAME_FIELD,
-					PageLayoutClassCodeGenerator.GUI_EDITOR_POS};
+					AbstractGUIVaadinClassCodeGenerator.GUI_EDITOR_POS };
 		case MODEL:
 			return new String[] {
 					GUIVaadinNameGenerator.ALTERNATE_GUI_VAADIN_MODULE_PREFIX,
@@ -96,12 +98,17 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 			return new String[] {
 					AbstractClassCodeFactory.NO_GENERATION,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
-					PageLayoutClassCodeGenerator.GENERATE_MASTER_DATA_GUI,
+					AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI,
 					NameGenerator.MODULE,
 					AbstractClassCodeGenerator.POJO_MODE };
 		default:
 			return new String[0];
 		}
+	}
+
+	@Override
+	public ModelChecker[] getModelCheckers() {
+		return new ModelChecker[] { new ModelCheckerGuiEditorPosHasAValue(guiBundle) };
 	}
 
 }

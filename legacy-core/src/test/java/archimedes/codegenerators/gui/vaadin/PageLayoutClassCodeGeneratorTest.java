@@ -1,6 +1,9 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import static archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator.GUI_EDITOR_POS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.sql.Types;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -9,7 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
+import archimedes.legacy.scheme.Domain;
+import archimedes.legacy.scheme.Tabellenspalte;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
@@ -118,6 +126,10 @@ public class PageLayoutClassCodeGeneratorTest {
 					"				.addColumn(model -> getHeaderString(\"DESCRIPTION\", model, () -> model.getDescription()))\n"
 					+ //
 					"				.setHeader(resourceManager.getLocalizedString(\"ATablePageLayout.grid.header.description.label\", session.getLocalization()));\n"
+					+ //
+					"		grid\n" + //
+					"				.addColumn(model -> getHeaderString(\"FLAG\", model, () -> model.isFlag()))\n" + //
+					"				.setHeader(resourceManager.getLocalizedString(\"ATablePageLayout.grid.header.flag.label\", session.getLocalization()));\n"
 					+ //
 					"		grid.setWidthFull();\n" + //
 					"		grid.addSelectionListener(this::enabledButtons);\n" + //
@@ -240,8 +252,13 @@ public class PageLayoutClassCodeGeneratorTest {
 			// Prepare
 			String expected = getExpected();
 			DataModel dataModel = readDataModel("Model.xml");
+			TableModel tableModel = dataModel.getTableByName("A_TABLE");
+			ColumnModel columnToAdd = new Tabellenspalte("Flag", new Domain("Boolean", Types.BOOLEAN, -1, -1));
+			columnToAdd.setNotNull(true);
+			columnToAdd.addOption(new Option(GUI_EDITOR_POS, "99"));
+			tableModel.addColumn(columnToAdd);
 			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
 			// Check
 			assertEquals(expected, returned);
 		}
