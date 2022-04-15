@@ -166,7 +166,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		grid
 				.setItems(
 						service
-								.findAll(new ${PageParametersClassName}().setEntriesPerPage(10).setPageNumber(pageNumber))
+								.findAll(new ${PageParametersClassName}().setEntriesPerPage(Integer.MAX_VALUE).setPageNumber(pageNumber))
 								.getEntries());
 	}
 

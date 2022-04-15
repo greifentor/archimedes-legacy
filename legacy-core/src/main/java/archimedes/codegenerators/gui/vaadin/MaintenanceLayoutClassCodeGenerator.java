@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
 
+import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -121,7 +122,8 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(PageLayoutClassCodeGenerator.GENERATE_MASTER_DATA_GUI);
+		return !t.isOptionSet(PageLayoutClassCodeGenerator.GENERATE_MASTER_DATA_GUI)
+				|| t.isOptionSet(AbstractClassCodeGenerator.SUBCLASS);
 	}
 
 }

@@ -7,11 +7,14 @@ import lombok.experimental.Accessors;
 @Data
 public class GUIColumnData {
 
+	public static final String TYPE_BOOLEAN = "BOOLEAN";
 	public static final String TYPE_COMBOBOX = "COMBOBOX";
+	public static final String TYPE_ENUM = "ENUM";
 	public static final String TYPE_INTEGER = "INTEGER";
 	public static final String TYPE_STRING = "STRING";
 
 	private String fieldNameCamelCase;
+	private String fieldTypeName;
 	private String max;
 	private String min;
 	private int position;

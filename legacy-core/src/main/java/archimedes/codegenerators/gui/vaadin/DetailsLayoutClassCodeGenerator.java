@@ -8,6 +8,7 @@ import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.ReferenceMode;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -32,7 +33,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("ButtonPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("GUIColumnData", getGUIColumnData(table));
+		context.put("GUIColumnDataCollection", getGUIColumnDataCollection(table, getReferenceMode(model, table)));
 		context.put("GUIReferences", getGUIReferenceData(table));
 		context.put("MasterDataButtonLayoutClassName", nameGenerator.getMasterDataButtonLayoutClassName(model));
 		context.put("MasterDataButtonLayoutPackageName", nameGenerator.getMasterDataButtonLayoutPackageName(model));
@@ -50,21 +51,32 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("ServiceInterfacePackageName", serviceNameGenerator.getServiceInterfacePackageName(model, table));
 	}
 
-	private List<GUIColumnData> getGUIColumnData(TableModel table) {
-		return List
-				.of(table.getColumns())
-				.stream()
-				.filter(column -> column.isOptionSet(PageLayoutClassCodeGenerator.GUI_EDITOR_POS))
-				.map(
-						column -> new GUIColumnData()
-								.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
-								.setMax(getMax(column))
-								.setMin(getMin(column))
-								.setPosition(getPosition(column))
-								.setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
-								.setType(getType(column)))
-				.sorted((gd0, gd1) -> gd0.getPosition() - gd1.getPosition())
-				.collect(Collectors.toList());
+	private GUIColumnDataCollection getGUIColumnDataCollection(TableModel table, ReferenceMode referenceMode) {
+		DataModel model = table.getDataModel();
+		return new GUIColumnDataCollection(
+				List
+						.of(table.getColumns())
+						.stream()
+						.filter(column -> column.isOptionSet(PageLayoutClassCodeGenerator.GUI_EDITOR_POS))
+						.map(
+								column -> new GUIColumnData()
+										.setFieldTypeName(
+												getType(
+														column,
+														model,
+														referenceMode,
+														c -> serviceNameGenerator
+																.getModelClassName(c.getReferencedTable()),
+														(c, m) -> serviceNameGenerator
+																.getModelClassName(c.getDomain(), model)))
+										.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
+										.setMax(getMax(column))
+										.setMin(getMin(column))
+										.setPosition(getPosition(column))
+										.setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
+										.setType(getType(column)))
+						.sorted((gd0, gd1) -> gd0.getPosition() - gd1.getPosition())
+						.collect(Collectors.toList()));
 	}
 
 	private String getMax(ColumnModel column) {
@@ -88,6 +100,10 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 	private String getType(ColumnModel column) {
 		if (column.getReferencedTable() != null) {
 			return GUIColumnData.TYPE_COMBOBOX;
+		} else if (column.getDomain().getDataType() == Types.BOOLEAN) {
+			return GUIColumnData.TYPE_BOOLEAN;
+		} else if (column.getDomain().isOptionSet(ENUM)) {
+			return GUIColumnData.TYPE_ENUM;
 		} else if (column.getDomain().getDataType() == Types.INTEGER) {
 			return GUIColumnData.TYPE_INTEGER;
 		}

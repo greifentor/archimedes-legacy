@@ -4,8 +4,18 @@ import com.vaadin.flow.component.AttachEvent;
 #if ($GUIReferences && $GUIReferences.size() > 0)
 import com.vaadin.flow.component.combobox.ComboBox;
 #end
+#if (${GUIColumnDataCollection.hasFieldType("BOOLEAN")} == true)
+import com.vaadin.flow.component.checkbox.Checkbox;
+#end
+#if (${GUIColumnDataCollection.hasFieldType("ENUM")} == true)
+import com.vaadin.flow.component.combobox.ComboBox;
+#end
+#if (${GUIColumnDataCollection.hasFieldType("INTEGER")} == true)
 import com.vaadin.flow.component.textfield.IntegerField;
+#end
+#if (${GUIColumnDataCollection.hasFieldType("STRING")} == true)
 import com.vaadin.flow.component.textfield.TextField;
+#end
 
 import ${ModelPackageName}.${ModelClassName};
 #foreach ($Reference in $GUIReferences)
@@ -48,8 +58,12 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 #foreach ($Reference in $GUIReferences)
 	private ComboBox<${Reference.getReferencedModelClassName()}> comboBox${Reference.getFieldNameCamelCase()};
 #end
-#foreach ($Column in $GUIColumnData)
-#if (${Column.getType()} == "COMBOBOX")
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+#if (${Column.getType()} == "BOOLEAN")
+	private CheckBox checkBox${Column.getFieldNameCamelCase()};
+#elseif (${Column.getType()} == "COMBOBOX")
+#elseif (${Column.getType()} == "ENUM")
+	private ComboBox<${Column.getFieldTypeName()}> comboBox${Column.getFieldNameCamelCase()};
 #elseif (${Column.getType()} == "INTEGER")
 	private IntegerField integerField${Column.getFieldNameCamelCase()};
 #else
@@ -67,8 +81,12 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		comboBox${Reference.getFieldNameCamelCase()}.setItemLabelGenerator(${Reference.getReferencedModelClassName()}::get${Reference.getReferencedModelNameFieldName()});
 		comboBox${Reference.getFieldNameCamelCase()}.setWidthFull();
 #end
-#foreach ($Column in $GUIColumnData)
-#if (${Column.getType()} == "COMBOBOX")
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+#if (${Column.getType()} == "BOOLEAN")
+		checkBox${Column.getFieldNameCamelCase()} = createCheckBox("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}());
+#elseif (${Column.getType()} == "COMBOBOX")
+#elseif (${Column.getType()} == "ENUM")
+		comboBox${Column.getFieldNameCamelCase()} = createComboBox("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}(), ${Column.getFieldTypeName()}.values());
 #elseif (${Column.getType()} == "INTEGER")
 		integerField${Column.getFieldNameCamelCase()} = createIntegerField("${Column.getResourceName()}", model.get${Column.getFieldNameCamelCase()}(), ${Column.getMin()}, ${Column.getMax()});
 #else
@@ -86,11 +104,15 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		setMargin(false);
 		setWidthFull();
 		add(
-#foreach ($Column in $GUIColumnData)
-#if (${Column.getType()} == "INTEGER")
-				integerField${Column.getFieldNameCamelCase()},
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+#if (${Column.getType()} == "BOOLEAN")
+				checkBox${Column.getFieldNameCamelCase()},
 #elseif (${Column.getType()} == "COMBOBOX")
 				comboBox${Column.getFieldNameCamelCase()},
+#elseif (${Column.getType()} == "ENUM")
+				comboBox${Column.getFieldNameCamelCase()},
+#elseif (${Column.getType()} == "INTEGER")
+				integerField${Column.getFieldNameCamelCase()},
 #else
 				textField${Column.getFieldNameCamelCase()},
 #end
@@ -126,11 +148,15 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 
 	@Override
 	protected void save() {
-#foreach ($Column in $GUIColumnData)
-#if (${Column.getType()} == "INTEGER")
-		model.set${Column.getFieldNameCamelCase()}(integerField${Column.getFieldNameCamelCase()}.getValue());
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+#if (${Column.getType()} == "BOOLEAN")
+		model.set${Column.getFieldNameCamelCase()}(checkBox${Column.getFieldNameCamelCase()}.getValue());
 #elseif (${Column.getType()} == "COMBOBOX")
 		model.set${Column.getFieldNameCamelCase()}(comboBox${Column.getFieldNameCamelCase()}.getValue());
+#elseif (${Column.getType()} == "ENUM")
+		model.set${Column.getFieldNameCamelCase()}(comboBox${Column.getFieldNameCamelCase()}.getValue());
+#elseif (${Column.getType()} == "INTEGER")
+		model.set${Column.getFieldNameCamelCase()}(integerField${Column.getFieldNameCamelCase()}.getValue());
 #else
 		model.set${Column.getFieldNameCamelCase()}(textField${Column.getFieldNameCamelCase()}.getValue());
 #end

@@ -135,7 +135,7 @@ public class PageLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUI
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI);
+		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) || t.isOptionSet(SUBCLASS);
 	}
 
 }

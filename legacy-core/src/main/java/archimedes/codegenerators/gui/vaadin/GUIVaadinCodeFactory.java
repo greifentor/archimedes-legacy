@@ -69,6 +69,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 		switch (optionType) {
 		case COLUMN:
 			return new String[] {
+					AbstractGUIVaadinClassCodeGenerator.NAME_FIELD,
 					PageLayoutClassCodeGenerator.GUI_EDITOR_POS};
 		case MODEL:
 			return new String[] {

@@ -207,7 +207,7 @@ public class PageLayoutClassCodeGeneratorTest {
 					"		grid\n" + //
 					"				.setItems(\n" + //
 					"						service\n" + //
-					"								.findAll(new PageParameters().setEntriesPerPage(10).setPageNumber(pageNumber))\n"
+					"								.findAll(new PageParameters().setEntriesPerPage(Integer.MAX_VALUE).setPageNumber(pageNumber))\n"
 					+ //
 					"								.getEntries());\n" + //
 					"	}\n" + //
