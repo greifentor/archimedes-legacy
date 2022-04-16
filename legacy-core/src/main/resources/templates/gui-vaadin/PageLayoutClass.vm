@@ -95,7 +95,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		grid.getStyle().set("-moz-border-radius", "4px");
 		grid.getStyle().set("-webkit-border-radius", "4px");
 		grid.getStyle().set("border-radius", "4px");
-		grid.getStyle().set("border", "1px solid black");
+		grid.getStyle().set("border", "1px solid #A9A9A9");
 		${MasterDataButtonLayoutClassName} buttonLayout = new ${MasterDataButtonLayoutClassName}(buttonAdd, buttonEdit, buttonRemove);
 		buttonLayout.setMargin(false);
 		buttonLayout.setWidthFull();
@@ -105,7 +105,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		dataLayout.getStyle().set("-moz-border-radius", "4px");
 		dataLayout.getStyle().set("-webkit-border-radius", "4px");
 		dataLayout.getStyle().set("border-radius", "4px");
-		dataLayout.getStyle().set("border", "1px solid gray");
+		dataLayout.getStyle().set("border", "1px solid #A9A9A9");
 		dataLayout
 				.getStyle()
 				.set(

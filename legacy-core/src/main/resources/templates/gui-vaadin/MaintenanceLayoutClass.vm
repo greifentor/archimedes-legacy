@@ -10,6 +10,9 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.Route;
 
 import ${ModelPackageName}.${ModelClassName};
+#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
+import ${Subclass.getModelPackageName()}.${Subclass.getModelClassName()};
+#end
 import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
 #foreach ($Reference in $GUIReferences)
 import ${Reference.getServicePackageName()}.${Reference.getServiceInterfaceName()};
@@ -83,8 +86,6 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 		getStyle().set("background-image", "url('" + guiConfiguration.getBackgroundFileName() + "')");
 		setMargin(false);
 		setWidthFull();
-		${DetailsLayoutClassName} fieldsLayout =
-				new ${DetailsLayoutClassName}(buttonFactory, model, service,#foreach ($Reference in $GUIReferences) ${Reference.getServiceAttributeName()},#end resourceManager, session, this);
 		add(
 				new ${HeaderLayoutClassName}(
 						buttonFactory
@@ -96,7 +97,22 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
 								resourceManager.getLocalizedString("${ClassName}.header.prefix.label", session.getLocalization()) + model.get${HeaderAttributeName}(),
 								HeaderLayoutMode.PLAIN),
-				fieldsLayout);
+				getDetailsLayout(model));
+	}
+
+	private AbstractMasterDataBaseLayout getDetailsLayout(${ModelClassName} model) {
+#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
+		if (model instanceof ${Subclass.getModelClassName()}) {
+			return new ${Subclass.getDetailsLayoutClassName()}(
+					buttonFactory,
+					(${Subclass.getModelClassName()}) model,
+					service,
+					resourceManager,
+					session,
+					this);
+		}
+#end
+		return new ${DetailsLayoutClassName}(buttonFactory, model, service, resourceManager, session, this);
 	}
 
 	@Override

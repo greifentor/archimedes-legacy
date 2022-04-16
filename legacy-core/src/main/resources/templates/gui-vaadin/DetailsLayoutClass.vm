@@ -44,12 +44,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 
-	public interface Observer {
-		void save();
-
-		void remove();
-	}
-
 	private final ${ButtonFactoryClassName} buttonFactory;
 	private final ${ModelClassName} model;
 	private final ${ServiceInterfaceName} service;
@@ -107,7 +101,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		getStyle().set("-moz-border-radius", "4px");
 		getStyle().set("-webkit-border-radius", "4px");
 		getStyle().set("border-radius", "4px");
-		getStyle().set("border", "1px solid gray");
+		getStyle().set("border", "1px solid #A9A9A9");
 		getStyle()
 				.set(
 						"box-shadow",

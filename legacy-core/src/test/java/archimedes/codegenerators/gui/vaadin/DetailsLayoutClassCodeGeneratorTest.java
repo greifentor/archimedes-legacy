@@ -62,12 +62,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"@RequiredArgsConstructor\n" + //
 						"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
-						"	public interface Observer {\n" + //
-						"		void save();\n" + //
-						"\n" + //
-						"		void remove();\n" + //
-						"	}\n" + //
-						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
@@ -87,7 +81,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
-						"		getStyle().set(\"border\", \"1px solid gray\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
 						"		getStyle()\n" + //
 						"				.set(\n" + //
 						"						\"box-shadow\",\n" + //
@@ -184,12 +178,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"@RequiredArgsConstructor\n" + //
 						"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
-						"	public interface Observer {\n" + //
-						"		void save();\n" + //
-						"\n" + //
-						"		void remove();\n" + //
-						"	}\n" + //
-						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
@@ -211,7 +199,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
-						"		getStyle().set(\"border\", \"1px solid gray\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
 						"		getStyle()\n" + //
 						"				.set(\n" + //
 						"						\"box-shadow\",\n" + //
@@ -301,12 +289,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"@RequiredArgsConstructor\n" + //
 						"public class TableWithSpecialsDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
-						"	public interface Observer {\n" + //
-						"		void save();\n" + //
-						"\n" + //
-						"		void remove();\n" + //
-						"	}\n" + //
-						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final TableWithSpecials model;\n" + //
 						"	private final TableWithSpecialsService service;\n" + //
@@ -328,7 +310,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
-						"		getStyle().set(\"border\", \"1px solid gray\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
 						"		getStyle()\n" + //
 						"				.set(\n" + //
 						"						\"box-shadow\",\n" + //
@@ -437,12 +419,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"@RequiredArgsConstructor\n" + //
 						"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
-						"	public interface Observer {\n" + //
-						"		void save();\n" + //
-						"\n" + //
-						"		void remove();\n" + //
-						"	}\n" + //
-						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
@@ -462,7 +438,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
-						"		getStyle().set(\"border\", \"1px solid gray\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
 						"		getStyle()\n" + //
 						"				.set(\n" + //
 						"						\"box-shadow\",\n" + //
@@ -553,12 +529,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"@RequiredArgsConstructor\n" + //
 						"public class AnotherTableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
-						"	public interface Observer {\n" + //
-						"		void save();\n" + //
-						"\n" + //
-						"		void remove();\n" + //
-						"	}\n" + //
-						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final AnotherTable model;\n" + //
 						"	private final ATableService service;\n" + //
@@ -580,7 +550,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
-						"		getStyle().set(\"border\", \"1px solid gray\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
 						"		getStyle()\n" + //
 						"				.set(\n" + //
 						"						\"box-shadow\",\n" + //

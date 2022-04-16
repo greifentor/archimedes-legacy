@@ -136,7 +136,7 @@ public class PageLayoutClassCodeGeneratorTest {
 					"		grid.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 					"		grid.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 					"		grid.getStyle().set(\"border-radius\", \"4px\");\n" + //
-					"		grid.getStyle().set(\"border\", \"1px solid black\");\n" + //
+					"		grid.getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
 					"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonRemove);\n"
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
@@ -147,7 +147,7 @@ public class PageLayoutClassCodeGeneratorTest {
 					"		dataLayout.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 					"		dataLayout.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 					"		dataLayout.getStyle().set(\"border-radius\", \"4px\");\n" + //
-					"		dataLayout.getStyle().set(\"border\", \"1px solid gray\");\n" + //
+					"		dataLayout.getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
 					"		dataLayout\n" + //
 					"				.getStyle()\n" + //
 					"				.set(\n" + //

@@ -52,8 +52,6 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("PageLayoutClassName", nameGenerator.getPageLayoutClassName(table));
-//		context.put("PageParametersClassName", serviceNameGenerator.getPageParametersClassName());
-//		context.put("PageParametersPackageName", serviceNameGenerator.getPageParametersPackageName(model, table));
 		context.put("PluralName", nameGenerator.getPluralName(table).toLowerCase());
 		context.put("ResourceManagerInterfaceName", localizationNameGenerator.getResourceManagerInterfaceName());
 		context
@@ -64,6 +62,7 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
 		context.put("ServiceInterfaceName", serviceNameGenerator.getServiceInterfaceName(table));
 		context.put("ServiceInterfacePackageName", serviceNameGenerator.getServiceInterfacePackageName(model, table));
+		context.put("SubclassDataCollection", getSubclassDataCollection(table));
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
 	}
@@ -98,6 +97,26 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 
 	private String getResourceName(ColumnModel column) {
 		return nameGenerator.getCamelCase(column.getName()).toLowerCase();
+	}
+
+	private SubclassDataCollection getSubclassDataCollection(TableModel table) {
+		return new SubclassDataCollection()
+				.addSubclasses(
+						getSubclassTables(table)
+								.stream()
+								.filter(
+										t -> t
+												.isOptionSet(
+														AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI))
+								.map(
+										t -> new SubclassData()
+												.setDetailsLayoutClassName(
+														nameGenerator.getDetailsLayoutClassName(t.getDataModel(), t))
+												.setModelClassName(serviceNameGenerator.getModelClassName(t))
+												.setModelPackageName(
+														serviceNameGenerator.getModelPackageName(t.getDataModel(), t)))
+								.collect(Collectors.toList())
+								.toArray(new SubclassData[0]));
 	}
 
 	@Override

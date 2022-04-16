@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -226,6 +227,26 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 												referencedClassNameProvider,
 												enumClassNameProvider)))
 				.collect(Collectors.toList());
+	}
+
+	protected List<TableModel> getSubclassTables(TableModel tableToCheckFor) {
+		return forAllTables(tableToCheckFor.getDataModel())
+				.filter(tableToCheck -> isTableSubclassTableOf(tableToCheckFor, tableToCheck))
+				.collect(Collectors.toList());
+	}
+
+	private Stream<TableModel> forAllTables(DataModel model) {
+		return List.of(model.getTables()).stream();
+	}
+
+	private boolean isTableSubclassTableOf(TableModel tableToCheckFor, TableModel tableToCheck) {
+		return isSubclass(tableToCheck)
+				? forAllPrimaryKeys(tableToCheck).anyMatch(column -> column.getReferencedTable() == tableToCheckFor)
+				: false;
+	}
+
+	private Stream<ColumnModel> forAllPrimaryKeys(TableModel table) {
+		return List.of(table.getColumns()).stream();
 	}
 
 	protected String getTypeQualifiedName(ColumnModel column, DataModel model, ReferenceMode referenceMode,
