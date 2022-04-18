@@ -2,6 +2,7 @@ package ${PackageName};
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
@@ -40,6 +41,9 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	public static final String URL = "${BaseURL}/masterdata/${PluralName}/details";
 
 	private static final Logger logger = LogManager.getLogger(${ClassName}.class);
+
+	@Autowired(required = false)
+	private MaintenanceLayoutRenderer<${ModelClassName}> maintenanceLayoutRenderer;
 
 	private final ${ButtonFactoryClassName} buttonFactory;
 	private final ${ResourceManagerInterfaceName} resourceManager;
@@ -104,9 +108,15 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 												${PageLayoutClassName}.URL,
 												session),
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
-								resourceManager.getLocalizedString("${ClassName}.header.prefix.label", session.getLocalization()) + model.get${HeaderAttributeName}(),
+								resourceManager.getLocalizedString("${ClassName}.header.prefix.label", session.getLocalization()) + getHeaderSuffix(model),
 								HeaderLayoutMode.PLAIN),
 				getDetailsLayout(model));
+	}
+
+	private String getHeaderSuffix(${ModelClassName} model) {
+		return maintenanceLayoutRenderer != null
+				? maintenanceLayoutRenderer.getHeaderSuffix(model)
+				: "" + model.get${HeaderAttributeName}();
 	}
 
 	private AbstractMasterDataBaseLayout getDetailsLayout(${ModelClassName} model) {

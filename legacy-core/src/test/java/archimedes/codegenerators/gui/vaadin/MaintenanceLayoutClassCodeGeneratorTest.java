@@ -34,6 +34,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"import org.apache.logging.log4j.LogManager;\n" + //
 					"import org.apache.logging.log4j.Logger;\n" + //
+					"import org.springframework.beans.factory.annotation.Autowired;\n" + //
 					"\n" + //
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
@@ -67,6 +68,9 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"	public static final String URL = \"carp-dnd/masterdata/atabellen/details\";\n" + //
 					"\n" + //
 					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceLayout.class);\n" + //
+					"\n" + //
+					"	@Autowired(required = false)\n" + //
+					"	private MaintenanceLayoutRenderer<ATable> maintenanceLayoutRenderer;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
@@ -121,10 +125,16 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
-					"								resourceManager.getLocalizedString(\"ATableMaintenanceLayout.header.prefix.label\", session.getLocalization()) + model.getDescription(),\n"
+					"								resourceManager.getLocalizedString(\"ATableMaintenanceLayout.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n"
 					+ //
 					"								HeaderLayoutMode.PLAIN),\n" + //
 					"				getDetailsLayout(model));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private String getHeaderSuffix(ATable model) {\n" + //
+					"		return maintenanceLayoutRenderer != null\n" + //
+					"				? maintenanceLayoutRenderer.getHeaderSuffix(model)\n" + //
+					"				: \"\" + model.getDescription();\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
@@ -180,6 +190,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"import org.apache.logging.log4j.LogManager;\n" + //
 					"import org.apache.logging.log4j.Logger;\n" + //
+					"import org.springframework.beans.factory.annotation.Autowired;\n" + //
 					"\n" + //
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
@@ -214,6 +225,9 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"	public static final String URL = \"test-project/masterdata/atabellen/details\";\n" + //
 					"\n" + //
 					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceLayout.class);\n" + //
+					"\n" + //
+					"	@Autowired(required = false)\n" + //
+					"	private MaintenanceLayoutRenderer<ATable> maintenanceLayoutRenderer;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
@@ -269,10 +283,16 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
-					"								resourceManager.getLocalizedString(\"ATableMaintenanceLayout.header.prefix.label\", session.getLocalization()) + model.getRef(),\n"
+					"								resourceManager.getLocalizedString(\"ATableMaintenanceLayout.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n"
 					+ //
 					"								HeaderLayoutMode.PLAIN),\n" + //
 					"				getDetailsLayout(model));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private String getHeaderSuffix(ATable model) {\n" + //
+					"		return maintenanceLayoutRenderer != null\n" + //
+					"				? maintenanceLayoutRenderer.getHeaderSuffix(model)\n" + //
+					"				: \"\" + model.getRef();\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
@@ -328,6 +348,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"import org.apache.logging.log4j.LogManager;\n" + //
 					"import org.apache.logging.log4j.Logger;\n" + //
+					"import org.springframework.beans.factory.annotation.Autowired;\n" + //
 					"\n" + //
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
@@ -363,6 +384,9 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"	public static final String URL = \"test-project/masterdata/atabellen/details\";\n" + //
 					"\n" + //
 					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceLayout.class);\n" + //
+					"\n" + //
+					"	@Autowired(required = false)\n" + //
+					"	private MaintenanceLayoutRenderer<ATable> maintenanceLayoutRenderer;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
@@ -427,10 +451,16 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
-					"								resourceManager.getLocalizedString(\"ATableMaintenanceLayout.header.prefix.label\", session.getLocalization()) + model.getDescription(),\n"
+					"								resourceManager.getLocalizedString(\"ATableMaintenanceLayout.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n"
 					+ //
 					"								HeaderLayoutMode.PLAIN),\n" + //
 					"				getDetailsLayout(model));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private String getHeaderSuffix(ATable model) {\n" + //
+					"		return maintenanceLayoutRenderer != null\n" + //
+					"				? maintenanceLayoutRenderer.getHeaderSuffix(model)\n" + //
+					"				: \"\" + model.getDescription();\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
