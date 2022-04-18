@@ -76,8 +76,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		integerFieldCount = createIntegerField(\"count\", model.getCount(), 1, 10);\n" + //
-						"		textFieldDescription = createTextField(\"description\", model.getDescription());\n" + //
+						"		integerFieldCount = createIntegerField(\"ATableDetailsLayout.field.count.label\", model.getCount(), 1, 10);\n"
+						+ //
+						"		textFieldDescription = createTextField(\"ATableDetailsLayout.field.description.label\", model.getDescription());\n"
+						+ //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -108,11 +110,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	@Override\n" + //
 						"	protected SessionData getSessionData() {\n" + //
 						"		return session;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	protected String getTextFieldResourceId() {\n" + //
-						"		return \"ATableDetailsLayout.details.field.{}.label\";\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -228,11 +225,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
-						"	protected String getTextFieldResourceId() {\n" + //
-						"		return \"ATableDetailsLayout.details.field.{}.label\";\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
 						"	protected void remove() {\n" + //
 						"		service.delete(model);\n" + //
 						"		observer.remove();\n" + //
@@ -303,9 +295,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxEnumField = createComboBox(\"enumfield\", model.getEnumField(), EnumType.values());\n"
+						"		comboBoxEnumField = createComboBox(\"TableWithSpecialsDetailsLayout.field.enumfield.label\", model.getEnumField(), EnumType.values());\n"
 						+ //
-						"		checkboxFlag = createCheckbox(\"flag\", model." + (flagIsNullable ? "get" : "is")
+						"		checkboxFlag = createCheckbox(\"TableWithSpecialsDetailsLayout.field.flag.label\", model."
+						+ (flagIsNullable ? "get" : "is")
 						+ "Flag());\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
@@ -337,11 +330,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	@Override\n" + //
 						"	protected SessionData getSessionData() {\n" + //
 						"		return session;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	protected String getTextFieldResourceId() {\n" + //
-						"		return \"TableWithSpecialsDetailsLayout.details.field.{}.label\";\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -433,8 +421,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		textFieldDescription = createTextField(\"description\", model.getDescription());\n" + //
-						"		checkboxFlag = createCheckbox(\"flag\", model.isFlag());\n" + //
+						"		textFieldDescription = createTextField(\"ATableDetailsLayout.field.description.label\", model.getDescription());\n"
+						+ //
+						"		checkboxFlag = createCheckbox(\"ATableDetailsLayout.field.flag.label\", model.isFlag());\n"
+						+ //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -465,11 +455,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	@Override\n" + //
 						"	protected SessionData getSessionData() {\n" + //
 						"		return session;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	protected String getTextFieldResourceId() {\n" + //
-						"		return \"ATableDetailsLayout.details.field.{}.label\";\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -544,9 +529,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		textFieldDescription = createTextField(\"description\", model.getDescription());\n" + //
-						"		textFieldName = createTextField(\"name\", model.getName());\n" + //
-						"		checkboxFlag = createCheckbox(\"flag\", model.isFlag());\n" + //
+						"		textFieldDescription = createTextField(\"ATableDetailsLayout.field.description.label\", model.getDescription());\n"
+						+ //
+						"		textFieldName = createTextField(\"AnotherTableDetailsLayout.field.name.label\", model.getName());\n"
+						+ //
+						"		checkboxFlag = createCheckbox(\"ATableDetailsLayout.field.flag.label\", model.isFlag());\n"
+						+ //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -578,11 +566,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	@Override\n" + //
 						"	protected SessionData getSessionData() {\n" + //
 						"		return session;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	protected String getTextFieldResourceId() {\n" + //
-						"		return \"AnotherTableDetailsLayout.details.field.{}.label\";\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //

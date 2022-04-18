@@ -31,6 +31,10 @@ public abstract class AbstractGUIVaadinClassCodeGenerator
 				codeFactory);
 	}
 
+	protected GUIReferenceDataCollection getGUIReferenceDataCollection(TableModel table) {
+		return new GUIReferenceDataCollection().addGUIReferenceData(getGUIReferenceData(table));
+	}
+
 	protected List<GUIReferenceData> getGUIReferenceData(TableModel table) {
 		return List
 				.of(table.getColumns())
@@ -63,6 +67,26 @@ public abstract class AbstractGUIVaadinClassCodeGenerator
 				.map(column -> nameGenerator.getCamelCase(column.getName()))
 				.findFirst()
 				.orElse("FIELD_NAME");
+	}
+
+	protected SubclassDataCollection getSubclassDataCollection(TableModel table) {
+		return new SubclassDataCollection()
+				.addSubclasses(
+						getSubclassTables(table)
+								.stream()
+								.filter(
+										t -> t
+												.isOptionSet(
+														AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI))
+								.map(
+										t -> new SubclassData()
+												.setDetailsLayoutClassName(
+														nameGenerator.getDetailsLayoutClassName(t.getDataModel(), t))
+												.setModelClassName(serviceNameGenerator.getModelClassName(t))
+												.setModelPackageName(
+														serviceNameGenerator.getModelPackageName(t.getDataModel(), t)))
+								.collect(Collectors.toList())
+								.toArray(new SubclassData[0]));
 	}
 
 }

@@ -1,17 +1,11 @@
 package archimedes.codegenerators.gui.vaadin;
 
-import static archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI;
-import static archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator.GUI_BASE_URL;
-import static archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator.GUI_EDITOR_POS;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
 
-import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
-import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.localization.LocalizationNameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
@@ -23,18 +17,13 @@ import archimedes.model.TableModel;
  *
  * @author ollie (07.04.2022)
  */
-public class PageLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
+public class PageLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
 
 	private static final LocalizationNameGenerator localizationNameGenerator = new LocalizationNameGenerator();
 	private static final ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
 	public PageLayoutClassCodeGenerator(AbstractCodeFactory codeFactory) {
-		super(
-				"PageLayoutClass.vm",
-				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
-				GUIVaadinNameGenerator.INSTANCE,
-				TypeGenerator.INSTANCE,
-				codeFactory);
+		super("PageLayoutClass.vm", codeFactory);
 	}
 
 	@Override
@@ -50,10 +39,7 @@ public class PageLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUI
 		context.put("HeaderLayoutClassName", nameGenerator.getHeaderLayoutClassName(model));
 		context.put("HeaderLayoutPackageName", nameGenerator.getHeaderLayoutPackageName(model));
 		context.put("MaintenanceLayoutClassName", nameGenerator.getMaintenanceLayoutClassName(model, table));
-		context
-				.put(
-						"MasterDataGUIConfigurationClassName",
-						nameGenerator.getMasterDataGUIConfigurationClassName(model));
+		context.put("MasterDataGUIConfigurationClassName", nameGenerator.getMasterDataGUIConfigurationClassName(model));
 		context
 				.put(
 						"MasterDataGUIConfigurationPackageName",
@@ -72,10 +58,13 @@ public class PageLayoutClassCodeGenerator extends AbstractClassCodeGenerator<GUI
 				.put(
 						"ResourceManagerPackageName",
 						localizationNameGenerator.getResourceManagerPackageName(model, table));
-		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
-		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
+		context.put("SelectionDialogClassName", nameGenerator.getSelectionDialogClassName(model));
+		context.put("SelectionDialogPackageName", nameGenerator.getSelectionDialogPackageName(model));
 		context.put("ServiceInterfaceName", serviceNameGenerator.getServiceInterfaceName(table));
 		context.put("ServiceInterfacePackageName", serviceNameGenerator.getServiceInterfacePackageName(model, table));
+		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
+		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
+		context.put("SubclassDataCollection", getSubclassDataCollection(table));
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
 	}

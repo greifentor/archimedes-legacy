@@ -26,12 +26,16 @@ import ${PageParametersPackageName}.${PageParametersClassName};
 import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
 import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
-import ${HeaderLayoutPackageName}.${HeaderLayoutClassName};
-import ${HeaderLayoutPackageName}.${HeaderLayoutClassName}.HeaderLayoutMode;
 import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};
 import ${ButtonPackageName}.${ButtonClassName};
 import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
+import ${HeaderLayoutPackageName}.${HeaderLayoutClassName};
+import ${HeaderLayoutPackageName}.${HeaderLayoutClassName}.HeaderLayoutMode;
 import ${MasterDataButtonLayoutPackageName}.${MasterDataButtonLayoutClassName};
+#if(${SubclassDataCollection.getSubclasses()})
+import ${SelectionDialogPackageName}.${SelectionDialogClassName};
+import ${SelectionDialogPackageName}.${SelectionDialogClassName}.Selectable;
+#end
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
@@ -88,7 +92,8 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	#end
 		grid
 				.addColumn(model -> getHeaderString("${FieldName.toUpperCase()}", model, () -> model.${GetterPrefix}${FieldName}()))
-				.setHeader(resourceManager.getLocalizedString("${ClassName}.grid.header.${Column.getResourceName()}.label", session.getLocalization()));
+				.setHeader(resourceManager.getLocalizedString("${ClassName}.grid.header.${Column.getResourceName()}.label", session.getLocalization()))
+				.setSortable(true);
 #end
 		grid.setWidthFull();
 		grid.addSelectionListener(this::enabledButtons);
@@ -177,7 +182,38 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	}
 
 	private void addRecord() {
+#if(${SubclassDataCollection.getSubclasses()})
+		Selectable[] selectableSubclasses =
+				new SelectableSubclass[] {
+	#foreach($Subclass in ${SubclassDataCollection.getSubclasses()})
+						new SelectableSubclass(
+								resourceManager
+										.getLocalizedString(
+												"${ClassName}.subclass.selection.${Subclass.getModelClassName()}.label",
+												session.getLocalization()),
+								"${Subclass.getModelClassName()}"),
+	#end
+						new SelectableSubclass(
+								resourceManager
+										.getLocalizedString(
+												"${ClassName}.subclass.selection.${ModelClassName}.label",
+												session.getLocalization()),
+								"${ModelClassName}") };
+		new SelectionDialog(
+				buttonFactory,
+				selectable -> switchToMaintenanceLayoutForANewObject(
+						((SelectableSubclass) selectable).getSubclassName()),
+				resourceManager,
+				session,
+				selectableSubclasses).open();
+	}
+
+	private void switchToMaintenanceLayoutForANewObject(String selectedSubclassName) {
+		QueryParameters parameters = new QueryParameters(Map.of("modelClass", List.of(selectedSubclassName)));
+		getUI().ifPresent(ui -> ui.navigate(${MaintenanceLayoutClassName}.URL, parameters));
+#else
 		getUI().ifPresent(ui -> ui.navigate(${MaintenanceLayoutClassName}.URL));
+#end
 	}
 
 	private void editRecord() {

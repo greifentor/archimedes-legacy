@@ -1421,6 +1421,66 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class SelectionDialogClassNameTests {
+
+		@Test
+		void getSelectionDialogClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getSelectionDialogClassName(null));
+		}
+
+		@Test
+		void getSelectionDialogClassName_passAValidModel_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "SelectionDialog";
+			// Run
+			String returned = unitUnderTest.getSelectionDialogClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getSelectionDialogClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherSelectionDialog";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_SELECTION_DIALOG_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(GUIVaadinNameGenerator.ALTERNATE_SELECTION_DIALOG_CLASS_NAME_SUFFIX, expected));
+			// Run
+			String returned = unitUnderTest.getSelectionDialogClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class SelectionDialogPackageNameTests {
+
+		@Test
+		void getSelectionDialogPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getSelectionDialogPackageName(null));
+		}
+
+		@Test
+		void getSelectionDialogPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin.component", unitUnderTest.getSelectionDialogPackageName(model));
+		}
+
+		@Test
+		void getSelectionDialogPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME,
+									"vaadin.mapper"));
+			// Run & Check
+			assertEquals("vaadin.mapper", unitUnderTest.getSelectionDialogPackageName(model));
+		}
+
+	}
+
+	@Nested
 	class SessionDataClassNameTests {
 
 		@Test

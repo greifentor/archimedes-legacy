@@ -65,6 +65,8 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 								.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
 								.map(
 										column -> new GUIColumnData()
+												.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
+												.setFieldOwnerClassName(serviceNameGenerator.getModelClassName(table))
 												.setFieldTypeName(
 														getType(
 																column,
@@ -74,7 +76,6 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 																		.getModelClassName(c.getReferencedTable()),
 																(c, m) -> serviceNameGenerator
 																		.getModelClassName(c.getDomain(), model)))
-												.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
 												.setMax(getMax(column))
 												.setMin(getMin(column))
 												.setPosition(getPosition(column))

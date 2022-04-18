@@ -92,16 +92,15 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	protected String getTextFieldResourceId() {\n" + //
-					"		return \"ATableMaintenanceLayout.details.field.{}.label\";\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
 					"	public void doSetParameter(BeforeEvent event) {\n" + //
 					"		long id = parametersMap.containsKey(\"id\") && (parametersMap.get(\"id\").size() > 0)\n" + //
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
-					"		model = service.findById(id).orElse(new ATable());\n" + //
+					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private ATable createNewModel() {\n" + //
+					"		return new ATable();\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -241,16 +240,15 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	protected String getTextFieldResourceId() {\n" + //
-					"		return \"ATableMaintenanceLayout.details.field.{}.label\";\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
 					"	public void doSetParameter(BeforeEvent event) {\n" + //
 					"		long id = parametersMap.containsKey(\"id\") && (parametersMap.get(\"id\").size() > 0)\n" + //
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
-					"		model = service.findById(id).orElse(new ATable());\n" + //
+					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private ATable createNewModel() {\n" + //
+					"		return new ATable();\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -278,7 +276,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
-					"		return new ATableDetailsLayout(buttonFactory, model, service, resourceManager, session, this);\n"
+					"		return new ATableDetailsLayout(buttonFactory, model, service, anotherTableService, resourceManager, session, this);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -390,18 +388,27 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	protected String getTextFieldResourceId() {\n" + //
-					"		return \"ATableMaintenanceLayout.details.field.{}.label\";\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
 					"	public void doSetParameter(BeforeEvent event) {\n" + //
 					"		long id = parametersMap.containsKey(\"id\") && (parametersMap.get(\"id\").size() > 0)\n" + //
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
-					"		model = service.findById(id).orElse(new ATable());\n" + //
+					"		model = service.findById(id).orElse(createNewModel());\n" + //
 					"	}\n" + //
 					"\n" + //
+					"	private ATable createNewModel() {\n" + //
+					"		String modelClassName = parametersMap.containsKey(\"modelClass\") && (parametersMap.get(\"modelClass\").size() > 0)\n"
+					+ //
+					"				? parametersMap.get(\"modelClass\").get(0)\n" + //
+					"				: \"ATable\";\n" + //
+					"		if (modelClassName.equals(\"AnotherHeirTable\")) {\n" + //
+					"			return new AnotherHeirTable();\n" + //
+					"		}\n" + //
+					"		if (modelClassName.equals(\"AnotherTable\")) {\n" + //
+					"			return new AnotherTable();\n" + //
+					"		}\n" + //
+					"		return new ATable();\n" + //
+					"	}\n" + //
+					"\n" + // + //
 					"	@Override\n" + //
 					"	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);\n"

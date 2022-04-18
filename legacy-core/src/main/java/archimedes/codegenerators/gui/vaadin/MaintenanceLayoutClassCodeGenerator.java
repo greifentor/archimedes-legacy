@@ -35,7 +35,7 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DetailsLayoutClassName", nameGenerator.getDetailsLayoutClassName(model, table));
 		context.put("GridData", getGridData(table));
-		context.put("GUIReferences", getGUIReferenceData(table));
+		context.put("GUIReferenceDataCollection", getGUIReferenceDataCollection(table));
 		context.put("HeaderLayoutClassName", nameGenerator.getHeaderLayoutClassName(model));
 		context.put("HeaderLayoutPackageName", nameGenerator.getHeaderLayoutPackageName(model));
 		context.put("HeaderAttributeName", getNameFieldName(table));
@@ -97,26 +97,6 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 
 	private String getResourceName(ColumnModel column) {
 		return nameGenerator.getCamelCase(column.getName()).toLowerCase();
-	}
-
-	private SubclassDataCollection getSubclassDataCollection(TableModel table) {
-		return new SubclassDataCollection()
-				.addSubclasses(
-						getSubclassTables(table)
-								.stream()
-								.filter(
-										t -> t
-												.isOptionSet(
-														AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI))
-								.map(
-										t -> new SubclassData()
-												.setDetailsLayoutClassName(
-														nameGenerator.getDetailsLayoutClassName(t.getDataModel(), t))
-												.setModelClassName(serviceNameGenerator.getModelClassName(t))
-												.setModelPackageName(
-														serviceNameGenerator.getModelPackageName(t.getDataModel(), t)))
-								.collect(Collectors.toList())
-								.toArray(new SubclassData[0]));
 	}
 
 	@Override

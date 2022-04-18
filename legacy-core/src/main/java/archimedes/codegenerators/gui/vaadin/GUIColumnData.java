@@ -14,6 +14,7 @@ public class GUIColumnData {
 	public static final String TYPE_STRING = "STRING";
 
 	private String fieldNameCamelCase;
+	private String fieldOwnerClassName;
 	private String fieldTypeName;
 	private String max;
 	private String min;

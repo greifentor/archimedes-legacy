@@ -82,20 +82,21 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 #end
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
 	#set($FieldName = "${Column.getFieldNameCamelCase()}")
+	#set($ResourceId = "${Column.getFieldOwnerClassName()}DetailsLayout.field.${Column.getResourceName()}.label")
 	#if (${Column.getType()} == "BOOLEAN")
 		#if(${Column.isSimpleBoolean()} == "true")
 			#set($GetterPrefix = "is")
 		#else
 			#set($GetterPrefix = "get")
 		#end
-		checkbox${FieldName} = createCheckbox("${Column.getResourceName()}", model.${GetterPrefix}${FieldName}());
+		checkbox${FieldName} = createCheckbox("$ResourceId", model.${GetterPrefix}${FieldName}());
 	#elseif (${Column.getType()} == "COMBOBOX")
 	#elseif (${Column.getType()} == "ENUM")
-		comboBox${FieldName} = createComboBox("${Column.getResourceName()}", model.get${FieldName}(), ${Column.getFieldTypeName()}.values());
+		comboBox${FieldName} = createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values());
 	#elseif (${Column.getType()} == "INTEGER")
-		integerField${FieldName} = createIntegerField("${Column.getResourceName()}", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()});
+		integerField${FieldName} = createIntegerField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()});
 	#else
-		textField${FieldName} = createTextField("${Column.getResourceName()}", model.get${FieldName}());
+		textField${FieldName} = createTextField("$ResourceId", model.get${FieldName}());
 	#end
 #end
 		getStyle().set("-moz-border-radius", "4px");
@@ -138,11 +139,6 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	@Override
 	protected ${SessionDataClassName} getSessionData() {
 		return session;
-	}
-
-	@Override
-	protected String getTextFieldResourceId() {
-		return "${ClassName}.details.field.{}.label";
 	}
 
 	@Override
