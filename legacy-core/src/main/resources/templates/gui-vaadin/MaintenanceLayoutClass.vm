@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.Route;
@@ -35,6 +36,11 @@ import lombok.RequiredArgsConstructor;
  */
 @Generated
 @Route(${ClassName}.URL)
+@CssImport("./styles/shared-styles.css")
+@CssImport(value = "./styles/vaadin-text-field-styles.css", themeFor = "vaadin-text-field")
+@CssImport(value = "./styles/vaadin-text-area-styles.css", themeFor = "vaadin-text-area")
+@CssImport(value = "./styles/vaadin-combo-box-styles.css", themeFor = "vaadin-combo-box")
+@CssImport(value = "./styles/vaadin-checkbox-styles.css", themeFor = "vaadin-checkbox")
 @RequiredArgsConstructor
 public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} implements ${DetailsLayoutClassName}.Observer {
 

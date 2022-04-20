@@ -263,6 +263,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
 						"import com.vaadin.flow.component.checkbox.Checkbox;\n" + //
 						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
+						"import com.vaadin.flow.component.textfield.TextArea;\n" + //
 						"\n" + //
 						"import base.pack.age.name.core.model.TableWithSpecials;\n" + //
 						"import base.pack.age.name.core.service.TableWithSpecialsService;\n" + //
@@ -290,6 +291,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	private ComboBox<EnumType> comboBoxEnumField;\n" + //
 						"	private Checkbox checkboxFlag;\n" + //
+						"	private TextArea textAreaLongtext;\n" + //
 						"\n" + //
 						"	@Override\n" + //
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
@@ -300,6 +302,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		checkboxFlag = createCheckbox(\"TableWithSpecialsDetailsLayout.field.flag.label\", model."
 						+ (flagIsNullable ? "get" : "is")
 						+ "Flag());\n" + //
+						"		textAreaLongtext = createTextArea(\"TableWithSpecialsDetailsLayout.field.longtext.label\", model.getLongtext());\n"
+						+ //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -314,6 +318,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		add(\n" + //
 						"				comboBoxEnumField,\n" + //
 						"				checkboxFlag,\n" + //
+						"				textAreaLongtext,\n" + //
 						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -342,6 +347,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	protected void save() {\n" + //
 						"		model.setEnumField(comboBoxEnumField.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
+						"		model.setLongtext(textAreaLongtext.getValue());\n" + //
 						"		service.update(model);\n" + //
 						"		observer.save();\n" + //
 						"	}\n" + //

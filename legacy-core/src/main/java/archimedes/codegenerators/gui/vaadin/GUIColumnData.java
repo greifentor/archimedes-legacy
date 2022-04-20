@@ -12,6 +12,7 @@ public class GUIColumnData {
 	public static final String TYPE_ENUM = "ENUM";
 	public static final String TYPE_INTEGER = "INTEGER";
 	public static final String TYPE_STRING = "STRING";
+	public static final String TYPE_TEXT = "TEXT";
 
 	private String fieldNameCamelCase;
 	private String fieldOwnerClassName;

@@ -32,6 +32,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 	public static final String ENUM = "ENUM";
 	public static final String CONTEXT_NAME = "CONTEXT_NAME";
 	public static final String MODULE_MODE = "MODULE_MODE";
+	public static final String TEXT = "TEXT";
 
 	protected static final String PROPERTY_PREFIX = "archimdes.code.generators.";
 	protected static final String SLASH = "/";

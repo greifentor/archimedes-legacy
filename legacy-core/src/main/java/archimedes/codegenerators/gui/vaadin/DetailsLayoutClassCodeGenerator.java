@@ -8,6 +8,7 @@ import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -114,6 +115,10 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 			return GUIColumnData.TYPE_ENUM;
 		} else if (column.getDomain().getDataType() == Types.INTEGER) {
 			return GUIColumnData.TYPE_INTEGER;
+		} else if (((column.getDomain().getDataType() == Types.LONGVARCHAR)
+				|| (column.getDomain().getDataType() == Types.VARCHAR))
+				&& column.getDomain().isOptionSet(AbstractCodeGenerator.TEXT)) {
+			return GUIColumnData.TYPE_TEXT;
 		}
 		return GUIColumnData.TYPE_STRING;
 	}

@@ -38,6 +38,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
+					"import com.vaadin.flow.component.dependency.CssImport;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEvent;\n" + //
 					"import com.vaadin.flow.router.Route;\n" + //
@@ -61,6 +62,12 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					" */\n" + //
 					"@Generated\n" + //
 					"@Route(ATableMaintenanceLayout.URL)\n" + //
+					"@CssImport(\"./styles/shared-styles.css\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-text-field-styles.css\", themeFor = \"vaadin-text-field\")\n"
+					+ //
+					"@CssImport(value = \"./styles/vaadin-text-area-styles.css\", themeFor = \"vaadin-text-area\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-combo-box-styles.css\", themeFor = \"vaadin-combo-box\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-checkbox-styles.css\", themeFor = \"vaadin-checkbox\")\n" + //
 					"@RequiredArgsConstructor\n" + //
 					"public class ATableMaintenanceLayout extends AbstractMasterDataBaseLayout implements ATableDetailsLayout.Observer {\n"
 					+ //
@@ -194,6 +201,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
+					"import com.vaadin.flow.component.dependency.CssImport;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEvent;\n" + //
 					"import com.vaadin.flow.router.Route;\n" + //
@@ -218,6 +226,12 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					" */\n" + //
 					"@Generated\n" + //
 					"@Route(ATableMaintenanceLayout.URL)\n" + //
+					"@CssImport(\"./styles/shared-styles.css\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-text-field-styles.css\", themeFor = \"vaadin-text-field\")\n"
+					+ //
+					"@CssImport(value = \"./styles/vaadin-text-area-styles.css\", themeFor = \"vaadin-text-area\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-combo-box-styles.css\", themeFor = \"vaadin-combo-box\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-checkbox-styles.css\", themeFor = \"vaadin-checkbox\")\n" + //
 					"@RequiredArgsConstructor\n" + //
 					"public class ATableMaintenanceLayout extends AbstractMasterDataBaseLayout implements ATableDetailsLayout.Observer {\n"
 					+ //
@@ -352,6 +366,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
+					"import com.vaadin.flow.component.dependency.CssImport;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEvent;\n" + //
 					"import com.vaadin.flow.router.Route;\n" + //
@@ -377,6 +392,12 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					" */\n" + //
 					"@Generated\n" + //
 					"@Route(ATableMaintenanceLayout.URL)\n" + //
+					"@CssImport(\"./styles/shared-styles.css\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-text-field-styles.css\", themeFor = \"vaadin-text-field\")\n"
+					+ //
+					"@CssImport(value = \"./styles/vaadin-text-area-styles.css\", themeFor = \"vaadin-text-area\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-combo-box-styles.css\", themeFor = \"vaadin-combo-box\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-checkbox-styles.css\", themeFor = \"vaadin-checkbox\")\n" + //
 					"@RequiredArgsConstructor\n" + //
 					"public class ATableMaintenanceLayout extends AbstractMasterDataBaseLayout implements ATableDetailsLayout.Observer {\n"
 					+ //
