@@ -136,6 +136,7 @@ public class PageLayoutClassCodeGeneratorTest {
 						"				.setHeader(resourceManager.getLocalizedString(\"ATablePageLayout.grid.header.flag.label\", session.getLocalization()))\n"
 						+ //
 						"				.setSortable(true);\n" + //
+						"		grid.setMultiSort(true);\n" + //
 						"		grid.setWidthFull();\n" + //
 						"		grid.addSelectionListener(this::enabledButtons);\n" + //
 						"		grid.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
@@ -375,6 +376,7 @@ public class PageLayoutClassCodeGeneratorTest {
 					"				.setHeader(resourceManager.getLocalizedString(\"ATablePageLayout.grid.header.flag.label\", session.getLocalization()))\n"
 					+ //
 					"				.setSortable(true);\n" + //
+					"		grid.setMultiSort(true);\n" + //
 					"		grid.setWidthFull();\n" + //
 					"		grid.addSelectionListener(this::enabledButtons);\n" + //
 					"		grid.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //

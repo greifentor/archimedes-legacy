@@ -95,6 +95,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 				.setHeader(resourceManager.getLocalizedString("${ClassName}.grid.header.${Column.getResourceName()}.label", session.getLocalization()))
 				.setSortable(true);
 #end
+		grid.setMultiSort(true);
 		grid.setWidthFull();
 		grid.addSelectionListener(this::enabledButtons);
 		grid.getStyle().set("-moz-border-radius", "4px");
