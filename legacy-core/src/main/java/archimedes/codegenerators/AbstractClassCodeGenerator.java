@@ -240,7 +240,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	private boolean isTableSubclassTableOf(TableModel tableToCheckFor, TableModel tableToCheck) {
-		return isSubclass(tableToCheck)
+		return isSubclass(tableToCheck) && tableToCheckFor.isOptionSet(SUPERCLASS)
 				? forAllPrimaryKeys(tableToCheck).anyMatch(column -> column.getReferencedTable() == tableToCheckFor)
 				: false;
 	}

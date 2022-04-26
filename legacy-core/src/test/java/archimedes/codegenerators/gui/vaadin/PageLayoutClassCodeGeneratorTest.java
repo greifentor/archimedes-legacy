@@ -490,6 +490,13 @@ public class PageLayoutClassCodeGeneratorTest {
 					"						new SelectableSubclass(\n" + //
 					"								resourceManager\n" + //
 					"										.getLocalizedString(\n" + //
+					"												\"ATablePageLayout.subclass.selection.HeirTableWithReference.label\",\n"
+					+ //
+					"												session.getLocalization()),\n" + //
+					"								\"HeirTableWithReference\"),\n" + //
+					"						new SelectableSubclass(\n" + //
+					"								resourceManager\n" + //
+					"										.getLocalizedString(\n" + //
 					"												\"ATablePageLayout.subclass.selection.ATable.label\",\n"
 					+ //
 					"												session.getLocalization()),\n" + //

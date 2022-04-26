@@ -84,9 +84,30 @@ public abstract class AbstractGUIVaadinClassCodeGenerator
 														nameGenerator.getDetailsLayoutClassName(t.getDataModel(), t))
 												.setModelClassName(serviceNameGenerator.getModelClassName(t))
 												.setModelPackageName(
-														serviceNameGenerator.getModelPackageName(t.getDataModel(), t)))
+														serviceNameGenerator.getModelPackageName(t.getDataModel(), t))
+												.setReferences(getSubclassReferenceData(t)))
 								.collect(Collectors.toList())
 								.toArray(new SubclassData[0]));
+	}
+
+	private List<SubclassReferenceData> getSubclassReferenceData(TableModel table) {
+		return List
+				.of(table.getColumns())
+				.stream()
+				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
+				.filter(column -> column.getReferencedTable() != null)
+				.map(this::createSubclassReferenceData)
+				.collect(Collectors.toList());
+	}
+
+	protected SubclassReferenceData createSubclassReferenceData(ColumnModel column) {
+		DataModel model = column.getTable().getDataModel();
+		TableModel referencedTable = column.getReferencedTable();
+		String serviceInterfaceName = serviceNameGenerator.getServiceInterfaceName(referencedTable);
+		return new SubclassReferenceData()
+				.setServiceAttributeName(nameGenerator.getAttributeName(serviceInterfaceName))
+				.setServiceInterfaceName(serviceInterfaceName)
+				.setServicePackageName(serviceNameGenerator.getServiceInterfacePackageName(model, referencedTable));
 	}
 
 }

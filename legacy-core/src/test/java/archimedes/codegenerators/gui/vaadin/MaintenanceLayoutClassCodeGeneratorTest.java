@@ -374,7 +374,9 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"import base.pack.age.name.core.model.ATable;\n" + //
 					"import base.pack.age.name.core.model.AnotherHeirTable;\n" + //
 					"import base.pack.age.name.core.model.AnotherTable;\n" + //
+					"import base.pack.age.name.core.model.HeirTableWithReference;\n" + //
 					"import base.pack.age.name.core.service.ATableService;\n" + //
+					"import base.pack.age.name.core.service.ReferencedTableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
@@ -413,6 +415,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 					"	private final ATableService service;\n" + //
+					"	private final ReferencedTableService referencedTableService;\n" + //
 					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private ATable model;\n" + //
@@ -450,6 +453,9 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"		}\n" + //
 					"		if (modelClassName.equals(\"AnotherTable\")) {\n" + //
 					"			return new AnotherTable();\n" + //
+					"		}\n" + //
+					"		if (modelClassName.equals(\"HeirTableWithReference\")) {\n" + //
+					"			return new HeirTableWithReference();\n" + //
 					"		}\n" + //
 					"		return new ATable();\n" + //
 					"	}\n" + //
@@ -499,6 +505,16 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					(AnotherTable) model,\n" + //
 					"					service,\n" + //
+					"					resourceManager,\n" + //
+					"					session,\n" + //
+					"					this);\n" + //
+					"		}\n" + //
+					"		if (model instanceof HeirTableWithReference) {\n" + //
+					"			return new HeirTableWithReferenceDetailsLayout(\n" + //
+					"					buttonFactory,\n" + //
+					"					(HeirTableWithReference) model,\n" + //
+					"					service,\n" + //
+					"					referencedTableService,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this);\n" + //

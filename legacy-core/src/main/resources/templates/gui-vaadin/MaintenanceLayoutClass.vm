@@ -16,6 +16,11 @@ import ${ModelPackageName}.${ModelClassName};
 import ${Subclass.getModelPackageName()}.${Subclass.getModelClassName()};
 #end
 import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
+#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
+#foreach($SubclassReference in ${Subclass.getReferences()}) 
+import ${SubclassReference.getServicePackageName()}.${SubclassReference.getServiceInterfaceName()};
+#end
+#end
 #foreach ($Reference in $GUIReferenceDataCollection.getReferences())
 import ${Reference.getServicePackageName()}.${Reference.getServiceInterfaceName()};
 #end
@@ -55,6 +60,11 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final ${ServiceInterfaceName} service;
+#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
+#foreach($SubclassReference in ${Subclass.getReferences()}) 
+	private final ${SubclassReference.getServiceInterfaceName()} ${SubclassReference.getServiceAttributeName()};
+#end
+#end
 #foreach ($Reference in $GUIReferenceDataCollection.getReferences())
 	private final ${Reference.getServiceInterfaceName()} ${Reference.getServiceAttributeName()};
 #end
@@ -131,7 +141,13 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 			return new ${Subclass.getDetailsLayoutClassName()}(
 					buttonFactory,
 					(${Subclass.getModelClassName()}) model,
-					service,#if($GUIReferenceDataCollection.getServiceAttributeNameList()) $GUIReferenceDataCollection.getServiceAttributeNameList(),#end
+					service,
+#foreach($SubclassReference in ${Subclass.getReferences()}) 
+					${SubclassReference.getServiceAttributeName()},
+#end
+#if($GUIReferenceDataCollection.getServiceAttributeNameList())
+					$GUIReferenceDataCollection.getServiceAttributeNameList(),
+#end
 					resourceManager,
 					session,
 					this);
