@@ -118,6 +118,7 @@ public class PageLayoutClassCodeGeneratorTest {
 						+ //
 						"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 						+ //
+						"		getStyle().set(\"background-size\", \"cover\");\n" + //
 						"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 						+ //
 						"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
@@ -358,6 +359,7 @@ public class PageLayoutClassCodeGeneratorTest {
 					+ //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
+					"		getStyle().set(\"background-size\", \"cover\");\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
 					"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
@@ -480,6 +482,13 @@ public class PageLayoutClassCodeGeneratorTest {
 					+ //
 					"												session.getLocalization()),\n" + //
 					"								\"AnotherHeirTable\"),\n" + //
+					"						new SelectableSubclass(\n" + //
+					"								resourceManager\n" + //
+					"										.getLocalizedString(\n" + //
+					"												\"ATablePageLayout.subclass.selection.AnotherHeirTableWithSameReference.label\",\n"
+					+ //
+					"												session.getLocalization()),\n" + //
+					"								\"AnotherHeirTableWithSameReference\"),\n" + //
 					"						new SelectableSubclass(\n" + //
 					"								resourceManager\n" + //
 					"										.getLocalizedString(\n" + //

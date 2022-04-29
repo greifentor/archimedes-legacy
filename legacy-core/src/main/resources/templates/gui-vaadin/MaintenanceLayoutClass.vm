@@ -16,10 +16,8 @@ import ${ModelPackageName}.${ModelClassName};
 import ${Subclass.getModelPackageName()}.${Subclass.getModelClassName()};
 #end
 import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
-#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
-#foreach($SubclassReference in ${Subclass.getReferences()}) 
+#foreach($SubclassReference in ${UniqueSubclassReferenceDataCollection}) 
 import ${SubclassReference.getServicePackageName()}.${SubclassReference.getServiceInterfaceName()};
-#end
 #end
 #foreach ($Reference in $GUIReferenceDataCollection.getReferences())
 import ${Reference.getServicePackageName()}.${Reference.getServiceInterfaceName()};
@@ -60,10 +58,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final ${ServiceInterfaceName} service;
-#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
-#foreach($SubclassReference in ${Subclass.getReferences()}) 
+#foreach($SubclassReference in ${UniqueSubclassReferenceDataCollection}) 
 	private final ${SubclassReference.getServiceInterfaceName()} ${SubclassReference.getServiceAttributeName()};
-#end
 #end
 #foreach ($Reference in $GUIReferenceDataCollection.getReferences())
 	private final ${Reference.getServiceInterfaceName()} ${Reference.getServiceAttributeName()};
@@ -113,6 +109,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {
 		${UserAuthorizationCheckerClassName}.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);
 		getStyle().set("background-image", "url('" + guiConfiguration.getBackgroundFileName() + "')");
+		getStyle().set("background-size", "cover");
 		setMargin(false);
 		setWidthFull();
 		add(

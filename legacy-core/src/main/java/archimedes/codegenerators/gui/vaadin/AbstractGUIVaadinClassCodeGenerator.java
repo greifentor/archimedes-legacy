@@ -110,4 +110,15 @@ public abstract class AbstractGUIVaadinClassCodeGenerator
 				.setServicePackageName(serviceNameGenerator.getServiceInterfacePackageName(model, referencedTable));
 	}
 
+	protected List<SubclassReferenceData> getUniqueSubclassReferenceData(TableModel table) {
+		return getSubclassDataCollection(table)
+				.getSubclasses()
+				.stream()
+				.flatMap(subclass -> subclass.getReferences().stream())
+				.collect(Collectors.toSet())
+				.stream()
+				.sorted((r0, r1) -> r0.getServiceInterfaceName().compareTo(r1.getServiceInterfaceName()))
+				.collect(Collectors.toList());
+	}
+
 }

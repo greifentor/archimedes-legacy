@@ -63,6 +63,7 @@ public class MaintenanceLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 		context.put("ServiceInterfaceName", serviceNameGenerator.getServiceInterfaceName(table));
 		context.put("ServiceInterfacePackageName", serviceNameGenerator.getServiceInterfacePackageName(model, table));
 		context.put("SubclassDataCollection", getSubclassDataCollection(table));
+		context.put("UniqueSubclassReferenceDataCollection", getUniqueSubclassReferenceData(table));
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
 	}

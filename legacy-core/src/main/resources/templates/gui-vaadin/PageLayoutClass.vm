@@ -79,6 +79,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
 		${UserAuthorizationCheckerClassName}.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);
 		getStyle().set("background-image", "url('" + guiConfiguration.getBackgroundFileName() + "')");
+		getStyle().set("background-size", "cover");
 		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);
 		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);
 		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);

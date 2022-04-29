@@ -120,6 +120,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					+ //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
+					"		getStyle().set(\"background-size\", \"cover\");\n" + //
 					"		setMargin(false);\n" + //
 					"		setWidthFull();\n" + //
 					"		add(\n" + //
@@ -285,6 +286,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					+ //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
+					"		getStyle().set(\"background-size\", \"cover\");\n" + //
 					"		setMargin(false);\n" + //
 					"		setWidthFull();\n" + //
 					"		add(\n" + //
@@ -373,6 +375,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"import base.pack.age.name.core.model.ATable;\n" + //
 					"import base.pack.age.name.core.model.AnotherHeirTable;\n" + //
+					"import base.pack.age.name.core.model.AnotherHeirTableWithSameReference;\n" + //
 					"import base.pack.age.name.core.model.AnotherTable;\n" + //
 					"import base.pack.age.name.core.model.HeirTableWithReference;\n" + //
 					"import base.pack.age.name.core.service.ATableService;\n" + //
@@ -451,6 +454,9 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"		if (modelClassName.equals(\"AnotherHeirTable\")) {\n" + //
 					"			return new AnotherHeirTable();\n" + //
 					"		}\n" + //
+					"		if (modelClassName.equals(\"AnotherHeirTableWithSameReference\")) {\n" + //
+					"			return new AnotherHeirTableWithSameReference();\n" + //
+					"		}\n" + //
 					"		if (modelClassName.equals(\"AnotherTable\")) {\n" + //
 					"			return new AnotherTable();\n" + //
 					"		}\n" + //
@@ -466,6 +472,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					+ //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
+					"		getStyle().set(\"background-size\", \"cover\");\n" + //
 					"		setMargin(false);\n" + //
 					"		setWidthFull();\n" + //
 					"		add(\n" + //
@@ -496,6 +503,16 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					(AnotherHeirTable) model,\n" + //
 					"					service,\n" + //
+					"					resourceManager,\n" + //
+					"					session,\n" + //
+					"					this);\n" + //
+					"		}\n" + //
+					"		if (model instanceof AnotherHeirTableWithSameReference) {\n" + //
+					"			return new AnotherHeirTableWithSameReferenceDetailsLayout(\n" + //
+					"					buttonFactory,\n" + //
+					"					(AnotherHeirTableWithSameReference) model,\n" + //
+					"					service,\n" + //
+					"					referencedTableService,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this);\n" + //
