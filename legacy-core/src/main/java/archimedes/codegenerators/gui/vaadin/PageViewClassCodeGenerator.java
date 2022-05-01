@@ -17,13 +17,13 @@ import archimedes.model.TableModel;
  *
  * @author ollie (07.04.2022)
  */
-public class PageLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
+public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
 
 	private static final LocalizationNameGenerator localizationNameGenerator = new LocalizationNameGenerator();
 	private static final ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
-	public PageLayoutClassCodeGenerator(AbstractCodeFactory codeFactory) {
-		super("PageLayoutClass.vm", codeFactory);
+	public PageViewClassCodeGenerator(AbstractCodeFactory codeFactory) {
+		super("PageViewClass.vm", codeFactory);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class PageLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGene
 		context.put("GridData", getGridData(table));
 		context.put("HeaderLayoutClassName", nameGenerator.getHeaderLayoutClassName(model));
 		context.put("HeaderLayoutPackageName", nameGenerator.getHeaderLayoutPackageName(model));
-		context.put("MaintenanceLayoutClassName", nameGenerator.getMaintenanceLayoutClassName(model, table));
+		context.put("MaintenanceViewClassName", nameGenerator.getMaintenanceViewClassName(model, table));
 		context.put("MasterDataGUIConfigurationClassName", nameGenerator.getMasterDataGUIConfigurationClassName(model));
 		context
 				.put(
@@ -46,7 +46,7 @@ public class PageLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGene
 						nameGenerator.getMasterDataGUIConfigurationPackageName(model));
 		context.put("MasterDataButtonLayoutClassName", nameGenerator.getMasterDataButtonLayoutClassName(model));
 		context.put("MasterDataButtonLayoutPackageName", nameGenerator.getMasterDataButtonLayoutPackageName(model));
-		context.put("MasterDataLayoutClassName", nameGenerator.getMasterDataLayoutClassName(model));
+		context.put("MasterDataViewClassName", nameGenerator.getMasterDataViewClassName(model));
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
 		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
@@ -104,7 +104,7 @@ public class PageLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGene
 
 	@Override
 	public String getClassName(DataModel model, TableModel table) {
-		return nameGenerator.getPageLayoutClassName(table);
+		return nameGenerator.getPageViewClassName(table);
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class PageLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGene
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getPageLayoutPackageName(model, table);
+		return nameGenerator.getPageViewPackageName(model, table);
 	}
 
 	@Override

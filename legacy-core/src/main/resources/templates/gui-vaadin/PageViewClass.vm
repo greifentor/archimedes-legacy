@@ -123,7 +123,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		dataLayout.add(grid, buttonLayout);
 		add(
 				new ${HeaderLayoutClassName}(
-						buttonFactory.createBackButton(resourceManager, this::getUI, ${MasterDataLayoutClassName}.URL, session),
+						buttonFactory.createBackButton(resourceManager, this::getUI, ${MasterDataViewClassName}.URL, session),
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
 						resourceManager.getLocalizedString("${ClassName}.header.label", session.getLocalization()),
 						HeaderLayoutMode.PLAIN),
@@ -203,25 +203,25 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 								"${ModelClassName}") };
 		new SelectionDialog(
 				buttonFactory,
-				selectable -> switchToMaintenanceLayoutForANewObject(
+				selectable -> switchToMaintenanceViewForANewObject(
 						((SelectableSubclass) selectable).getSubclassName()),
 				resourceManager,
 				session,
 				selectableSubclasses).open();
 	}
 
-	private void switchToMaintenanceLayoutForANewObject(String selectedSubclassName) {
+	private void switchToMaintenanceViewForANewObject(String selectedSubclassName) {
 		QueryParameters parameters = new QueryParameters(Map.of("modelClass", List.of(selectedSubclassName)));
-		getUI().ifPresent(ui -> ui.navigate(${MaintenanceLayoutClassName}.URL, parameters));
+		getUI().ifPresent(ui -> ui.navigate(${MaintenanceViewClassName}.URL, parameters));
 #else
-		getUI().ifPresent(ui -> ui.navigate(${MaintenanceLayoutClassName}.URL));
+		getUI().ifPresent(ui -> ui.navigate(${MaintenanceViewClassName}.URL));
 #end
 	}
 
 	private void editRecord() {
 		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
 			QueryParameters parameters = new QueryParameters(Map.of("id", List.of("" + model.getId())));
-			getUI().ifPresent(ui -> ui.navigate(${MaintenanceLayoutClassName}.URL, parameters));
+			getUI().ifPresent(ui -> ui.navigate(${MaintenanceViewClassName}.URL, parameters));
 		});
 	}
 

@@ -52,7 +52,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	private static final Logger logger = LogManager.getLogger(${ClassName}.class);
 
 	@Autowired(required = false)
-	private MaintenanceLayoutRenderer<${ModelClassName}> maintenanceLayoutRenderer;
+	private MaintenanceViewRenderer<${ModelClassName}> maintenanceViewRenderer;
 
 	private final ${ButtonFactoryClassName} buttonFactory;
 	private final ${ResourceManagerInterfaceName} resourceManager;
@@ -127,8 +127,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	}
 
 	private String getHeaderSuffix(${ModelClassName} model) {
-		return maintenanceLayoutRenderer != null
-				? maintenanceLayoutRenderer.getHeaderSuffix(model)
+		return maintenanceViewRenderer != null
+				? maintenanceViewRenderer.getHeaderSuffix(model)
 				: "" + model.get${HeaderAttributeName}();
 	}
 

@@ -146,7 +146,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getPageLayoutPackageName(model, table);
+		return nameGenerator.getPageViewPackageName(model, table);
 	}
 
 	@Override

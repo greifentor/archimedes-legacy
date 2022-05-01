@@ -14,12 +14,12 @@ import archimedes.model.DataModel;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class MaintenanceLayoutClassCodeGeneratorTest {
+public class MaintenanceViewClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
-	private MaintenanceLayoutClassCodeGenerator unitUnderTest;
+	private MaintenanceViewClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -61,7 +61,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
 					"@Generated\n" + //
-					"@Route(ATableMaintenanceLayout.URL)\n" + //
+					"@Route(ATableMaintenanceView.URL)\n" + //
 					"@CssImport(\"./styles/shared-styles.css\")\n" + //
 					"@CssImport(value = \"./styles/vaadin-text-field-styles.css\", themeFor = \"vaadin-text-field\")\n"
 					+ //
@@ -69,15 +69,15 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"@CssImport(value = \"./styles/vaadin-combo-box-styles.css\", themeFor = \"vaadin-combo-box\")\n" + //
 					"@CssImport(value = \"./styles/vaadin-checkbox-styles.css\", themeFor = \"vaadin-checkbox\")\n" + //
 					"@RequiredArgsConstructor\n" + //
-					"public class ATableMaintenanceLayout extends AbstractMasterDataBaseLayout implements ATableDetailsLayout.Observer {\n"
+					"public class ATableMaintenanceView extends AbstractMasterDataBaseLayout implements ATableDetailsLayout.Observer {\n"
 					+ //
 					"\n" + //
 					"	public static final String URL = \"carp-dnd/masterdata/atabellen/details\";\n" + //
 					"\n" + //
-					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceLayout.class);\n" + //
+					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceView.class);\n" + //
 					"\n" + //
 					"	@Autowired(required = false)\n" + //
-					"	private MaintenanceLayoutRenderer<ATable> maintenanceLayoutRenderer;\n" + //
+					"	private MaintenanceViewRenderer<ATable> maintenanceViewRenderer;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
@@ -129,19 +129,19 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												ATablePageLayout.URL,\n" + //
+					"												ATablePageView.URL,\n" + //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
-					"								resourceManager.getLocalizedString(\"ATableMaintenanceLayout.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n"
+					"								resourceManager.getLocalizedString(\"ATableMaintenanceView.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n"
 					+ //
 					"								HeaderLayoutMode.PLAIN),\n" + //
 					"				getDetailsLayout(model));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private String getHeaderSuffix(ATable model) {\n" + //
-					"		return maintenanceLayoutRenderer != null\n" + //
-					"				? maintenanceLayoutRenderer.getHeaderSuffix(model)\n" + //
+					"		return maintenanceViewRenderer != null\n" + //
+					"				? maintenanceViewRenderer.getHeaderSuffix(model)\n" + //
 					"				: \"\" + model.getDescription();\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -165,13 +165,13 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void save() {\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageLayout.URL));\n" + //
+					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
 					"	public void remove() {\n" + //
 					"		service.delete(model);\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageLayout.URL));\n" + //
+					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"}";
@@ -226,7 +226,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
 					"@Generated\n" + //
-					"@Route(ATableMaintenanceLayout.URL)\n" + //
+					"@Route(ATableMaintenanceView.URL)\n" + //
 					"@CssImport(\"./styles/shared-styles.css\")\n" + //
 					"@CssImport(value = \"./styles/vaadin-text-field-styles.css\", themeFor = \"vaadin-text-field\")\n"
 					+ //
@@ -234,15 +234,15 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"@CssImport(value = \"./styles/vaadin-combo-box-styles.css\", themeFor = \"vaadin-combo-box\")\n" + //
 					"@CssImport(value = \"./styles/vaadin-checkbox-styles.css\", themeFor = \"vaadin-checkbox\")\n" + //
 					"@RequiredArgsConstructor\n" + //
-					"public class ATableMaintenanceLayout extends AbstractMasterDataBaseLayout implements ATableDetailsLayout.Observer {\n"
+					"public class ATableMaintenanceView extends AbstractMasterDataBaseLayout implements ATableDetailsLayout.Observer {\n"
 					+ //
 					"\n" + //
 					"	public static final String URL = \"test-project/masterdata/atabellen/details\";\n" + //
 					"\n" + //
-					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceLayout.class);\n" + //
+					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceView.class);\n" + //
 					"\n" + //
 					"	@Autowired(required = false)\n" + //
-					"	private MaintenanceLayoutRenderer<ATable> maintenanceLayoutRenderer;\n" + //
+					"	private MaintenanceViewRenderer<ATable> maintenanceViewRenderer;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
@@ -295,19 +295,19 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												ATablePageLayout.URL,\n" + //
+					"												ATablePageView.URL,\n" + //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
-					"								resourceManager.getLocalizedString(\"ATableMaintenanceLayout.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n"
+					"								resourceManager.getLocalizedString(\"ATableMaintenanceView.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n"
 					+ //
 					"								HeaderLayoutMode.PLAIN),\n" + //
 					"				getDetailsLayout(model));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private String getHeaderSuffix(ATable model) {\n" + //
-					"		return maintenanceLayoutRenderer != null\n" + //
-					"				? maintenanceLayoutRenderer.getHeaderSuffix(model)\n" + //
+					"		return maintenanceViewRenderer != null\n" + //
+					"				? maintenanceViewRenderer.getHeaderSuffix(model)\n" + //
 					"				: \"\" + model.getRef();\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -331,13 +331,13 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void save() {\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageLayout.URL));\n" + //
+					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
 					"	public void remove() {\n" + //
 					"		service.delete(model);\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageLayout.URL));\n" + //
+					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"}";
@@ -396,7 +396,7 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
 					"@Generated\n" + //
-					"@Route(ATableMaintenanceLayout.URL)\n" + //
+					"@Route(ATableMaintenanceView.URL)\n" + //
 					"@CssImport(\"./styles/shared-styles.css\")\n" + //
 					"@CssImport(value = \"./styles/vaadin-text-field-styles.css\", themeFor = \"vaadin-text-field\")\n"
 					+ //
@@ -404,15 +404,15 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"@CssImport(value = \"./styles/vaadin-combo-box-styles.css\", themeFor = \"vaadin-combo-box\")\n" + //
 					"@CssImport(value = \"./styles/vaadin-checkbox-styles.css\", themeFor = \"vaadin-checkbox\")\n" + //
 					"@RequiredArgsConstructor\n" + //
-					"public class ATableMaintenanceLayout extends AbstractMasterDataBaseLayout implements ATableDetailsLayout.Observer {\n"
+					"public class ATableMaintenanceView extends AbstractMasterDataBaseLayout implements ATableDetailsLayout.Observer {\n"
 					+ //
 					"\n" + //
 					"	public static final String URL = \"test-project/masterdata/atabellen/details\";\n" + //
 					"\n" + //
-					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceLayout.class);\n" + //
+					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceView.class);\n" + //
 					"\n" + //
 					"	@Autowired(required = false)\n" + //
-					"	private MaintenanceLayoutRenderer<ATable> maintenanceLayoutRenderer;\n" + //
+					"	private MaintenanceViewRenderer<ATable> maintenanceViewRenderer;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
@@ -481,19 +481,19 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												ATablePageLayout.URL,\n" + //
+					"												ATablePageView.URL,\n" + //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
-					"								resourceManager.getLocalizedString(\"ATableMaintenanceLayout.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n"
+					"								resourceManager.getLocalizedString(\"ATableMaintenanceView.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n"
 					+ //
 					"								HeaderLayoutMode.PLAIN),\n" + //
 					"				getDetailsLayout(model));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private String getHeaderSuffix(ATable model) {\n" + //
-					"		return maintenanceLayoutRenderer != null\n" + //
-					"				? maintenanceLayoutRenderer.getHeaderSuffix(model)\n" + //
+					"		return maintenanceViewRenderer != null\n" + //
+					"				? maintenanceViewRenderer.getHeaderSuffix(model)\n" + //
 					"				: \"\" + model.getDescription();\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -555,13 +555,13 @@ public class MaintenanceLayoutClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void save() {\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageLayout.URL));\n" + //
+					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
 					"	public void remove() {\n" + //
 					"		service.delete(model);\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageLayout.URL));\n" + //
+					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"}";

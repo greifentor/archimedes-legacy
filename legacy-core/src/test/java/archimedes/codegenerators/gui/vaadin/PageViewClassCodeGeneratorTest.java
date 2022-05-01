@@ -21,12 +21,12 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class PageLayoutClassCodeGeneratorTest {
+public class PageViewClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
-	private PageLayoutClassCodeGenerator unitUnderTest;
+	private PageViewClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -84,14 +84,14 @@ public class PageLayoutClassCodeGeneratorTest {
 						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 						" */\n" + //
 						"@Generated\n" + //
-						"@Route(ATablePageLayout.URL)\n" + //
+						"@Route(ATablePageView.URL)\n" + //
 						"@RequiredArgsConstructor\n" + //
-						"public class ATablePageLayout extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
+						"public class ATablePageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 						+ //
 						"\n" + //
 						"	public static final String URL = \"carp-dnd/masterdata/atabellen\";\n" + //
 						"\n" + //
-						"	private static final Logger logger = LogManager.getLogger(ATablePageLayout.class);\n" + //
+						"	private static final Logger logger = LogManager.getLogger(ATablePageView.class);\n" + //
 						"\n" + //
 						"	@Autowired(required = false)\n" + //
 						"	private MasterDataGridFieldRenderer<ATable> masterDataGridFieldRenderer;\n" + //
@@ -129,12 +129,12 @@ public class PageLayoutClassCodeGeneratorTest {
 						"		grid\n" + //
 						"				.addColumn(model -> getHeaderString(\"DESCRIPTION\", model, () -> model.getDescription()))\n"
 						+ //
-						"				.setHeader(resourceManager.getLocalizedString(\"ATablePageLayout.grid.header.description.label\", session.getLocalization()))\n"
+						"				.setHeader(resourceManager.getLocalizedString(\"ATablePageView.grid.header.description.label\", session.getLocalization()))\n"
 						+ //
 						"				.setSortable(true);\n" + //
 						"		grid\n" + //
 						"				.addColumn(model -> getHeaderString(\"FLAG\", model, () -> model.isFlag()))\n" + //
-						"				.setHeader(resourceManager.getLocalizedString(\"ATablePageLayout.grid.header.flag.label\", session.getLocalization()))\n"
+						"				.setHeader(resourceManager.getLocalizedString(\"ATablePageView.grid.header.flag.label\", session.getLocalization()))\n"
 						+ //
 						"				.setSortable(true);\n" + //
 						"		grid.setMultiSort(true);\n" + //
@@ -166,11 +166,11 @@ public class PageLayoutClassCodeGeneratorTest {
 						"		dataLayout.add(grid, buttonLayout);\n" + //
 						"		add(\n" + //
 						"				new HeaderLayout(\n" + //
-						"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataLayout.URL, session),\n"
+						"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataView.URL, session),\n"
 						+ //
 						"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 						+ //
-						"						resourceManager.getLocalizedString(\"ATablePageLayout.header.label\", session.getLocalization()),\n"
+						"						resourceManager.getLocalizedString(\"ATablePageView.header.label\", session.getLocalization()),\n"
 						+ //
 						"						HeaderLayoutMode.PLAIN),\n" + //
 						"				dataLayout);\n" + //
@@ -234,14 +234,14 @@ public class PageLayoutClassCodeGeneratorTest {
 						"	}\n" + //
 						"\n" + //
 						"	private void addRecord() {\n" + //
-						"		getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceLayout.URL));\n" + //
+						"		getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceView.URL));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	private void editRecord() {\n" + //
 						"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
 						"			QueryParameters parameters = new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId())));\n"
 						+ //
-						"			getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceLayout.URL, parameters));\n" + //
+						"			getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceView.URL, parameters));\n" + //
 						"		});\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -325,14 +325,14 @@ public class PageLayoutClassCodeGeneratorTest {
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
 					"@Generated\n" + //
-					"@Route(ATablePageLayout.URL)\n" + //
+					"@Route(ATablePageView.URL)\n" + //
 					"@RequiredArgsConstructor\n" + //
-					"public class ATablePageLayout extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
+					"public class ATablePageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 					+ //
 					"\n" + //
 					"	public static final String URL = \"test-project/masterdata/atabellen\";\n" + //
 					"\n" + //
-					"	private static final Logger logger = LogManager.getLogger(ATablePageLayout.class);\n" + //
+					"	private static final Logger logger = LogManager.getLogger(ATablePageView.class);\n" + //
 					"\n" + //
 					"	@Autowired(required = false)\n" + //
 					"	private MasterDataGridFieldRenderer<ATable> masterDataGridFieldRenderer;\n" + //
@@ -370,12 +370,12 @@ public class PageLayoutClassCodeGeneratorTest {
 					"		grid\n" + //
 					"				.addColumn(model -> getHeaderString(\"DESCRIPTION\", model, () -> model.getDescription()))\n"
 					+ //
-					"				.setHeader(resourceManager.getLocalizedString(\"ATablePageLayout.grid.header.description.label\", session.getLocalization()))\n"
+					"				.setHeader(resourceManager.getLocalizedString(\"ATablePageView.grid.header.description.label\", session.getLocalization()))\n"
 					+ //
 					"				.setSortable(true);\n" + //
 					"		grid\n" + //
 					"				.addColumn(model -> getHeaderString(\"FLAG\", model, () -> model.isFlag()))\n" + //
-					"				.setHeader(resourceManager.getLocalizedString(\"ATablePageLayout.grid.header.flag.label\", session.getLocalization()))\n"
+					"				.setHeader(resourceManager.getLocalizedString(\"ATablePageView.grid.header.flag.label\", session.getLocalization()))\n"
 					+ //
 					"				.setSortable(true);\n" + //
 					"		grid.setMultiSort(true);\n" + //
@@ -407,11 +407,11 @@ public class PageLayoutClassCodeGeneratorTest {
 					"		dataLayout.add(grid, buttonLayout);\n" + //
 					"		add(\n" + //
 					"				new HeaderLayout(\n" + //
-					"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataLayout.URL, session),\n"
+					"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataView.URL, session),\n"
 					+ //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
-					"						resourceManager.getLocalizedString(\"ATablePageLayout.header.label\", session.getLocalization()),\n"
+					"						resourceManager.getLocalizedString(\"ATablePageView.header.label\", session.getLocalization()),\n"
 					+ //
 					"						HeaderLayoutMode.PLAIN),\n" + //
 					"				dataLayout);\n" + //
@@ -478,58 +478,58 @@ public class PageLayoutClassCodeGeneratorTest {
 					"						new SelectableSubclass(\n" + //
 					"								resourceManager\n" + //
 					"										.getLocalizedString(\n" + //
-					"												\"ATablePageLayout.subclass.selection.AnotherHeirTable.label\",\n"
+					"												\"ATablePageView.subclass.selection.AnotherHeirTable.label\",\n"
 					+ //
 					"												session.getLocalization()),\n" + //
 					"								\"AnotherHeirTable\"),\n" + //
 					"						new SelectableSubclass(\n" + //
 					"								resourceManager\n" + //
 					"										.getLocalizedString(\n" + //
-					"												\"ATablePageLayout.subclass.selection.AnotherHeirTableWithSameReference.label\",\n"
+					"												\"ATablePageView.subclass.selection.AnotherHeirTableWithSameReference.label\",\n"
 					+ //
 					"												session.getLocalization()),\n" + //
 					"								\"AnotherHeirTableWithSameReference\"),\n" + //
 					"						new SelectableSubclass(\n" + //
 					"								resourceManager\n" + //
 					"										.getLocalizedString(\n" + //
-					"												\"ATablePageLayout.subclass.selection.AnotherTable.label\",\n"
+					"												\"ATablePageView.subclass.selection.AnotherTable.label\",\n"
 					+ //
 					"												session.getLocalization()),\n" + //
 					"								\"AnotherTable\"),\n" + //
 					"						new SelectableSubclass(\n" + //
 					"								resourceManager\n" + //
 					"										.getLocalizedString(\n" + //
-					"												\"ATablePageLayout.subclass.selection.HeirTableWithReference.label\",\n"
+					"												\"ATablePageView.subclass.selection.HeirTableWithReference.label\",\n"
 					+ //
 					"												session.getLocalization()),\n" + //
 					"								\"HeirTableWithReference\"),\n" + //
 					"						new SelectableSubclass(\n" + //
 					"								resourceManager\n" + //
 					"										.getLocalizedString(\n" + //
-					"												\"ATablePageLayout.subclass.selection.ATable.label\",\n"
+					"												\"ATablePageView.subclass.selection.ATable.label\",\n"
 					+ //
 					"												session.getLocalization()),\n" + //
 					"								\"ATable\") };\n" + //
 					"		new SelectionDialog(\n" + //
 					"				buttonFactory,\n" + //
-					"				selectable -> switchToMaintenanceLayoutForANewObject(\n" + //
+					"				selectable -> switchToMaintenanceViewForANewObject(\n" + //
 					"						((SelectableSubclass) selectable).getSubclassName()),\n" + //
 					"				resourceManager,\n" + //
 					"				session,\n" + //
 					"				selectableSubclasses).open();\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	private void switchToMaintenanceLayoutForANewObject(String selectedSubclassName) {\n" + //
+					"	private void switchToMaintenanceViewForANewObject(String selectedSubclassName) {\n" + //
 					"		QueryParameters parameters = new QueryParameters(Map.of(\"modelClass\", List.of(selectedSubclassName)));\n"
 					+ //
-					"		getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceLayout.URL, parameters));\n" + //
+					"		getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceView.URL, parameters));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private void editRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
 					"			QueryParameters parameters = new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId())));\n"
 					+ //
-					"			getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceLayout.URL, parameters));\n" + //
+					"			getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceView.URL, parameters));\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //

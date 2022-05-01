@@ -30,9 +30,9 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX = "ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME = "ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME";
 	public static final String ALTERNATE_IMAGE_CLASS_NAME_SUFFIX = "ALTERNATE_IMAGE_CLASS_NAME_SUFFIX";
-	public static final String ALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIX =
-			"ALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIX";
-	public static final String ALTERNATE_MAINTENANCE_LAYOUT_PACKAGE_NAME = "ALTERNATE_MAINTENANCE_LAYOUT_PACKAGE_NAME";
+	public static final String ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX =
+			"ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME = "ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME";
 	public static final String ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX =
 			"ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME =
@@ -41,13 +41,12 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 			"ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_CLASS_NAME";
 	public static final String ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_PACKAGE_NAME =
 			"ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_PACKAGE_NAME";
-	public static final String ALTERNATE_MASTER_DATA_LAYOUT_CLASS_NAME =
-			"ALTERNATE_MASTER_DATA_LAYOUT_CLASS_NAME_SUFFIX";
-	public static final String ALTERNATE_MASTER_DATA_LAYOUT_PACKAGE_NAME = "ALTERNATE_MASTER_DATA_LAYOUT_PACKAGE_NAME";
+	public static final String ALTERNATE_MASTER_DATA_VIEW_CLASS_NAME = "ALTERNATE_MASTER_DATA_VIEW_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_MASTER_DATA_VIEW_PACKAGE_NAME = "ALTERNATE_MASTER_DATA_VIEW_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_GO_CONVERTER_PACKAGE_NAME = "ALTERNATE_PAGE_GO_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_GO_PACKAGE_NAME = "ALTERNATE_PAGE_GO_PACKAGE_NAME";
-	public static final String ALTERNATE_PAGE_LAYOUT_PACKAGE_NAME = "ALTERNATE_PAGE_LAYOUT_PACKAGE_NAME";
-	public static final String ALTERNATE_PAGE_LAYOUT_CLASS_NAME_SUFFIX = "ALTERNATE_PAGE_LAYOUT_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_PAGE_VIEW_PACKAGE_NAME = "ALTERNATE_PAGE_VIEW_PACKAGE_NAME";
+	public static final String ALTERNATE_PAGE_VIEW_CLASS_NAME_SUFFIX = "ALTERNATE_PAGE_VIEW_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME =
 			"ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME = "ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME";
@@ -149,19 +148,19 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return model == null ? null : getNameOrAlternativeFromOption(model, "Image", ALTERNATE_IMAGE_CLASS_NAME_SUFFIX);
 	}
 
-	public String getMaintenanceLayoutClassName(DataModel model, TableModel table) {
-		return table != null ? getClassName(table) + getMaintenanceLayoutClassNameSuffix(table) : null;
+	public String getMaintenanceViewClassName(DataModel model, TableModel table) {
+		return table != null ? getClassName(table) + getMaintenanceViewClassNameSuffix(table) : null;
 	}
 
-	private String getMaintenanceLayoutClassNameSuffix(TableModel table) {
+	private String getMaintenanceViewClassNameSuffix(TableModel table) {
 		return getNameOrAlternativeFromOption(
 				table.getDataModel(),
-				"MaintenanceLayout",
-				ALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIX);
+				"MaintenanceView",
+				ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX);
 	}
 
-	public String getMaintenanceLayoutPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "gui.vaadin.masterdata", ALTERNATE_MAINTENANCE_LAYOUT_PACKAGE_NAME);
+	public String getMaintenanceViewPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "gui.vaadin.masterdata", ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME);
 	}
 
 	public String getMasterDataButtonLayoutClassName(DataModel model) {
@@ -194,17 +193,17 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 				ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_PACKAGE_NAME);
 	}
 
-	public String getMasterDataLayoutClassName(DataModel model) {
+	public String getMasterDataViewClassName(DataModel model) {
 		return model == null
 				? null
 				: getNameOrAlternativeFromOption(
 						model,
-						"MasterDataLayout",
-						ALTERNATE_MASTER_DATA_LAYOUT_CLASS_NAME);
+						"MasterDataView",
+						ALTERNATE_MASTER_DATA_VIEW_CLASS_NAME);
 	}
 
-	public String getMasterDataLayoutPackageName(DataModel model) {
-		return createPackageName(model, null, "gui.vaadin.masterdata", ALTERNATE_MASTER_DATA_LAYOUT_PACKAGE_NAME);
+	public String getMasterDataViewPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin.masterdata", ALTERNATE_MASTER_DATA_VIEW_PACKAGE_NAME);
 	}
 
 	public String getPageGOConverterClassName(TableModel table) {
@@ -223,19 +222,19 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return createPackageName(model, table, "gui.vaadin.go.converter", ALTERNATE_PAGE_GO_PACKAGE_NAME);
 	}
 
-	public String getPageLayoutClassName(TableModel table) {
-		return table != null ? getClassName(table) + getPageLayoutClassNameSuffix(table) : null;
+	public String getPageViewClassName(TableModel table) {
+		return table != null ? getClassName(table) + getPageViewClassNameSuffix(table) : null;
 	}
 
-	private String getPageLayoutClassNameSuffix(TableModel table) {
+	private String getPageViewClassNameSuffix(TableModel table) {
 		return getNameOrAlternativeFromOption(
 				table.getDataModel(),
-				"PageLayout",
-				ALTERNATE_PAGE_LAYOUT_CLASS_NAME_SUFFIX);
+				"PageView",
+				ALTERNATE_PAGE_VIEW_CLASS_NAME_SUFFIX);
 	}
 
-	public String getPageLayoutPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "gui.vaadin.masterdata", ALTERNATE_PAGE_LAYOUT_PACKAGE_NAME);
+	public String getPageViewPackageName(DataModel model, TableModel table) {
+		return createPackageName(model, table, "gui.vaadin.masterdata", ALTERNATE_PAGE_VIEW_PACKAGE_NAME);
 	}
 
 	public String getPageParametersGOClassName(TableModel table) {
