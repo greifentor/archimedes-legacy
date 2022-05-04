@@ -127,6 +127,7 @@ This checker looks up the all tables for potential foreign key column. These are
 the model checker create a warning.
 
 | Option Name | To Place In | Description |
+| ----------- | ----------- | ----------- |
 | POTENTIAL_FK_WARNING_MODE | MODEL | Sets the passed mode (``STRICT`` or ``WEAK``) for the whole model. |
 | POTENTIAL_FK_WARNING_MODE | TABLE | Sets the passed mode (``STRICT`` or ``WEAK``) for specific table. This overrides the mode set for the model. |
 | SUPPRESS_POTENTIAL_FK_WARNING | COLUMN | Suppresses any check by the model checker for these column. |
