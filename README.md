@@ -120,6 +120,21 @@ It also starts the model checker which processes a Java script (see below
 "Model Checker By Script").
 
 
+#### Check for Potential Foreign Keys
+
+This checker looks up the all tables for potential foreign key column. These are columns starting or ending with with
+``id``. In case of finding such a column which is not referencing a table respectively the correct table in strict mode,
+the model checker create a warning.
+
+| Option Name | To Place In | Description |
+| POTENTIAL_FK_WARNING_MODE | MODEL | Sets the passed mode (``STRICT`` or ``WEAK``) for the whole model. |
+| POTENTIAL_FK_WARNING_MODE | TABLE | Sets the passed mode (``STRICT`` or ``WEAK``) for specific table. This overrides the mode set for the model. |
+| SUPPRESS_POTENTIAL_FK_WARNING | COLUMN | Suppresses any check by the model checker for these column. |
+
+In ``STRICT`` mode the column name have to be the referenced table name with ``id`` prefix or suffix. In ``WEAK`` mode
+it is adequate that the column is referencing any table.
+
+
 ### Model Checkers of Code Factories
 
 Additionally any Code Factory implementation could provide its own model 

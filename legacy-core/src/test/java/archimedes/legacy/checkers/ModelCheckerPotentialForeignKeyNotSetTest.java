@@ -110,4 +110,165 @@ public class ModelCheckerPotentialForeignKeyNotSetTest {
 				returned);
 	}
 
+	@Test
+	void happyRun_FindThePotentialForeignKey_ModeStrictInDataModel() {
+		// Prepare
+		DataModel dataModel = readDataModel("ModelCheckers-PotentialForeignKeyNotSet.xml");
+		String message1 = "message1";
+		String message2 = "message2";
+		String message3 = "message3";
+		String message4 = "message4";
+		doReturn(message1)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.ATableId",
+		                "ATable");
+		doReturn(message2)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.AnotherTable_Id",
+		                "AnotherTable");
+		doReturn(message3)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.Id_ATable",
+		                "ATable");
+		doReturn(message4)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.Id_BTable",
+		                "BTable");
+		dataModel
+		        .addOption(
+		                new Option(
+		                        ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE,
+		                        ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE_STRICT));
+		// Run
+		ModelCheckerMessage[] returned = unitUnderTest.check(dataModel);
+		// Check
+		assertEquals(4, returned.length);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message1, dataModel.getTableByName("Referencer")),
+		        returned);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message2, dataModel.getTableByName("Referencer")),
+		        returned);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message3, dataModel.getTableByName("Referencer")),
+		        returned);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message4, dataModel.getTableByName("Referencer")),
+		        returned);
+	}
+
+	@Test
+	void happyRun_FindThePotentialForeignKey_ModeStrictInTableModel() {
+		// Prepare
+		DataModel dataModel = readDataModel("ModelCheckers-PotentialForeignKeyNotSet.xml");
+		String message1 = "message1";
+		String message2 = "message2";
+		String message3 = "message3";
+		String message4 = "message4";
+		doReturn(message1)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.ATableId",
+		                "ATable");
+		doReturn(message2)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.AnotherTable_Id",
+		                "AnotherTable");
+		doReturn(message3)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.Id_ATable",
+		                "ATable");
+		doReturn(message4)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.Id_BTable",
+		                "BTable");
+		dataModel
+		        .getTableByName("Referencer")
+		        .addOption(
+		                new Option(
+		                        ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE,
+		                        ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE_STRICT));
+		// Run
+		ModelCheckerMessage[] returned = unitUnderTest.check(dataModel);
+		// Check
+		assertEquals(4, returned.length);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message1, dataModel.getTableByName("Referencer")),
+		        returned);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message2, dataModel.getTableByName("Referencer")),
+		        returned);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message3, dataModel.getTableByName("Referencer")),
+		        returned);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message4, dataModel.getTableByName("Referencer")),
+		        returned);
+	}
+
+	@Test
+	void happyRun_FindThePotentialForeignKey_ModeStrictInDataModelButOverridenWithWeakInTable() {
+		// Prepare
+		DataModel dataModel = readDataModel("ModelCheckers-PotentialForeignKeyNotSet.xml");
+		String message1 = "message1";
+		String message2 = "message2";
+		String message3 = "message3";
+		doReturn(message1)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.ATableId",
+		                "ATable");
+		doReturn(message2)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.AnotherTable_Id",
+		                "AnotherTable");
+		doReturn(message3)
+		        .when(guiBundle)
+		        .getResourceText(
+		                ModelCheckerPotentialForeignKeyNotSet.RES_MODEL_CHECKER_POTENTIAL_FOREIGN_KEY,
+		                "Referencer.Id_ATable",
+		                "ATable");
+		dataModel
+		        .addOption(
+		                new Option(
+		                        ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE,
+		                        ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE_STRICT));
+		dataModel
+		        .getTableByName("Referencer")
+		        .addOption(
+		                new Option(
+		                        ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE,
+		                        ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE_WEAK));
+		// Run
+		ModelCheckerMessage[] returned = unitUnderTest.check(dataModel);
+		assertEquals(3, returned.length);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message1, dataModel.getTableByName("Referencer")),
+		        returned);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message2, dataModel.getTableByName("Referencer")),
+		        returned);
+		assertMessageContained(
+		        new ModelCheckerMessage(Level.WARNING, message3, dataModel.getTableByName("Referencer")),
+		        returned);
+	}
+
 }
