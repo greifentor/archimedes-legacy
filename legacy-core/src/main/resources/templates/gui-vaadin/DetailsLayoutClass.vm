@@ -81,7 +81,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		createButtons();
 #foreach ($Reference in $GUIReferences)
 		comboBox${Reference.getFieldNameCamelCase()} = new ComboBox<>("${Reference.getReferencedModelClassName()}", ${Reference.getServiceAttributeName()}.findAll());
-		comboBox${Reference.getFieldNameCamelCase()}.setValue(model.get${Reference.getReferencedModelClassName()}());
+		comboBox${Reference.getFieldNameCamelCase()}.setValue(model.get${Reference.getFieldNameCamelCase()}());
 		comboBox${Reference.getFieldNameCamelCase()}.setItemLabelGenerator(${Reference.getReferencedModelClassName()}::get${Reference.getReferencedModelNameFieldName()});
 		comboBox${Reference.getFieldNameCamelCase()}.setWidthFull();
 #end

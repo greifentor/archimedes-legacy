@@ -34,8 +34,8 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 		super(
 				"DBOConverterClass.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-		        PersistenceJPANameGenerator.INSTANCE,
-		        TypeGenerator.INSTANCE,
+				PersistenceJPANameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
@@ -79,16 +79,16 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 				.put(
 						"ModelClassNameQualified",
 						getQualifiedName(
-		                        SERVICE_NAME_GENERATOR.getModelPackageName(model, table),
-		                        SERVICE_NAME_GENERATOR.getModelClassName(table)));
+								SERVICE_NAME_GENERATOR.getModelPackageName(model, table),
+								SERVICE_NAME_GENERATOR.getModelClassName(table)));
 		context.put("ModelSuperclassName", getSuperclassName(table, SERVICE_NAME_GENERATOR::getModelClassName));
 		context
 				.put(
 						"ModelSuperclassNameQualified",
 						getSuperclassName(
 								table,
-		                        t -> SERVICE_NAME_GENERATOR.getModelPackageName(model, t) + "."
-		                                + SERVICE_NAME_GENERATOR.getModelClassName(t)));
+								t -> SERVICE_NAME_GENERATOR.getModelPackageName(model, t) + "."
+										+ SERVICE_NAME_GENERATOR.getModelClassName(t)));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ReferenceMode", referenceMode);
 		context.put("Subclasses", getSubclassData(model, table));
@@ -116,14 +116,14 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 	private String getDBOConverterAttributeName(ColumnModel column, DataModel model) {
 		return (column.getReferencedColumn() != null)
 				? nameGenerator.getAttributeName(getClassName(column.getReferencedTable()))
-		        : getEnumAttributeName(column, model);
+				: getEnumAttributeName(column, model);
 	}
 
 	private String getEnumAttributeName(ColumnModel column, DataModel model) {
 		return isEnum(column)
-		        ? nameGenerator
-		                .getAttributeName(nameGenerator.getDBOConverterClassName(column.getDomain().getName(), model))
-		        : "UNKNOWN";
+				? nameGenerator
+						.getAttributeName(nameGenerator.getDBOConverterClassName(column.getDomain().getName(), model))
+				: "UNKNOWN";
 	}
 
 	private String getGetterCall(ColumnModel column, DataModel model, ReferenceMode referenceMode) {
@@ -198,8 +198,8 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 						.of(model.getAllColumns())
 						.stream()
 						.filter(column -> column.getTable().isOptionSet(AbstractClassCodeGenerator.SUBCLASS))
-						.filter(column -> column.getReferencedTable() == table)
-		                .map(ColumnModel::getTable)
+						.filter(column -> column.isPrimaryKey() && (column.getReferencedTable() == table))
+						.map(ColumnModel::getTable)
 						.collect(Collectors.toSet());
 		return subclassTables
 				.stream()
@@ -208,14 +208,14 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 						t -> new SubclassData()
 								.setConverterAttributeName(nameGenerator.getAttributeName(getClassName(t)))
 								.setConverterClassName(getClassName(t))
-		                        .setDboClassName(nameGenerator.getDBOClassName(t))
+								.setDboClassName(nameGenerator.getDBOClassName(t))
 								.setDboClassNameQualified(
-		                                nameGenerator.getDBOPackageName(model, t) + "."
-		                                        + nameGenerator.getDBOClassName(t))
-		                        .setModelClassName(SERVICE_NAME_GENERATOR.getModelClassName(t))
+										nameGenerator.getDBOPackageName(model, t) + "."
+												+ nameGenerator.getDBOClassName(t))
+								.setModelClassName(SERVICE_NAME_GENERATOR.getModelClassName(t))
 								.setModelClassNameQualified(
-		                                SERVICE_NAME_GENERATOR.getModelPackageName(model, t) + "."
-		                                        + SERVICE_NAME_GENERATOR.getModelClassName(t)))
+										SERVICE_NAME_GENERATOR.getModelPackageName(model, t) + "."
+												+ SERVICE_NAME_GENERATOR.getModelClassName(t)))
 				.collect(Collectors.toList());
 	}
 

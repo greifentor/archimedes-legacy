@@ -190,7 +190,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
 						"		comboBoxRef = new ComboBox<>(\"AnotherTable\", anotherTableService.findAll());\n" + //
-						"		comboBoxRef.setValue(model.getAnotherTable());\n" + //
+						"		comboBoxRef.setValue(model.getRef());\n" + //
 						"		comboBoxRef.setItemLabelGenerator(AnotherTable::getName);\n" + //
 						"		comboBoxRef.setWidthFull();\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
