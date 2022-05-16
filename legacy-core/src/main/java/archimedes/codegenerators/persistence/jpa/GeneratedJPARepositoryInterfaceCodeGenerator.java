@@ -43,7 +43,9 @@ public class GeneratedJPARepositoryInterfaceCodeGenerator
 										nameGenerator,
 										nameGenerator::getDBOClassName,
 										t -> nameGenerator.getDBOPackageName(model, t),
-										typeGenerator));
+										typeGenerator,
+										(c, m) -> nameGenerator.getDBOClassName(c.getDomain(), m),
+										d -> nameGenerator.getDBOPackageName(model, d)));
 		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
 		context.put("HasNoUniques", FindByUtils.hasNoUniques(table.getColumns()));
 		context

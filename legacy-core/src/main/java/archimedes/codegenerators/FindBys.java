@@ -1,5 +1,7 @@
 package archimedes.codegenerators;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -22,6 +24,29 @@ public class FindBys {
 		private String typeName;
 		private String typePackageName;
 		private boolean unique;
+
+		public boolean isSimpleType() {
+			return List
+					.of(
+							"boolean",
+							"Boolean",
+							"byte",
+							"Byte",
+							"char",
+							"Character",
+							"double",
+							"Double",
+							"float",
+							"Float",
+							"int",
+							"Integer",
+							"long",
+							"Long",
+							"short",
+							"Short",
+							"String")
+					.contains(typeName);
+		}
 	}
 
 }

@@ -6,6 +6,11 @@ import java.util.Optional;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#foreach($FindBy in $FindBys)
+#if(!${FindBy.isSimpleType()})
+import ${FindBy.getTypePackageName()}.${FindBy.getTypeName()};
+#end
+#end
 #foreach($ListAccessData in $ListAccess)
 #if($ListAccessData.getTypeQualifiedName())
 import ${ListAccessData.getTypeQualifiedName()};

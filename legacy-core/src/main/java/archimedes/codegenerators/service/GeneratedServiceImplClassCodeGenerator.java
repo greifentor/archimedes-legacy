@@ -42,7 +42,9 @@ public class GeneratedServiceImplClassCodeGenerator extends AbstractClassCodeGen
 										nameGenerator,
 										nameGenerator::getModelClassName,
 										t -> nameGenerator.getModelPackageName(model, t),
-										typeGenerator));
+										typeGenerator,
+										(c, m) -> nameGenerator.getModelClassName(c.getDomain(), m),
+										d -> nameGenerator.getModelPackageName(model, d)));
 		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
 		context.put("HasNoUniques", FindByUtils.hasNoUniques(table.getColumns()));
 		context

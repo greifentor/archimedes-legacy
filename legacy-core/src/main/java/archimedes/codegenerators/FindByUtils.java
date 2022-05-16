@@ -1,11 +1,14 @@
 package archimedes.codegenerators;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import archimedes.codegenerators.FindBys.FindByData;
 import archimedes.model.ColumnModel;
+import archimedes.model.DataModel;
+import archimedes.model.OptionListProvider;
 import archimedes.model.TableModel;
 
 public class FindByUtils {
@@ -13,10 +16,7 @@ public class FindByUtils {
 	public static final String FIND_BY = "FIND_BY";
 
 	public static boolean hasUniques(ColumnModel[] columns) {
-		return List
-				.of(columns)
-				.stream()
-				.anyMatch(ColumnModel::isUnique);
+		return List.of(columns).stream().anyMatch(ColumnModel::isUnique);
 	}
 
 	public static boolean hasNotNulls(ColumnModel[] columns) {
@@ -41,7 +41,9 @@ public class FindByUtils {
 
 	public static List<FindByData> getFindBys(ColumnModel[] columns, ReferenceMode referenceMode,
 			NameGenerator nameGenerator, Function<TableModel, String> referenceClassNameProvider,
-			Function<TableModel, String> referenceClassPackageNameProvider, TypeGenerator typeGenerator) {
+			Function<TableModel, String> referenceClassPackageNameProvider, TypeGenerator typeGenerator,
+			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider,
+			Function<OptionListProvider, String> enumPackagerNameProvider) {
 		return getFindBys(
 				columns,
 				referenceMode,
@@ -50,14 +52,18 @@ public class FindByUtils {
 				referenceClassPackageNameProvider,
 				t -> "UNDEFINED",
 				t -> "UNDEFINED",
-				typeGenerator);
+				typeGenerator,
+				enumClassNameProvider,
+				enumPackagerNameProvider);
 	}
 
 	public static List<FindByData> getFindBys(ColumnModel[] columns, ReferenceMode referenceMode,
 			NameGenerator nameGenerator, Function<TableModel, String> referenceClassNameProvider,
 			Function<TableModel, String> referenceClassPackageNameProvider,
 			Function<TableModel, String> referenceConverterClassNameProvider,
-			Function<TableModel, String> referenceConverterPackageNameProvider, TypeGenerator typeGenerator) {
+			Function<TableModel, String> referenceConverterPackageNameProvider, TypeGenerator typeGenerator,
+			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider,
+			Function<OptionListProvider, String> enumPackagerNameProvider) {
 		return List
 				.of(columns)
 				.stream()
@@ -81,8 +87,19 @@ public class FindByUtils {
 										getFromProvider(column, referenceConverterPackageNameProvider, referenceMode))
 								.setObjectReference(isObjectReference(column, referenceMode))
 								.setTypePackageName(
-										getFromProvider(column, referenceClassPackageNameProvider, referenceMode))
-								.setTypeName(getType(column, referenceMode, referenceClassNameProvider, typeGenerator))
+										isEnum(column)
+												? enumPackagerNameProvider.apply(column.getDomain())
+												: getFromProvider(
+														column,
+														referenceClassPackageNameProvider,
+														referenceMode))
+								.setTypeName(
+										getType(
+												column,
+												referenceMode,
+												referenceClassNameProvider,
+												typeGenerator,
+												enumClassNameProvider))
 								.setUnique(column.isUnique()))
 				.collect(Collectors.toList());
 	}
@@ -100,11 +117,18 @@ public class FindByUtils {
 	}
 
 	private static String getType(ColumnModel column, ReferenceMode referenceMode,
-			Function<TableModel, String> referenceClassNameProvider, TypeGenerator typeGenerator) {
+			Function<TableModel, String> referenceClassNameProvider, TypeGenerator typeGenerator,
+			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider) {
 		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
 			return referenceClassNameProvider.apply(column.getReferencedTable());
+		} else if (isEnum(column)) {
+			return enumClassNameProvider.apply(column, column.getTable().getDataModel());
 		}
 		return typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column));
+	}
+
+	private static boolean isEnum(ColumnModel column) {
+		return column.getDomain().isOptionSet(AbstractClassCodeGenerator.ENUM);
 	}
 
 }
