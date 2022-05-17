@@ -21,9 +21,14 @@ public class FindBys {
 		private String converterClassName;
 		private String converterPackageName;
 		private boolean objectReference;
+		// TODO: Following three must be refactored !!!
+		private String typeDBOConverterAttributeName;
+		private String typeDBOConverterClassName;
+		private String typeDBOConverterPackageName;
 		private String typeName;
 		private String typePackageName;
 		private boolean unique;
+		private boolean isEnumType;
 
 		public boolean isSimpleType() {
 			return List

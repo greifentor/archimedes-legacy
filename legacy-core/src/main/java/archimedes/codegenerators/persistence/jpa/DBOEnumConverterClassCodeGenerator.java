@@ -75,7 +75,7 @@ public class DBOEnumConverterClassCodeGenerator extends AbstractDomainCodeGenera
 
 	@Override
 	public String getPackageName(DataModel model, DomainModel domain) {
-		return nameGenerator.getDBOConverterPackageName(model, null);
+		return nameGenerator.getDBOConverterPackageName(model, (DomainModel) null);
 	}
 
 	@Override

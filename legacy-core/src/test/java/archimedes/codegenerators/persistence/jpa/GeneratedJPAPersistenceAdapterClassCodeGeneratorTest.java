@@ -330,6 +330,155 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 		}
 
 		@Test
+		void happyRunForASimpleObjectWithFindByOptionSetAnEnumType() {
+			// Prepare
+			String expected = "package base.pack.age.name.persistence;\n" + //
+			        "\n" + //
+			        "import java.util.List;\n" + //
+			        "import java.util.Optional;\n" + //
+			        "\n" + //
+			        "import javax.annotation.PostConstruct;\n" + //
+			        "import javax.inject.Inject;\n" + //
+			        "\n" + //
+			        "import base.pack.age.name.core.model.Page;\n" + //
+			        "import base.pack.age.name.core.model.PageParameters;\n" + //
+			        "import base.pack.age.name.core.model.TableWithEnumType;\n" + //
+			        "import base.pack.age.name.core.model.EnumType;\n" + //
+			        "import base.pack.age.name.core.service.port.persistence.TableWithEnumTypePersistencePort;\n" + //
+			        "import base.pack.age.name.persistence.converter.PageConverter;\n" + //
+			        "import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" + //
+			        "import base.pack.age.name.persistence.converter.TableWithEnumTypeDBOConverter;\n" + //
+			        "import base.pack.age.name.persistence.converter.EnumTypeDBOConverter;\n" + //
+			        "import base.pack.age.name.persistence.entity.TableWithEnumTypeDBO;\n" + //
+			        "import base.pack.age.name.persistence.repository.TableWithEnumTypeDBORepository;\n" + //
+			        "import lombok.Generated;\n" + //
+			        "\n" + //
+			        "/**\n" + //
+			        " * A generated JPA persistence adapter for table_with_enum_types.\n" + //
+			        " *\n" + //
+			        " * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+			        " */\n" + //
+			        "@Generated\n" + //
+			        "public abstract class TableWithEnumTypeGeneratedJPAPersistenceAdapter implements TableWithEnumTypePersistencePort {\n"
+			        + //
+			        "\n"
+			        + //
+			        "	@Inject\n"
+			        + //
+			        "	protected TableWithEnumTypeDBOConverter converter;\n"
+			        + //
+			        "	@Inject\n"
+			        + //
+			        "	protected EnumTypeDBOConverter enumTypeDBOConverter;\n"
+			        + //
+			        "	@Inject\n"
+			        + //
+			        "	protected TableWithEnumTypeDBORepository repository;\n"
+			        + //
+			        "\n"
+			        + //
+			        "	@Inject\n"
+			        + //
+			        "	protected PageParametersToPageableConverter pageParametersToPageableConverter;\n"
+			        + //
+			        "\n"
+			        + //
+			        "	protected PageConverter<TableWithEnumType, TableWithEnumTypeDBO> pageConverter;\n"
+			        + //
+			        "\n"
+			        + //
+			        "	@PostConstruct\n"
+			        + //
+			        "	public void postConstruct() {\n"
+			        + //
+			        "		pageConverter = new PageConverter<>(converter);\n"
+			        + //
+			        "	}\n"
+			        + //
+			        "\n"
+			        + //
+			        "	@Override\n"
+			        + //
+			        "	public TableWithEnumType create(TableWithEnumType model) {\n"
+			        + //
+			        "		model.setId(null);\n"
+			        + //
+			        "		return converter.toModel(repository.save(converter.toDBO(model)));\n"
+			        + //
+			        "	}\n"
+			        + //
+			        "\n"
+			        + //
+			        "	@Override\n"
+			        + //
+			        "	public List<TableWithEnumType> findAll() {\n"
+			        + //
+			        "		return converter.toModel(repository.findAll());\n"
+			        + //
+			        "	}\n"
+			        + //
+			        "\n"
+			        + //
+			        "	@Override\n"
+			        + //
+			        "	public Page<TableWithEnumType> findAll(PageParameters pageParameters) {\n"
+			        + //
+			        "		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n"
+			        + //
+			        "	}\n"
+			        + //
+			        "\n"
+			        + //
+			        "	@Override\n"
+			        + //
+			        "	public Optional<TableWithEnumType> findById(Long id) {\n"
+			        + //
+			        "		return repository.findById(id).map(dbo -> converter.toModel(dbo));\n"
+			        + //
+			        "	}\n"
+			        + //
+			        "\n"
+			        + //
+			        "	@Override\n"
+			        + //
+			        "	public TableWithEnumType update(TableWithEnumType model) {\n"
+			        + //
+			        "		return converter.toModel(repository.save(converter.toDBO(model)));\n"
+			        + //
+			        "	}\n"
+			        + //
+			        "\n"
+			        + //
+			        "	@Override\n"
+			        + //
+			        "	public void delete(TableWithEnumType model) {\n"
+			        + //
+			        "		repository.deleteById(model.getId());\n"
+			        + //
+			        "	}\n"
+			        + //
+			        "\n"
+			        + //
+			        "	@Override\n"
+			        + //
+			        "	public List<TableWithEnumType> findAllByEnumField(EnumType enumField) {\n"
+			        + //
+			        "		return converter.toModel(repository.findAllByEnumField(enumTypeDBOConverter.toDBO(enumField)));\n"
+			        + //
+			        "	}\n"
+			        + //
+			        "\n"
+			        + //
+			        "}";
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("TABLE_WITH_ENUM_TYPE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
 		void happyRunForASimpleObjectWithFindByOptionSetAnObjectReference() {
 			// Prepare
 			String expected = getExpectedForObjectReferences(false);

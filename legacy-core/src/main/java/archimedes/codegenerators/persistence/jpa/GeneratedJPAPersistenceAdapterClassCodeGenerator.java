@@ -62,8 +62,8 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 										t -> nameGenerator.getDBOConverterClassName(t.getName(), model),
 										t -> nameGenerator.getDBOConverterPackageName(model, t),
 										typeGenerator,
-										(c, m) -> nameGenerator.getDBOClassName(c.getDomain(), m),
-										d -> nameGenerator.getDBOPackageName(model, d)));
+		                                (c, m) -> ServiceNameGenerator.INSTANCE.getModelClassName(c.getDomain(), m),
+		                                d -> ServiceNameGenerator.INSTANCE.getModelPackageName(model, d)));
 		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
 		context.put("HasNotNulls", FindByUtils.hasNotNulls(table.getColumns()));
 		context.put("HasNoUniques", FindByUtils.hasNoUniques(table.getColumns()));

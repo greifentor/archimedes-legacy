@@ -6,6 +6,7 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
+import archimedes.model.TableModel;
 
 /**
  * A to model converter interface code generator for JPA database objects (DBO's).
@@ -42,7 +43,7 @@ public class ToModelConverterInterfaceCodeGenerator extends AbstractModelCodeGen
 
 	@Override
 	public String getPackageName(DataModel model, DataModel sameModel) {
-		return nameGenerator.getDBOConverterPackageName(model, null);
+		return nameGenerator.getDBOConverterPackageName(model, (TableModel) null);
 	}
 
 }

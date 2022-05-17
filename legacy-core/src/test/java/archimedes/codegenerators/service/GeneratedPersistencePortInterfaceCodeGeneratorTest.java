@@ -185,6 +185,51 @@ public class GeneratedPersistencePortInterfaceCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void happyRunForASimpleObject_FindBy_EnumType() {
+			// Prepare
+			String expected = "package base.pack.age.name.core.service.port.persistence;\n" + //
+			        "\n" + //
+			        "import java.util.List;\n" + //
+			        "import java.util.Optional;\n" + //
+			        "\n" + //
+			        "import base.pack.age.name.core.model.Page;\n" + //
+			        "import base.pack.age.name.core.model.PageParameters;\n" + //
+			        "import base.pack.age.name.core.model.TableWithEnumType;\n" + //
+			        "import base.pack.age.name.core.model.EnumType;\n" + //
+			        "import lombok.Generated;\n" + //
+			        "\n" + //
+			        "/**\n" + //
+			        " * A generated persistence port interface for TableWithEnumType CRUD operations.\n" + //
+			        " *\n" + //
+			        " * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+			        " */\n" + //
+			        "@Generated\n" + //
+			        "public interface TableWithEnumTypeGeneratedPersistencePort {\n" + //
+			        "\n" + //
+			        "	TableWithEnumType create(TableWithEnumType model);\n" + //
+			        "\n" + //
+			        "	List<TableWithEnumType> findAll();\n" + //
+			        "\n" + //
+			        "	Page<TableWithEnumType> findAll(PageParameters pageParameters);\n" + //
+			        "\n" + //
+			        "	Optional<TableWithEnumType> findById(Long id);\n" + //
+			        "\n" + //
+			        "	TableWithEnumType update(TableWithEnumType model);\n" + //
+			        "\n" + //
+			        "	void delete(TableWithEnumType model);\n" + //
+			        "\n" + //
+			        "	List<TableWithEnumType> findAllByEnumField(EnumType enumField);\n" + //
+			        "\n" + //
+			        "}";
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("TABLE_WITH_ENUM_TYPE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 		@Nested
 		class ListAccess {
 

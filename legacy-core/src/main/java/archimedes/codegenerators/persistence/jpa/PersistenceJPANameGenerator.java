@@ -70,6 +70,10 @@ public class PersistenceJPANameGenerator extends NameGenerator {
 		return createPackageName(model, table, "persistence.converter", ALTERNATE_DBOCONVERTER_PACKAGE_NAME);
 	}
 
+	public String getDBOConverterPackageName(DataModel model, DomainModel domain) {
+		return createPackageName(model, domain, "persistence.converter", ALTERNATE_DBOCONVERTER_PACKAGE_NAME);
+	}
+
 	public String getDBOPackageName(DataModel model, OptionListProvider options) {
 		return createPackageName(model, options, "persistence.entity", ALTERNATE_ENTITY_PACKAGE_NAME);
 	}

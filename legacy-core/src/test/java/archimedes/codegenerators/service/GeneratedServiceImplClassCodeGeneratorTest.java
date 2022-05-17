@@ -196,6 +196,79 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 		assertEquals(expected, returned);
 	}
 
+	@Test
+	void happyRunForASimpleObject_FindByWithEnumType() {
+		// Prepare
+		String expected = "package base.pack.age.name.core.service.impl;\n" + //
+		        "\n" + //
+		        "import java.util.List;\n" + //
+		        "import java.util.Optional;\n" + //
+		        "\n" + //
+		        "import javax.inject.Inject;\n" + //
+		        "\n" + //
+		        "import base.pack.age.name.core.model.Page;\n" + //
+		        "import base.pack.age.name.core.model.PageParameters;\n" + //
+		        "import base.pack.age.name.core.model.TableWithEnumType;\n" + //
+		        "import base.pack.age.name.core.model.EnumType;\n" + //
+		        "import base.pack.age.name.core.service.port.persistence.TableWithEnumTypePersistencePort;\n" + //
+		        "import base.pack.age.name.core.service.TableWithEnumTypeService;\n" + //
+		        "import lombok.Generated;\n" + //
+		        "\n" + //
+		        "/**\n" + //
+		        " * A generated service interface implementation for TableWithEnumType management.\n" + //
+		        " *\n" + //
+		        " * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+		        " */\n" + //
+		        "@Generated\n" + //
+		        "public abstract class TableWithEnumTypeGeneratedServiceImpl implements TableWithEnumTypeService {\n" + //
+		        "\n" + //
+		        "	@Inject\n" + //
+		        "	protected TableWithEnumTypePersistencePort persistencePort;\n" + //
+		        "\n" + //
+		        "	@Override\n" + //
+		        "	public TableWithEnumType create(TableWithEnumType model) {\n" + //
+		        "		return persistencePort.create(model);\n" + //
+		        "	}\n" + //
+		        "\n" + //
+		        "	@Override\n" + //
+		        "	public List<TableWithEnumType> findAll() {\n" + //
+		        "		return persistencePort.findAll();\n" + //
+		        "	}\n" + //
+		        "\n" + //
+		        "	@Override\n" + //
+		        "	public Page<TableWithEnumType> findAll(PageParameters pageParameters) {\n" + //
+		        "		return persistencePort.findAll(pageParameters);\n" + //
+		        "	}\n" + //
+		        "\n" + //
+		        "	@Override\n" + //
+		        "	public Optional<TableWithEnumType> findById(Long id) {\n" + //
+		        "		return persistencePort.findById(id);\n" + //
+		        "	}\n" + //
+		        "\n" + //
+		        "	@Override\n" + //
+		        "	public TableWithEnumType update(TableWithEnumType model) {\n" + //
+		        "		return persistencePort.update(model);\n" + //
+		        "	}\n" + //
+		        "\n" + //
+		        "	@Override\n" + //
+		        "	public void delete(TableWithEnumType model) {\n" + //
+		        "		persistencePort.delete(model);\n" + //
+		        "	}\n" + //
+		        "\n" + //
+		        "	@Override\n" + //
+		        "	public List<TableWithEnumType> findAllByEnumField(EnumType enumField) {\n" + //
+		        "		return persistencePort.findAllByEnumField(enumField);\n" + //
+		        "	}\n" + //
+		        "\n" + //
+		        "}";
+		DataModel dataModel = readDataModel("Model.xml");
+		TableModel table = dataModel.getTableByName("TABLE_WITH_ENUM_TYPE");
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+		// Check
+		assertEquals(expected, returned);
+	}
+
 	@Nested
 	class TestsOfMethod_isToIgnoreFor_DataModel_TableModel {
 

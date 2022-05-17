@@ -158,6 +158,43 @@ public class GeneratedJPARepositoryInterfaceCodeGeneratorTest {
 		}
 
 		@Test
+		void happyRunForASimpleObjectWithFindBy_EnumType() {
+			// Prepare
+			String expected = "package base.pack.age.name.persistence.repository;\n" + //
+			        "\n" + //
+			        "import org.springframework.data.jpa.repository.JpaRepository;\n" + //
+			        "import org.springframework.stereotype.Repository;\n" + //
+			        "\n" + //
+			        "import base.pack.age.name.persistence.entity.TableWithEnumTypeDBO;\n" + //
+			        "import base.pack.age.name.persistence.entity.EnumTypeDBO;\n" + //
+			        "import lombok.Generated;\n" + //
+			        "import java.util.List;\n" + //
+			        "\n" + //
+			        "/**\n" + //
+			        " * A generated JPA repository for table_with_enum_types.\n" + //
+			        " *\n" + //
+			        " * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+			        " */\n" + //
+			        "@Generated\n" + //
+			        "@Repository\n" + //
+			        "public interface TableWithEnumTypeGeneratedDBORepository extends JpaRepository<TableWithEnumTypeDBO, Long> {\n"
+			        + //
+			        "\n"
+			        + //
+			        "	List<TableWithEnumTypeDBO> findAllByEnumField(EnumTypeDBO enumField);\n"
+			        + //
+			        "\n"
+			        + //
+			        "}";
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel table = dataModel.getTableByName("TABLE_WITH_ENUM_TYPE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
 		void happyRunForASimpleObjectWithListAccess() {
 			// Prepare
 			String expected = "package base.pack.age.name.persistence.repository;\n" + //

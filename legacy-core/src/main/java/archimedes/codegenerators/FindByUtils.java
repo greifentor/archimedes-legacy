@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import archimedes.codegenerators.FindBys.FindByData;
+import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.OptionListProvider;
@@ -100,6 +101,24 @@ public class FindByUtils {
 												referenceClassNameProvider,
 												typeGenerator,
 												enumClassNameProvider))
+		                        .setTypeDBOConverterAttributeName(
+		                                nameGenerator
+		                                        .getAttributeName(
+		                                                new PersistenceJPANameGenerator()
+		                                                        .getDBOConverterClassName(
+		                                                                column.getDomain().getName(),
+		                                                                column.getTable().getDataModel())))
+		                        .setTypeDBOConverterClassName(
+		                                new PersistenceJPANameGenerator()
+		                                        .getDBOConverterClassName(
+		                                                column.getDomain().getName(),
+		                                                column.getTable().getDataModel()))
+		                        .setTypeDBOConverterPackageName(
+		                                new PersistenceJPANameGenerator()
+		                                        .getDBOConverterPackageName(
+		                                                column.getTable().getDataModel(),
+		                                                column.getDomain()))
+		                        .setEnumType(isEnum(column))
 								.setUnique(column.isUnique()))
 				.collect(Collectors.toList());
 	}

@@ -4,6 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import ${DBOPackageName}.${DBOClassName};
+#foreach($FindBy in $FindBys)
+#if(${FindBy.isEnumType()})
+import ${FindBy.getTypePackageName()}.${FindBy.getTypeName()};
+#end
+#end
 #foreach($ListAccessData in $ListAccess)
 #if($ListAccessData.getTypeQualifiedName())
 import ${ListAccessData.getTypeQualifiedName()};

@@ -231,7 +231,7 @@ public class PersistenceJPANameGeneratorTest {
 
 		@Test
 		void getDBOConverterPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("persistence.converter", unitUnderTest.getDBOConverterPackageName(model, null));
+			assertEquals("persistence.converter", unitUnderTest.getDBOConverterPackageName(model, (TableModel) null));
 		}
 
 		@Test
