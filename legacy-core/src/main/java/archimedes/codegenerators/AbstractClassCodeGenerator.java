@@ -50,6 +50,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
 	protected CommonImportAdder commonImportAdder = new CommonImportAdder();
+	protected FieldDeclarations fieldDeclarations = new FieldDeclarations();
 
 	public AbstractClassCodeGenerator(String templateFileName, String templatePathName, N nameGenerator,
 			TypeGenerator typeGenerator, AbstractCodeFactory codeFactory) {
@@ -65,6 +66,11 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		} catch (Exception e) {
 			LOG.error("error while generating class code for table: " + tableModel.getName(), e);
 		}
+	}
+
+	@Override
+	protected void afterExtendVelocityContext(VelocityContext context, DataModel model, TableModel t) {
+		context.put("FieldDeclarations", fieldDeclarations);
 	}
 
 	protected boolean hasEnums(ColumnModel[] columns) {
@@ -192,6 +198,15 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 								.getOptionByName(model, REFERENCE_MODE)
 								.map(option -> ReferenceMode.valueOf(option.getParameter()))
 								.orElse(ReferenceMode.ID));
+	}
+
+	protected List<ColumnModel> getAllColumns(List<ColumnModel> columns, TableModel table) {
+		columns.addAll(List.of(table.getColumns()));
+		TableModel superClassTable = getSuperclassTable(table);
+		if (superClassTable != null) {
+			columns.addAll(getAllColumns(columns, superClassTable));
+		}
+		return columns;
 	}
 
 	protected List<ListAccessData> getListAccesses(DataModel model, TableModel table,

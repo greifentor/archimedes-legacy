@@ -20,22 +20,8 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 #end
 
-import ${ModelPackageName}.${ModelClassName};
-#foreach ($Reference in $GUIReferences)
-import ${Reference.getReferencedModelPackageName()}.${Reference.getReferencedModelClassName()};
-#end
-import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
-#foreach ($Reference in $GUIReferences)
-import ${Reference.getServicePackageName()}.${Reference.getServiceInterfaceName()};
-#end
-import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
-import ${SessionDataPackageName}.${SessionDataClassName};
-import ${AbstractMasterDataBaseLayoutPackageName}.${AbstractMasterDataBaseLayoutClassName};
-import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
-#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
-	#if (${Column.getType()} == "ENUM")
-import ${Column.getTypePackage()}.${Column.getFieldTypeName()};
-	#end
+#foreach ($ImportDeclaration in $ImportDeclarations.toList())
+import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +36,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	private final ${ButtonFactoryClassName} buttonFactory;
 	private final ${ModelClassName} model;
 	private final ${ServiceInterfaceName} service;
-#foreach ($Reference in $GUIReferences)
-	private final ${Reference.getServiceInterfaceName()} ${Reference.getServiceAttributeName()};
+#foreach ($FieldDeclaration in $FieldDeclarations.toList())
+	private final ${FieldDeclaration.getTypeName()} ${FieldDeclaration.getAttributeName()};
 #end
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${SessionDataClassName} session;
@@ -80,7 +66,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		super.onAttach(attachEvent);
 		createButtons();
 #foreach ($Reference in $GUIReferences)
-		comboBox${Reference.getFieldNameCamelCase()} = new ComboBox<>("${Reference.getReferencedModelClassName()}", ${Reference.getServiceAttributeName()}.findAll());
+		comboBox${Reference.getFieldNameCamelCase()} = new ComboBox<>("${Reference.getReferencedModelClassName()}", ${Reference.getServiceAttributeName()}.findAll${Reference.getFindAllMethodNameExtension()}());
 		comboBox${Reference.getFieldNameCamelCase()}.setValue(model.get${Reference.getFieldNameCamelCase()}());
 		comboBox${Reference.getFieldNameCamelCase()}.setItemLabelGenerator(${Reference.getReferencedModelClassName()}::get${Reference.getReferencedModelNameFieldName()});
 		comboBox${Reference.getFieldNameCamelCase()}.setWidthFull();

@@ -1,5 +1,6 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,8 +13,7 @@ import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
-public abstract class AbstractGUIVaadinClassCodeGenerator
-		extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
+public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassCodeGenerator<GUIVaadinNameGenerator> {
 
 	public static final String GENERATE_MASTER_DATA_GUI = "GENERATE_MASTER_DATA_GUI";
 	public static final String GUI_BASE_URL = "GUI_BASE_URL";
@@ -25,43 +25,78 @@ public abstract class AbstractGUIVaadinClassCodeGenerator
 	protected static final ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
 	public AbstractGUIVaadinClassCodeGenerator(String templateFileName, AbstractCodeFactory codeFactory) {
-		super(templateFileName, GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
+		super(
+				templateFileName,
+				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				GUIVaadinNameGenerator.INSTANCE,
 				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
+	protected void addGUIReferencesToFieldDeclarations(List<GUIReferenceData> guiReferenceData) {
+		guiReferenceData
+				.stream()
+				.forEach(data -> fieldDeclarations.add(data.getServiceInterfaceName(), data.getServiceAttributeName()));
+	}
+
+	protected String getServiceInterfaceName(TableModel table) {
+		TableModel supertable = getSuperclassTable(table);
+		return serviceNameGenerator.getServiceInterfaceName(supertable != null ? supertable : table);
+	}
+
 	protected GUIReferenceDataCollection getGUIReferenceDataCollection(TableModel table) {
-		return new GUIReferenceDataCollection().addGUIReferenceData(getGUIReferenceData(table));
+		return getGUIReferenceDataCollection(table, false);
+	}
+
+	protected GUIReferenceDataCollection getGUIReferenceDataCollection(TableModel table, boolean maintenanceView) {
+		return new GUIReferenceDataCollection().addGUIReferenceData(getGUIReferenceData(table, maintenanceView));
 	}
 
 	protected List<GUIReferenceData> getGUIReferenceData(TableModel table) {
+		return getGUIReferenceData(table, false);
+	}
+
+	protected List<GUIReferenceData> getGUIReferenceData(TableModel table, boolean maintenanceView) {
 		return List
 				.of(table.getColumns())
 				.stream()
 				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
 				.filter(column -> column.getReferencedTable() != null)
-				.map(this::createGUIReferenceData)
+				.map(column -> createGUIReferenceData(column, maintenanceView))
 				.collect(Collectors.toList());
 	}
 
-	protected GUIReferenceData createGUIReferenceData(ColumnModel column) {
+	protected GUIReferenceData createGUIReferenceData(ColumnModel column, boolean maintenanceView) {
 		DataModel model = column.getTable().getDataModel();
 		TableModel referencedTable = column.getReferencedTable();
-		String serviceInterfaceName = serviceNameGenerator.getServiceInterfaceName(referencedTable);
+		TableModel referencedSuperTable = getSuperclassTable(column.getReferencedTable());
+		referencedSuperTable = referencedSuperTable != null ? referencedSuperTable : referencedTable;
+		String referenceModelClassName = serviceNameGenerator.getModelClassName(referencedTable);
+		String referenceModelPackageName = serviceNameGenerator.getModelPackageName(model, referencedTable);
+		String serviceInterfaceName = serviceNameGenerator.getServiceInterfaceName(referencedSuperTable);
+		String servicePackageName = serviceNameGenerator.getServiceInterfacePackageName(model, referencedTable);
+		if (!maintenanceView) {
+			importDeclarations.add(referenceModelPackageName, referenceModelClassName);
+		}
+		importDeclarations.add(servicePackageName, serviceInterfaceName);
 		return new GUIReferenceData()
 				.setFieldNameCamelCase(nameGenerator.getCamelCase(nameGenerator.getAttributeName(column)))
-				.setReferencedModelClassName(serviceNameGenerator.getModelClassName(referencedTable))
-				.setReferencedModelNameFieldName(getNameFieldName(referencedTable))
-				.setReferencedModelPackageName(serviceNameGenerator.getModelPackageName(model, referencedTable))
+				.setFindAllMethodNameExtension(getFindAllMethodNameExtension(referencedTable))
+				.setReferencedModelClassName(referenceModelClassName)
+				.setReferencedModelNameFieldName(getNameFieldName(referencedSuperTable))
+				.setReferencedModelPackageName(referenceModelPackageName)
 				.setServiceAttributeName(nameGenerator.getAttributeName(serviceInterfaceName))
 				.setServiceInterfaceName(serviceInterfaceName)
-				.setServicePackageName(serviceNameGenerator.getServiceInterfacePackageName(model, referencedTable));
+				.setServicePackageName(servicePackageName);
+	}
+
+	private String getFindAllMethodNameExtension(TableModel table) {
+		return nameGenerator.getCamelCase(!isSubclass(table) ? "" : table.getName());
 	}
 
 	protected String getNameFieldName(TableModel table) {
-		return List
-				.of(table.getColumns())
+		List<ColumnModel> columns = getAllColumns(new ArrayList<ColumnModel>(), table);
+		return columns
 				.stream()
 				.filter(column -> column.isOptionSet(NAME_FIELD))
 				.map(column -> nameGenerator.getCamelCase(column.getName()))

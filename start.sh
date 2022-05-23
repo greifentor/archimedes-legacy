@@ -13,7 +13,7 @@ CP=$CP:$LIB/log4j-1.2.13.jar
 
 FILE=../archimedes-legacy-additions/archimedes-legacy-additions.sh
 
-DEBUG_OPTIONS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n"
+# DEBUG_OPTIONS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n"
 
 ADDITIONAL_OPTIONS="-Darchimedes.maximum.strlen.table.header=50 -Dconf_path=./legacy-core/src/main/resources/conf/ -DCodeFactory.templates.path=legacy-core/src/main/resources/templates"
 

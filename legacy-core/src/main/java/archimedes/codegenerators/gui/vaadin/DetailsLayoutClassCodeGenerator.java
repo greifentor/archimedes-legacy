@@ -27,29 +27,35 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
-		context.put("AbstractMasterDataBaseLayoutClassName", nameGenerator.getAbstractMasterDataBaseLayoutClassName());
-		context.put("AbstractMasterDataBaseLayoutPackageName", nameGenerator.getVaadinComponentPackageName(model));
-		context.put("ButtonFactoryClassName", nameGenerator.getButtonFactoryClassName(model));
-		context.put("ButtonFactoryPackageName", nameGenerator.getVaadinComponentPackageName(model));
-		context.put("ButtonPackageName", nameGenerator.getVaadinComponentPackageName(model));
+		String abstractMasterDataBaseLayoutClassName = nameGenerator.getAbstractMasterDataBaseLayoutClassName();
+		String buttonFactoryClassName = nameGenerator.getButtonFactoryClassName(model);
+		String modelClassName = serviceNameGenerator.getModelClassName(table);
+		String resourceManagerInterfaceName = localizationNameGenerator.getResourceManagerInterfaceName();
+		String serviceInterfaceName = getServiceInterfaceName(table);
+		String sessionDataClassName = nameGenerator.getSessionDataClassName(model);
+		List<GUIReferenceData> guiReferenceData = getGUIReferenceData(table);
+		context.put("AbstractMasterDataBaseLayoutClassName", abstractMasterDataBaseLayoutClassName);
+		context.put("ButtonFactoryClassName", buttonFactoryClassName);
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("GUIColumnDataCollection", getGUIColumnDataCollection(new GUIColumnDataCollection(), table));
-		context.put("GUIReferences", getGUIReferenceData(table));
-		context.put("MasterDataButtonLayoutClassName", nameGenerator.getMasterDataButtonLayoutClassName(model));
-		context.put("MasterDataButtonLayoutPackageName", nameGenerator.getMasterDataButtonLayoutPackageName(model));
-		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
-		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
+		context.put("GUIReferences", guiReferenceData);
+		context.put("ModelClassName", modelClassName);
 		context.put("PackageName", getPackageName(model, table));
-		context.put("ResourceManagerInterfaceName", localizationNameGenerator.getResourceManagerInterfaceName());
-		context
-				.put(
-						"ResourceManagerPackageName",
-						localizationNameGenerator.getResourceManagerPackageName(model, table));
-		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
-		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
-		context.put("ServiceInterfaceName", getServiceInterfaceName(table));
-		context.put("ServiceInterfacePackageName", serviceNameGenerator.getServiceInterfacePackageName(model, table));
+		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
+		context.put("SessionDataClassName", sessionDataClassName);
+		context.put("ServiceInterfaceName", serviceInterfaceName);
+		importDeclarations
+				.add(nameGenerator.getVaadinComponentPackageName(model), abstractMasterDataBaseLayoutClassName);
+		importDeclarations.add(nameGenerator.getVaadinComponentPackageName(model), buttonFactoryClassName);
+		importDeclarations
+				.add(
+						localizationNameGenerator.getResourceManagerPackageName(model, table),
+						resourceManagerInterfaceName);
+		importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelClassName);
+		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
+		importDeclarations.add(nameGenerator.getSessionDataPackageName(model), sessionDataClassName);
+		addGUIReferencesToFieldDeclarations(guiReferenceData);
 	}
 
 	private GUIColumnDataCollection getGUIColumnDataCollection(GUIColumnDataCollection collection, TableModel table) {
@@ -64,26 +70,32 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 								.of(table.getColumns())
 								.stream()
 								.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
-								.map(
-										column -> new GUIColumnData()
-												.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
-												.setFieldOwnerClassName(serviceNameGenerator.getModelClassName(table))
-												.setFieldTypeName(
-														getType(
-																column,
-																model,
-																referenceMode,
-																c -> serviceNameGenerator
-																		.getModelClassName(c.getReferencedTable()),
-																(c, m) -> serviceNameGenerator
-																		.getModelClassName(c.getDomain(), model)))
-												.setMax(getMax(column))
-												.setMin(getMin(column))
-												.setPosition(getPosition(column))
-												.setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
-												.setSimpleBoolean(isSimpleBoolean(column))
-												.setType(getType(column))
-												.setTypePackage(getTypePackage(column)))
+								.map(column -> {
+									String type = getType(column);
+									String fieldTypeName =
+											getType(
+													column,
+													model,
+													referenceMode,
+													c -> serviceNameGenerator.getModelClassName(c.getReferencedTable()),
+													(c, m) -> serviceNameGenerator
+															.getModelClassName(c.getDomain(), model));
+									String typePackage = getTypePackage(column);
+									if (GUIColumnData.TYPE_ENUM.equals(type)) {
+										importDeclarations.add(typePackage, fieldTypeName);
+									}
+									return new GUIColumnData()
+											.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
+											.setFieldOwnerClassName(serviceNameGenerator.getModelClassName(table))
+											.setFieldTypeName(fieldTypeName)
+											.setMax(getMax(column))
+											.setMin(getMin(column))
+											.setPosition(getPosition(column))
+											.setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
+											.setSimpleBoolean(isSimpleBoolean(column))
+											.setType(getType(column))
+											.setTypePackage(typePackage);
+								})
 								.collect(Collectors.toList()));
 		return collection;
 	}
@@ -127,11 +139,6 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		return column.getDomain().isOptionSet(ENUM)
 				? serviceNameGenerator.getModelPackageName(column.getTable().getDataModel(), column)
 				: null;
-	}
-
-	private String getServiceInterfaceName(TableModel table) {
-		TableModel supertable = getSuperclassTable(table);
-		return serviceNameGenerator.getServiceInterfaceName(supertable != null ? supertable : table);
 	}
 
 	@Override

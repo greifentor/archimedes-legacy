@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 public class GUIReferenceData {
 
 	private String fieldNameCamelCase;
+	private String findAllMethodNameExtension;
 	private String referencedModelClassName;
 	private String referencedModelNameFieldName;
 	private String referencedModelPackageName;

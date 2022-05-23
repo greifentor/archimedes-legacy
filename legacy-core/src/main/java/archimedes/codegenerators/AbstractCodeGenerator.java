@@ -40,6 +40,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 	private static final Logger LOG = LogManager.getLogger(AbstractCodeGenerator.class);
 
 	protected AbstractCodeFactory codeFactory;
+	protected ImportDeclarations importDeclarations = new ImportDeclarations();
 	protected N nameGenerator;
 	protected TypeGenerator typeGenerator;
 
@@ -73,7 +74,12 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 		context.put("Generated", GENERATED_CODE);
 		context.put("PluralName", t != null ? t.getName().toLowerCase() + "s" : "");
 		extendVelocityContext(context, model, t);
+		afterExtendVelocityContext(context, model, t);
+		context.put("ImportDeclarations", importDeclarations);
 		return processTemplate(context, templateFileName);
+	}
+
+	protected void afterExtendVelocityContext(VelocityContext context, DataModel model, T t) {
 	}
 
 	protected String getQualifiedName(String packageName, String className) {

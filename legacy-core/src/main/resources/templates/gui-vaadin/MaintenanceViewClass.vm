@@ -11,16 +11,14 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.Route;
 
-import ${ModelPackageName}.${ModelClassName};
+#foreach ($ImportDeclaration in $ImportDeclarations.toList())
+import ${ImportDeclaration.getSingleImportDeclaration()};
+#end
 #foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
 import ${Subclass.getModelPackageName()}.${Subclass.getModelClassName()};
 #end
-import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
 #foreach($SubclassReference in ${UniqueSubclassReferenceDataCollection}) 
 import ${SubclassReference.getServicePackageName()}.${SubclassReference.getServiceInterfaceName()};
-#end
-#foreach ($Reference in $GUIReferenceDataCollection.getReferences())
-import ${Reference.getServicePackageName()}.${Reference.getServiceInterfaceName()};
 #end
 import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
@@ -61,8 +59,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 #foreach($SubclassReference in ${UniqueSubclassReferenceDataCollection}) 
 	private final ${SubclassReference.getServiceInterfaceName()} ${SubclassReference.getServiceAttributeName()};
 #end
-#foreach ($Reference in $GUIReferenceDataCollection.getReferences())
-	private final ${Reference.getServiceInterfaceName()} ${Reference.getServiceAttributeName()};
+#foreach ($FieldDeclaration in $FieldDeclarations.toList())
+	private final ${FieldDeclaration.getTypeName()} ${FieldDeclaration.getAttributeName()};
 #end
 	private final ${SessionDataClassName} session;
 

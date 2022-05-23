@@ -18,12 +18,17 @@ import archimedes.model.TableModel;
  */
 public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
 
+	private static final boolean MAINTENANCE_VIEW = true;
+
 	public MaintenanceViewClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super("MaintenanceViewClass.vm", codeFactory);
 	}
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		String modelClassName = serviceNameGenerator.getModelClassName(table);
+		String serviceInterfaceName = serviceNameGenerator.getServiceInterfaceName(table);
+		GUIReferenceDataCollection guiReferenceDataCollection = getGUIReferenceDataCollection(table, MAINTENANCE_VIEW);
 		context.put("BaseURL", getBaseURL(model, table));
 		context.put("AbstractMasterDataBaseLayoutClassName", nameGenerator.getAbstractMasterDataBaseLayoutClassName());
 		context.put("AbstractMasterDataBaseLayoutPackageName", nameGenerator.getVaadinComponentPackageName(model));
@@ -35,7 +40,7 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("DetailsLayoutClassName", nameGenerator.getDetailsLayoutClassName(model, table));
 		context.put("GridData", getGridData(table));
-		context.put("GUIReferenceDataCollection", getGUIReferenceDataCollection(table));
+		context.put("GUIReferenceDataCollection", guiReferenceDataCollection);
 		context.put("HeaderLayoutClassName", nameGenerator.getHeaderLayoutClassName(model));
 		context.put("HeaderLayoutPackageName", nameGenerator.getHeaderLayoutPackageName(model));
 		context.put("HeaderAttributeName", getNameFieldName(table));
@@ -48,8 +53,7 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		context.put("MasterDataButtonLayoutClassName", nameGenerator.getMasterDataButtonLayoutClassName(model));
 		context.put("MasterDataButtonLayoutPackageName", nameGenerator.getMasterDataButtonLayoutPackageName(model));
 		context.put("MasterDataLayoutClassName", nameGenerator.getMasterDataViewClassName(model));
-		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
-		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
+		context.put("ModelClassName", modelClassName);
 		context.put("PackageName", getPackageName(model, table));
 		context.put("PageLayoutClassName", nameGenerator.getPageViewClassName(table));
 		context.put("PluralName", nameGenerator.getPluralName(table).toLowerCase());
@@ -60,12 +64,14 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 						localizationNameGenerator.getResourceManagerPackageName(model, table));
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
-		context.put("ServiceInterfaceName", serviceNameGenerator.getServiceInterfaceName(table));
-		context.put("ServiceInterfacePackageName", serviceNameGenerator.getServiceInterfacePackageName(model, table));
+		context.put("ServiceInterfaceName", serviceInterfaceName);
 		context.put("SubclassDataCollection", getSubclassDataCollection(table));
 		context.put("UniqueSubclassReferenceDataCollection", getUniqueSubclassReferenceData(table));
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
+		importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelClassName);
+		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
+		addGUIReferencesToFieldDeclarations(guiReferenceDataCollection.getReferences());
 	}
 
 	private String getBaseURL(DataModel model, TableModel table) {
@@ -122,8 +128,7 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI)
-				|| t.isOptionSet(AbstractClassCodeGenerator.SUBCLASS);
+		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) || t.isOptionSet(AbstractClassCodeGenerator.SUBCLASS);
 	}
 
 }

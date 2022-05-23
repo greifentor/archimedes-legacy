@@ -157,10 +157,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
 						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
 						"\n" + //
-						"import base.pack.age.name.core.model.ATable;\n" + //
 						"import base.pack.age.name.core.model.AnotherTable;\n" + //
-						"import base.pack.age.name.core.service.ATableService;\n" + //
+						"import base.pack.age.name.core.model.ATable;\n" + //
 						"import base.pack.age.name.core.service.AnotherTableService;\n" + //
+						"import base.pack.age.name.core.service.ATableService;\n" + //
 						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
@@ -265,13 +265,13 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
 						"import com.vaadin.flow.component.textfield.TextArea;\n" + //
 						"\n" + //
+						"import base.pack.age.name.core.model.EnumType;\n" + //
 						"import base.pack.age.name.core.model.TableWithSpecials;\n" + //
-						"import base.pack.age.name.core.service.TableWithSpecialsService;\n" + //
 						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
+						"import base.pack.age.name.core.service.TableWithSpecialsService;\n" + //
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
-						"import base.pack.age.name.core.model.EnumType;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -598,6 +598,113 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				String expected = getExpected();
 				DataModel dataModel = readDataModel("Model-Inheritance.xml");
 				TableModel tableModel = dataModel.getTableByName("ANOTHER_TABLE");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			@Test
+			void differentSubClassReferences() {
+				// Prepare
+				String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+						"\n" + //
+						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
+						"\n" + //
+						"import base.pack.age.name.core.model.AnotherTable;\n" + //
+						"import base.pack.age.name.core.model.ATable;\n" + //
+						"import base.pack.age.name.core.model.DifferentSubclassReferences;\n" + //
+						"import base.pack.age.name.core.service.ATableService;\n" + //
+						"import base.pack.age.name.core.service.DifferentSubclassReferencesService;\n" + //
+						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
+						"import base.pack.age.name.gui.SessionData;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.RequiredArgsConstructor;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n" + //
+						"@Generated\n" + //
+						"@RequiredArgsConstructor\n" + //
+						"public class DifferentSubclassReferencesDetailsLayout extends AbstractMasterDataBaseLayout {\n"
+						+ //
+						"\n" + //
+						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final DifferentSubclassReferences model;\n" + //
+						"	private final DifferentSubclassReferencesService service;\n" + //
+						"	private final ATableService aTableService;\n" + //
+						"	private final ResourceManager resourceManager;\n" + //
+						"	private final SessionData session;\n" + //
+						"	private final Observer observer;\n" + //
+						"\n" + //
+						"	private ComboBox<ATable> comboBoxATable;\n" + //
+						"	private ComboBox<AnotherTable> comboBoxAnotherTable;\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public void onAttach(AttachEvent attachEvent) {\n" + //
+						"		super.onAttach(attachEvent);\n" + //
+						"		createButtons();\n" + //
+						"		comboBoxATable = new ComboBox<>(\"ATable\", aTableService.findAll());\n" + //
+						"		comboBoxATable.setValue(model.getATable());\n" + //
+						"		comboBoxATable.setItemLabelGenerator(ATable::getDescription);\n" + //
+						"		comboBoxATable.setWidthFull();\n" + //
+						"		comboBoxAnotherTable = new ComboBox<>(\"AnotherTable\", aTableService.findAllAnotherTable());\n"
+						+ //
+						"		comboBoxAnotherTable.setValue(model.getAnotherTable());\n" + //
+						"		comboBoxAnotherTable.setItemLabelGenerator(AnotherTable::getDescription);\n" + //
+						"		comboBoxAnotherTable.setWidthFull();\n" + //
+						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
+						"		getStyle()\n" + //
+						"				.set(\n" + //
+						"						\"box-shadow\",\n" + //
+						"						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n"
+						+ //
+						"		setMargin(false);\n" + //
+						"		setWidthFull();\n" + //
+						"		add(\n" + //
+						"				comboBoxAnotherTable,\n" + //
+						"				comboBoxATable,\n" + //
+						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ButtonFactory getButtonFactory() {\n" + //
+						"		return buttonFactory;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ResourceManager getResourceManager() {\n" + //
+						"		return resourceManager;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected SessionData getSessionData() {\n" + //
+						"		return session;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void remove() {\n" + //
+						"		service.delete(model);\n" + //
+						"		observer.remove();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void save() {\n" + //
+						"		model.setAnotherTable(comboBoxAnotherTable.getValue());\n" + //
+						"		model.setATable(comboBoxATable.getValue());\n" + //
+						"		service.update(model);\n" + //
+						"		observer.save();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"}";
+				DataModel dataModel = readDataModel("Model-Inheritance.xml");
+				TableModel tableModel = dataModel.getTableByName("DIFFERENT_SUBCLASS_REFERENCES");
 				// Run
 				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
 				// Check
