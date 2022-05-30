@@ -9,6 +9,8 @@ import org.apache.velocity.VelocityContext;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.CommonImportAdder;
+import archimedes.codegenerators.FieldDeclarations;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -27,6 +29,8 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		commonImportAdder = new CommonImportAdder();
+		fieldDeclarations = new FieldDeclarations();
 		String abstractMasterDataBaseLayoutClassName = nameGenerator.getAbstractMasterDataBaseLayoutClassName();
 		String buttonFactoryClassName = nameGenerator.getButtonFactoryClassName(model);
 		String modelClassName = serviceNameGenerator.getModelClassName(table);

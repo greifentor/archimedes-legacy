@@ -67,6 +67,7 @@ public class GeneratedJPARepositoryInterfaceCodeGenerator
 										+ nameGenerator.getDBOClassName(c.getDomain(), model),
 								null));
 		context.put("PackageName", getPackageName(model, table));
+		context.put("Subclass", isSubclass(table));
 	}
 
 	@Override
@@ -84,9 +85,9 @@ public class GeneratedJPARepositoryInterfaceCodeGenerator
 		return nameGenerator.getGeneratedJPARepositoryPackageName(model, table);
 	}
 
-	@Override
-	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return isSubclass(t);
-	}
+//	@Override
+//	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
+//		return isSubclass(t);
+//	}
 
 }

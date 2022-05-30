@@ -1,11 +1,15 @@
 package archimedes.codegenerators.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.FindByUtils;
 import archimedes.codegenerators.ReferenceMode;
+import archimedes.codegenerators.Subclasses.SubclassData;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -72,6 +76,19 @@ public class GeneratedServiceInterfaceCodeGenerator extends AbstractClassCodeGen
 		context.put("PageClassName", nameGenerator.getPageClassName());
 		context.put("PagePackageName", nameGenerator.getPagePackageName(model));
 		context.put("PageParametersClassName", nameGenerator.getPageParametersClassName());
+		context.put("Subclasses", getSubclassData(model, table));
+	}
+
+	private List<SubclassData> getSubclassData(DataModel model, TableModel table) {
+		return getSubclassTables(table)
+				.stream()
+				.map(
+						subclassTable -> new SubclassData()
+								.setModelClassName(nameGenerator.getModelClassName(subclassTable))
+								.setModelClassNameQualified(
+										nameGenerator.getModelPackageName(model, subclassTable) + "."
+												+ nameGenerator.getModelClassName(subclassTable)))
+				.collect(Collectors.toList());
 	}
 
 	@Override

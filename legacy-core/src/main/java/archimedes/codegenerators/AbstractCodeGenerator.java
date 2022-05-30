@@ -40,7 +40,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 	private static final Logger LOG = LogManager.getLogger(AbstractCodeGenerator.class);
 
 	protected AbstractCodeFactory codeFactory;
-	protected ImportDeclarations importDeclarations = new ImportDeclarations();
+	protected ImportDeclarations importDeclarations;
 	protected N nameGenerator;
 	protected TypeGenerator typeGenerator;
 
@@ -69,6 +69,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 
 	@Override
 	public String generate(String basePackageName, DataModel model, T t) {
+		importDeclarations = new ImportDeclarations();
 		VelocityContext context = new VelocityContext();
 		context.put("BasePackageName", basePackageName);
 		context.put("Generated", GENERATED_CODE);

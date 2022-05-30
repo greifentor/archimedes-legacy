@@ -49,8 +49,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
-	protected CommonImportAdder commonImportAdder = new CommonImportAdder();
-	protected FieldDeclarations fieldDeclarations = new FieldDeclarations();
+	protected CommonImportAdder commonImportAdder;
+	protected FieldDeclarations fieldDeclarations;
 
 	public AbstractClassCodeGenerator(String templateFileName, String templatePathName, N nameGenerator,
 			TypeGenerator typeGenerator, AbstractCodeFactory codeFactory) {
@@ -58,6 +58,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	public void generate(String path, String basePackageName, DataModel dataModel, TableModel tableModel) {
+		commonImportAdder = new CommonImportAdder();
+		fieldDeclarations = new FieldDeclarations();
 		String code = generate(basePackageName, dataModel, tableModel);
 		String fileName = getSourceFileName(path, dataModel, tableModel);
 		try (FileWriter writer = new FileWriter(fileName)) {
@@ -261,7 +263,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	private Stream<ColumnModel> forAllPrimaryKeys(TableModel table) {
-		return List.of(table.getColumns()).stream();
+		return List.of(table.getPrimaryKeyColumns()).stream();
 	}
 
 	protected String getTypeQualifiedName(ColumnModel column, DataModel model, ReferenceMode referenceMode,

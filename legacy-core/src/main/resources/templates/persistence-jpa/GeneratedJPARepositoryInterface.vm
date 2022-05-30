@@ -15,7 +15,7 @@ import ${ListAccessData.getTypeQualifiedName()};
 #end
 #end
 import lombok.Generated;
-#if (($FindBys && $HasNoUniques) || ${ListAccess})
+#if (($FindBys && $HasNoUniques) || ${ListAccess} || ${Subclass})
 import java.util.List;
 #end
 #if ($FindBys && $HasUniques)
@@ -36,6 +36,12 @@ import ${FindBy.getTypePackageName()}.${FindBy.getTypeName()};
 @Generated
 @Repository
 public interface ${ClassName} extends JpaRepository<${DBOClassName}, ${IdClassName}> {
+#if($Subclass)
+
+	@Override
+	List<${DBOClassName}> findAll();
+
+#end
 #foreach($FindBy in $FindBys)
 
 	#if (${FindBy.isUnique()})	Optional#{else}	List#{end}<${DBOClassName}> find#if (!${FindBy.isUnique()})All#{end}By${FindBy.getColumnName()}(${FindBy.getTypeName()} ${FindBy.getAttributeName()});

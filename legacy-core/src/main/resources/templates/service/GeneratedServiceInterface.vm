@@ -6,6 +6,9 @@ import java.util.Optional;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#foreach($Subclass in $Subclasses)
+import ${Subclass.getModelClassNameQualified()};
+#end
 #foreach($FindBy in $FindBys)
 #if(!${FindBy.isSimpleType()})
 import ${FindBy.getTypePackageName()}.${FindBy.getTypeName()};
@@ -38,6 +41,10 @@ public interface ${ClassName} {
 
 	List<${ModelClassName}> findAll();
 
+#foreach($Subclass in $Subclasses)
+	List<${Subclass.getModelClassName()}> findAll${Subclass.getModelClassName()}();
+
+#end
 	${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters);
 
 	Optional<${ModelClassName}> findById(${IdClassName} ${IdFieldName});

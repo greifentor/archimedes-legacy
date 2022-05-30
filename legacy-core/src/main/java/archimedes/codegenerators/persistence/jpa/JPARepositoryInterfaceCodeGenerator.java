@@ -19,8 +19,8 @@ public class JPARepositoryInterfaceCodeGenerator extends AbstractClassCodeGenera
 		super(
 				"JPARepositoryInterface.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-		        PersistenceJPANameGenerator.INSTANCE,
-		        TypeGenerator.INSTANCE,
+				PersistenceJPANameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
@@ -29,6 +29,7 @@ public class JPARepositoryInterfaceCodeGenerator extends AbstractClassCodeGenera
 		context.put("ClassName", getClassName(table));
 		context.put("GeneratedClassName", nameGenerator.getGeneratedJPARepositoryInterfaceName(table));
 		context.put("PackageName", getPackageName(model, table));
+		context.put("Subclass", isSubclass(table));
 	}
 
 	@Override
@@ -46,9 +47,9 @@ public class JPARepositoryInterfaceCodeGenerator extends AbstractClassCodeGenera
 		return nameGenerator.getJPARepositoryPackageName(model, table);
 	}
 
-	@Override
-	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return isSubclass(t);
-	}
+//	@Override
+//	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
+//		return isSubclass(t);
+//	}
 
 }

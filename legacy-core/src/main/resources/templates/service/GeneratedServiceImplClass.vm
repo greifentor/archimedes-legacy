@@ -8,6 +8,9 @@ import javax.inject.Inject;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#foreach($Subclass in $Subclasses)
+import ${Subclass.getModelClassNameQualified()};
+#end
 #foreach($FindBy in $FindBys)
 #if(!${FindBy.isSimpleType()})
 import ${FindBy.getTypePackageName()}.${FindBy.getTypeName()};
@@ -51,6 +54,13 @@ public abstract class ${ClassName} implements ${ServiceInterfaceName} {
 		return persistencePort.findAll();
 	}
 
+#foreach($Subclass in $Subclasses)
+	@Override
+	public List<${Subclass.getModelClassName()}> findAll${Subclass.getModelClassName()}() {
+		return persistencePort.findAll${Subclass.getModelClassName()}();
+	}
+
+#end
 	@Override
 	public ${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters) {
 		return persistencePort.findAll(pageParameters);

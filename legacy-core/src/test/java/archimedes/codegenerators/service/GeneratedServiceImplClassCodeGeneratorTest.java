@@ -200,69 +200,166 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 	void happyRunForASimpleObject_FindByWithEnumType() {
 		// Prepare
 		String expected = "package base.pack.age.name.core.service.impl;\n" + //
-		        "\n" + //
-		        "import java.util.List;\n" + //
-		        "import java.util.Optional;\n" + //
-		        "\n" + //
-		        "import javax.inject.Inject;\n" + //
-		        "\n" + //
-		        "import base.pack.age.name.core.model.Page;\n" + //
-		        "import base.pack.age.name.core.model.PageParameters;\n" + //
-		        "import base.pack.age.name.core.model.TableWithEnumType;\n" + //
-		        "import base.pack.age.name.core.model.EnumType;\n" + //
-		        "import base.pack.age.name.core.service.port.persistence.TableWithEnumTypePersistencePort;\n" + //
-		        "import base.pack.age.name.core.service.TableWithEnumTypeService;\n" + //
-		        "import lombok.Generated;\n" + //
-		        "\n" + //
-		        "/**\n" + //
-		        " * A generated service interface implementation for TableWithEnumType management.\n" + //
-		        " *\n" + //
-		        " * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-		        " */\n" + //
-		        "@Generated\n" + //
-		        "public abstract class TableWithEnumTypeGeneratedServiceImpl implements TableWithEnumTypeService {\n" + //
-		        "\n" + //
-		        "	@Inject\n" + //
-		        "	protected TableWithEnumTypePersistencePort persistencePort;\n" + //
-		        "\n" + //
-		        "	@Override\n" + //
-		        "	public TableWithEnumType create(TableWithEnumType model) {\n" + //
-		        "		return persistencePort.create(model);\n" + //
-		        "	}\n" + //
-		        "\n" + //
-		        "	@Override\n" + //
-		        "	public List<TableWithEnumType> findAll() {\n" + //
-		        "		return persistencePort.findAll();\n" + //
-		        "	}\n" + //
-		        "\n" + //
-		        "	@Override\n" + //
-		        "	public Page<TableWithEnumType> findAll(PageParameters pageParameters) {\n" + //
-		        "		return persistencePort.findAll(pageParameters);\n" + //
-		        "	}\n" + //
-		        "\n" + //
-		        "	@Override\n" + //
-		        "	public Optional<TableWithEnumType> findById(Long id) {\n" + //
-		        "		return persistencePort.findById(id);\n" + //
-		        "	}\n" + //
-		        "\n" + //
-		        "	@Override\n" + //
-		        "	public TableWithEnumType update(TableWithEnumType model) {\n" + //
-		        "		return persistencePort.update(model);\n" + //
-		        "	}\n" + //
-		        "\n" + //
-		        "	@Override\n" + //
-		        "	public void delete(TableWithEnumType model) {\n" + //
-		        "		persistencePort.delete(model);\n" + //
-		        "	}\n" + //
-		        "\n" + //
-		        "	@Override\n" + //
-		        "	public List<TableWithEnumType> findAllByEnumField(EnumType enumField) {\n" + //
-		        "		return persistencePort.findAllByEnumField(enumField);\n" + //
-		        "	}\n" + //
-		        "\n" + //
-		        "}";
+				"\n" + //
+				"import java.util.List;\n" + //
+				"import java.util.Optional;\n" + //
+				"\n" + //
+				"import javax.inject.Inject;\n" + //
+				"\n" + //
+				"import base.pack.age.name.core.model.Page;\n" + //
+				"import base.pack.age.name.core.model.PageParameters;\n" + //
+				"import base.pack.age.name.core.model.TableWithEnumType;\n" + //
+				"import base.pack.age.name.core.model.EnumType;\n" + //
+				"import base.pack.age.name.core.service.port.persistence.TableWithEnumTypePersistencePort;\n" + //
+				"import base.pack.age.name.core.service.TableWithEnumTypeService;\n" + //
+				"import lombok.Generated;\n" + //
+				"\n" + //
+				"/**\n" + //
+				" * A generated service interface implementation for TableWithEnumType management.\n" + //
+				" *\n" + //
+				" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+				" */\n" + //
+				"@Generated\n" + //
+				"public abstract class TableWithEnumTypeGeneratedServiceImpl implements TableWithEnumTypeService {\n" + //
+				"\n" + //
+				"	@Inject\n" + //
+				"	protected TableWithEnumTypePersistencePort persistencePort;\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public TableWithEnumType create(TableWithEnumType model) {\n" + //
+				"		return persistencePort.create(model);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public List<TableWithEnumType> findAll() {\n" + //
+				"		return persistencePort.findAll();\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public Page<TableWithEnumType> findAll(PageParameters pageParameters) {\n" + //
+				"		return persistencePort.findAll(pageParameters);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public Optional<TableWithEnumType> findById(Long id) {\n" + //
+				"		return persistencePort.findById(id);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public TableWithEnumType update(TableWithEnumType model) {\n" + //
+				"		return persistencePort.update(model);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public void delete(TableWithEnumType model) {\n" + //
+				"		persistencePort.delete(model);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public List<TableWithEnumType> findAllByEnumField(EnumType enumField) {\n" + //
+				"		return persistencePort.findAllByEnumField(enumField);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"}";
 		DataModel dataModel = readDataModel("Model.xml");
 		TableModel table = dataModel.getTableByName("TABLE_WITH_ENUM_TYPE");
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void happyRunForASimpleObject_Inheritance() {
+		// Prepare
+		String expected = "package base.pack.age.name.core.service.impl;\n" + //
+				"\n" + //
+				"import java.util.List;\n" + //
+				"import java.util.Optional;\n" + //
+				"\n" + //
+				"import javax.inject.Inject;\n" + //
+				"\n" + //
+				"import base.pack.age.name.core.model.Page;\n" + //
+				"import base.pack.age.name.core.model.PageParameters;\n" + //
+				"import base.pack.age.name.core.model.ATable;\n" + //
+				"import base.pack.age.name.core.model.AnotherHeirTable;\n" + //
+				"import base.pack.age.name.core.model.AnotherHeirTableWithSameReference;\n" + //
+				"import base.pack.age.name.core.model.AnotherTable;\n" + //
+				"import base.pack.age.name.core.model.HeirTableWithReference;\n" + //
+				"import base.pack.age.name.core.model.IgnoredHeirTable;\n" + //
+				"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
+				"import base.pack.age.name.core.service.ATableService;\n" + //
+				"import lombok.Generated;\n" + //
+				"\n" + //
+				"/**\n" + //
+				" * A generated service interface implementation for ATable management.\n" + //
+				" *\n" + //
+				" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+				" */\n" + //
+				"@Generated\n" + //
+				"public abstract class ATableGeneratedServiceImpl implements ATableService {\n" + //
+				"\n" + //
+				"	@Inject\n" + //
+				"	protected ATablePersistencePort persistencePort;\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public ATable create(ATable model) {\n" + //
+				"		return persistencePort.create(model);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public List<ATable> findAll() {\n" + //
+				"		return persistencePort.findAll();\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public List<AnotherHeirTable> findAllAnotherHeirTable() {\n" + //
+				"		return persistencePort.findAllAnotherHeirTable();\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public List<AnotherHeirTableWithSameReference> findAllAnotherHeirTableWithSameReference() {\n" + //
+				"		return persistencePort.findAllAnotherHeirTableWithSameReference();\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public List<AnotherTable> findAllAnotherTable() {\n" + //
+				"		return persistencePort.findAllAnotherTable();\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public List<HeirTableWithReference> findAllHeirTableWithReference() {\n" + //
+				"		return persistencePort.findAllHeirTableWithReference();\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public List<IgnoredHeirTable> findAllIgnoredHeirTable() {\n" + //
+				"		return persistencePort.findAllIgnoredHeirTable();\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+				"		return persistencePort.findAll(pageParameters);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public Optional<ATable> findById(Long id) {\n" + //
+				"		return persistencePort.findById(id);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public ATable update(ATable model) {\n" + //
+				"		return persistencePort.update(model);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public void delete(ATable model) {\n" + //
+				"		persistencePort.delete(model);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"}";
+		DataModel dataModel = readDataModel("Model-Inheritance.xml");
+		TableModel table = dataModel.getTableByName("A_TABLE");
 		// Run
 		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 		// Check

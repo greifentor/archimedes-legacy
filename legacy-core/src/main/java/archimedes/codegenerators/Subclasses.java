@@ -10,8 +10,12 @@ public class Subclasses {
 	public static class SubclassData {
 		private String converterAttributeName;
 		private String converterClassName;
+		private String converterClassNameQualified;
 		private String dboClassName;
 		private String dboClassNameQualified;
+		private String dboRepositoryAttributeName;
+		private String dboRepositoryClassName;
+		private String dboRepositoryClassNameQualified;
 		private String modelClassName;
 		private String modelClassNameQualified;
 	}

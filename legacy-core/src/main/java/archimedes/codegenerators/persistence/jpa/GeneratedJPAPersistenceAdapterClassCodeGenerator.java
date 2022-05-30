@@ -15,6 +15,7 @@ import archimedes.codegenerators.ListAccess.ListAccessConverterData;
 import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.ReferenceMode;
+import archimedes.codegenerators.Subclasses.SubclassData;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
@@ -28,6 +29,8 @@ import archimedes.model.TableModel;
  */
 public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
+
+	private static final ServiceNameGenerator SERVICE_NAME_GENERATOR = ServiceNameGenerator.INSTANCE;
 
 	public GeneratedJPAPersistenceAdapterClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
@@ -62,8 +65,8 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 										t -> nameGenerator.getDBOConverterClassName(t.getName(), model),
 										t -> nameGenerator.getDBOConverterPackageName(model, t),
 										typeGenerator,
-		                                (c, m) -> ServiceNameGenerator.INSTANCE.getModelClassName(c.getDomain(), m),
-		                                d -> ServiceNameGenerator.INSTANCE.getModelPackageName(model, d)));
+										(c, m) -> ServiceNameGenerator.INSTANCE.getModelClassName(c.getDomain(), m),
+										d -> ServiceNameGenerator.INSTANCE.getModelPackageName(model, d)));
 		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
 		context.put("HasNotNulls", FindByUtils.hasNotNulls(table.getColumns()));
 		context.put("HasNoUniques", FindByUtils.hasNoUniques(table.getColumns()));
@@ -132,6 +135,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 				.put(
 						"PersistencePortPackageName",
 						ServiceNameGenerator.INSTANCE.getPersistencePortPackageName(model, table));
+		context.put("Subclasses", getSubclassData(model, table));
 		context.put("TableName", table.getName());
 		context.put("TableAttributeName", nameGenerator.getAttributeName(table.getName()));
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
@@ -191,6 +195,45 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 			context.put("KeyFromIdClass", "false");
 		}
 		return processTemplate(context, "DBOKeyGetter.vm");
+	}
+
+	private List<SubclassData> getSubclassData(DataModel model, TableModel table) {
+		return getSubclassTables(table)
+				.stream()
+				.map(
+						subclassTable -> new SubclassData()
+								.setConverterAttributeName(
+										nameGenerator
+												.getAttributeName(
+														nameGenerator
+																.getDBOConverterClassName(
+																		subclassTable.getName(),
+																		model)))
+								.setConverterClassName(
+										nameGenerator.getDBOConverterClassName(subclassTable.getName(), model))
+								.setConverterClassNameQualified(
+										nameGenerator.getDBOConverterPackageName(model, subclassTable) + "."
+												+ nameGenerator
+														.getDBOConverterClassName(subclassTable.getName(), model))
+								.setDboRepositoryAttributeName(
+										nameGenerator
+												.getAttributeName(
+														nameGenerator.getJPARepositoryInterfaceName(subclassTable)))
+								.setDboRepositoryClassName(nameGenerator.getJPARepositoryInterfaceName(subclassTable))
+								.setDboRepositoryClassNameQualified(
+										nameGenerator.getJPARepositoryPackageName(model, subclassTable) + "."
+												+ nameGenerator.getJPARepositoryInterfaceName(subclassTable))
+								.setConverterClassName(
+										nameGenerator.getDBOConverterClassName(subclassTable.getName(), model))
+								.setConverterClassNameQualified(
+										nameGenerator.getDBOConverterPackageName(model, subclassTable) + "."
+												+ nameGenerator
+														.getDBOConverterClassName(subclassTable.getName(), model))
+								.setModelClassName(SERVICE_NAME_GENERATOR.getModelClassName(subclassTable))
+								.setModelClassNameQualified(
+										SERVICE_NAME_GENERATOR.getModelPackageName(model, subclassTable) + "."
+												+ SERVICE_NAME_GENERATOR.getModelClassName(subclassTable)))
+				.collect(Collectors.toList());
 	}
 
 	@Override

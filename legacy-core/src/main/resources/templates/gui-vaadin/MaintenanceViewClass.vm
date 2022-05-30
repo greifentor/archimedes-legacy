@@ -140,9 +140,6 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 #foreach($SubclassReference in ${Subclass.getReferences()}) 
 					${SubclassReference.getServiceAttributeName()},
 #end
-#if($GUIReferenceDataCollection.getServiceAttributeNameList())
-					$GUIReferenceDataCollection.getServiceAttributeNameList(),
-#end
 					resourceManager,
 					session,
 					this);

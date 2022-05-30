@@ -9,6 +9,8 @@ import org.apache.velocity.VelocityContext;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
+import archimedes.codegenerators.CommonImportAdder;
+import archimedes.codegenerators.FieldDeclarations;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -33,6 +35,8 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		commonImportAdder = new CommonImportAdder();
+		fieldDeclarations = new FieldDeclarations();
 		List<ColumnData> columnData = getColumnData(table.getColumns(), model, getReferenceMode(model, table));
 		commonImportAdder.addCommonImports(context, columnData);
 		context.put("ClassName", getClassName(table));

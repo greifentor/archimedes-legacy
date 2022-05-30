@@ -7,6 +7,8 @@ import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.CommonImportAdder;
+import archimedes.codegenerators.FieldDeclarations;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -26,6 +28,8 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		commonImportAdder = new CommonImportAdder();
+		fieldDeclarations = new FieldDeclarations();
 		String modelClassName = serviceNameGenerator.getModelClassName(table);
 		String serviceInterfaceName = serviceNameGenerator.getServiceInterfaceName(table);
 		GUIReferenceDataCollection guiReferenceDataCollection = getGUIReferenceDataCollection(table, MAINTENANCE_VIEW);

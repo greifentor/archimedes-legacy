@@ -62,16 +62,15 @@ public class GeneratedJPARepositoryInterfaceCodeGeneratorTest {
 					s += "import java.util.Optional;\n";
 				}
 			}
-			s +=
-							"\n" + //
-							"/**\n" + //
-							" * A generated JPA repository for a_tables.\n" + //
-							" *\n" + //
-							" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-							" */\n" + //
-							"@Generated\n" + //
-							"@Repository\n" + //
-							"public interface ATableGeneratedDBORepository extends JpaRepository<ATableDBO, Long> {\n";
+			s += "\n" + //
+					"/**\n" + //
+					" * A generated JPA repository for a_tables.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Repository\n" + //
+					"public interface ATableGeneratedDBORepository extends JpaRepository<ATableDBO, Long> {\n";
 			if (findByLine != null) {
 				s += "\n" + //
 						"	" + findByLine + ";\n" + //
@@ -161,31 +160,28 @@ public class GeneratedJPARepositoryInterfaceCodeGeneratorTest {
 		void happyRunForASimpleObjectWithFindBy_EnumType() {
 			// Prepare
 			String expected = "package base.pack.age.name.persistence.repository;\n" + //
-			        "\n" + //
-			        "import org.springframework.data.jpa.repository.JpaRepository;\n" + //
-			        "import org.springframework.stereotype.Repository;\n" + //
-			        "\n" + //
-			        "import base.pack.age.name.persistence.entity.TableWithEnumTypeDBO;\n" + //
-			        "import base.pack.age.name.persistence.entity.EnumTypeDBO;\n" + //
-			        "import lombok.Generated;\n" + //
-			        "import java.util.List;\n" + //
-			        "\n" + //
-			        "/**\n" + //
-			        " * A generated JPA repository for table_with_enum_types.\n" + //
-			        " *\n" + //
-			        " * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-			        " */\n" + //
-			        "@Generated\n" + //
-			        "@Repository\n" + //
-			        "public interface TableWithEnumTypeGeneratedDBORepository extends JpaRepository<TableWithEnumTypeDBO, Long> {\n"
-			        + //
-			        "\n"
-			        + //
-			        "	List<TableWithEnumTypeDBO> findAllByEnumField(EnumTypeDBO enumField);\n"
-			        + //
-			        "\n"
-			        + //
-			        "}";
+					"\n" + //
+					"import org.springframework.data.jpa.repository.JpaRepository;\n" + //
+					"import org.springframework.stereotype.Repository;\n" + //
+					"\n" + //
+					"import base.pack.age.name.persistence.entity.TableWithEnumTypeDBO;\n" + //
+					"import base.pack.age.name.persistence.entity.EnumTypeDBO;\n" + //
+					"import lombok.Generated;\n" + //
+					"import java.util.List;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A generated JPA repository for table_with_enum_types.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Repository\n" + //
+					"public interface TableWithEnumTypeGeneratedDBORepository extends JpaRepository<TableWithEnumTypeDBO, Long> {\n"
+					+ //
+					"\n" + //
+					"	List<TableWithEnumTypeDBO> findAllByEnumField(EnumTypeDBO enumField);\n" + //
+					"\n" + //
+					"}";
 			DataModel dataModel = readDataModel("Model.xml");
 			TableModel table = dataModel.getTableByName("TABLE_WITH_ENUM_TYPE");
 			// Run
@@ -227,6 +223,40 @@ public class GeneratedJPARepositoryInterfaceCodeGeneratorTest {
 									AbstractClassCodeGenerator.REFERENCE_MODE,
 									AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT));
 			table.getColumnByName("REF").addOption(new Option("LIST_ACCESS"));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void inheritanceSubclass() {
+			// Prepare
+			String expected = "package base.pack.age.name.persistence.repository;\n" + //
+					"\n" + //
+					"import org.springframework.data.jpa.repository.JpaRepository;\n" + //
+					"import org.springframework.stereotype.Repository;\n" + //
+					"\n" + //
+					"import base.pack.age.name.persistence.entity.AnotherTableDBO;\n" + //
+					"import lombok.Generated;\n" + //
+					"import java.util.List;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A generated JPA repository for another_tables.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Repository\n" + //
+					"public interface AnotherTableGeneratedDBORepository extends JpaRepository<AnotherTableDBO, Long> {\n"
+					+ //
+					"\n" + //
+					"	@Override\n" + //
+					"	List<AnotherTableDBO> findAll();\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model-Inheritance.xml");
+			TableModel table = dataModel.getTableByName("ANOTHER_TABLE");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check

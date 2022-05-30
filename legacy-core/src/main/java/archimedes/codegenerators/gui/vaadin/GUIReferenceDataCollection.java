@@ -16,9 +16,15 @@ public class GUIReferenceDataCollection {
 
 	public GUIReferenceDataCollection addGUIReferenceData(List<GUIReferenceData> dataToAdd) {
 		if (dataToAdd != null) {
-			dataToAdd.forEach(data -> references.add(data));
+			dataToAdd.stream().filter(data -> !isAlreadyContained(data)).forEach(data -> references.add(data));
 		}
 		return this;
+	}
+
+	private boolean isAlreadyContained(GUIReferenceData guiReferenceData) {
+		return references
+				.stream()
+				.anyMatch(e -> e.getServiceAttributeName().equals(guiReferenceData.getServiceAttributeName()));
 	}
 
 	public String getServiceAttributeNameList() {

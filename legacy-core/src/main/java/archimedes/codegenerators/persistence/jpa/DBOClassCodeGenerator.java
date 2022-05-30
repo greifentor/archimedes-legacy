@@ -13,6 +13,8 @@ import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.Columns.ParameterData;
+import archimedes.codegenerators.CommonImportAdder;
+import archimedes.codegenerators.FieldDeclarations;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -31,13 +33,15 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		super(
 				"DBOClass.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-		        PersistenceJPANameGenerator.INSTANCE,
-		        TypeGenerator.INSTANCE,
+				PersistenceJPANameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		commonImportAdder = new CommonImportAdder();
+		fieldDeclarations = new FieldDeclarations();
 		List<ColumnData> columnData = getColumnData(table.getColumns(), model, getReferenceMode(model, table));
 		commonImportAdder.addCommonImports(context, columnData);
 		context.put("Autoincrement", getAutoincrementMode(columnData));
@@ -175,8 +179,8 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 			annotations.add(annotationData);
 			annotationData =
 					new AnnotationData()
-			                .setName("ManyToOne")
-			                .addParameter(new ParameterData().setName("fetch").setValue("FetchType.EAGER"));
+							.setName("ManyToOne")
+							.addParameter(new ParameterData().setName("fetch").setValue("FetchType.EAGER"));
 			annotations.add(annotationData);
 		} else {
 			annotations

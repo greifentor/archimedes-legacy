@@ -701,7 +701,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(DifferentSubclassReferences model) {\n" + //
-					"		return new DifferentSubclassReferencesDetailsLayout(buttonFactory, model, service, aTableService, aTableService, resourceManager, session, this);\n"
+					"		return new DifferentSubclassReferencesDetailsLayout(buttonFactory, model, service, aTableService, resourceManager, session, this);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //

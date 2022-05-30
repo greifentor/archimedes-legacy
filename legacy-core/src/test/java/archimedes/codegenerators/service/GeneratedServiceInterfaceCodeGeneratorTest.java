@@ -242,7 +242,7 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 			}
 
 			@Test
-			void passANoSubnlassModel_returnsFalse() {
+			void passANoSubclassModel_returnsFalse() {
 				// Prepare
 				DataModel dataModel = readDataModel("Model.xml");
 				TableModel table = dataModel.getTableByName("A_TABLE");
@@ -250,6 +250,68 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 				assertFalse(unitUnderTest.isToIgnoreFor(dataModel, table));
 			}
 
+		}
+
+	}
+
+	@Nested
+	class Inheritance {
+
+		@Test
+		void simpleInheritance() {
+			// Prepare
+			String expected = "package base.pack.age.name.core.service;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.Optional;\n" + //
+					"\n" + //
+					"import base.pack.age.name.core.model.Page;\n" + //
+					"import base.pack.age.name.core.model.PageParameters;\n" + //
+					"import base.pack.age.name.core.model.ATable;\n" + //
+					"import base.pack.age.name.core.model.AnotherHeirTable;\n" + //
+					"import base.pack.age.name.core.model.AnotherHeirTableWithSameReference;\n" + //
+					"import base.pack.age.name.core.model.AnotherTable;\n" + //
+					"import base.pack.age.name.core.model.HeirTableWithReference;\n" + //
+					"import base.pack.age.name.core.model.IgnoredHeirTable;\n" + //
+					"import lombok.Generated;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A generated service interface for ATable management.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"public interface ATableGeneratedService {\n" + //
+					"\n" + //
+					"	ATable create(ATable model);\n" + //
+					"\n" + //
+					"	List<ATable> findAll();\n" + //
+					"\n" + //
+					"	List<AnotherHeirTable> findAllAnotherHeirTable();\n" + //
+					"\n" + //
+					"	List<AnotherHeirTableWithSameReference> findAllAnotherHeirTableWithSameReference();\n" + //
+					"\n" + //
+					"	List<AnotherTable> findAllAnotherTable();\n" + //
+					"\n" + //
+					"	List<HeirTableWithReference> findAllHeirTableWithReference();\n" + //
+					"\n" + //
+					"	List<IgnoredHeirTable> findAllIgnoredHeirTable();\n" + //
+					"\n" + //
+					"	Page<ATable> findAll(PageParameters pageParameters);\n" + //
+					"\n" + //
+					"	Optional<ATable> findById(Long id);\n" + //
+					"\n" + //
+					"	ATable update(ATable model);\n" + //
+					"\n" + //
+					"	void delete(ATable model);\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model-Inheritance.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
 		}
 
 	}
