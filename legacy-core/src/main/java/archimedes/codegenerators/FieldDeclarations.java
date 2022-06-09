@@ -55,4 +55,13 @@ public class FieldDeclarations {
 				.collect(Collectors.toList());
 	}
 
+	public void removeAttribute(String serviceAttributeName, String serviceInterfaceName) {
+		for (int i = fieldDeclarations.size() - 1; i >= 0; i--) {
+			FieldDeclaration fd = fieldDeclarations.get(i);
+			if (fd.getAttributeName().equals(serviceAttributeName) && fd.getTypeName().equals(serviceInterfaceName)) {
+				fieldDeclarations.remove(i);
+			}
+		}
+	}
+
 }

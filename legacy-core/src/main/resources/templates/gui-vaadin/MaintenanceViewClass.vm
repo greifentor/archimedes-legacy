@@ -14,12 +14,6 @@ import com.vaadin.flow.router.Route;
 #foreach ($ImportDeclaration in $ImportDeclarations.toList())
 import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
-#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
-import ${Subclass.getModelPackageName()}.${Subclass.getModelClassName()};
-#end
-#foreach($SubclassReference in ${UniqueSubclassReferenceDataCollection}) 
-import ${SubclassReference.getServicePackageName()}.${SubclassReference.getServiceInterfaceName()};
-#end
 import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
 import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};
@@ -137,9 +131,9 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 					buttonFactory,
 					(${Subclass.getModelClassName()}) model,
 					service,
-#foreach($SubclassReference in ${Subclass.getReferences()}) 
+	#foreach($SubclassReference in ${Subclass.getReferences()}) 
 					${SubclassReference.getServiceAttributeName()},
-#end
+	#end
 					resourceManager,
 					session,
 					this);

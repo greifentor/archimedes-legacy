@@ -104,19 +104,19 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		setWidthFull();
 		add(
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
-#if (${Column.getType()} == "BOOLEAN")
+	#if (${Column.getType()} == "BOOLEAN")
 				checkbox${Column.getFieldNameCamelCase()},
-#elseif (${Column.getType()} == "COMBOBOX")
+	#elseif (${Column.getType()} == "COMBOBOX")
 				comboBox${Column.getFieldNameCamelCase()},
-#elseif (${Column.getType()} == "ENUM")
+	#elseif (${Column.getType()} == "ENUM")
 				comboBox${Column.getFieldNameCamelCase()},
-#elseif (${Column.getType()} == "INTEGER")
+	#elseif (${Column.getType()} == "INTEGER")
 				integerField${Column.getFieldNameCamelCase()},
-#elseif (${Column.getType()} == "TEXT")
+	#elseif (${Column.getType()} == "TEXT")
 				textArea${Column.getFieldNameCamelCase()},
-#else
+	#else
 				textField${Column.getFieldNameCamelCase()},
-#end
+	#end
 #end
 				getMasterDataButtonLayout(model.getId() > 0));
 	}
@@ -145,19 +145,19 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	@Override
 	protected void save() {
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
-#if (${Column.getType()} == "BOOLEAN")
+	#if (${Column.getType()} == "BOOLEAN")
 		model.set${Column.getFieldNameCamelCase()}(checkbox${Column.getFieldNameCamelCase()}.getValue());
-#elseif (${Column.getType()} == "COMBOBOX")
+	#elseif (${Column.getType()} == "COMBOBOX")
 		model.set${Column.getFieldNameCamelCase()}(comboBox${Column.getFieldNameCamelCase()}.getValue());
-#elseif (${Column.getType()} == "ENUM")
+	#elseif (${Column.getType()} == "ENUM")
 		model.set${Column.getFieldNameCamelCase()}(comboBox${Column.getFieldNameCamelCase()}.getValue());
-#elseif (${Column.getType()} == "INTEGER")
+	#elseif (${Column.getType()} == "INTEGER")
 		model.set${Column.getFieldNameCamelCase()}(integerField${Column.getFieldNameCamelCase()}.getValue());
-#elseif (${Column.getType()} == "TEXT")
+	#elseif (${Column.getType()} == "TEXT")
 		model.set${Column.getFieldNameCamelCase()}(textArea${Column.getFieldNameCamelCase()}.getValue());
-#else
+	#else
 		model.set${Column.getFieldNameCamelCase()}(textField${Column.getFieldNameCamelCase()}.getValue());
-#end
+	#end
 #end
 		service.update(model);
 		observer.save();

@@ -57,12 +57,15 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 	}
 
 	protected List<GUIReferenceData> getGUIReferenceData(TableModel table, boolean maintenanceView) {
-		return List
-				.of(table.getColumns())
+//		return List
+//				.of(table.getColumns())
+		return getAllColumns(new ArrayList<>(), table)
 				.stream()
 				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
 				.filter(column -> column.getReferencedTable() != null)
 				.map(column -> createGUIReferenceData(column, maintenanceView))
+				.collect(Collectors.toSet())
+				.stream()
 				.collect(Collectors.toList());
 	}
 
@@ -126,12 +129,16 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 	}
 
 	private List<SubclassReferenceData> getSubclassReferenceData(TableModel table) {
-		return List
-				.of(table.getColumns())
+//		return List
+//				.of(table.getColumns())
+		return getAllColumns(new ArrayList<ColumnModel>(), table)
 				.stream()
 				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
 				.filter(column -> column.getReferencedTable() != null)
 				.map(this::createSubclassReferenceData)
+				.collect(Collectors.toSet())
+				.stream()
+				.sorted((srd0, srd1) -> srd0.getServiceAttributeName().compareTo(srd1.getServiceAttributeName()))
 				.collect(Collectors.toList());
 	}
 

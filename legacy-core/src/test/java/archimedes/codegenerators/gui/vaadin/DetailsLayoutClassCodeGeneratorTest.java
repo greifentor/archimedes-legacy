@@ -640,22 +640,22 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
 						"\n" + //
-						"	private ComboBox<ATable> comboBoxATable;\n" + //
 						"	private ComboBox<AnotherTable> comboBoxAnotherTable;\n" + //
+						"	private ComboBox<ATable> comboBoxATable;\n" + //
 						"\n" + //
 						"	@Override\n" + //
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxATable = new ComboBox<>(\"ATable\", aTableService.findAll());\n" + //
-						"		comboBoxATable.setValue(model.getATable());\n" + //
-						"		comboBoxATable.setItemLabelGenerator(ATable::getDescription);\n" + //
-						"		comboBoxATable.setWidthFull();\n" + //
 						"		comboBoxAnotherTable = new ComboBox<>(\"AnotherTable\", aTableService.findAllAnotherTable());\n"
 						+ //
 						"		comboBoxAnotherTable.setValue(model.getAnotherTable());\n" + //
 						"		comboBoxAnotherTable.setItemLabelGenerator(AnotherTable::getDescription);\n" + //
 						"		comboBoxAnotherTable.setWidthFull();\n" + //
+						"		comboBoxATable = new ComboBox<>(\"ATable\", aTableService.findAll());\n" + //
+						"		comboBoxATable.setValue(model.getATable());\n" + //
+						"		comboBoxATable.setItemLabelGenerator(ATable::getDescription);\n" + //
+						"		comboBoxATable.setWidthFull();\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -705,6 +705,124 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"}";
 				DataModel dataModel = readDataModel("Model-Inheritance.xml");
 				TableModel tableModel = dataModel.getTableByName("DIFFERENT_SUBCLASS_REFERENCES");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+		}
+
+		@Nested
+		class WithReferences {
+
+			private String getExpected() {
+				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+						"\n" + //
+						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
+						"import com.vaadin.flow.component.textfield.TextField;\n" + //
+						"\n" + //
+						"import base.pack.age.name.core.model.BHeirTable;\n" + //
+						"import base.pack.age.name.core.model.BReferencedTable;\n" + //
+						"import base.pack.age.name.core.service.BReferencedTableService;\n" + //
+						"import base.pack.age.name.core.service.BTableService;\n" + //
+						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
+						"import base.pack.age.name.gui.SessionData;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.RequiredArgsConstructor;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n" + //
+						"@Generated\n" + //
+						"@RequiredArgsConstructor\n" + //
+						"public class BHeirTableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
+						"\n" + //
+						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final BHeirTable model;\n" + //
+						"	private final BTableService service;\n" + //
+						"	private final BReferencedTableService bReferencedTableService;\n" + //
+						"	private final ResourceManager resourceManager;\n" + //
+						"	private final SessionData session;\n" + //
+						"	private final Observer observer;\n" + //
+						"\n" + //
+						"	private ComboBox<BReferencedTable> comboBoxReference;\n" + //
+						"	private TextField textFieldDescription;\n" + //
+						"	private TextField textFieldName;\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public void onAttach(AttachEvent attachEvent) {\n" + //
+						"		super.onAttach(attachEvent);\n" + //
+						"		createButtons();\n" + //
+						"		comboBoxReference = new ComboBox<>(\"BReferencedTable\", bReferencedTableService.findAll());\n"
+						+ //
+						"		comboBoxReference.setValue(model.getReference());\n" + //
+						"		comboBoxReference.setItemLabelGenerator(BReferencedTable::getDescription);\n" + //
+						"		comboBoxReference.setWidthFull();\n" + //
+						"		textFieldDescription = createTextField(\"BTableDetailsLayout.field.description.label\", model.getDescription());\n"
+						+ //
+						"		textFieldName = createTextField(\"BHeirTableDetailsLayout.field.name.label\", model.getName());\n"
+						+ //
+						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
+						"		getStyle()\n" + //
+						"				.set(\n" + //
+						"						\"box-shadow\",\n" + //
+						"						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n"
+						+ //
+						"		setMargin(false);\n" + //
+						"		setWidthFull();\n" + //
+						"		add(\n" + //
+						"				textFieldDescription,\n" + //
+						"				textFieldName,\n" + //
+						"				comboBoxReference,\n" + //
+						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ButtonFactory getButtonFactory() {\n" + //
+						"		return buttonFactory;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ResourceManager getResourceManager() {\n" + //
+						"		return resourceManager;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected SessionData getSessionData() {\n" + //
+						"		return session;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void remove() {\n" + //
+						"		service.delete(model);\n" + //
+						"		observer.remove();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void save() {\n" + //
+						"		model.setDescription(textFieldDescription.getValue());\n" + //
+						"		model.setName(textFieldName.getValue());\n" + //
+						"		model.setReference(comboBoxReference.getValue());\n" + //
+						"		service.update(model);\n" + //
+						"		observer.save();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"}";
+			}
+
+			@Test
+			void happyRun() {
+				// Prepare
+				String expected = getExpected();
+				DataModel dataModel = readDataModel("Model-Inheritance.xml");
+				TableModel tableModel = dataModel.getTableByName("B_HEIR_TABLE");
 				// Run
 				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
 				// Check

@@ -31,6 +31,7 @@ public class GUIReferenceDataCollection {
 		return references
 				.stream()
 				.map(reference -> reference.getServiceAttributeName())
+				.sorted((s0, s1) -> s0.compareTo(s1))
 				.reduce((s0, s1) -> s0 + ", " + s1)
 				.orElse(null);
 	}

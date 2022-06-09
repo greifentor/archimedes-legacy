@@ -33,6 +33,8 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		String modelClassName = serviceNameGenerator.getModelClassName(table);
 		String serviceInterfaceName = serviceNameGenerator.getServiceInterfaceName(table);
 		GUIReferenceDataCollection guiReferenceDataCollection = getGUIReferenceDataCollection(table, MAINTENANCE_VIEW);
+		SubclassDataCollection subclassDataCollection = getSubclassDataCollection(table);
+		List<SubclassReferenceData> uniqueSubclassReferenceDataCollection = getUniqueSubclassReferenceData(table);
 		context.put("BaseURL", getBaseURL(model, table));
 		context.put("AbstractMasterDataBaseLayoutClassName", nameGenerator.getAbstractMasterDataBaseLayoutClassName());
 		context.put("AbstractMasterDataBaseLayoutPackageName", nameGenerator.getVaadinComponentPackageName(model));
@@ -69,13 +71,16 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
 		context.put("ServiceInterfaceName", serviceInterfaceName);
-		context.put("SubclassDataCollection", getSubclassDataCollection(table));
-		context.put("UniqueSubclassReferenceDataCollection", getUniqueSubclassReferenceData(table));
+		context.put("SubclassDataCollection", subclassDataCollection);
+		context.put("UniqueSubclassReferenceDataCollection", uniqueSubclassReferenceDataCollection);
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
 		importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelClassName);
 		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
+		addImportsFromSubClassDataCollection(subclassDataCollection);
+		addImportsFromUniqueSubclassReferenceData(uniqueSubclassReferenceDataCollection);
 		addGUIReferencesToFieldDeclarations(guiReferenceDataCollection.getReferences());
+		cleanUpFieldDeclarationsFromSubClassReferences(subclassDataCollection);
 	}
 
 	private String getBaseURL(DataModel model, TableModel table) {
@@ -108,6 +113,32 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 
 	private String getResourceName(ColumnModel column) {
 		return nameGenerator.getCamelCase(column.getName()).toLowerCase();
+	}
+
+	private void addImportsFromSubClassDataCollection(SubclassDataCollection subclassDataCollection) {
+		for (SubclassData subclass : subclassDataCollection.getSubclasses()) {
+			importDeclarations.add(subclass.getModelPackageName(), subclass.getModelClassName());
+		}
+	}
+
+	private void addImportsFromUniqueSubclassReferenceData(List<SubclassReferenceData> subclassDataCollection) {
+		for (SubclassReferenceData subclassReferenceData : subclassDataCollection) {
+			importDeclarations
+					.add(
+							subclassReferenceData.getServicePackageName(),
+							subclassReferenceData.getServiceInterfaceName());
+		}
+	}
+
+	private void cleanUpFieldDeclarationsFromSubClassReferences(SubclassDataCollection subclassDataCollection) {
+		for (SubclassData subClass : subclassDataCollection.getSubclasses()) {
+			for (SubclassReferenceData subclassReferenceData : subClass.getReferences()) {
+				fieldDeclarations
+						.removeAttribute(
+								subclassReferenceData.getServiceAttributeName(),
+								subclassReferenceData.getServiceInterfaceName());
+			}
+		}
 	}
 
 	@Override
