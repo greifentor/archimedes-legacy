@@ -128,6 +128,22 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	#end
 #end
 				getMasterDataButtonLayout(model.getId() > 0));
+#set ($FirstColumn = ${GUIColumnDataCollection.getColumns().get(0)})
+#if (${FirstColumn.getType()} == "BOOLEAN")
+		checkbox${FirstColumn.getFieldNameCamelCase()}.focus();
+#elseif (${FirstColumn.getType()} == "COMBOBOX")
+		comboBox${FirstColumn.getFieldNameCamelCase()}.focus();
+#elseif (${FirstColumn.getType()} == "ENUM")
+		comboBox${FirstColumn.getFieldNameCamelCase()}.focus();
+#elseif (${FirstColumn.getType()} == "INTEGER")
+		integerField${FirstColumn.getFieldNameCamelCase()}.focus();
+#elseif (${FirstColumn.getType()} == "NUMERIC")
+		numberField${FirstColumn.getFieldNameCamelCase()}.focus();
+#elseif (${FirstColumn.getType()} == "TEXT")
+		textArea${FirstColumn.getFieldNameCamelCase()}.focus();
+#else
+		textField${FirstColumn.getFieldNameCamelCase()}.focus();
+#end
 	}
 
 	@Override

@@ -95,6 +95,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"				integerFieldCount,\n" + //
 						"				textFieldDescription,\n" + //
 						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"		integerFieldCount.focus();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -207,6 +208,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		add(\n" + //
 						"				comboBoxRef,\n" + //
 						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"		comboBoxRef.focus();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -320,6 +322,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"				checkboxFlag,\n" + //
 						"				textAreaLongtext,\n" + //
 						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"		comboBoxEnumField.focus();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -455,6 +458,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"				integerFieldCounterWithLimits,\n" + //
 						"				integerFieldWithSpecialDomain,\n" + //
 						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"		integerFieldCounter.focus();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -564,6 +568,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"				textFieldDescription,\n" + //
 						"				checkboxFlag,\n" + //
 						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"		textFieldDescription.focus();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -675,6 +680,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"				textFieldName,\n" + //
 						"				checkboxFlag,\n" + //
 						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"		textFieldDescription.focus();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -789,6 +795,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"				comboBoxAnotherTable,\n" + //
 						"				comboBoxATable,\n" + //
 						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"		comboBoxAnotherTable.focus();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -900,6 +907,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"				textFieldName,\n" + //
 						"				comboBoxReference,\n" + //
 						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"		textFieldDescription.focus();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
