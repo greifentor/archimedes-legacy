@@ -44,6 +44,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String REFERENCE_MODE = "REFERENCE_MODE";
 	public static final String REFERENCE_MODE_ID = "ID";
 	public static final String REFERENCE_MODE_OBJECT = "OBJECT";
+	public static final String STEP = "STEP";
 	public static final String SUBCLASS = "SUBCLASS";
 	public static final String SUPERCLASS = "SUPERCLASS";
 

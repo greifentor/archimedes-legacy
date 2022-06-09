@@ -76,7 +76,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		integerFieldCount = createIntegerField(\"ATableDetailsLayout.field.count.label\", model.getCount(), 1, 10);\n"
+						"		integerFieldCount = createIntegerField(\"ATableDetailsLayout.field.count.label\", model.getCount(), 1, 10, null);\n"
 						+ //
 						"		textFieldDescription = createTextField(\"ATableDetailsLayout.field.description.label\", model.getDescription());\n"
 						+ //
@@ -374,6 +374,124 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				DataModel dataModel = readDataModel("Model.xml");
 				TableModel tableModel = dataModel.getTableByName("TABLE_WITH_SPECIALS");
 				tableModel.getColumnByName("Flag").setNotNull(true);
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+		}
+
+		@Nested
+		class Numbers {
+
+			@Test
+			void happyRunForASimpleObject_withNotNullBoolean() {
+				// Prepare
+				String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+						"\n" + //
+						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.textfield.IntegerField;\n" + //
+						"import com.vaadin.flow.component.textfield.NumberField;\n" + //
+						"\n" + //
+						"import base.pack.age.name.core.model.TableWithNumberField;\n" + //
+						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
+						"import base.pack.age.name.core.service.TableWithNumberFieldService;\n" + //
+						"import base.pack.age.name.gui.SessionData;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.RequiredArgsConstructor;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n" + //
+						"@Generated\n" + //
+						"@RequiredArgsConstructor\n" + //
+						"public class TableWithNumberFieldDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
+						"\n" + //
+						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final TableWithNumberField model;\n" + //
+						"	private final TableWithNumberFieldService service;\n" + //
+						"	private final ResourceManager resourceManager;\n" + //
+						"	private final SessionData session;\n" + //
+						"	private final Observer observer;\n" + //
+						"\n" + //
+						"	private IntegerField integerFieldCounter;\n" + //
+						"	private NumberField numberFieldAmount;\n" + //
+						"	private NumberField numberFieldAmountWithLimits;\n" + //
+						"	private IntegerField integerFieldCounterWithLimits;\n" + //
+						"	private IntegerField integerFieldWithSpecialDomain;\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public void onAttach(AttachEvent attachEvent) {\n" + //
+						"		super.onAttach(attachEvent);\n" + //
+						"		createButtons();\n" + //
+						"		integerFieldCounter = createIntegerField(\"TableWithNumberFieldDetailsLayout.field.counter.label\", model.getCounter(), null, null, null);\n"
+						+ //
+						"		numberFieldAmount = createNumberField(\"TableWithNumberFieldDetailsLayout.field.amount.label\", model.getAmount(), null, null, null);\n"
+						+ //
+						"		numberFieldAmountWithLimits = createNumberField(\"TableWithNumberFieldDetailsLayout.field.amountwithlimits.label\", model.getAmountWithLimits(), -999, 999.9, 1.5);\n"
+						+ //
+						"		integerFieldCounterWithLimits = createIntegerField(\"TableWithNumberFieldDetailsLayout.field.counterwithlimits.label\", model.getCounterWithLimits(), 0, 99, 3);\n"
+						+ //
+						"		integerFieldWithSpecialDomain = createIntegerField(\"TableWithNumberFieldDetailsLayout.field.withspecialdomain.label\", model.getWithSpecialDomain(), -20, 10, 2);\n"
+						+ //
+						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
+						"		getStyle()\n" + //
+						"				.set(\n" + //
+						"						\"box-shadow\",\n" + //
+						"						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n"
+						+ //
+						"		setMargin(false);\n" + //
+						"		setWidthFull();\n" + //
+						"		add(\n" + //
+						"				integerFieldCounter,\n" + //
+						"				numberFieldAmount,\n" + //
+						"				numberFieldAmountWithLimits,\n" + //
+						"				integerFieldCounterWithLimits,\n" + //
+						"				integerFieldWithSpecialDomain,\n" + //
+						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ButtonFactory getButtonFactory() {\n" + //
+						"		return buttonFactory;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ResourceManager getResourceManager() {\n" + //
+						"		return resourceManager;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected SessionData getSessionData() {\n" + //
+						"		return session;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void remove() {\n" + //
+						"		service.delete(model);\n" + //
+						"		observer.remove();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void save() {\n" + //
+						"		model.setCounter(integerFieldCounter.getValue());\n" + //
+						"		model.setAmount(numberFieldAmount.getValue());\n" + //
+						"		model.setAmountWithLimits(numberFieldAmountWithLimits.getValue());\n" + //
+						"		model.setCounterWithLimits(integerFieldCounterWithLimits.getValue());\n" + //
+						"		model.setWithSpecialDomain(integerFieldWithSpecialDomain.getValue());\n" + //
+						"		service.update(model);\n" + //
+						"		observer.save();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"}";
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel tableModel = dataModel.getTableByName("TABLE_WITH_NUMBER_FIELD");
 				// Run
 				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
 				// Check

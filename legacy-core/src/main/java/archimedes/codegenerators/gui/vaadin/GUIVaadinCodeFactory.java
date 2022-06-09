@@ -72,9 +72,16 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 		case COLUMN:
 			return new String[] {
 					AbstractGUIVaadinClassCodeGenerator.GUI_EDITOR_POS,
-					AbstractGUIVaadinClassCodeGenerator.NAME_FIELD };
+					AbstractClassCodeGenerator.MAX,
+					AbstractClassCodeGenerator.MIN,
+					AbstractGUIVaadinClassCodeGenerator.NAME_FIELD,
+					AbstractClassCodeGenerator.STEP };
 		case DOMAIN:
-			return new String[] { AbstractClassCodeGenerator.TEXT };
+			return new String[] {
+					AbstractClassCodeGenerator.MAX,
+					AbstractClassCodeGenerator.MIN,
+					AbstractClassCodeGenerator.STEP,
+					AbstractClassCodeGenerator.TEXT };
 		case MODEL:
 			return new String[] {
 					GUIVaadinNameGenerator.ALTERNATE_GUI_VAADIN_MODULE_PREFIX,

@@ -13,6 +13,9 @@ import com.vaadin.flow.component.combobox.ComboBox;
 #if (${GUIColumnDataCollection.hasFieldType("INTEGER")} == true)
 import com.vaadin.flow.component.textfield.IntegerField;
 #end
+#if (${GUIColumnDataCollection.hasFieldType("NUMERIC")} == true)
+import com.vaadin.flow.component.textfield.NumberField;
+#end
 #if (${GUIColumnDataCollection.hasFieldType("TEXT")} == true)
 import com.vaadin.flow.component.textfield.TextArea;
 #end
@@ -54,6 +57,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	private ComboBox<${Column.getFieldTypeName()}> comboBox${Column.getFieldNameCamelCase()};
 	#elseif (${Column.getType()} == "INTEGER")
 	private IntegerField integerField${Column.getFieldNameCamelCase()};
+	#elseif (${Column.getType()} == "NUMERIC")
+	private NumberField numberField${Column.getFieldNameCamelCase()};
 	#elseif (${Column.getType()} == "TEXT")
 	private TextArea textArea${Column.getFieldNameCamelCase()};
 	#else
@@ -85,7 +90,9 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	#elseif (${Column.getType()} == "ENUM")
 		comboBox${FieldName} = createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values());
 	#elseif (${Column.getType()} == "INTEGER")
-		integerField${FieldName} = createIntegerField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()});
+		integerField${FieldName} = createIntegerField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()});
+	#elseif (${Column.getType()} == "NUMERIC")
+		numberField${FieldName} = createNumberField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()});
 	#elseif (${Column.getType()} == "TEXT")
 		textArea${FieldName} = createTextArea("$ResourceId", model.get${FieldName}());
 	#else
@@ -112,6 +119,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 				comboBox${Column.getFieldNameCamelCase()},
 	#elseif (${Column.getType()} == "INTEGER")
 				integerField${Column.getFieldNameCamelCase()},
+	#elseif (${Column.getType()} == "NUMERIC")
+				numberField${Column.getFieldNameCamelCase()},
 	#elseif (${Column.getType()} == "TEXT")
 				textArea${Column.getFieldNameCamelCase()},
 	#else
@@ -153,6 +162,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		model.set${Column.getFieldNameCamelCase()}(comboBox${Column.getFieldNameCamelCase()}.getValue());
 	#elseif (${Column.getType()} == "INTEGER")
 		model.set${Column.getFieldNameCamelCase()}(integerField${Column.getFieldNameCamelCase()}.getValue());
+	#elseif (${Column.getType()} == "NUMERIC")
+		model.set${Column.getFieldNameCamelCase()}(numberField${Column.getFieldNameCamelCase()}.getValue());
 	#elseif (${Column.getType()} == "TEXT")
 		model.set${Column.getFieldNameCamelCase()}(textArea${Column.getFieldNameCamelCase()}.getValue());
 	#else

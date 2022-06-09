@@ -14,6 +14,7 @@ import archimedes.codegenerators.FieldDeclarations;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.DomainModel;
 import archimedes.model.TableModel;
 
 /**
@@ -97,6 +98,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 											.setPosition(getPosition(column))
 											.setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
 											.setSimpleBoolean(isSimpleBoolean(column))
+											.setStep(getStep(column))
 											.setType(getType(column))
 											.setTypePackage(typePackage);
 								})
@@ -105,15 +107,27 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 	}
 
 	private String getMax(ColumnModel column) {
-		return column.isOptionSet(AbstractClassCodeGenerator.MAX)
-				? column.getOptionByName(AbstractClassCodeGenerator.MAX).getParameter()
+		return getParameterValueFromColumn(column, AbstractClassCodeGenerator.MAX, null);
+	}
+
+	private String getParameterValueFromColumn(ColumnModel column, String parameterIdent, String defaultValue) {
+		return column.isOptionSet(parameterIdent)
+				? column.getOptionByName(parameterIdent).getParameter()
+				: getParameterValueFromDomain(column.getDomain(), parameterIdent, defaultValue);
+	}
+
+	private String getParameterValueFromDomain(DomainModel domain, String parameterIdent, String defaultValue) {
+		return domain.isOptionSet(parameterIdent)
+				? domain.getOptionByName(parameterIdent).getParameter()
 				: "null";
 	}
 
 	private String getMin(ColumnModel column) {
-		return column.isOptionSet(AbstractClassCodeGenerator.MIN)
-				? column.getOptionByName(AbstractClassCodeGenerator.MIN).getParameter()
-				: "null";
+		return getParameterValueFromColumn(column, AbstractClassCodeGenerator.MIN, null);
+	}
+
+	private String getStep(ColumnModel column) {
+		return getParameterValueFromColumn(column, AbstractClassCodeGenerator.STEP, null);
 	}
 
 	private int getPosition(ColumnModel column) {
@@ -127,6 +141,11 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 			return GUIColumnData.TYPE_COMBOBOX;
 		} else if (column.getDomain().getDataType() == Types.BOOLEAN) {
 			return GUIColumnData.TYPE_BOOLEAN;
+		} else if ((column.getDomain().getDataType() == Types.DECIMAL)
+				|| (column.getDomain().getDataType() == Types.DOUBLE)
+				|| (column.getDomain().getDataType() == Types.FLOAT)
+				|| (column.getDomain().getDataType() == Types.NUMERIC)) {
+			return GUIColumnData.TYPE_NUMERIC;
 		} else if (column.getDomain().isOptionSet(ENUM)) {
 			return GUIColumnData.TYPE_ENUM;
 		} else if (column.getDomain().getDataType() == Types.INTEGER) {
