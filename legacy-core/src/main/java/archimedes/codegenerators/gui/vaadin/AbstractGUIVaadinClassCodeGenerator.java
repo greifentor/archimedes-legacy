@@ -57,8 +57,6 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 	}
 
 	protected List<GUIReferenceData> getGUIReferenceData(TableModel table, boolean maintenanceView) {
-//		return List
-//				.of(table.getColumns())
 		return getAllColumns(new ArrayList<>(), table)
 				.stream()
 				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
@@ -88,6 +86,7 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 				.setReferencedModelClassName(referenceModelClassName)
 				.setReferencedModelNameFieldName(getNameFieldName(referencedSuperTable))
 				.setReferencedModelPackageName(referenceModelPackageName)
+				.setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
 				.setServiceAttributeName(nameGenerator.getAttributeName(serviceInterfaceName))
 				.setServiceInterfaceName(serviceInterfaceName)
 				.setServicePackageName(servicePackageName);
@@ -129,8 +128,6 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 	}
 
 	private List<SubclassReferenceData> getSubclassReferenceData(TableModel table) {
-//		return List
-//				.of(table.getColumns())
 		return getAllColumns(new ArrayList<ColumnModel>(), table)
 				.stream()
 				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))

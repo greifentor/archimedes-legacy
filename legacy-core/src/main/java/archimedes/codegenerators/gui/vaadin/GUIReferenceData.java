@@ -12,6 +12,7 @@ public class GUIReferenceData {
 	private String referencedModelClassName;
 	private String referencedModelNameFieldName;
 	private String referencedModelPackageName;
+	private String resourceName;
 	private String serviceAttributeName;
 	private String serviceInterfaceName;
 	private String servicePackageName;

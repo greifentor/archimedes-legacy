@@ -190,10 +190,9 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxRef = new ComboBox<>(\"AnotherTable\", anotherTableService.findAll());\n" + //
-						"		comboBoxRef.setValue(model.getRef());\n" + //
+						"		comboBoxRef = createComboBox(\"RefDetailsLayout.field.ref.label\", model.getRef(), anotherTableService.findAll().toArray(new AnotherTable[0]));\n"
+						+ //
 						"		comboBoxRef.setItemLabelGenerator(AnotherTable::getName);\n" + //
-						"		comboBoxRef.setWidthFull();\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -764,22 +763,19 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
 						"\n" + //
-						"	private ComboBox<AnotherTable> comboBoxAnotherTable;\n" + //
 						"	private ComboBox<ATable> comboBoxATable;\n" + //
+						"	private ComboBox<AnotherTable> comboBoxAnotherTable;\n" + //
 						"\n" + //
 						"	@Override\n" + //
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxAnotherTable = new ComboBox<>(\"AnotherTable\", aTableService.findAllAnotherTable());\n"
+						"		comboBoxATable = createComboBox(\"ATableDetailsLayout.field.atable.label\", model.getATable(), aTableService.findAll().toArray(new ATable[0]));\n"
 						+ //
-						"		comboBoxAnotherTable.setValue(model.getAnotherTable());\n" + //
-						"		comboBoxAnotherTable.setItemLabelGenerator(AnotherTable::getDescription);\n" + //
-						"		comboBoxAnotherTable.setWidthFull();\n" + //
-						"		comboBoxATable = new ComboBox<>(\"ATable\", aTableService.findAll());\n" + //
-						"		comboBoxATable.setValue(model.getATable());\n" + //
 						"		comboBoxATable.setItemLabelGenerator(ATable::getDescription);\n" + //
-						"		comboBoxATable.setWidthFull();\n" + //
+						"		comboBoxAnotherTable = createComboBox(\"AnotherTableDetailsLayout.field.anothertable.label\", model.getAnotherTable(), aTableService.findAllAnotherTable().toArray(new AnotherTable[0]));\n"
+						+ //
+						"		comboBoxAnotherTable.setItemLabelGenerator(AnotherTable::getDescription);\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -882,11 +878,9 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxReference = new ComboBox<>(\"BReferencedTable\", bReferencedTableService.findAll());\n"
+						"		comboBoxReference = createComboBox(\"ReferenceDetailsLayout.field.reference.label\", model.getReference(), bReferencedTableService.findAll().toArray(new BReferencedTable[0]));\n"
 						+ //
-						"		comboBoxReference.setValue(model.getReference());\n" + //
 						"		comboBoxReference.setItemLabelGenerator(BReferencedTable::getDescription);\n" + //
-						"		comboBoxReference.setWidthFull();\n" + //
 						"		textFieldDescription = createTextField(\"BTableDetailsLayout.field.description.label\", model.getDescription());\n"
 						+ //
 						"		textFieldName = createTextField(\"BHeirTableDetailsLayout.field.name.label\", model.getName());\n"
