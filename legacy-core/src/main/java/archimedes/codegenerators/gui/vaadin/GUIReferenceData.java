@@ -16,5 +16,6 @@ public class GUIReferenceData {
 	private String serviceAttributeName;
 	private String serviceInterfaceName;
 	private String servicePackageName;
+	private String tableName;
 
 }

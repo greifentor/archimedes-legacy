@@ -89,7 +89,8 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 				.setResourceName(nameGenerator.getAttributeName(column).toLowerCase())
 				.setServiceAttributeName(nameGenerator.getAttributeName(serviceInterfaceName))
 				.setServiceInterfaceName(serviceInterfaceName)
-				.setServicePackageName(servicePackageName);
+				.setServicePackageName(servicePackageName)
+				.setTableName(nameGenerator.getCamelCase(column.getTable().getName()));
 	}
 
 	private String getFindAllMethodNameExtension(TableModel table) {

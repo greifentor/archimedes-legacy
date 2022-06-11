@@ -71,7 +71,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		super.onAttach(attachEvent);
 		createButtons();
 #foreach ($Reference in $GUIReferences)
-	#set($ResourceId = "${Reference.getFieldNameCamelCase()}DetailsLayout.field.${Reference.getResourceName()}.label")
+	#set($ResourceId = "${Reference.getTableName()}DetailsLayout.field.${Reference.getResourceName()}.label")
 		comboBox${Reference.getFieldNameCamelCase()} = createComboBox("$ResourceId", model.get${Reference.getFieldNameCamelCase()}(), ${Reference.getServiceAttributeName()}.findAll${Reference.getFindAllMethodNameExtension()}().toArray(new ${Reference.getReferencedModelClassName()}[0]));
 		comboBox${Reference.getFieldNameCamelCase()}.setItemLabelGenerator(${Reference.getReferencedModelClassName()}::get${Reference.getReferencedModelNameFieldName()});
 #end

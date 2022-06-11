@@ -190,7 +190,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxRef = createComboBox(\"RefDetailsLayout.field.ref.label\", model.getRef(), anotherTableService.findAll().toArray(new AnotherTable[0]));\n"
+						"		comboBoxRef = createComboBox(\"ATableDetailsLayout.field.ref.label\", model.getRef(), anotherTableService.findAll().toArray(new AnotherTable[0]));\n"
 						+ //
 						"		comboBoxRef.setItemLabelGenerator(AnotherTable::getName);\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
@@ -770,10 +770,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxATable = createComboBox(\"ATableDetailsLayout.field.atable.label\", model.getATable(), aTableService.findAll().toArray(new ATable[0]));\n"
+						"		comboBoxATable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.atable.label\", model.getATable(), aTableService.findAll().toArray(new ATable[0]));\n"
 						+ //
 						"		comboBoxATable.setItemLabelGenerator(ATable::getDescription);\n" + //
-						"		comboBoxAnotherTable = createComboBox(\"AnotherTableDetailsLayout.field.anothertable.label\", model.getAnotherTable(), aTableService.findAllAnotherTable().toArray(new AnotherTable[0]));\n"
+						"		comboBoxAnotherTable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.anothertable.label\", model.getAnotherTable(), aTableService.findAllAnotherTable().toArray(new AnotherTable[0]));\n"
 						+ //
 						"		comboBoxAnotherTable.setItemLabelGenerator(AnotherTable::getDescription);\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
@@ -878,7 +878,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxReference = createComboBox(\"ReferenceDetailsLayout.field.reference.label\", model.getReference(), bReferencedTableService.findAll().toArray(new BReferencedTable[0]));\n"
+						"		comboBoxReference = createComboBox(\"BTableDetailsLayout.field.reference.label\", model.getReference(), bReferencedTableService.findAll().toArray(new BReferencedTable[0]));\n"
 						+ //
 						"		comboBoxReference.setItemLabelGenerator(BReferencedTable::getDescription);\n" + //
 						"		textFieldDescription = createTextField(\"BTableDetailsLayout.field.description.label\", model.getDescription());\n"
