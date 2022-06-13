@@ -163,8 +163,13 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	public void save() {\n" + //
+					"	public void save(Object model) {\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void save() {\n" + //
+					"		save(model);\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -329,8 +334,13 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	public void save() {\n" + //
+					"	public void save(Object model) {\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void save() {\n" + //
+					"		save(model);\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -553,8 +563,13 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	public void save() {\n" + //
+					"	public void save(Object model) {\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void save() {\n" + //
+					"		save(model);\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -718,8 +733,13 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	public void save() {\n" + //
+					"	public void save(Object model) {\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(DifferentSubclassReferencesPageView.URL));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void save() {\n" + //
+					"		save(model);\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -898,8 +918,13 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	public void save() {\n" + //
+					"	public void save(Object model) {\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(BTablePageView.URL));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void save() {\n" + //
+					"		save(model);\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //

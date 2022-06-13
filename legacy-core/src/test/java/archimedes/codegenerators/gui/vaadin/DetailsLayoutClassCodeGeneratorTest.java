@@ -123,8 +123,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	protected void save() {\n" + //
 						"		model.setCount(integerFieldCount.getValue());\n" + //
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
-						"		service.update(model);\n" + //
-						"		observer.save();\n" + //
+						"		observer.save(service.update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -234,8 +233,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	@Override\n" + //
 						"	protected void save() {\n" + //
 						"		model.setRef(comboBoxRef.getValue());\n" + //
-						"		service.update(model);\n" + //
-						"		observer.save();\n" + //
+						"		observer.save(service.update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -350,8 +348,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setEnumField(comboBoxEnumField.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
 						"		model.setLongtext(textAreaLongtext.getValue());\n" + //
-						"		service.update(model);\n" + //
-						"		observer.save();\n" + //
+						"		observer.save(service.update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -488,8 +485,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setAmountWithLimits(numberFieldAmountWithLimits.getValue());\n" + //
 						"		model.setCounterWithLimits(integerFieldCounterWithLimits.getValue());\n" + //
 						"		model.setWithSpecialDomain(integerFieldWithSpecialDomain.getValue());\n" + //
-						"		service.update(model);\n" + //
-						"		observer.save();\n" + //
+						"		observer.save(service.update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -595,8 +591,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	protected void save() {\n" + //
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
-						"		service.update(model);\n" + //
-						"		observer.save();\n" + //
+						"		observer.save(service.update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -708,8 +703,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setName(textFieldName.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
-						"		service.update(model);\n" + //
-						"		observer.save();\n" + //
+						"		observer.save(service.update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -819,8 +813,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	protected void save() {\n" + //
 						"		model.setAnotherTable(comboBoxAnotherTable.getValue());\n" + //
 						"		model.setATable(comboBoxATable.getValue());\n" + //
-						"		service.update(model);\n" + //
-						"		observer.save();\n" + //
+						"		observer.save(service.update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -930,8 +923,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setName(textFieldName.getValue());\n" + //
 						"		model.setReference(comboBoxReference.getValue());\n" + //
-						"		service.update(model);\n" + //
-						"		observer.save();\n" + //
+						"		observer.save(service.update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";

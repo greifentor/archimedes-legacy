@@ -185,8 +185,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		model.set${Column.getFieldNameCamelCase()}(textField${Column.getFieldNameCamelCase()}.getValue());
 	#end
 #end
-		service.update(model);
-		observer.save();
+		observer.save(service.update(model));
 	}
 
 }

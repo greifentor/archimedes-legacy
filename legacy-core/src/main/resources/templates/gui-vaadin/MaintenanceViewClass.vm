@@ -156,8 +156,13 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	}
 
 	@Override
-	public void save() {
+	public void save(Object model) {
 		getUI().ifPresent(ui -> ui.navigate(${PageLayoutClassName}.URL));
+	}
+
+	@Override
+	public void save() {
+		save(model);
 	}
 
 	@Override
