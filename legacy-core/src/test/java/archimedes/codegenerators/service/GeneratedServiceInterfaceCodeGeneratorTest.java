@@ -12,6 +12,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.FindByUtils;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -219,6 +220,97 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 				"}";
 		DataModel dataModel = readDataModel("Model.xml");
 		TableModel table = dataModel.getTableByName("TABLE_WITH_ENUM_TYPE");
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void happyRunForASimpleObject_FindByWithUniqueString() {
+		// Prepare
+		String expected = "package base.pack.age.name.core.service;\n" + //
+				"\n" + //
+				"import java.util.List;\n" + //
+				"import java.util.Optional;\n" + //
+				"\n" + //
+				"import base.pack.age.name.core.model.Page;\n" + //
+				"import base.pack.age.name.core.model.PageParameters;\n" + //
+				"import base.pack.age.name.core.model.ATable;\n" + //
+				"import lombok.Generated;\n" + //
+				"\n" + //
+				"/**\n" + //
+				" * A generated service interface for ATable management.\n" + //
+				" *\n" + //
+				" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+				" */\n" + //
+				"@Generated\n" + //
+				"public interface ATableGeneratedService {\n" + //
+				"\n" + //
+				"	ATable create(ATable model);\n" + //
+				"\n" + //
+				"	List<ATable> findAll();\n" + //
+				"\n" + //
+				"	Page<ATable> findAll(PageParameters pageParameters);\n" + //
+				"\n" + //
+				"	Optional<ATable> findById(Long id);\n" + //
+				"\n" + //
+				"	ATable update(ATable model);\n" + //
+				"\n" + //
+				"	void delete(ATable model);\n" + //
+				"\n" + //
+				"	Optional<ATable> findByDescription(String description);\n" + //
+				"\n" + //
+				"}";
+		DataModel dataModel = readDataModel("Model.xml");
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		table.getColumnByName("Description").addOption(new Option(FindByUtils.FIND_BY));
+		table.getColumnByName("Description").setUnique(true);
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
+	void happyRunForASimpleObject_FindByWithString() {
+		// Prepare
+		String expected = "package base.pack.age.name.core.service;\n" + //
+				"\n" + //
+				"import java.util.List;\n" + //
+				"import java.util.Optional;\n" + //
+				"\n" + //
+				"import base.pack.age.name.core.model.Page;\n" + //
+				"import base.pack.age.name.core.model.PageParameters;\n" + //
+				"import base.pack.age.name.core.model.ATable;\n" + //
+				"import lombok.Generated;\n" + //
+				"\n" + //
+				"/**\n" + //
+				" * A generated service interface for ATable management.\n" + //
+				" *\n" + //
+				" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+				" */\n" + //
+				"@Generated\n" + //
+				"public interface ATableGeneratedService {\n" + //
+				"\n" + //
+				"	ATable create(ATable model);\n" + //
+				"\n" + //
+				"	List<ATable> findAll();\n" + //
+				"\n" + //
+				"	Page<ATable> findAll(PageParameters pageParameters);\n" + //
+				"\n" + //
+				"	Optional<ATable> findById(Long id);\n" + //
+				"\n" + //
+				"	ATable update(ATable model);\n" + //
+				"\n" + //
+				"	void delete(ATable model);\n" + //
+				"\n" + //
+				"	List<ATable> findAllByDescription(String description);\n" + //
+				"\n" + //
+				"}";
+		DataModel dataModel = readDataModel("Model.xml");
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		table.getColumnByName("Description").addOption(new Option(FindByUtils.FIND_BY));
 		// Run
 		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 		// Check

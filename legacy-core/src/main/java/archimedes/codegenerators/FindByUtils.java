@@ -101,24 +101,24 @@ public class FindByUtils {
 												referenceClassNameProvider,
 												typeGenerator,
 												enumClassNameProvider))
-		                        .setTypeDBOConverterAttributeName(
-		                                nameGenerator
-		                                        .getAttributeName(
-		                                                new PersistenceJPANameGenerator()
-		                                                        .getDBOConverterClassName(
-		                                                                column.getDomain().getName(),
-		                                                                column.getTable().getDataModel())))
-		                        .setTypeDBOConverterClassName(
-		                                new PersistenceJPANameGenerator()
-		                                        .getDBOConverterClassName(
-		                                                column.getDomain().getName(),
-		                                                column.getTable().getDataModel()))
-		                        .setTypeDBOConverterPackageName(
-		                                new PersistenceJPANameGenerator()
-		                                        .getDBOConverterPackageName(
-		                                                column.getTable().getDataModel(),
-		                                                column.getDomain()))
-		                        .setEnumType(isEnum(column))
+								.setTypeDBOConverterAttributeName(
+										nameGenerator
+												.getAttributeName(
+														new PersistenceJPANameGenerator()
+																.getDBOConverterClassName(
+																		column.getDomain().getName(),
+																		column.getTable().getDataModel())))
+								.setTypeDBOConverterClassName(
+										new PersistenceJPANameGenerator()
+												.getDBOConverterClassName(
+														column.getDomain().getName(),
+														column.getTable().getDataModel()))
+								.setTypeDBOConverterPackageName(
+										new PersistenceJPANameGenerator()
+												.getDBOConverterPackageName(
+														column.getTable().getDataModel(),
+														column.getDomain()))
+								.setEnumType(isEnum(column))
 								.setUnique(column.isUnique()))
 				.collect(Collectors.toList());
 	}
