@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.Filters;
+import archimedes.codegenerators.Filters.Filter;
 import archimedes.codegenerators.localization.LocalizationNameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
@@ -35,6 +37,7 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 		context.put("ButtonPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
+		context.put("Filters", getFilters(model, table));
 		context.put("GridData", getGridData(table));
 		context.put("HeaderLayoutClassName", nameGenerator.getHeaderLayoutClassName(model));
 		context.put("HeaderLayoutPackageName", nameGenerator.getHeaderLayoutPackageName(model));
@@ -75,6 +78,17 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 				: model.isOptionSet(GUI_BASE_URL)
 						? model.getOptionByName(GUI_BASE_URL).getParameter()
 						: model.getApplicationName().toLowerCase();
+	}
+
+	private List<Filter> getFilters(DataModel model, TableModel table) {
+		return List
+				.of(table.getColumnsWithOption(Filters.FILTER))
+				.stream()
+				.map(
+						column -> new Filter()
+								.setColumn(column)
+								.setFieldName(nameGenerator.getCamelCase(nameGenerator.getAttributeName(column))))
+				.collect(Collectors.toList());
 	}
 
 	private List<GridData> getGridData(TableModel table) {

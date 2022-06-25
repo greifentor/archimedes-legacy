@@ -8,6 +8,7 @@ import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
+import archimedes.codegenerators.Filters;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
@@ -71,6 +72,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 		switch (optionType) {
 		case COLUMN:
 			return new String[] {
+					Filters.FILTER,
 					AbstractGUIVaadinClassCodeGenerator.GUI_EDITOR_POS,
 					AbstractClassCodeGenerator.MAX,
 					AbstractClassCodeGenerator.MIN,

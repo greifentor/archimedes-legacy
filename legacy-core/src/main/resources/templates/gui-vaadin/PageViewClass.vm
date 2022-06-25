@@ -3,15 +3,27 @@ package ${PackageName};
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+#if ($Filters)
+import java.util.stream.Collectors;
+#end
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+#if ($Filters)
+import org.bouncycastle.util.Strings;
+#end
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
+#if ($Filters)
+import com.vaadin.flow.component.Key;
+#end
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+#if ($Filters)
+import com.vaadin.flow.component.textfield.TextField;
+#end
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -40,7 +52,7 @@ import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClas
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
-#if (!$CommentsOff )
+#if (!$CommentsOff)
 /**
  * A view for paginated ${ModelClassName.toLowerCase()} lists.
  *
@@ -55,6 +67,9 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	public static final String URL = "${BaseURL}/masterdata/${PluralName}";
 
 	private static final Logger logger = LogManager.getLogger(${ClassName}.class);
+	#if ($Filters)
+	private static final String PARAMETER_FILTER = "${ClassName}.Filter";
+	#end
 
 	@Autowired(required = false)
 	private MasterDataGridFieldRenderer<${ModelClassName}> masterDataGridFieldRenderer;
@@ -69,6 +84,9 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	private ${ButtonClassName} buttonEdit;
 	private ${ButtonClassName} buttonRemove;
 	private Grid<${ModelClassName}> grid;
+	#if ($Filters)
+	private TextField textFieldFilter;
+	#end
 
 	@Override
 	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
@@ -80,6 +98,19 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		${UserAuthorizationCheckerClassName}.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);
 		getStyle().set("background-image", "url('" + guiConfiguration.getBackgroundFileName() + "')");
 		getStyle().set("background-size", "cover");
+		#if ($Filters)
+		textFieldFilter = new TextField();
+		textFieldFilter.addKeyUpListener(event -> {
+			if (event.getKey() == Key.ENTER) {
+				updateGrid(0);
+			}
+		});
+		textFieldFilter.setWidthFull();
+		#if ($Filters)
+		session.findParameter(PARAMETER_FILTER).ifPresent(s -> textFieldFilter.setValue(s.toString()));
+		#end
+		textFieldFilter.addValueChangeListener(event -> updateGrid(0));
+		#end
 		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);
 		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);
 		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);
@@ -108,6 +139,21 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		buttonLayout.setWidthFull();
 		setMargin(false);
 		setWidthFull();
+		#if ($Filters)
+		VerticalLayout filterLayout = new VerticalLayout();
+		filterLayout.getStyle().set("-moz-border-radius", "4px");
+		filterLayout.getStyle().set("-webkit-border-radius", "4px");
+		filterLayout.getStyle().set("border-radius", "4px");
+		filterLayout.getStyle().set("border", "1px solid #A9A9A9");
+		filterLayout
+				.getStyle()
+				.set(
+						"box-shadow",
+						"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4");
+		filterLayout.setMargin(false);
+		filterLayout.setWidthFull();
+		filterLayout.add(textFieldFilter);
+		#end
 		VerticalLayout dataLayout = new VerticalLayout();
 		dataLayout.getStyle().set("-moz-border-radius", "4px");
 		dataLayout.getStyle().set("-webkit-border-radius", "4px");
@@ -127,6 +173,9 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
 						resourceManager.getLocalizedString("${ClassName}.header.label", session.getLocalization()),
 						HeaderLayoutMode.PLAIN),
+				#if ($Filters)
+				filterLayout,
+				#end
 				dataLayout);
 		updateGrid(0);
 		setButtonEnabled(buttonEdit, false);
@@ -180,10 +229,56 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 				.setItems(
 						service
 								.findAll(new ${PageParametersClassName}().setEntriesPerPage(Integer.MAX_VALUE).setPageNumber(pageNumber))
+								#if ($Filters)
+								.getEntries()
+								.stream()
+								.filter(this::isMatching)
+								.collect(Collectors.toList()));
+								#else
 								.getEntries());
+								#end
+	}
+	#if ($Filters)
+
+	private boolean isMatching(${ModelClassName} model) {
+		String[] arr = Strings.split(textFieldFilter.getValue(), ' ');
+		List<String> patterns =
+				(arr.length == 0) || (arr[0] == "")
+						? List.of()
+						: List.of(arr).stream().map(s -> s.toLowerCase()).collect(Collectors.toList());
+		if (patterns.isEmpty()) {
+			return true;
+		}
+		boolean b = true;
+		for (String pattern : patterns) {
+			b &= isMatchingPattern(pattern, model);
+		}
+		return b;
 	}
 
+	private boolean isMatchingPattern(String pattern, ${ModelClassName} model) {
+		if (masterDataGridFieldRenderer != null) {
+			return
+					#foreach ($Filter in $Filters)
+					masterDataGridFieldRenderer.getHeaderString(${ModelClassName}.${Filter.getFieldName().toUpperCase()}, model).toString().toLowerCase().contains(pattern)#if ($foreach.hasNext) ||#else;#end
+					#end
+		}
+		return
+				#foreach ($Filter in $Filters)
+					#if(${Column.isSimpleBoolean()} == "true")
+						#set($GetterPrefix = "is")
+					#else
+						#set($GetterPrefix = "get")
+					#end
+				model.${GetterPrefix}${Filter.getFieldName()}().toString().toLowerCase().contains(pattern)#if ($foreach.hasNext) ||#else;#end
+				#end
+	}
+	#end
+
 	private void addRecord() {
+		#if ($Filters)
+		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());
+		#end
 #if(${SubclassDataCollection.getSubclasses()})
 		Selectable[] selectableSubclasses =
 				new SelectableSubclass[] {
@@ -219,6 +314,9 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	}
 
 	private void editRecord() {
+		#if ($Filters)
+		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());
+		#end
 		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
 			QueryParameters parameters = new QueryParameters(Map.of("id", List.of("" + model.getId())));
 			getUI().ifPresent(ui -> ui.navigate(${MaintenanceViewClassName}.URL, parameters));
