@@ -35,6 +35,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		String abstractMasterDataBaseLayoutClassName = nameGenerator.getAbstractMasterDataBaseLayoutClassName();
 		String buttonFactoryClassName = nameGenerator.getButtonFactoryClassName(model);
 		String modelClassName = serviceNameGenerator.getModelClassName(table);
+		String modelSuperClassName = getSuperclassName(table, serviceNameGenerator::getModelClassName);
 		String resourceManagerInterfaceName = localizationNameGenerator.getResourceManagerInterfaceName();
 		String serviceInterfaceName = getServiceInterfaceName(table);
 		String sessionDataClassName = nameGenerator.getSessionDataClassName(model);
@@ -46,6 +47,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("GUIColumnDataCollection", getGUIColumnDataCollection(new GUIColumnDataCollection(), table));
 		context.put("GUIReferences", guiReferenceData);
 		context.put("ModelClassName", modelClassName);
+		context.put("ModelSuperClassName", modelSuperClassName);
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
 		context.put("SessionDataClassName", sessionDataClassName);
@@ -58,6 +60,9 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 						localizationNameGenerator.getResourceManagerPackageName(model, table),
 						resourceManagerInterfaceName);
 		importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelClassName);
+		if (modelSuperClassName != null) {
+			importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelSuperClassName);
+		}
 		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
 		importDeclarations.add(nameGenerator.getSessionDataPackageName(model), sessionDataClassName);
 		addGUIReferencesToFieldDeclarations(guiReferenceData);

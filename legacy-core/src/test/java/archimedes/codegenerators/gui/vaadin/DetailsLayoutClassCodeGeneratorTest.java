@@ -68,6 +68,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
+						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
+						+ //
 						"\n" + //
 						"	private IntegerField integerFieldCount;\n" + //
 						"	private TextField textFieldDescription;\n" + //
@@ -182,6 +184,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
+						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
+						+ //
 						"\n" + //
 						"	private ComboBox<AnotherTable> comboBoxRef;\n" + //
 						"\n" + //
@@ -191,7 +195,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		createButtons();\n" + //
 						"		comboBoxRef = createComboBox(\"ATableDetailsLayout.field.ref.label\", model.getRef(), anotherTableService.findAll().toArray(new AnotherTable[0]));\n"
 						+ //
-						"		comboBoxRef.setItemLabelGenerator(AnotherTable::getName);\n" + //
+						"		comboBoxRef\n" + //
+						"				.setItemLabelGenerator(\n" + //
+						"						anotherTable  -> comboBoxItemLabelGenerator != null\n" + //
+						"								? comboBoxItemLabelGenerator.getLabel(ATable.REF, anotherTable)\n"
+						+ //
+						"								: \"\" + anotherTable.getName());\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -287,6 +296,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
+						"	private final DetailsLayoutComboBoxItemLabelGenerator<TableWithSpecials> comboBoxItemLabelGenerator;\n"
+						+ //
 						"\n" + //
 						"	private ComboBox<EnumType> comboBoxEnumField;\n" + //
 						"	private Checkbox checkboxFlag;\n" + //
@@ -415,6 +426,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
+						"	private final DetailsLayoutComboBoxItemLabelGenerator<TableWithNumberField> comboBoxItemLabelGenerator;\n"
+						+ //
 						"\n" + //
 						"	private IntegerField integerFieldCounter;\n" + //
 						"	private NumberField numberFieldAmount;\n" + //
@@ -536,6 +549,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
+						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
+						+ //
 						"\n" + //
 						"	private TextField textFieldDescription;\n" + //
 						"	private Checkbox checkboxFlag;\n" + //
@@ -622,6 +637,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import com.vaadin.flow.component.textfield.TextField;\n" + //
 						"\n" + //
 						"import base.pack.age.name.core.model.AnotherTable;\n" + //
+						"import base.pack.age.name.core.model.ATable;\n" + //
 						"import base.pack.age.name.core.service.ATableService;\n" + //
 						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 						"import base.pack.age.name.gui.SessionData;\n" + //
@@ -643,6 +659,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
+						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
+						+ //
 						"\n" + //
 						"	private TextField textFieldDescription;\n" + //
 						"	private TextField textFieldName;\n" + //
@@ -756,6 +774,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
+						"	private final DetailsLayoutComboBoxItemLabelGenerator<DifferentSubclassReferences> comboBoxItemLabelGenerator;\n"
+						+ //
 						"\n" + //
 						"	private ComboBox<ATable> comboBoxATable;\n" + //
 						"	private ComboBox<AnotherTable> comboBoxAnotherTable;\n" + //
@@ -766,10 +786,20 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		createButtons();\n" + //
 						"		comboBoxATable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.atable.label\", model.getATable(), aTableService.findAll().toArray(new ATable[0]));\n"
 						+ //
-						"		comboBoxATable.setItemLabelGenerator(ATable::getDescription);\n" + //
+						"		comboBoxATable\n" + //
+						"				.setItemLabelGenerator(\n" + //
+						"						aTable  -> comboBoxItemLabelGenerator != null\n" + //
+						"								? comboBoxItemLabelGenerator.getLabel(DifferentSubclassReferences.ATABLE, aTable)\n"
+						+ //
+						"								: \"\" + aTable.getDescription());\n" + //
 						"		comboBoxAnotherTable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.anothertable.label\", model.getAnotherTable(), aTableService.findAllAnotherTable().toArray(new AnotherTable[0]));\n"
 						+ //
-						"		comboBoxAnotherTable.setItemLabelGenerator(AnotherTable::getDescription);\n" + //
+						"		comboBoxAnotherTable\n" + //
+						"				.setItemLabelGenerator(\n" + //
+						"						anotherTable  -> comboBoxItemLabelGenerator != null\n" + //
+						"								? comboBoxItemLabelGenerator.getLabel(DifferentSubclassReferences.ANOTHERTABLE, anotherTable)\n"
+						+ //
+						"								: \"\" + anotherTable.getDescription());\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -839,6 +869,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"import base.pack.age.name.core.model.BHeirTable;\n" + //
 						"import base.pack.age.name.core.model.BReferencedTable;\n" + //
+						"import base.pack.age.name.core.model.BTable;\n" + //
 						"import base.pack.age.name.core.service.BReferencedTableService;\n" + //
 						"import base.pack.age.name.core.service.BTableService;\n" + //
 						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
@@ -862,6 +893,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
+						"	private final DetailsLayoutComboBoxItemLabelGenerator<BTable> comboBoxItemLabelGenerator;\n"
+						+ //
 						"\n" + //
 						"	private ComboBox<BReferencedTable> comboBoxReference;\n" + //
 						"	private TextField textFieldDescription;\n" + //
@@ -873,7 +906,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		createButtons();\n" + //
 						"		comboBoxReference = createComboBox(\"BTableDetailsLayout.field.reference.label\", model.getReference(), bReferencedTableService.findAll().toArray(new BReferencedTable[0]));\n"
 						+ //
-						"		comboBoxReference.setItemLabelGenerator(BReferencedTable::getDescription);\n" + //
+						"		comboBoxReference\n" + //
+						"				.setItemLabelGenerator(\n" + //
+						"						bReferencedTable  -> comboBoxItemLabelGenerator != null\n" + //
+						"								? comboBoxItemLabelGenerator.getLabel(BHeirTable.REFERENCE, bReferencedTable)\n"
+						+ //
+						"								: \"\" + bReferencedTable.getDescription());\n" + //
 						"		textFieldDescription = createTextField(\"BTableDetailsLayout.field.description.label\", model.getDescription());\n"
 						+ //
 						"		textFieldName = createTextField(\"BHeirTableDetailsLayout.field.name.label\", model.getName());\n"

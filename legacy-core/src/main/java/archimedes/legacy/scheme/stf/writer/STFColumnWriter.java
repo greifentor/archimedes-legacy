@@ -9,14 +9,13 @@
 
 package archimedes.legacy.scheme.stf.writer;
 
-import logging.Logger;
-
 import archimedes.legacy.model.DiagramSaveMode;
 import archimedes.legacy.scheme.stf.handler.STFColumnHandler;
 import archimedes.model.ColumnModel;
 import archimedes.model.SequenceModel;
 import archimedes.model.ViewModel;
 import corent.files.StructuredTextFile;
+import logging.Logger;
 
 /**
  * A writer for table columns to STF.
@@ -84,8 +83,8 @@ public class STFColumnWriter extends STFColumnHandler {
 				.isLastModificationField()).toString());
 		stf.writeStr(this.createPathForColumn(i, j, LIST_ITEM_FIELD), new Boolean(column.isListItemField()).toString());
 		stf.writeStr(this.createPathForColumn(i, j, NOT_NULL), new Boolean(column.isNotNull()).toString());
-		stf.writeLong(this.createPathForColumn(i, j, PANEL_NUMBER), column.getTable().getPanelPosition(
-				column.getPanel()));
+		long panelNumber = column.getTable().getPanelPosition(column.getPanel());
+		stf.writeLong(this.createPathForColumn(i, j, PANEL_NUMBER), panelNumber < 0 ? 0 : panelNumber);
 		stf.writeStr(this.createPathForColumn(i, j, PARAMETER), toHTML(column.getParameters()));
 		stf.writeStr(this.createPathForColumn(i, j, PRIMARY_KEY), new Boolean(column.isPrimaryKey()).toString());
 		stf.writeStr(this.createPathForColumn(i, j, REMOVED_STATE_FIELD), new Boolean(column.isRemovedStateField())

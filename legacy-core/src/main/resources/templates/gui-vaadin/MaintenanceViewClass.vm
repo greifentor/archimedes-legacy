@@ -45,6 +45,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 
 	@Autowired(required = false)
 	private MaintenanceViewRenderer<${ModelClassName}> maintenanceViewRenderer;
+	@Autowired(required = false)
+	private DetailsLayoutComboBoxItemLabelGenerator<${ModelClassName}> comboBoxItemLabelGenerator;
 
 	private final ${ButtonFactoryClassName} buttonFactory;
 	private final ${ResourceManagerInterfaceName} resourceManager;
@@ -136,10 +138,11 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	#end
 					resourceManager,
 					session,
-					this);
+					this,
+					comboBoxItemLabelGenerator);
 		}
 #end
-		return new ${DetailsLayoutClassName}(buttonFactory, model, service,#if($GUIReferenceDataCollection.getServiceAttributeNameList()) $GUIReferenceDataCollection.getServiceAttributeNameList(),#{end} resourceManager, session, this);
+		return new ${DetailsLayoutClassName}(buttonFactory, model, service,#if($GUIReferenceDataCollection.getServiceAttributeNameList()) $GUIReferenceDataCollection.getServiceAttributeNameList(),#{end} resourceManager, session, this, comboBoxItemLabelGenerator);
 	}
 
 	@Override
