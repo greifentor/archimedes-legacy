@@ -108,6 +108,10 @@ public class ServiceNameGenerator extends NameGenerator {
 				: null;
 	}
 
+	public String getGeneratedModelClassName(TableModel table) {
+		return table != null ? "Generated" + getModelClassName(table) : null;
+	}
+
 	private String getModelClassNameSuffix(DataModel model) {
 		return getNameOrAlternativeFromOption(model, "", ALTERNATE_MODEL_CLASS_NAME_SUFFIX);
 	}

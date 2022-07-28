@@ -192,6 +192,155 @@ public class ServiceNameGeneratorTest {
 
 	}
 
+	@Nested
+	class GeneratedModelClassNameTests {
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getGeneratedModelClassName(table);
+			});
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getGeneratedModelClassName(null));
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelWithNameCamelCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedTestTable";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelWithNameUpperCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedTable";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedTableName";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedTableName";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedTableName";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelWithNameLowerCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedTable";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedT";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedT";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedTableModel";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX))
+					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX, "Model"));
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelNullAsWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedTable";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX)).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getGeneratedModelClassName_PassTableModelEmptyAsWithAlternateModelClassSuffix_ReturnsACorrectModelName() {
+			// Prepare
+			String expected = "GeneratedTable";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX))
+					.thenReturn(new Option(ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX, ""));
+			// Run
+			String returned = unitUnderTest.getGeneratedModelClassName(table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("Tests for generated persistence port interface names")
 	@Nested
 	class GeneratedPersistencePortInterfaceNameTests {
