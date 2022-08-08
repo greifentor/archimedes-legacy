@@ -2,8 +2,6 @@ package archimedes.codegenerators.service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
@@ -13,7 +11,6 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.CommonImportAdder;
 import archimedes.codegenerators.FieldDeclarations;
-import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -25,11 +22,11 @@ import archimedes.model.TableModel;
  *
  * @author ollie (20.07.2021)
  */
-public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
+public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
 
-	public ModelClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	public GeneratedModelClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"ModelClass.vm",
+				"GeneratedModelClass.vm",
 				ServiceCodeFactory.TEMPLATE_FOLDER_PATH,
 				ServiceNameGenerator.INSTANCE,
 				TypeGenerator.INSTANCE,
@@ -45,10 +42,15 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("GeneratedModelClassName", nameGenerator.getGeneratedModelClassName(table));
+		context.put("EntityName", nameGenerator.getClassName(table));
+		context.put("HasEnums", hasEnums(table.getColumns()));
+		context.put("HasReferences", hasReferences(table.getColumns()));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
-		context.put("Subclass", true);
+		context.put("ReferenceMode", getReferenceMode(model, table).name());
+		context.put("Subclass", table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS));
+		context.put("Superclass", table.isOptionSet(AbstractClassCodeGenerator.SUPERCLASS));
+		context.put("SuperclassName", getSuperclassName(table, nameGenerator::getModelClassName));
 		context.put("TableName", table.getName());
 	}
 
@@ -66,23 +68,13 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 												referenceMode,
 												c -> nameGenerator.getModelClassName(c.getReferencedTable()),
 												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model)))
-								.setPkMember(column.isPrimaryKey())
-								.setSetterName(nameGenerator.getCamelCase(nameGenerator.getAttributeName(column))))
+								.setPkMember(column.isPrimaryKey()))
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	protected String getType(ColumnModel column, DataModel model, ReferenceMode referenceMode,
-			Function<ColumnModel, String> referencedClassNameProvider,
-			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider) {
-		return column.isPrimaryKey()
-				? typeGenerator.getJavaTypeString(column.getDomain(), NullableUtils.isNullable(column))
-				: super.getType(column, model, referenceMode, referencedClassNameProvider, enumClassNameProvider);
-	}
-
-	@Override
 	public String getClassName(DataModel model, TableModel table) {
-		return nameGenerator.getModelClassName(table);
+		return nameGenerator.getGeneratedModelClassName(table);
 	}
 
 	@Override

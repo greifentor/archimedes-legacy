@@ -35,6 +35,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 						// Table
 						new ApplicationClassCodeGenerator(this),
 						new CheckClassCodeGenerator(this),
+						new GeneratedModelClassCodeGenerator(this),
 						new GeneratedPersistencePortInterfaceCodeGenerator(this),
 						new GeneratedServiceImplClassCodeGenerator(this),
 						new GeneratedServiceInterfaceCodeGenerator(this),

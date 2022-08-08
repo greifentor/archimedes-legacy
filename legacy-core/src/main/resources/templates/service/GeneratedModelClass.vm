@@ -48,14 +48,18 @@ import lombok.experimental.Accessors;
 #if ($Subclass)
 @ToString(callSuper = true)
 #end
-public class ${ClassName} extends ${GeneratedModelClassName} {
+public class ${ClassName} #if($Subclass)extends ${SuperclassName} #end{
 
 #foreach($Column in $ColumnData)
-	@Override
-	public ${ClassName} set${Column.getSetterName()}(${Column.getFieldType()} ${Column.getFieldName()}) {
-		super.set${Column.getSetterName()}(${Column.getFieldName()});
-		return this;
-	}
-
+#if(!${Subclass} or !${Column.isPkMember()})
+	public static final String ${Column.getFieldName().toUpperCase()} = "${Column.getFieldName().toUpperCase()}";
 #end
+#end
+
+#foreach($Column in $ColumnData)
+#if(!${Subclass} or !${Column.isPkMember()})
+	private ${Column.getFieldType()} ${Column.getFieldName()};
+#end
+#end
+
 }

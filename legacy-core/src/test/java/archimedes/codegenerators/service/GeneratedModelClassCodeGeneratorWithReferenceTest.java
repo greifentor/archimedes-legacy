@@ -13,22 +13,18 @@ import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
-import archimedes.legacy.scheme.Relation;
-import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
-import archimedes.model.ViewModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
-import corent.base.Direction;
 
 @ExtendWith(MockitoExtension.class)
-class ModelClassCodeGeneratorTest {
+class GeneratedModelClassCodeGeneratorWithReferenceTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
-	private ModelClassCodeGenerator unitUnderTest;
+	private GeneratedModelClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -42,7 +38,7 @@ class ModelClassCodeGeneratorTest {
 		void happyRunForASimpleObject() {
 			// Prepare
 			String expected = getExpected("core.model");
-			DataModel dataModel = readDataModel("Model.xml");
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
@@ -57,17 +53,13 @@ class ModelClassCodeGeneratorTest {
 			return getExpected(prefix, packageName, suppressComment, false, false);
 		}
 
-		private String getExpected(String prefix, String packageName, boolean suppressComment,
-				boolean descriptionNotNull, boolean refMode) {
+		private String getExpected(String prefix, String packageName, boolean suppressComment, boolean refNotNull,
+				boolean refMode) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
 							"\n" + //
-							"import java.time.LocalDate;\n" + //
-							"\n" + //
 							"import lombok.Data;\n" + //
-							"import lombok.EqualsAndHashCode;\n" + //
 							"import lombok.Generated;\n" + //
-							"import lombok.ToString;\n" + //
 							"import lombok.experimental.Accessors;\n" + //
 							"\n";
 			if (!suppressComment) {
@@ -79,29 +71,19 @@ class ModelClassCodeGeneratorTest {
 			}
 			s += "@Accessors(chain = true)\n" + //
 					"@Data\n" + //
-					"@EqualsAndHashCode(callSuper = true)\n" + //
 					"@Generated\n" + //
-					"@ToString(callSuper = true)\n" + //
-					"public class ATable extends GeneratedATable {\n" + //
+					"public class GeneratedATable {\n" + //
 					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setId(Long id) {\n" + //
-					"		super.setId(id);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
+					"	public static final String ID = \"ID\";\n" + //
+					"	public static final String REF = \"REF\";\n" + //
 					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setADate(LocalDate aDate) {\n" + //
-					"		super.setADate(aDate);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setDescription(String description) {\n" + //
-					"		super.setDescription(description);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
+					"	private Long id;\n";
+			if (refMode) {
+				s += "	private AnotherTable ref;\n";
+			} else {
+				s += "	private " + (refNotNull ? "long" : "Long") + " ref;\n";
+			}
+			s += "\n" + //
 					"}";
 			return s;
 		}
@@ -111,7 +93,7 @@ class ModelClassCodeGeneratorTest {
 			// Prepare
 			String alternatePackageName = "alternate.name";
 			String expected = getExpected(alternatePackageName);
-			DataModel dataModel = readDataModel("Model.xml");
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			dataModel.addOption(new Option(ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME, alternatePackageName));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
@@ -124,7 +106,7 @@ class ModelClassCodeGeneratorTest {
 			// Prepare
 			String technicalContextName = "technical";
 			String expected = getExpected(technicalContextName + ".core.model");
-			DataModel dataModel = readDataModel("Model.xml");
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			dataModel
 					.getTableByName("A_TABLE")
 					.addOption(new Option(NameGenerator.TECHNICAL_CONTEXT, technicalContextName));
@@ -139,7 +121,7 @@ class ModelClassCodeGeneratorTest {
 			// Prepare
 			String prefix = "prefix";
 			String expected = getExpected(prefix, "core.model", false);
-			DataModel dataModel = readDataModel("Model.xml");
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			table.addOption(new Option(PersistenceJPANameGenerator.MODULE, prefix));
 			// Run
@@ -152,7 +134,7 @@ class ModelClassCodeGeneratorTest {
 		void happyRunForASimpleObjectWithSuppressedComment() {
 			// Prepare
 			String expected = getExpected(null, "core.model", true);
-			DataModel dataModel = readDataModel("Model.xml");
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			// Run
@@ -165,9 +147,27 @@ class ModelClassCodeGeneratorTest {
 		void happyRunForASimpleObjectWithNotNullField() {
 			// Prepare
 			String expected = getExpected(null, "core.model", false, true, false);
-			DataModel dataModel = readDataModel("Model.xml");
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			TableModel table = dataModel.getTableByName("A_TABLE");
-			table.getColumnByName("Description").setNotNull(true);
+			table.getColumnByName("REF").setNotNull(true);
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithAReferenceField() {
+			// Prepare
+			String expected = getExpected(null, "core.model", false, true, true);
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
+			dataModel
+					.addOption(
+							new Option(
+									AbstractClassCodeGenerator.REFERENCE_MODE,
+									AbstractClassCodeGenerator.REFERENCE_MODE_OBJECT));
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.getColumnByName("REF").setNotNull(true);
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
@@ -177,15 +177,11 @@ class ModelClassCodeGeneratorTest {
 		private String getExpectedPOJOModeBuilder(String packageName, String generatedValue) {
 			return "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
 					"\n" + //
-					"import java.time.LocalDate;\n" + //
-					"\n" + //
 					"import lombok.AllArgsConstructor;\n" + //
 					"import lombok.Builder;\n" + //
 					"import lombok.NoArgsConstructor;\n" + //
 					"import lombok.Data;\n" + //
-					"import lombok.EqualsAndHashCode;\n" + //
 					"import lombok.Generated;\n" + //
-					"import lombok.ToString;\n" + //
 					"\n" + //
 					"/**\n" + //
 					" * A model for a_tables.\n" + //
@@ -196,28 +192,14 @@ class ModelClassCodeGeneratorTest {
 					"@AllArgsConstructor\n" + //
 					"@NoArgsConstructor\n" + //
 					"@Data\n" + //
-					"@EqualsAndHashCode(callSuper = true)\n" + //
 					"@Generated\n" + //
-					"@ToString(callSuper = true)\n" + //
-					"public class ATable extends GeneratedATable {\n" + //
+					"public class GeneratedATable {\n" + //
 					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setId(Long id) {\n" + //
-					"		super.setId(id);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
+					"	public static final String ID = \"ID\";\n" + //
+					"	public static final String REF = \"REF\";\n" + //
 					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setADate(LocalDate aDate) {\n" + //
-					"		super.setADate(aDate);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setDescription(String description) {\n" + //
-					"		super.setDescription(description);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
+					"	private Long id;\n" + //
+					"	private Long ref;\n" + //
 					"\n" + //
 					"}";
 		}
@@ -226,7 +208,7 @@ class ModelClassCodeGeneratorTest {
 		void happyRunForASimpleObjectPOJOModeBUILDWithIDENTITY() {
 			// Prepare
 			String expected = getExpectedPOJOModeBuilder("core.model", "IDENTITY");
-			DataModel dataModel = readDataModel("Model.xml");
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			dataModel
 					.addOption(
 							new Option(
@@ -246,7 +228,7 @@ class ModelClassCodeGeneratorTest {
 		void happyRunForASimpleObjectPOJOModeBUILDWithSEQUENCE() {
 			// Prepare
 			String expected = getExpectedPOJOModeBuilder("core.model", "SEQUENCE");
-			DataModel dataModel = readDataModel("Model.xml");
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			dataModel
 					.addOption(
 							new Option(
@@ -260,131 +242,6 @@ class ModelClassCodeGeneratorTest {
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
 			assertEquals(expected, returned);
-		}
-
-		@Nested
-		class Subclass {
-
-			@Test
-			void modelWithSubclass() {
-				// Prepare
-				String expected = "package base.pack.age.name.core.model;\n" + //
-						"\n" + //
-						"import java.time.LocalDate;\n" + //
-						"\n" + //
-						"import lombok.Data;\n" + //
-						"import lombok.EqualsAndHashCode;\n" + //
-						"import lombok.Generated;\n" + //
-						"import lombok.ToString;\n" + //
-						"import lombok.experimental.Accessors;\n" + //
-						"\n" + //
-						"/**\n" + //
-						" * A model for a_tables.\n" + //
-						" *\n" + //
-						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-						" */\n" + //
-						"@Accessors(chain = true)\n" + //
-						"@Data\n" + //
-						"@EqualsAndHashCode(callSuper = true)\n" + //
-						"@Generated\n" + //
-						"@ToString(callSuper = true)\n" + //
-						"public class ATable extends GeneratedATable {\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setId(Long id) {\n" + //
-						"		super.setId(id);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setADate(LocalDate aDate) {\n" + //
-						"		super.setADate(aDate);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setDescription(String description) {\n" + //
-						"		super.setDescription(description);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"}";
-				DataModel dataModel = readDataModel("Model.xml");
-				TableModel table = dataModel.getTableByName("A_TABLE");
-				table.addOption(new Option(AbstractClassCodeGenerator.SUBCLASS));
-				TableModel tableRef = dataModel.getTableByName("ANOTHER_TABLE");
-				ColumnModel columnRef = tableRef.getColumnByName("ID");
-				ColumnModel column = table.getColumnByName("ID");
-				column
-						.setRelation(
-								new Relation(
-										(ViewModel) dataModel.getMainView(),
-										column,
-										Direction.UP,
-										0,
-										columnRef,
-										Direction.LEFT,
-										0));
-				// Run
-				String returned =
-						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
-				// Check
-				assertEquals(expected, returned);
-			}
-
-			@Test
-			void modelNoSubclass() {
-				// Prepare
-				String expected =
-						"package base.pack.age.name.core.model;\n" + //
-								"\n" + //
-								"import java.time.LocalDate;\n" + //
-								"\n" + //
-								"import lombok.Data;\n" + //
-								"import lombok.EqualsAndHashCode;\n" + //
-								"import lombok.Generated;\n" + //
-								"import lombok.ToString;\n" + //
-								"import lombok.experimental.Accessors;\n" + //
-								"\n" + //
-								"/**\n" + //
-								" * A model for a_tables.\n" + //
-								" *\n" + //
-								" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-								" */\n" + //
-								"@Accessors(chain = true)\n" + //
-								"@Data\n" + //
-								"@EqualsAndHashCode(callSuper = true)\n" + //
-								"@Generated\n" + //
-								"@ToString(callSuper = true)\n" + //
-								"public class ATable extends GeneratedATable {\n" + //
-								"\n" + //
-								"	@Override\n" + //
-								"	public ATable setId(Long id) {\n" + //
-								"		super.setId(id);\n" + //
-								"		return this;\n" + //
-								"	}\n" + //
-								"\n" + //
-								"	@Override\n" + //
-								"	public ATable setADate(LocalDate aDate) {\n" + //
-								"		super.setADate(aDate);\n" + //
-								"		return this;\n" + //
-								"	}\n" + //
-								"\n" + //
-								"	@Override\n" + //
-								"	public ATable setDescription(String description) {\n" + //
-								"		super.setDescription(description);\n" + //
-								"		return this;\n" + //
-								"	}\n" + //
-								"\n" + //
-								"}";
-				DataModel dataModel = readDataModel("Model.xml");
-				// Run
-				String returned =
-						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
-				// Check
-				assertEquals(expected, returned);
-			}
-
 		}
 
 	}
