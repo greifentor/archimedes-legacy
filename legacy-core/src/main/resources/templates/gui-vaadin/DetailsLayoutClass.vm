@@ -36,6 +36,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 
+#foreach (${Preference} in ${PreferenceData})
+	#if (${Preference.getType()} == "BOOLEAN")
+	#elseif (${Preference.getType()} == "COMBOBOX")
+	private static final String COMBO_BOX_${Preference.getPreferenceIdName()} = "${ClassName}.comboBox${Preference.getAttributeNameCamelCase()}.preference";
+	#elseif (${Preference.getType()} == "ENUM")
+	#elseif (${Preference.getType()} == "INTEGER")
+	#elseif (${Preference.getType()} == "NUMERIC")
+	#elseif (${Preference.getType()} == "TEXT")
+	#else
+	#end
+
+#end
 	private final ${ButtonFactoryClassName} buttonFactory;
 	private final ${ModelClassName} model;
 	private final ${ServiceInterfaceName} service;
@@ -132,21 +144,57 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	#end
 #end
 				getMasterDataButtonLayout(model.getId() > 0));
-#set ($FirstColumn = ${GUIColumnDataCollection.getColumns().get(0)})
-#if (${FirstColumn.getType()} == "BOOLEAN")
-		checkbox${FirstColumn.getFieldNameCamelCase()}.focus();
-#elseif (${FirstColumn.getType()} == "COMBOBOX")
-		comboBox${FirstColumn.getFieldNameCamelCase()}.focus();
-#elseif (${FirstColumn.getType()} == "ENUM")
-		comboBox${FirstColumn.getFieldNameCamelCase()}.focus();
-#elseif (${FirstColumn.getType()} == "INTEGER")
-		integerField${FirstColumn.getFieldNameCamelCase()}.focus();
-#elseif (${FirstColumn.getType()} == "NUMERIC")
-		numberField${FirstColumn.getFieldNameCamelCase()}.focus();
-#elseif (${FirstColumn.getType()} == "TEXT")
-		textArea${FirstColumn.getFieldNameCamelCase()}.focus();
+#if (${PreferenceData})
+	#foreach (${Preference} in ${PreferenceData})
+		if (model.get${Preference.getIdColumnNameCamelCase()}() < 1) {
+			session
+		#if (${Preference.getType()} == "BOOLEAN")
+		#elseif (${Preference.getType()} == "COMBOBOX")
+					.findParameter(COMBO_BOX_${Preference.getPreferenceIdName()})
+					.ifPresent(${Preference.getAttributeName()} -> comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()}));
+		#elseif (${Preference.getType()} == "ENUM")
+		#elseif (${Preference.getType()} == "INTEGER")
+		#elseif (${Preference.getType()} == "NUMERIC")
+		#elseif (${Preference.getType()} == "TEXT")
+		#else
+		#end
+		#if (${Preference.getNextFieldType()})
+		} else {
+			#if (${Preference.getNextFieldType()} == "BOOLEAN")
+			checkbox${Preference.getNextFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getNextFieldType()} == "COMBOBOX")
+			comboBox${Preference.getNextFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getNextFieldType()} == "ENUM")
+			comboBox${Preference.getNextFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getNextFieldType()} == "INTEGER")
+			integerField${Preference.getNextFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getNextFieldType()} == "NUMERIC")
+			numberField${Preference.getNextFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getNextFieldType()} == "TEXT")
+			textArea${Preference.getNextFieldNameCamelCase()}.focus();
+			#else
+			textField${Preference.getNextFieldNameCamelCase()}.focus();
+			#end
+		#end
+		}
+	#end
 #else
+	#set ($FirstColumn = ${GUIColumnDataCollection.getColumns().get(0)})
+	#if (${FirstColumn.getType()} == "BOOLEAN")
+		checkbox${FirstColumn.getFieldNameCamelCase()}.focus();
+	#elseif (${FirstColumn.getType()} == "COMBOBOX")
+		comboBox${FirstColumn.getFieldNameCamelCase()}.focus();
+	#elseif (${FirstColumn.getType()} == "ENUM")
+		comboBox${FirstColumn.getFieldNameCamelCase()}.focus();
+	#elseif (${FirstColumn.getType()} == "INTEGER")
+		integerField${FirstColumn.getFieldNameCamelCase()}.focus();
+	#elseif (${FirstColumn.getType()} == "NUMERIC")
+		numberField${FirstColumn.getFieldNameCamelCase()}.focus();
+	#elseif (${FirstColumn.getType()} == "TEXT")
+		textArea${FirstColumn.getFieldNameCamelCase()}.focus();
+	#else
 		textField${FirstColumn.getFieldNameCamelCase()}.focus();
+	#end
 #end
 	}
 
@@ -173,6 +221,9 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 
 	@Override
 	protected void save() {
+#foreach (${Preference} in ${PreferenceData})
+		session.setParameter(COMBO_BOX_${Preference.getPreferenceIdName()}, comboBox${Preference.getAttributeNameCamelCase()}.getValue());
+#end
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
 	#if (${Column.getType()} == "BOOLEAN")
 		model.set${Column.getFieldNameCamelCase()}(checkbox${Column.getFieldNameCamelCase()}.getValue());

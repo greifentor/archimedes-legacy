@@ -310,8 +310,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		comboBoxEnumField = createComboBox(\"TableWithSpecialsDetailsLayout.field.enumfield.label\", model.getEnumField(), EnumType.values());\n"
 						+ //
 						"		checkboxFlag = createCheckbox(\"TableWithSpecialsDetailsLayout.field.flag.label\", model."
-						+ (flagIsNullable ? "get" : "is")
-						+ "Flag());\n" + //
+						+ (flagIsNullable ? "get" : "is") + "Flag());\n" + //
 						"		textAreaLongtext = createTextArea(\"TableWithSpecialsDetailsLayout.field.longtext.label\", model.getLongtext());\n"
 						+ //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
@@ -973,6 +972,138 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				String expected = getExpected();
 				DataModel dataModel = readDataModel("Model-Inheritance.xml");
 				TableModel tableModel = dataModel.getTableByName("B_HEIR_TABLE");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+		}
+
+		@Nested
+		class FieldPreferences {
+
+			@Test
+			void firstFieldIsMarked_comboBox() {
+				// Prepare
+				String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+						"\n" + //
+						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
+						"import com.vaadin.flow.component.checkbox.Checkbox;\n" + //
+						"import com.vaadin.flow.component.textfield.TextField;\n" + //
+						"\n" + //
+						"import base.pack.age.name.core.model.AnotherTable;\n" + //
+						"import base.pack.age.name.core.model.ATable;\n" + //
+						"import base.pack.age.name.core.service.AnotherTableService;\n" + //
+						"import base.pack.age.name.core.service.ATableService;\n" + //
+						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
+						"import base.pack.age.name.gui.SessionData;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.RequiredArgsConstructor;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n" + //
+						"@Generated\n" + //
+						"@RequiredArgsConstructor\n" + //
+						"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
+						"\n" + //
+						"	private static final String COMBO_BOX_ANOTHER_TABLE_PREFERENCE_ID = \"ATableDetailsLayout.comboBoxAnotherTable.preference\";\n"
+						+ //
+						"\n" + //
+						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ATable model;\n" + //
+						"	private final ATableService service;\n" + //
+						"	private final AnotherTableService anotherTableService;\n" + //
+						"	private final ResourceManager resourceManager;\n" + //
+						"	private final SessionData session;\n" + //
+						"	private final Observer observer;\n" + //
+						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
+						+ //
+						"\n" + //
+						"	private ComboBox<AnotherTable> comboBoxAnotherTable;\n" + //
+						"	private TextField textFieldDescription;\n" + //
+						"	private Checkbox checkboxFlag;\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public void onAttach(AttachEvent attachEvent) {\n" + //
+						"		super.onAttach(attachEvent);\n" + //
+						"		createButtons();\n" + //
+						"		comboBoxAnotherTable = createComboBox(\"ATableDetailsLayout.field.anothertable.label\", model.getAnotherTable(), anotherTableService.findAllAnotherTable().toArray(new AnotherTable[0]));\n"
+						+ //
+						"		comboBoxAnotherTable\n" + //
+						"				.setItemLabelGenerator(\n" + //
+						"						anotherTable  -> comboBoxItemLabelGenerator != null\n" + //
+						"								? comboBoxItemLabelGenerator.getLabel(ATable.ANOTHERTABLE, anotherTable)\n"
+						+ //
+						"								: \"\" + anotherTable.getName());\n" + //
+						"		textFieldDescription = createTextField(\"ATableDetailsLayout.field.description.label\", model.getDescription());\n"
+						+ //
+						"		checkboxFlag = createCheckbox(\"ATableDetailsLayout.field.flag.label\", model.isFlag());\n"
+						+ //
+						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
+						"		getStyle()\n" + //
+						"				.set(\n" + //
+						"						\"box-shadow\",\n" + //
+						"						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n"
+						+ //
+						"		setMargin(false);\n" + //
+						"		setWidthFull();\n" + //
+						"		add(\n" + //
+						"				comboBoxAnotherTable,\n" + //
+						"				textFieldDescription,\n" + //
+						"				checkboxFlag,\n" + //
+						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"		if (model.getId() < 1) {\n" + //
+						"			session\n" + //
+						"					.findParameter(COMBO_BOX_ANOTHER_TABLE_PREFERENCE_ID)\n" + //
+						"					.ifPresent(anotherTable -> comboBoxAnotherTable.setValue((AnotherTable) anotherTable));\n"
+						+ //
+						"		} else {\n" + //
+						"			textFieldDescription.focus();\n" + //
+						"		}\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ButtonFactory getButtonFactory() {\n" + //
+						"		return buttonFactory;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ResourceManager getResourceManager() {\n" + //
+						"		return resourceManager;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected SessionData getSessionData() {\n" + //
+						"		return session;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void remove() {\n" + //
+						"		service.delete(model);\n" + //
+						"		observer.remove();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void save() {\n" + //
+						"		session.setParameter(COMBO_BOX_ANOTHER_TABLE_PREFERENCE_ID, comboBoxAnotherTable.getValue());\n"
+						+ //
+						"		model.setAnotherTable(comboBoxAnotherTable.getValue());\n" + //
+						"		model.setDescription(textFieldDescription.getValue());\n" + //
+						"		model.setFlag(checkboxFlag.getValue());\n" + //
+						"		observer.save(service.update(model));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"}";
+				DataModel dataModel = readDataModel("Model-Preferences.xml");
+				TableModel tableModel = dataModel.getTableByName("A_TABLE");
 				// Run
 				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
 				// Check

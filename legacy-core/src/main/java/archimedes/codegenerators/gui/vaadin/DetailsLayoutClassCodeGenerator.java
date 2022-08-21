@@ -24,6 +24,8 @@ import archimedes.model.TableModel;
  */
 public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
 
+	public static final String PREFERENCE = "PREFERENCE";
+
 	public DetailsLayoutClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super("DetailsLayoutClass.vm", codeFactory);
 	}
@@ -49,6 +51,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("ModelClassName", modelClassName);
 		context.put("ModelSuperClassName", modelSuperClassName);
 		context.put("PackageName", getPackageName(model, table));
+		context.put("PreferenceData", getPreferenceData(table));
 		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
 		context.put("SessionDataClassName", sessionDataClassName);
 		context.put("ServiceInterfaceName", serviceInterfaceName);
@@ -82,14 +85,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 								.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
 								.map(column -> {
 									String type = getType(column);
-									String fieldTypeName =
-											getType(
-													column,
-													model,
-													referenceMode,
-													c -> serviceNameGenerator.getModelClassName(c.getReferencedTable()),
-													(c, m) -> serviceNameGenerator
-															.getModelClassName(c.getDomain(), model));
+									String fieldTypeName = getFieldTypeName(column, model, referenceMode);
 									String typePackage = getTypePackage(column);
 									if (GUIColumnData.TYPE_ENUM.equals(type)) {
 										importDeclarations.add(typePackage, fieldTypeName);
@@ -111,6 +107,15 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		return collection;
 	}
 
+	private String getFieldTypeName(ColumnModel column, DataModel model, ReferenceMode referenceMode) {
+		return getType(
+				column,
+				model,
+				referenceMode,
+				c -> serviceNameGenerator.getModelClassName(c.getReferencedTable()),
+				(c, m) -> serviceNameGenerator.getModelClassName(c.getDomain(), model));
+	}
+
 	private String getMax(ColumnModel column) {
 		return getParameterValueFromColumn(column, AbstractClassCodeGenerator.MAX, null);
 	}
@@ -122,9 +127,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 	}
 
 	private String getParameterValueFromDomain(DomainModel domain, String parameterIdent, String defaultValue) {
-		return domain.isOptionSet(parameterIdent)
-				? domain.getOptionByName(parameterIdent).getParameter()
-				: "null";
+		return domain.isOptionSet(parameterIdent) ? domain.getOptionByName(parameterIdent).getParameter() : "null";
 	}
 
 	private String getMin(ColumnModel column) {
@@ -167,6 +170,69 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		return column.getDomain().isOptionSet(ENUM)
 				? serviceNameGenerator.getModelPackageName(column.getTable().getDataModel(), column)
 				: null;
+	}
+
+	private List<PreferenceData> getPreferenceData(TableModel table) {
+		ReferenceMode referenceMode = getReferenceMode(table.getDataModel(), table);
+		return List
+				.of(table.getColumns())
+				.stream()
+				.filter(column -> column.isOptionSet(PREFERENCE))
+				.map(
+						column -> new PreferenceData()
+								.setAttributeName(nameGenerator.getAttributeName(column))
+								.setAttributeNameCamelCase(nameGenerator.getCamelCase(column.getName()))
+								.setFieldTypeName(getFieldTypeName(column, table.getDataModel(), referenceMode))
+								.setIdColumnNameCamelCase(getIdColumnNameCamelCase(column))
+								.setNextFieldType(getNextFieldType(column, referenceMode))
+								.setNextFieldNameCamelCase(getNextFieldNameCamelCase(column))
+								.setPreferenceIdName(getPreferenceIdName(column))
+								.setType(getType(column)))
+				.collect(Collectors.toList());
+	}
+
+	private String getIdColumnNameCamelCase(ColumnModel column) {
+		ColumnModel[] pks = column.getTable().getPrimaryKeyColumns();
+		if (pks.length > 0) {
+			return nameGenerator
+					.getCamelCase(nameGenerator.getAttributeName(column.getTable().getColumns()[0].getName()));
+		}
+		return "NO_PK";
+	}
+
+	private ColumnModel getNextField(ColumnModel column) {
+		List<ColumnModel> columns =
+				List
+						.of(column.getTable().getColumns())
+						.stream()
+						.filter(c -> c.isOptionSet(GUI_EDITOR_POS))
+						.sorted((c0, c1) -> getGuiEditorPos(c0) - getGuiEditorPos(c1))
+						.collect(Collectors.toList());
+		int i = columns.indexOf(column);
+		ColumnModel nextColumn = columns.get(0);
+		if (i < columns.size() - 1) {
+			nextColumn = columns.get(i + 1);
+		}
+		return nextColumn;
+	}
+
+	private String getNextFieldType(ColumnModel column, ReferenceMode referenceMode) {
+		return getFieldTypeName(getNextField(column), column.getTable().getDataModel(), referenceMode);
+	}
+
+	private String getNextFieldNameCamelCase(ColumnModel column) {
+		return nameGenerator.getCamelCase(getNextField(column).getName());
+	}
+
+	private int getGuiEditorPos(ColumnModel column) {
+		if (column.isOptionSet(GUI_EDITOR_POS)) {
+			return Integer.parseInt(column.getOptionByName(PREFERENCE).getParameter());
+		}
+		return -1;
+	}
+
+	private String getPreferenceIdName(ColumnModel column) {
+		return column.getName().toUpperCase() + "_PREFERENCE_ID";
 	}
 
 	@Override

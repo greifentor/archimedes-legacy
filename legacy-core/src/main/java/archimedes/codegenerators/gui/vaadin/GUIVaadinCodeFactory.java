@@ -77,6 +77,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 					AbstractClassCodeGenerator.MAX,
 					AbstractClassCodeGenerator.MIN,
 					AbstractGUIVaadinClassCodeGenerator.NAME_FIELD,
+					DetailsLayoutClassCodeGenerator.PREFERENCE,
 					AbstractClassCodeGenerator.STEP };
 		case DOMAIN:
 			return new String[] {
