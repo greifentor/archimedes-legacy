@@ -38,13 +38,19 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 
 #foreach (${Preference} in ${PreferenceData})
 	#if (${Preference.getType()} == "BOOLEAN")
+	private static final String CHECK_BOX_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "COMBOBOX")
-	private static final String COMBO_BOX_${Preference.getPreferenceIdName()} = "${ClassName}.comboBox${Preference.getAttributeNameCamelCase()}.preference";
+	private static final String COMBO_BOX_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "ENUM")
+	private static final String COMBO_BOX_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "INTEGER")
+	private static final String INTEGER_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "NUMERIC")
+	private static final String NUMBER_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "TEXT")
+	private static final String TEXT_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#else
+	private static final String TEXT_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#end
 
 #end
@@ -149,31 +155,73 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		if (model.get${Preference.getIdColumnNameCamelCase()}() < 1) {
 			session
 		#if (${Preference.getType()} == "BOOLEAN")
+					.findParameter(CHECK_BOX_${Preference.getPreferenceIdName()})
+					.ifPresent(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#elseif (${Preference.getType()} == "COMBOBOX")
 					.findParameter(COMBO_BOX_${Preference.getPreferenceIdName()})
-					.ifPresent(${Preference.getAttributeName()} -> comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()}));
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#elseif (${Preference.getType()} == "ENUM")
+					.findParameter(COMBO_BOX_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#elseif (${Preference.getType()} == "INTEGER")
+					.findParameter(INTEGER_FIELD_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#elseif (${Preference.getType()} == "NUMERIC")
+					.findParameter(NUMERIC_FIELD_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#elseif (${Preference.getType()} == "TEXT")
+					.findParameter(TEXT_FIELD_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#else
+					.findParameter(TEXT_FIELD_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							textField${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#end
-		#if (${Preference.getNextFieldType()})
+							#if (${Preference.getNextFieldType()} == "BOOLEAN")
+							checkbox${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "COMBOBOX")
+							comboBox${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "ENUM")
+							comboBox${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "INTEGER")
+							integerField${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "NUMERIC")
+							numberField${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "TEXT")
+							textArea${Preference.getNextFieldNameCamelCase()}.focus();
+							#else
+							textField${Preference.getNextFieldNameCamelCase()}.focus();
+							#end
+					}, () -> #if (${Preference.getFirstFieldType()} == "BOOLEAN")
+checkbox${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "COMBOBOX")
+comboBox${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "ENUM")
+comboBox${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "INTEGER")
+integerField${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "NUMERIC")
+numberField${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "TEXT")
+textArea${Preference.getFirstFieldNameCamelCase()}.focus());#else
+textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
+#if (${Preference.getFirstFieldType()})
 		} else {
-			#if (${Preference.getNextFieldType()} == "BOOLEAN")
-			checkbox${Preference.getNextFieldNameCamelCase()}.focus();
-			#elseif (${Preference.getNextFieldType()} == "COMBOBOX")
-			comboBox${Preference.getNextFieldNameCamelCase()}.focus();
-			#elseif (${Preference.getNextFieldType()} == "ENUM")
-			comboBox${Preference.getNextFieldNameCamelCase()}.focus();
-			#elseif (${Preference.getNextFieldType()} == "INTEGER")
-			integerField${Preference.getNextFieldNameCamelCase()}.focus();
-			#elseif (${Preference.getNextFieldType()} == "NUMERIC")
-			numberField${Preference.getNextFieldNameCamelCase()}.focus();
-			#elseif (${Preference.getNextFieldType()} == "TEXT")
-			textArea${Preference.getNextFieldNameCamelCase()}.focus();
+			#if (${Preference.getFirstFieldType()} == "BOOLEAN")
+			checkbox${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "COMBOBOX")
+			comboBox${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "ENUM")
+			comboBox${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "INTEGER")
+			integerField${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "NUMERIC")
+			numberField${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "TEXT")
+			textArea${Preference.getFirstFieldNameCamelCase()}.focus();
 			#else
-			textField${Preference.getNextFieldNameCamelCase()}.focus();
+			textField${Preference.getFirstFieldNameCamelCase()}.focus();
 			#end
 		#end
 		}
@@ -222,7 +270,21 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	@Override
 	protected void save() {
 #foreach (${Preference} in ${PreferenceData})
+	#if (${Preference.getType()} == "BOOLEAN")
+		session.setParameter(CHECK_BOX_${Preference.getPreferenceIdName()}, checkBox${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "COMBOBOX")
 		session.setParameter(COMBO_BOX_${Preference.getPreferenceIdName()}, comboBox${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "ENUM")
+		session.setParameter(COMBO_BOX_${Preference.getPreferenceIdName()}, comboBox${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "INTEGER")
+		session.setParameter(INTEGER_FIELD_${Preference.getPreferenceIdName()}, integerField${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "NUMERIC")
+		session.setParameter(NUMBER_FIELD_${Preference.getPreferenceIdName()}, numberField${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "TEXT")
+		session.setParameter(TEXT_AREA_${Preference.getPreferenceIdName()}, textArea${Preference.getAttributeNameCamelCase()}.getValue());
+	#else
+		session.setParameter(TEXT_FIELD_${Preference.getPreferenceIdName()}, textField${Preference.getAttributeNameCamelCase()}.getValue());
+	#end
 #end
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
 	#if (${Column.getType()} == "BOOLEAN")
