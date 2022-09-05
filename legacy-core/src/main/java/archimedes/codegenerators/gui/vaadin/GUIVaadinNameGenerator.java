@@ -55,6 +55,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME = "ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME";
 	public static final String ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX = "ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_SESSION_DATA_PACKAGE_NAME = "ALTERNATE_SESSION_DATA_PACKAGE_NAME";
+	public static final String ALTERNATE_SESSION_ID_CLASS_NAME = "ALTERNATE_SESSION_ID_CLASS_NAME";
 	public static final String ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX = "ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_USER_AUTHORIZATION_CHECKER_CLASS_NAME_SUFFIX =
 			"ALTERNATE_USER_AUTHORIZATION_CHECKER_CLASS_NAME_SUFFIX";
@@ -287,6 +288,12 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getSessionDataPackageName(DataModel model) {
 		return createPackageName(model, null, "gui", ALTERNATE_SESSION_DATA_PACKAGE_NAME);
+	}
+
+	public String getSessionIdClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(model, "SessionId", ALTERNATE_SESSION_ID_CLASS_NAME);
 	}
 
 	public String getTextFieldClassName(DataModel model) {

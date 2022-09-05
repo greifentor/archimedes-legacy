@@ -47,6 +47,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new PageParametersGOClassCodeGenerator(this),
 						// new PageParametersGOConverterClassCodeGenerator(this),
 						// new PageGOConverterClassCodeGenerator(this),
+						new SessionIdClassCodeGenerator(this),
 						new TextFieldClassCodeGenerator(this)
 				// new ToGOConverterInterfaceCodeGenerator(this)
 				);

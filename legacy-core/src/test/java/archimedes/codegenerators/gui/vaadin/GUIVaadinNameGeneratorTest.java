@@ -1538,6 +1538,38 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class SessionIdGOClassNameTests {
+
+		@Test
+		void getSessionIdClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getSessionIdClassName(null));
+		}
+
+		@Test
+		void getSessionIdClassName_passAValidModel_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "SessionId";
+			// Run
+			String returned = unitUnderTest.getSessionIdClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getSessionIdClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherSessionId";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_SESSION_ID_CLASS_NAME))
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_SESSION_ID_CLASS_NAME, expected));
+			// Run
+			String returned = unitUnderTest.getSessionIdClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
 	class TextFieldClassNameTests {
 
 		@Test
