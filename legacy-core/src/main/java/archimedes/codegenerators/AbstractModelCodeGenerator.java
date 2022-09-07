@@ -14,7 +14,7 @@ public abstract class AbstractModelCodeGenerator<N extends NameGenerator> extend
 	private static final Logger LOG = LogManager.getLogger(AbstractModelCodeGenerator.class);
 
 	public AbstractModelCodeGenerator(String templateFileName, String templatePathName, N nameGenerator,
-	        TypeGenerator typeGenerator, AbstractCodeFactory codeFactory) {
+			TypeGenerator typeGenerator, AbstractCodeFactory codeFactory) {
 		super(templateFileName, templatePathName, nameGenerator, typeGenerator, codeFactory);
 	}
 
@@ -34,9 +34,9 @@ public abstract class AbstractModelCodeGenerator<N extends NameGenerator> extend
 			return false;
 		}
 		return OptionGetter
-		        .getOptionByName(model, COMMENTS)
-		        .map(option -> "off".equalsIgnoreCase(option.getParameter()))
-		        .orElse(false);
+				.getOptionByName(model, COMMENTS)
+				.map(option -> "off".equalsIgnoreCase(option.getParameter()))
+				.orElse(false);
 	}
 
 	@Override

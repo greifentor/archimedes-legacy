@@ -1042,6 +1042,75 @@ public class ServiceNameGeneratorTest {
 
 	}
 
+	@Nested
+	class ResourceManagerClassNameTests {
+
+		@Test
+		void getResourceManagerClassName_ReturnsACorrectResourceManagerClassName() {
+			assertEquals("ResourceManager", unitUnderTest.getResourceManagerInterfaceName());
+		}
+
+	}
+
+	@Nested
+	class ResourceManagerInterfacePackageNameTests {
+
+		@Test
+		void getResourceManagerInterfacePackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("core.service.localization", unitUnderTest.getResourceManagerInterfacePackageName(model));
+		}
+
+		@Test
+		void getResourceManagerInterfacePackageName_PassAValidDataModel_ReturnsACorrecServiceName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".core.service.localization";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getResourceManagerInterfacePackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getResourceManagerInterfacePackageName_PassAValidDataModelWithEmptyBasePackageName_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "core.service.localization";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getResourceManagerInterfacePackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getResourceManagerInterfacePackageName_PassAValidDataModelWithNullBasePackageName_ReturnsACorrectServiceName() {
+			// Prepare
+			String expected = "core.service.localization";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getResourceManagerInterfacePackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getResourceManagerInterfacePackageName_PassAValidDataModelWithSetWithAlternatePackageName_ReturnsACorrectPackageName() {
+			// Prepare
+			String alternatePackageName = "alternate.package.name";
+			String expected = alternatePackageName;
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATE_RESOURCE_MANAGER_INTERFACE_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									ServiceNameGenerator.ALTERNATE_RESOURCE_MANAGER_INTERFACE_PACKAGE_NAME,
+									alternatePackageName));
+			// Run
+			String returned = unitUnderTest.getResourceManagerInterfacePackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("Tests for Service impl class names")
 	@Nested
 	class ServiceImplClassNameTests {

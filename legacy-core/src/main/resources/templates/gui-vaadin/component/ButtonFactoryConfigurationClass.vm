@@ -1,0 +1,31 @@
+package ${PackageName};
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
+import lombok.Getter;
+
+#if (!$CommentsOff )
+/**
+ * A configuration for the button factory.
+ *
+ * ${Generated}
+ */
+#end
+@Configuration
+@Getter
+public class ${ClassName} {
+
+	@Value("${Dollar}{gui.button.disabled-image-file-name:button-background-disabled.png}")
+	private String buttonDisabledBackgroundFileName;
+
+	@Value("${Dollar}{gui.button.disabled-border-color:gray}")
+	private String buttonDisabledBorderColor;
+
+	@Value("${Dollar}{gui.button.enabled-image-file-name:button-background-enabled.png}")
+	private String buttonEnabledBackgroundFileName;
+
+	@Value("${Dollar}{gui.button.enabled-border-color:blue}")
+	private String buttonEnabledBorderColor;
+
+}

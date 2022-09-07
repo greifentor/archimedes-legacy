@@ -30,6 +30,8 @@ public class ServiceNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX =
 			"ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX";
 	public static final String ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME = "ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME";
+	public static final String ALTERNATE_RESOURCE_MANAGER_INTERFACE_PACKAGE_NAME =
+			"ALTERNATE_RESOURCE_MANAGER_INTERFACE_PACKAGE_NAME";
 	public static final String ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX = "ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_SERVICE_IMPL_PACKAGE_NAME = "ALTERNATE_SERVICE_IMPL_PACKAGE_NAME";
 	public static final String ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX = "ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX";
@@ -155,6 +157,14 @@ public class ServiceNameGenerator extends NameGenerator {
 				table,
 				"core.service.port.persistence",
 				ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME);
+	}
+
+	public String getResourceManagerInterfaceName() {
+		return "ResourceManager";
+	}
+
+	public String getResourceManagerInterfacePackageName(DataModel model) {
+		return createPackageName(model, "core.service.localization", ALTERNATE_RESOURCE_MANAGER_INTERFACE_PACKAGE_NAME);
 	}
 
 	public String getServiceInterfaceName(TableModel table) {
