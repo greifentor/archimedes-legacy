@@ -8,15 +8,16 @@ import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
 
 /**
- * A class code generator for the session id classes.
+ * A class code generator for the session data classes.
  *
- * @author ollie (02.09.2022)
+ * @author ollie (07.09.2022)
  */
-public class SessionIdClassCodeGenerator extends AbstractModelCodeGenerator<GUIVaadinNameGenerator> {
 
-	public SessionIdClassCodeGenerator(AbstractCodeFactory codeFactory) {
+public class SessionDataClassCodeGenerator extends AbstractModelCodeGenerator<GUIVaadinNameGenerator> {
+
+	public SessionDataClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"SessionIdClass.vm",
+				"SessionDataClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				GUIVaadinNameGenerator.INSTANCE,
 				TypeGenerator.INSTANCE,
@@ -25,13 +26,15 @@ public class SessionIdClassCodeGenerator extends AbstractModelCodeGenerator<GUIV
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel model0) {
+		context.put("ApplicationName", model.getApplicationName());
 		context.put("ClassName", getClassName(model, null));
 		context.put("PackageName", getPackageName(model, null));
+		context.put("SessionIdClassName", nameGenerator.getSessionIdClassName(model));
 	}
 
 	@Override
 	public String getClassName(DataModel model, DataModel dummy) {
-		return nameGenerator.getSessionIdClassName(model);
+		return nameGenerator.getSessionDataClassName(model);
 	}
 
 	@Override
