@@ -170,6 +170,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return model == null ? null : getNameOrAlternativeFromOption(model, "Image", ALTERNATE_IMAGE_CLASS_NAME_SUFFIX);
 	}
 
+	public String getMainMenuViewClassName() {
+		return "MainMenuView";
+	}
+
 	public String getMaintenanceViewClassName(DataModel model, TableModel table) {
 		return table != null ? getClassName(table) + getMaintenanceViewClassNameSuffix(table) : null;
 	}

@@ -33,7 +33,7 @@ public class FileBasedResourceManagerImplClassCodeGenerator extends AbstractClas
 				.put(
 						"FileBasedResourceManagerConfigurationClassName",
 						nameGenerator.getFileBasedResourceManagerConfigurationClassName());
-		context.put("LocalizationSOPackageName", nameGenerator.getLocalizationSOPackageName(model, table));
+		context.put("LocalizationSOPackageName", nameGenerator.getLocalizationSOPackageName(model));
 		context.put("LocalizationSOClassName", nameGenerator.getLocalizationSOClassName());
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ResourceManagerInterfaceName", nameGenerator.getResourceManagerInterfaceName());

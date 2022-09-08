@@ -38,6 +38,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 	protected List<CodeGenerator<?>> getCodeGenerators() {
 		return Arrays
 				.asList(
+						new ApplicationStartViewClassCodeGenerator(this),
 						new ButtonClassCodeGenerator(this),
 						new ButtonFactoryClassCodeGenerator(this),
 						new ButtonFactoryConfigurationClassCodeGenerator(this),
@@ -109,6 +110,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
+					ApplicationStartViewClassCodeGenerator.GUI_BASE_URL,
 					AbstractClassCodeGenerator.MODULE_MODE,
 					GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
 					GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME };

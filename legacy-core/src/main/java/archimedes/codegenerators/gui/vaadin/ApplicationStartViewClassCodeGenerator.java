@@ -4,21 +4,23 @@ import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.AbstractModelCodeGenerator;
+import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.TypeGenerator;
-import archimedes.codegenerators.localization.LocalizationNameGenerator;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 
 /**
- * A class code generator for the session data classes.
+ * A class code generator for the session id classes.
  *
- * @author ollie (07.09.2022)
+ * @author ollie (02.09.2022)
  */
+public class ApplicationStartViewClassCodeGenerator extends AbstractModelCodeGenerator<GUIVaadinNameGenerator> {
 
-public class SessionDataClassCodeGenerator extends AbstractModelCodeGenerator<GUIVaadinNameGenerator> {
+	public static final String GUI_BASE_URL = "GUI_BASE_URL";
 
-	public SessionDataClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	public ApplicationStartViewClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"SessionDataClass.vm",
+				"ApplicationStartViewClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				GUIVaadinNameGenerator.INSTANCE,
 				TypeGenerator.INSTANCE,
@@ -27,20 +29,22 @@ public class SessionDataClassCodeGenerator extends AbstractModelCodeGenerator<GU
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel model0) {
-		context.put("ApplicationName", model.getApplicationName());
+		context.put("BaseURL", getBaseURL(model));
 		context.put("ClassName", getClassName(model, null));
-		context.put("LocalizationSOClassName", LocalizationNameGenerator.INSTANCE.getLocalizationSOClassName());
-		context
-				.put(
-						"LocalizationSOPackageName",
-						LocalizationNameGenerator.INSTANCE.getLocalizationSOPackageName(model));
 		context.put("PackageName", getPackageName(model, null));
-		context.put("SessionIdClassName", nameGenerator.getSessionIdClassName(model));
+		context.put("MainMenuViewClassName", nameGenerator.getMainMenuViewClassName());
+	}
+
+	private String getBaseURL(DataModel model) {
+		return OptionGetter
+				.getOptionByName(model, GUI_BASE_URL)
+				.map(OptionModel::getParameter)
+				.orElseGet(() -> model.getApplicationName().toLowerCase());
 	}
 
 	@Override
 	public String getClassName(DataModel model, DataModel dummy) {
-		return nameGenerator.getSessionDataClassName(model);
+		return nameGenerator.getApplicationStartViewClassName();
 	}
 
 	@Override
@@ -50,7 +54,7 @@ public class SessionDataClassCodeGenerator extends AbstractModelCodeGenerator<GU
 
 	@Override
 	public String getPackageName(DataModel model, DataModel dummy) {
-		return nameGenerator.getSessionDataPackageName(model);
+		return nameGenerator.getApplicationStartViewPackageName(model);
 	}
 
 	@Override

@@ -44,7 +44,7 @@ public class LocalizationSOClassCodeGenerator extends AbstractClassCodeGenerator
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getLocalizationSOPackageName(model, table);
+		return nameGenerator.getLocalizationSOPackageName(model);
 	}
 
 }

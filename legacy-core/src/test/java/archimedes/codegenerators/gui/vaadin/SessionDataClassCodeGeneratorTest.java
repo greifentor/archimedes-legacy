@@ -41,6 +41,7 @@ public class SessionDataClassCodeGeneratorTest {
 						"\n" + //
 						"import org.springframework.stereotype.Component;\n" + //
 						"\n" + //
+						"import de.ollie.carp.dnd.core.model.localization.LocalizationSO;\n" + //
 						"import com.vaadin.flow.spring.annotation.VaadinSessionScope;\n" + //
 						"\n" + //
 						"import lombok.Data;\n" + //
@@ -57,6 +58,7 @@ public class SessionDataClassCodeGeneratorTest {
 						"\n" + //
 						"	private SessionId id = new SessionId(\"" + APPLICATION_NAME.toLowerCase()
 						+ "-\" + (counter++));\n" + //
+						"	private LocalizationSO localization = LocalizationSO.DE;\n" + //
 						"	private Map<String, Object> parameters = new HashMap<>();\n" + //
 						"\n" + //
 						"	public String getUserName() {\n" + //
