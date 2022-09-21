@@ -6,13 +6,15 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import de.ollie.carp.dnd.core.model.localization.LocalizationSO;
+import ${LocalizationSOPackageName}.${LocalizationSOClassName};
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 
 import lombok.Data;
 
 /**
  * An object to hold data during the session.
+ *
+ * ${Generated}
  */
 @Component
 @VaadinSessionScope
@@ -22,7 +24,7 @@ public class ${ClassName} {
 	private static int counter = 0;
 
 	private ${SessionIdClassName} id = new ${SessionIdClassName}("${ApplicationName.toLowerCase()}-" + (counter++));
-	private LocalizationSO localization = LocalizationSO.DE;
+	private ${LocalizationSOClassName} localization = ${LocalizationSOClassName}.DE;
 	private Map<String, Object> parameters = new HashMap<>();
 
 	public String getUserName() {

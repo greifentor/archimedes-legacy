@@ -109,6 +109,10 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
 					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
+					+ //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private ATable createNewModel() {\n" + //
@@ -282,6 +286,10 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
 					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
+					+ //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private ATable createNewModel() {\n" + //
@@ -459,6 +467,10 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
 					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
+					+ //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private ATable createNewModel() {\n" + //
@@ -690,6 +702,10 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
 					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
+					+ //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private DifferentSubclassReferences createNewModel() {\n" + //
@@ -860,6 +876,10 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
 					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
+					+ //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private BTable createNewModel() {\n" + //

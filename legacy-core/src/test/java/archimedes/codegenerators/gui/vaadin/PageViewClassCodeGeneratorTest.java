@@ -103,6 +103,7 @@ public class PageViewClassCodeGeneratorTest {
 						"	private final SessionData session;\n" + //
 						"\n" + //
 						"	private Button buttonAdd;\n" + //
+						"	private Button buttonDuplicate;\n" + //
 						"	private Button buttonEdit;\n" + //
 						"	private Button buttonRemove;\n" + //
 						"	private Grid<ATable> grid;\n" + //
@@ -121,6 +122,8 @@ public class PageViewClassCodeGeneratorTest {
 						"		getStyle().set(\"background-size\", \"cover\");\n" + //
 						"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 						+ //
+						"		buttonDuplicate = buttonFactory.createButton(\"commons.button.duplicate.text\");\n" + //
+						"		buttonDuplicate.addClickListener(event -> duplicateRecord());\n" + //
 						"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
 						+ //
 						"		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);\n"
@@ -144,7 +147,7 @@ public class PageViewClassCodeGeneratorTest {
 						"		grid.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		grid.getStyle().set(\"border-radius\", \"4px\");\n" + //
 						"		grid.getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
-						"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonRemove);\n"
+						"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonDuplicate, buttonRemove);\n"
 						+ //
 						"		buttonLayout.setMargin(false);\n" + //
 						"		buttonLayout.setWidthFull();\n" + //
@@ -175,6 +178,7 @@ public class PageViewClassCodeGeneratorTest {
 						"						HeaderLayoutMode.PLAIN),\n" + //
 						"				dataLayout);\n" + //
 						"		updateGrid(0);\n" + //
+						"		setButtonEnabled(buttonDuplicate, false);\n" + //
 						"		setButtonEnabled(buttonEdit, false);\n" + //
 						"		setButtonEnabled(buttonRemove, false);\n" + //
 						"	}\n" + //
@@ -189,10 +193,12 @@ public class PageViewClassCodeGeneratorTest {
 						"	private void enabledButtons(SelectionEvent<Grid<ATable>, ATable> event) {\n" + //
 						"		if (event.getFirstSelectedItem().isEmpty()) {\n" + //
 						"			setButtonEnabled(buttonAdd, true);\n" + //
+						"			setButtonEnabled(buttonDuplicate, false);\n" + //
 						"			setButtonEnabled(buttonEdit, false);\n" + //
 						"			setButtonEnabled(buttonRemove, false);\n" + //
 						"		} else {\n" + //
 						"			setButtonEnabled(buttonAdd, false);\n" + //
+						"			setButtonEnabled(buttonDuplicate, true);\n" + //
 						"			setButtonEnabled(buttonEdit, true);\n" + //
 						"			setButtonEnabled(buttonRemove, true);\n" + //
 						"		}\n" + //
@@ -235,6 +241,16 @@ public class PageViewClassCodeGeneratorTest {
 						"\n" + //
 						"	private void addRecord() {\n" + //
 						"		getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceView.URL));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	private void duplicateRecord() {\n" + //
+						"		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());\n" + //
+						"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
+						"			QueryParameters parameters =\n" + //
+						"					new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId()), \"duplicate\", List.of(\"true\")));\n"
+						+ //
+						"			getUI().ifPresent(ui -> ui.navigate(MerkmalMaintenanceView.URL, parameters));\n" + //
+						"		});\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	private void editRecord() {\n" + //
@@ -344,6 +360,7 @@ public class PageViewClassCodeGeneratorTest {
 					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private Button buttonAdd;\n" + //
+					"	private Button buttonDuplicate;\n" + //
 					"	private Button buttonEdit;\n" + //
 					"	private Button buttonRemove;\n" + //
 					"	private Grid<ATable> grid;\n" + //
@@ -362,6 +379,8 @@ public class PageViewClassCodeGeneratorTest {
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
+					"		buttonDuplicate = buttonFactory.createButton(\"commons.button.duplicate.text\");\n" + //
+					"		buttonDuplicate.addClickListener(event -> duplicateRecord());\n" + //
 					"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
 					+ //
 					"		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);\n"
@@ -385,7 +404,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		grid.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 					"		grid.getStyle().set(\"border-radius\", \"4px\");\n" + //
 					"		grid.getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
-					"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonRemove);\n"
+					"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonDuplicate, buttonRemove);\n"
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
 					"		buttonLayout.setWidthFull();\n" + //
@@ -416,6 +435,7 @@ public class PageViewClassCodeGeneratorTest {
 					"						HeaderLayoutMode.PLAIN),\n" + //
 					"				dataLayout);\n" + //
 					"		updateGrid(0);\n" + //
+					"		setButtonEnabled(buttonDuplicate, false);\n" + //
 					"		setButtonEnabled(buttonEdit, false);\n" + //
 					"		setButtonEnabled(buttonRemove, false);\n" + //
 					"	}\n" + //
@@ -430,10 +450,12 @@ public class PageViewClassCodeGeneratorTest {
 					"	private void enabledButtons(SelectionEvent<Grid<ATable>, ATable> event) {\n" + //
 					"		if (event.getFirstSelectedItem().isEmpty()) {\n" + //
 					"			setButtonEnabled(buttonAdd, true);\n" + //
+					"			setButtonEnabled(buttonDuplicate, false);\n" + //
 					"			setButtonEnabled(buttonEdit, false);\n" + //
 					"			setButtonEnabled(buttonRemove, false);\n" + //
 					"		} else {\n" + //
 					"			setButtonEnabled(buttonAdd, false);\n" + //
+					"			setButtonEnabled(buttonDuplicate, true);\n" + //
 					"			setButtonEnabled(buttonEdit, true);\n" + //
 					"			setButtonEnabled(buttonRemove, true);\n" + //
 					"		}\n" + //
@@ -523,6 +545,16 @@ public class PageViewClassCodeGeneratorTest {
 					"		QueryParameters parameters = new QueryParameters(Map.of(\"modelClass\", List.of(selectedSubclassName)));\n"
 					+ //
 					"		getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceView.URL, parameters));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private void duplicateRecord() {\n" + //
+					"		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());\n" + //
+					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
+					"			QueryParameters parameters =\n" + //
+					"					new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId()), \"duplicate\", List.of(\"true\")));\n"
+					+ //
+					"			getUI().ifPresent(ui -> ui.navigate(MerkmalMaintenanceView.URL, parameters));\n" + //
+					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private void editRecord() {\n" + //
@@ -626,6 +658,7 @@ public class PageViewClassCodeGeneratorTest {
 					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private Button buttonAdd;\n" + //
+					"	private Button buttonDuplicate;\n" + //
 					"	private Button buttonEdit;\n" + //
 					"	private Button buttonRemove;\n" + //
 					"	private Grid<GuiTable> grid;\n" + //
@@ -644,6 +677,8 @@ public class PageViewClassCodeGeneratorTest {
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
+					"		buttonDuplicate = buttonFactory.createButton(\"commons.button.duplicate.text\");\n" + //
+					"		buttonDuplicate.addClickListener(event -> duplicateRecord());\n" + //
 					"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
 					+ //
 					"		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);\n"
@@ -666,7 +701,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		grid.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 					"		grid.getStyle().set(\"border-radius\", \"4px\");\n" + //
 					"		grid.getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
-					"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonRemove);\n"
+					"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonDuplicate, buttonRemove);\n"
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
 					"		buttonLayout.setWidthFull();\n" + //
@@ -697,6 +732,7 @@ public class PageViewClassCodeGeneratorTest {
 					"						HeaderLayoutMode.PLAIN),\n" + //
 					"				dataLayout);\n" + //
 					"		updateGrid(0);\n" + //
+					"		setButtonEnabled(buttonDuplicate, false);\n" + //
 					"		setButtonEnabled(buttonEdit, false);\n" + //
 					"		setButtonEnabled(buttonRemove, false);\n" + //
 					"	}\n" + //
@@ -711,10 +747,12 @@ public class PageViewClassCodeGeneratorTest {
 					"	private void enabledButtons(SelectionEvent<Grid<GuiTable>, GuiTable> event) {\n" + //
 					"		if (event.getFirstSelectedItem().isEmpty()) {\n" + //
 					"			setButtonEnabled(buttonAdd, true);\n" + //
+					"			setButtonEnabled(buttonDuplicate, false);\n" + //
 					"			setButtonEnabled(buttonEdit, false);\n" + //
 					"			setButtonEnabled(buttonRemove, false);\n" + //
 					"		} else {\n" + //
 					"			setButtonEnabled(buttonAdd, false);\n" + //
+					"			setButtonEnabled(buttonDuplicate, true);\n" + //
 					"			setButtonEnabled(buttonEdit, true);\n" + //
 					"			setButtonEnabled(buttonRemove, true);\n" + //
 					"		}\n" + //
@@ -755,6 +793,16 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void addRecord() {\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(GuiTableMaintenanceView.URL));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private void duplicateRecord() {\n" + //
+					"		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());\n" + //
+					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
+					"			QueryParameters parameters =\n" + //
+					"					new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId()), \"duplicate\", List.of(\"true\")));\n"
+					+ //
+					"			getUI().ifPresent(ui -> ui.navigate(MerkmalMaintenanceView.URL, parameters));\n" + //
+					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private void editRecord() {\n" + //
@@ -852,6 +900,7 @@ public class PageViewClassCodeGeneratorTest {
 					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private Button buttonAdd;\n" + //
+					"	private Button buttonDuplicate;\n" + //
 					"	private Button buttonEdit;\n" + //
 					"	private Button buttonRemove;\n" + //
 					"	private Grid<GuiTable> grid;\n" + //
@@ -881,6 +930,8 @@ public class PageViewClassCodeGeneratorTest {
 					"		textFieldFilter.addValueChangeListener(event -> updateGrid(0));\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
+					"		buttonDuplicate = buttonFactory.createButton(\"commons.button.duplicate.text\");\n" + //
+					"		buttonDuplicate.addClickListener(event -> duplicateRecord());\n" + //
 					"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
 					+ //
 					"		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);\n"
@@ -903,7 +954,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		grid.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 					"		grid.getStyle().set(\"border-radius\", \"4px\");\n" + //
 					"		grid.getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
-					"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonRemove);\n"
+					"		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonDuplicate, buttonRemove);\n"
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
 					"		buttonLayout.setWidthFull();\n" + //
@@ -949,6 +1000,7 @@ public class PageViewClassCodeGeneratorTest {
 					"				filterLayout,\n" + //
 					"				dataLayout);\n" + //
 					"		updateGrid(0);\n" + //
+					"		setButtonEnabled(buttonDuplicate, false);\n" + //
 					"		setButtonEnabled(buttonEdit, false);\n" + //
 					"		setButtonEnabled(buttonRemove, false);\n" + //
 					"	}\n" + //
@@ -963,10 +1015,12 @@ public class PageViewClassCodeGeneratorTest {
 					"	private void enabledButtons(SelectionEvent<Grid<GuiTable>, GuiTable> event) {\n" + //
 					"		if (event.getFirstSelectedItem().isEmpty()) {\n" + //
 					"			setButtonEnabled(buttonAdd, true);\n" + //
+					"			setButtonEnabled(buttonDuplicate, false);\n" + //
 					"			setButtonEnabled(buttonEdit, false);\n" + //
 					"			setButtonEnabled(buttonRemove, false);\n" + //
 					"		} else {\n" + //
 					"			setButtonEnabled(buttonAdd, false);\n" + //
+					"			setButtonEnabled(buttonDuplicate, true);\n" + //
 					"			setButtonEnabled(buttonEdit, true);\n" + //
 					"			setButtonEnabled(buttonRemove, true);\n" + //
 					"		}\n" + //
@@ -1043,6 +1097,16 @@ public class PageViewClassCodeGeneratorTest {
 					"	private void addRecord() {\n" + //
 					"		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(GuiTableMaintenanceView.URL));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private void duplicateRecord() {\n" + //
+					"		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());\n" + //
+					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
+					"			QueryParameters parameters =\n" + //
+					"					new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId()), \"duplicate\", List.of(\"true\")));\n"
+					+ //
+					"			getUI().ifPresent(ui -> ui.navigate(MerkmalMaintenanceView.URL, parameters));\n" + //
+					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private void editRecord() {\n" + //

@@ -41,13 +41,15 @@ public class SessionDataClassCodeGeneratorTest {
 						"\n" + //
 						"import org.springframework.stereotype.Component;\n" + //
 						"\n" + //
-						"import de.ollie.carp.dnd.core.model.localization.LocalizationSO;\n" + //
+						"import base.pack.age.name.core.model.localization.LocalizationSO;\n" + //
 						"import com.vaadin.flow.spring.annotation.VaadinSessionScope;\n" + //
 						"\n" + //
 						"import lombok.Data;\n" + //
 						"\n" + //
 						"/**\n" + //
 						" * An object to hold data during the session.\n" + //
+						" *\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 						" */\n" + //
 						"@Component\n" + //
 						"@VaadinSessionScope\n" + //
