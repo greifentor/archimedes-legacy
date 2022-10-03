@@ -122,7 +122,8 @@ public class PageViewClassCodeGeneratorTest {
 						"		getStyle().set(\"background-size\", \"cover\");\n" + //
 						"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 						+ //
-						"		buttonDuplicate = buttonFactory.createButton(\"commons.button.duplicate.text\");\n" + //
+						"		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString(\"commons.button.duplicate.text\", session.getLocalization()));\n"
+						+ //
 						"		buttonDuplicate.addClickListener(event -> duplicateRecord());\n" + //
 						"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
 						+ //
@@ -244,12 +245,11 @@ public class PageViewClassCodeGeneratorTest {
 						"	}\n" + //
 						"\n" + //
 						"	private void duplicateRecord() {\n" + //
-						"		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());\n" + //
 						"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
 						"			QueryParameters parameters =\n" + //
 						"					new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId()), \"duplicate\", List.of(\"true\")));\n"
 						+ //
-						"			getUI().ifPresent(ui -> ui.navigate(MerkmalMaintenanceView.URL, parameters));\n" + //
+						"			getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceView.URL, parameters));\n" + //
 						"		});\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -379,7 +379,8 @@ public class PageViewClassCodeGeneratorTest {
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
-					"		buttonDuplicate = buttonFactory.createButton(\"commons.button.duplicate.text\");\n" + //
+					"		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString(\"commons.button.duplicate.text\", session.getLocalization()));\n"
+					+ //
 					"		buttonDuplicate.addClickListener(event -> duplicateRecord());\n" + //
 					"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
 					+ //
@@ -548,12 +549,11 @@ public class PageViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private void duplicateRecord() {\n" + //
-					"		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
 					"			QueryParameters parameters =\n" + //
 					"					new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId()), \"duplicate\", List.of(\"true\")));\n"
 					+ //
-					"			getUI().ifPresent(ui -> ui.navigate(MerkmalMaintenanceView.URL, parameters));\n" + //
+					"			getUI().ifPresent(ui -> ui.navigate(ATableMaintenanceView.URL, parameters));\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -677,7 +677,8 @@ public class PageViewClassCodeGeneratorTest {
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
-					"		buttonDuplicate = buttonFactory.createButton(\"commons.button.duplicate.text\");\n" + //
+					"		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString(\"commons.button.duplicate.text\", session.getLocalization()));\n"
+					+ //
 					"		buttonDuplicate.addClickListener(event -> duplicateRecord());\n" + //
 					"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
 					+ //
@@ -796,12 +797,11 @@ public class PageViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private void duplicateRecord() {\n" + //
-					"		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
 					"			QueryParameters parameters =\n" + //
 					"					new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId()), \"duplicate\", List.of(\"true\")));\n"
 					+ //
-					"			getUI().ifPresent(ui -> ui.navigate(MerkmalMaintenanceView.URL, parameters));\n" + //
+					"			getUI().ifPresent(ui -> ui.navigate(GuiTableMaintenanceView.URL, parameters));\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -930,7 +930,8 @@ public class PageViewClassCodeGeneratorTest {
 					"		textFieldFilter.addValueChangeListener(event -> updateGrid(0));\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
-					"		buttonDuplicate = buttonFactory.createButton(\"commons.button.duplicate.text\");\n" + //
+					"		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString(\"commons.button.duplicate.text\", session.getLocalization()));\n"
+					+ //
 					"		buttonDuplicate.addClickListener(event -> duplicateRecord());\n" + //
 					"		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n"
 					+ //
@@ -1105,7 +1106,7 @@ public class PageViewClassCodeGeneratorTest {
 					"			QueryParameters parameters =\n" + //
 					"					new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId()), \"duplicate\", List.of(\"true\")));\n"
 					+ //
-					"			getUI().ifPresent(ui -> ui.navigate(MerkmalMaintenanceView.URL, parameters));\n" + //
+					"			getUI().ifPresent(ui -> ui.navigate(GuiTableMaintenanceView.URL, parameters));\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //

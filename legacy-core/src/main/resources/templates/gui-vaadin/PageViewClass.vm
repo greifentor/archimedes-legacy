@@ -113,7 +113,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		textFieldFilter.addValueChangeListener(event -> updateGrid(0));
 		#end
 		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);
-		buttonDuplicate = buttonFactory.createButton("commons.button.duplicate.text");
+		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString("commons.button.duplicate.text", session.getLocalization()));
 		buttonDuplicate.addClickListener(event -> duplicateRecord());
 		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);
 		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);
@@ -320,11 +320,13 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	}
 
 	private void duplicateRecord() {
+		#if ($Filters)
 		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());
+		#end
 		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
 			QueryParameters parameters =
 					new QueryParameters(Map.of("id", List.of("" + model.getId()), "duplicate", List.of("true")));
-			getUI().ifPresent(ui -> ui.navigate(MerkmalMaintenanceView.URL, parameters));
+			getUI().ifPresent(ui -> ui.navigate(${MaintenanceViewClassName}.URL, parameters));
 		});
 	}
 
