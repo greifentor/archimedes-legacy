@@ -184,6 +184,11 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		setButtonEnabled(buttonDuplicate, false);
 		setButtonEnabled(buttonEdit, false);
 		setButtonEnabled(buttonRemove, false);
+		#if ($Filters)
+		textFieldFilter.focus();
+		#else
+		buttonAdd.focus();
+		#end
 	}
 
 	private Object getHeaderString(String fieldName, ${ModelClassName} aTable, Supplier<?> f) {
@@ -344,6 +349,11 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
 			service.delete(model);
 			updateGrid(0);
+			#if ($Filters)
+			textFieldFilter.focus();
+			#else
+			buttonAdd.focus();
+			#end
 		});
 	}
 
