@@ -10,9 +10,9 @@ import lombok.experimental.Accessors;
 @Data
 public class SubclassData {
 
+	private String detailsLayoutClassName;
 	private String modelClassName;
 	private String modelPackageName;
-	private String detailsLayoutClassName;
 	private List<SubclassReferenceData> references = new ArrayList<>();
 
 }

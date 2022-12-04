@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Diagram application="Archimedes" application-version="2.33.6" diagram-version="2.0">
+<Diagram application="Archimedes" application-version="2.33.7" diagram-version="2.0">
     <AdditionalSQLStatements postChanging="" postReducing="" preChanging="" preExtending="" />
     <Colors>
         <Color b="255" g="0" name="blau" r="0" />
@@ -46,7 +46,7 @@
             <Column canBeReferenced="false" comment="" deprecated="false" domain="Description" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="NAME" notNull="false" panelNumber="0" parameter="NAME_FIELD" primaryKey="false" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
             <Options />
             <Panel panelClass="" panelNumber="0" tabMnemonic="1" tabTitle="data" tabToolTipText="Hier k&amp;ouml;nnen Sie die Daten des Objekt warten" />
-            <View name="Main" x="325" y="350" />
+            <View name="Main" x="325" y="300" />
         </Table>
         <Table activeInApplication="false" additionalCreateConstraint="" codeFolder="" codeGeneratorOptions="" colorBackground="wei&amp;szlig;" colorForeground="schwarz" comment="" complexForeignKey="" contextName="" deprecated="false" draft="false" dynamicCode="true" externalTable="false" firstGenerationDone="false" generateCode="true" history="@changed OLI - Added." inherited="false" name="ANOTHER_TABLE" nmRelation="false" uniqueFormula="">
             <Column canBeReferenced="true" comment="" deprecated="false" domain="Ident" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="ID" notNull="true" panelNumber="0" parameter="" primaryKey="true" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
@@ -73,7 +73,7 @@
             <Column canBeReferenced="false" comment="" deprecated="false" domain="Description" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="NAME" notNull="false" panelNumber="0" parameter="NAME_FIELD" primaryKey="false" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
             <Options />
             <Panel panelClass="" panelNumber="0" tabMnemonic="1" tabTitle="data" tabToolTipText="Hier k&amp;ouml;nnen Sie die Daten des Objekt warten" />
-            <View name="Main" x="325" y="575" />
+            <View name="Main" x="875" y="125" />
         </Table>
         <Table activeInApplication="false" additionalCreateConstraint="" codeFolder="" codeGeneratorOptions="" colorBackground="wei&amp;szlig;" colorForeground="schwarz" comment="" complexForeignKey="" contextName="" deprecated="false" draft="false" dynamicCode="true" externalTable="false" firstGenerationDone="false" generateCode="true" history="@changed OLI - Added." inherited="false" name="B_TABLE" nmRelation="false" uniqueFormula="">
             <Column canBeReferenced="true" comment="" deprecated="false" domain="Ident" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="ID" notNull="false" panelNumber="0" parameter="" primaryKey="true" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
@@ -92,7 +92,81 @@
                 <Option name="PLURAL_NAME" parameter="atabellen" />
             </Options>
             <Panel panelClass="" panelNumber="0" tabMnemonic="1" tabTitle="data" tabToolTipText="Hier k&amp;ouml;nnen Sie die Daten des Objekt warten" />
-            <View name="Main" x="25" y="575" />
+            <View name="Main" x="575" y="125" />
+        </Table>
+        <Table activeInApplication="false" additionalCreateConstraint="" codeFolder="" codeGeneratorOptions="" colorBackground="wei&amp;szlig;" colorForeground="schwarz" comment="" complexForeignKey="" contextName="" deprecated="false" draft="false" dynamicCode="true" externalTable="false" firstGenerationDone="false" generateCode="true" history="@changed OLI - Added." inherited="false" name="C_ANOTHER_TABLE" nmRelation="false" uniqueFormula="">
+            <Column canBeReferenced="true" comment="" deprecated="false" domain="Ident" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="ID" notNull="true" panelNumber="0" parameter="" primaryKey="true" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
+            <Column canBeReferenced="false" comment="" deprecated="false" domain="Description" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="NAME" notNull="false" panelNumber="0" parameter="NAME_FIELD" primaryKey="false" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
+            <Options>
+                <Option name="GENERATE_MASTER_DATA_GUI" parameter="" />
+                <Option name="SUPERCLASS" parameter="JOINED" />
+            </Options>
+            <Panel panelClass="" panelNumber="0" tabMnemonic="1" tabTitle="data" tabToolTipText="Hier k&amp;ouml;nnen Sie die Daten des Objekt warten" />
+            <View name="Main" x="325" y="550" />
+        </Table>
+        <Table activeInApplication="false" additionalCreateConstraint="" codeFolder="" codeGeneratorOptions="" colorBackground="wei&amp;szlig;" colorForeground="schwarz" comment="" complexForeignKey="" contextName="" deprecated="false" draft="false" dynamicCode="true" externalTable="false" firstGenerationDone="false" generateCode="true" history="@changed OLI - Added." inherited="false" name="C_ANOTHER_TABLE_SUB" nmRelation="false" uniqueFormula="">
+            <Column canBeReferenced="true" comment="" deprecated="false" domain="Ident" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="ID" notNull="true" panelNumber="0" parameter="" primaryKey="true" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false">
+                <Relation referenceColumnName="ID" referenceTableName="C_ANOTHER_TABLE">
+                    <View direction0="LEFT" direction1="RIGHT" name="Main" offset0="25" offset1="25" />
+                </Relation>
+            </Column>
+            <Column canBeReferenced="false" comment="" deprecated="false" domain="Description" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="NAME" notNull="false" panelNumber="0" parameter="GUI_EDITOR_POS:1|NAME_FIELD" primaryKey="false" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
+            <Options>
+                <Option name="GENERATE_MASTER_DATA_GUI" parameter="" />
+                <Option name="SUBCLASS" parameter="" />
+            </Options>
+            <Panel panelClass="" panelNumber="0" tabMnemonic="1" tabTitle="data" tabToolTipText="Hier k&amp;ouml;nnen Sie die Daten des Objekt warten" />
+            <View name="Main" x="625" y="550" />
+        </Table>
+        <Table activeInApplication="false" additionalCreateConstraint="" codeFolder="" codeGeneratorOptions="" colorBackground="wei&amp;szlig;" colorForeground="schwarz" comment="" complexForeignKey="" contextName="" deprecated="false" draft="false" dynamicCode="true" externalTable="false" firstGenerationDone="false" generateCode="true" history="@changed OLI - Added." inherited="false" name="C_TABLE" nmRelation="false" uniqueFormula="">
+            <Column canBeReferenced="true" comment="" deprecated="false" domain="Ident" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="ID" notNull="false" panelNumber="0" parameter="AUTO_INCREMENT:IDENTITY" primaryKey="true" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
+            <Column canBeReferenced="false" comment="" deprecated="false" domain="Ident" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="REF" notNull="false" panelNumber="0" parameter="GUI_EDITOR_POS:1|NAME_FIELD" primaryKey="false" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false">
+                <Relation referenceColumnName="ID" referenceTableName="C_ANOTHER_TABLE_SUB">
+                    <View direction0="UP" direction1="UP" name="Main" offset0="25" offset1="25">
+                        <Point x="50" y="500" />
+                        <Point x="650" y="500" />
+                    </View>
+                </Relation>
+            </Column>
+            <Column canBeReferenced="false" comment="" deprecated="false" domain="Description" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="NAME" notNull="false" panelNumber="0" parameter="GUI_EDITOR_POS:2" primaryKey="false" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
+            <Options>
+                <Option name="GENERATE_MASTER_DATA_GUI" parameter="" />
+                <Option name="PLURAL_NAME" parameter="atabellen" />
+                <Option name="SUPERCLASS" parameter="JOINED" />
+            </Options>
+            <Panel panelClass="" panelNumber="0" tabMnemonic="1" tabTitle="data" tabToolTipText="Hier k&amp;ouml;nnen Sie die Daten des Objekt warten" />
+            <View name="Main" x="25" y="550" />
+        </Table>
+        <Table activeInApplication="false" additionalCreateConstraint="" codeFolder="" codeGeneratorOptions="" colorBackground="wei&amp;szlig;" colorForeground="schwarz" comment="" complexForeignKey="" contextName="" deprecated="false" draft="false" dynamicCode="true" externalTable="false" firstGenerationDone="false" generateCode="true" history="@changed OLI - Added." inherited="false" name="C_TABLE_SUB0" nmRelation="false" uniqueFormula="">
+            <Column canBeReferenced="true" comment="" deprecated="false" domain="Ident" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="ID" notNull="true" panelNumber="0" parameter="AUTO_INCREMENT:IDENTITY" primaryKey="true" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false">
+                <Relation referenceColumnName="ID" referenceTableName="C_TABLE">
+                    <View direction0="UP" direction1="DOWN" name="Main" offset0="25" offset1="25" />
+                </Relation>
+            </Column>
+            <Column canBeReferenced="false" comment="" deprecated="false" domain="Description" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="BLA" notNull="false" panelNumber="0" parameter="GUI_EDITOR_POS:1|NAME_FIELD" primaryKey="false" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
+            <Options>
+                <Option name="GENERATE_MASTER_DATA_GUI" parameter="" />
+                <Option name="SUBCLASS" parameter="" />
+            </Options>
+            <Panel panelClass="" panelNumber="0" tabMnemonic="1" tabTitle="data" tabToolTipText="Hier k&amp;ouml;nnen Sie die Daten des Objekt warten" />
+            <View name="Main" x="25" y="825" />
+        </Table>
+        <Table activeInApplication="false" additionalCreateConstraint="" codeFolder="" codeGeneratorOptions="" colorBackground="wei&amp;szlig;" colorForeground="schwarz" comment="" complexForeignKey="" contextName="" deprecated="false" draft="false" dynamicCode="true" externalTable="false" firstGenerationDone="false" generateCode="true" history="@changed OLI - Added." inherited="false" name="C_TABLE_SUB1" nmRelation="false" uniqueFormula="">
+            <Column canBeReferenced="true" comment="" deprecated="false" domain="Ident" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="ID" notNull="true" panelNumber="0" parameter="AUTO_INCREMENT:IDENTITY" primaryKey="true" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false">
+                <Relation referenceColumnName="ID" referenceTableName="C_TABLE">
+                    <View direction0="UP" direction1="DOWN" name="Main" offset0="25" offset1="25">
+                        <Point x="350" y="775" />
+                        <Point x="50" y="775" />
+                    </View>
+                </Relation>
+            </Column>
+            <Column canBeReferenced="false" comment="" deprecated="false" domain="Description" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="BLUBS" notNull="false" panelNumber="0" parameter="GUI_EDITOR_POS:1|NAME_FIELD" primaryKey="false" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
+            <Options>
+                <Option name="GENERATE_MASTER_DATA_GUI" parameter="" />
+                <Option name="SUBCLASS" parameter="" />
+            </Options>
+            <Panel panelClass="" panelNumber="0" tabMnemonic="1" tabTitle="data" tabToolTipText="Hier k&amp;ouml;nnen Sie die Daten des Objekt warten" />
+            <View name="Main" x="325" y="825" />
         </Table>
         <Table activeInApplication="false" additionalCreateConstraint="" codeFolder="" codeGeneratorOptions="" colorBackground="wei&amp;szlig;" colorForeground="schwarz" comment="" complexForeignKey="" contextName="" deprecated="false" draft="false" dynamicCode="true" externalTable="false" firstGenerationDone="false" generateCode="true" history="@changed OLI - Added." inherited="false" name="GUI_TABLE" nmRelation="false" uniqueFormula="">
             <Column canBeReferenced="true" comment="" deprecated="false" domain="Ident" editorAlterInBatchView="false" editorDisabled="false" editorLabelText="" editorMaxLength="0" editorMember="false" editorMnemonic="" editorPosition="0" editorReferenceWeight="NONE" editorResourceId="" editorToolTipText="" encrypted="false" global="false" globalId="false" hasIndex="false" hideReference="false" history="@changed OLI - Added." indexSearchMember="false" individualDefaultValue="" lastModificationField="false" listItemField="false" name="ID" notNull="false" panelNumber="0" parameter="" primaryKey="true" removedStateField="false" required="false" sequenceForKeyGeneration="" suppressForeignKeyConstraints="false" technicalField="false" transient="false" unique="false" />
@@ -107,7 +181,7 @@
                 <Option name="PLURAL_NAME" parameter="atabellen" />
             </Options>
             <Panel panelClass="" panelNumber="0" tabMnemonic="1" tabTitle="data" tabToolTipText="Hier k&amp;ouml;nnen Sie die Daten des Objekt warten" />
-            <View name="Main" x="25" y="350" />
+            <View name="Main" x="25" y="300" />
         </Table>
     </Tables>
     <Views>
