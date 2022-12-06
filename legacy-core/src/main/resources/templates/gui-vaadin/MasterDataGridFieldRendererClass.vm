@@ -17,8 +17,8 @@ public class ${ClassName} implements MasterDataGridFieldRenderer<${ModelClassNam
 	@Override
 	public Object getHeaderString(String fieldName, ${ModelClassName} model) {
 		#foreach($Column in $ReferencedColumnData)
-		if (${ModelClassName}.${Column.getIdentifier()}.equals(fieldName)) {
-			return model.get${Column.getAttributeNameCamelCase()}() != null ? model.${Column.getAttributeNameCamelCase()}().get${Column.getNameAttributeNameCamelCase()}() : "-";
+		if (${ModelClassName}.${Column.getFieldNameCamelCase().toUpperCase()}.equals(fieldName)) {
+			return model.get${Column.getFieldNameCamelCase()}() != null ? model.get${Column.getFieldNameCamelCase()}().get${Column.getReferencedModelNameFieldName()}() : "-";
 		}
 		#end
 		return null;
@@ -27,7 +27,7 @@ public class ${ClassName} implements MasterDataGridFieldRenderer<${ModelClassNam
 	@Override
 	public boolean hasRenderingFor(String fieldName) {
 		#foreach($Column in $ReferencedColumnData)
-		if (${ModelClassName}.${Column.getIdentifier()}.equals(fieldName)) {
+		if (${ModelClassName}.${Column.getFieldNameCamelCase().toUpperCase()}.equals(fieldName)) {
 			return true;
 		}
 		#end

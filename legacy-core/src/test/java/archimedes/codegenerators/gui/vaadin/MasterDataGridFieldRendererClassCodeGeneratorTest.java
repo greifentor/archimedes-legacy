@@ -47,7 +47,38 @@ public class MasterDataGridFieldRendererClassCodeGeneratorTest {
 		@Test
 		void happyRun() {
 			// Prepare
-			String expected = getExpected();
+			String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import ${ModelClassPackageName}.GuiTable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * An implementation of the MasterDataGridFieldRenderer interface for GuiTable.toLowerCase()s.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"public class GuiTableMasterDataGridFieldRenderer implements MasterDataGridFieldRenderer<GuiTable> {\n"
+					+ //
+					"\n" + //
+					"	@Override\n" + //
+					"	public Object getHeaderString(String fieldName, GuiTable model) {\n" + //
+					"		if (GuiTable.REF.equals(fieldName)) {\n" + //
+					"			return model.getRef() != null ? model.getRef().getName() : \"-\";\n" + //
+					"		}\n" + //
+					"		return null;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public boolean hasRenderingFor(String fieldName) {\n" + //
+					"		if (GuiTable.REF.equals(fieldName)) {\n" + //
+					"			return true;\n" + //
+					"		}\n" + //
+					"		return false;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			// Run
 			String returned =
