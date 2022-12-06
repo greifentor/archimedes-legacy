@@ -297,6 +297,19 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		return table != null ? table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS) : false;
 	}
 
+	protected boolean isSubclass(TableModel superTable, TableModel subTable) {
+		return (subTable != null) && (superTable != null)
+				? subTable.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)
+						&& isPrimaryKeyReferencingTo(superTable, subTable)
+				: false;
+	}
+
+	protected boolean isPrimaryKeyReferencingTo(TableModel superTable, TableModel subTable) {
+		return (subTable != null) && (superTable != null) && (subTable.getPrimaryKeyColumns().length > 0)
+				? subTable.getPrimaryKeyColumns()[0].getReferencedTable() == superTable
+				: false;
+	}
+
 	protected String getSuperclassName(TableModel table, Function<TableModel, String> classNameProvider) {
 		TableModel referencedTable = getSuperclassTable(table);
 		if (referencedTable != null) {

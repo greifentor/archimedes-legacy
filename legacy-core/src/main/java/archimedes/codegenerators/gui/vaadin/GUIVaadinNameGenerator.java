@@ -202,6 +202,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return createPackageName(model, null, "gui.vaadin.component", ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME);
 	}
 
+	public String getMasterDataGridFieldRendererClassName(TableModel table) {
+		return table != null ? getClassName(table) + "MasterDataGridFieldRenderer" : null;
+	}
+
 	public String getMasterDataGUIConfigurationClassName(DataModel model) {
 		return model == null
 				? null
@@ -222,10 +226,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public String getMasterDataViewClassName(DataModel model) {
 		return model == null
 				? null
-				: getNameOrAlternativeFromOption(
-						model,
-						"MasterDataView",
-						ALTERNATE_MASTER_DATA_VIEW_CLASS_NAME);
+				: getNameOrAlternativeFromOption(model, "MasterDataView", ALTERNATE_MASTER_DATA_VIEW_CLASS_NAME);
 	}
 
 	public String getMasterDataViewPackageName(DataModel model) {
@@ -253,10 +254,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	private String getPageViewClassNameSuffix(TableModel table) {
-		return getNameOrAlternativeFromOption(
-				table.getDataModel(),
-				"PageView",
-				ALTERNATE_PAGE_VIEW_CLASS_NAME_SUFFIX);
+		return getNameOrAlternativeFromOption(table.getDataModel(), "PageView", ALTERNATE_PAGE_VIEW_CLASS_NAME_SUFFIX);
 	}
 
 	public String getPageViewPackageName(DataModel model, TableModel table) {

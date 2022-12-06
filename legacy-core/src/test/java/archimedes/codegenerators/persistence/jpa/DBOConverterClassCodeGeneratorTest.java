@@ -805,4 +805,76 @@ public class DBOConverterClassCodeGeneratorTest {
 
 	}
 
+	@Nested
+	class TestsOfMethod_generate_String_TableModel_TwoReferencesToTheSameTargetTable {
+
+		@Test
+		void happyRun() {
+			// Prepare
+			String expected = "package " + BASE_PACKAGE_NAME + ".persistence.converter;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.stream.Collectors;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
+					"\n" + //
+					"import base.pack.age.name.persistence.entity.BTableDBO;\n" + //
+					"import base.pack.age.name.core.model.BTable;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A DBO converter for b_tables.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"@RequiredArgsConstructor\n" + //
+					"public class BTableDBOConverter implements ToModelConverter<BTable, BTableDBO> {\n" + //
+					"\n" + //
+					"	private final BAnotherTableDBOConverter bAnotherTableDBOConverter;\n" + //
+					"\n" + //
+					"	public BTableDBO toDBO(BTable model) {\n" + //
+					"		if (model == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new BTableDBO()\n" + //
+					"				.setId(model.getId())\n" + //
+					"				.setRefB0(bAnotherTableDBOConverter.toDBO(model.getRefB0()))\n" + //
+					"				.setRefB1(bAnotherTableDBOConverter.toDBO(model.getRefB1()));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public BTable toModel(BTableDBO dbo) {\n" + //
+					"		if (dbo == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new BTable()\n" + //
+					"				.setId(dbo.getId())\n" + //
+					"				.setRefB0(bAnotherTableDBOConverter.toModel(dbo.getRefB0()))\n" + //
+					"				.setRefB1(bAnotherTableDBOConverter.toModel(dbo.getRefB1()));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public List<BTable> toModel(List<BTableDBO> dbos) {\n" + //
+					"		if (dbos == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
+			dataModel.addOption(new Option("REFERENCE_MODE", "OBJECT"));
+			TableModel table = dataModel.getTableByName("B_TABLE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 }

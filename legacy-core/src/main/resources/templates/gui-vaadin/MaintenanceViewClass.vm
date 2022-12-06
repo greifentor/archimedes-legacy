@@ -52,7 +52,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final ${ServiceInterfaceName} service;
-#foreach($SubclassReference in ${UniqueSubclassReferenceDataCollection}) 
+#foreach($SubclassReference in ${UniqueSubclassReferenceDataCollection})
 	private final ${SubclassReference.getServiceInterfaceName()} ${SubclassReference.getServiceAttributeName()};
 #end
 #foreach ($FieldDeclaration in $FieldDeclarations.toList())
