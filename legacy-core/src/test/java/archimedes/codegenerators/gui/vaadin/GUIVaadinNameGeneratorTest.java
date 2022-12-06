@@ -134,6 +134,41 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class ButtonFactoryConfigurationClassNameTests {
+
+		@Test
+		void getButtonFactoryConfigurationClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getButtonFactoryConfigurationClassName(null));
+		}
+
+		@Test
+		void getButtonFactoryConfigurationClassName_passAValidTable_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "ButtonFactoryConfiguration";
+			// Run
+			String returned = unitUnderTest.getButtonFactoryConfigurationClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getButtonFactoryConfigurationClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherButtonFactoryConfiguration";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX,
+									expected));
+			// Run
+			String returned = unitUnderTest.getButtonFactoryConfigurationClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
 	class DetailsLayoutClassNameTests {
 
 		@Test
@@ -1533,6 +1568,38 @@ public class GUIVaadinNameGeneratorTest {
 							new Option(GUIVaadinNameGenerator.ALTERNATE_SESSION_DATA_PACKAGE_NAME, "vaadin.mapper"));
 			// Run & Check
 			assertEquals("vaadin.mapper", unitUnderTest.getSessionDataPackageName(model));
+		}
+
+	}
+
+	@Nested
+	class SessionIdClassNameTests {
+
+		@Test
+		void getSessionIdClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getSessionIdClassName(null));
+		}
+
+		@Test
+		void getSessionIdClassName_passAValidModel_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "SessionId";
+			// Run
+			String returned = unitUnderTest.getSessionIdClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getSessionIdClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherSessionId";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_SESSION_ID_CLASS_NAME))
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_SESSION_ID_CLASS_NAME, expected));
+			// Run
+			String returned = unitUnderTest.getSessionIdClassName(model);
+			// Check
+			assertEquals(expected, returned);
 		}
 
 	}

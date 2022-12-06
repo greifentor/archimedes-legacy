@@ -16,6 +16,8 @@ public class LocalizationNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_RESOURCE_MANAGER_IMPL_PACKAGE_NAME =
 			"ALTERNATE_RESOURCE_MANAGER_IMPL_PACKAGE_NAME";
 
+	public static final LocalizationNameGenerator INSTANCE = new LocalizationNameGenerator();
+
 	public String getFileBasedResourceManagerConfigurationClassName() {
 		return "FileBasedResourceManagerConfiguration";
 	}
@@ -28,8 +30,8 @@ public class LocalizationNameGenerator extends NameGenerator {
 		return "LocalizationSO";
 	}
 
-	public String getLocalizationSOPackageName(DataModel model, TableModel table) {
-		return createPackageName(model, table, "core.model.localization", ALTERNATE_LOCALIZATION_SO_PACKAGE_NAME);
+	public String getLocalizationSOPackageName(DataModel model) {
+		return createPackageName(model, model, "core.model.localization", ALTERNATE_LOCALIZATION_SO_PACKAGE_NAME);
 	}
 
 	public String getResourceManagerImplPackageName(DataModel model, TableModel table) {

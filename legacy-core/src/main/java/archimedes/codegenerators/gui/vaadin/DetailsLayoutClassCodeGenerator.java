@@ -183,8 +183,10 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 								.setAttributeName(nameGenerator.getAttributeName(column))
 								.setAttributeNameCamelCase(nameGenerator.getCamelCase(column.getName()))
 								.setFieldTypeName(getFieldTypeName(column, table.getDataModel(), referenceMode))
+								.setFirstFieldType(getFirstFieldType(column))
+								.setFirstFieldNameCamelCase(getFirstFieldNameCamelCase(column))
 								.setIdColumnNameCamelCase(getIdColumnNameCamelCase(column))
-								.setNextFieldType(getNextFieldType(column, referenceMode))
+								.setNextFieldType(getNextFieldType(column))
 								.setNextFieldNameCamelCase(getNextFieldNameCamelCase(column))
 								.setPreferenceIdName(getPreferenceIdName(column))
 								.setType(getType(column)))
@@ -198,6 +200,24 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 					.getCamelCase(nameGenerator.getAttributeName(column.getTable().getColumns()[0].getName()));
 		}
 		return "NO_PK";
+	}
+
+	private ColumnModel getFirstField(ColumnModel column) {
+		return List
+				.of(column.getTable().getColumns())
+				.stream()
+				.filter(c -> c.isOptionSet(GUI_EDITOR_POS))
+				.sorted((c0, c1) -> getGuiEditorPos(c0) - getGuiEditorPos(c1))
+				.findFirst()
+				.orElse(null);
+	}
+
+	private String getFirstFieldType(ColumnModel column) {
+		return getType(getFirstField(column));
+	}
+
+	private String getFirstFieldNameCamelCase(ColumnModel column) {
+		return nameGenerator.getCamelCase(getFirstField(column).getName());
 	}
 
 	private ColumnModel getNextField(ColumnModel column) {
@@ -216,8 +236,8 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		return nextColumn;
 	}
 
-	private String getNextFieldType(ColumnModel column, ReferenceMode referenceMode) {
-		return getFieldTypeName(getNextField(column), column.getTable().getDataModel(), referenceMode);
+	private String getNextFieldType(ColumnModel column) {
+		return getType(getNextField(column));
 	}
 
 	private String getNextFieldNameCamelCase(ColumnModel column) {
@@ -226,7 +246,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	private int getGuiEditorPos(ColumnModel column) {
 		if (column.isOptionSet(GUI_EDITOR_POS)) {
-			return Integer.parseInt(column.getOptionByName(PREFERENCE).getParameter());
+			return Integer.parseInt(column.getOptionByName(GUI_EDITOR_POS).getParameter());
 		}
 		return -1;
 	}

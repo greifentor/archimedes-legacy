@@ -15,9 +15,13 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public static final GUIVaadinNameGenerator INSTANCE = new GUIVaadinNameGenerator();
 
+	public static final String ALTERNATE_APPLICATION_START_VIEW_PACKAGE_NAME =
+			"ALTERNATE_APPLICATION_START_VIEW_PACKAGE_NAME";
 	public static final String ALTERNATE_BUTTON_CLASS_NAME_SUFFIX = "ALTERNATE_BUTTON_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX =
 			"ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX =
+			"ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX =
 			"ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_GUI_VAADIN_MODULE_PREFIX = "ALTERNATE_GUI_VAADIN_MODULE_PREFIX";
@@ -55,6 +59,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME = "ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME";
 	public static final String ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX = "ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_SESSION_DATA_PACKAGE_NAME = "ALTERNATE_SESSION_DATA_PACKAGE_NAME";
+	public static final String ALTERNATE_SESSION_ID_CLASS_NAME = "ALTERNATE_SESSION_ID_CLASS_NAME";
 	public static final String ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX = "ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_USER_AUTHORIZATION_CHECKER_CLASS_NAME_SUFFIX =
 			"ALTERNATE_USER_AUTHORIZATION_CHECKER_CLASS_NAME_SUFFIX";
@@ -68,6 +73,14 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getAbstractMasterDataDetailLayoutClassName() {
 		return "AbstractMasterDataDetailLayout";
+	}
+
+	public String getApplicationStartViewClassName() {
+		return "ApplicationStartView";
+	}
+
+	public String getApplicationStartViewPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin", ALTERNATE_APPLICATION_START_VIEW_PACKAGE_NAME);
 	}
 
 	public String getVaadinComponentPackageName(DataModel model) {
@@ -84,6 +97,15 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return model == null
 				? null
 				: getNameOrAlternativeFromOption(model, "ButtonFactory", ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX);
+	}
+
+	public String getButtonFactoryConfigurationClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"ButtonFactoryConfiguration",
+						ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX);
 	}
 
 	public String getDetailsLayoutClassName(DataModel model, TableModel table) {
@@ -146,6 +168,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getImageClassName(DataModel model) {
 		return model == null ? null : getNameOrAlternativeFromOption(model, "Image", ALTERNATE_IMAGE_CLASS_NAME_SUFFIX);
+	}
+
+	public String getMainMenuViewClassName() {
+		return "MainMenuView";
 	}
 
 	public String getMaintenanceViewClassName(DataModel model, TableModel table) {
@@ -287,6 +313,12 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getSessionDataPackageName(DataModel model) {
 		return createPackageName(model, null, "gui", ALTERNATE_SESSION_DATA_PACKAGE_NAME);
+	}
+
+	public String getSessionIdClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(model, "SessionId", ALTERNATE_SESSION_ID_CLASS_NAME);
 	}
 
 	public String getTextFieldClassName(DataModel model) {

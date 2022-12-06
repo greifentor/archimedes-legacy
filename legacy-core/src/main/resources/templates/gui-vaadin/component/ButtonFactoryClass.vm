@@ -1,0 +1,100 @@
+package ${PackageName};
+
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import javax.inject.Named;
+
+import org.apache.logging.log4j.Logger;
+
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.router.QueryParameters;
+
+import ${ResourceManagerInterfacePackageName}.${ResourceManagerInterfaceName};
+import ${SessionDataPackageName}.${SessionDataClassName};
+import ${ApplicationStartViewPackageName}.${ApplicationStartViewClassName};
+import lombok.RequiredArgsConstructor;
+
+#if (!$CommentsOff )
+/**
+ * A button factory.
+ *
+ * ${Generated}
+ */
+#end
+@Named
+@RequiredArgsConstructor
+public class ${ClassName} {
+
+	private final ${ButtonFactoryConfigurationClassName} buttonFactoryConfiguration;
+
+	public ${ButtonClassName} createButton(String text) {
+		${ButtonClassName} button = new ${ButtonClassName}(text)
+				.setBackgroundColor("white")
+				.setBorder("solid 1px")
+				.setBorderColor(buttonFactoryConfiguration.getButtonEnabledBorderColor())
+				.setColor("black")
+				.setBackgroundImage(buttonFactoryConfiguration.getButtonEnabledBackgroundFileName());
+		return button;
+	}
+
+	public ${ButtonClassName} createAddButton(${ResourceManagerInterfaceName} resourceManager, Consumer<ClickEvent<?>> action,
+			${SessionDataClassName} sessionData) {
+		return createResourcedButton(resourceManager, "commons.button.add.text", action, sessionData);
+	}
+
+	public ${ButtonClassName} createBackButton(${ResourceManagerInterfaceName} resourceManager, Supplier<Optional<UI>> uiSupplier,
+			String urlBack, ${SessionDataClassName} sessionData) {
+		${ButtonClassName} buttonBack =
+				createButton(
+						resourceManager.getLocalizedString("commons.button.back.text", sessionData.getLocalization()));
+		buttonBack.addClickListener(event -> uiSupplier.get().ifPresent(ui -> ui.navigate(urlBack)));
+		return buttonBack;
+	}
+
+	public ${ButtonClassName} createBackButton(${ResourceManagerInterfaceName} resourceManager, Supplier<Optional<UI>> uiSupplier, String urlBack,
+			${SessionDataClassName} sessionData, QueryParameters parameters) {
+		${ButtonClassName} buttonBack =
+				createButton(
+						resourceManager.getLocalizedString("commons.button.back.text", sessionData.getLocalization()));
+		buttonBack.addClickListener(event -> uiSupplier.get().ifPresent(ui -> ui.navigate(urlBack, parameters)));
+		return buttonBack;
+	}
+
+	public ${ButtonClassName} createEditButton(${ResourceManagerInterfaceName} resourceManager, Consumer<ClickEvent<?>> action,
+			${SessionDataClassName} sessionData) {
+		return createResourcedButton(resourceManager, "commons.button.edit.text", action, sessionData);
+	}
+
+	public ${ButtonClassName} createLogoutButton(${ResourceManagerInterfaceName} resourceManager, Supplier<Optional<UI>> uiSupplier,
+			${SessionDataClassName} sessionData, Logger logger) {
+		${ButtonClassName} buttonLogout =
+				createButton(
+						resourceManager
+								.getLocalizedString("commons.button.logout.text", sessionData.getLocalization()));
+		buttonLogout.addClickListener(event -> uiSupplier.get().ifPresent(ui -> {
+			ui.navigate(ApplicationStartView.URL);
+		}));
+		return buttonLogout;
+	}
+
+	public ${ButtonClassName} createRemoveButton(${ResourceManagerInterfaceName} resourceManager, Consumer<ClickEvent<?>> action,
+			${SessionDataClassName} sessionData) {
+		return createResourcedButton(resourceManager, "commons.button.remove.text", action, sessionData);
+	}
+
+	private ${ButtonClassName} createResourcedButton(${ResourceManagerInterfaceName} resourceManager, String resourceId,
+			Consumer<ClickEvent<?>> action, ${SessionDataClassName} sessionData) {
+		${ButtonClassName} button = createButton(resourceManager.getLocalizedString(resourceId, sessionData.getLocalization()));
+		button.addClickListener(action::accept);
+		return button;
+	}
+
+	public ${ButtonClassName} createSaveButton(${ResourceManagerInterfaceName} resourceManager, Consumer<ClickEvent<?>> action,
+			${SessionDataClassName} sessionData) {
+		return createResourcedButton(resourceManager, "commons.button.save.text", action, sessionData);
+	}
+
+}

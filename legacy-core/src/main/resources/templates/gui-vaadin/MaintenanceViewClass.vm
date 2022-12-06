@@ -83,6 +83,9 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 				? Long.parseLong(parametersMap.get("id").get(0))
 				: -1;
 		model = service.findById(id).orElse(createNewModel());
+		if (parametersMap.containsKey("duplicate") && "true".equals(parametersMap.get("duplicate").get(0))) {
+			model.setId(-1);
+		}
 	}
 
 	private ${ModelClassName} createNewModel() {

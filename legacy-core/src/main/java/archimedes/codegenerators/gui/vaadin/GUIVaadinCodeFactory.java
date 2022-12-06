@@ -11,6 +11,8 @@ import archimedes.codegenerators.CodeGenerator;
 import archimedes.codegenerators.Filters;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.ButtonFactoryClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.ButtonFactoryConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.modelcheckers.ModelCheckerGuiEditorPosHasAValue;
@@ -36,7 +38,10 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 	protected List<CodeGenerator<?>> getCodeGenerators() {
 		return Arrays
 				.asList(
+						new ApplicationStartViewClassCodeGenerator(this),
 						new ButtonClassCodeGenerator(this),
+						new ButtonFactoryClassCodeGenerator(this),
+						new ButtonFactoryConfigurationClassCodeGenerator(this),
 						// new GOClassCodeGenerator(this),
 						// new GOConverterClassCodeGenerator(this),
 						new DetailsLayoutClassCodeGenerator(this),
@@ -47,6 +52,8 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new PageParametersGOClassCodeGenerator(this),
 						// new PageParametersGOConverterClassCodeGenerator(this),
 						// new PageGOConverterClassCodeGenerator(this),
+						new SessionDataClassCodeGenerator(this),
+						new SessionIdClassCodeGenerator(this),
 						new TextFieldClassCodeGenerator(this)
 				// new ToGOConverterInterfaceCodeGenerator(this)
 				);
@@ -103,6 +110,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
+					ApplicationStartViewClassCodeGenerator.GUI_BASE_URL,
 					AbstractClassCodeGenerator.MODULE_MODE,
 					GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
 					GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME };

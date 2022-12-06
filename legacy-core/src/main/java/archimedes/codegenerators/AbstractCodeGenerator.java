@@ -72,6 +72,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 		importDeclarations = new ImportDeclarations();
 		VelocityContext context = new VelocityContext();
 		context.put("BasePackageName", basePackageName);
+		context.put("Dollar", "$");
 		context.put("Generated", GENERATED_CODE);
 		context.put("PluralName", t != null ? t.getName().toLowerCase() + "s" : "");
 		extendVelocityContext(context, model, t);
