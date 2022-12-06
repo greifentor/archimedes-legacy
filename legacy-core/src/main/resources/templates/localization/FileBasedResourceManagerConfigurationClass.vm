@@ -17,6 +17,9 @@ import lombok.Getter;
 @Getter
 public class FileBasedResourceManagerConfiguration {
 
+	@Value("${Dollar}{localization.resource.enabled:true}")
+	private boolean enabled;
+
 	@Value("${Dollar}{localization.resource.file.name.prefix:${AppResourcePrefix}}")
 	private String fileNamePrefix;
 
