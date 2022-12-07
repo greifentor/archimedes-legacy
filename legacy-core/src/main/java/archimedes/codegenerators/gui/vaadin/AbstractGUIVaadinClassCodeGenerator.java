@@ -144,11 +144,14 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 	protected SubclassReferenceData createSubclassReferenceData(ColumnModel column) {
 		DataModel model = column.getTable().getDataModel();
 		TableModel referencedTable = column.getReferencedTable();
-		String serviceInterfaceName = serviceNameGenerator.getServiceInterfaceName(referencedTable);
+		TableModel referencedSuperTable = getSuperclassTable(column.getReferencedTable());
+		referencedSuperTable = referencedSuperTable != null ? referencedSuperTable : referencedTable;
+		String serviceInterfaceName = serviceNameGenerator.getServiceInterfaceName(referencedSuperTable);
 		return new SubclassReferenceData()
 				.setServiceAttributeName(nameGenerator.getAttributeName(serviceInterfaceName))
 				.setServiceInterfaceName(serviceInterfaceName)
-				.setServicePackageName(serviceNameGenerator.getServiceInterfacePackageName(model, referencedTable));
+				.setServicePackageName(
+						serviceNameGenerator.getServiceInterfacePackageName(model, referencedSuperTable));
 	}
 
 	protected List<SubclassReferenceData> getUniqueSubclassReferenceData(TableModel table) {

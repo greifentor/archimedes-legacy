@@ -1,6 +1,7 @@
 package archimedes.codegenerators.gui.vaadin;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
@@ -20,6 +21,8 @@ import archimedes.model.TableModel;
  * @author ollie (07.04.2022)
  */
 public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
+
+	public static final String GRID_FIELD = "GRID_FIELD";
 
 	private static final LocalizationNameGenerator localizationNameGenerator = new LocalizationNameGenerator();
 	private static final ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
@@ -92,10 +95,14 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 	}
 
 	private List<GridData> getGridData(TableModel table) {
+		Function<ColumnModel, Boolean> isInGrid =
+				hasGridFieldColumn(table)
+						? column -> column.isOptionSet(GRID_FIELD)
+						: column -> column.isOptionSet(GUI_EDITOR_POS);
 		return List
 				.of(table.getColumns())
 				.stream()
-				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
+				.filter(column -> isInGrid.apply(column))
 				.map(
 						column -> new GridData()
 								.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
@@ -104,6 +111,10 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 								.setSimpleBoolean(isSimpleBoolean(column)))
 				.sorted((gd0, gd1) -> gd0.getPosition() - gd1.getPosition())
 				.collect(Collectors.toList());
+	}
+
+	private boolean hasGridFieldColumn(TableModel table) {
+		return table.getColumnsWithOption(GRID_FIELD).length > 0;
 	}
 
 	private int getPosition(ColumnModel column) {

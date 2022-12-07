@@ -16,12 +16,12 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class ButtonClassCodeGeneratorTest {
+public class ButtonFactoryConfigurationClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
-	private ButtonClassCodeGenerator unitUnderTest;
+	private ButtonFactoryConfigurationClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -44,51 +44,38 @@ public class ButtonClassCodeGeneratorTest {
 
 		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
 			String s =
-					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" //
-							+ "\n" //
-							+ "import lombok.Generated;\n" //
-							+ "\n";
+					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" + //
+							"\n" + //
+							"import org.springframework.beans.factory.annotation.Value;\n" + //
+							"import org.springframework.context.annotation.Configuration;\n" + //
+							"\n" + //
+							"import lombok.Getter;\n" + //
+							"\n";
 			if (!suppressComment) {
 				s += "/**\n" + //
-						" * An extended button for easy configuration.\n" + //
+						" * A configuration for the button factory.\n" + //
 						" *\n" + //
 						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 						" */\n";
 			}
 			s +=
-					"@Generated\n" //
-							+ "public class Button extends com.vaadin.flow.component.button.Button {\n" //
-							+ "\n" //
-							+ "	public Button(String text) {\n" //
-							+ "		super(text);\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "	private Button setStyle(String name, String value) {\n" //
-							+ "		getStyle().set(name, value);\n" //
-							+ "		return this;\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "	public Button setBackgroundColor(String backgroundColor) {\n" //
-							+ "		return setStyle(\"background-color\", backgroundColor);\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "	public Button setBackgroundImage(String imageFileName) {\n" //
-							+ "		return setStyle(\"background-image\", \"url('\" + imageFileName + \"')\");\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "	public Button setBorder(String border) {\n" //
-							+ "		return setStyle(\"border\", border);\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "	public Button setBorderColor(String borderColor) {\n" //
-							+ "		return setStyle(\"border-color\", borderColor);\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "	public Button setColor(String color) {\n" //
-							+ "		return setStyle(\"color\", color);\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "}";
+					"@Configuration\n" + //
+					"@Getter\n" + //
+							"public class ButtonFactoryConfiguration {\n" + //
+					"\n" + //
+					"	@Value(\"${gui.button.disabled-image-file-name:button-background-disabled.png}\")\n" + //
+					"	private String buttonDisabledBackgroundFileName;\n" + //
+					"\n" + //
+					"	@Value(\"${gui.button.disabled-border-color:gray}\")\n" + //
+					"	private String buttonDisabledBorderColor;\n" + //
+					"\n" + //
+					"	@Value(\"${gui.button.enabled-image-file-name:button-background-enabled.png}\")\n" + //
+					"	private String buttonEnabledBackgroundFileName;\n" + //
+					"\n" + //
+					"	@Value(\"${gui.button.enabled-border-color:blue}\")\n" + //
+					"	private String buttonEnabledBorderColor;\n" + //
+					"\n" + //
+					"}";
 			return s;
 		}
 

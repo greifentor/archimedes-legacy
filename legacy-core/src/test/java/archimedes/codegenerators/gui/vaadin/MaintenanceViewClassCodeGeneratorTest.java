@@ -109,6 +109,10 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
 					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
+					+ //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private ATable createNewModel() {\n" + //
@@ -282,6 +286,10 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
 					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
+					+ //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private ATable createNewModel() {\n" + //
@@ -459,6 +467,10 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
 					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
+					+ //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private ATable createNewModel() {\n" + //
@@ -690,6 +702,10 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
 					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
+					+ //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private DifferentSubclassReferences createNewModel() {\n" + //
@@ -860,6 +876,10 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
 					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
+					+ //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private BTable createNewModel() {\n" + //
@@ -953,6 +973,199 @@ public class MaintenanceViewClassCodeGeneratorTest {
 			DataModel dataModel = readDataModel("Model-Inheritance.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("B_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void subClassReferenced() {
+			// Prepare
+			String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+					"\n" + //
+					"import org.apache.logging.log4j.LogManager;\n" + //
+					"import org.apache.logging.log4j.Logger;\n" + //
+					"import org.springframework.beans.factory.annotation.Autowired;\n" + //
+					"\n" + //
+					"import com.vaadin.flow.component.AttachEvent;\n" + //
+					"import com.vaadin.flow.component.DetachEvent;\n" + //
+					"import com.vaadin.flow.component.dependency.CssImport;\n" + //
+					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
+					"import com.vaadin.flow.router.BeforeEvent;\n" + //
+					"import com.vaadin.flow.router.Route;\n" + //
+					"\n" + //
+					"import base.pack.age.name.core.model.CTable;\n" + //
+					"import base.pack.age.name.core.model.CTableSub0;\n" + //
+					"import base.pack.age.name.core.model.CTableSub1;\n" + //
+					"import base.pack.age.name.core.service.CAnotherTableService;\n" + //
+					"import base.pack.age.name.core.service.CTableService;\n" + //
+					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
+					"import base.pack.age.name.gui.SessionData;\n" + //
+					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
+					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A dialog to edit CTable details.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Route(CTableMaintenanceView.URL)\n" + //
+					"@CssImport(\"./styles/shared-styles.css\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-text-field-styles.css\", themeFor = \"vaadin-text-field\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-text-area-styles.css\", themeFor = \"vaadin-text-area\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-combo-box-styles.css\", themeFor = \"vaadin-combo-box\")\n" + //
+					"@CssImport(value = \"./styles/vaadin-checkbox-styles.css\", themeFor = \"vaadin-checkbox\")\n" + //
+					"@RequiredArgsConstructor\n" + //
+					"public class CTableMaintenanceView extends AbstractMasterDataBaseLayout implements CTableDetailsLayout.Observer {\n" + //
+					"\n" + //
+					"	public static final String URL = \"test-project/masterdata/atabellen/details\";\n" + //
+					"\n" + //
+					"	private static final Logger logger = LogManager.getLogger(CTableMaintenanceView.class);\n" + //
+					"\n" + //
+					"	@Autowired(required = false)\n" + //
+					"	private MaintenanceViewRenderer<CTable> maintenanceViewRenderer;\n" + //
+					"	@Autowired(required = false)\n" + //
+					"	private DetailsLayoutComboBoxItemLabelGenerator<CTable> comboBoxItemLabelGenerator;\n" + //
+					"\n" + //
+					"	private final ButtonFactory buttonFactory;\n" + //
+					"	private final ResourceManager resourceManager;\n" + //
+					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
+					"	private final CTableService service;\n" + //
+					"	private final CAnotherTableService cAnotherTableService;\n" + //
+					"	private final SessionData session;\n" + //
+					"\n" + //
+					"	private CTable model;\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	protected ButtonFactory getButtonFactory() {\n" + //
+					"		return buttonFactory;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	protected ResourceManager getResourceManager() {\n" + //
+					"		return resourceManager;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	protected SessionData getSessionData() {\n" + //
+					"		return session;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void doSetParameter(BeforeEvent event) {\n" + //
+					"		long id = parametersMap.containsKey(\"id\") && (parametersMap.get(\"id\").size() > 0)\n" + //
+					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
+					"				: -1;\n" + //
+					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n" + //
+					"			model.setId(-1);\n" + //
+					"		}\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private CTable createNewModel() {\n" + //
+					"		String modelClassName = parametersMap.containsKey(\"modelClass\") && (parametersMap.get(\"modelClass\").size() > 0)\n" + //
+					"				? parametersMap.get(\"modelClass\").get(0)\n" + //
+					"				: \"CTable\";\n" + //
+					"		if (modelClassName.equals(\"CTableSub0\")) {\n" + //
+					"			return new CTableSub0();\n" + //
+					"		}\n" + //
+					"		if (modelClassName.equals(\"CTableSub1\")) {\n" + //
+					"			return new CTableSub1();\n" + //
+					"		}\n" + //
+					"		return new CTable();\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
+					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);\n" + //
+					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n" + //
+					"		getStyle().set(\"background-size\", \"cover\");\n" + //
+					"		setMargin(false);\n" + //
+					"		setWidthFull();\n" + //
+					"		add(\n" + //
+					"				new HeaderLayout(\n" + //
+					"						buttonFactory\n" + //
+					"										.createBackButton(\n" + //
+					"												resourceManager,\n" + //
+					"												this::getUI,\n" + //
+					"												CTablePageView.URL,\n" + //
+					"												session),\n" + //
+					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n" + //
+					"								resourceManager.getLocalizedString(\"CTableMaintenanceView.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n" + //
+					"								HeaderLayoutMode.PLAIN),\n" + //
+					"				getDetailsLayout(model));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private String getHeaderSuffix(CTable model) {\n" + //
+					"		return maintenanceViewRenderer != null\n" + //
+					"				? maintenanceViewRenderer.getHeaderSuffix(model)\n" + //
+					"				: \"\" + model.getRef();\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private AbstractMasterDataBaseLayout getDetailsLayout(CTable model) {\n" + //
+					"		if (model instanceof CTableSub0) {\n" + //
+					"			return new CTableSub0DetailsLayout(\n" + //
+					"					buttonFactory,\n" + //
+					"					(CTableSub0) model,\n" + //
+					"					service,\n" + //
+					"					cAnotherTableService,\n" + //
+					"					resourceManager,\n" + //
+					"					session,\n" + //
+					"					this,\n" + //
+					"					comboBoxItemLabelGenerator);\n" + //
+					"		}\n" + //
+					"		if (model instanceof CTableSub1) {\n" + //
+					"			return new CTableSub1DetailsLayout(\n" + //
+					"					buttonFactory,\n" + //
+					"					(CTableSub1) model,\n" + //
+					"					service,\n" + //
+					"					cAnotherTableService,\n" + //
+					"					resourceManager,\n" + //
+					"					session,\n" + //
+					"					this,\n" + //
+					"					comboBoxItemLabelGenerator);\n" + //
+					"		}\n" + //
+					"		return new CTableDetailsLayout(buttonFactory, model, service, cAnotherTableService, resourceManager, session, this, comboBoxItemLabelGenerator);\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	protected void onAttach(AttachEvent attachEvent) {\n" + //
+					"		logger.info(\"onAttach\");\n" + //
+					"		super.onAttach(attachEvent);\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	protected void onDetach(DetachEvent detachEvent) {\n" + //
+					"		logger.info(\"onDetach\");\n" + //
+					"		super.onDetach(detachEvent);\n" + //
+					"		getElement().removeFromTree();\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void save(Object model) {\n" + //
+					"		getUI().ifPresent(ui -> ui.navigate(CTablePageView.URL));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void save() {\n" + //
+					"		save(model);\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void remove() {\n" + //
+					"		service.delete(model);\n" + //
+					"		getUI().ifPresent(ui -> ui.navigate(CTablePageView.URL));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("C_TABLE"));
 			// Check
 			assertEquals(expected, returned);
 		}

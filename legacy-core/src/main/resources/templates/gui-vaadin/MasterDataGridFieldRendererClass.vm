@@ -1,0 +1,37 @@
+package ${PackageName};
+
+import javax.inject.Named;
+
+import ${ModelClassPackageName}.${ModelClassName};
+
+#if (!$CommentsOff)
+/**
+ * An implementation of the MasterDataGridFieldRenderer interface for ${ModelClassName}.toLowerCase()s.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public class ${ClassName} implements MasterDataGridFieldRenderer<${ModelClassName}> {
+
+	@Override
+	public Object getHeaderString(String fieldName, ${ModelClassName} model) {
+		#foreach($Column in $ReferencedColumnData)
+		if (${ModelClassName}.${Column.getFieldNameCamelCase().toUpperCase()}.equals(fieldName)) {
+			return model.get${Column.getFieldNameCamelCase()}() != null ? model.get${Column.getFieldNameCamelCase()}().get${Column.getReferencedModelNameFieldName()}() : "-";
+		}
+		#end
+		return null;
+	}
+
+	@Override
+	public boolean hasRenderingFor(String fieldName) {
+		#foreach($Column in $ReferencedColumnData)
+		if (${ModelClassName}.${Column.getFieldNameCamelCase().toUpperCase()}.equals(fieldName)) {
+			return true;
+		}
+		#end
+		return false;
+	}
+
+}

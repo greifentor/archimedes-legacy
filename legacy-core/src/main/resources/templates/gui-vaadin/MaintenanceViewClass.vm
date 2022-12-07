@@ -52,7 +52,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final ${ServiceInterfaceName} service;
-#foreach($SubclassReference in ${UniqueSubclassReferenceDataCollection}) 
+#foreach($SubclassReference in ${UniqueSubclassReferenceDataCollection})
 	private final ${SubclassReference.getServiceInterfaceName()} ${SubclassReference.getServiceAttributeName()};
 #end
 #foreach ($FieldDeclaration in $FieldDeclarations.toList())
@@ -83,6 +83,9 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 				? Long.parseLong(parametersMap.get("id").get(0))
 				: -1;
 		model = service.findById(id).orElse(createNewModel());
+		if (parametersMap.containsKey("duplicate") && "true".equals(parametersMap.get("duplicate").get(0))) {
+			model.setId(-1);
+		}
 	}
 
 	private ${ModelClassName} createNewModel() {

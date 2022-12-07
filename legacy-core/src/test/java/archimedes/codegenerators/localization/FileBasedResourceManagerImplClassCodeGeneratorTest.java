@@ -82,6 +82,10 @@ public class FileBasedResourceManagerImplClassCodeGeneratorTest {
 						+ "\n" //
 						+ "	@PostConstruct\n" //
 						+ "	private void postConstruct() {\n" //
+						+ "		if (!configuration.isEnabled()) {\n" //
+						+ "			logger.warn(\"resource manager disabled!\");\n" //
+						+ "			return;\n" //
+						+ "		}\n" //
 						+ "		logger.info(\"reading resources ...\");\n" //
 						+ "		for (LocalizationSO localization : LocalizationSO.values()) {\n" //
 						+ "			String fileName = configuration.getResourceFileName(localization).isEmpty()\n" //
