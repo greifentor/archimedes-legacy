@@ -40,10 +40,6 @@ public class MasterDataGridFieldRendererClassCodeGeneratorTest {
 	@Nested
 	class TableWithObjectReferences {
 
-		private String getExpected() {
-			return "";
-		}
-
 		@Test
 		void happyRun() {
 			// Prepare
@@ -51,14 +47,17 @@ public class MasterDataGridFieldRendererClassCodeGeneratorTest {
 					"\n" + //
 					"import javax.inject.Named;\n" + //
 					"\n" + //
-					"import ${ModelClassPackageName}.GuiTable;\n" + //
+					"import base.pack.age.name.core.model.GuiTable;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
 					"\n" + //
 					"/**\n" + //
-					" * An implementation of the MasterDataGridFieldRenderer interface for GuiTable.toLowerCase()s.\n" + //
+					" * An implementation of the MasterDataGridFieldRenderer interface for gui tables.\n" + //
 					" *\n" + //
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
 					"@Generated\n" + //
+					"@Named\n" + //
 					"public class GuiTableMasterDataGridFieldRenderer implements MasterDataGridFieldRenderer<GuiTable> {\n"
 					+ //
 					"\n" + //

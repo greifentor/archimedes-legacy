@@ -26,7 +26,11 @@ public class MasterDataGridFieldRendererClassCodeGenerator extends AbstractGUIVa
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
-		context.put("ModelPackageName", serviceNameGenerator.getModelPackageName(model, table));
+		context
+				.put(
+						"ModelDescription",
+						serviceNameGenerator.getDescriptionName(serviceNameGenerator.getModelClassName(table)));
+		context.put("ModelClassPackageName", serviceNameGenerator.getModelPackageName(model, table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ReferencedColumnData", getGUIReferenceData(table));
 	}

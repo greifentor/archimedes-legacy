@@ -4,14 +4,17 @@ import javax.inject.Named;
 
 import ${ModelClassPackageName}.${ModelClassName};
 
+import lombok.Generated;
+
 #if (!$CommentsOff)
 /**
- * An implementation of the MasterDataGridFieldRenderer interface for ${ModelClassName}.toLowerCase()s.
+ * An implementation of the MasterDataGridFieldRenderer interface for ${ModelDescription}s.
  *
  * ${Generated}
  */
 #end
 @Generated
+@Named
 public class ${ClassName} implements MasterDataGridFieldRenderer<${ModelClassName}> {
 
 	@Override
