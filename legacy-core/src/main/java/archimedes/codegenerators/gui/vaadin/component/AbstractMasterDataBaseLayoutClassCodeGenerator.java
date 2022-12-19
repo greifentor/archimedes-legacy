@@ -42,6 +42,7 @@ public class AbstractMasterDataBaseLayoutClassCodeGenerator extends AbstractMode
 						ServiceNameGenerator.INSTANCE.getResourceManagerInterfacePackageName(model));
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
+		context.put("TextFieldFactoryClassName", nameGenerator.getTextFieldFactoryClassName(model));
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
 	}

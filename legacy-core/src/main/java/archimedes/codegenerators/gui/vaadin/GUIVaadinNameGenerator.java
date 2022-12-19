@@ -64,6 +64,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_SESSION_DATA_PACKAGE_NAME = "ALTERNATE_SESSION_DATA_PACKAGE_NAME";
 	public static final String ALTERNATE_SESSION_ID_CLASS_NAME = "ALTERNATE_SESSION_ID_CLASS_NAME";
 	public static final String ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX = "ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_TEXT_FIELD_FACTORY_CLASS_NAME_SUFFIX =
+			"ALTERNATE_TEXT_FIELD_FACTORY_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_USER_AUTHORIZATION_CHECKER_CLASS_NAME_SUFFIX =
 			"ALTERNATE_USER_AUTHORIZATION_CHECKER_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_USER_AUTHORIZATION_CHECKER_PACKAGE_NAME =
@@ -341,6 +343,15 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return model == null
 				? null
 				: getNameOrAlternativeFromOption(model, "TextField", ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX);
+	}
+
+	public String getTextFieldFactoryClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"TextFieldFactory",
+						ALTERNATE_TEXT_FIELD_FACTORY_CLASS_NAME_SUFFIX);
 	}
 
 	public String getToGOConverterInterfaceName(TableModel table) {

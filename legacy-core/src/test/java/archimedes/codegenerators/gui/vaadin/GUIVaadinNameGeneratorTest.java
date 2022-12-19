@@ -1703,6 +1703,41 @@ public class GUIVaadinNameGeneratorTest {
 
 	}
 
+	@Nested
+	class TextFieldFactoryClassNameTests {
+
+		@Test
+		void getTextFieldFactoryClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getTextFieldFactoryClassName(null));
+		}
+
+		@Test
+		void getTextFieldFactoryClassName_passAValidModel_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TextFieldFactory";
+			// Run
+			String returned = unitUnderTest.getTextFieldFactoryClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getTextFieldFactoryClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherTextFieldFactory";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_TEXT_FIELD_FACTORY_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_TEXT_FIELD_FACTORY_CLASS_NAME_SUFFIX,
+									expected));
+			// Run
+			String returned = unitUnderTest.getTextFieldFactoryClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 	@DisplayName("tests for to GO converter interface names")
 	@Nested
 	class ToGOConverterInterfaceNameTests {
