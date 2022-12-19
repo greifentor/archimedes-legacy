@@ -19,6 +19,7 @@ import archimedes.codegenerators.gui.vaadin.component.HeaderLayoutClassCodeGener
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.modelcheckers.ModelCheckerGuiEditorPosHasAValue;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
@@ -64,7 +65,8 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new PageGOConverterClassCodeGenerator(this),
 						new SessionDataClassCodeGenerator(this),
 						new SessionIdClassCodeGenerator(this),
-						new TextFieldClassCodeGenerator(this)
+						new TextFieldClassCodeGenerator(this),
+						new TextFieldFactoryClassCodeGenerator(this)
 				// new ToGOConverterInterfaceCodeGenerator(this)
 				);
 	}
