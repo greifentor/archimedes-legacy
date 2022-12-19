@@ -169,6 +169,38 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class ButtonGridClassNameTests {
+
+		@Test
+		void getButtonGridClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getButtonGridClassName(null));
+		}
+
+		@Test
+		void getButtonGridClassName_passAValidTable_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "ButtonGrid";
+			// Run
+			String returned = unitUnderTest.getButtonGridClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getButtonGridClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherButtonGrid";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX))
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX, expected));
+			// Run
+			String returned = unitUnderTest.getButtonGridClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
 	class DetailsLayoutClassNameTests {
 
 		@Test
