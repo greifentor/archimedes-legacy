@@ -13,6 +13,7 @@ import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonFactoryConfigurationClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.ButtonGridClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.modelcheckers.ModelCheckerGuiEditorPosHasAValue;
@@ -42,6 +43,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new ButtonClassCodeGenerator(this),
 						new ButtonFactoryClassCodeGenerator(this),
 						new ButtonFactoryConfigurationClassCodeGenerator(this),
+						new ButtonGridClassCodeGenerator(this),
 						// new GOClassCodeGenerator(this),
 						// new GOConverterClassCodeGenerator(this),
 						new DetailsLayoutClassCodeGenerator(this),
@@ -95,6 +97,11 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 					AbstractClassCodeGenerator.TEXT };
 		case MODEL:
 			return new String[] {
+					GUIVaadinNameGenerator.ALTERNATE_BUTTON_CLASS_NAME_SUFFIX,
+					GUIVaadinNameGenerator.ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX,
+					GUIVaadinNameGenerator.ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX,
+					GUIVaadinNameGenerator.ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX,
+					GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX,
 					GUIVaadinNameGenerator.ALTERNATE_GUI_VAADIN_MODULE_PREFIX,
 					GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX,
 					GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_PACKAGE_NAME,
