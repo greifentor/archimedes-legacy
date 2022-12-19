@@ -15,10 +15,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.imports.ImplementationCheckerOLD.ImplementationCheckerObserver;
 
 @ExtendWith(MockitoExtension.class)
-public class ImplementationCheckerTest {
+public class ImplementationCheckerOLDTest {
 
 	@InjectMocks
-	private ImplementationChecker unitUnderTest;
+	private ImplementationCheckerOLD unitUnderTest;
 
 	@Nested
 	class TestsOfMethod_getClassesImplementingInterfaceWithName_String {
