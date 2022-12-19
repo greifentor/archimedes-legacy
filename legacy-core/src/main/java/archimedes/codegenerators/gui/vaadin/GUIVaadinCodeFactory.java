@@ -10,6 +10,7 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.codegenerators.Filters;
 import archimedes.codegenerators.NameGenerator;
+import archimedes.codegenerators.gui.vaadin.component.AbstractMasterDataBaseLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonFactoryConfigurationClassCodeGenerator;
@@ -40,7 +41,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 	protected List<CodeGenerator<?>> getCodeGenerators() {
 		return Arrays
 				.asList(
-						new AbstractMasterDataDetailLayoutClassCodeGenerator(this),
+						new AbstractMasterDataBaseLayoutClassCodeGenerator(this),
 						new ApplicationStartViewClassCodeGenerator(this),
 						new ButtonClassCodeGenerator(this),
 						new ButtonFactoryClassCodeGenerator(this),
