@@ -25,6 +25,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX = "ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX =
 			"ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_DETAILS_LAYOUT_COMBO_BOX_ITEM_LABEL_GENERATOR_INTERFACE_NAME =
+			"ALTERNATE_DETAILS_LAYOUT_COMBO_BOX_ITEM_LABEL_GENERATOR_INTERFACE_NAME";
 	public static final String ALTERNATE_GUI_VAADIN_MODULE_PREFIX = "ALTERNATE_GUI_VAADIN_MODULE_PREFIX";
 	public static final String ALTERNATE_TO_GO_METHOD_NAME = "ALTERNATE_TO_GO_METHOD_NAME";
 	public static final String ALTERNATE_TO_MODEL_METHOD_NAME = "ALTERNATE_TO_MODEL_METHOD_NAME";
@@ -38,6 +40,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX =
 			"ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME = "ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME";
+	public static final String ALTERNATE_MAINTENANCE_VIEW_RENDERER_INTERFACE_NAME =
+			"ALTERNATE_MAINTENANCE_VIEW_RENDERER_INTERFACE_NAME_SUFFIX";
 	public static final String ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX =
 			"ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME =
@@ -130,6 +134,15 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 				ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX);
 	}
 
+	public String getDetailsLayoutComboBoxItemLabelGeneratorInterfaceName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"DetailsLayoutComboBoxItemLabelGenerator",
+						ALTERNATE_DETAILS_LAYOUT_COMBO_BOX_ITEM_LABEL_GENERATOR_INTERFACE_NAME);
+	}
+
 	public String getGOClassName(TableModel table) {
 		return table != null ? getClassName(table) + getGOClassNameSuffix(table) : null;
 	}
@@ -200,6 +213,15 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return createPackageName(model, table, "gui.vaadin.masterdata", ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME);
 	}
 
+	public String getMaintenanceViewRendererInterfaceName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"MaintenanceViewRenderer",
+						ALTERNATE_MAINTENANCE_VIEW_RENDERER_INTERFACE_NAME);
+	}
+
 	public String getMasterDataButtonLayoutClassName(DataModel model) {
 		return model == null
 				? null
@@ -249,7 +271,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 				: getNameOrAlternativeFromOption(model, "MasterDataView", ALTERNATE_MASTER_DATA_VIEW_CLASS_NAME);
 	}
 
-	public String getMasterDataViewPackageName(DataModel model) {
+	public String getMasterDataPackageName(DataModel model) {
 		return createPackageName(model, null, "gui.vaadin.masterdata", ALTERNATE_MASTER_DATA_VIEW_PACKAGE_NAME);
 	}
 

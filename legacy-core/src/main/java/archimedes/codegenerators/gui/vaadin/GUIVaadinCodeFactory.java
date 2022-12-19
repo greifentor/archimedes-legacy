@@ -20,6 +20,9 @@ import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.masterdata.DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewRendererInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataGUIConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.modelcheckers.ModelCheckerGuiEditorPosHasAValue;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
@@ -52,12 +55,15 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new GOClassCodeGenerator(this),
 						// new GOConverterClassCodeGenerator(this),
 						new DetailsLayoutClassCodeGenerator(this),
+						new DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator(this),
 						new HeaderLayoutClassCodeGenerator(this),
 						new ImageClassCodeGenerator(this),
 						new MaintenanceViewClassCodeGenerator(this),
+						new MaintenanceViewRendererInterfaceCodeGenerator(this),
 						new MasterDataButtonLayoutClassCodeGenerator(this),
 						new MasterDataGridFieldRendererClassCodeGenerator(this),
 						new MasterDataGridFieldRendererInterfaceCodeGenerator(this),
+						new MasterDataGUIConfigurationClassCodeGenerator(this),
 						new PageViewClassCodeGenerator(this),
 						// new PageGOClassCodeGenerator(this),
 						// new PageParametersGOClassCodeGenerator(this),

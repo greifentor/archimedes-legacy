@@ -1,0 +1,17 @@
+package ${PackageName};
+
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * An interface for maintenance view renderer.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public interface ${ClassName}<T> {
+
+	String getHeaderSuffix(T t);
+
+}

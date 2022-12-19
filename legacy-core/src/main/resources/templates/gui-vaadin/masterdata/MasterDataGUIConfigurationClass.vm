@@ -1,0 +1,37 @@
+package ${PackageName};
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
+import lombok.Generated;
+import lombok.Getter;
+
+#if (!$CommentsOff )
+/**
+ * A configuration for the master data GUI.
+ *
+ * ${Generated}
+ */
+#end
+@Configuration
+@Generated
+@Getter
+#set( $DOLLAR = '$' )
+public class ${ClassName} {
+
+	@Value("$DOLLAR{gui.masterdata.background-image-file-name:master-data-background.png}")
+	private String backgroundFileName;
+
+	@Value("$DOLLAR{gui.masterdata.button.disabled-image-file-name:button-background-disabled.png}")
+	private String buttonDisabledBackgroundFileName;
+
+	@Value("$DOLLAR{gui.masterdata.button.disabled-border-color:gray}")
+	private String buttonDisabledBorderColor;
+
+	@Value("$DOLLAR{gui.masterdata.button.enabled-image-file-name:button-background-enabled.png}")
+	private String buttonEnabledBackgroundFileName;
+
+	@Value("$DOLLAR{gui.masterdata.button.enabled-border-color:blue}")
+	private String buttonEnabledBorderColor;
+
+}

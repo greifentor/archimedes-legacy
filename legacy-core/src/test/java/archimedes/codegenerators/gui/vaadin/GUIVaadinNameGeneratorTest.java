@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -35,6 +38,16 @@ public class GUIVaadinNameGeneratorTest {
 
 	@InjectMocks
 	private GUIVaadinNameGenerator unitUnderTest;
+
+	static void assertCorrectClassName(String expected, Supplier<String> check) {
+		assertEquals(expected, check.get());
+	}
+
+	static void assertCorrectAlternativeClassName(String expected, String alternativIdentfier, DataModel model,
+			Function<DataModel, String> check) {
+		when(model.getOptionByName(alternativIdentfier)).thenReturn(new Option(alternativIdentfier, expected));
+		assertEquals(expected, check.apply(model));
+	}
 
 	@Nested
 	class AbstractMasterDataDetailLayoutClassNameTests {
@@ -319,6 +332,32 @@ public class GUIVaadinNameGeneratorTest {
 			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class DetailsLayoutComboBoxItemLabelGeneratorInterfaceNameTests {
+
+		@Test
+		void getDetailsLayoutComboBoxItemLabelGeneratorInterfaceName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getDetailsLayoutComboBoxItemLabelGeneratorInterfaceName(null));
+		}
+
+		@Test
+		void getDetailsLayoutComboBoxItemLabelGeneratorInterfaceName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName(
+					"DetailsLayoutComboBoxItemLabelGenerator",
+					() -> unitUnderTest.getDetailsLayoutComboBoxItemLabelGeneratorInterfaceName(model));
+		}
+
+		@Test
+		void getDetailsLayoutComboBoxItemLabelGeneratorInterfaceName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherDetailsLayoutComboBoxItemLabelGenerator",
+					GUIVaadinNameGenerator.ALTERNATE_DETAILS_LAYOUT_COMBO_BOX_ITEM_LABEL_GENERATOR_INTERFACE_NAME,
+					model,
+					m -> unitUnderTest.getDetailsLayoutComboBoxItemLabelGeneratorInterfaceName(m));
 		}
 
 	}
@@ -875,6 +914,32 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class MaintenanceViewRendererInterfaceNameTests {
+
+		@Test
+		void getMaintenanceViewRendererInterfaceName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getMaintenanceViewRendererInterfaceName(null));
+		}
+
+		@Test
+		void getMaintenanceViewRendererInterfaceName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName(
+					"MaintenanceViewRenderer",
+					() -> unitUnderTest.getMaintenanceViewRendererInterfaceName(model));
+		}
+
+		@Test
+		void getMaintenanceViewRendererInterfaceName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherMaintenanceViewRenderer",
+					GUIVaadinNameGenerator.ALTERNATE_MAINTENANCE_VIEW_RENDERER_INTERFACE_NAME,
+					model,
+					m -> unitUnderTest.getMaintenanceViewRendererInterfaceName(m));
+		}
+
+	}
+
+	@Nested
 	class MasterDataButtonLayoutClassNameTests {
 
 		@Test
@@ -1030,27 +1095,18 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getMasterDataGUIConfigurationClassName_passAValidModel_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "MasterDataGUIConfiguration";
-			// Run
-			String returned = unitUnderTest.getMasterDataGUIConfigurationClassName(model);
-			// Check
-			assertEquals(expected, returned);
+			assertCorrectClassName(
+					"MasterDataGUIConfiguration",
+					() -> unitUnderTest.getMasterDataGUIConfigurationClassName(model));
 		}
 
 		@Test
 		void getMasterDataGUIConfigurationClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "AnotherMasterDataGUIConfiguration";
-			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_CLASS_NAME))
-					.thenReturn(
-							new Option(
-									GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_CLASS_NAME,
-									expected));
-			// Run
-			String returned = unitUnderTest.getMasterDataGUIConfigurationClassName(model);
-			// Check
-			assertEquals(expected, returned);
+			assertCorrectAlternativeClassName(
+					"AnotherMasterDataGUIConfiguration",
+					GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_CLASS_NAME,
+					model,
+					m -> unitUnderTest.getMasterDataGUIConfigurationClassName(m));
 		}
 
 	}
@@ -1122,12 +1178,12 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getMasterDataViewPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getMasterDataViewPackageName(null));
+			assertNull(unitUnderTest.getMasterDataPackageName(null));
 		}
 
 		@Test
 		void getMasterDataViewPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("gui.vaadin.masterdata", unitUnderTest.getMasterDataViewPackageName(model));
+			assertEquals("gui.vaadin.masterdata", unitUnderTest.getMasterDataPackageName(model));
 		}
 
 		@Test
@@ -1139,7 +1195,7 @@ public class GUIVaadinNameGeneratorTest {
 									GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_VIEW_PACKAGE_NAME,
 									"vaadin.mapper"));
 			// Run & Check
-			assertEquals("vaadin.mapper", unitUnderTest.getMasterDataViewPackageName(model));
+			assertEquals("vaadin.mapper", unitUnderTest.getMasterDataPackageName(model));
 		}
 
 	}
@@ -1681,24 +1737,16 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getTextFieldClassName_passAValidModel_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TextField";
-			// Run
-			String returned = unitUnderTest.getTextFieldClassName(model);
-			// Check
-			assertEquals(expected, returned);
+			assertCorrectClassName("TextField", () -> unitUnderTest.getTextFieldClassName(model));
 		}
 
 		@Test
 		void getTextFieldClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "AnotherTextField";
-			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX))
-					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX, expected));
-			// Run
-			String returned = unitUnderTest.getTextFieldClassName(model);
-			// Check
-			assertEquals(expected, returned);
+			assertCorrectAlternativeClassName(
+					"AnotherTextField",
+					GUIVaadinNameGenerator.ALTERNATE_TEXT_FIELD_CLASS_NAME_SUFFIX,
+					model,
+					m -> unitUnderTest.getTextFieldClassName(m));
 		}
 
 	}
@@ -1713,27 +1761,16 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Test
 		void getTextFieldFactoryClassName_passAValidModel_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TextFieldFactory";
-			// Run
-			String returned = unitUnderTest.getTextFieldFactoryClassName(model);
-			// Check
-			assertEquals(expected, returned);
+			assertCorrectClassName("TextFieldFactory", () -> unitUnderTest.getTextFieldFactoryClassName(model));
 		}
 
 		@Test
 		void getTextFieldFactoryClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "AnotherTextFieldFactory";
-			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_TEXT_FIELD_FACTORY_CLASS_NAME_SUFFIX))
-					.thenReturn(
-							new Option(
-									GUIVaadinNameGenerator.ALTERNATE_TEXT_FIELD_FACTORY_CLASS_NAME_SUFFIX,
-									expected));
-			// Run
-			String returned = unitUnderTest.getTextFieldFactoryClassName(model);
-			// Check
-			assertEquals(expected, returned);
+			assertCorrectAlternativeClassName(
+					"AnotherTextFieldFactory",
+					GUIVaadinNameGenerator.ALTERNATE_TEXT_FIELD_FACTORY_CLASS_NAME_SUFFIX,
+					model,
+					m -> unitUnderTest.getTextFieldFactoryClassName(m));
 		}
 
 	}
