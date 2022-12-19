@@ -66,8 +66,9 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new SessionDataClassCodeGenerator(this),
 						new SessionIdClassCodeGenerator(this),
 						new TextFieldClassCodeGenerator(this),
-						new TextFieldFactoryClassCodeGenerator(this)
-				// new ToGOConverterInterfaceCodeGenerator(this)
+						new TextFieldFactoryClassCodeGenerator(this),
+						// new ToGOConverterInterfaceCodeGenerator(this),
+						new UserAuthorizationCheckerClassCodeGenerator(this)
 				);
 	}
 

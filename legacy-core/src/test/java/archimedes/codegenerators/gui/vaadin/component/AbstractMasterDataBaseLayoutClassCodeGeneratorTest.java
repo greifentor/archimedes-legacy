@@ -101,7 +101,7 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "	protected abstract ResourceManager getResourceManager();\n" //
 							+ "\n" //
 							+ "	protected abstract SessionData getSessionData();\n" //
-							+ "2	\n" //
+							+ "\n" //
 							+ "	@Override\n" //
 							+ "	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" //
 							+ "		logger.info(\"setParameter\");\n" //

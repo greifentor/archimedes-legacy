@@ -54,7 +54,7 @@ public abstract class ${ClassName} extends VerticalLayout implements BeforeEnter
 	protected abstract ${ResourceManagerClassName} getResourceManager();
 
 	protected abstract ${SessionDataClassName} getSessionData();
-2	
+
 	@Override
 	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
 		logger.info("setParameter");
