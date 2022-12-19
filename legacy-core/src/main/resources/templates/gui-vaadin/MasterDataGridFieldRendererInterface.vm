@@ -1,5 +1,7 @@
 package ${PackageName};
 
+import lombok.Generated;
+
 #if (!$CommentsOff)
 /**
  * An interface for master data grid field renderers.
