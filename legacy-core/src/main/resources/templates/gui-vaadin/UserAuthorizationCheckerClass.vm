@@ -17,6 +17,7 @@ import lombok.Generated;
  */
 #end
 @Generated
+@UtilityClass
 public class ${ClassName} {
 
 	private static final Logger logger = LogManager.getLogger(UserAuthorizationChecker.class);

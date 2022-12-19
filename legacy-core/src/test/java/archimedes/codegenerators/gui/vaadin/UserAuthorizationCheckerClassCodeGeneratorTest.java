@@ -64,8 +64,9 @@ public class UserAuthorizationCheckerClassCodeGeneratorTest {
 			}
 			s +=
 					"@Generated\n" //
+							+ "@UtilityClass\n" //
 							+ "public class UserAuthorizationChecker {\n" //
-							+ "\n"//
+							+ "\n" //
 							+ "	private static final Logger logger = LogManager.getLogger(UserAuthorizationChecker.class);\n" //
 							+ "\n" //
 							+ "	public void forwardToLoginOnNoUserSetForSession(SessionData sessionData, BeforeEnterEvent beforeEnterEvent) {\n" //
