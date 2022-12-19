@@ -1,0 +1,17 @@
+package ${PackageName};
+
+#if (!$CommentsOff)
+/**
+ * An interface for master data grid field renderers.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public interface ${InterfaceName}<T> {
+
+	Object getHeaderString(String fieldName, T t);
+
+	boolean hasRenderingFor(String fieldName);
+
+}

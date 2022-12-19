@@ -986,6 +986,41 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class MasterDataGridFieldRendererInterfaceNameTests {
+
+		@Test
+		void getMasterDataGridFieldRendererInterfaceName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getMasterDataGridFieldRendererInterfaceName(null));
+		}
+
+		@Test
+		void getMasterDataGridFieldRendererInterfaceName_passAValidTable_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "MasterDataGridFieldRenderer";
+			// Run
+			String returned = unitUnderTest.getMasterDataGridFieldRendererInterfaceName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMasterDataGridFieldRendererInterfaceName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherMasterDataGridFieldRenderer";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_GRID_FIELD_RENDERER_INTERFACE_NAME))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_GRID_FIELD_RENDERER_INTERFACE_NAME,
+									expected));
+			// Run
+			String returned = unitUnderTest.getMasterDataGridFieldRendererInterfaceName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
 	class MasterDataGUIConfigurationClassNameTests {
 
 		@Test

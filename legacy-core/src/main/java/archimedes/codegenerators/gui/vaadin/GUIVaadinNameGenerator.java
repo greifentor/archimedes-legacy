@@ -42,6 +42,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 			"ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME =
 			"ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME";
+	public static final String ALTERNATE_MASTER_DATA_GRID_FIELD_RENDERER_INTERFACE_NAME =
+			"ALTERNATE_MASTER_DATA_GRID_FIELD_RENDERER_INTERFACE_NAME";
 	public static final String ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_CLASS_NAME =
 			"ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_CLASS_NAME";
 	public static final String ALTERNATE_MASTER_DATA_GUI_CONFIGURATION_PACKAGE_NAME =
@@ -211,6 +213,15 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getMasterDataGridFieldRendererClassName(TableModel table) {
 		return table != null ? getClassName(table) + "MasterDataGridFieldRenderer" : null;
+	}
+
+	public String getMasterDataGridFieldRendererInterfaceName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"MasterDataGridFieldRenderer",
+						ALTERNATE_MASTER_DATA_GRID_FIELD_RENDERER_INTERFACE_NAME);
 	}
 
 	public String getMasterDataGUIConfigurationClassName(DataModel model) {

@@ -52,6 +52,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new ImageClassCodeGenerator(this),
 						new MaintenanceViewClassCodeGenerator(this),
 						new MasterDataGridFieldRendererClassCodeGenerator(this),
+						new MasterDataGridFieldRendererInterfaceCodeGenerator(this),
 						new PageViewClassCodeGenerator(this),
 						// new PageGOClassCodeGenerator(this),
 						// new PageParametersGOClassCodeGenerator(this),
