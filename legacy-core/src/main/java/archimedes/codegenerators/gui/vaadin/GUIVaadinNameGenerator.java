@@ -75,6 +75,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_USER_AUTHORIZATION_CHECKER_PACKAGE_NAME =
 			"ALTERNATE_USER_AUTHORIZATION_CHECKER_PACKAGE_NAME";
 	public static final String ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME = "ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME";
+	public static final String ALTERNATE_VAADIN_PACKAGE_NAME = "ALTERNATE_VAADIN_PACKAGE_NAME";
 
 	public String getAbstractMasterDataBaseLayoutClassName() {
 		return "AbstractMasterDataBaseLayout";
@@ -94,6 +95,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getVaadinComponentPackageName(DataModel model) {
 		return createPackageName(model, null, "gui.vaadin.component", ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME);
+	}
+
+	public String getVaadinPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin", ALTERNATE_VAADIN_PACKAGE_NAME);
 	}
 
 	public String getButtonClassName(DataModel model) {
