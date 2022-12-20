@@ -23,6 +23,7 @@ import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeG
 import archimedes.codegenerators.gui.vaadin.masterdata.DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewRendererInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataGUIConfigurationClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataViewClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.modelcheckers.ModelCheckerGuiEditorPosHasAValue;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
@@ -64,6 +65,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new MasterDataGridFieldRendererClassCodeGenerator(this),
 						new MasterDataGridFieldRendererInterfaceCodeGenerator(this),
 						new MasterDataGUIConfigurationClassCodeGenerator(this),
+						new MasterDataViewClassCodeGenerator(this),
 						new PageViewClassCodeGenerator(this),
 						// new PageGOClassCodeGenerator(this),
 						// new PageParametersGOClassCodeGenerator(this),
