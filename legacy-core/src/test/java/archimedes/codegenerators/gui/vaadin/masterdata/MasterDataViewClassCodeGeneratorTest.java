@@ -47,7 +47,7 @@ public class MasterDataViewClassCodeGeneratorTest {
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" //
 							+ "\n" //
 							+ "import org.apache.logging.log4j.LogManager;\n" //
-							+ "import org.apache.logging.log4j.LOG;\n" //
+							+ "import org.apache.logging.log4j.Logger;\n" //
 							+ "\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
 							+ "import com.vaadin.flow.router.BeforeEnterEvent;\n" //
@@ -86,7 +86,7 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	public static final String URL = \"${BaseURL}/masterdata/menu\";\n" //
 							+ "\n" //
-							+ "	private static final LOG LOG = LogManager.getLOG(MasterDataView.class);\n" //
+							+ "	private static final Logger LOG = LogManager.getLogger(MasterDataView.class);\n" //
 							+ "\n" //
 							+ "	private final ButtonFactory buttonFactory;\n" //
 							+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
@@ -163,16 +163,16 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "	}\n" //
 							+ "\n" //
 							+ "	private void switchToSourceTableWithEnumType() {\n" //
-							+ "		getUI().ifPresent(ui -> ui.navigate(switchToSourceTableWithEnumTypePageView.URL));\n" //
+							+ "		getUI().ifPresent(ui -> ui.navigate(TableWithEnumTypePageView.URL));\n" //
 							+ "	}\n" //
 							+ "	private void switchToSourceTableWithGridFields() {\n" //
-							+ "		getUI().ifPresent(ui -> ui.navigate(switchToSourceTableWithGridFieldsPageView.URL));\n" //
+							+ "		getUI().ifPresent(ui -> ui.navigate(TableWithGridFieldsPageView.URL));\n" //
 							+ "	}\n" //
 							+ "	private void switchToSourceTableWithNumberField() {\n" //
-							+ "		getUI().ifPresent(ui -> ui.navigate(switchToSourceTableWithNumberFieldPageView.URL));\n" //
+							+ "		getUI().ifPresent(ui -> ui.navigate(TableWithNumberFieldPageView.URL));\n" //
 							+ "	}\n" //
 							+ "	private void switchToSourceTableWithSpecials() {\n" //
-							+ "		getUI().ifPresent(ui -> ui.navigate(switchToSourceTableWithSpecialsPageView.URL));\n" //
+							+ "		getUI().ifPresent(ui -> ui.navigate(TableWithSpecialsPageView.URL));\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "}";

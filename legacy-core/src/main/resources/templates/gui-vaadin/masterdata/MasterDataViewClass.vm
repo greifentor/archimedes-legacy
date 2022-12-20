@@ -1,7 +1,7 @@
 package ${PackageName};
 
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.LOG;
+import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -39,7 +39,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 
 	public static final String URL = "${BaseURL}/masterdata/menu";
 
-	private static final LOG LOG = LogManager.getLOG(${ClassName}.class);
+	private static final Logger LOG = LogManager.getLogger(${ClassName}.class);
 
 	private final ${ButtonFactoryClassName} buttonFactory;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
@@ -91,7 +91,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 
 #foreach($MasterDataInfo in ${MasterDataInfos})
 	private void switchToSource${MasterDataInfo.getModelClassName()}() {
-		getUI().ifPresent(ui -> ui.navigate(switchToSource${MasterDataInfo.getPageViewName()}.URL));
+		getUI().ifPresent(ui -> ui.navigate(${MasterDataInfo.getPageViewName()}.URL));
 	}
 #end
 
