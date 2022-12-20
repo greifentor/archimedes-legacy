@@ -627,6 +627,57 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class GUIConfigurationClassNameTests {
+
+		@Test
+		void getGUIConfigurationClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getGUIConfigurationClassName(null));
+		}
+
+		@Test
+		void getGUIConfigurationClassName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName("GUIConfiguration", () -> unitUnderTest.getGUIConfigurationClassName(model));
+		}
+
+		@Test
+		void getGUIConfigurationClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherGUIConfiguration",
+					GUIVaadinNameGenerator.ALTERNATE_GUI_CONFIGURATION_CLASS_NAME,
+					model,
+					m -> unitUnderTest.getGUIConfigurationClassName(m));
+		}
+
+	}
+
+	@Nested
+	class GUIConfigurationPackageNameTests {
+
+		@Test
+		void getGUIConfigurationPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getGUIConfigurationPackageName(null));
+		}
+
+		@Test
+		void getGUIConfigurationPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin", unitUnderTest.getGUIConfigurationPackageName(model));
+		}
+
+		@Test
+		void getGUIConfigurationPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_GUI_CONFIGURATION_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_GUI_CONFIGURATION_PACKAGE_NAME,
+									"vaadin.blubs"));
+			// Run & Check
+			assertEquals("vaadin.blubs", unitUnderTest.getGUIConfigurationPackageName(model));
+		}
+
+	}
+
+	@Nested
 	class HeaderLayoutClassNameTests {
 
 		@Test

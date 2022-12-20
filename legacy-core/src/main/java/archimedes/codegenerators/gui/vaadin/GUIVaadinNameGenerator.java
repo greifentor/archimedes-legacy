@@ -34,6 +34,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_GO_CONVERTER_PACKAGE_NAME = "ALTERNATE_GO_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_GO_CLASS_NAME_SUFFIX = "ALTERNATE_GO_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_GO_PACKAGE_NAME = "ALTERNATE_GO_PACKAGE_NAME";
+	public static final String ALTERNATE_GUI_CONFIGURATION_CLASS_NAME = "ALTERNATE_GUI_CONFIGURATION_CLASS_NAME";
+	public static final String ALTERNATE_GUI_CONFIGURATION_PACKAGE_NAME = "ALTERNATE_GUI_CONFIGURATION_PACKAGE_NAME";
 	public static final String ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX = "ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME = "ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME";
 	public static final String ALTERNATE_IMAGE_CLASS_NAME_SUFFIX = "ALTERNATE_IMAGE_CLASS_NAME_SUFFIX";
@@ -183,6 +185,16 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getGOPackageName(DataModel model, TableModel table) {
 		return createPackageName(model, table, "gui.vaadin.go", ALTERNATE_GO_PACKAGE_NAME);
+	}
+
+	public String getGUIConfigurationClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(model, "GUIConfiguration", ALTERNATE_GUI_CONFIGURATION_CLASS_NAME);
+	}
+
+	public String getGUIConfigurationPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin", ALTERNATE_GUI_CONFIGURATION_PACKAGE_NAME);
 	}
 
 	public String getHeaderLayoutClassName(DataModel model) {

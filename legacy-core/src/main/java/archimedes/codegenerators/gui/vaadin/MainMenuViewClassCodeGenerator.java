@@ -1,4 +1,4 @@
-package archimedes.codegenerators.gui.vaadin.masterdata;
+package archimedes.codegenerators.gui.vaadin;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,10 +6,6 @@ import java.util.stream.Collectors;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractCodeFactory;
-import archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator;
-import archimedes.codegenerators.gui.vaadin.AbstractVaadinModelCodeGenerator;
-import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
-import archimedes.codegenerators.gui.vaadin.MasterDataData;
 import archimedes.codegenerators.localization.LocalizationNameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
@@ -20,10 +16,10 @@ import archimedes.model.TableModel;
  *
  * @author ollie (19.12.2022)
  */
-public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGenerator {
+public class MainMenuViewClassCodeGenerator extends AbstractVaadinModelCodeGenerator {
 
-	public MasterDataViewClassCodeGenerator(AbstractCodeFactory codeFactory) {
-		super("masterdata/MasterDataViewClass.vm", codeFactory);
+	public MainMenuViewClassCodeGenerator(AbstractCodeFactory codeFactory) {
+		super("MainMenuViewClass.vm", codeFactory);
 	}
 
 	@Override
@@ -41,11 +37,8 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 		context.put("HeaderLayoutPackageName", nameGenerator.getHeaderLayoutPackageName(model));
 		context.put("MainMenuViewClassName", nameGenerator.getMainMenuViewClassName());
 		context.put("MainMenuViewPackageName", nameGenerator.getVaadinPackageName(model));
-		context.put("MasterDataGUIConfigurationClassName", nameGenerator.getMasterDataGUIConfigurationClassName(model));
-		context
-				.put(
-						"MasterDataGUIConfigurationPackageName",
-						nameGenerator.getMasterDataGUIConfigurationPackageName(model));
+		context.put("GUIConfigurationClassName", nameGenerator.getGUIConfigurationClassName(model));
+		context.put("GUIConfigurationPackageName", nameGenerator.getGUIConfigurationPackageName(model));
 		context.put("MasterDataInfos", getMasterDataInfos(model));
 		context.put("MasterDataViewClassName", nameGenerator.getMasterDataViewClassName(model));
 		context.put("MasterDataViewPackageName", nameGenerator.getMasterDataPackageName(model));
@@ -87,7 +80,7 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 
 	@Override
 	public String getClassName(DataModel model, DataModel sameModel) {
-		return nameGenerator.getMasterDataViewClassName(model);
+		return nameGenerator.getMainMenuViewClassName();
 	}
 
 	@Override
@@ -97,7 +90,7 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 
 	@Override
 	public String getPackageName(DataModel model, DataModel sameModel) {
-		return nameGenerator.getMasterDataPackageName(model);
+		return nameGenerator.getVaadinPackageName(model);
 	}
 
 	@Override

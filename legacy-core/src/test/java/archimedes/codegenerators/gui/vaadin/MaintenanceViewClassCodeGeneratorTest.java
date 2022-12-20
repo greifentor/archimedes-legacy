@@ -71,7 +71,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"public class ATableMaintenanceView extends AbstractMasterDataBaseLayout implements ATableDetailsLayout.Observer {\n"
 					+ //
 					"\n" + //
-					"	public static final String URL = \"carp-dnd/masterdata/atabellen/details\";\n" + //
+					"	public static final String URL = \"test-ws/masterdata/atabellen/details\";\n" + //
 					"\n" + //
 					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceView.class);\n" + //
 					"\n" + //

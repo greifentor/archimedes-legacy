@@ -84,7 +84,7 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "@RequiredArgsConstructor\n" //
 							+ "public class MasterDataView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n" //
 							+ "\n" //
-							+ "	public static final String URL = \"${BaseURL}/masterdata/menu\";\n" //
+							+ "	public static final String URL = \"test-ws/masterdata/menu\";\n" //
 							+ "\n" //
 							+ "	private static final Logger LOG = LogManager.getLogger(MasterDataView.class);\n" //
 							+ "\n" //

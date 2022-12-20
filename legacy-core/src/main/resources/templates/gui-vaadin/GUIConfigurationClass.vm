@@ -1,0 +1,25 @@
+package ${PackageName};
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
+import lombok.Generated;
+import lombok.Getter;
+
+#if (!$CommentsOff )
+/**
+ * A configuration for the GUI.
+ *
+ * ${Generated}
+ */
+#end
+@Configuration
+@Generated
+@Getter
+#set( $DOLLAR = '$' )
+public class ${ClassName} {
+
+	@Value("$DOLLAR{gui.masterdata.background-image-file-name:main-menu-background.png}")
+	private String mainMenuBackgroundFileName;
+
+}

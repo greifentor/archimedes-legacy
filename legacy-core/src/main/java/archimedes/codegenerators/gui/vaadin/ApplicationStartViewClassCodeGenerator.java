@@ -3,28 +3,17 @@ package archimedes.codegenerators.gui.vaadin;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractCodeFactory;
-import archimedes.codegenerators.AbstractModelCodeGenerator;
-import archimedes.codegenerators.OptionGetter;
-import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.OptionModel;
 
 /**
  * A class code generator for the session id classes.
  *
  * @author ollie (02.09.2022)
  */
-public class ApplicationStartViewClassCodeGenerator extends AbstractModelCodeGenerator<GUIVaadinNameGenerator> {
-
-	public static final String GUI_BASE_URL = "GUI_BASE_URL";
+public class ApplicationStartViewClassCodeGenerator extends AbstractVaadinModelCodeGenerator {
 
 	public ApplicationStartViewClassCodeGenerator(AbstractCodeFactory codeFactory) {
-		super(
-				"ApplicationStartViewClass.vm",
-				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
-				GUIVaadinNameGenerator.INSTANCE,
-				TypeGenerator.INSTANCE,
-				codeFactory);
+		super("ApplicationStartViewClass.vm", codeFactory);
 	}
 
 	@Override
@@ -33,13 +22,6 @@ public class ApplicationStartViewClassCodeGenerator extends AbstractModelCodeGen
 		context.put("ClassName", getClassName(model, null));
 		context.put("PackageName", getPackageName(model, null));
 		context.put("MainMenuViewClassName", nameGenerator.getMainMenuViewClassName());
-	}
-
-	private String getBaseURL(DataModel model) {
-		return OptionGetter
-				.getOptionByName(model, GUI_BASE_URL)
-				.map(OptionModel::getParameter)
-				.orElseGet(() -> model.getApplicationName().toLowerCase());
 	}
 
 	@Override

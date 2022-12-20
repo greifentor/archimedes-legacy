@@ -89,7 +89,7 @@ public class PageViewClassCodeGeneratorTest {
 						"public class ATablePageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 						+ //
 						"\n" + //
-						"	public static final String URL = \"carp-dnd/masterdata/atabellen\";\n" + //
+						"	public static final String URL = \"test-ws/masterdata/atabellen\";\n" + //
 						"\n" + //
 						"	private static final Logger logger = LogManager.getLogger(ATablePageView.class);\n" + //
 						"\n" + //
@@ -1195,7 +1195,7 @@ public class PageViewClassCodeGeneratorTest {
 					"public class TableWithSpecialsPageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 					+ //
 					"\n" + //
-					"	public static final String URL = \"carp-dnd/masterdata/atabellen\";\n" + //
+					"	public static final String URL = \"test-ws/masterdata/atabellen\";\n" + //
 					"\n" + //
 					"	private static final Logger logger = LogManager.getLogger(TableWithSpecialsPageView.class);\n" + //
 					"\n" + //
@@ -1445,7 +1445,7 @@ public class PageViewClassCodeGeneratorTest {
 					"public class TableWithGridFieldsPageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 					+ //
 					"\n" + //
-					"	public static final String URL = \"carp-dnd/masterdata/atabellen\";\n" + //
+					"	public static final String URL = \"test-ws/masterdata/atabellen\";\n" + //
 					"\n" + //
 					"	private static final Logger logger = LogManager.getLogger(TableWithGridFieldsPageView.class);\n"
 					+ //

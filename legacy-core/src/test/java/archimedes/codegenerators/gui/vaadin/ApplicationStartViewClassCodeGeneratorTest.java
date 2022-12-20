@@ -68,7 +68,7 @@ public class ApplicationStartViewClassCodeGeneratorTest {
 						"public class ApplicationStartView extends VerticalLayout implements BeforeEnterObserver {\n" + //
 						"\n" + //
 						"	public static final Logger LOG = LogManager.getLogger(ApplicationStartView.class);\n" + //
-						"	public static final String URL = \"carp-dnd\";\n" + //
+						"	public static final String URL = \"test-ws\";\n" + //
 						"\n" + //
 						"	@Override\n" + //
 						"	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
