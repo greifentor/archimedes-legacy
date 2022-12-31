@@ -48,6 +48,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 		return Arrays
 				.asList(
 						new AbstractMasterDataBaseLayoutClassCodeGenerator(this),
+						new ApplicationStarterClassCodeGenerator(this),
 						new ApplicationStartViewClassCodeGenerator(this),
 						new ButtonClassCodeGenerator(this),
 						new ButtonFactoryClassCodeGenerator(this),

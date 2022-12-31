@@ -3,6 +3,7 @@ package archimedes.codegenerators.gui.vaadin;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
 import archimedes.model.DataModel;
 
 /**
@@ -19,7 +20,13 @@ public class ApplicationStarterClassCodeGenerator extends AbstractVaadinModelCod
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel model0) {
 		context.put("ClassName", getClassName(model, null));
+		context.put("CommentsOff", isCommentsOff(model));
+		context.put("EntityPackageName", PersistenceJPANameGenerator.INSTANCE.getDBOPackageName(model, null));
 		context.put("PackageName", getPackageName(model, null));
+		context
+				.put(
+						"RepositoryPackageName",
+						PersistenceJPANameGenerator.INSTANCE.getJPARepositoryPackageName(model, null));
 	}
 
 	@Override

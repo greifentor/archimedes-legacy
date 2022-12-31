@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableJpaRepositories("${RepositoryPackageName}")
-@ComponentScan(${BasePackageName})
+@ComponentScan("${BasePackageName}")
 @EntityScan("${EntityPackageName}")
 public class ${ClassName} extends SpringBootServletInitializer {
 

@@ -65,7 +65,7 @@ public class ApplicationStarterClassCodeGeneratorTest {
 					"@SpringBootApplication\n" //
 							+ "@EnableAutoConfiguration\n" //
 							+ "@EnableJpaRepositories(\"base.pack.age.name.persistence.repository\")\n" //
-							+ "@ComponentScan(\"base.pack.age\")\n" //
+							+ "@ComponentScan(\"base.pack.age.name\")\n" //
 							+ "@EntityScan(\"base.pack.age.name.persistence.entity\")\n" //
 							+ "public class ApplicationStarter extends SpringBootServletInitializer {\n" //
 							+ "\n" //
