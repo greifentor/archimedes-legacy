@@ -48,13 +48,13 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 
 	@Override
 	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-		logger.debug("setParameter");
+		LOG.debug("setParameter");
 	}
 
 	@Override
 	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
 		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);
-		logger.info("created");
+		LOG.info("created");
 		setMargin(false);
 		setWidthFull();
 		getStyle().set("background-image", "url('" + guiConfiguration.getMainMenuBackgroundFileName() + "')");
@@ -68,16 +68,16 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 												session.getLocalization()));
 		buttonMasterData.addClickListener(event -> switchToMasterData());
 		buttonMasterData.setWidthFull();
-		${ButtonGirdClassName} buttonGridMasterData = new ButtonGrid(4, buttonMasterData);
+		${ButtonGridClassName} buttonGridMasterData = new ButtonGrid(4, buttonMasterData);
 		buttonGridMasterData.setMargin(false);
 		buttonGridMasterData.setWidthFull();
 		add(
 				new ${HeaderLayoutClassName}(
-						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
+						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),
 						resourceManager.getLocalizedString("commons.header.main-menu.label", session.getLocalization()),
 						HeaderLayoutMode.PLAIN),
 				buttonGridMasterData);
-		logger.info("main menu view opened for user '{}'.", session.getUserName());
+		LOG.info("main menu view opened for user '{}'.", session.getUserName());
 	}
 
 	private void switchToMasterData() {

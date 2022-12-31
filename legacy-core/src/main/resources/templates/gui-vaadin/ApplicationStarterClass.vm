@@ -1,0 +1,29 @@
+package ${PackageName};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+#if (!$CommentsOff)
+/**
+ * The starter class for the application.
+ *
+ * ${Generated}
+ */
+#end
+@SpringBootApplication
+@EnableAutoConfiguration
+@EnableJpaRepositories("${RepositoryPackageName}")
+@ComponentScan(${BasePackageName})
+@EntityScan("${EntityPackageName}")
+public class ${ClassName} extends SpringBootServletInitializer {
+
+	public static void main(String[] args) {
+		SpringApplication.run(${ClassName}.class, args);
+	}
+
+}

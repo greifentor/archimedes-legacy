@@ -87,6 +87,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return "AbstractMasterDataDetailLayout";
 	}
 
+	public String getApplicationStarterClassName() {
+		return "ApplicationStarter";
+	}
+
 	public String getApplicationStartViewClassName() {
 		return "ApplicationStartView";
 	}

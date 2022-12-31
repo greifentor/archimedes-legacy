@@ -94,13 +94,13 @@ public class MainMenuViewClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" //
-							+ "		logger.debug(\"setParameter\");\n" //
+							+ "		LOG.debug(\"setParameter\");\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" //
 							+ "		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n" //
-							+ "		logger.info(\"created\");\n" //
+							+ "		LOG.info(\"created\");\n" //
 							+ "		setMargin(false);\n" //
 							+ "		setWidthFull();\n" //
 							+ "		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getMainMenuBackgroundFileName() + \"')\");\n" //
@@ -114,16 +114,16 @@ public class MainMenuViewClassCodeGeneratorTest {
 							+ "												session.getLocalization()));\n" //
 							+ "		buttonMasterData.addClickListener(event -> switchToMasterData());\n" //
 							+ "		buttonMasterData.setWidthFull();\n" //
-							+ "		${ButtonGirdClassName} buttonGridMasterData = new ButtonGrid(4, buttonMasterData);\n" //
+							+ "		ButtonGrid buttonGridMasterData = new ButtonGrid(4, buttonMasterData);\n" //
 							+ "		buttonGridMasterData.setMargin(false);\n" //
 							+ "		buttonGridMasterData.setWidthFull();\n" //
 							+ "		add(\n" //
 							+ "				new HeaderLayout(\n" //
-							+ "						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n" //
+							+ "						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),\n" //
 							+ "						resourceManager.getLocalizedString(\"commons.header.main-menu.label\", session.getLocalization()),\n" //
 							+ "						HeaderLayoutMode.PLAIN),\n" //
 							+ "				buttonGridMasterData);\n" //
-							+ "		logger.info(\"main menu view opened for user '{}'.\", session.getUserName());\n" //
+							+ "		LOG.info(\"main menu view opened for user '{}'.\", session.getUserName());\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "	private void switchToMasterData() {\n" //
