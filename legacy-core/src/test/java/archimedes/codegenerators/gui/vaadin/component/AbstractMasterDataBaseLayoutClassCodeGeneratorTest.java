@@ -89,7 +89,7 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "		void remove();\n" //
 							+ "	}\n" //
 							+ "\n" //
-							+ "	private static final Logger logger = LogManager.getLogger(AbstractMasterDataBaseLayout.class);\n" //
+							+ "	private static final Logger LOG = LogManager.getLogger(AbstractMasterDataBaseLayout.class);\n" //
 							+ "\n" //
 							+ "	protected Button buttonRemove;\n" //
 							+ "	protected Button buttonSave;\n" //
@@ -104,7 +104,7 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" //
-							+ "		logger.info(\"setParameter\");\n" //
+							+ "		LOG.info(\"setParameter\");\n" //
 							+ "		Location location = event.getLocation();\n" //
 							+ "		QueryParameters queryParameters = location.getQueryParameters();\n" //
 							+ "		parametersMap = queryParameters.getParameters();\n" //
@@ -116,7 +116,7 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" //
-							+ "		logger.info(\"check for authorization\");\n" //
+							+ "		LOG.info(\"check for authorization\");\n" //
 							+ "		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);\n" //
 							+ "		createButtons();\n" //
 							+ "		doBeforeEnter(beforeEnterEvent);\n" //
@@ -201,7 +201,9 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "		integerField.setHasControls(true);\n" //
 							+ "		integerField.setValue(fieldContent);\n" //
 							+ "		integerField.setWidthFull();\n" //
-							+ "		integerField.setStep(step);\n" //
+							+ "		if (step != null) {\n" //
+							+ "			integerField.setStep(step);\n" //
+							+ "		}\n" //
 							+ "		return integerField;\n" //
 							+ "	}\n" //
 							+ "\n" //

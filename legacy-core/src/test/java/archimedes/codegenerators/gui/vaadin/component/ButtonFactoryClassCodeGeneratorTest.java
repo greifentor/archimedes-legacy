@@ -61,6 +61,7 @@ public class ButtonFactoryClassCodeGeneratorTest {
 							"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 							"import base.pack.age.name.gui.SessionData;\n" + //
 							"import base.pack.age.name.gui.vaadin.ApplicationStartView;\n" + //
+							"import lombok.Generated;\n" + //
 							"import lombok.RequiredArgsConstructor;\n" + //
 							"\n";
 			if (!suppressComment) {
@@ -70,7 +71,8 @@ public class ButtonFactoryClassCodeGeneratorTest {
 						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 						" */\n";
 			}
-			s += "@Named\n" + //
+			s += "@Generated\n" + //
+					"@Named\n" + //
 					"@RequiredArgsConstructor\n" + //
 					"public class ButtonFactory {\n" + //
 					"\n" + //
@@ -146,7 +148,7 @@ public class ButtonFactoryClassCodeGeneratorTest {
 					+ //
 					"	}\n" + //
 					"\n" + //
-					"	private Button createResourcedButton(ResourceManager resourceManager, String resourceId,\n"
+					"	public Button createResourcedButton(ResourceManager resourceManager, String resourceId,\n"
 					+ //
 					"			Consumer<ClickEvent<?>> action, SessionData sessionData) {\n" + //
 					"		Button button = createButton(resourceManager.getLocalizedString(resourceId, sessionData.getLocalization()));\n"

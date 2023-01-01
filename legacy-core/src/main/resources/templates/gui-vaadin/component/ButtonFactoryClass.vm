@@ -15,6 +15,7 @@ import com.vaadin.flow.router.QueryParameters;
 import ${ResourceManagerInterfacePackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
 import ${ApplicationStartViewPackageName}.${ApplicationStartViewClassName};
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
 #if (!$CommentsOff )
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
  * ${Generated}
  */
 #end
+@Generated
 @Named
 @RequiredArgsConstructor
 public class ${ClassName} {
@@ -85,7 +87,7 @@ public class ${ClassName} {
 		return createResourcedButton(resourceManager, "commons.button.remove.text", action, sessionData);
 	}
 
-	private ${ButtonClassName} createResourcedButton(${ResourceManagerInterfaceName} resourceManager, String resourceId,
+	public ${ButtonClassName} createResourcedButton(${ResourceManagerInterfaceName} resourceManager, String resourceId,
 			Consumer<ClickEvent<?>> action, ${SessionDataClassName} sessionData) {
 		${ButtonClassName} button = createButton(resourceManager.getLocalizedString(resourceId, sessionData.getLocalization()));
 		button.addClickListener(action::accept);
