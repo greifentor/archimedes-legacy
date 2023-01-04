@@ -16,12 +16,12 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class ApplicationStarterClassCodeGeneratorTest {
+public class GUIApplicationStarterClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
-	private ApplicationStarterClassCodeGenerator unitUnderTest;
+	private GUIApplicationStarterClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -34,7 +34,7 @@ public class ApplicationStarterClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = getExpected(null, "gui.vaadin", false, "null");
+			String expected = getExpected(null, "gui", false, "null");
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, null);
@@ -67,10 +67,10 @@ public class ApplicationStarterClassCodeGeneratorTest {
 							+ "@EnableJpaRepositories(\"base.pack.age.name.persistence.repository\")\n" //
 							+ "@ComponentScan(\"base.pack.age.name\")\n" //
 							+ "@EntityScan(\"base.pack.age.name.persistence.entity\")\n" //
-							+ "public class ApplicationStarter extends SpringBootServletInitializer {\n" //
+							+ "public class GUIApplicationStarter extends SpringBootServletInitializer {\n" //
 							+ "\n" //
 							+ "	public static void main(String[] args) {\n" //
-							+ "		SpringApplication.run(ApplicationStarter.class, args);\n" //
+							+ "		SpringApplication.run(GUIApplicationStarter.class, args);\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "}";
@@ -80,7 +80,7 @@ public class ApplicationStarterClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectWithSuppressedComments() {
 			// Prepare
-			String expected = getExpected(null, "gui.vaadin", true, "null");
+			String expected = getExpected(null, "gui", true, "null");
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			// Run
