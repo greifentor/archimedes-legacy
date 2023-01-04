@@ -1,0 +1,31 @@
+package ${PackageName};
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
+import lombok.Getter;
+import lombok.Generated;
+
+#if (!$CommentsOff)
+/**
+ * A class for the web app configuration;
+ *
+ * ${Generated}
+ */
+#end
+@Configuration
+@Generated
+@Getter
+#set( $DOLLAR = '$' )
+public class ${ClassName} {
+
+	@Value("$DOLLAR{app.version}")
+	private String appVersion;
+
+	@Value("$DOLLAR{cube.url}")
+	private String cubeURL;
+
+	@Value("$DOLLAR{maximum.jwt.validity-in-minutes:60}")
+	private int maximumJWTValidityInMinutes;
+
+}
