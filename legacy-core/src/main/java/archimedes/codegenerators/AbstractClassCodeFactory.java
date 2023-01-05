@@ -98,9 +98,10 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 						// "- ignored by not ready to override for generator: " + generatorName);
 						LOG
 								.info(
-										"- ignored model '{}' by not ready to override: {}",
+										"- ignored model '{}' by not ready to override: {} - {}",
 										dataModel.getName(),
-										generatorName);
+										generatorName,
+										fileName);
 					}
 				});
 		for (TableModel tableModel : dataModel.getTables()) {

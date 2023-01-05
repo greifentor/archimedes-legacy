@@ -10,7 +10,7 @@ import lombok.Generated;
  */
 #end
 @Generated
-public class ${ClassName} {
+public interface ${ClassName} {
 
 	boolean isSessionValid();
 

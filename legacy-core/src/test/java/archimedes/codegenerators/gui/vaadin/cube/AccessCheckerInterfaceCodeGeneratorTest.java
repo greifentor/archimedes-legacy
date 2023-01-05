@@ -46,7 +46,7 @@ public class AccessCheckerInterfaceCodeGeneratorTest {
 						+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
 						+ " */\n" //
 						+ "@Generated\n" //
-						+ "public class AccessChecker {\n" //
+						+ "public interface AccessChecker {\n" //
 						+ "\n" //
 						+ "	boolean isSessionValid();\n" //
 						+ "\n" //
