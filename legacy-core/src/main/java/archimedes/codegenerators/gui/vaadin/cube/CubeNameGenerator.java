@@ -12,10 +12,22 @@ public class CubeNameGenerator extends NameGenerator {
 
 	public static final CubeNameGenerator INSTANCE = new CubeNameGenerator();
 
+	public static final String ALTERNATE_ACCESS_CHECKER_INTERFACE_NAME = "ALTERNATE_ACCESS_CHECKER_INTERFACE_NAME";
+	public static final String ALTERNATE_ACCESS_CHECKER_PACKAGE_NAME = "ALTERNATE_ACCESS_CHECKER_PACKAGE_NAME";
 	public static final String ALTERNATE_AUTHORIZATION_DATA_CLASS_NAME = "ALTERNATE_AUTHORIZATION_DATA_CLASS_NAME";
 	public static final String ALTERNATE_JWT_SERVICE_INTERFACE_NAME = "ALTERNATE_JWT_SERVICE_INTERFACE_NAME";
 	public static final String ALTERNATE_WEB_APP_CONFIGURATION_CLASS_NAME =
 			"ALTERNATE_WEB_APP_CONFIGURATION_CLASS_NAME";
+
+	public String getAccessCheckerInterfaceName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(model, "AccessChecker", ALTERNATE_ACCESS_CHECKER_INTERFACE_NAME);
+	}
+
+	public String getAccessCheckerPackageName(DataModel model) {
+		return createPackageName(model, null, "gui", ALTERNATE_ACCESS_CHECKER_PACKAGE_NAME);
+	}
 
 	public String getAuthorizationDataClassName(DataModel model) {
 		return model == null

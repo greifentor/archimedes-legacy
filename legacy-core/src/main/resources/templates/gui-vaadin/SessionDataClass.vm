@@ -14,6 +14,7 @@ import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import ${LocalizationSOPackageName}.${LocalizationSOClassName};
 #if ($CubeApplication)
 import ${ServicePackageName}.${JWTServiceInterfaceName}.${AuthorizationDataClassName};
+import ${AccessCheckerPackageName}.${AccessCheckerInterfaceName};
 #end
 
 import lombok.Data;
@@ -33,8 +34,8 @@ public class ${ClassName} {
 	private static int counter = 0;
 
 #if ($CubeApplication)
-	private AccessChecker accessChecker;
-	private AuthorizationData authorizationData;
+	private ${AccessCheckerInterfaceName} accessChecker;
+	private ${AuthorizationDataClassName} authorizationData;
 #end
 	private ${SessionIdClassName} id = new ${SessionIdClassName}("${ApplicationName.toLowerCase()}-" + (counter++));
 	private ${LocalizationSOClassName} localization = ${LocalizationSOClassName}.DE;

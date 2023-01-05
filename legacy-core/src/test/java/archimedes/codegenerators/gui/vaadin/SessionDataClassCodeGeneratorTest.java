@@ -113,6 +113,7 @@ public class SessionDataClassCodeGeneratorTest {
 						"\n" + //
 						"import base.pack.age.name.core.model.localization.LocalizationSO;\n" + //
 						"import base.pack.age.name.core.service.JWTService.AuthorizationData;\n" + //
+						"import base.pack.age.name.gui.AccessChecker;\n" + //
 						"\n" + //
 						"import lombok.Data;\n" + //
 						"import lombok.Generated;\n" + //

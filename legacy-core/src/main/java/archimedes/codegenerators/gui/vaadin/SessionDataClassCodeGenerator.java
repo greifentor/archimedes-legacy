@@ -29,6 +29,8 @@ public class SessionDataClassCodeGenerator extends AbstractModelCodeGenerator<GU
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel model0) {
+		context.put("AccessCheckerInterfaceName", CubeNameGenerator.INSTANCE.getAccessCheckerInterfaceName(model));
+		context.put("AccessCheckerPackageName", CubeNameGenerator.INSTANCE.getAccessCheckerPackageName(model));
 		context.put("ApplicationName", model.getApplicationName());
 		context.put("AuthorizationDataClassName", CubeNameGenerator.INSTANCE.getAuthorizationDataClassName(model));
 		context.put("ClassName", getClassName(model, null));

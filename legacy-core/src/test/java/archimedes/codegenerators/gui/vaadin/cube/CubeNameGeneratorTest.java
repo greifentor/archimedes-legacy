@@ -45,6 +45,56 @@ public class CubeNameGeneratorTest {
 	}
 
 	@Nested
+	class AccessCheckerInterfaceNameTests {
+
+		@Test
+		void getAccessCheckerInterfaceName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getAccessCheckerInterfaceName(null));
+		}
+
+		@Test
+		void getAccessCheckerInterfaceName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName("AccessChecker", () -> unitUnderTest.getAccessCheckerInterfaceName(model));
+		}
+
+		@Test
+		void getAccessCheckerInterfaceName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherTextFieldFactory",
+					CubeNameGenerator.ALTERNATE_ACCESS_CHECKER_INTERFACE_NAME,
+					model,
+					m -> unitUnderTest.getAccessCheckerInterfaceName(m));
+		}
+
+	}
+
+	@Nested
+	class AccessCheckerPackageNameTests {
+
+		@Test
+		void getAccessCheckerPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getAccessCheckerPackageName(null));
+		}
+
+		@Test
+		void getAccessCheckerPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui", unitUnderTest.getAccessCheckerPackageName(model));
+		}
+
+		@Test
+		void getAccessCheckerPackageName_PassAValidTableButModelAsAlternateNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			String alternative = "alternative.package.name";
+			when(model.getOptionByName(CubeNameGenerator.ALTERNATE_ACCESS_CHECKER_PACKAGE_NAME))
+					.thenReturn(
+							new Option(CubeNameGenerator.ALTERNATE_ACCESS_CHECKER_PACKAGE_NAME, alternative));
+			// Run & Check
+			assertEquals(alternative, unitUnderTest.getAccessCheckerPackageName(model));
+		}
+
+	}
+
+	@Nested
 	class AuthorizationDataClassNameTests {
 
 		@Test

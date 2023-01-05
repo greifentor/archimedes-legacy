@@ -139,6 +139,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
+					AbstractGUIVaadinClassCodeGenerator.CUBE_APPLICATION,
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 					ApplicationStartViewClassCodeGenerator.GUI_BASE_URL,
