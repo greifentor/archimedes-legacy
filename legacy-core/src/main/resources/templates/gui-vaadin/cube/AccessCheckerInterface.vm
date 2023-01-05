@@ -1,0 +1,17 @@
+package ${PackageName};
+
+import lombok.Generated;
+
+#if (!$CommentsOff)
+/**
+ * An interface for access checkers.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public class ${ClassName} {
+
+	boolean isSessionValid();
+
+}

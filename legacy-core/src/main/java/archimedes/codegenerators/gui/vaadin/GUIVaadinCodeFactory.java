@@ -20,6 +20,7 @@ import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.AccessCheckerInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.WebAppConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewRendererInterfaceCodeGenerator;
@@ -49,6 +50,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 		return Arrays
 				.asList(
 						new AbstractMasterDataBaseLayoutClassCodeGenerator(this),
+						new AccessCheckerInterfaceCodeGenerator(this),
 						new GUIApplicationStarterClassCodeGenerator(this),
 						new ApplicationStartViewClassCodeGenerator(this),
 						new ButtonClassCodeGenerator(this),

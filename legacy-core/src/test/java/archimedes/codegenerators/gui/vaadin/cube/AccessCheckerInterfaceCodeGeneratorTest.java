@@ -17,12 +17,12 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class WebAppConfigurationClassCodeGeneratorTest {
+public class AccessCheckerInterfaceCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
-	private WebAppConfigurationClassCodeGenerator unitUnderTest;
+	private AccessCheckerInterfaceCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
@@ -36,32 +36,19 @@ public class WebAppConfigurationClassCodeGeneratorTest {
 		class SimpleClass {
 
 			private String getExpected() {
-				return "package base.pack.age.name.gui.vaadin;\n" //
+				return "package base.pack.age.name.gui;\n" //
 						+ "\n" //
-						+ "import org.springframework.beans.factory.annotation.Value;\n" //
-						+ "import org.springframework.context.annotation.Configuration;\n" //
-						+ "\n" //
-						+ "import lombok.Getter;\n" //
 						+ "import lombok.Generated;\n" //
 						+ "\n" //
 						+ "/**\n" //
-						+ " * A class for the web app configuration;\n" //
+						+ " * An interface for access checkers.\n" //
 						+ " *\n" //
 						+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
 						+ " */\n" //
-						+ "@Configuration\n" //
 						+ "@Generated\n" //
-						+ "@Getter\n" //
-						+ "public class WebAppConfiguration {\n" //
+						+ "public class AccessChecker {\n" //
 						+ "\n" //
-						+ "	@Value(\"${app.version}\")\n" //
-						+ "	private String appVersion;\n" //
-						+ "\n" //
-						+ "	@Value(\"${cube.url}\")\n" //
-						+ "	private String cubeURL;\n" //
-						+ "\n" //
-						+ "	@Value(\"${maximum.jwt.validity-in-minutes:60}\")\n" //
-						+ "	private int maximumJWTValidityInMinutes;\n" //
+						+ "	boolean isSessionValid();\n" //
 						+ "\n" //
 						+ "}";
 			}
