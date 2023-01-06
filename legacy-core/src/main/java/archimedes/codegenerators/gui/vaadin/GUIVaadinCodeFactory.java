@@ -21,6 +21,7 @@ import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClas
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.AccessCheckerInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.JWTServiceInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.WebAppConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewRendererInterfaceCodeGenerator;
@@ -64,6 +65,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new GUIConfigurationClassCodeGenerator(this),
 						new HeaderLayoutClassCodeGenerator(this),
 						new ImageClassCodeGenerator(this),
+						new JWTServiceInterfaceCodeGenerator(this),
 						new MainMenuViewClassCodeGenerator(this),
 						new MaintenanceViewClassCodeGenerator(this),
 						new MaintenanceViewRendererInterfaceCodeGenerator(this),

@@ -7,7 +7,6 @@ import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
-import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
 
@@ -44,17 +43,12 @@ public class JWTServiceInterfaceCodeGenerator extends AbstractModelCodeGenerator
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
-		return "gui-web";
+		return "service";
 	}
 
 	@Override
 	public String getPackageName(DataModel model, DataModel sameModel) {
 		return ServiceNameGenerator.INSTANCE.getServiceInterfacePackageName(model, null);
-	}
-
-	@Override
-	protected String getAlternateModule() {
-		return GUIVaadinNameGenerator.ALTERNATE_GUI_VAADIN_MODULE_PREFIX;
 	}
 
 	@Override
