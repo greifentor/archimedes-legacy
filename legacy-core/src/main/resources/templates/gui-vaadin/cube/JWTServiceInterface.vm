@@ -1,0 +1,45 @@
+package ${PackageName};
+
+import java.time.LocalDateTime;
+
+import ${AuthorizationUserPackageName}.${AuthorizationUserInterfaceName};
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Generated;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+/**
+ * An interface for the JWT service.
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
+@Generated
+public interface ${ClassName} {
+
+	public static final String CLAIM_NAME_APPLICATION_NAME = "applicationName";
+	public static final String CLAIM_NAME_APPLICATION_RIGHTS = "applicationRights";
+	public static final String CLAIM_NAME_LOGIN_DATE = "loginDate";
+	public static final String CLAIM_NAME_USER_GLOBAL_ID = "userGlobalId";
+	public static final String CLAIM_NAME_USER_NAME = "userName";
+	public static final String CLAIM_NAME_USER_TOKEN = "userToken";
+
+	@Accessors(chain = true)
+	@AllArgsConstructor
+	@EqualsAndHashCode
+	@Getter
+	@Generated
+	public static class ${AuthorizationDataClassName} {
+
+		private String applicationName;
+		private LocalDateTime loginDateTime;
+		private ${AuthorizationUserInterfaceName} user;
+		private String[] applicationRights;
+
+	}
+
+	${AuthorizationDataClassName} getAuthorizationData(String jwt);
+
+	LocalDateTime getLoginDate(String jwt);
+
+}

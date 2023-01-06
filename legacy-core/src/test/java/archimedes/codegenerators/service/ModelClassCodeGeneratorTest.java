@@ -387,6 +387,67 @@ class ModelClassCodeGeneratorTest {
 
 		}
 
+		@Nested
+		class WithInterface {
+
+			@Test
+			void twoInterfaces() {
+				String expected = "package " + BASE_PACKAGE_NAME + ".core.model;\n" + //
+						"\n" + //
+						"import java.time.LocalDate;\n" + //
+						"\n" + //
+						"import interface1.package.name.TheInterface1;\n" + //
+						"import interface2.package.name.TheSecondInterface;\n" + //
+						"\n" + //
+						"import lombok.Data;\n" + //
+						"import lombok.EqualsAndHashCode;\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.ToString;\n" + //
+						"import lombok.experimental.Accessors;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * A model for a_tables.\n" + //
+						" *\n" + //
+						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
+						" */\n" + //
+						"@Accessors(chain = true)\n" + //
+						"@Data\n" + //
+						"@EqualsAndHashCode(callSuper = true)\n" + //
+						"@Generated\n" + //
+						"@ToString(callSuper = true)\n" + //
+						"public class ATable extends GeneratedATable implements TheInterface1, TheSecondInterface {\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public ATable setId(Long id) {\n" + //
+						"		super.setId(id);\n" + //
+						"		return this;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public ATable setADate(LocalDate aDate) {\n" + //
+						"		super.setADate(aDate);\n" + //
+						"		return this;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public ATable setDescription(String description) {\n" + //
+						"		super.setDescription(description);\n" + //
+						"		return this;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"}";
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel table = dataModel.getTableByName("A_TABLE");
+				table.addOption(new Option("IMPLEMENTS", "interface2.package.name.TheSecondInterface"));
+				table.addOption(new Option("IMPLEMENTS", "interface1.package.name.TheInterface1"));
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+		}
+
 	}
 
 }

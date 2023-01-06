@@ -13,11 +13,13 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.CommonImportAdder;
 import archimedes.codegenerators.FieldDeclarations;
+import archimedes.codegenerators.ImportDeclarations;
 import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -26,6 +28,8 @@ import archimedes.model.TableModel;
  * @author ollie (20.07.2021)
  */
 public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
+
+	public static final String IMPLEMENTS = "IMPLEMENTS";
 
 	public ModelClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
@@ -46,6 +50,7 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 		context.put("ColumnData", columnData);
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("GeneratedModelClassName", nameGenerator.getGeneratedModelClassName(table));
+		context.put("Implements", getImplements(model, table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
 		context.put("Subclass", true);
@@ -69,6 +74,20 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 								.setPkMember(column.isPrimaryKey())
 								.setSetterName(nameGenerator.getCamelCase(nameGenerator.getAttributeName(column))))
 				.collect(Collectors.toList());
+	}
+
+	private ImportDeclarations getImplements(DataModel model, TableModel table) {
+		ImportDeclarations i = new ImportDeclarations();
+		for (OptionModel option : table.getOptionsByName(IMPLEMENTS)) {
+			String packageName = "";
+			String typeName = option.getParameter();
+			if (option.getParameter().contains(".")) {
+				packageName = option.getParameter().substring(0, option.getParameter().lastIndexOf("."));
+				typeName = option.getParameter().substring(option.getParameter().lastIndexOf(".") + 1);
+			}
+			i.add(packageName, typeName);
+		}
+		return i;
 	}
 
 	@Override
