@@ -1,0 +1,20 @@
+package ${PackageName};
+
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import ${AuthorizationUserPackageName}.${AuthorizationUserInterfaceName};
+import lombok.Generated;
+
+#if (!$CommentsOff)
+/**
+ * An interface for the authorization user service.
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
+ #end
+@Generated
+public interface ${ClassName} {
+
+	${AuthorizationUserInterfaceName} findByGlobalIdOrCreate(DecodedJWT decodedJWT);
+
+}

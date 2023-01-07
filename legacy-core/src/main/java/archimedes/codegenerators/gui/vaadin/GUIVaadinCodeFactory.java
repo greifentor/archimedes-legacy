@@ -21,6 +21,9 @@ import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClas
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.AccessCheckerInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserServiceInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.JWTServiceConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.JWTServiceInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.WebAppConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator;
@@ -52,8 +55,9 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 				.asList(
 						new AbstractMasterDataBaseLayoutClassCodeGenerator(this),
 						new AccessCheckerInterfaceCodeGenerator(this),
-						new GUIApplicationStarterClassCodeGenerator(this),
 						new ApplicationStartViewClassCodeGenerator(this),
+						new AuthorizationUserInterfaceCodeGenerator(this),
+						new AuthorizationUserServiceInterfaceCodeGenerator(this),
 						new ButtonClassCodeGenerator(this),
 						new ButtonFactoryClassCodeGenerator(this),
 						new ButtonFactoryConfigurationClassCodeGenerator(this),
@@ -62,10 +66,12 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new GOConverterClassCodeGenerator(this),
 						new DetailsLayoutClassCodeGenerator(this),
 						new DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator(this),
+						new GUIApplicationStarterClassCodeGenerator(this),
 						new GUIConfigurationClassCodeGenerator(this),
 						new HeaderLayoutClassCodeGenerator(this),
 						new ImageClassCodeGenerator(this),
 						new JWTServiceInterfaceCodeGenerator(this),
+						new JWTServiceConfigurationClassCodeGenerator(this),
 						new MainMenuViewClassCodeGenerator(this),
 						new MaintenanceViewClassCodeGenerator(this),
 						new MaintenanceViewRendererInterfaceCodeGenerator(this),

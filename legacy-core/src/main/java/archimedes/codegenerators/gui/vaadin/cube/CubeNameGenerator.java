@@ -17,6 +17,10 @@ public class CubeNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_AUTHORIZATION_DATA_CLASS_NAME = "ALTERNATE_AUTHORIZATION_DATA_CLASS_NAME";
 	public static final String ALTERNATE_AUTHORIZATION_USER_INTERFACE_NAME =
 			"ALTERNATE_AUTHORIZATION_USER_INTERFACE_NAME";
+	public static final String ALTERNATE_AUTHORIZATION_USER_SERVICE_INTERFACE_NAME =
+			"ALTERNATE_AUTHORIZATION_USER_SERVICE_INTERFACE_NAME";
+	public static final String ALTERNATE_JWT_SERVICE_CONFIGURATION_CLASS_NAME =
+			"ALTERNATE_JWT_SERVICE_CONFIGURATION_CLASS_NAME";
 	public static final String ALTERNATE_JWT_SERVICE_INTERFACE_NAME = "ALTERNATE_JWT_SERVICE_INTERFACE_NAME";
 	public static final String ALTERNATE_WEB_APP_CONFIGURATION_CLASS_NAME =
 			"ALTERNATE_WEB_APP_CONFIGURATION_CLASS_NAME";
@@ -44,6 +48,24 @@ public class CubeNameGenerator extends NameGenerator {
 						model,
 						"AuthorizationUser",
 						ALTERNATE_AUTHORIZATION_USER_INTERFACE_NAME);
+	}
+
+	public String getAuthorizationUserServiceInterfaceName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"AuthorizationUserService",
+						ALTERNATE_AUTHORIZATION_USER_SERVICE_INTERFACE_NAME);
+	}
+
+	public String getJWTServiceConfigurationClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"JWTServiceConfiguration",
+						ALTERNATE_JWT_SERVICE_CONFIGURATION_CLASS_NAME);
 	}
 
 	public String getJWTServiceInterfaceName(DataModel model) {

@@ -9,11 +9,13 @@ import lombok.Generated;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+#if (!$CommentsOff)
 /**
  * An interface for the JWT service.
  *
- * GENERATED CODE !!! DO NOT CHANGE !!!
+ * ${Generated}
  */
+#end
 @Generated
 public interface ${ClassName} {
 

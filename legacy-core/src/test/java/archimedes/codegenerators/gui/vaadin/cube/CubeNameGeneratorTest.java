@@ -22,8 +22,6 @@ import archimedes.scheme.Option;
 @ExtendWith(MockitoExtension.class)
 public class CubeNameGeneratorTest {
 
-	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
-
 	@Mock
 	private ColumnModel column;
 	@Mock
@@ -114,6 +112,82 @@ public class CubeNameGeneratorTest {
 					CubeNameGenerator.ALTERNATE_AUTHORIZATION_DATA_CLASS_NAME,
 					model,
 					m -> unitUnderTest.getAuthorizationDataClassName(m));
+		}
+
+	}
+
+	@Nested
+	class getAuthorizationUserInterfaceNameNameTests {
+
+		@Test
+		void getAuthorizationUserInterfaceName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getAuthorizationUserInterfaceName(null));
+		}
+
+		@Test
+		void getAuthorizationUserInterfaceName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName("AuthorizationUser", () -> unitUnderTest.getAuthorizationUserInterfaceName(model));
+		}
+
+		@Test
+		void getAuthorizationUserInterfaceName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherTextFieldFactory",
+					CubeNameGenerator.ALTERNATE_AUTHORIZATION_USER_INTERFACE_NAME,
+					model,
+					m -> unitUnderTest.getAuthorizationUserInterfaceName(m));
+		}
+
+	}
+
+	@Nested
+	class getAuthorizationUserServiceInterfaceNameNameTests {
+
+		@Test
+		void getAuthorizationUserServiceInterfaceName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getAuthorizationUserServiceInterfaceName(null));
+		}
+
+		@Test
+		void getAuthorizationUserServiceInterfaceName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName(
+					"AuthorizationUserService",
+					() -> unitUnderTest.getAuthorizationUserServiceInterfaceName(model));
+		}
+
+		@Test
+		void getAuthorizationUserServiceInterfaceName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherAuthorizationUserService",
+					CubeNameGenerator.ALTERNATE_AUTHORIZATION_USER_SERVICE_INTERFACE_NAME,
+					model,
+					m -> unitUnderTest.getAuthorizationUserServiceInterfaceName(m));
+		}
+
+	}
+
+	@Nested
+	class JWTServiceConfigurationClassNameTests {
+
+		@Test
+		void getJWTServiceConfigurationClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getJWTServiceConfigurationClassName(null));
+		}
+
+		@Test
+		void getJWTServiceConfigurationClassName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName(
+					"JWTServiceConfiguration",
+					() -> unitUnderTest.getJWTServiceConfigurationClassName(model));
+		}
+
+		@Test
+		void getJWTServiceConfigurationClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherJWTServiceConfiguration",
+					CubeNameGenerator.ALTERNATE_JWT_SERVICE_CONFIGURATION_CLASS_NAME,
+					model,
+					m -> unitUnderTest.getJWTServiceConfigurationClassName(m));
 		}
 
 	}
