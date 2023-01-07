@@ -15,6 +15,8 @@ public class CubeNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_ACCESS_CHECKER_INTERFACE_NAME = "ALTERNATE_ACCESS_CHECKER_INTERFACE_NAME";
 	public static final String ALTERNATE_ACCESS_CHECKER_PACKAGE_NAME = "ALTERNATE_ACCESS_CHECKER_PACKAGE_NAME";
 	public static final String ALTERNATE_AUTHORIZATION_DATA_CLASS_NAME = "ALTERNATE_AUTHORIZATION_DATA_CLASS_NAME";
+	public static final String ALTERNATE_AUTHORIZATION_USER_SERVICE_IMPL_CLASS_NAME =
+			"ALTERNATE_AUTHORIZATION_USER_SERVICE_IMPL_CLASS_NAME";
 	public static final String ALTERNATE_AUTHORIZATION_USER_INTERFACE_NAME =
 			"ALTERNATE_AUTHORIZATION_USER_INTERFACE_NAME";
 	public static final String ALTERNATE_AUTHORIZATION_USER_SERVICE_INTERFACE_NAME =
@@ -48,6 +50,15 @@ public class CubeNameGenerator extends NameGenerator {
 						model,
 						"AuthorizationUser",
 						ALTERNATE_AUTHORIZATION_USER_INTERFACE_NAME);
+	}
+
+	public String getAuthorizationUserServiceImplClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"AuthorizationUserServiceImpl",
+						ALTERNATE_AUTHORIZATION_USER_SERVICE_IMPL_CLASS_NAME);
 	}
 
 	public String getAuthorizationUserServiceInterfaceName(DataModel model) {

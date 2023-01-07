@@ -141,6 +141,32 @@ public class CubeNameGeneratorTest {
 	}
 
 	@Nested
+	class getAuthorizationUserServiceImplClassNameests {
+
+		@Test
+		void getAuthorizationUserServiceImplClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getAuthorizationUserServiceImplClassName(null));
+		}
+
+		@Test
+		void getAuthorizationUserServiceImplClassName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName(
+					"AuthorizationUserServiceImpl",
+					() -> unitUnderTest.getAuthorizationUserServiceImplClassName(model));
+		}
+
+		@Test
+		void getAuthorizationUserServiceImplClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherClassName",
+					CubeNameGenerator.ALTERNATE_AUTHORIZATION_USER_SERVICE_IMPL_CLASS_NAME,
+					model,
+					m -> unitUnderTest.getAuthorizationUserServiceImplClassName(m));
+		}
+
+	}
+
+	@Nested
 	class getAuthorizationUserServiceInterfaceNameNameTests {
 
 		@Test
@@ -158,7 +184,7 @@ public class CubeNameGeneratorTest {
 		@Test
 		void getAuthorizationUserServiceInterfaceName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
 			assertCorrectAlternativeClassName(
-					"AnotherAuthorizationUserService",
+					"AnotherClassName",
 					CubeNameGenerator.ALTERNATE_AUTHORIZATION_USER_SERVICE_INTERFACE_NAME,
 					model,
 					m -> unitUnderTest.getAuthorizationUserServiceInterfaceName(m));
@@ -184,7 +210,7 @@ public class CubeNameGeneratorTest {
 		@Test
 		void getJWTServiceConfigurationClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
 			assertCorrectAlternativeClassName(
-					"AnotherJWTServiceConfiguration",
+					"AnotherClassName",
 					CubeNameGenerator.ALTERNATE_JWT_SERVICE_CONFIGURATION_CLASS_NAME,
 					model,
 					m -> unitUnderTest.getJWTServiceConfigurationClassName(m));
@@ -208,7 +234,7 @@ public class CubeNameGeneratorTest {
 		@Test
 		void getJWTServiceInterfaceName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
 			assertCorrectAlternativeClassName(
-					"AnotherTextFieldFactory",
+					"AnotherClassName",
 					CubeNameGenerator.ALTERNATE_JWT_SERVICE_INTERFACE_NAME,
 					model,
 					m -> unitUnderTest.getJWTServiceInterfaceName(m));
@@ -232,7 +258,7 @@ public class CubeNameGeneratorTest {
 		@Test
 		void getWebAppConfigurationClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
 			assertCorrectAlternativeClassName(
-					"AnotherTextFieldFactory",
+					"AnotherClassName",
 					CubeNameGenerator.ALTERNATE_WEB_APP_CONFIGURATION_CLASS_NAME,
 					model,
 					m -> unitUnderTest.getWebAppConfigurationClassName(m));

@@ -22,6 +22,7 @@ import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerato
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.AccessCheckerInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserServiceImplClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserServiceInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.JWTServiceConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.JWTServiceInterfaceCodeGenerator;
@@ -57,6 +58,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new AccessCheckerInterfaceCodeGenerator(this),
 						new ApplicationStartViewClassCodeGenerator(this),
 						new AuthorizationUserInterfaceCodeGenerator(this),
+						new AuthorizationUserServiceImplClassCodeGenerator(this),
 						new AuthorizationUserServiceInterfaceCodeGenerator(this),
 						new ButtonClassCodeGenerator(this),
 						new ButtonFactoryClassCodeGenerator(this),
