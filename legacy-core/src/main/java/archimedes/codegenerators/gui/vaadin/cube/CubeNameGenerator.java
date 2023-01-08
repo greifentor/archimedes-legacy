@@ -21,8 +21,11 @@ public class CubeNameGenerator extends NameGenerator {
 			"ALTERNATE_AUTHORIZATION_USER_INTERFACE_NAME";
 	public static final String ALTERNATE_AUTHORIZATION_USER_SERVICE_INTERFACE_NAME =
 			"ALTERNATE_AUTHORIZATION_USER_SERVICE_INTERFACE_NAME";
+	public static final String ALTERNATE_JWT_NOT_VALID_EXCEPTION_CLASS_NAME =
+			"ALTERNATE_JWT_NOT_VALID_EXCEPTION_CLASS_NAME";
 	public static final String ALTERNATE_JWT_SERVICE_CONFIGURATION_CLASS_NAME =
 			"ALTERNATE_JWT_SERVICE_CONFIGURATION_CLASS_NAME";
+	public static final String ALTERNATE_JWT_SERVICE_IMPL_CLASS_NAME = "ALTERNATE_JWT_SERVICE_IMPL_CLASS_NAME";
 	public static final String ALTERNATE_JWT_SERVICE_INTERFACE_NAME = "ALTERNATE_JWT_SERVICE_INTERFACE_NAME";
 	public static final String ALTERNATE_WEB_APP_CONFIGURATION_CLASS_NAME =
 			"ALTERNATE_WEB_APP_CONFIGURATION_CLASS_NAME";
@@ -70,6 +73,15 @@ public class CubeNameGenerator extends NameGenerator {
 						ALTERNATE_AUTHORIZATION_USER_SERVICE_INTERFACE_NAME);
 	}
 
+	public String getJWTNotValidExceptionClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"JWTNotValidException",
+						ALTERNATE_JWT_NOT_VALID_EXCEPTION_CLASS_NAME);
+	}
+
 	public String getJWTServiceConfigurationClassName(DataModel model) {
 		return model == null
 				? null
@@ -77,6 +89,12 @@ public class CubeNameGenerator extends NameGenerator {
 						model,
 						"JWTServiceConfiguration",
 						ALTERNATE_JWT_SERVICE_CONFIGURATION_CLASS_NAME);
+	}
+
+	public String getJWTServiceImplClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(model, "JWTServiceImpl", ALTERNATE_JWT_SERVICE_IMPL_CLASS_NAME);
 	}
 
 	public String getJWTServiceInterfaceName(DataModel model) {

@@ -193,6 +193,30 @@ public class CubeNameGeneratorTest {
 	}
 
 	@Nested
+	class JWTNotValidExceptionClassNameTests {
+
+		@Test
+		void getJWTNotValidExceptionClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getJWTNotValidExceptionClassName(null));
+		}
+
+		@Test
+		void getJWTNotValidExceptionClassName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName("JWTNotValidException", () -> unitUnderTest.getJWTNotValidExceptionClassName(model));
+		}
+
+		@Test
+		void getJWTNotValidExceptionClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherClassName",
+					CubeNameGenerator.ALTERNATE_JWT_NOT_VALID_EXCEPTION_CLASS_NAME,
+					model,
+					m -> unitUnderTest.getJWTNotValidExceptionClassName(m));
+		}
+
+	}
+
+	@Nested
 	class JWTServiceConfigurationClassNameTests {
 
 		@Test
@@ -214,6 +238,30 @@ public class CubeNameGeneratorTest {
 					CubeNameGenerator.ALTERNATE_JWT_SERVICE_CONFIGURATION_CLASS_NAME,
 					model,
 					m -> unitUnderTest.getJWTServiceConfigurationClassName(m));
+		}
+
+	}
+
+	@Nested
+	class JWTServiceImplClassNameTests {
+
+		@Test
+		void getJWTServiceImplClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getJWTServiceImplClassName(null));
+		}
+
+		@Test
+		void getJWTServiceImplClassName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName("JWTServiceImpl", () -> unitUnderTest.getJWTServiceImplClassName(model));
+		}
+
+		@Test
+		void getJWTServiceImplClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherClassName",
+					CubeNameGenerator.ALTERNATE_JWT_SERVICE_IMPL_CLASS_NAME,
+					model,
+					m -> unitUnderTest.getJWTServiceImplClassName(m));
 		}
 
 	}
