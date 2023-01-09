@@ -27,7 +27,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 			"ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_DETAILS_LAYOUT_COMBO_BOX_ITEM_LABEL_GENERATOR_INTERFACE_NAME =
 			"ALTERNATE_DETAILS_LAYOUT_COMBO_BOX_ITEM_LABEL_GENERATOR_INTERFACE_NAME";
+	public static final String ALTERNATE_GUI_APPLICATION_STARTER_CLASS_NAME_SUFFIX =
+			"ALTERNATE_GUI_APPLICATION_STARTER_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_GUI_VAADIN_MODULE_PREFIX = "ALTERNATE_GUI_VAADIN_MODULE_PREFIX";
+	public static final String ALTERNATE_GUI_PACKAGE_NAME = "ALTERNATE_GUI_PACKAGE_NAME";
 	public static final String ALTERNATE_TO_GO_METHOD_NAME = "ALTERNATE_TO_GO_METHOD_NAME";
 	public static final String ALTERNATE_TO_MODEL_METHOD_NAME = "ALTERNATE_TO_MODEL_METHOD_NAME";
 	public static final String ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX = "ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX";
@@ -87,16 +90,25 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return "AbstractMasterDataDetailLayout";
 	}
 
-	public String getApplicationStarterClassName() {
-		return "ApplicationStarter";
-	}
-
 	public String getApplicationStartViewClassName() {
 		return "ApplicationStartView";
 	}
 
 	public String getApplicationStartViewPackageName(DataModel model) {
 		return createPackageName(model, null, "gui.vaadin", ALTERNATE_APPLICATION_START_VIEW_PACKAGE_NAME);
+	}
+
+	public String getGUIApplicationStarterClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"GUIApplicationStarter",
+						ALTERNATE_GUI_APPLICATION_STARTER_CLASS_NAME_SUFFIX);
+	}
+
+	public String getGUIApplicationStarterPackageName(DataModel model) {
+		return createPackageName(model, null, "gui", ALTERNATE_GUI_PACKAGE_NAME);
 	}
 
 	public String getVaadinComponentPackageName(DataModel model) {

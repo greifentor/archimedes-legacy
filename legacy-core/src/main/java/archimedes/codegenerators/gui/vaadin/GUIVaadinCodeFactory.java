@@ -20,6 +20,15 @@ import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.AccessCheckerInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserServiceImplClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserServiceInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.JWTNotValidExceptionClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.JWTServiceConfigurationClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.JWTServiceImplClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.JWTServiceInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.WebAppConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewRendererInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataGUIConfigurationClassCodeGenerator;
@@ -48,8 +57,11 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 		return Arrays
 				.asList(
 						new AbstractMasterDataBaseLayoutClassCodeGenerator(this),
-						new ApplicationStarterClassCodeGenerator(this),
+						new AccessCheckerInterfaceCodeGenerator(this),
 						new ApplicationStartViewClassCodeGenerator(this),
+						new AuthorizationUserInterfaceCodeGenerator(this),
+						new AuthorizationUserServiceImplClassCodeGenerator(this),
+						new AuthorizationUserServiceInterfaceCodeGenerator(this),
 						new ButtonClassCodeGenerator(this),
 						new ButtonFactoryClassCodeGenerator(this),
 						new ButtonFactoryConfigurationClassCodeGenerator(this),
@@ -58,9 +70,14 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new GOConverterClassCodeGenerator(this),
 						new DetailsLayoutClassCodeGenerator(this),
 						new DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator(this),
+						new GUIApplicationStarterClassCodeGenerator(this),
 						new GUIConfigurationClassCodeGenerator(this),
 						new HeaderLayoutClassCodeGenerator(this),
 						new ImageClassCodeGenerator(this),
+						new JWTNotValidExceptionClassCodeGenerator(this),
+						new JWTServiceConfigurationClassCodeGenerator(this),
+						new JWTServiceImplClassCodeGenerator(this),
+						new JWTServiceInterfaceCodeGenerator(this),
 						new MainMenuViewClassCodeGenerator(this),
 						new MaintenanceViewClassCodeGenerator(this),
 						new MaintenanceViewRendererInterfaceCodeGenerator(this),
@@ -79,7 +96,8 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new TextFieldClassCodeGenerator(this),
 						new TextFieldFactoryClassCodeGenerator(this),
 						// new ToGOConverterInterfaceCodeGenerator(this),
-						new UserAuthorizationCheckerClassCodeGenerator(this)
+						new UserAuthorizationCheckerClassCodeGenerator(this),
+						new WebAppConfigurationClassCodeGenerator(this)
 				);
 	}
 
@@ -137,6 +155,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
+					AbstractGUIVaadinClassCodeGenerator.CUBE_APPLICATION,
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 					ApplicationStartViewClassCodeGenerator.GUI_BASE_URL,

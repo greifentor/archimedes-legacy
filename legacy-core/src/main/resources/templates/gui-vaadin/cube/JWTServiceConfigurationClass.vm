@@ -1,0 +1,29 @@
+package ${PackageName};
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
+import lombok.Generated;
+import lombok.Getter;
+
+#if (!$CommentsOff)
+/**
+ * A class for the JWT service configuration.
+ *
+ * ${Generated}
+ */
+#end
+@Configuration
+@Generated
+@Getter
+#set( $DOLLAR = '$' )
+public class ${ClassName} {
+
+	@Value("$DOLLAR{jwt.service.secret}")
+	private String secret;
+	@Value("$DOLLAR{jwt.service.base-validity-in-minutes:5}")
+	private int baseValidityInMinutes;
+	@Value("$DOLLAR{test.mode:false}")
+	private boolean testMode;
+
+}

@@ -1,15 +1,24 @@
 package ${PackageName};
 
+#if ($CubeApplication)
+import java.time.LocalDateTime;
+#end
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import ${LocalizationSOPackageName}.${LocalizationSOClassName};
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 
+import ${LocalizationSOPackageName}.${LocalizationSOClassName};
+#if ($CubeApplication)
+import ${ServicePackageName}.${JWTServiceInterfaceName}.${AuthorizationDataClassName};
+import ${AccessCheckerPackageName}.${AccessCheckerInterfaceName};
+#end
+
 import lombok.Data;
+import lombok.Generated;
 
 /**
  * An object to hold data during the session.
@@ -17,18 +26,30 @@ import lombok.Data;
  * ${Generated}
  */
 @Component
-@VaadinSessionScope
 @Data
+@Generated
+@VaadinSessionScope
 public class ${ClassName} {
 
 	private static int counter = 0;
 
+#if ($CubeApplication)
+	private ${AccessCheckerInterfaceName} accessChecker;
+	private ${AuthorizationDataClassName} authorizationData;
+#end
 	private ${SessionIdClassName} id = new ${SessionIdClassName}("${ApplicationName.toLowerCase()}-" + (counter++));
 	private ${LocalizationSOClassName} localization = ${LocalizationSOClassName}.DE;
 	private Map<String, Object> parameters = new HashMap<>();
+#if ($CubeApplication)
+	private LocalDateTime validUntil;
+#end
 
 	public String getUserName() {
+#if ($CubeApplication)
+		return authorizationData.getUser().getName();
+#else
 		return "N/A";
+#end
 	}
 
 	public Optional<Object> findParameter(String id) {

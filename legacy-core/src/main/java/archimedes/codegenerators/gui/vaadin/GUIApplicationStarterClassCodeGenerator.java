@@ -11,10 +11,10 @@ import archimedes.model.DataModel;
  *
  * @author ollie (02.09.2022)
  */
-public class ApplicationStarterClassCodeGenerator extends AbstractVaadinModelCodeGenerator {
+public class GUIApplicationStarterClassCodeGenerator extends AbstractVaadinModelCodeGenerator {
 
-	public ApplicationStarterClassCodeGenerator(AbstractCodeFactory codeFactory) {
-		super("ApplicationStarterClass.vm", codeFactory);
+	public GUIApplicationStarterClassCodeGenerator(AbstractCodeFactory codeFactory) {
+		super("GUIApplicationStarterClass.vm", codeFactory);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class ApplicationStarterClassCodeGenerator extends AbstractVaadinModelCod
 
 	@Override
 	public String getClassName(DataModel model, DataModel dummy) {
-		return nameGenerator.getApplicationStarterClassName();
+		return nameGenerator.getGUIApplicationStarterClassName(model);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class ApplicationStarterClassCodeGenerator extends AbstractVaadinModelCod
 
 	@Override
 	public String getPackageName(DataModel model, DataModel dummy) {
-		return nameGenerator.getApplicationStartViewPackageName(model);
+		return nameGenerator.getGUIApplicationStarterPackageName(model);
 	}
 
 	@Override
