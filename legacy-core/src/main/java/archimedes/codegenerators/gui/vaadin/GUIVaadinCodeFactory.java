@@ -24,6 +24,7 @@ import archimedes.codegenerators.gui.vaadin.cube.AccessCheckerInterfaceCodeGener
 import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserServiceImplClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.AuthorizationUserServiceInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.cube.JWTNotValidExceptionClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.JWTServiceConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.JWTServiceImplClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.JWTServiceInterfaceCodeGenerator;
@@ -73,6 +74,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new GUIConfigurationClassCodeGenerator(this),
 						new HeaderLayoutClassCodeGenerator(this),
 						new ImageClassCodeGenerator(this),
+						new JWTNotValidExceptionClassCodeGenerator(this),
 						new JWTServiceConfigurationClassCodeGenerator(this),
 						new JWTServiceImplClassCodeGenerator(this),
 						new JWTServiceInterfaceCodeGenerator(this),

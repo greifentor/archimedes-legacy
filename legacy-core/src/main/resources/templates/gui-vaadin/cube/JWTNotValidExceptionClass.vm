@@ -1,0 +1,14 @@
+package ${PackageName};
+
+import lombok.Generated;
+
+#if (!$CommentsOff)
+/**
+ * An exception for not valid JWT's.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public class ${ClassName} extends RuntimeException {
+}
