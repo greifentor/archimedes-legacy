@@ -1082,22 +1082,18 @@ public class PageViewClassCodeGeneratorTest {
 					"		}\n" + //
 					"		boolean b = true;\n" + //
 					"		for (String pattern : patterns) {\n" + //
-					"			b &= isMatchingPattern(pattern, model);\n" + //
+					"			b &= isMatchingPattern(pattern.toLowerCase(), model);\n" + //
 					"		}\n" + //
 					"		return b;\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private boolean isMatchingPattern(String pattern, GuiTable model) {\n" + //
-					"		if (masterDataGridFieldRenderer != null) {\n" + //
-					"			return\n" + //
-					"					masterDataGridFieldRenderer.getHeaderString(GuiTable.REF, model).toString().toLowerCase().contains(pattern) ||\n"
+					"		boolean result = false;\n" + //
+					"		result = result || getHeaderString(GuiTable.REF, model, () -> model.getRef()).toString().toLowerCase().contains(pattern);\n"
 					+ //
-					"					masterDataGridFieldRenderer.getHeaderString(GuiTable.NAME, model).toString().toLowerCase().contains(pattern);\n"
+					"		result = result || getHeaderString(GuiTable.NAME, model, () -> model.getName()).toString().toLowerCase().contains(pattern);\n"
 					+ //
-					"		}\n" + //
-					"		return\n" + //
-					"				model.getRef().toString().toLowerCase().contains(pattern) ||\n" + //
-					"				model.getName().toString().toLowerCase().contains(pattern);\n" + //
+					"		return result;\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private void addRecord() {\n" + //

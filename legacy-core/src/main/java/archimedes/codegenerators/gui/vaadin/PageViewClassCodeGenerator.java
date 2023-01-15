@@ -59,6 +59,7 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 		context.put("PageParametersClassName", serviceNameGenerator.getPageParametersClassName());
 		context.put("PageParametersPackageName", serviceNameGenerator.getPageParametersPackageName(model, table));
 		context.put("PluralName", nameGenerator.getPluralName(table).toLowerCase());
+		context.put("ReferencedColumnData", getGUIReferenceData(table));
 		context.put("ResourceManagerInterfaceName", localizationNameGenerator.getResourceManagerInterfaceName());
 		context
 				.put(

@@ -262,27 +262,22 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		}
 		boolean b = true;
 		for (String pattern : patterns) {
-			b &= isMatchingPattern(pattern, model);
+			b &= isMatchingPattern(pattern.toLowerCase(), model);
 		}
 		return b;
 	}
 
 	private boolean isMatchingPattern(String pattern, ${ModelClassName} model) {
-		if (masterDataGridFieldRenderer != null) {
-			return
-					#foreach ($Filter in $Filters)
-					masterDataGridFieldRenderer.getHeaderString(${ModelClassName}.${Filter.getFieldName().toUpperCase()}, model).toString().toLowerCase().contains(pattern)#if ($foreach.hasNext) ||#else;#end
-					#end
-		}
-		return
-				#foreach ($Filter in $Filters)
-					#if(${Column.isSimpleBoolean()} == "true")
-						#set($GetterPrefix = "is")
-					#else
-						#set($GetterPrefix = "get")
-					#end
-				model.${GetterPrefix}${Filter.getFieldName()}().toString().toLowerCase().contains(pattern)#if ($foreach.hasNext) ||#else;#end
-				#end
+		boolean result = false;
+		#foreach ($Filter in $Filters)
+			#if(${Column.isSimpleBoolean()} == "true")
+				#set($GetterPrefix = "is")
+			#else
+				#set($GetterPrefix = "get")
+			#end
+		result = result || getHeaderString(${ModelClassName}.${Filter.getFieldName().toUpperCase()}, model, () -> model.${GetterPrefix}${Filter.getFieldName()}()).toString().toLowerCase().contains(pattern);
+		#end
+		return result;
 	}
 	#end
 
