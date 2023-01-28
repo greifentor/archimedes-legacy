@@ -1,5 +1,6 @@
 package archimedes.codegenerators.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,7 @@ import archimedes.codegenerators.FindByUtils;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.Subclasses.SubclassData;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
@@ -33,6 +35,7 @@ public class GeneratedServiceImplClassCodeGenerator extends AbstractClassCodeGen
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		ReferenceMode referenceMode = getReferenceMode(model, table);
+		context.put("CascadeDeleteCode", getCascadeDeleteCodeData(model, table));
 		context.put("ClassName", getClassName(table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("ContextName", getContextName(table));
@@ -93,6 +96,43 @@ public class GeneratedServiceImplClassCodeGenerator extends AbstractClassCodeGen
 										nameGenerator.getModelPackageName(model, subclassTable) + "."
 												+ nameGenerator.getModelClassName(subclassTable)))
 				.collect(Collectors.toList());
+	}
+
+	private List<CascadeDeleteCodeData> getCascadeDeleteCodeData(DataModel model, TableModel table) {
+		return getReferencingColumns(table, model)
+				.stream()
+				.filter(this::isCascadeDeleteCodeSet)
+				.map(column -> createCascadeDeleteCodeData(column, model))
+				.collect(Collectors.toList());
+	}
+
+	private boolean isCascadeDeleteCodeSet(ColumnModel column) {
+		return (column.getOptionByName(AbstractClassCodeGenerator.CASCADE_DELETE) != null)
+				&& (column.getOptionByName(AbstractClassCodeGenerator.CASCADE_DELETE).getParameter() != null)
+				&& (column
+						.getOptionByName(AbstractClassCodeGenerator.CASCADE_DELETE)
+						.getParameter()
+						.contains(AbstractClassCodeGenerator.CODE));
+	}
+
+	private CascadeDeleteCodeData createCascadeDeleteCodeData(ColumnModel column, DataModel model) {
+		return new CascadeDeleteCodeData()
+				.setFindMethodName("findAllBy" + nameGenerator.getCamelCase(column.getName()))
+				.setPersistencePortAttributeName(
+						nameGenerator
+								.getAttributeName(nameGenerator.getPersistencePortInterfaceName(column.getTable())))
+				.setPersistencePortInterfaceName(nameGenerator.getPersistencePortInterfaceName(column.getTable()))
+				.setPersistencePortPackageName(nameGenerator.getPersistencePortPackageName(model, column.getTable()));
+	}
+
+	private List<ColumnModel> getReferencingColumns(TableModel table, DataModel dataModel) {
+		List<ColumnModel> columns = new ArrayList<>();
+		for (ColumnModel column : dataModel.getAllColumns()) {
+			if (column.getReferencedTable() == table) {
+				columns.add(column);
+			}
+		}
+		return columns;
 	}
 
 	@Override

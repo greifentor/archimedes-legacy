@@ -31,6 +31,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	public static final String ALTERNATE_MODULE_PREFIX = "ALTERNATE_MODULE_PREFIX";
 	public static final String AUTO_INCREMENT = "AUTO_INCREMENT";
+	public static final String CASCADE_DELETE = "CASCADE_DELETE";
+	public static final String CODE = "CODE";
 	public static final String COMMENTS = "COMMENTS";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
 	public static final String INHERITANCE_MODE_JOINED = "JOINED";
