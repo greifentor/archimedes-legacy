@@ -22,6 +22,11 @@ import ${HeaderLayoutPackageName}.${HeaderLayoutClassName};
 import ${HeaderLayoutPackageName}.${HeaderLayoutClassName}.HeaderLayoutMode;
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
 
+#set ($DOLLAR = "$")
+#if ("${MainMenuViewImport}" != "$DOLLAR{MainMenuViewImport}")
+import ${MainMenuViewImport};
+
+#end
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -93,6 +98,6 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	private void switchToSource${MasterDataInfo.getModelClassName()}() {
 		getUI().ifPresent(ui -> ui.navigate(${MasterDataInfo.getPageViewName()}.URL));
 	}
-#end
 
+#end
 }

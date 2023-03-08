@@ -147,6 +147,8 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 	private String getType(ColumnModel column) {
 		if (column.getReferencedTable() != null) {
 			return GUIColumnData.TYPE_COMBOBOX;
+		} else if (column.getDomain().getDataType() == Types.BLOB) {
+			return GUIColumnData.TYPE_UPLOAD;
 		} else if (column.getDomain().getDataType() == Types.BOOLEAN) {
 			return GUIColumnData.TYPE_BOOLEAN;
 		} else if ((column.getDomain().getDataType() == Types.DECIMAL)
