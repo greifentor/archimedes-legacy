@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.AbstractVaadinModelCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
@@ -21,6 +22,8 @@ import archimedes.model.TableModel;
  * @author ollie (19.12.2022)
  */
 public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGenerator {
+
+	public static final String ALTERNATIVE_MAIN_VIEW_URL = "ALTERNATIVE_MAIN_VIEW_URL";
 
 	public MasterDataViewClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super("masterdata/MasterDataViewClass.vm", codeFactory);
@@ -49,6 +52,7 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 		context.put("MasterDataInfos", getMasterDataInfos(model));
 		context.put("MasterDataViewClassName", nameGenerator.getMasterDataViewClassName(model));
 		context.put("MasterDataViewPackageName", nameGenerator.getMasterDataPackageName(model));
+		context.put("MainMenuViewURL", getMainMenuViewURL(model));
 		context.put("PackageName", getPackageName(model, model));
 		context
 				.put(
@@ -83,6 +87,10 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 				.setModelClassName(ServiceNameGenerator.INSTANCE.getModelClassName(table))
 				.setPageViewName(nameGenerator.getPageViewClassName(table))
 				.setResourceIdentifier(ServiceNameGenerator.INSTANCE.getModelClassName(table).toLowerCase());
+	}
+
+	private String getMainMenuViewURL(DataModel model) {
+		return OptionGetter.getParameterOfOptionByName(model, ALTERNATIVE_MAIN_VIEW_URL).orElse("MainMenuView.URL");
 	}
 
 	@Override
