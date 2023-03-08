@@ -81,7 +81,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		buttonGrid.setWidthFull();
 		add(
 				new ${HeaderLayoutClassName}(
-						buttonFactory.createBackButton(resourceManager, this::getUI, MainMenuView.URL, session),
+						buttonFactory.createBackButton(resourceManager, this::getUI, ${MainMenuViewURL}, session),
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),
 						resourceManager.getLocalizedString("master-data.header.menu.label", session.getLocalization()),
 						HeaderLayoutMode.PLAIN),

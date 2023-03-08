@@ -34,7 +34,7 @@ public class MasterDataViewClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = getExpected(null, "gui.vaadin.masterdata", false, "null");
+			String expected = getExpected(null, "gui.vaadin.masterdata", false, "null", null);
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, null);
@@ -42,7 +42,7 @@ public class MasterDataViewClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
-		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue) {
+		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue, String mainViewURL) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" //
 							+ "\n" //
@@ -154,7 +154,8 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "		buttonGrid.setWidthFull();\n" //
 							+ "		add(\n" //
 							+ "				new HeaderLayout(\n" //
-							+ "						buttonFactory.createBackButton(resourceManager, this::getUI, MainMenuView.URL, session),\n" //
+							+ "						buttonFactory.createBackButton(resourceManager, this::getUI, "
+							+ (mainViewURL == null ? "MainMenuView.URL" : mainViewURL) + ", session),\n" //
 							+ "						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),\n" //
 							+ "						resourceManager.getLocalizedString(\"master-data.header.menu.label\", session.getLocalization()),\n" //
 							+ "						HeaderLayoutMode.PLAIN),\n" //
@@ -182,9 +183,27 @@ public class MasterDataViewClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectWithSuppressedComments() {
 			// Prepare
-			String expected = getExpected(null, "gui.vaadin.masterdata", true, "null");
+			String expected = getExpected(null, "gui.vaadin.masterdata", true, "null", null);
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, null);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithAlternativeMainViewURL() {
+			// Prepare
+			String alternativeMainViewURL = "AlternativeMainView.URL";
+			String expected = getExpected(null, "gui.vaadin.masterdata", true, "null", alternativeMainViewURL);
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
+			dataModel
+					.addOption(
+							new Option(
+									MasterDataViewClassCodeGenerator.ALTERNATIVE_MAIN_VIEW_URL,
+									alternativeMainViewURL));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, null);
 			// Check
