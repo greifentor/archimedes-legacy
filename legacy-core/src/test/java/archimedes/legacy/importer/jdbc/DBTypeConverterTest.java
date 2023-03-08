@@ -37,6 +37,7 @@ public class DBTypeConverterTest {
 					Types.CLOB + ",0,0",
 					Types.DATE + ",0,0",
 					Types.DECIMAL + ",42,7",
+					Types.LONGVARBINARY + ",0,0",
 					Types.LONGVARCHAR + ",0,0",
 					Types.NUMERIC + ",42,7",
 					Types.OTHER + ",0,0",

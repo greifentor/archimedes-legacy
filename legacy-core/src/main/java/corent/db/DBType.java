@@ -101,6 +101,7 @@ public final class DBType {
 	public static final DBType DOUBLE = new DBType("DOUBLE");
 	public static final DBType FLOAT = new DBType("FLOAT");
 	public static final DBType INTEGER = new DBType("INTEGER");
+	public static final DBType LONGVARBINARY = new DBType("LONGVARBINARY");
 	public static final DBType LONGVARCHAR = new DBType("LONGVARCHAR");
 	public static final DBType NUMERIC = new DBType("NUMERIC", true, true);
 	public static final DBType SMALLINT = new DBType("SMALLINT");
@@ -140,6 +141,8 @@ public final class DBType {
 			return FLOAT;
 		case Types.INTEGER:
 			return INTEGER;
+		case Types.LONGVARBINARY:
+			return LONGVARBINARY;
 		case Types.LONGVARCHAR:
 			return LONGVARCHAR;
 		case Types.NUMERIC:
@@ -191,6 +194,8 @@ public final class DBType {
 			return Types.FLOAT;
 		} else if (dbtype == INTEGER) {
 			return Types.INTEGER;
+		} else if (dbtype == LONGVARBINARY) {
+			return Types.LONGVARBINARY;
 		} else if (dbtype == LONGVARCHAR) {
 			return Types.LONGVARCHAR;
 		} else if (dbtype == NUMERIC) {
