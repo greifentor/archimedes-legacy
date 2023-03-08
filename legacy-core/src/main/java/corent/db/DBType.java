@@ -108,6 +108,7 @@ public final class DBType {
 	public static final DBType TIME = new DBType("TIME");
 	public static final DBType TIMESTAMP = new DBType("TIMESTAMP");
 	public static final DBType TINYINT = new DBType("TINYINT");
+	public static final DBType VARBINARY = new DBType("VARBINARY", true, false);
 	public static final DBType VARCHAR = new DBType("VARCHAR", true, false);
 
 	/**
@@ -158,7 +159,7 @@ public final class DBType {
 		case Types.TINYINT:
 			return TINYINT;
 		case Types.VARBINARY:
-			return BLOB;
+			return VARBINARY;
 		case Types.VARCHAR:
 			return VARCHAR;
 		default:
@@ -208,6 +209,8 @@ public final class DBType {
 			return Types.TIMESTAMP;
 		} else if (dbtype == TINYINT) {
 			return Types.TINYINT;
+		} else if (dbtype == VARBINARY) {
+			return Types.VARBINARY;
 		}
 		return Types.VARCHAR;
 	}
@@ -239,6 +242,8 @@ public final class DBType {
 			return "float";
 		} else if (dbtype == INTEGER) {
 			return "int";
+		} else if (dbtype == LONGVARBINARY) {
+			return "longvarbinary";
 		} else if (dbtype == LONGVARCHAR) {
 			if (DBExec.GetMode() == DBExecMode.HSQL) {
 				return "longvarchar";
@@ -254,6 +259,8 @@ public final class DBType {
 			return "timestamp";
 		} else if (dbtype == TINYINT) {
 			return "tinyint";
+		} else if (dbtype == VARBINARY) {
+			return "varbinary";
 		}
 		return "varchar";
 	}
