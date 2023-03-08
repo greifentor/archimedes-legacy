@@ -14,6 +14,7 @@ public class GUIColumnData {
 	public static final String TYPE_NUMERIC = "NUMERIC";
 	public static final String TYPE_STRING = "STRING";
 	public static final String TYPE_TEXT = "TEXT";
+	public static final String TYPE_UPLOAD = "UPLOAD";
 
 	private String fieldNameCamelCase;
 	private String fieldOwnerClassName;

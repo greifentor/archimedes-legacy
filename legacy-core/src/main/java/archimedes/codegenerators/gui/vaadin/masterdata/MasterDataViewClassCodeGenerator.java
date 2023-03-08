@@ -23,7 +23,7 @@ import archimedes.model.TableModel;
  */
 public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGenerator {
 
-	public static final String ALTERNATIVE_MAIN_VIEW_URL = "ALTERNATIVE_MAIN_VIEW_URL";
+	public static final String ALTERNATIVE_MAIN_VIEW = "ALTERNATIVE_MAIN_VIEW";
 
 	public MasterDataViewClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super("masterdata/MasterDataViewClass.vm", codeFactory);
@@ -52,6 +52,7 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 		context.put("MasterDataInfos", getMasterDataInfos(model));
 		context.put("MasterDataViewClassName", nameGenerator.getMasterDataViewClassName(model));
 		context.put("MasterDataViewPackageName", nameGenerator.getMasterDataPackageName(model));
+		context.put("MainMenuViewImport", getMainMenuViewImport(model));
 		context.put("MainMenuViewURL", getMainMenuViewURL(model));
 		context.put("PackageName", getPackageName(model, model));
 		context
@@ -89,8 +90,22 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 				.setResourceIdentifier(ServiceNameGenerator.INSTANCE.getModelClassName(table).toLowerCase());
 	}
 
+	private String getMainMenuViewImport(DataModel model) {
+		return OptionGetter
+				.getParameterOfOptionByName(model, ALTERNATIVE_MAIN_VIEW)
+				.filter(value -> value.contains("|"))
+				.map(value -> value.substring(value.indexOf("|") + 1))
+				.orElse(null);
+	}
+
 	private String getMainMenuViewURL(DataModel model) {
-		return OptionGetter.getParameterOfOptionByName(model, ALTERNATIVE_MAIN_VIEW_URL).orElse("MainMenuView.URL");
+		return OptionGetter
+				.getParameterOfOptionByName(model, ALTERNATIVE_MAIN_VIEW)
+				.map(
+						value -> value.contains("|") && value.indexOf("|") > 0
+								? value.substring(0, value.indexOf("|"))
+								: value)
+				.orElse("MainMenuView.URL");
 	}
 
 	@Override

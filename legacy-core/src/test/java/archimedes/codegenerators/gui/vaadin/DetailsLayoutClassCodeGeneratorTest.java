@@ -1230,4 +1230,126 @@ public class DetailsLayoutClassCodeGeneratorTest {
 
 	}
 
+	@Nested
+	class Blobs {
+
+		@Test
+		void createsAnUploadComponent() {
+			// Prepare
+			String expected =
+					"package base.pack.age.name.gui.vaadin.masterdata;\n" //
+							+ "\n" //
+							+ "import java.io.IOException;\n" //
+							+ "import java.io.InputStream;\n" //
+							+ "\n" //
+							+ "import com.vaadin.flow.component.AttachEvent;\n" //
+							+ "import com.vaadin.flow.component.upload.Upload;\n"
+							+ "import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;\n" //
+							+ "\n" //
+							+ "import base.pack.age.name.core.model.BlobTable;\n" //
+							+ "import base.pack.age.name.core.service.BlobTableService;\n" //
+							+ "import base.pack.age.name.core.service.localization.ResourceManager;\n" //
+							+ "import base.pack.age.name.gui.SessionData;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
+							+ "import lombok.Generated;\n" //
+							+ "import lombok.RequiredArgsConstructor;\n" //
+							+ "\n" //
+							+ "/**\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n" //
+							+ "@Generated\n" //
+							+ "@RequiredArgsConstructor\n" //
+							+ "public class BlobTableDetailsLayout extends AbstractMasterDataBaseLayout {\n" //
+							+ "\n" //
+							+ "	private final ButtonFactory buttonFactory;\n" //
+							+ "	private final BlobTable model;\n" //
+							+ "	private final BlobTableService service;\n" //
+							+ "	private final ResourceManager resourceManager;\n" //
+							+ "	private final SessionData session;\n" //
+							+ "	private final Observer observer;\n" //
+							+ "	private final DetailsLayoutComboBoxItemLabelGenerator<BlobTable> comboBoxItemLabelGenerator;\n" //
+							+ "\n" //
+							+ "	private Upload uploadBlob;\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public void onAttach(AttachEvent attachEvent) {\n" //
+							+ "		super.onAttach(attachEvent);\n" //
+							+ "		createButtons();\n" //
+							+ "		MultiFileMemoryBuffer bufferBlob = new MultiFileMemoryBuffer();\n" //
+							+ "		uploadBlob = new Upload(bufferBlob);\n" //
+							+ "		uploadBlob.setMaxFiles(1);\n" //
+							+ "		uploadBlob.setMaxFileSize(Integer.MAX_VALUE);\n" //
+							+ "		uploadBlob.addSucceededListener(event -> {\n" //
+							+ "			System.out.println(\"upload (Blob) started.\");\n" //
+							+ "			String fileName = event.getFileName();\n" //
+							+ "			InputStream inputStream = bufferBlob.getInputStream(fileName);\n" //
+							+ "			System.out.println(\"upload complete!\");\n" //
+							+ "			try {\n" //
+							+ "				model.setBlob(inputStream.readAllBytes());\n" //
+							+ "			} catch (IOException ioe) {\n" //
+							+ "				System.out.println(\"while uploading file: \" + fileName);\n" //
+							+ "				ioe.printStackTrace();\n" //
+							+ "			} finally {\n" //
+							+ "				try {\n" //
+							+ "					inputStream.close();\n" //
+							+ "				} catch (Exception e) {\n" //
+							+ "					e.printStackTrace();\n" //
+							+ "				}\n" //
+							+ "			}\n" //
+							+ "		});\n" //
+							+ "		uploadBlob.setWidthFull();\n" //
+							+ "		getStyle().set(\"-moz-border-radius\", \"4px\");\n" //
+							+ "		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" //
+							+ "		getStyle().set(\"border-radius\", \"4px\");\n" //
+							+ "		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" //
+							+ "		getStyle()\n" //
+							+ "				.set(\n" //
+							+ "						\"box-shadow\",\n" //
+							+ "						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n" //
+							+ "		setMargin(false);\n" //
+							+ "		setWidthFull();\n" //
+							+ "		add(\n" //
+							+ "				uploadBlob,\n" //
+							+ "				getMasterDataButtonLayout(model.getId() > 0));\n" //
+							+ "		textFieldBlob.focus();\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected ButtonFactory getButtonFactory() {\n" //
+							+ "		return buttonFactory;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected ResourceManager getResourceManager() {\n" //
+							+ "		return resourceManager;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected SessionData getSessionData() {\n" //
+							+ "		return session;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected void remove() {\n" //
+							+ "		service.delete(model);\n" //
+							+ "		observer.remove();\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected void save() {\n" //
+							+ "		observer.save(service.update(model));\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "}";
+			DataModel dataModel = readDataModel("Model.xml");
+			TableModel tableModel = dataModel.getTableByName("BLOB_TABLE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
 }

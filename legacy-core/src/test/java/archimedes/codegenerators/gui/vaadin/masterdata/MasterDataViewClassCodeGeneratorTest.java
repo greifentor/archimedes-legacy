@@ -34,7 +34,7 @@ public class MasterDataViewClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObject() {
 			// Prepare
-			String expected = getExpected(null, "gui.vaadin.masterdata", false, "null", null);
+			String expected = getExpected(null, "gui.vaadin.masterdata", false, "null", null, null);
 			DataModel dataModel = readDataModel("Model.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, null);
@@ -42,7 +42,8 @@ public class MasterDataViewClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
-		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue, String mainViewURL) {
+		private String getExpected(String prefix, String packageName, boolean suppressComment, String noKeyValue,
+				String mainViewURL, String mainViewImport) {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" //
 							+ "\n" //
@@ -66,8 +67,14 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "import base.pack.age.name.gui.vaadin.component.ButtonGrid;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" //
-							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
-							+ "\n" //
+							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n";
+			if (mainViewImport != null) {
+				s +=
+						"\n" //
+								+ "import " + mainViewImport + ";\n";
+			}
+			s +=
+					"\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
 							+ "\n";
@@ -106,6 +113,15 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "		setWidthFull();\n" //
 							+ "		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n" //
 							+ "		getStyle().set(\"background-size\", \"cover\");\n" //
+							+ "		Button buttonMasterDataBlobTable =\n" //
+							+ "				buttonFactory\n" //
+							+ "						.createButton(\n" //
+							+ "								resourceManager\n" //
+							+ "										.getLocalizedString(\n" //
+							+ "												\"master-data.button.blobtable.text\",\n" //
+							+ "												session.getLocalization()));\n" //
+							+ "		buttonMasterDataBlobTable.addClickListener(event -> switchToSourceBlobTable());\n" //
+							+ "		buttonMasterDataBlobTable.setWidthFull();\n" //
 							+ "		Button buttonMasterDataTableWithEnumType =\n" //
 							+ "				buttonFactory\n" //
 							+ "						.createButton(\n" //
@@ -145,6 +161,7 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "		ButtonGrid buttonGrid =\n" //
 							+ "				new ButtonGrid(\n" //
 							+ "						4,\n" //
+							+ "						buttonMasterDataBlobTable,\n" //
 							+ "						buttonMasterDataTableWithEnumType,\n" //
 							+ "						buttonMasterDataTableWithGridFields,\n" //
 							+ "						buttonMasterDataTableWithNumberField,\n" //
@@ -163,15 +180,22 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "		LOG.info(\"main menu view opened for user '{}'.\", session.getUserName());\n" //
 							+ "	}\n" //
 							+ "\n" //
+							+ "	private void switchToSourceBlobTable() {\n" //
+							+ "		getUI().ifPresent(ui -> ui.navigate(BlobTablePageView.URL));\n" //
+							+ "	}\n" //
+							+ "\n" //
 							+ "	private void switchToSourceTableWithEnumType() {\n" //
 							+ "		getUI().ifPresent(ui -> ui.navigate(TableWithEnumTypePageView.URL));\n" //
 							+ "	}\n" //
+							+ "\n" //
 							+ "	private void switchToSourceTableWithGridFields() {\n" //
 							+ "		getUI().ifPresent(ui -> ui.navigate(TableWithGridFieldsPageView.URL));\n" //
 							+ "	}\n" //
+							+ "\n" //
 							+ "	private void switchToSourceTableWithNumberField() {\n" //
 							+ "		getUI().ifPresent(ui -> ui.navigate(TableWithNumberFieldPageView.URL));\n" //
 							+ "	}\n" //
+							+ "\n" //
 							+ "	private void switchToSourceTableWithSpecials() {\n" //
 							+ "		getUI().ifPresent(ui -> ui.navigate(TableWithSpecialsPageView.URL));\n" //
 							+ "	}\n" //
@@ -183,7 +207,7 @@ public class MasterDataViewClassCodeGeneratorTest {
 		@Test
 		void happyRunForASimpleObjectWithSuppressedComments() {
 			// Prepare
-			String expected = getExpected(null, "gui.vaadin.masterdata", true, "null", null);
+			String expected = getExpected(null, "gui.vaadin.masterdata", true, "null", null, null);
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			// Run
@@ -196,14 +220,40 @@ public class MasterDataViewClassCodeGeneratorTest {
 		void happyRunForASimpleObjectWithAlternativeMainViewURL() {
 			// Prepare
 			String alternativeMainViewURL = "AlternativeMainView.URL";
-			String expected = getExpected(null, "gui.vaadin.masterdata", true, "null", alternativeMainViewURL);
+			String expected = getExpected(null, "gui.vaadin.masterdata", true, "null", alternativeMainViewURL, null);
 			DataModel dataModel = readDataModel("Model.xml");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			dataModel
 					.addOption(
 							new Option(
-									MasterDataViewClassCodeGenerator.ALTERNATIVE_MAIN_VIEW_URL,
+									MasterDataViewClassCodeGenerator.ALTERNATIVE_MAIN_VIEW,
 									alternativeMainViewURL));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, null);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void happyRunForASimpleObjectWithAlternativeMainViewURLWithImport() {
+			// Prepare
+			String alternativeMainViewURL = "AlternativeMainView.URL";
+			String alternativeMainViewImport = "blubs.test.AlternativeMainView";
+			String expected =
+					getExpected(
+							null,
+							"gui.vaadin.masterdata",
+							true,
+							"null",
+							alternativeMainViewURL,
+							alternativeMainViewImport);
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
+			dataModel
+					.addOption(
+							new Option(
+									MasterDataViewClassCodeGenerator.ALTERNATIVE_MAIN_VIEW,
+									alternativeMainViewURL + "|" + alternativeMainViewImport));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, null);
 			// Check
