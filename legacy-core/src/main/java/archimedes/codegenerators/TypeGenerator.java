@@ -22,6 +22,8 @@ public class TypeGenerator {
 			return getTypeRespectNullable(nullable, "long", "Long");
 		} else if ((domain.getDataType() == Types.BIT) || (domain.getDataType() == Types.BOOLEAN)) {
 			return getTypeRespectNullable(nullable, "boolean", "Boolean");
+		} else if (domain.getDataType() == Types.BLOB) {
+			return "byte[]";
 		} else if ((domain.getDataType() == Types.CHAR) || (domain.getDataType() == Types.LONGNVARCHAR)
 				|| (domain.getDataType() == Types.LONGVARCHAR) || (domain.getDataType() == Types.NCHAR)
 				|| (domain.getDataType() == Types.NVARCHAR) || (domain.getDataType() == Types.VARCHAR)) {

@@ -86,9 +86,12 @@ class TypeGeneratorTest {
 		@Test
 		void passDomainModelOfBLOB_ReturnsAStringWithTheCorrectJavaType() {
 			// Prepare
+			String expected = "byte[]";
 			when(type.getDataType()).thenReturn(Types.BLOB);
 			// Run
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.getJavaTypeString(type, false));
+			String returned = unitUnderTest.getJavaTypeString(type, true);
+			// Check
+			assertEquals(expected, returned);
 		}
 
 		@Test
