@@ -40,6 +40,8 @@ public class TypeGenerator {
 			return getTypeRespectNullable(nullable, "float", "Float");
 		} else if (domain.getDataType() == Types.INTEGER) {
 			return getTypeRespectNullable(nullable, "int", "Integer");
+		} else if (domain.getDataType() == Types.LONGVARBINARY) {
+			return "byte[]";
 		} else if (domain.getDataType() == Types.SMALLINT) {
 			return getTypeRespectNullable(nullable, "short", "Short");
 		} else if (domain.getDataType() == Types.TIME) {
@@ -50,6 +52,8 @@ public class TypeGenerator {
 			return "ZonedDateTime";
 		} else if (domain.getDataType() == Types.TINYINT) {
 			return getTypeRespectNullable(nullable, "byte", "Byte");
+		} else if (domain.getDataType() == Types.VARBINARY) {
+			return "byte[]";
 		}
 		throw new IllegalArgumentException("type " + domain.getDataType() + " cannot be converted to a Java type.");
 	}

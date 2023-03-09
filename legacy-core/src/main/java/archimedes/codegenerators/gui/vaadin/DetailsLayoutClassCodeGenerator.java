@@ -160,10 +160,14 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 			return GUIColumnData.TYPE_ENUM;
 		} else if (column.getDomain().getDataType() == Types.INTEGER) {
 			return GUIColumnData.TYPE_INTEGER;
+		} else if (column.getDomain().getDataType() == Types.LONGVARBINARY) {
+			return GUIColumnData.TYPE_UPLOAD;
 		} else if (((column.getDomain().getDataType() == Types.LONGVARCHAR)
 				|| (column.getDomain().getDataType() == Types.VARCHAR))
 				&& column.getDomain().isOptionSet(AbstractCodeGenerator.TEXT)) {
 			return GUIColumnData.TYPE_TEXT;
+		} else if (column.getDomain().getDataType() == Types.VARBINARY) {
+			return GUIColumnData.TYPE_UPLOAD;
 		}
 		return GUIColumnData.TYPE_STRING;
 	}

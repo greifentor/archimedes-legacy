@@ -357,9 +357,12 @@ class TypeGeneratorTest {
 		@Test
 		void passDomainModelOfLONGVARBINARY_ReturnsAStringWithTheCorrectJavaType() {
 			// Prepare
+			String expected = "byte[]";
 			when(type.getDataType()).thenReturn(Types.LONGVARBINARY);
 			// Run
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.getJavaTypeString(type, false));
+			String returned = unitUnderTest.getJavaTypeString(type, false);
+			// Check
+			assertEquals(expected, returned);
 		}
 
 		@Test
@@ -735,9 +738,12 @@ class TypeGeneratorTest {
 		@Test
 		void passDomainModelOfVARBINARY_ReturnsAStringWithTheCorrectJavaType() {
 			// Prepare
+			String expected = "byte[]";
 			when(type.getDataType()).thenReturn(Types.VARBINARY);
 			// Run
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.getJavaTypeString(type, false));
+			String returned = unitUnderTest.getJavaTypeString(type, false);
+			// Check
+			assertEquals(expected, returned);
 		}
 
 		@Test
