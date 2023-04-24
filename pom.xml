@@ -34,6 +34,7 @@
 	</build>
 	<modules>
 		<module>../dm-comp</module>
+		<module>../jasperreportchecker</module>
 		<module>legacy-core</module>
 	</modules>
 
