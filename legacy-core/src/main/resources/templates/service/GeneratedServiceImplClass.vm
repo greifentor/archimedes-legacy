@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
+#if($CascadeDeleteCode)
+import javax.transaction.Transactional;
+#end
 
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
@@ -22,6 +25,9 @@ import ${ListAccessData.getTypeQualifiedName()};
 #end
 #end
 import ${PersistencePortPackageName}.${PersistencePortInterfaceName};
+#foreach($CascadeDeleteData in $CascadeDeleteCode)
+import ${CascadeDeleteData.getPersistencePortPackageName()}.${CascadeDeleteData.getPersistencePortInterfaceName()};
+#end
 import ${ServiceInterfacePackageName}.${ServiceInterfaceName};
 import lombok.Generated;
 
@@ -43,6 +49,10 @@ public abstract class ${ClassName} implements ${ServiceInterfaceName} {
 
 	@Inject
 	protected ${PersistencePortInterfaceName} persistencePort;
+	#foreach($CascadeDeleteData in $CascadeDeleteCode)
+	@Inject
+	protected ${CascadeDeleteData.getPersistencePortInterfaceName()} ${CascadeDeleteData.getPersistencePortAttributeName()};
+	#end
 
 	@Override
 	public ${ModelClassName} create(${ModelClassName} model) {
@@ -77,7 +87,13 @@ public abstract class ${ClassName} implements ${ServiceInterfaceName} {
 	}
 
 	@Override
+	#if($CascadeDeleteCode)
+	@Transactional
+	#end
 	public void delete(${ModelClassName} model) {
+		#foreach($CascadeDeleteData in $CascadeDeleteCode)
+		${CascadeDeleteData.getPersistencePortAttributeName()}.${CascadeDeleteData.getFindMethodName()}(model).forEach(${CascadeDeleteData.getPersistencePortAttributeName()}::delete);
+		#end
 		persistencePort.delete(model);
 	}
 #foreach($FindBy in $FindBys)

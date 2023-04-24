@@ -81,6 +81,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	private final ${SessionDataClassName} session;
 
 	private ${ButtonClassName} buttonAdd;
+	private ${ButtonClassName} buttonDuplicate;
 	private ${ButtonClassName} buttonEdit;
 	private ${ButtonClassName} buttonRemove;
 	private Grid<${ModelClassName}> grid;
@@ -112,6 +113,8 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		textFieldFilter.addValueChangeListener(event -> updateGrid(0));
 		#end
 		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);
+		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString("commons.button.duplicate.text", session.getLocalization()));
+		buttonDuplicate.addClickListener(event -> duplicateRecord());
 		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);
 		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);
 		grid = new Grid<>();
@@ -134,7 +137,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		grid.getStyle().set("-webkit-border-radius", "4px");
 		grid.getStyle().set("border-radius", "4px");
 		grid.getStyle().set("border", "1px solid #A9A9A9");
-		${MasterDataButtonLayoutClassName} buttonLayout = new ${MasterDataButtonLayoutClassName}(buttonAdd, buttonEdit, buttonRemove);
+		${MasterDataButtonLayoutClassName} buttonLayout = new ${MasterDataButtonLayoutClassName}(buttonAdd, buttonEdit, buttonDuplicate, buttonRemove);
 		buttonLayout.setMargin(false);
 		buttonLayout.setWidthFull();
 		setMargin(false);
@@ -178,8 +181,14 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 				#end
 				dataLayout);
 		updateGrid(0);
+		setButtonEnabled(buttonDuplicate, false);
 		setButtonEnabled(buttonEdit, false);
 		setButtonEnabled(buttonRemove, false);
+		#if ($Filters)
+		textFieldFilter.focus();
+		#else
+		buttonAdd.focus();
+		#end
 	}
 
 	private Object getHeaderString(String fieldName, ${ModelClassName} aTable, Supplier<?> f) {
@@ -191,10 +200,12 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	private void enabledButtons(SelectionEvent<Grid<${ModelClassName}>, ${ModelClassName}> event) {
 		if (event.getFirstSelectedItem().isEmpty()) {
 			setButtonEnabled(buttonAdd, true);
+			setButtonEnabled(buttonDuplicate, false);
 			setButtonEnabled(buttonEdit, false);
 			setButtonEnabled(buttonRemove, false);
 		} else {
 			setButtonEnabled(buttonAdd, false);
+			setButtonEnabled(buttonDuplicate, true);
 			setButtonEnabled(buttonEdit, true);
 			setButtonEnabled(buttonRemove, true);
 		}
@@ -251,27 +262,22 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		}
 		boolean b = true;
 		for (String pattern : patterns) {
-			b &= isMatchingPattern(pattern, model);
+			b &= isMatchingPattern(pattern.toLowerCase(), model);
 		}
 		return b;
 	}
 
 	private boolean isMatchingPattern(String pattern, ${ModelClassName} model) {
-		if (masterDataGridFieldRenderer != null) {
-			return
-					#foreach ($Filter in $Filters)
-					masterDataGridFieldRenderer.getHeaderString(${ModelClassName}.${Filter.getFieldName().toUpperCase()}, model).toString().toLowerCase().contains(pattern)#if ($foreach.hasNext) ||#else;#end
-					#end
-		}
-		return
-				#foreach ($Filter in $Filters)
-					#if(${Column.isSimpleBoolean()} == "true")
-						#set($GetterPrefix = "is")
-					#else
-						#set($GetterPrefix = "get")
-					#end
-				model.${GetterPrefix}${Filter.getFieldName()}().toString().toLowerCase().contains(pattern)#if ($foreach.hasNext) ||#else;#end
-				#end
+		boolean result = false;
+		#foreach ($Filter in $Filters)
+			#if(${Column.isSimpleBoolean()} == "true")
+				#set($GetterPrefix = "is")
+			#else
+				#set($GetterPrefix = "get")
+			#end
+		result = result || getHeaderString(${ModelClassName}.${Filter.getFieldName().toUpperCase()}, model, () -> model.${GetterPrefix}${Filter.getFieldName()}()).toString().toLowerCase().contains(pattern);
+		#end
+		return result;
 	}
 	#end
 
@@ -313,6 +319,17 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 #end
 	}
 
+	private void duplicateRecord() {
+		#if ($Filters)
+		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());
+		#end
+		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
+			QueryParameters parameters =
+					new QueryParameters(Map.of("id", List.of("" + model.getId()), "duplicate", List.of("true")));
+			getUI().ifPresent(ui -> ui.navigate(${MaintenanceViewClassName}.URL, parameters));
+		});
+	}
+
 	private void editRecord() {
 		#if ($Filters)
 		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());
@@ -327,6 +344,11 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
 			service.delete(model);
 			updateGrid(0);
+			#if ($Filters)
+			textFieldFilter.focus();
+			#else
+			buttonAdd.focus();
+			#end
 		});
 	}
 

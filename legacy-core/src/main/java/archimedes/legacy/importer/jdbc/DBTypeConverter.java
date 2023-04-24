@@ -42,6 +42,8 @@ public class DBTypeConverter {
 			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.LONGVARCHAR) {
 			return new TypeSO().setSqlType(dataType);
+		} else if (dataType == Types.LONGVARBINARY) {
+			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.NUMERIC) {
 			return new TypeSO().setSqlType(dataType).setLength(length).setPrecision(precision);
 		} else if (dataType == Types.OTHER) {

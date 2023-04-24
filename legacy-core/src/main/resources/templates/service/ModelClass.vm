@@ -1,13 +1,19 @@
 package ${PackageName};
 
 #if ($ImportLocalDate || $ImportLocalDateTime)
-#if ($ImportLocalDate)
+	#if ($ImportLocalDate)
 import ${ImportLocalDate};
-#end
-#if ($ImportLocalDateTime)
+	#end
+	#if ($ImportLocalDateTime)
 import ${ImportLocalDateTime};
-#end
+	#end
 
+#end
+#foreach($Impl in ${Implements.toList()})
+import ${Impl.getPackageName()}.${Impl.getTypeName()};
+	#if ($foreach.hasNext)#else
+
+	#end
 #end
 #if ($POJOMode == "BUILDER")
 import lombok.AllArgsConstructor;
@@ -48,7 +54,7 @@ import lombok.experimental.Accessors;
 #if ($Subclass)
 @ToString(callSuper = true)
 #end
-public class ${ClassName} extends ${GeneratedModelClassName} {
+public class ${ClassName} extends ${GeneratedModelClassName}#if (!${Implements.toList().isEmpty()}) implements #foreach ($I in ${Implements.toList()})${I.getTypeName()}#if ($foreach.hasNext), #end#end#end {
 
 #foreach($Column in $ColumnData)
 	@Override

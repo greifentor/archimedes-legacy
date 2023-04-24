@@ -36,6 +36,10 @@ public class ${ClassName} implements ${ResourceManagerInterfaceName} {
 
 	@PostConstruct
 	private void postConstruct() {
+		if (!configuration.isEnabled()) {
+			logger.warn("resource manager disabled!");
+			return;
+		}
 		logger.info("reading resources ...");
 		for (${LocalizationSOClassName} localization : ${LocalizationSOClassName}.values()) {
 			String fileName = configuration.getResourceFileName(localization).isEmpty()

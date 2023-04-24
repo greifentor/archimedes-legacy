@@ -12,7 +12,6 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
-import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
@@ -98,7 +97,6 @@ public class ButtonClassCodeGeneratorTest {
 			// Prepare
 			String expected = getExpected(null, "gui.vaadin.component", true, "null");
 			DataModel dataModel = readDataModel("Model.xml");
-			TableModel table = dataModel.getTableByName("A_TABLE");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.COMMENTS, "off"));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, null);

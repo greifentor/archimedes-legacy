@@ -31,6 +31,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	public static final String ALTERNATE_MODULE_PREFIX = "ALTERNATE_MODULE_PREFIX";
 	public static final String AUTO_INCREMENT = "AUTO_INCREMENT";
+	public static final String CASCADE_DELETE = "CASCADE_DELETE";
+	public static final String CODE = "CODE";
 	public static final String COMMENTS = "COMMENTS";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
 	public static final String INHERITANCE_MODE_JOINED = "JOINED";
@@ -295,6 +297,19 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	protected boolean isSubclass(TableModel table) {
 		return table != null ? table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS) : false;
+	}
+
+	protected boolean isSubclass(TableModel superTable, TableModel subTable) {
+		return (subTable != null) && (superTable != null)
+				? subTable.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)
+						&& isPrimaryKeyReferencingTo(superTable, subTable)
+				: false;
+	}
+
+	protected boolean isPrimaryKeyReferencingTo(TableModel superTable, TableModel subTable) {
+		return (subTable != null) && (superTable != null) && (subTable.getPrimaryKeyColumns().length > 0)
+				? subTable.getPrimaryKeyColumns()[0].getReferencedTable() == superTable
+				: false;
 	}
 
 	protected String getSuperclassName(TableModel table, Function<TableModel, String> classNameProvider) {

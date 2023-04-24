@@ -93,6 +93,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 		case TABLE:
 			return new String[] {
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
+					ModelClassCodeGenerator.IMPLEMENTS,
 					NameGenerator.MODULE,
 					AbstractClassCodeFactory.NO_GENERATION,
 					AbstractClassCodeGenerator.POJO_MODE };

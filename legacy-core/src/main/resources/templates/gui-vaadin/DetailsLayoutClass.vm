@@ -1,5 +1,10 @@
 package ${PackageName};
 
+#if (${GUIColumnDataCollection.hasFieldType("UPLOAD")} == true)
+import java.io.IOException;
+import java.io.InputStream;
+
+#end
 import com.vaadin.flow.component.AttachEvent;
 #if ($GUIReferences && $GUIReferences.size() > 0)
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -22,6 +27,10 @@ import com.vaadin.flow.component.textfield.TextArea;
 #if (${GUIColumnDataCollection.hasFieldType("STRING")} == true)
 import com.vaadin.flow.component.textfield.TextField;
 #end
+#if (${GUIColumnDataCollection.hasFieldType("UPLOAD")} == true)
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
+#end
 
 #foreach ($ImportDeclaration in $ImportDeclarations.toList())
 import ${ImportDeclaration.getSingleImportDeclaration()};
@@ -38,13 +47,21 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 
 #foreach (${Preference} in ${PreferenceData})
 	#if (${Preference.getType()} == "BOOLEAN")
+	private static final String CHECK_BOX_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "COMBOBOX")
-	private static final String COMBO_BOX_${Preference.getPreferenceIdName()} = "${ClassName}.comboBox${Preference.getAttributeNameCamelCase()}.preference";
+	private static final String COMBO_BOX_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "ENUM")
+	private static final String COMBO_BOX_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "INTEGER")
+	private static final String INTEGER_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "NUMERIC")
+	private static final String NUMBER_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "TEXT")
+	private static final String TEXT_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
+	#elseif (${Preference.getType()} == "UPLOAD")
+	private static final String UPLOAD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#else
+	private static final String TEXT_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#end
 
 #end
@@ -74,6 +91,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	private NumberField numberField${Column.getFieldNameCamelCase()};
 	#elseif (${Column.getType()} == "TEXT")
 	private TextArea textArea${Column.getFieldNameCamelCase()};
+	#elseif (${Column.getType()} == "UPLOAD")
+	private Upload upload${Column.getFieldNameCamelCase()};
 	#else
 	private TextField textField${Column.getFieldNameCamelCase()};
 	#end
@@ -111,6 +130,30 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		numberField${FieldName} = createNumberField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()});
 	#elseif (${Column.getType()} == "TEXT")
 		textArea${FieldName} = createTextArea("$ResourceId", model.get${FieldName}());
+	#elseif (${Column.getType()} == "UPLOAD")
+		MultiFileMemoryBuffer buffer${FieldName} = new MultiFileMemoryBuffer();
+		upload${FieldName} = new Upload(buffer${FieldName});
+		upload${FieldName}.setMaxFiles(1);
+		upload${FieldName}.setMaxFileSize(Integer.MAX_VALUE);
+		upload${FieldName}.addSucceededListener(event -> {
+			System.out.println("upload (${FieldName}) started.");
+			String fileName = event.getFileName();
+			InputStream inputStream = buffer${FieldName}.getInputStream(fileName);
+			System.out.println("upload complete!");
+			try {
+				model.set${FieldName}(inputStream.readAllBytes());
+			} catch (IOException ioe) {
+				System.out.println("while uploading file: " + fileName);
+				ioe.printStackTrace();
+			} finally {
+				try {
+					inputStream.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		upload${FieldName}.setWidthFull();
 	#else
 		textField${FieldName} = createTextField("$ResourceId", model.get${FieldName}());
 	#end
@@ -139,6 +182,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 				numberField${Column.getFieldNameCamelCase()},
 	#elseif (${Column.getType()} == "TEXT")
 				textArea${Column.getFieldNameCamelCase()},
+	#elseif (${Column.getType()} == "UPLOAD")
+				upload${Column.getFieldNameCamelCase()},
 	#else
 				textField${Column.getFieldNameCamelCase()},
 	#end
@@ -149,31 +194,73 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		if (model.get${Preference.getIdColumnNameCamelCase()}() < 1) {
 			session
 		#if (${Preference.getType()} == "BOOLEAN")
+					.findParameter(CHECK_BOX_${Preference.getPreferenceIdName()})
+					.ifPresent(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#elseif (${Preference.getType()} == "COMBOBOX")
 					.findParameter(COMBO_BOX_${Preference.getPreferenceIdName()})
-					.ifPresent(${Preference.getAttributeName()} -> comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()}));
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#elseif (${Preference.getType()} == "ENUM")
+					.findParameter(COMBO_BOX_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#elseif (${Preference.getType()} == "INTEGER")
+					.findParameter(INTEGER_FIELD_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#elseif (${Preference.getType()} == "NUMERIC")
+					.findParameter(NUMERIC_FIELD_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#elseif (${Preference.getType()} == "TEXT")
+					.findParameter(TEXT_FIELD_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#else
+					.findParameter(TEXT_FIELD_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							textField${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#end
-		#if (${Preference.getNextFieldType()})
+							#if (${Preference.getNextFieldType()} == "BOOLEAN")
+							checkbox${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "COMBOBOX")
+							comboBox${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "ENUM")
+							comboBox${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "INTEGER")
+							integerField${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "NUMERIC")
+							numberField${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "TEXT")
+							textArea${Preference.getNextFieldNameCamelCase()}.focus();
+							#else
+							textField${Preference.getNextFieldNameCamelCase()}.focus();
+							#end
+					}, () -> #if (${Preference.getFirstFieldType()} == "BOOLEAN")
+checkbox${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "COMBOBOX")
+comboBox${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "ENUM")
+comboBox${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "INTEGER")
+integerField${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "NUMERIC")
+numberField${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "TEXT")
+textArea${Preference.getFirstFieldNameCamelCase()}.focus());#else
+textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
+#if (${Preference.getFirstFieldType()})
 		} else {
-			#if (${Preference.getNextFieldType()} == "BOOLEAN")
-			checkbox${Preference.getNextFieldNameCamelCase()}.focus();
-			#elseif (${Preference.getNextFieldType()} == "COMBOBOX")
-			comboBox${Preference.getNextFieldNameCamelCase()}.focus();
-			#elseif (${Preference.getNextFieldType()} == "ENUM")
-			comboBox${Preference.getNextFieldNameCamelCase()}.focus();
-			#elseif (${Preference.getNextFieldType()} == "INTEGER")
-			integerField${Preference.getNextFieldNameCamelCase()}.focus();
-			#elseif (${Preference.getNextFieldType()} == "NUMERIC")
-			numberField${Preference.getNextFieldNameCamelCase()}.focus();
-			#elseif (${Preference.getNextFieldType()} == "TEXT")
-			textArea${Preference.getNextFieldNameCamelCase()}.focus();
+			#if (${Preference.getFirstFieldType()} == "BOOLEAN")
+			checkbox${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "COMBOBOX")
+			comboBox${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "ENUM")
+			comboBox${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "INTEGER")
+			integerField${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "NUMERIC")
+			numberField${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "TEXT")
+			textArea${Preference.getFirstFieldNameCamelCase()}.focus();
 			#else
-			textField${Preference.getNextFieldNameCamelCase()}.focus();
+			textField${Preference.getFirstFieldNameCamelCase()}.focus();
 			#end
 		#end
 		}
@@ -222,7 +309,21 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	@Override
 	protected void save() {
 #foreach (${Preference} in ${PreferenceData})
+	#if (${Preference.getType()} == "BOOLEAN")
+		session.setParameter(CHECK_BOX_${Preference.getPreferenceIdName()}, checkBox${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "COMBOBOX")
 		session.setParameter(COMBO_BOX_${Preference.getPreferenceIdName()}, comboBox${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "ENUM")
+		session.setParameter(COMBO_BOX_${Preference.getPreferenceIdName()}, comboBox${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "INTEGER")
+		session.setParameter(INTEGER_FIELD_${Preference.getPreferenceIdName()}, integerField${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "NUMERIC")
+		session.setParameter(NUMBER_FIELD_${Preference.getPreferenceIdName()}, numberField${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "TEXT")
+		session.setParameter(TEXT_AREA_${Preference.getPreferenceIdName()}, textArea${Preference.getAttributeNameCamelCase()}.getValue());
+	#else
+		session.setParameter(TEXT_FIELD_${Preference.getPreferenceIdName()}, textField${Preference.getAttributeNameCamelCase()}.getValue());
+	#end
 #end
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
 	#if (${Column.getType()} == "BOOLEAN")
@@ -237,8 +338,10 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		model.set${Column.getFieldNameCamelCase()}(numberField${Column.getFieldNameCamelCase()}.getValue());
 	#elseif (${Column.getType()} == "TEXT")
 		model.set${Column.getFieldNameCamelCase()}(textArea${Column.getFieldNameCamelCase()}.getValue());
-	#else
+	#elseif (${Column.getType()} == "STRING")
 		model.set${Column.getFieldNameCamelCase()}(textField${Column.getFieldNameCamelCase()}.getValue());
+	#elseif (${Column.getType()} != "UPLOAD")
+		// UNKNOWN ${Column.getFieldNameCamelCase()}
 	#end
 #end
 		observer.save(service.update(model));

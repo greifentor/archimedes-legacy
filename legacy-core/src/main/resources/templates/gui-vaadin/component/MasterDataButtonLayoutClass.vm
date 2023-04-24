@@ -1,0 +1,23 @@
+package ${PackageName};
+
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * A layout for master data buttons.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public class ${ClassName} extends HorizontalLayout {
+
+	public ${ClassName}(Button... buttons) {
+		setMargin(false);
+		setWidthFull();
+		add(buttons);
+	}
+
+}

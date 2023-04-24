@@ -366,6 +366,84 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 		assertEquals(expected, returned);
 	}
 
+	@Test
+	void happyRunForASimpleObject_ForeignKey_CascaseDeleteCodeOptionSet() {
+		// Prepare
+		String expected =
+				"package base.pack.age.name.core.service.impl;\n" //
+						+ "\n" //
+						+ "import java.util.List;\n" //
+						+ "import java.util.Optional;\n" //
+						+ "\n" //
+						+ "import javax.inject.Inject;\n" //
+						+ "import javax.transaction.Transactional;\n" //
+						+ "\n" //
+						+ "import base.pack.age.name.core.model.Page;\n" //
+						+ "import base.pack.age.name.core.model.PageParameters;\n" //
+						+ "import base.pack.age.name.core.model.AnotherTable;\n" //
+						+ "import base.pack.age.name.core.service.port.persistence.AnotherTablePersistencePort;\n" //
+						+ "import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" //
+						+ "import base.pack.age.name.core.service.AnotherTableService;\n" //
+						+ "import lombok.Generated;\n" //
+						+ "\n" //
+						+ "/**\n" //
+						+ " * A generated service interface implementation for AnotherTable management.\n" //
+						+ " *\n" //
+						+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+						+ " */\n" //
+						+ "@Generated\n" //
+						+ "public abstract class AnotherTableGeneratedServiceImpl implements AnotherTableService {\n" //
+						+ "\n" //
+						+ "	@Inject\n" //
+						+ "	protected AnotherTablePersistencePort persistencePort;\n" //
+						+ "	@Inject\n" //
+						+ "	protected ATablePersistencePort aTablePersistencePort;\n" //
+						+ "\n" //
+						+ "	@Override\n" //
+						+ "	public AnotherTable create(AnotherTable model) {\n" //
+						+ "		return persistencePort.create(model);\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	@Override\n" //
+						+ "	public List<AnotherTable> findAll() {\n" //
+						+ "		return persistencePort.findAll();\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	@Override\n" //
+						+ "	public Page<AnotherTable> findAll(PageParameters pageParameters) {\n" //
+						+ "		return persistencePort.findAll(pageParameters);\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	@Override\n" //
+						+ "	public Optional<AnotherTable> findById(Long id) {\n" //
+						+ "		return persistencePort.findById(id);\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	@Override\n" //
+						+ "	public AnotherTable update(AnotherTable model) {\n" //
+						+ "		return persistencePort.update(model);\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	@Override\n" //
+						+ "	@Transactional\n" //
+						+ "	public void delete(AnotherTable model) {\n" //
+						+ "		aTablePersistencePort.findAllByRef(model).forEach(aTablePersistencePort::delete);\n" //
+						+ "		persistencePort.delete(model);\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "}";
+		DataModel dataModel = readDataModel("Model-ForeignKey.xml");
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		table
+				.getColumnByName("REF")
+				.addOption(new Option(AbstractClassCodeGenerator.CASCADE_DELETE, AbstractClassCodeGenerator.CODE));
+		// Run
+		String returned =
+				unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("ANOTHER_TABLE"));
+		// Check
+		assertEquals(expected, returned);
+	}
+
 	@Nested
 	class TestsOfMethod_isToIgnoreFor_DataModel_TableModel {
 

@@ -152,6 +152,8 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 				.filter(column -> (column.getReferencedColumn() != null) || isEnum(column))
 				.map(column -> toConverterData(column, model))
 				.sorted((cd0, cd1) -> cd0.getClassName().compareTo(cd1.getClassName()))
+				.collect(Collectors.toSet())
+				.stream()
 				.collect(Collectors.toList());
 	}
 

@@ -128,7 +128,7 @@ public class FindByUtils {
 		TableModel referencedTable = column.getReferencedTable();
 		return (referencedTable != null) && (referenceMode == ReferenceMode.OBJECT)
 				? provider.apply(referencedTable)
-				: null;
+				: "java.lang";
 	}
 
 	private static boolean isObjectReference(ColumnModel column, ReferenceMode referenceMode) {

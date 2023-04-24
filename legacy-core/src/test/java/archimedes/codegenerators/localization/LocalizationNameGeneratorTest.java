@@ -69,12 +69,7 @@ public class LocalizationNameGeneratorTest {
 
 		@Test
 		void getLocalizationSOPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getLocalizationSOPackageName(null, table));
-		}
-
-		@Test
-		void getLocalizationSOPackageName_PassANullValueAsTable_ReturnsDefaultValue() {
-			assertEquals("core.model.localization", unitUnderTest.getLocalizationSOPackageName(model, null));
+			assertNull(unitUnderTest.getLocalizationSOPackageName(null));
 		}
 
 		@Test
@@ -83,7 +78,7 @@ public class LocalizationNameGeneratorTest {
 			String expected = BASE_PACKAGE_NAME + ".core.model.localization";
 			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
 			// Run
-			String returned = unitUnderTest.getLocalizationSOPackageName(model, table);
+			String returned = unitUnderTest.getLocalizationSOPackageName(model);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -94,7 +89,7 @@ public class LocalizationNameGeneratorTest {
 			String expected = "core.model.localization";
 			when(model.getBasePackageName()).thenReturn("");
 			// Run
-			String returned = unitUnderTest.getLocalizationSOPackageName(model, table);
+			String returned = unitUnderTest.getLocalizationSOPackageName(model);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -105,7 +100,7 @@ public class LocalizationNameGeneratorTest {
 			String expected = "core.model.localization";
 			when(model.getBasePackageName()).thenReturn(null);
 			// Run
-			String returned = unitUnderTest.getLocalizationSOPackageName(model, table);
+			String returned = unitUnderTest.getLocalizationSOPackageName(model);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -120,7 +115,7 @@ public class LocalizationNameGeneratorTest {
 			when(model.getOptionByName(LocalizationNameGenerator.ALTERNATE_LOCALIZATION_SO_PACKAGE_NAME))
 					.thenReturn(option);
 			// Run
-			String returned = unitUnderTest.getLocalizationSOPackageName(model, table);
+			String returned = unitUnderTest.getLocalizationSOPackageName(model);
 			// Check
 			assertEquals(expected, returned);
 		}

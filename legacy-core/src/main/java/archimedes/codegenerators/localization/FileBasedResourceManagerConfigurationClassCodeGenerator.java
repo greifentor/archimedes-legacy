@@ -31,7 +31,7 @@ public class FileBasedResourceManagerConfigurationClassCodeGenerator extends Abs
 		context.put("ClassName", getClassName(table));;
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("Dollar", "$");
-		context.put("LocalizationSOPackageName", nameGenerator.getLocalizationSOPackageName(model, table));
+		context.put("LocalizationSOPackageName", nameGenerator.getLocalizationSOPackageName(model));
 		context.put("LocalizationSOClassName", nameGenerator.getLocalizationSOClassName());
 		context.put("PackageName", getPackageName(model, table));
 	}

@@ -147,6 +147,8 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 	private String getType(ColumnModel column) {
 		if (column.getReferencedTable() != null) {
 			return GUIColumnData.TYPE_COMBOBOX;
+		} else if (column.getDomain().getDataType() == Types.BLOB) {
+			return GUIColumnData.TYPE_UPLOAD;
 		} else if (column.getDomain().getDataType() == Types.BOOLEAN) {
 			return GUIColumnData.TYPE_BOOLEAN;
 		} else if ((column.getDomain().getDataType() == Types.DECIMAL)
@@ -158,10 +160,14 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 			return GUIColumnData.TYPE_ENUM;
 		} else if (column.getDomain().getDataType() == Types.INTEGER) {
 			return GUIColumnData.TYPE_INTEGER;
+		} else if (column.getDomain().getDataType() == Types.LONGVARBINARY) {
+			return GUIColumnData.TYPE_UPLOAD;
 		} else if (((column.getDomain().getDataType() == Types.LONGVARCHAR)
 				|| (column.getDomain().getDataType() == Types.VARCHAR))
 				&& column.getDomain().isOptionSet(AbstractCodeGenerator.TEXT)) {
 			return GUIColumnData.TYPE_TEXT;
+		} else if (column.getDomain().getDataType() == Types.VARBINARY) {
+			return GUIColumnData.TYPE_UPLOAD;
 		}
 		return GUIColumnData.TYPE_STRING;
 	}
@@ -183,8 +189,10 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 								.setAttributeName(nameGenerator.getAttributeName(column))
 								.setAttributeNameCamelCase(nameGenerator.getCamelCase(column.getName()))
 								.setFieldTypeName(getFieldTypeName(column, table.getDataModel(), referenceMode))
+								.setFirstFieldType(getFirstFieldType(column))
+								.setFirstFieldNameCamelCase(getFirstFieldNameCamelCase(column))
 								.setIdColumnNameCamelCase(getIdColumnNameCamelCase(column))
-								.setNextFieldType(getNextFieldType(column, referenceMode))
+								.setNextFieldType(getNextFieldType(column))
 								.setNextFieldNameCamelCase(getNextFieldNameCamelCase(column))
 								.setPreferenceIdName(getPreferenceIdName(column))
 								.setType(getType(column)))
@@ -198,6 +206,24 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 					.getCamelCase(nameGenerator.getAttributeName(column.getTable().getColumns()[0].getName()));
 		}
 		return "NO_PK";
+	}
+
+	private ColumnModel getFirstField(ColumnModel column) {
+		return List
+				.of(column.getTable().getColumns())
+				.stream()
+				.filter(c -> c.isOptionSet(GUI_EDITOR_POS))
+				.sorted((c0, c1) -> getGuiEditorPos(c0) - getGuiEditorPos(c1))
+				.findFirst()
+				.orElse(null);
+	}
+
+	private String getFirstFieldType(ColumnModel column) {
+		return getType(getFirstField(column));
+	}
+
+	private String getFirstFieldNameCamelCase(ColumnModel column) {
+		return nameGenerator.getCamelCase(getFirstField(column).getName());
 	}
 
 	private ColumnModel getNextField(ColumnModel column) {
@@ -216,8 +242,8 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		return nextColumn;
 	}
 
-	private String getNextFieldType(ColumnModel column, ReferenceMode referenceMode) {
-		return getFieldTypeName(getNextField(column), column.getTable().getDataModel(), referenceMode);
+	private String getNextFieldType(ColumnModel column) {
+		return getType(getNextField(column));
 	}
 
 	private String getNextFieldNameCamelCase(ColumnModel column) {
@@ -226,7 +252,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	private int getGuiEditorPos(ColumnModel column) {
 		if (column.isOptionSet(GUI_EDITOR_POS)) {
-			return Integer.parseInt(column.getOptionByName(PREFERENCE).getParameter());
+			return Integer.parseInt(column.getOptionByName(GUI_EDITOR_POS).getParameter());
 		}
 		return -1;
 	}

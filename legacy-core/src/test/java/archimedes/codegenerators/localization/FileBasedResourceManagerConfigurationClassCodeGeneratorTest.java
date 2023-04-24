@@ -64,6 +64,9 @@ public class FileBasedResourceManagerConfigurationClassCodeGeneratorTest {
 						+ "@Getter\n" //
 						+ "public class FileBasedResourceManagerConfiguration {\n" //
 						+ "\n" //
+						+ "	@Value(\"${localization.resource.enabled:true}\")\n" //
+						+ "	private boolean enabled;\n" //
+						+ "\n" //
 						+ "	@Value(\"${localization.resource.file.name.prefix:test-app}\")\n" //
 						+ "	private String fileNamePrefix;\n" //
 						+ "\n" //
