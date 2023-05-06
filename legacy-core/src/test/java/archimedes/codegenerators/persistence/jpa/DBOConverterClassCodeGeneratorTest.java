@@ -561,6 +561,78 @@ public class DBOConverterClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void happyRun_withSuperClassWithReference() {
+			// Prepare
+			String expected =
+					"package base.pack.age.name.persistence.converter;\n" //
+							+ "\n" //
+							+ "import java.util.List;\n" //
+							+ "import java.util.stream.Collectors;\n" //
+							+ "\n" //
+							+ "import javax.inject.Named;\n" //
+							+ "\n" //
+							+ "import lombok.Generated;\n" //
+							+ "import lombok.RequiredArgsConstructor;\n" //
+							+ "\n" //
+							+ "import base.pack.age.name.persistence.entity.BenotherTableDBO;\n" //
+							+ "import base.pack.age.name.core.model.BenotherTable;\n" //
+							+ "\n" //
+							+ "/**\n" //
+							+ " * A DBO converter for benother_tables.\n" //
+							+ " *\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n" //
+							+ "@Generated\n" //
+							+ "@Named\n" //
+							+ "@RequiredArgsConstructor\n" //
+							+ "public class BenotherTableDBOConverter implements ToModelConverter<BenotherTable, BenotherTableDBO> {\n" //
+							+ "\n" //
+							+ "	private final TableWithSpecialsDBOConverter tableWithSpecialsDBOConverter;\n" //
+							+ "\n" //
+							+ "	public BenotherTableDBO toDBO(BenotherTable model) {\n" //
+							+ "		if (model == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		BenotherTableDBO dbo = new BenotherTableDBO();\n" //
+							+ "		dbo.setId(model.getId());\n" //
+							+ "		dbo.setValid(model.getValid());\n" //
+							+ "		dbo.setTableWithSpecials(tableWithSpecialsDBOConverter.toDBO(model.getTableWithSpecials()));\n" //
+							+ "		dbo.setDescription(model.getDescription());\n" //
+							+ "		return dbo;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public BenotherTable toModel(BenotherTableDBO dbo) {\n" //
+							+ "		if (dbo == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		BenotherTable model = new BenotherTable();\n" //
+							+ "		model.setId(dbo.getId());\n" //
+							+ "		model.setValid(dbo.getValid());\n" //
+							+ "		model.setTableWithSpecials(tableWithSpecialsDBOConverter.toModel(dbo.getTableWithSpecials()));\n" //
+							+ "		model.setDescription(dbo.getDescription());\n" //
+							+ "		return model;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public List<BenotherTable> toModel(List<BenotherTableDBO> dbos) {\n" //
+							+ "		if (dbos == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "}";
+			DataModel dataModel = readDataModel("Model.xml");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.REFERENCE_MODE, "OBJECT"));
+			// Run
+			String returned =
+					unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("BENOTHER_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 	@Nested

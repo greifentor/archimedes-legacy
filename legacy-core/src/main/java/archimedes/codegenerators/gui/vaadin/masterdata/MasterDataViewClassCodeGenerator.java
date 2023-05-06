@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
 
+import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator;
@@ -52,6 +53,14 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 		context.put("MasterDataInfos", getMasterDataInfos(model));
 		context.put("MasterDataViewClassName", nameGenerator.getMasterDataViewClassName(model));
 		context.put("MasterDataViewPackageName", nameGenerator.getMasterDataPackageName(model));
+		context
+				.put(
+						"MasterDataViewButtonAdderInterfaceName",
+						nameGenerator.getMasterDataViewButtonAdderInterfaceName(model));
+		context
+				.put(
+						"MasterDataViewButtonAdderPackageName",
+						nameGenerator.getMasterDataViewButtonAdderPackageName(model));
 		context.put("MainMenuViewImport", getMainMenuViewImport(model));
 		context.put("MainMenuViewURL", getMainMenuViewURL(model));
 		context.put("PackageName", getPackageName(model, model));
@@ -80,7 +89,8 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 	}
 
 	private boolean isInMasterDataGUI(TableModel table) {
-		return table.isOptionSet(AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI);
+		return table.isOptionSet(AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI)
+				&& !table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS);
 	}
 
 	private MasterDataData createMasterDataDataForTable(TableModel table) {

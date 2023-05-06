@@ -18,6 +18,7 @@ import archimedes.codegenerators.gui.vaadin.component.ButtonGridClassCodeGenerat
 import archimedes.codegenerators.gui.vaadin.component.HeaderLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.MasterDataViewButtonAdderInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.AccessCheckerInterfaceCodeGenerator;
@@ -86,6 +87,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new MasterDataGridFieldRendererInterfaceCodeGenerator(this),
 						new MasterDataGUIConfigurationClassCodeGenerator(this),
 						new MasterDataViewClassCodeGenerator(this),
+						new MasterDataViewButtonAdderInterfaceCodeGenerator(this),
 						new PageViewClassCodeGenerator(this),
 						// new PageGOClassCodeGenerator(this),
 						// new PageParametersGOClassCodeGenerator(this),

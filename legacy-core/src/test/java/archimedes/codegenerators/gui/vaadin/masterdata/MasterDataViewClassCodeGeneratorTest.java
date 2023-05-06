@@ -47,9 +47,15 @@ public class MasterDataViewClassCodeGeneratorTest {
 			String s =
 					"package " + BASE_PACKAGE_NAME + "." + (prefix != null ? prefix + "." : "") + packageName + ";\n" //
 							+ "\n" //
+							+ "import java.util.ArrayList;\n" //
+							+ "import java.util.Arrays;\n" //
+							+ "import java.util.List;\n" //
+							+ "\n" //
 							+ "import org.apache.logging.log4j.LogManager;\n" //
 							+ "import org.apache.logging.log4j.Logger;\n" //
+							+ "import org.springframework.beans.factory.annotation.Autowired;\n" //
 							+ "\n" //
+							+ "import com.vaadin.flow.component.orderedlayout.Scroller;\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
 							+ "import com.vaadin.flow.router.BeforeEnterEvent;\n" //
 							+ "import com.vaadin.flow.router.BeforeEnterObserver;\n" //
@@ -60,13 +66,14 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "\n" //
 							+ "import base.pack.age.name.core.service.localization.ResourceManager;\n" //
 							+ "import base.pack.age.name.gui.SessionData;\n" //
-							+ "import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" //
 							+ "import base.pack.age.name.gui.vaadin.MainMenuView;\n" //
+							+ "import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.Button;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ButtonGrid;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.MasterDataViewButtonAdder;\n" //
 							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n";
 			if (mainViewImport != null) {
 				s +=
@@ -89,7 +96,7 @@ public class MasterDataViewClassCodeGeneratorTest {
 					"@Generated\n" //
 							+ "@Route(MasterDataView.URL)\n" //
 							+ "@RequiredArgsConstructor\n" //
-							+ "public class MasterDataView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n" //
+							+ "public class MasterDataView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {\n" //
 							+ "\n" //
 							+ "	public static final String URL = \"test-ws/masterdata/menu\";\n" //
 							+ "\n" //
@@ -100,6 +107,9 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "	private final ResourceManager resourceManager;\n" //
 							+ "	private final SessionData session;\n" //
 							+ "\n" //
+							+ "	@Autowired(required = false)\n"
+							+ "	private MasterDataViewButtonAdder masterDataViewButtonAdder;\n" //
+							+ "\n" //
 							+ "	@Override\n" //
 							+ "	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" //
 							+ "		LOG.debug(\"setParameter\");\n" //
@@ -109,10 +119,10 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" //
 							+ "		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n" //
 							+ "		LOG.info(\"created\");\n" //
-							+ "		setMargin(false);\n" //
-							+ "		setWidthFull();\n" //
+							+ "		setSizeFull();\n" //
 							+ "		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n" //
 							+ "		getStyle().set(\"background-size\", \"cover\");\n" //
+							+ "		getStyle().set(\"background-attachment\", \"fixed\");\n" //
 							+ "		Button buttonMasterDataBlobTable =\n" //
 							+ "				buttonFactory\n" //
 							+ "						.createButton(\n" //
@@ -158,25 +168,34 @@ public class MasterDataViewClassCodeGeneratorTest {
 							+ "												session.getLocalization()));\n" //
 							+ "		buttonMasterDataTableWithSpecials.addClickListener(event -> switchToSourceTableWithSpecials());\n" //
 							+ "		buttonMasterDataTableWithSpecials.setWidthFull();\n" //
-							+ "		ButtonGrid buttonGrid =\n" //
-							+ "				new ButtonGrid(\n" //
-							+ "						4,\n" //
-							+ "						buttonMasterDataBlobTable,\n" //
-							+ "						buttonMasterDataTableWithEnumType,\n" //
-							+ "						buttonMasterDataTableWithGridFields,\n" //
-							+ "						buttonMasterDataTableWithNumberField,\n" //
-							+ "						buttonMasterDataTableWithSpecials\n" //
-							+ "				);\n" //
+							+ "		List<Button> buttons =\n" //
+							+ "				new ArrayList<>(\n" //
+							+ "						Arrays\n" //
+							+ "								.asList(\n" //
+							+ "										buttonMasterDataBlobTable,\n" //
+							+ "										buttonMasterDataTableWithEnumType,\n" //
+							+ "										buttonMasterDataTableWithGridFields,\n" //
+							+ "										buttonMasterDataTableWithNumberField,\n" //
+							+ "										buttonMasterDataTableWithSpecials\n" //
+							+ "								));\n" //
+							+ "		if (masterDataViewButtonAdder != null) {\n" //
+							+ "			buttons.addAll(masterDataViewButtonAdder.createButtonsToAdd(session, () -> getUI()));\n" //
+							+ "		} \n" //
+							+ "		ButtonGrid buttonGrid = new ButtonGrid(4, buttons);\n" //
 							+ "		buttonGrid.setMargin(false);\n" //
 							+ "		buttonGrid.setWidthFull();\n" //
-							+ "		add(\n" //
-							+ "				new HeaderLayout(\n" //
-							+ "						buttonFactory.createBackButton(resourceManager, this::getUI, "
+							+ "		VerticalLayout mainLayout = new VerticalLayout();\n"
+							+ "		mainLayout.setSizeFull();\n" + "		mainLayout.setMargin(false);\n"
+							+ "		mainLayout\n" //
+							+ "				.add(\n" //
+							+ "						new HeaderLayout(\n" //
+							+ "								buttonFactory.createBackButton(resourceManager, this::getUI, "
 							+ (mainViewURL == null ? "MainMenuView.URL" : mainViewURL) + ", session),\n" //
-							+ "						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),\n" //
-							+ "						resourceManager.getLocalizedString(\"master-data.header.menu.label\", session.getLocalization()),\n" //
-							+ "						HeaderLayoutMode.PLAIN),\n" //
-							+ "				buttonGrid);\n" //
+							+ "								buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),\n" //
+							+ "								resourceManager.getLocalizedString(\"master-data.header.menu.label\", session.getLocalization()),\n" //
+							+ "								HeaderLayoutMode.PLAIN),\n" //
+							+ "						buttonGrid);\n" //
+							+ "		setContent(mainLayout);\n" //
 							+ "		LOG.info(\"main menu view opened for user '{}'.\", session.getUserName());\n" //
 							+ "	}\n" //
 							+ "\n" //

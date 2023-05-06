@@ -1,8 +1,14 @@
 package ${PackageName};
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -13,13 +19,14 @@ import com.vaadin.flow.router.Route;
 
 import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
-import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};
 import ${MainMenuViewPackageName}.${MainMenuViewClassName};
+import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};
 import ${ButtonPackageName}.${ButtonClassName};
 import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
 import ${ButtonGridPackageName}.${ButtonGridClassName};
 import ${HeaderLayoutPackageName}.${HeaderLayoutClassName};
 import ${HeaderLayoutPackageName}.${HeaderLayoutClassName}.HeaderLayoutMode;
+import ${MasterDataViewButtonAdderPackageName}.${MasterDataViewButtonAdderInterfaceName};
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
 
 #set ($DOLLAR = "$")
@@ -40,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 @Generated
 @Route(${MasterDataViewClassName}.URL)
 @RequiredArgsConstructor
-public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {
+public class ${ClassName} extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {
 
 	public static final String URL = "${BaseURL}/masterdata/menu";
 
@@ -51,6 +58,9 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${SessionDataClassName} session;
 
+	@Autowired(required = false)
+	private ${MasterDataViewButtonAdderInterfaceName} masterDataViewButtonAdder;
+
 	@Override
 	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
 		LOG.debug("setParameter");
@@ -60,10 +70,10 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
 		${UserAuthorizationCheckerClassName}.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);
 		LOG.info("created");
-		setMargin(false);
-		setWidthFull();
+		setSizeFull();
 		getStyle().set("background-image", "url('" + guiConfiguration.getBackgroundFileName() + "')");
 		getStyle().set("background-size", "cover");
+		getStyle().set("background-attachment", "fixed");
 	#foreach($MasterDataInfo in ${MasterDataInfos})
 		${ButtonClassName} buttonMasterData${MasterDataInfo.getModelClassName()} =
 				buttonFactory
@@ -75,22 +85,32 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		buttonMasterData${MasterDataInfo.getModelClassName()}.addClickListener(event -> switchToSource${MasterDataInfo.getModelClassName()}());
 		buttonMasterData${MasterDataInfo.getModelClassName()}.setWidthFull();
 	#end
-		${ButtonGridClassName} buttonGrid =
-				new ButtonGrid(
-						4,
-					#foreach($MasterDataInfo in ${MasterDataInfos})
-						buttonMasterData${MasterDataInfo.getModelClassName()}#if($foreach.hasNext),#end
-					#end
-				);
+		List<${ButtonClassName}> buttons =
+				new ArrayList<>(
+						Arrays
+								.asList(
+									#foreach($MasterDataInfo in ${MasterDataInfos})
+										buttonMasterData${MasterDataInfo.getModelClassName()}#if($foreach.hasNext),#end
+									#end
+								));
+		if (masterDataViewButtonAdder != null) {
+			buttons.addAll(masterDataViewButtonAdder.createButtonsToAdd(session, () -> getUI()));
+		} 
+		${ButtonGridClassName} buttonGrid = new ButtonGrid(4, buttons);
 		buttonGrid.setMargin(false);
 		buttonGrid.setWidthFull();
-		add(
-				new ${HeaderLayoutClassName}(
-						buttonFactory.createBackButton(resourceManager, this::getUI, ${MainMenuViewURL}, session),
-						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),
-						resourceManager.getLocalizedString("master-data.header.menu.label", session.getLocalization()),
-						HeaderLayoutMode.PLAIN),
-				buttonGrid);
+		VerticalLayout mainLayout = new VerticalLayout();
+		mainLayout.setSizeFull();
+		mainLayout.setMargin(false);
+		mainLayout
+				.add(
+						new ${HeaderLayoutClassName}(
+								buttonFactory.createBackButton(resourceManager, this::getUI, ${MainMenuViewURL}, session),
+								buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),
+								resourceManager.getLocalizedString("master-data.header.menu.label", session.getLocalization()),
+								HeaderLayoutMode.PLAIN),
+						buttonGrid);
+		setContent(mainLayout);
 		LOG.info("main menu view opened for user '{}'.", session.getUserName());
 	}
 

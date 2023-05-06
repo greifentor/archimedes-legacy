@@ -105,10 +105,11 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	@Override
 	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {
 		${UserAuthorizationCheckerClassName}.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);
+		setMargin(false);
+		setSizeFull();
 		getStyle().set("background-image", "url('" + guiConfiguration.getBackgroundFileName() + "')");
 		getStyle().set("background-size", "cover");
-		setMargin(false);
-		setWidthFull();
+		getStyle().set("background-attachment", "fixed");
 		add(
 				new ${HeaderLayoutClassName}(
 						buttonFactory

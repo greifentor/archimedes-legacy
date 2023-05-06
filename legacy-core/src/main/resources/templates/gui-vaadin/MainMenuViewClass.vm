@@ -3,6 +3,7 @@ package ${PackageName};
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -35,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @Generated
 @Route(${ClassName}.URL)
 @RequiredArgsConstructor
-public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {
+public class ${ClassName} extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {
 
 	public static final String URL = "${BaseURL}/menu";
 
@@ -55,10 +56,10 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
 		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);
 		LOG.info("created");
-		setMargin(false);
 		setWidthFull();
 		getStyle().set("background-image", "url('" + guiConfiguration.getMainMenuBackgroundFileName() + "')");
 		getStyle().set("background-size", "cover");
+		getStyle().set("background-attachment", "fixed");
 		${ButtonClassName} buttonMasterData =
 				buttonFactory
 						.createButton(
@@ -71,12 +72,13 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		${ButtonGridClassName} buttonGridMasterData = new ButtonGrid(4, buttonMasterData);
 		buttonGridMasterData.setMargin(false);
 		buttonGridMasterData.setWidthFull();
-		add(
+		mainLayout.add(
 				new ${HeaderLayoutClassName}(
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),
 						resourceManager.getLocalizedString("commons.header.main-menu.label", session.getLocalization()),
 						HeaderLayoutMode.PLAIN),
 				buttonGridMasterData);
+		setContent(mainLayout);
 		LOG.info("main menu view opened for user '{}'.", session.getUserName());
 	}
 

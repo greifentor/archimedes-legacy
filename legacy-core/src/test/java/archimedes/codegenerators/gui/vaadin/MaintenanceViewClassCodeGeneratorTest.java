@@ -123,11 +123,12 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);\n"
 					+ //
+					"		setMargin(false);\n" + //
+					"		setSizeFull();\n" + //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory\n" + //
@@ -300,11 +301,12 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);\n"
 					+ //
+					"		setMargin(false);\n" + //
+					"		setSizeFull();\n" + //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory\n" + //
@@ -497,11 +499,12 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);\n"
 					+ //
+					"		setMargin(false);\n" + //
+					"		setSizeFull();\n" + //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory\n" + //
@@ -716,11 +719,12 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);\n"
 					+ //
+					"		setMargin(false);\n" + //
+					"		setSizeFull();\n" + //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory\n" + //
@@ -897,11 +901,12 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);\n"
 					+ //
+					"		setMargin(false);\n" + //
+					"		setSizeFull();\n" + //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory\n" + //
@@ -1083,10 +1088,12 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	@Override\n" + //
 					"	public void doBeforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);\n" + //
-					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n" + //
-					"		getStyle().set(\"background-size\", \"cover\");\n" + //
 					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		setSizeFull();\n" + //
+					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
+					+ //
+					"		getStyle().set(\"background-size\", \"cover\");\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory\n" + //

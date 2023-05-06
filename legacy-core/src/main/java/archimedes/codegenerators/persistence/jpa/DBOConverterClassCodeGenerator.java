@@ -73,7 +73,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 			context.put("ImportLocalDate", "java.time.LocalDate");
 		}
 		context.put("HasEnums", hasEnums(getColumnsIncludingInherited(table)));
-		context.put("HasReferences", hasReferences(table, model));
+		context.put("HasReferences", hasReferences(table, model, referenceMode));
 		context.put("ModelClassName", SERVICE_NAME_GENERATOR.getModelClassName(table));
 		context
 				.put(
@@ -221,16 +221,15 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 				.collect(Collectors.toList());
 	}
 
-	private boolean hasReferences(TableModel table, DataModel model) {
-		return (!table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS) && hasReferences(table.getColumns()))
-				|| hasANonPrimarkeyReference(table);
+	private boolean hasReferences(TableModel table, DataModel model, ReferenceMode referenceMode) {
+		return (!table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)
+				&& hasReferences(table.getColumns())) || hasANonPrimarkeyReference(table, model, referenceMode);
 	}
 
-	private boolean hasANonPrimarkeyReference(TableModel table) {
-		return List
-				.of(table.getColumns())
+	private boolean hasANonPrimarkeyReference(TableModel table, DataModel model, ReferenceMode referenceMode) {
+		return getInheritedColumns(table, model, referenceMode)
 				.stream()
-				.anyMatch(column -> !column.isPrimaryKey() && (column.getReferencedTable() != null));
+				.anyMatch(column -> !column.isPkMember() && column.isReference());
 	}
 
 	private List<ColumnModel> getColumnsIncludingInherited(TableModel table) {

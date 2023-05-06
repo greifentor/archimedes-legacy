@@ -20,6 +20,7 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.Key;
 #end
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 #if ($Filters)
 import com.vaadin.flow.component.textfield.TextField;
@@ -62,7 +63,7 @@ import lombok.RequiredArgsConstructor;
 @Generated
 @Route(${ClassName}.URL)
 @RequiredArgsConstructor
-public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {
+public class ${ClassName} extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {
 
 	public static final String URL = "${BaseURL}/masterdata/${PluralName}";
 
@@ -88,6 +89,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	#if ($Filters)
 	private TextField textFieldFilter;
 	#end
+	private VerticalLayout mainLayout;
 
 	@Override
 	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
@@ -97,8 +99,10 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 	@Override
 	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
 		${UserAuthorizationCheckerClassName}.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);
+		mainLayout = new VerticalLayout();
 		getStyle().set("background-image", "url('" + guiConfiguration.getBackgroundFileName() + "')");
 		getStyle().set("background-size", "cover");
+		getStyle().set("background-attachment", "fixed");
 		#if ($Filters)
 		textFieldFilter = new TextField();
 		textFieldFilter.addKeyUpListener(event -> {
@@ -140,8 +144,9 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		${MasterDataButtonLayoutClassName} buttonLayout = new ${MasterDataButtonLayoutClassName}(buttonAdd, buttonEdit, buttonDuplicate, buttonRemove);
 		buttonLayout.setMargin(false);
 		buttonLayout.setWidthFull();
-		setMargin(false);
-		setWidthFull();
+		mainLayout.setMargin(false);
+		mainLayout.setSizeFull();
+		setSizeFull();
 		#if ($Filters)
 		VerticalLayout filterLayout = new VerticalLayout();
 		filterLayout.getStyle().set("-moz-border-radius", "4px");
@@ -170,7 +175,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		dataLayout.setMargin(false);
 		dataLayout.setWidthFull();
 		dataLayout.add(grid, buttonLayout);
-		add(
+		mainLayout.add(
 				new ${HeaderLayoutClassName}(
 						buttonFactory.createBackButton(resourceManager, this::getUI, ${MasterDataViewClassName}.URL, session),
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
@@ -184,6 +189,7 @@ public class ${ClassName} extends VerticalLayout implements BeforeEnterObserver,
 		setButtonEnabled(buttonDuplicate, false);
 		setButtonEnabled(buttonEdit, false);
 		setButtonEnabled(buttonRemove, false);
+		setContent(mainLayout);
 		#if ($Filters)
 		textFieldFilter.focus();
 		#else

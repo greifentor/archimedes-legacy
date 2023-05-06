@@ -53,6 +53,7 @@ public class PageViewClassCodeGeneratorTest {
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
 						"import com.vaadin.flow.component.DetachEvent;\n" + //
 						"import com.vaadin.flow.component.grid.Grid;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.Scroller;\n" + //
 						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.data.selection.SelectionEvent;\n" + //
 						"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
@@ -86,7 +87,7 @@ public class PageViewClassCodeGeneratorTest {
 						"@Generated\n" + //
 						"@Route(ATablePageView.URL)\n" + //
 						"@RequiredArgsConstructor\n" + //
-						"public class ATablePageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
+						"public class ATablePageView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 						+ //
 						"\n" + //
 						"	public static final String URL = \"test-ws/masterdata/atabellen\";\n" + //
@@ -107,6 +108,7 @@ public class PageViewClassCodeGeneratorTest {
 						"	private Button buttonEdit;\n" + //
 						"	private Button buttonRemove;\n" + //
 						"	private Grid<ATable> grid;\n" + //
+						"	private VerticalLayout mainLayout;\n" + //
 						"\n" + //
 						"	@Override\n" + //
 						"	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" + //
@@ -117,9 +119,11 @@ public class PageViewClassCodeGeneratorTest {
 						"	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 						"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n"
 						+ //
+						"		mainLayout = new VerticalLayout();\n" + //
 						"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 						+ //
 						"		getStyle().set(\"background-size\", \"cover\");\n" + //
+						"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 						"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 						+ //
 						"		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString(\"commons.button.duplicate.text\", session.getLocalization()));\n"
@@ -152,8 +156,9 @@ public class PageViewClassCodeGeneratorTest {
 						+ //
 						"		buttonLayout.setMargin(false);\n" + //
 						"		buttonLayout.setWidthFull();\n" + //
-						"		setMargin(false);\n" + //
-						"		setWidthFull();\n" + //
+						"		mainLayout.setMargin(false);\n" + //
+						"		mainLayout.setSizeFull();\n" + //
+						"		setSizeFull();\n" + //
 						"		VerticalLayout dataLayout = new VerticalLayout();\n" + //
 						"		dataLayout.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		dataLayout.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
@@ -168,7 +173,7 @@ public class PageViewClassCodeGeneratorTest {
 						"		dataLayout.setMargin(false);\n" + //
 						"		dataLayout.setWidthFull();\n" + //
 						"		dataLayout.add(grid, buttonLayout);\n" + //
-						"		add(\n" + //
+						"		mainLayout.add(\n" + //
 						"				new HeaderLayout(\n" + //
 						"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataView.URL, session),\n"
 						+ //
@@ -182,6 +187,7 @@ public class PageViewClassCodeGeneratorTest {
 						"		setButtonEnabled(buttonDuplicate, false);\n" + //
 						"		setButtonEnabled(buttonEdit, false);\n" + //
 						"		setButtonEnabled(buttonRemove, false);\n" + //
+						"		setContent(mainLayout);\n" + //
 						"		buttonAdd.focus();\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -310,6 +316,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
 					"import com.vaadin.flow.component.grid.Grid;\n" + //
+					"import com.vaadin.flow.component.orderedlayout.Scroller;\n" + //
 					"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 					"import com.vaadin.flow.data.selection.SelectionEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
@@ -345,7 +352,7 @@ public class PageViewClassCodeGeneratorTest {
 					"@Generated\n" + //
 					"@Route(ATablePageView.URL)\n" + //
 					"@RequiredArgsConstructor\n" + //
-					"public class ATablePageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
+					"public class ATablePageView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 					+ //
 					"\n" + //
 					"	public static final String URL = \"test-project/masterdata/atabellen\";\n" + //
@@ -366,6 +373,7 @@ public class PageViewClassCodeGeneratorTest {
 					"	private Button buttonEdit;\n" + //
 					"	private Button buttonRemove;\n" + //
 					"	private Grid<ATable> grid;\n" + //
+					"	private VerticalLayout mainLayout;\n" + //
 					"\n" + //
 					"	@Override\n" + //
 					"	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" + //
@@ -376,9 +384,11 @@ public class PageViewClassCodeGeneratorTest {
 					"	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n"
 					+ //
+					"		mainLayout = new VerticalLayout();\n" + //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
 					"		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString(\"commons.button.duplicate.text\", session.getLocalization()));\n"
@@ -411,8 +421,9 @@ public class PageViewClassCodeGeneratorTest {
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
 					"		buttonLayout.setWidthFull();\n" + //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		mainLayout.setMargin(false);\n" + //
+					"		mainLayout.setSizeFull();\n" + //
+					"		setSizeFull();\n" + //
 					"		VerticalLayout dataLayout = new VerticalLayout();\n" + //
 					"		dataLayout.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 					"		dataLayout.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
@@ -427,7 +438,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		dataLayout.setMargin(false);\n" + //
 					"		dataLayout.setWidthFull();\n" + //
 					"		dataLayout.add(grid, buttonLayout);\n" + //
-					"		add(\n" + //
+					"		mainLayout.add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataView.URL, session),\n"
 					+ //
@@ -441,6 +452,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		setButtonEnabled(buttonDuplicate, false);\n" + //
 					"		setButtonEnabled(buttonEdit, false);\n" + //
 					"		setButtonEnabled(buttonRemove, false);\n" + //
+					"		setContent(mainLayout);\n" + //
 					"		buttonAdd.focus();\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -612,6 +624,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
 					"import com.vaadin.flow.component.grid.Grid;\n" + //
+					"import com.vaadin.flow.component.orderedlayout.Scroller;\n" + //
 					"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 					"import com.vaadin.flow.data.selection.SelectionEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
@@ -645,7 +658,7 @@ public class PageViewClassCodeGeneratorTest {
 					"@Generated\n" + //
 					"@Route(GuiTablePageView.URL)\n" + //
 					"@RequiredArgsConstructor\n" + //
-					"public class GuiTablePageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
+					"public class GuiTablePageView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 					+ //
 					"\n" + //
 					"	public static final String URL = \"test-project/masterdata/atabellen\";\n" + //
@@ -666,6 +679,7 @@ public class PageViewClassCodeGeneratorTest {
 					"	private Button buttonEdit;\n" + //
 					"	private Button buttonRemove;\n" + //
 					"	private Grid<GuiTable> grid;\n" + //
+					"	private VerticalLayout mainLayout;\n" + //
 					"\n" + //
 					"	@Override\n" + //
 					"	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" + //
@@ -676,9 +690,11 @@ public class PageViewClassCodeGeneratorTest {
 					"	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n"
 					+ //
+					"		mainLayout = new VerticalLayout();\n" + //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
 					"		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString(\"commons.button.duplicate.text\", session.getLocalization()));\n"
@@ -710,8 +726,9 @@ public class PageViewClassCodeGeneratorTest {
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
 					"		buttonLayout.setWidthFull();\n" + //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		mainLayout.setMargin(false);\n" + //
+					"		mainLayout.setSizeFull();\n" + //
+					"		setSizeFull();\n" + //
 					"		VerticalLayout dataLayout = new VerticalLayout();\n" + //
 					"		dataLayout.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 					"		dataLayout.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
@@ -726,7 +743,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		dataLayout.setMargin(false);\n" + //
 					"		dataLayout.setWidthFull();\n" + //
 					"		dataLayout.add(grid, buttonLayout);\n" + //
-					"		add(\n" + //
+					"		mainLayout.add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataView.URL, session),\n"
 					+ //
@@ -740,6 +757,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		setButtonEnabled(buttonDuplicate, false);\n" + //
 					"		setButtonEnabled(buttonEdit, false);\n" + //
 					"		setButtonEnabled(buttonRemove, false);\n" + //
+					"		setContent(mainLayout);\n" + //
 					"		buttonAdd.focus();\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -854,6 +872,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
 					"import com.vaadin.flow.component.Key;\n" + //
 					"import com.vaadin.flow.component.grid.Grid;\n" + //
+					"import com.vaadin.flow.component.orderedlayout.Scroller;\n" + //
 					"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 					"import com.vaadin.flow.component.textfield.TextField;\n" + //
 					"import com.vaadin.flow.data.selection.SelectionEvent;\n" + //
@@ -888,7 +907,7 @@ public class PageViewClassCodeGeneratorTest {
 					"@Generated\n" + //
 					"@Route(GuiTablePageView.URL)\n" + //
 					"@RequiredArgsConstructor\n" + //
-					"public class GuiTablePageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
+					"public class GuiTablePageView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 					+ //
 					"\n" + //
 					"	public static final String URL = \"test-project/masterdata/atabellen\";\n" + //
@@ -911,6 +930,7 @@ public class PageViewClassCodeGeneratorTest {
 					"	private Button buttonRemove;\n" + //
 					"	private Grid<GuiTable> grid;\n" + //
 					"	private TextField textFieldFilter;\n" + //
+					"	private VerticalLayout mainLayout;\n" + //
 					"\n" + //
 					"	@Override\n" + //
 					"	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" + //
@@ -921,9 +941,11 @@ public class PageViewClassCodeGeneratorTest {
 					"	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n"
 					+ //
+					"		mainLayout = new VerticalLayout();\n" + //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		textFieldFilter = new TextField();\n" + //
 					"		textFieldFilter.addKeyUpListener(event -> {\n" + //
 					"			if (event.getKey() == Key.ENTER) {\n" + //
@@ -965,8 +987,9 @@ public class PageViewClassCodeGeneratorTest {
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
 					"		buttonLayout.setWidthFull();\n" + //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		mainLayout.setMargin(false);\n" + //
+					"		mainLayout.setSizeFull();\n" + //
+					"		setSizeFull();\n" + //
 					"		VerticalLayout filterLayout = new VerticalLayout();\n" + //
 					"		filterLayout.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 					"		filterLayout.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
@@ -995,7 +1018,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		dataLayout.setMargin(false);\n" + //
 					"		dataLayout.setWidthFull();\n" + //
 					"		dataLayout.add(grid, buttonLayout);\n" + //
-					"		add(\n" + //
+					"		mainLayout.add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataView.URL, session),\n"
 					+ //
@@ -1010,6 +1033,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		setButtonEnabled(buttonDuplicate, false);\n" + //
 					"		setButtonEnabled(buttonEdit, false);\n" + //
 					"		setButtonEnabled(buttonRemove, false);\n" + //
+					"		setContent(mainLayout);\n" + //
 					"		textFieldFilter.focus();\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -1155,6 +1179,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
 					"import com.vaadin.flow.component.grid.Grid;\n" + //
+					"import com.vaadin.flow.component.orderedlayout.Scroller;\n" + //
 					"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 					"import com.vaadin.flow.data.selection.SelectionEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
@@ -1188,7 +1213,7 @@ public class PageViewClassCodeGeneratorTest {
 					"@Generated\n" + //
 					"@Route(TableWithSpecialsPageView.URL)\n" + //
 					"@RequiredArgsConstructor\n" + //
-					"public class TableWithSpecialsPageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
+					"public class TableWithSpecialsPageView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 					+ //
 					"\n" + //
 					"	public static final String URL = \"test-ws/masterdata/atabellen\";\n" + //
@@ -1209,6 +1234,7 @@ public class PageViewClassCodeGeneratorTest {
 					"	private Button buttonEdit;\n" + //
 					"	private Button buttonRemove;\n" + //
 					"	private Grid<TableWithSpecials> grid;\n" + //
+					"	private VerticalLayout mainLayout;\n" + //
 					"\n" + //
 					"	@Override\n" + //
 					"	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" + //
@@ -1219,9 +1245,11 @@ public class PageViewClassCodeGeneratorTest {
 					"	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n"
 					+ //
+					"		mainLayout = new VerticalLayout();\n" + //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
 					"		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString(\"commons.button.duplicate.text\", session.getLocalization()));\n"
@@ -1260,8 +1288,9 @@ public class PageViewClassCodeGeneratorTest {
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
 					"		buttonLayout.setWidthFull();\n" + //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		mainLayout.setMargin(false);\n" + //
+					"		mainLayout.setSizeFull();\n" + //
+					"		setSizeFull();\n" + //
 					"		VerticalLayout dataLayout = new VerticalLayout();\n" + //
 					"		dataLayout.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 					"		dataLayout.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
@@ -1276,7 +1305,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		dataLayout.setMargin(false);\n" + //
 					"		dataLayout.setWidthFull();\n" + //
 					"		dataLayout.add(grid, buttonLayout);\n" + //
-					"		add(\n" + //
+					"		mainLayout.add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataView.URL, session),\n"
 					+ //
@@ -1290,6 +1319,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		setButtonEnabled(buttonDuplicate, false);\n" + //
 					"		setButtonEnabled(buttonEdit, false);\n" + //
 					"		setButtonEnabled(buttonRemove, false);\n" + //
+					"		setContent(mainLayout);\n" + //
 					"		buttonAdd.focus();\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -1405,6 +1435,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
 					"import com.vaadin.flow.component.DetachEvent;\n" + //
 					"import com.vaadin.flow.component.grid.Grid;\n" + //
+					"import com.vaadin.flow.component.orderedlayout.Scroller;\n" + //
 					"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 					"import com.vaadin.flow.data.selection.SelectionEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
@@ -1438,7 +1469,7 @@ public class PageViewClassCodeGeneratorTest {
 					"@Generated\n" + //
 					"@Route(TableWithGridFieldsPageView.URL)\n" + //
 					"@RequiredArgsConstructor\n" + //
-					"public class TableWithGridFieldsPageView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n"
+					"public class TableWithGridFieldsPageView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {\n"
 					+ //
 					"\n" + //
 					"	public static final String URL = \"test-ws/masterdata/atabellen\";\n" + //
@@ -1460,6 +1491,7 @@ public class PageViewClassCodeGeneratorTest {
 					"	private Button buttonEdit;\n" + //
 					"	private Button buttonRemove;\n" + //
 					"	private Grid<TableWithGridFields> grid;\n" + //
+					"	private VerticalLayout mainLayout;\n" + //
 					"\n" + //
 					"	@Override\n" + //
 					"	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" + //
@@ -1470,9 +1502,11 @@ public class PageViewClassCodeGeneratorTest {
 					"	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" + //
 					"		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n"
 					+ //
+					"		mainLayout = new VerticalLayout();\n" + //
 					"		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n"
 					+ //
 					"		getStyle().set(\"background-size\", \"cover\");\n" + //
+					"		getStyle().set(\"background-attachment\", \"fixed\");\n" + //
 					"		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n"
 					+ //
 					"		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString(\"commons.button.duplicate.text\", session.getLocalization()));\n"
@@ -1505,8 +1539,9 @@ public class PageViewClassCodeGeneratorTest {
 					+ //
 					"		buttonLayout.setMargin(false);\n" + //
 					"		buttonLayout.setWidthFull();\n" + //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
+					"		mainLayout.setMargin(false);\n" + //
+					"		mainLayout.setSizeFull();\n" + //
+					"		setSizeFull();\n" + //
 					"		VerticalLayout dataLayout = new VerticalLayout();\n" + //
 					"		dataLayout.getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 					"		dataLayout.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
@@ -1521,7 +1556,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		dataLayout.setMargin(false);\n" + //
 					"		dataLayout.setWidthFull();\n" + //
 					"		dataLayout.add(grid, buttonLayout);\n" + //
-					"		add(\n" + //
+					"		mainLayout.add(\n" + //
 					"				new HeaderLayout(\n" + //
 					"						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataView.URL, session),\n"
 					+ //
@@ -1535,6 +1570,7 @@ public class PageViewClassCodeGeneratorTest {
 					"		setButtonEnabled(buttonDuplicate, false);\n" + //
 					"		setButtonEnabled(buttonEdit, false);\n" + //
 					"		setButtonEnabled(buttonRemove, false);\n" + //
+					"		setContent(mainLayout);\n" + //
 					"		buttonAdd.focus();\n" + //
 					"	}\n" + //
 					"\n" + //

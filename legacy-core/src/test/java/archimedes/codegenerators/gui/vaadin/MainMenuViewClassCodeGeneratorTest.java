@@ -48,6 +48,7 @@ public class MainMenuViewClassCodeGeneratorTest {
 							+ "import org.apache.logging.log4j.LogManager;\n" //
 							+ "import org.apache.logging.log4j.Logger;\n" //
 							+ "\n" //
+							+ "import com.vaadin.flow.component.orderedlayout.Scroller;\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
 							+ "import com.vaadin.flow.router.BeforeEnterEvent;\n" //
 							+ "import com.vaadin.flow.router.BeforeEnterObserver;\n" //
@@ -81,7 +82,7 @@ public class MainMenuViewClassCodeGeneratorTest {
 					"@Generated\n" //
 							+ "@Route(MainMenuView.URL)\n" //
 							+ "@RequiredArgsConstructor\n" //
-							+ "public class MainMenuView extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n" //
+							+ "public class MainMenuView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {\n" //
 							+ "\n" //
 							+ "	public static final String URL = \"test-ws/menu\";\n" //
 							+ "\n" //
@@ -101,10 +102,10 @@ public class MainMenuViewClassCodeGeneratorTest {
 							+ "	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" //
 							+ "		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n" //
 							+ "		LOG.info(\"created\");\n" //
-							+ "		setMargin(false);\n" //
 							+ "		setWidthFull();\n" //
 							+ "		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getMainMenuBackgroundFileName() + \"')\");\n" //
 							+ "		getStyle().set(\"background-size\", \"cover\");\n" //
+							+ "		getStyle().set(\"background-attachment\", \"fixed\");\n" //
 							+ "		Button buttonMasterData =\n" //
 							+ "				buttonFactory\n" //
 							+ "						.createButton(\n" //
@@ -117,12 +118,13 @@ public class MainMenuViewClassCodeGeneratorTest {
 							+ "		ButtonGrid buttonGridMasterData = new ButtonGrid(4, buttonMasterData);\n" //
 							+ "		buttonGridMasterData.setMargin(false);\n" //
 							+ "		buttonGridMasterData.setWidthFull();\n" //
-							+ "		add(\n" //
+							+ "		mainLayout.add(\n" //
 							+ "				new HeaderLayout(\n" //
 							+ "						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),\n" //
 							+ "						resourceManager.getLocalizedString(\"commons.header.main-menu.label\", session.getLocalization()),\n" //
 							+ "						HeaderLayoutMode.PLAIN),\n" //
 							+ "				buttonGridMasterData);\n" //
+							+ "		setContent(mainLayout);\n" //
 							+ "		LOG.info(\"main menu view opened for user '{}'.\", session.getUserName());\n" //
 							+ "	}\n" //
 							+ "\n" //

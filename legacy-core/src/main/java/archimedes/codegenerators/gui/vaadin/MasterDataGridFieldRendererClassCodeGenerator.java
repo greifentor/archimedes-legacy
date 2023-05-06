@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.apache.velocity.VelocityContext;
 
+import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -57,7 +58,8 @@ public class MasterDataGridFieldRendererClassCodeGenerator extends AbstractGUIVa
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return t.isOptionSet(GENERATE_MASTER_DATA_GUI) && "OBJECT".equals(model.getOptionByName("REFERENCE_MODE"))
+		return t.isOptionSet(GENERATE_MASTER_DATA_GUI)
+				&& "OBJECT".equals(model.getOptionByName(AbstractClassCodeGenerator.REFERENCE_MODE).getParameter())
 				&& hasReferencesInGrid(t);
 	}
 

@@ -6,8 +6,11 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
@@ -34,7 +37,7 @@ import lombok.Generated;
  */
 #end
 @Generated
-public abstract class ${ClassName} extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {
+public abstract class ${ClassName} extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {
 
 	public interface Observer {
 		void save(Object model);
@@ -46,6 +49,7 @@ public abstract class ${ClassName} extends VerticalLayout implements BeforeEnter
 
 	protected ${ButtonClassName} buttonRemove;
 	protected ${ButtonClassName} buttonSave;
+	protected VerticalLayout mainLayout;
 
 	protected Map<String, List<String>> parametersMap;
 
@@ -54,6 +58,11 @@ public abstract class ${ClassName} extends VerticalLayout implements BeforeEnter
 	protected abstract ${ResourceManagerClassName} getResourceManager();
 
 	protected abstract ${SessionDataClassName} getSessionData();
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		super.onAttach(attachEvent);
+	}
 
 	@Override
 	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
@@ -190,6 +199,20 @@ public abstract class ${ClassName} extends VerticalLayout implements BeforeEnter
 
 	protected ${MasterDataButtonLayoutClassName} getMasterDataButtonLayout(boolean couldBeRemoved) {
 		return new ${MasterDataButtonLayoutClassName}(getButtons(couldBeRemoved));
+	}
+
+	protected void setMargin(boolean b) {
+		if (mainLayout != null) {
+			mainLayout.setMargin(b);
+		}
+	}
+
+	protected void add(Component... components) {
+		if (mainLayout == null) {
+			mainLayout = new VerticalLayout();
+			setContent(mainLayout);
+		}
+		mainLayout.add(components);
 	}
 
 }

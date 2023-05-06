@@ -1,0 +1,24 @@
+package ${PackageName};
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import com.vaadin.flow.component.UI;
+
+import ${SessionDataInterfaceName}.${SessionDataClassName};
+import lombok.Generated;
+
+#if (!$CommentsOff )
+/**
+ * Can be implemented to add buttons to the master data view.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public interface ${ClassName} {
+
+	List<Button> createButtonsToAdd(SessionData session, Supplier<Optional<UI>> uiSupplier);
+
+}

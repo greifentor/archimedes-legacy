@@ -52,8 +52,11 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "import org.apache.logging.log4j.LogManager;\n" //
 							+ "import org.apache.logging.log4j.Logger;\n" //
 							+ "\n" //
+							+ "import com.vaadin.flow.component.AttachEvent;\n" //
+							+ "import com.vaadin.flow.component.Component;\n" //
 							+ "import com.vaadin.flow.component.checkbox.Checkbox;\n" //
 							+ "import com.vaadin.flow.component.combobox.ComboBox;\n" //
+							+ "import com.vaadin.flow.component.orderedlayout.Scroller;\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
 							+ "import com.vaadin.flow.component.textfield.IntegerField;\n" //
 							+ "import com.vaadin.flow.component.textfield.NumberField;\n" //
@@ -81,7 +84,7 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 			}
 			s +=
 					"@Generated\n" //
-							+ "public abstract class AbstractMasterDataBaseLayout extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {\n" //
+							+ "public abstract class AbstractMasterDataBaseLayout extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {\n" //
 							+ "\n" //
 							+ "	public interface Observer {\n" //
 							+ "		void save(Object model);\n" //
@@ -93,6 +96,7 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	protected Button buttonRemove;\n" //
 							+ "	protected Button buttonSave;\n" //
+							+ "	protected VerticalLayout mainLayout;\n"
 							+ "\n" //
 							+ "	protected Map<String, List<String>> parametersMap;\n" //
 							+ "\n" //
@@ -101,6 +105,11 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "	protected abstract ResourceManager getResourceManager();\n" //
 							+ "\n" //
 							+ "	protected abstract SessionData getSessionData();\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected void onAttach(AttachEvent attachEvent) {\n" //
+							+ "		super.onAttach(attachEvent);\n" //
+							+ "	}\n" //
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" //
@@ -237,6 +246,20 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	protected MasterDataButtonLayout getMasterDataButtonLayout(boolean couldBeRemoved) {\n" //
 							+ "		return new MasterDataButtonLayout(getButtons(couldBeRemoved));\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	protected void setMargin(boolean b) {\n" //
+							+ "		if (mainLayout != null) {\n" //
+							+ "			mainLayout.setMargin(b);\n" //
+							+ "		}\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	protected void add(Component... components) {\n" //
+							+ "		if (mainLayout == null) {\n" //
+							+ "			mainLayout = new VerticalLayout();\n" //
+							+ "			setContent(mainLayout);\n" //
+							+ "		}\n" //
+							+ "		mainLayout.add(components);\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "}";

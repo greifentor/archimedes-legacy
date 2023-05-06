@@ -68,6 +68,10 @@ public class ButtonGridClassCodeGeneratorTest {
 							+ "public class ButtonGrid extends VerticalLayout {\n" //
 							+ "\n" //
 							+ "	public ButtonGrid(int buttonsPerRow, Button... buttons) {\n" //
+							+ "		this(buttonsPerRow, new ArrayList<>(Arrays.asList(buttons)));\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	public ButtonGrid(int buttonsPerRow, List<Button> buttonList) {\n" //
 							+ "		getStyle().set(\"-moz-border-radius\", \"4px\");\n" //
 							+ "		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" //
 							+ "		getStyle().set(\"border-radius\", \"4px\");\n" //
@@ -76,7 +80,6 @@ public class ButtonGridClassCodeGeneratorTest {
 							+ "				.set(\n" //
 							+ "						\"box-shadow\",\n" //
 							+ "						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n" //
-							+ "		List<Button> buttonList = new ArrayList<>(Arrays.asList(buttons));\n" //
 							+ "		while (!buttonList.isEmpty()) {\n" //
 							+ "			add(createRow(buttonsPerRow, buttonList));\n" //
 							+ "		}\n" //

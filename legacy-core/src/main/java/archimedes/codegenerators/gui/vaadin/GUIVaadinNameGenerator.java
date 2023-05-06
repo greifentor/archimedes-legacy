@@ -23,6 +23,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX =
 			"ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX = "ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_MASTER_DATA_VIEW_BUTTON_ADDER_CLASS_NAME_SUFFIX =
+			"ALTERNATE_MASTER_DATA_VIEW_BUTTON_ADDER_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX =
 			"ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_DETAILS_LAYOUT_COMBO_BOX_ITEM_LABEL_GENERATOR_INTERFACE_NAME =
@@ -306,6 +308,19 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getMasterDataPackageName(DataModel model) {
 		return createPackageName(model, null, "gui.vaadin.masterdata", ALTERNATE_MASTER_DATA_VIEW_PACKAGE_NAME);
+	}
+
+	public String getMasterDataViewButtonAdderInterfaceName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"MasterDataViewButtonAdder",
+						ALTERNATE_MASTER_DATA_VIEW_BUTTON_ADDER_CLASS_NAME_SUFFIX);
+	}
+
+	public String getMasterDataViewButtonAdderPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin.component", ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME);
 	}
 
 	public String getPageGOConverterClassName(TableModel table) {
