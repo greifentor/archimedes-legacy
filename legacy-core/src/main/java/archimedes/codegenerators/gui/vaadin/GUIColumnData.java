@@ -14,6 +14,7 @@ public class GUIColumnData {
 	public static final String TYPE_NUMERIC = "NUMERIC";
 	public static final String TYPE_STRING = "STRING";
 	public static final String TYPE_TEXT = "TEXT";
+	public static final String TYPE_TIMESTAMP = "TIMESTAMP";
 	public static final String TYPE_UPLOAD = "UPLOAD";
 
 	private String fieldNameCamelCase;
@@ -21,6 +22,7 @@ public class GUIColumnData {
 	private String fieldTypeName;
 	private String max;
 	private String min;
+	private boolean nullable;
 	private int position;
 	private String resourceName;
 	private boolean simpleBoolean;

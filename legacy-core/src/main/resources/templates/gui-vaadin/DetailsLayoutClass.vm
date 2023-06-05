@@ -15,6 +15,9 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 #if (${GUIColumnDataCollection.hasFieldType("ENUM")} == true)
 import com.vaadin.flow.component.combobox.ComboBox;
 #end
+#if (${GUIColumnDataCollection.hasFieldType("TIMESTAMP")} == true)
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
+#end
 #if (${GUIColumnDataCollection.hasFieldType("INTEGER")} == true)
 import com.vaadin.flow.component.textfield.IntegerField;
 #end
@@ -58,6 +61,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	private static final String NUMBER_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "TEXT")
 	private static final String TEXT_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
+	#elseif (${Preference.getType()} == "TIMESTAMP")
+	private static final String TIMESTAMP_FIELD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#elseif (${Preference.getType()} == "UPLOAD")
 	private static final String UPLOAD_${Preference.getPreferenceIdName()} = "${ClassName}.field${Preference.getAttributeNameCamelCase()}.preference";
 	#else
@@ -91,6 +96,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	private NumberField numberField${Column.getFieldNameCamelCase()};
 	#elseif (${Column.getType()} == "TEXT")
 	private TextArea textArea${Column.getFieldNameCamelCase()};
+	#elseif (${Column.getType()} == "TIMESTAMP")
+	private DateTimePicker dateTimePicker${Column.getFieldNameCamelCase()};
 	#elseif (${Column.getType()} == "UPLOAD")
 	private Upload upload${Column.getFieldNameCamelCase()};
 	#else
@@ -110,6 +117,9 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 						${Reference.getReferencedModelClassFieldName()}  -> comboBoxItemLabelGenerator != null
 								? comboBoxItemLabelGenerator.getLabel(${ModelClassName}.${Reference.getFieldNameCamelCase().toUpperCase()}, ${Reference.getReferencedModelClassFieldName()})
 								: "" + ${Reference.getReferencedModelClassFieldName()}.get${Reference.getReferencedModelNameFieldName()}());
+		#if (${Reference.isNullable()} == true)
+		comboBox${Reference.getFieldNameCamelCase()}.setClearButtonVisible(true);
+		#end
 #end
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
 	#set($FieldName = "${Column.getFieldNameCamelCase()}")
@@ -124,12 +134,17 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	#elseif (${Column.getType()} == "COMBOBOX")
 	#elseif (${Column.getType()} == "ENUM")
 		comboBox${FieldName} = createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values());
+		#if (${Column.isNullable()} == true)
+		comboBox${FieldName}.setClearButtonVisible(true);
+		#end
 	#elseif (${Column.getType()} == "INTEGER")
 		integerField${FieldName} = createIntegerField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()});
 	#elseif (${Column.getType()} == "NUMERIC")
 		numberField${FieldName} = createNumberField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()});
 	#elseif (${Column.getType()} == "TEXT")
 		textArea${FieldName} = createTextArea("$ResourceId", model.get${FieldName}());
+	#elseif (${Column.getType()} == "TIMESTAMP")
+		dateTimePicker${FieldName} = new DateTimePicker(resourceManager.getLocalizedString("$ResourceId", session.getLocalization()), model.get${FieldName}(), event -> {});
 	#elseif (${Column.getType()} == "UPLOAD")
 		MultiFileMemoryBuffer buffer${FieldName} = new MultiFileMemoryBuffer();
 		upload${FieldName} = new Upload(buffer${FieldName});
@@ -182,6 +197,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 				numberField${Column.getFieldNameCamelCase()},
 	#elseif (${Column.getType()} == "TEXT")
 				textArea${Column.getFieldNameCamelCase()},
+	#elseif (${Column.getType()} == "TIMESTAMP")
+				dateTimePicker${Column.getFieldNameCamelCase()},
 	#elseif (${Column.getType()} == "UPLOAD")
 				upload${Column.getFieldNameCamelCase()},
 	#else
@@ -217,6 +234,10 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 					.findParameter(TEXT_FIELD_${Preference.getPreferenceIdName()})
 					.ifPresentOrElse(${Preference.getAttributeName()} -> {
 							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
+		#elseif (${Preference.getType()} == "TIMESTAMP")
+					.findParameter(TIMESTAMP_FIELD_${Preference.getPreferenceIdName()})
+					.ifPresentOrElse(${Preference.getAttributeName()} -> {
+							comboBox${Preference.getAttributeNameCamelCase()}.setValue((${Preference.getFieldTypeName()}) ${Preference.getAttributeName()});
 		#else
 					.findParameter(TEXT_FIELD_${Preference.getPreferenceIdName()})
 					.ifPresentOrElse(${Preference.getAttributeName()} -> {
@@ -234,6 +255,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 							numberField${Preference.getNextFieldNameCamelCase()}.focus();
 							#elseif (${Preference.getNextFieldType()} == "TEXT")
 							textArea${Preference.getNextFieldNameCamelCase()}.focus();
+							#elseif (${Preference.getNextFieldType()} == "TIMESTAMP")
+							dateTimePicker${Preference.getNextFieldNameCamelCase()}.focus();
 							#else
 							textField${Preference.getNextFieldNameCamelCase()}.focus();
 							#end
@@ -243,7 +266,8 @@ comboBox${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preferenc
 comboBox${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "INTEGER")
 integerField${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "NUMERIC")
 numberField${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "TEXT")
-textArea${Preference.getFirstFieldNameCamelCase()}.focus());#else
+textArea${Preference.getFirstFieldNameCamelCase()}.focus());#elseif (${Preference.getFirstFieldType()} == "TIMESTAMP")
+dateTimePicker${Preference.getFirstFieldNameCamelCase()}.focus());#else
 textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
 #if (${Preference.getFirstFieldType()})
 		} else {
@@ -259,6 +283,8 @@ textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
 			numberField${Preference.getFirstFieldNameCamelCase()}.focus();
 			#elseif (${Preference.getFirstFieldType()} == "TEXT")
 			textArea${Preference.getFirstFieldNameCamelCase()}.focus();
+			#elseif (${Preference.getFirstFieldType()} == "TIMESTAMP")
+			dateTimePicker${Preference.getFirstFieldNameCamelCase()}.focus();
 			#else
 			textField${Preference.getFirstFieldNameCamelCase()}.focus();
 			#end
@@ -279,6 +305,8 @@ textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
 		numberField${FirstColumn.getFieldNameCamelCase()}.focus();
 	#elseif (${FirstColumn.getType()} == "TEXT")
 		textArea${FirstColumn.getFieldNameCamelCase()}.focus();
+	#elseif (${FirstColumn.getType()} == "TIMESTAMP")
+		dateTimePicker${FirstColumn.getFieldNameCamelCase()}.focus();
 	#else
 		textField${FirstColumn.getFieldNameCamelCase()}.focus();
 	#end
@@ -321,6 +349,8 @@ textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
 		session.setParameter(NUMBER_FIELD_${Preference.getPreferenceIdName()}, numberField${Preference.getAttributeNameCamelCase()}.getValue());
 	#elseif (${Preference.getType()} == "TEXT")
 		session.setParameter(TEXT_AREA_${Preference.getPreferenceIdName()}, textArea${Preference.getAttributeNameCamelCase()}.getValue());
+	#elseif (${Preference.getType()} == "TIMESTAMP")
+		session.setParameter(TIMESTAMP_FIELD_${Preference.getPreferenceIdName()}, textArea${Preference.getAttributeNameCamelCase()}.getValue());
 	#else
 		session.setParameter(TEXT_FIELD_${Preference.getPreferenceIdName()}, textField${Preference.getAttributeNameCamelCase()}.getValue());
 	#end
@@ -338,6 +368,8 @@ textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
 		model.set${Column.getFieldNameCamelCase()}(numberField${Column.getFieldNameCamelCase()}.getValue());
 	#elseif (${Column.getType()} == "TEXT")
 		model.set${Column.getFieldNameCamelCase()}(textArea${Column.getFieldNameCamelCase()}.getValue());
+	#elseif (${Column.getType()} == "TIMESTAMP")
+		model.set${Column.getFieldNameCamelCase()}(dateTimePicker${Column.getFieldNameCamelCase()}.getValue());
 	#elseif (${Column.getType()} == "STRING")
 		model.set${Column.getFieldNameCamelCase()}(textField${Column.getFieldNameCamelCase()}.getValue());
 	#elseif (${Column.getType()} != "UPLOAD")

@@ -118,6 +118,7 @@ public class MainMenuViewClassCodeGeneratorTest {
 							+ "		ButtonGrid buttonGridMasterData = new ButtonGrid(4, buttonMasterData);\n" //
 							+ "		buttonGridMasterData.setMargin(false);\n" //
 							+ "		buttonGridMasterData.setWidthFull();\n" //
+							+ "		VerticalLayout mainLayout = new VerticalLayout();\n" //
 							+ "		mainLayout.add(\n" //
 							+ "				new HeaderLayout(\n" //
 							+ "						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),\n" //

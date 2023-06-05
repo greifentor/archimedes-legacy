@@ -9,6 +9,7 @@ public class GUIReferenceData {
 
 	private String fieldNameCamelCase;
 	private String findAllMethodNameExtension;
+	private boolean nullable;
 	private String referencedModelClassName;
 	private String referencedModelClassFieldName;
 	private String referencedModelNameFieldName;

@@ -151,6 +151,112 @@ public class DetailsLayoutClassCodeGeneratorTest {
 		}
 
 		@Nested
+		class DateAndTimeFields {
+
+			private String getExpected() {
+				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+						"\n" + //
+						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.datetimepicker.DateTimePicker;\n" + //
+						"\n" + //
+						"import base.pack.age.name.core.model.ATable;\n" + //
+						"import base.pack.age.name.core.service.ATableService;\n" + //
+						"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
+						"import base.pack.age.name.gui.SessionData;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.RequiredArgsConstructor;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n" + //
+						"@Generated\n" + //
+						"@RequiredArgsConstructor\n" + //
+						"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
+						"\n" + //
+						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ATable model;\n" + //
+						"	private final ATableService service;\n" + //
+						"	private final ResourceManager resourceManager;\n" + //
+						"	private final SessionData session;\n" + //
+						"	private final Observer observer;\n" + //
+						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
+						+ //
+						"\n" + //
+						"	private DateTimePicker dateTimePickerAdate;\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public void onAttach(AttachEvent attachEvent) {\n" + //
+						"		super.onAttach(attachEvent);\n" + //
+						"		createButtons();\n" + //
+						"		dateTimePickerAdate = new DateTimePicker(resourceManager.getLocalizedString(\"ATableDetailsLayout.field.adate.label\", session.getLocalization()), model.getAdate(), event -> {});\n"
+						+ //
+						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
+						"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
+						"		getStyle()\n" + //
+						"				.set(\n" + //
+						"						\"box-shadow\",\n" + //
+						"						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n"
+						+ //
+						"		setMargin(false);\n" + //
+						"		setWidthFull();\n" + //
+						"		add(\n" + //
+						"				dateTimePickerAdate,\n" + //
+						"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+						"		dateTimePickerAdate.focus();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ButtonFactory getButtonFactory() {\n" + //
+						"		return buttonFactory;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected ResourceManager getResourceManager() {\n" + //
+						"		return resourceManager;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected SessionData getSessionData() {\n" + //
+						"		return session;\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void remove() {\n" + //
+						"		service.delete(model);\n" + //
+						"		observer.remove();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	protected void save() {\n" + //
+						"		model.setAdate(dateTimePickerAdate.getValue());\n" + //
+						"		observer.save(service.update(model));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"}";
+			}
+
+			@Test
+			void happyRunForASimpleObject() {
+				// Prepare
+				String expected = getExpected();
+				DataModel dataModel = readDataModel("Model.xml");
+				TableModel tableModel = dataModel.getTableByName("A_TABLE");
+				tableModel.getColumnByName("ADate").setDomain(dataModel.getDomainByName("Timestamp"));
+				tableModel.getColumnByName("ADate").addOption(new Option(GUI_EDITOR_POS, "1"));
+				tableModel.removeColumn(tableModel.getColumnByName("Description"));
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+		}
+
+		@Nested
 		class WithReference {
 
 			private String getExpected() {
@@ -201,6 +307,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"								? comboBoxItemLabelGenerator.getLabel(ATable.REF, anotherTable)\n"
 						+ //
 						"								: \"\" + anotherTable.getName());\n" + //
+						"		comboBoxRef.setClearButtonVisible(true);\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -309,6 +416,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		createButtons();\n" + //
 						"		comboBoxEnumField = createComboBox(\"TableWithSpecialsDetailsLayout.field.enumfield.label\", model.getEnumField(), EnumType.values());\n"
 						+ //
+						"		comboBoxEnumField.setClearButtonVisible(true);\n" + //
 						"		checkboxFlag = createCheckbox(\"TableWithSpecialsDetailsLayout.field.flag.label\", model."
 						+ (flagIsNullable ? "get" : "is") + "Flag());\n" + //
 						"		textAreaLongtext = createTextArea(\"TableWithSpecialsDetailsLayout.field.longtext.label\", model.getLongtext());\n"
@@ -776,21 +884,13 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<DifferentSubclassReferences> comboBoxItemLabelGenerator;\n"
 						+ //
 						"\n" + //
-						"	private ComboBox<ATable> comboBoxATable;\n" + //
 						"	private ComboBox<AnotherTable> comboBoxAnotherTable;\n" + //
+						"	private ComboBox<ATable> comboBoxATable;\n" + //
 						"\n" + //
 						"	@Override\n" + //
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxATable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.atable.label\", model.getATable(), aTableService.findAll().toArray(new ATable[0]));\n"
-						+ //
-						"		comboBoxATable\n" + //
-						"				.setItemLabelGenerator(\n" + //
-						"						aTable  -> comboBoxItemLabelGenerator != null\n" + //
-						"								? comboBoxItemLabelGenerator.getLabel(DifferentSubclassReferences.ATABLE, aTable)\n"
-						+ //
-						"								: \"\" + aTable.getDescription());\n" + //
 						"		comboBoxAnotherTable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.anothertable.label\", model.getAnotherTable(), aTableService.findAllAnotherTable().toArray(new AnotherTable[0]));\n"
 						+ //
 						"		comboBoxAnotherTable\n" + //
@@ -799,6 +899,14 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"								? comboBoxItemLabelGenerator.getLabel(DifferentSubclassReferences.ANOTHERTABLE, anotherTable)\n"
 						+ //
 						"								: \"\" + anotherTable.getDescription());\n" + //
+						"		comboBoxATable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.atable.label\", model.getATable(), aTableService.findAll().toArray(new ATable[0]));\n"
+						+ //
+						"		comboBoxATable\n" + //
+						"				.setItemLabelGenerator(\n" + //
+						"						aTable  -> comboBoxItemLabelGenerator != null\n" + //
+						"								? comboBoxItemLabelGenerator.getLabel(DifferentSubclassReferences.ATABLE, aTable)\n"
+						+ //
+						"								: \"\" + aTable.getDescription());\n" + //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
 						"		getStyle().set(\"border-radius\", \"4px\");\n" + //
@@ -1040,6 +1148,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"								? comboBoxItemLabelGenerator.getLabel(ATable.ANOTHERTABLE, anotherTable)\n"
 						+ //
 						"								: \"\" + anotherTable.getName());\n" + //
+						"		comboBoxAnotherTable.setClearButtonVisible(true);\n" + //
 						"		textFieldDescription = createTextField(\"ATableDetailsLayout.field.description.label\", model.getDescription());\n"
 						+ //
 						"		checkboxFlag = createCheckbox(\"ATableDetailsLayout.field.flag.label\", model.isFlag());\n"

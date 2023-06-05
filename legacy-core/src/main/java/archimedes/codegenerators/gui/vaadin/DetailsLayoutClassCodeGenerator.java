@@ -94,6 +94,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 											.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
 											.setFieldOwnerClassName(serviceNameGenerator.getModelClassName(table))
 											.setFieldTypeName(fieldTypeName)
+											.setNullable(!column.isNotNull())
 											.setMax(getMax(column))
 											.setMin(getMin(column))
 											.setPosition(getPosition(column))
@@ -166,6 +167,8 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 				|| (column.getDomain().getDataType() == Types.VARCHAR))
 				&& column.getDomain().isOptionSet(AbstractCodeGenerator.TEXT)) {
 			return GUIColumnData.TYPE_TEXT;
+		} else if (column.getDomain().getDataType() == Types.TIMESTAMP) {
+			return GUIColumnData.TYPE_TIMESTAMP;
 		} else if (column.getDomain().getDataType() == Types.VARBINARY) {
 			return GUIColumnData.TYPE_UPLOAD;
 		}

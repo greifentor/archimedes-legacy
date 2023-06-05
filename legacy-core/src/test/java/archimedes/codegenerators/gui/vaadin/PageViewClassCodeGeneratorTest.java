@@ -858,14 +858,15 @@ public class PageViewClassCodeGeneratorTest {
 			// Prepare
 			String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 					"\n" + //
+					"import java.util.ArrayList;\n" + //
 					"import java.util.List;\n" + //
 					"import java.util.Map;\n" + //
+					"import java.util.StringTokenizer;\n" + //
 					"import java.util.function.Supplier;\n" + //
 					"import java.util.stream.Collectors;\n" + //
 					"\n" + //
 					"import org.apache.logging.log4j.LogManager;\n" + //
 					"import org.apache.logging.log4j.Logger;\n" + //
-					"import org.bouncycastle.util.Strings;\n" + //
 					"import org.springframework.beans.factory.annotation.Autowired;\n" + //
 					"\n" + //
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
@@ -1095,11 +1096,8 @@ public class PageViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private boolean isMatching(GuiTable model) {\n" + //
-					"		String[] arr = Strings.split(textFieldFilter.getValue(), ' ');\n" + //
 					"		List<String> patterns =\n" + //
-					"				(arr.length == 0) || (arr[0] == \"\")\n" + //
-					"						? List.of()\n" + //
-					"						: List.of(arr).stream().map(s -> s.toLowerCase()).collect(Collectors.toList());\n"
+					"				getWords(textFieldFilter.getValue()).stream().map(s -> s.toLowerCase()).collect(Collectors.toList());\n"
 					+ //
 					"		if (patterns.isEmpty()) {\n" + //
 					"			return true;\n" + //
@@ -1109,6 +1107,17 @@ public class PageViewClassCodeGeneratorTest {
 					"			b &= isMatchingPattern(pattern.toLowerCase(), model);\n" + //
 					"		}\n" + //
 					"		return b;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	private List<String> getWords(String s) {\n" + //
+					"		List<String> l = new ArrayList<>();\n" + //
+					"		if (s != null) {\n" + //
+					"			StringTokenizer st = new StringTokenizer(s, \" \");\n" + //
+					"			while (st.hasMoreTokens()) {\n" + //
+					"				l.add(st.nextToken());\n" + //
+					"			}\n" + //
+					"		}\n" + //
+					"		return l;\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	private boolean isMatchingPattern(String pattern, GuiTable model) {\n" + //

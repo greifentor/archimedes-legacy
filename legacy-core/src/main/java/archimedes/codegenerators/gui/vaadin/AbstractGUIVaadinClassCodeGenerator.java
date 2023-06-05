@@ -84,6 +84,7 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 		return new GUIReferenceData()
 				.setFieldNameCamelCase(nameGenerator.getCamelCase(nameGenerator.getAttributeName(column)))
 				.setFindAllMethodNameExtension(getFindAllMethodNameExtension(referencedTable))
+				.setNullable(!column.isNotNull())
 				.setReferencedModelClassName(referenceModelClassName)
 				.setReferencedModelClassFieldName(nameGenerator.getAttributeName(referenceModelClassName))
 				.setReferencedModelNameFieldName(getNameFieldName(referencedSuperTable))

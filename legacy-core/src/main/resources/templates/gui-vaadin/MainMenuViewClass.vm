@@ -72,6 +72,7 @@ public class ${ClassName} extends Scroller implements BeforeEnterObserver, HasUr
 		${ButtonGridClassName} buttonGridMasterData = new ButtonGrid(4, buttonMasterData);
 		buttonGridMasterData.setMargin(false);
 		buttonGridMasterData.setWidthFull();
+		VerticalLayout mainLayout = new VerticalLayout();
 		mainLayout.add(
 				new ${HeaderLayoutClassName}(
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, LOG),

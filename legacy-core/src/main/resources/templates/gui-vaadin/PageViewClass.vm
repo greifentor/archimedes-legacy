@@ -1,7 +1,13 @@
 package ${PackageName};
 
+#if ($Filters)
+import java.util.ArrayList;
+#end
 import java.util.List;
 import java.util.Map;
+#if ($Filters)
+import java.util.StringTokenizer;
+#end
 import java.util.function.Supplier;
 #if ($Filters)
 import java.util.stream.Collectors;
@@ -9,9 +15,6 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-#if ($Filters)
-import org.bouncycastle.util.Strings;
-#end
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.AttachEvent;
@@ -258,11 +261,8 @@ public class ${ClassName} extends Scroller implements BeforeEnterObserver, HasUr
 	#if ($Filters)
 
 	private boolean isMatching(${ModelClassName} model) {
-		String[] arr = Strings.split(textFieldFilter.getValue(), ' ');
 		List<String> patterns =
-				(arr.length == 0) || (arr[0] == "")
-						? List.of()
-						: List.of(arr).stream().map(s -> s.toLowerCase()).collect(Collectors.toList());
+				getWords(textFieldFilter.getValue()).stream().map(s -> s.toLowerCase()).collect(Collectors.toList());
 		if (patterns.isEmpty()) {
 			return true;
 		}
@@ -271,6 +271,17 @@ public class ${ClassName} extends Scroller implements BeforeEnterObserver, HasUr
 			b &= isMatchingPattern(pattern.toLowerCase(), model);
 		}
 		return b;
+	}
+
+	private List<String> getWords(String s) {
+		List<String> l = new ArrayList<>();
+		if (s != null) {
+			StringTokenizer st = new StringTokenizer(s, " ");
+			while (st.hasMoreTokens()) {
+				l.add(st.nextToken());
+			}
+		}
+		return l;
 	}
 
 	private boolean isMatchingPattern(String pattern, ${ModelClassName} model) {
