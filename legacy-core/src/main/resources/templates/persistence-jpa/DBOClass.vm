@@ -38,6 +38,12 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SequenceGenerator;
 #end
 import javax.persistence.Table;
+#if ($HasCompositionLists)
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+#end
 
 #if ($POJOMode == "BUILDER")
 import lombok.AllArgsConstructor;

@@ -22,14 +22,21 @@ import corent.base.Direction;
 @ExtendWith(MockitoExtension.class)
 public class DBOClassCodeGeneratorTest {
 
+	private static final String EXAMPLE_XMLS = "src/test/resources/examples/dm/";
+	private static final String TEST_XMLS = "src/test/resources/dm/codegenerators/";
+
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
 	private DBOClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
+		return readDataModel(fileName, null);
+	}
+
+	static DataModel readDataModel(String fileName, String path) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		return reader.read("src/test/resources/dm/codegenerators/" + fileName);
+		return reader.read((path == null ? TEST_XMLS : path) + fileName);
 	}
 
 	@Nested
@@ -90,7 +97,7 @@ public class DBOClassCodeGeneratorTest {
 					"\n";
 			if (!isExtends) {
 				s += "	@Id\n" + //
-					"	@Column(name = \"ID\")\n" + //
+						"	@Column(name = \"ID\")\n" + //
 						"	private Long id;\n";
 			}
 			s += "	@Column(name = \"ADate\")\n" + //
@@ -150,6 +157,67 @@ public class DBOClassCodeGeneratorTest {
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+		@Nested
+		class List_Composition_Parent {
+
+			@Test
+			void happyRunForASimpleObject() {
+				// Prepare
+				String expected = getExpected(false, false);
+				DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("BOOK"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			private String getExpected(boolean isSuperclass, boolean isExtends) {
+				String s =
+						"package de.ollie.bookstore.persistence.entity;\n" //
+								+ "\n" //
+								+ "import javax.persistence.Column;\n" //
+								+ "import javax.persistence.Entity;\n" //
+								+ "import javax.persistence.Id;\n" //
+								+ "import javax.persistence.Table;\n" //
+								+ "import javax.persistence.CascadeType;\n" //
+								+ "import javax.persistence.FetchType;\n" //
+								+ "import javax.persistence.JoinColumn;\n" //
+								+ "import javax.persistence.OneToMany;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A DBO for books.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@Generated\n" //
+								+ "@Entity(name = \"Book\")\n" //
+								+ "@Table(name = \"BOOK\")\n" //
+								+ "public class BookDBO {\n" //
+								+ "\n" //
+								+ "	@Id\n" //
+								+ "	@Column(name = \"ID\", nullable = false)\n" //
+								+ "	private long id;\n" //
+								+ "	@Column(name = \"ISBN\")\n" //
+								+ "	private String isbn;\n" //
+								+ "	@Column(name = \"TITLE\", nullable = false)\n" //
+								+ "	private String title;\n" //
+								+ "	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)\n" //
+								+ "	@JoinColumn(name = \"BOOK_ID\")\n" //
+								+ "	private List<ChapterDBO> chapters;\n" //
+								+ "\n" //
+								+ "}";
+				return s;
+			}
+
 		}
 
 	}

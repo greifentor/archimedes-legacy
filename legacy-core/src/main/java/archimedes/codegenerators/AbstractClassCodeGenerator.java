@@ -4,6 +4,7 @@ import static corentx.util.Checks.ensure;
 
 import java.io.FileWriter;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -39,6 +40,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String LIST_ACCESS = "LIST_ACCESS";
 	public static final String MAPPERS = "MAPPERS";
 	public static final String MAX = "MAX";
+	public static final String MEMBER_LIST = "MEMBER_LIST";
 	public static final String MIN = "MIN";
 	public static final String POJO_MODE = "POJO_MODE";
 	public static final String POJO_MODE_BUILDER = "BUILDER";
@@ -203,6 +205,16 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 								.getOptionByName(model, REFERENCE_MODE)
 								.map(option -> ReferenceMode.valueOf(option.getParameter()))
 								.orElse(ReferenceMode.ID));
+	}
+
+	protected List<ColumnModel> getReferencingColumns(TableModel table, DataModel dataModel) {
+		List<ColumnModel> columns = new ArrayList<>();
+		for (ColumnModel column : dataModel.getAllColumns()) {
+			if (column.getReferencedTable() == table) {
+				columns.add(column);
+			}
+		}
+		return columns;
 	}
 
 	protected List<ColumnModel> getAllColumns(List<ColumnModel> columns, TableModel table) {
