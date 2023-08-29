@@ -83,7 +83,6 @@ public class DefaultDatabaseMetaDataAdapter implements DatabaseMetaDataPort {
 	public List<IndexMemberImportInfo> getIndexInformation(DatabaseMetaData dbmd, String schemeName, String tableName)
 			throws SQLException {
 		List<IndexMemberImportInfo> indexInfos = new ArrayList<>();
-		// TODO: Set "false, false" to "true, true" for large oracle tables.
 		ResultSet rs = jdbcImportDatabaseMetaDataPort.getIndices(dbmd, schemeName, tableName);
 		while (rs.next()) {
 			boolean nonUniqueIndex = rs.getBoolean("NON_UNIQUE");

@@ -81,7 +81,7 @@ public class JDBCModelReader implements ModelReader {
 			this.databaseMetaDataPort = new MySQLDatabaseMetaDataAdapter(new MySQLJDBCImportDatabaseMetaDataAdapter());
 		} else if (dbExecMode == DBExecMode.ORACLE) {
 			this.databaseMetaDataPort =
-					new OracleDatabaseMetaDataAdapter(new DefaultJDBCImportDatabaseMetaDataAdapter());
+					new OracleDatabaseMetaDataAdapter(new OracleJDBCImportDatabaseMetaDataAdapter());
 		}
 	}
 
