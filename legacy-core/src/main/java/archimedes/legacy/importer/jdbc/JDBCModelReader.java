@@ -3,7 +3,7 @@
  *
  * 20.09.2018
  *
- * (c) by O.Lieshoff 
+ * (c) by O.Lieshoff
  */
 package archimedes.legacy.importer.jdbc;
 
@@ -47,28 +47,22 @@ public class JDBCModelReader implements ModelReader {
 	private String[] ignoreTablePatterns;
 	private String[] importOnlyTablePatterns;
 	private List<ModelReaderListener> listeners = new ArrayList<>();
-	private DatabaseMetaDataPort databaseMetaDataPort = new DefaultDatabaseMetaDataAdapter(
-			new DefaultJDBCImportDatabaseMetaDataAdapter());
+	private DatabaseMetaDataPort databaseMetaDataPort =
+			new DefaultDatabaseMetaDataAdapter(new DefaultJDBCImportDatabaseMetaDataAdapter());
 
 	/**
 	 * Creates a new model reader with the passed parameters.
 	 *
-	 * @param factory                 An object factory implementation to create the
-	 *                                DB objects.
+	 * @param factory                 An object factory implementation to create the DB objects.
 	 * @param typeConverter           A converter for database types.
-	 * @param connection              The connection whose data model should be
-	 *                                read.
-	 * @param schemePattern           The pattern of the scheme names whose data are
-	 *                                to read (pass "null" to ignore scheme and load
-	 *                                all tables).
+	 * @param connection              The connection whose data model should be read.
+	 * @param schemePattern           The pattern of the scheme names whose data are to read (pass "null" to ignore
+	 *                                scheme and load all tables).
 	 * @param ignoreIndices           Set this flag to ignore indices while import.
-	 * @param ignoreTablePatterns     Patterns of table names which should be
-	 *                                returned.
-	 * @param importOnlyTablePatterns Patterns of table names which are to import if
-	 *                                the table name matches the at least one
-	 *                                pattern. The patterns to import only are
-	 *                                checked before ignore table patterns (set "*"
-	 *                                if all tables are to import).
+	 * @param ignoreTablePatterns     Patterns of table names which should be returned.
+	 * @param importOnlyTablePatterns Patterns of table names which are to import if the table name matches the at least
+	 *                                one pattern. The patterns to import only are checked before ignore table patterns
+	 *                                (set "*" if all tables are to import).
 	 * @param dbExecMode              The database exec mode.
 	 * @throws IllegalArgumentException Passing null value.
 	 */
@@ -85,6 +79,9 @@ public class JDBCModelReader implements ModelReader {
 		this.typeConverter = typeConverter;
 		if (dbExecMode == DBExecMode.MYSQL) {
 			this.databaseMetaDataPort = new MySQLDatabaseMetaDataAdapter(new MySQLJDBCImportDatabaseMetaDataAdapter());
+		} else if (dbExecMode == DBExecMode.ORACLE) {
+			this.databaseMetaDataPort =
+					new OracleDatabaseMetaDataAdapter(new DefaultJDBCImportDatabaseMetaDataAdapter());
 		}
 	}
 
@@ -143,8 +140,13 @@ public class JDBCModelReader implements ModelReader {
 		int current = 0;
 		for (String tableName : tableNames) {
 			if (!isMatchingImportOnlyPattern(tableName)) {
-				fireModelReaderEvent(new ModelReaderEvent(current, max, 1,
-						ModelReaderEventType.IMPORT_ONLY_PATTERN_NOT_MATCHING, tableName));
+				fireModelReaderEvent(
+						new ModelReaderEvent(
+								current,
+								max,
+								1,
+								ModelReaderEventType.IMPORT_ONLY_PATTERN_NOT_MATCHING,
+								tableName));
 			} else if (isMatchingIgnorePattern(tableName)) {
 				fireModelReaderEvent(
 						new ModelReaderEvent(current, max, 1, ModelReaderEventType.IGNORED_BY_PATTERN, tableName));
@@ -187,18 +189,37 @@ public class JDBCModelReader implements ModelReader {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			for (ColumnImportInfo columnInfo : databaseMetaDataPort.getColumns(dbmd, scheme.getName(),
-					table.getName())) {
+			for (ColumnImportInfo columnInfo : databaseMetaDataPort
+					.getColumns(dbmd, scheme.getName(), table.getName())) {
 				try {
-					table.addColumns(factory.createColumn(
-							columnInfo.getColumnName(), typeConverter.convert(columnInfo.getDataType(),
-									columnInfo.getColumnSize(), columnInfo.getDecimalDigits()),
-							columnInfo.isNullable(), columnInfo.isAutoIncrement()));
+					table
+							.addColumns(
+									factory
+											.createColumn(
+													columnInfo.getColumnName(),
+													typeConverter
+															.convert(
+																	columnInfo.getDataType(),
+																	columnInfo.getColumnSize(),
+																	columnInfo.getDecimalDigits()),
+													columnInfo.isNullable(),
+													columnInfo.isAutoIncrement()));
 					log.debug("imported column: " + columnInfo);
 				} catch (Exception e) {
-					log.error("Problems while reading column '" + scheme.getName() + "." + table.getName() + "."
-							+ columnInfo.getColumnName() + "' (" + columnInfo.getDataType() + " {"
-							+ columnInfo.getDataType() + "}): " + e.getMessage(), e);
+					log
+							.error(
+									"Problems while reading column '" + scheme.getName()
+											+ "."
+											+ table.getName()
+											+ "."
+											+ columnInfo.getColumnName()
+											+ "' ("
+											+ columnInfo.getDataType()
+											+ " {"
+											+ columnInfo.getDataType()
+											+ "}): "
+											+ e.getMessage(),
+									e);
 				}
 			}
 			fireModelReaderEvent(
@@ -211,8 +232,8 @@ public class JDBCModelReader implements ModelReader {
 		int max = scheme.getTables().size();
 		int current = 0;
 		for (TableSO table : scheme.getTables()) {
-			for (String columnName : databaseMetaDataPort.getPrimaryKeyColumnNames(dbmd, scheme.getName(),
-					table.getName())) {
+			for (String columnName : databaseMetaDataPort
+					.getPrimaryKeyColumnNames(dbmd, scheme.getName(), table.getName())) {
 				try {
 					ColumnSO pkColumn = this.getColumnByName(columnName, table);
 					pkColumn.setNullable(false);
@@ -235,23 +256,35 @@ public class JDBCModelReader implements ModelReader {
 			for (ForeignKeyReferenceImportInfo fkImportInfo : databaseMetaDataPort
 					.getForeignKeyReferencesInformation(dbmd, scheme.getName(), table.getName())) {
 				try {
-					table.getForeignKeyByName(fkImportInfo.getFkName()).ifPresentOrElse(fk -> log.info("FK: " + fk),
-							() -> {
+					table
+							.getForeignKeyByName(fkImportInfo.getFkName())
+							.ifPresentOrElse(fk -> log.info("FK: " + fk), () -> {
 								ForeignKeySO fk = new ForeignKeySO().setName(fkImportInfo.getFkName());
-								TableSO referencedTable = scheme.getTableByName(fkImportInfo.getPkTableName())
+								TableSO referencedTable = scheme
+										.getTableByName(fkImportInfo.getPkTableName())
 										.orElseThrow(() -> new TableNotFoundException(fkImportInfo.getPkTableName()));
-								TableSO referencingTable = scheme.getTableByName(fkImportInfo.getFkTableName())
+								TableSO referencingTable = scheme
+										.getTableByName(fkImportInfo.getFkTableName())
 										.orElseThrow(() -> new TableNotFoundException(fkImportInfo.getFkTableName()));
-								fk.addReferences(new ReferenceSO()
-										.setReferencedColumn(referencedTable
-												.getColumnByName(fkImportInfo.getPkColumnName())
-												.orElseThrow(() -> new ColumnNotFoundException(
-														fkImportInfo.getPkTableName(), fkImportInfo.getPkColumnName())))
-										.setReferencingColumn(
-												referencingTable.getColumnByName(fkImportInfo.getFkColumnName())
-														.orElseThrow(() -> new ColumnNotFoundException(
-																fkImportInfo.getFkTableName(),
-																fkImportInfo.getFkColumnName()))));
+								fk
+										.addReferences(
+												new ReferenceSO()
+														.setReferencedColumn(
+																referencedTable
+																		.getColumnByName(fkImportInfo.getPkColumnName())
+																		.orElseThrow(
+																				() -> new ColumnNotFoundException(
+																						fkImportInfo.getPkTableName(),
+																						fkImportInfo
+																								.getPkColumnName())))
+														.setReferencingColumn(
+																referencingTable
+																		.getColumnByName(fkImportInfo.getFkColumnName())
+																		.orElseThrow(
+																				() -> new ColumnNotFoundException(
+																						fkImportInfo.getFkTableName(),
+																						fkImportInfo
+																								.getFkColumnName()))));
 								table.addForeignKeys(fk);
 								log.info("FK created: " + fk);
 							});
@@ -278,16 +311,21 @@ public class JDBCModelReader implements ModelReader {
 		int max = tables.size();
 		int current = 0;
 		for (TableSO table : tables) {
-			for (IndexMemberImportInfo indexInfo : databaseMetaDataPort.getIndexInformation(dbmd, scheme.getName(),
-					table.getName())) {
+			for (IndexMemberImportInfo indexInfo : databaseMetaDataPort
+					.getIndexInformation(dbmd, scheme.getName(), table.getName())) {
 				if (!isAForeignKey(indexInfo.getIndexName(), table)) {
 					try {
 						IndexSO index = getIndexByName(indexInfo.getIndexName(), table);
 						ColumnSO column = getColumnByName(indexInfo.getColumnName(), table);
 						index.getColumns().add(column);
 					} catch (IllegalArgumentException iae) {
-						log.error(LocalDateTime.now() + " - Index '" + indexInfo.getIndexName() + "'not added: "
-								+ iae.getMessage(), iae);
+						log
+								.error(
+										LocalDateTime.now() + " - Index '"
+												+ indexInfo.getIndexName()
+												+ "'not added: "
+												+ iae.getMessage(),
+										iae);
 					}
 				}
 			}
