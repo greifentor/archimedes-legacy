@@ -29,6 +29,9 @@ import archimedes.model.TableModel;
  */
 public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extends AbstractCodeGenerator<N, TableModel> {
 
+	public static final String GENERAL_TEMPLATE_FOLDER_PATH =
+			AbstractCodeFactory.TEMPLATE_PATH + System.getProperty("general.templates.folder", "");
+
 	public static final String ALTERNATE_MODULE_PREFIX = "ALTERNATE_MODULE_PREFIX";
 	public static final String AUTO_INCREMENT = "AUTO_INCREMENT";
 	public static final String CASCADE_DELETE = "CASCADE_DELETE";
@@ -99,7 +102,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		context.put("FieldName", getAttributeNameFirstLetterUpperCase(column));
 		context.put("NotNull", column.isNotNull());
 		context.put("BooleanType", "boolean".equalsIgnoreCase(column.getDomain().getName()));
-		return processTemplate(context, "JavaGetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
+		return processTemplate(context, "JavaGetterName.vm", GENERAL_TEMPLATE_FOLDER_PATH).trim();
 	}
 
 	private String getAttributeNameFirstLetterUpperCase(ColumnModel column) {
@@ -113,7 +116,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		context.put("FieldName", getAttributeNameFirstLetterUpperCase(column));
 		context.put("NotNull", column.isNotNull());
 		context.put("BooleanType", "boolean".equalsIgnoreCase(column.getDomain().getName()));
-		return processTemplate(context, "JavaSetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
+		return processTemplate(context, "JavaSetterName.vm", GENERAL_TEMPLATE_FOLDER_PATH).trim();
 	}
 
 	protected boolean isGenerateIdClass(DataModel model, TableModel table) {
