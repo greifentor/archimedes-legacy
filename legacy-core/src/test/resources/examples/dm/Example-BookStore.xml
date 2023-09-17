@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Diagram application="Archimedes" application-version="2.37.3" diagram-version="2.0">
+<Diagram application="Archimedes" application-version="2.39.0" diagram-version="2.0">
     <AdditionalSQLStatements postChanging="" postReducing="" preChanging="" preExtending="" />
     <Colors>
         <Color b="255" g="0" name="blau" r="0" />
@@ -39,7 +39,6 @@
         <Domain comment="" dataType="4" decimalPlace="-1" history="" initialValue="NULL" length="-1" name="Int" parameters="" type="int" />
         <Domain comment="" dataType="93" decimalPlace="0" history="" initialValue="NULL" length="0" name="Timestamp" parameters="" type="timestamp" />
         <Domain comment="" dataType="12" decimalPlace="0" history="" initialValue="NULL" length="100" name="Title" parameters="" type="varchar(100)" />
-        <Domain comment="" dataType="12" decimalPlace="0" history="" initialValue="NULL" length="20" name="Token" parameters="" type="varchar(20)" />
         <Domain comment="" dataType="12" decimalPlace="-1" history="" initialValue="NULL" length="10" name="Varchar10" parameters="" type="varchar(10)" />
         <Domain comment="" dataType="12" decimalPlace="-1" history="" initialValue="NULL" length="20" name="Varchar20" parameters="" type="varchar(20)" />
         <Domain comment="" dataType="12" decimalPlace="-1" history="" initialValue="NULL" length="255" name="Varchar255" parameters="" type="varchar(255)" />

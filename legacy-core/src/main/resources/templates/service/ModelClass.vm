@@ -1,5 +1,11 @@
 package ${PackageName};
 
+#foreach($Import in $ImportDeclarations.toList())
+import $Import.getSingleImportDeclaration();
+#if($velocityCount == $ImportDeclarations.size()) 
+
+#end
+#end
 #if ($ImportLocalDate || $ImportLocalDateTime)
 	#if ($ImportLocalDate)
 import ${ImportLocalDate};

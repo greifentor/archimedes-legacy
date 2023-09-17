@@ -25,14 +25,20 @@ import corent.base.Direction;
 @ExtendWith(MockitoExtension.class)
 class ModelClassCodeGeneratorTest {
 
+	private static final String EXAMPLE_XMLS = "src/test/resources/examples/dm/";
+	private static final String TEST_XMLS = "src/test/resources/dm/codegenerators/";
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
 	private ModelClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
+		return readDataModel(fileName, null);
+	}
+
+	static DataModel readDataModel(String fileName, String path) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		return reader.read("src/test/resources/dm/codegenerators/" + fileName);
+		return reader.read((path == null ? TEST_XMLS : path) + fileName);
 	}
 
 	@Nested
@@ -446,6 +452,75 @@ class ModelClassCodeGeneratorTest {
 				assertEquals(expected, returned);
 			}
 
+		}
+
+	}
+
+	@Nested
+	class List_Composition_Parent {
+
+		@Test
+		void happyRunForASimpleObject() {
+			// Prepare
+			String expected = getExpected(false, false);
+			DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+			// Run
+			String returned =
+					unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("BOOK"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String getExpected(boolean isSuperclass, boolean isExtends) {
+			String s =
+					"package de.ollie.bookstore.core.model;\n" + //
+							"\n" + //
+							"import java.util.List;\n" + //
+							"\n" + //
+							"import lombok.Data;\n" + //
+							"import lombok.EqualsAndHashCode;\n" + //
+							"import lombok.Generated;\n" + //
+							"import lombok.ToString;\n" + //
+							"import lombok.experimental.Accessors;\n" + //
+							"\n" + //
+							"/**\n" + //
+							" * A model for books.\n" + //
+							" *\n" + //
+							" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+							" */\n" + //
+							"@Accessors(chain = true)\n" + //
+							"@Data\n" + //
+							"@EqualsAndHashCode(callSuper = true)\n" + //
+							"@Generated\n" + //
+							"@ToString(callSuper = true)\n" + //
+							"public class Book extends GeneratedBook {\n" + //
+							"\n" + //
+							"	@Override\n" + //
+							"	public Book setId(long id) {\n" + //
+							"		super.setId(id);\n" + //
+							"		return this;\n" + //
+							"	}\n" + //
+							"\n" + //
+							"	@Override\n" + //
+							"	public Book setIsbn(String isbn) {\n" + //
+							"		super.setIsbn(isbn);\n" + //
+							"		return this;\n" + //
+							"	}\n" + //
+							"\n" + //
+							"	@Override\n" + //
+							"	public Book setTitle(String title) {\n" + //
+							"		super.setTitle(title);\n" + //
+							"		return this;\n" + //
+							"	}\n" + //
+							"\n" + //
+							"	@Override\n" + //
+							"	public Book setChapters(List<Chapter> chapters) {\n" + //
+							"		super.setChapters(chapters);\n" + //
+							"		return this;\n" + //
+							"	}\n" + //
+							"\n" + //
+							"}";
+			return s;
 		}
 
 	}

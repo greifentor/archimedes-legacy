@@ -178,6 +178,8 @@ public class DBOClassCodeGeneratorTest {
 				String s =
 						"package de.ollie.bookstore.persistence.entity;\n" //
 								+ "\n" //
+								+ "import java.util.List;\n" //
+								+ "\n" //
 								+ "import javax.persistence.Column;\n" //
 								+ "import javax.persistence.Entity;\n" //
 								+ "import javax.persistence.Id;\n" //

@@ -25,14 +25,20 @@ import corent.base.Direction;
 @ExtendWith(MockitoExtension.class)
 public class GeneratedModelClassCodeGeneratorTest {
 
+	private static final String EXAMPLE_XMLS = "src/test/resources/examples/dm/";
+	private static final String TEST_XMLS = "src/test/resources/dm/codegenerators/";
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
 	private GeneratedModelClassCodeGenerator unitUnderTest;
 
 	static DataModel readDataModel(String fileName) {
+		return readDataModel(fileName, null);
+	}
+
+	static DataModel readDataModel(String fileName, String path) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		return reader.read("src/test/resources/dm/codegenerators/" + fileName);
+		return reader.read((path == null ? TEST_XMLS : path) + fileName);
 	}
 
 	@Nested
@@ -330,6 +336,55 @@ public class GeneratedModelClassCodeGeneratorTest {
 				assertEquals(expected, returned);
 			}
 
+		}
+
+	}
+
+	@Nested
+	class List_Composition_Parent {
+
+		@Test
+		void happyRunForASimpleObject() {
+			// Prepare
+			String expected = getExpected(false, false);
+			DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("BOOK"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String getExpected(boolean isSuperclass, boolean isExtends) {
+			String s = "package de.ollie.bookstore.core.model;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"\n" + //
+					"import lombok.Data;\n" + //
+					"import lombok.Generated;\n" + //
+					"import lombok.experimental.Accessors;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A model for books.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Accessors(chain = true)\n" + //
+					"@Data\n" + //
+					"@Generated\n" + //
+					"public class GeneratedBook {\n" + //
+					"\n" + //
+					"	public static final String ID = \"ID\";\n" + //
+					"	public static final String ISBN = \"ISBN\";\n" + //
+					"	public static final String TITLE = \"TITLE\";\n" + //
+					"	public static final String CHAPTERS = \"CHAPTERS\";\n" + //
+					"\n" + //
+					"	private long id;\n" + //
+					"	private String isbn;\n" + //
+					"	private String title;\n" + //
+					"	private List<Chapter> chapters;\n" + //
+					"\n" + //
+					"}";
+			return s;
 		}
 
 	}

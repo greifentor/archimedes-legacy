@@ -258,6 +258,9 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 															.setBackReferenceColumn(cm)
 															.setMemberTable(cm.getTable())));
 				});
+		if (l.size() > 0) {
+			importDeclarations.add("java.util", "List");
+		}
 		return l;
 	}
 
