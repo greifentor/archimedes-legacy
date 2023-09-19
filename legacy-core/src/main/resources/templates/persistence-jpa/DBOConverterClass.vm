@@ -66,7 +66,7 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 #if ((${Column.isReference()} && ${ReferenceMode} == "OBJECT") or ${Column.isEnumType()})
 				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(model.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
 #elseif (${Column.getFieldType()} == "LIST")
-				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(dbo.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
+				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(model.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
 #else
 				.${Column.getSetterName()}(model.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
 #end

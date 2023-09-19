@@ -1087,7 +1087,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					"				.setId(model.getId())\n" + //
 					"				.setIsbn(model.getIsbn())\n" + //
 					"				.setTitle(model.getTitle())\n" + //
-					"				.setChapters(chapterDBOConverter.toDBO(dbo.getChapters()));\n" + //
+					"				.setChapters(chapterDBOConverter.toDBO(model.getChapters()));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	public List<BookDBO> toDBO(List<Book> models) {\n" + //
