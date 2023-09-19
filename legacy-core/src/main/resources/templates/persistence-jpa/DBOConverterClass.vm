@@ -10,9 +10,7 @@ import ${ImportLocalDate};
 
 #end
 import lombok.Generated;
-#if ((${ReferenceMode} == "OBJECT" && ${HasReferences}) or ${HasEnums} or (${Subclasses} && ${Subclasses.size()} > 0))
 import lombok.RequiredArgsConstructor;
-#end
 
 #foreach ($Subclass in $Subclasses)
 import ${Subclass.getDboClassNameQualified()};
@@ -30,12 +28,10 @@ import ${ModelClassNameQualified};
  */
 @Generated
 @Named
-#if ((${ReferenceMode} == "OBJECT" && ${HasReferences}) or ${HasEnums} or (${Subclasses} && ${Subclasses.size()} > 0))
 @RequiredArgsConstructor
-#end
 public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOClassName}> {
 
-#if ((${ReferenceMode} == "OBJECT" && ${HasReferences}) or ${HasEnums})
+#if ((${ReferenceMode} == "OBJECT" && ${HasReferences}) or ${HasEnums} or ${HasMemberLists})
 #foreach($Converter in $ConverterData)
 	private final ${Converter.getClassName()} ${Converter.getAttributeName()};
 #if ( !$foreach.hasNext )
@@ -69,6 +65,8 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 #foreach ($Column in $ColumnData)
 #if ((${Column.isReference()} && ${ReferenceMode} == "OBJECT") or ${Column.isEnumType()})
 				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(model.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
+#elseif (${Column.getFieldType()} == "LIST")
+				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(dbo.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
 #else
 				.${Column.getSetterName()}(model.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
 #end
@@ -84,6 +82,13 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 #end
 		return dbo;
 #end
+	}
+
+	public List<${DBOClassName}> ${ToDBOMethodName}(List<${ModelClassName}> models) {
+		if (models == null) {
+			return null;
+		}
+		return models.stream().map(this::${ToDBOMethodName}).collect(Collectors.toList());
 	}
 
 	@Override
@@ -106,6 +111,8 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 		return new ${ModelClassName}()
 #foreach($Column in $ColumnData)
 #if ((${Column.isReference()} && ${ReferenceMode} == "OBJECT") or ${Column.isEnumType()})
+				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToModelMethodName}(dbo.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
+#elseif (${Column.getFieldType()} == "LIST")
 				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToModelMethodName}(dbo.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
 #else
 				.${Column.getSetterName()}(dbo.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end

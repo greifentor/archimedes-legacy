@@ -88,6 +88,14 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		return columns.stream().anyMatch(column -> column.getDomain().isOptionSet(ENUM));
 	}
 
+	protected boolean hasMemberLists(TableModel table) {
+		return OptionGetter
+				.getOptionByName(table, MEMBER_LIST)
+				.map(om -> (om.getParameter() != null) && om.getParameter().toUpperCase().equals("PARENT"))
+				.orElse(false);
+
+	}
+
 	protected boolean hasReferences(ColumnModel[] columns) {
 		return List.of(columns).stream().anyMatch(column -> column.getReferencedTable() != null);
 	}
@@ -104,8 +112,20 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		return processTemplate(context, "JavaGetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
 	}
 
+	protected String getGetterName(String columnName) {
+		VelocityContext context = new VelocityContext();
+		context.put("FieldName", getAttributeNameFirstLetterUpperCase(columnName));
+		return processTemplate(context, "JavaGetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
+	}
+
 	private String getAttributeNameFirstLetterUpperCase(ColumnModel column) {
 		String attrName = nameGenerator.getAttributeName(column);
+		return attrName.substring(0, 1).toUpperCase()
+				+ (attrName.length() == 1 ? "" : attrName.substring(1, attrName.length()));
+	}
+
+	private String getAttributeNameFirstLetterUpperCase(String columnName) {
+		String attrName = nameGenerator.getAttributeName(columnName);
 		return attrName.substring(0, 1).toUpperCase()
 				+ (attrName.length() == 1 ? "" : attrName.substring(1, attrName.length()));
 	}
@@ -115,6 +135,14 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		context.put("FieldName", getAttributeNameFirstLetterUpperCase(column));
 		context.put("NotNull", column.isNotNull());
 		context.put("BooleanType", "boolean".equalsIgnoreCase(column.getDomain().getName()));
+		return processTemplate(context, "JavaSetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
+	}
+
+	protected String getSetterName(String columnName) {
+		VelocityContext context = new VelocityContext();
+		context.put("FieldName", getAttributeNameFirstLetterUpperCase(columnName));
+		context.put("NotNull", "true");
+		context.put("BooleanType", "false");
 		return processTemplate(context, "JavaSetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
 	}
 

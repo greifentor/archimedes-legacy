@@ -49,6 +49,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
 					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
 					"import " + BASE_PACKAGE_NAME + ".persistence.entity.ATableDBO;\n" + //
 					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + //
@@ -60,6 +61,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					" */\n" + //
 					"@Generated\n" + //
 					"@Named\n" + //
+					"@RequiredArgsConstructor\n" + //
 					"public class ATableDBOConverter implements ToModelConverter<ATable, ATableDBO> {\n" + //
 					"\n" + //
 					"	public ATableDBO toDBO(ATable model) {\n" + //
@@ -70,6 +72,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"				.setId(model.getId())\n" + //
 					"				.setADate(model.getADate())\n" + //
 					"				.setDescription(model.getDescription());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public List<ATableDBO> toDBO(List<ATable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -141,6 +150,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"				.setRef(anotherTableDBOConverter.toDBO(model.getRef()));\n" + //
 					"	}\n" + //
 					"\n" + //
+					"	public List<ATableDBO> toDBO(List<ATable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
 					"	@Override\n" + //
 					"	public ATable toModel(ATableDBO dbo) {\n" + //
 					"		if (dbo == null) {\n" + //
@@ -185,6 +201,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					"import javax.inject.Named;\n" + //
 					"\n" + //
 					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
 					"import " + BASE_PACKAGE_NAME + ".persistence.entity.AnotherTableDBO;\n" + //
 					"import " + BASE_PACKAGE_NAME + ".core.model.AnotherTable;\n" + //
@@ -196,6 +213,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					" */\n" + //
 					"@Generated\n" + //
 					"@Named\n" + //
+					"@RequiredArgsConstructor\n" + //
 					"public class AnotherTableDBOConverter implements ToModelConverter<AnotherTable, AnotherTableDBO> {\n"
 					+ //
 					"\n" + //
@@ -206,6 +224,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"		return new AnotherTableDBO()\n" + //
 					"				.setId(model.getId())\n" + //
 					"				.setName(model.getName());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public List<AnotherTableDBO> toDBO(List<AnotherTable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -256,6 +281,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					"import javax.inject.Named;\n" + //
 					"\n" + //
 					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
 					"import " + BASE_PACKAGE_NAME + ".persistence.entity.ATableDBO;\n" + //
 					"import " + BASE_PACKAGE_NAME + ".core.model.ATable;\n" + //
@@ -267,6 +293,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					" */\n" + //
 					"@Generated\n" + //
 					"@Named\n" + //
+					"@RequiredArgsConstructor\n" + //
 					"public class ATableDBOConverter implements ToModelConverter<ATable, ATableDBO> {\n" + //
 					"\n" + //
 					"	public ATableDBO toDBO(ATable model) {\n" + //
@@ -276,6 +303,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"		return new ATableDBO()\n" + //
 					"				.setId(model.getId())\n" + //
 					"				.setRef(model.getRef());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public List<ATableDBO> toDBO(List<ATable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -356,6 +390,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"				.setDescription(descriptionDBOConverter.toDBO(model.getDescription()));\n" + //
 					"	}\n" + //
 					"\n" + //
+					"	public List<ATableDBO> toDBO(List<ATable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
 					"	@Override\n" + //
 					"	public ATable toModel(ATableDBO dbo) {\n" + //
 					"		if (dbo == null) {\n" + //
@@ -403,6 +444,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					"import java.time.LocalDate;\n" + //
 					"\n" + //
 					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
 					"import base.pack.age.name.persistence.entity.ATableDBO;\n" + //
 					"import base.pack.age.name.core.model.ATable;\n" + //
@@ -414,6 +456,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					" */\n" + //
 					"@Generated\n" + //
 					"@Named\n" + //
+					"@RequiredArgsConstructor\n" + //
 					"public class ATableDBOConverter implements ToModelConverter<ATable, ATableDBO> {\n" + //
 					"\n" + //
 					"	public ATableDBO toDBO(ATable model) {\n" + //
@@ -426,6 +469,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"		dbo.setDescription(model.getDescription());\n" + //
 					"		dbo.setValid(model.getValid());\n" + //
 					"		return dbo;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public List<ATableDBO> toDBO(List<ATable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -515,6 +565,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"		return dbo;\n" + //
 					"	}\n" + //
 					"\n" + //
+					"	public List<ATableDBO> toDBO(List<ATable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
 					"	@Override\n" + //
 					"	public ATable toModel(ATableDBO dbo) {\n" + //
 					"		if (dbo == null) {\n" + //
@@ -602,6 +659,13 @@ public class DBOConverterClassCodeGeneratorTest {
 							+ "		return dbo;\n" //
 							+ "	}\n" //
 							+ "\n" //
+							+ "	public List<BenotherTableDBO> toDBO(List<BenotherTable> models) {\n" //
+							+ "		if (models == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" //
+							+ "	}\n" //
+							+ "\n" //
 							+ "	@Override\n" //
 							+ "	public BenotherTable toModel(BenotherTableDBO dbo) {\n" //
 							+ "		if (dbo == null) {\n" //
@@ -681,6 +745,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"				.setValid(model.getValid());\n" + //
 					"	}\n" + //
 					"\n" + //
+					"	public List<AnotherTableDBO> toDBO(List<AnotherTable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
 					"	@Override\n" + //
 					"	public AnotherTable toModel(AnotherTableDBO dbo) {\n" + //
 					"		if (dbo == null) {\n" + //
@@ -737,6 +808,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					"import javax.inject.Named;\n" + //
 					"\n" + //
 					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
 					"import base.pack.age.name.persistence.entity.AnotherTableDBO;\n" + //
 					"import base.pack.age.name.core.model.AnotherTable;\n" + //
@@ -748,6 +820,7 @@ public class DBOConverterClassCodeGeneratorTest {
 					" */\n" + //
 					"@Generated\n" + //
 					"@Named\n" + //
+					"@RequiredArgsConstructor\n" + //
 					"public class AnotherTableDBOConverter implements ToModelConverter<AnotherTable, AnotherTableDBO> {\n"
 					+ //
 					"\n" + //
@@ -758,6 +831,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"		return new AnotherTableDBO()\n" + //
 					"				.setId(model.getId())\n" + //
 					"				.setValid(model.getValid());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public List<AnotherTableDBO> toDBO(List<AnotherTable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -846,6 +926,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"				.setDescription(descriptionDBOConverter.toDBO(model.getDescription()));\n" + //
 					"	}\n" + //
 					"\n" + //
+					"	public List<ATableDBO> toDBO(List<ATable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
 					"	@Override\n" + //
 					"	public ATable toModel(ATableDBO dbo) {\n" + //
 					"		if (dbo == null) {\n" + //
@@ -918,6 +1005,13 @@ public class DBOConverterClassCodeGeneratorTest {
 					"				.setRefB1(bAnotherTableDBOConverter.toDBO(model.getRefB1()));\n" + //
 					"	}\n" + //
 					"\n" + //
+					"	public List<BTableDBO> toDBO(List<BTable> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
 					"	@Override\n" + //
 					"	public BTable toModel(BTableDBO dbo) {\n" + //
 					"		if (dbo == null) {\n" + //
@@ -941,6 +1035,92 @@ public class DBOConverterClassCodeGeneratorTest {
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			dataModel.addOption(new Option("REFERENCE_MODE", "OBJECT"));
 			TableModel table = dataModel.getTableByName("B_TABLE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_generate_String_TableModel_MemberList {
+
+		private DataModel readDataModel(String fileName) {
+			ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+			return reader.read("src/test/resources/examples/dm/" + fileName);
+		}
+
+		@Test
+		void happyRun() {
+			// Prepare
+			String expected = "package de.ollie.bookstore.persistence.converter;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.stream.Collectors;\n" + //
+					"\n" + //
+					"import javax.inject.Named;\n" + //
+					"\n" + //
+					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
+					"\n" + //
+					"import de.ollie.bookstore.persistence.entity.BookDBO;\n" + //
+					"import de.ollie.bookstore.core.model.Book;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A DBO converter for books.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@Named\n" + //
+					"@RequiredArgsConstructor\n" + //
+					"public class BookDBOConverter implements ToModelConverter<Book, BookDBO> {\n" + //
+					"\n" + //
+					"	private final ChapterDBOConverter chapterDBOConverter;\n" + //
+					"\n" + //
+					"	public BookDBO toDBO(Book model) {\n" + //
+					"		if (model == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new BookDBO()\n" + //
+					"				.setId(model.getId())\n" + //
+					"				.setIsbn(model.getIsbn())\n" + //
+					"				.setTitle(model.getTitle())\n" + //
+					"				.setChapters(chapterDBOConverter.toDBO(dbo.getChapters()));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public List<BookDBO> toDBO(List<Book> models) {\n" + //
+					"		if (models == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public Book toModel(BookDBO dbo) {\n" + //
+					"		if (dbo == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return new Book()\n" + //
+					"				.setId(dbo.getId())\n" + //
+					"				.setIsbn(dbo.getIsbn())\n" + //
+					"				.setTitle(dbo.getTitle())\n" + //
+					"				.setChapters(chapterDBOConverter.toModel(dbo.getChapters()));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public List<Book> toModel(List<BookDBO> dbos) {\n" + //
+					"		if (dbos == null) {\n" + //
+					"			return null;\n" + //
+					"		}\n" + //
+					"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Example-BookStore.xml");
+			dataModel.addOption(new Option("REFERENCE_MODE", "OBJECT"));
+			TableModel table = dataModel.getTableByName("BOOK");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
