@@ -165,7 +165,7 @@ public class DBOClassCodeGeneratorTest {
 			@Test
 			void happyRunForASimpleObject() {
 				// Prepare
-				String expected = getExpected(false, false);
+				String expected = getExpectedForASimpleObject(false, false);
 				DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
 				// Run
 				String returned =
@@ -174,7 +174,7 @@ public class DBOClassCodeGeneratorTest {
 				assertEquals(expected, returned);
 			}
 
-			private String getExpected(boolean isSuperclass, boolean isExtends) {
+			private String getExpectedForASimpleObject(boolean isSuperclass, boolean isExtends) {
 				String s =
 						"package de.ollie.bookstore.persistence.entity;\n" //
 								+ "\n" //
@@ -215,6 +215,65 @@ public class DBOClassCodeGeneratorTest {
 								+ "	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)\n" //
 								+ "	@JoinColumn(name = \"BOOK_ID\")\n" //
 								+ "	private List<ChapterDBO> chapters;\n" //
+								+ "\n" //
+								+ "}";
+				return s;
+			}
+
+			@Test
+			void happyRunForAHeirObject() {
+				// Prepare
+				String expected = getExpectedForAHeirObject(false, false);
+				DataModel dataModel = readDataModel("Model-Inheritance.xml");
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("C_HEIR_TABLE"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			private String getExpectedForAHeirObject(boolean isSuperclass, boolean isExtends) {
+				String s =
+						"package base.pack.age.name.persistence.entity;\n" //
+								+ "\n" //
+								+ "import java.util.List;\n" //
+								+ "\n" //
+								+ "import javax.persistence.Column;\n" //
+								+ "import javax.persistence.Entity;\n" //
+								+ "import javax.persistence.Id;\n" //
+								+ "import javax.persistence.PrimaryKeyJoinColumn;\n" //
+								+ "import javax.persistence.Table;\n" //
+								+ "import javax.persistence.CascadeType;\n" //
+								+ "import javax.persistence.FetchType;\n" //
+								+ "import javax.persistence.JoinColumn;\n" //
+								+ "import javax.persistence.OneToMany;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.EqualsAndHashCode;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.ToString;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A DBO for c_heir_tables.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@Generated\n" //
+								+ "@Entity(name = \"CHeirTable\")\n" //
+								+ "@EqualsAndHashCode(callSuper = true)\n" //
+								+ "@PrimaryKeyJoinColumn(name = \"ID\")\n" //
+								+ "@Table(name = \"C_HEIR_TABLE\")\n" //
+								+ "@ToString(callSuper = true)\n" //
+								+ "public class CHeirTableDBO extends CTableDBO {\n" //
+								+ "\n" //
+								+ "	@Column(name = \"NAME\")\n" //
+								+ "	private String name;\n" //
+								+ "	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)\n" //
+								+ "	@JoinColumn(name = \"PARENT\")\n" //
+								+ "	private List<CHeirTableMemberDBO> cHeirTableMembers;\n" //
 								+ "\n" //
 								+ "}";
 				return s;
