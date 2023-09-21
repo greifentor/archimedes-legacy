@@ -65,6 +65,16 @@ public class ${ClassName} {
 		return buttonBack;
 	}
 
+	public ${ButtonClassName} createCancelButton(${ResourceManagerInterfaceName} resourceManager, Consumer<ClickEvent<?>> action,
+			${SessionDataClassName} sessionData) {
+		return createResourcedButton(resourceManager, "commons.button.cancel.text", action, sessionData);
+	}
+
+	public ${ButtonClassName} createDuplicateButton(${ResourceManagerInterfaceName} resourceManager, Consumer<ClickEvent<?>> action,
+			${SessionDataClassName} sessionData) {
+		return createResourcedButton(resourceManager, "commons.button.duplicate.text", action, sessionData);
+	}
+
 	public ${ButtonClassName} createEditButton(${ResourceManagerInterfaceName} resourceManager, Consumer<ClickEvent<?>> action,
 			${SessionDataClassName} sessionData) {
 		return createResourcedButton(resourceManager, "commons.button.edit.text", action, sessionData);

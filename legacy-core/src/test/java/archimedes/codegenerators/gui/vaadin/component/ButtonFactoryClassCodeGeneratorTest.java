@@ -120,6 +120,20 @@ public class ButtonFactoryClassCodeGeneratorTest {
 					"		return buttonBack;\n" + //
 					"	}\n" + //
 					"\n" + //
+					"	public Button createCancelButton(ResourceManager resourceManager, Consumer<ClickEvent<?>> action,\n"
+					+ //
+					"			SessionData sessionData) {\n" + //
+					"		return createResourcedButton(resourceManager, \"commons.button.cancel.text\", action, sessionData);\n"
+					+ //
+					"	}\n" + //
+					"\n" + //
+					"	public Button createDuplicateButton(ResourceManager resourceManager, Consumer<ClickEvent<?>> action,\n"
+					+ //
+					"			SessionData sessionData) {\n" + //
+					"		return createResourcedButton(resourceManager, \"commons.button.duplicate.text\", action, sessionData);\n"
+					+ //
+					"	}\n" + //
+					"\n" + //
 					"	public Button createEditButton(ResourceManager resourceManager, Consumer<ClickEvent<?>> action,\n"
 					+ //
 					"			SessionData sessionData) {\n" + //
