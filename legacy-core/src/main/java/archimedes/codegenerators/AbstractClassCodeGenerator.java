@@ -21,6 +21,7 @@ import archimedes.codegenerators.ListAccess.ListAccessConverterData;
 import archimedes.codegenerators.ListAccess.ListAccessData;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -51,6 +52,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String STEP = "STEP";
 	public static final String SUBCLASS = "SUBCLASS";
 	public static final String SUPERCLASS = "SUPERCLASS";
+	public static final String TO_STRING = "TO_STRING";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
@@ -370,6 +372,30 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	@Override
 	public Type getType() {
 		return Type.TABLE;
+	}
+
+	protected boolean isAMember(TableModel table) {
+		return OptionGetter
+				.getOptionByName(table, MEMBER_LIST)
+				.map(om -> isParameterEquals(om, "MEMBER"))
+				.orElse(false);
+	}
+
+	protected boolean isParameterEquals(OptionModel om, String value) {
+		return (om.getParameter() != null) && om.getParameter().toUpperCase().equals(value);
+	}
+
+	protected boolean isColumnReferencingAParent(ColumnModel column) {
+		return (column.getReferencedTable() != null) && isAParent(column.getReferencedTable());
+	}
+
+	protected boolean isAParent(TableModel table) {
+		return table != null
+				? OptionGetter
+						.getOptionByName(table, MEMBER_LIST)
+						.map(om -> isParameterEquals(om, "PARENT"))
+						.orElse(false)
+				: false;
 	}
 
 }

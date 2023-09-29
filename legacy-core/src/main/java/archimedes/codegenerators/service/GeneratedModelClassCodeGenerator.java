@@ -9,6 +9,7 @@ import org.apache.velocity.VelocityContext;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.CommonImportAdder;
 import archimedes.codegenerators.CompositionListData;
@@ -63,8 +64,10 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 				Arrays
 						.asList(columns)
 						.stream()
+						.filter(column -> !isAMember(table) || !isColumnReferencingAParent(column))
 						.map(
 								column -> new ColumnData()
+										.setAnnotations(getAnnotationsForColumn(column))
 										.setFieldName(nameGenerator.getAttributeName(column))
 										.setFieldType(
 												getType(
@@ -85,6 +88,15 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 											nameGenerator.getAttributeName(cld.getMemberTable().getName()) + "s"));
 		});
 		return l;
+	}
+
+	private List<AnnotationData> getAnnotationsForColumn(ColumnModel column) {
+		List<AnnotationData> annotations = new ArrayList<>();
+		column.ifOptionSetWithValueDo(TO_STRING, "EXCLUDE", om -> {
+			importDeclarations.add("lombok", "ToString");
+			annotations.add(new AnnotationData().setName("ToString.Exclude"));
+		});
+		return annotations;
 	}
 
 	private List<CompositionListData> getCompositionLists(TableModel table) {

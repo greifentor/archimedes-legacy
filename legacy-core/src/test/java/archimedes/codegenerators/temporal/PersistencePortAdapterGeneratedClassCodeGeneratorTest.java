@@ -1,6 +1,7 @@
 package archimedes.codegenerators.temporal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
+import archimedes.model.TableModel;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
@@ -29,6 +31,21 @@ public class PersistencePortAdapterGeneratedClassCodeGeneratorTest {
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		return reader.read("src/test/resources/dm/codegenerators/" + fileName);
+	}
+
+	@Nested
+	class TestsOfMethod_isToIgnoreFor_TableModel {
+
+		@Test
+		void passAMemberModel_returnsTrue() {
+			// Prepare
+			ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+			DataModel dataModel = reader.read("src/test/resources/examples/dm/Example-BookStore.xml");
+			TableModel table = dataModel.getTableByName("CHAPTER");
+			// Run & Check
+			assertTrue(unitUnderTest.isToIgnoreFor(dataModel, table));
+		}
+
 	}
 
 	@Nested

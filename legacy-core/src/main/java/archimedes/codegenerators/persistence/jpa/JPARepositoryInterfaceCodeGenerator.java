@@ -47,9 +47,9 @@ public class JPARepositoryInterfaceCodeGenerator extends AbstractClassCodeGenera
 		return nameGenerator.getJPARepositoryPackageName(model, table);
 	}
 
-//	@Override
-//	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-//		return isSubclass(t);
-//	}
+	@Override
+	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
+		return super.isToIgnoreFor(model, t) || isAMember(t);
+	}
 
 }

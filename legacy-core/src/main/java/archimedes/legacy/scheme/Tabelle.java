@@ -2687,51 +2687,8 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	 * @changed OLI 15.10.2013 - Added.
 	 */
 	@Override
-	public OptionModel getOptionAt(int i) {
-		return this.options.get(i);
-	}
-
-	/**
-	 * @changed OLI 10.03.2016 - Added.
-	 */
-	@Override
-	public OptionModel getOptionByName(String name) {
-		for (OptionModel o : this.options) {
-			if (o.getName().equals(name)) {
-				return o;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * @changed OLI 15.10.2013 - Added.
-	 */
-	@Override
-	public int getOptionCount() {
-		return this.options.size();
-	}
-
-	/**
-	 * @changed OLI 15.10.2013 - Added.
-	 */
-	@Override
 	public OptionModel[] getOptions() {
 		return this.options.toArray(new OptionModel[0]);
-	}
-
-	/**
-	 * @changed OLI 25.05.2016 - Added.
-	 */
-	@Override
-	public OptionModel[] getOptionsByName(String name) {
-		List<OptionModel> l = new LinkedList<OptionModel>();
-		for (OptionModel o : this.options) {
-			if (o.getName().equals(name)) {
-				l.add(o);
-			}
-		}
-		return l.toArray(new OptionModel[0]);
 	}
 
 	/**
@@ -2882,14 +2839,6 @@ public class Tabelle implements Selectable, SelectionViewMetaData, TabellenModel
 	@Override
 	public boolean isNMRelation() {
 		return this.isManyToManyRelation();
-	}
-
-	/**
-	 * @changed OLI 26.05.2016 - Added.
-	 */
-	@Override
-	public boolean isOptionSet(String optionName) {
-		return this.getOptionByName(optionName) != null;
 	}
 
 	/**

@@ -128,10 +128,7 @@ public class NameGenerator {
 	private String getTechnicalContextName(OptionListProvider optionListProvider) {
 		return optionListProvider == null
 				? ""
-				: OptionGetter
-						.getOptionByName(optionListProvider, TECHNICAL_CONTEXT)
-						.map(OptionModel::getParameter)
-						.orElse("");
+				: optionListProvider.findOptionByName(TECHNICAL_CONTEXT).map(OptionModel::getParameter).orElse("");
 	}
 
 	public String getCamelCase(String s) {
@@ -257,8 +254,8 @@ public class NameGenerator {
 		}
 		if (optionListProvider != null) {
 			prefix =
-					OptionGetter
-							.getOptionByName(optionListProvider, MODULE)
+					optionListProvider
+							.findOptionByName(MODULE)
 							.map(option -> addDotIfNecessary(option.getParameter(), false))
 							.orElse("");
 		}

@@ -105,6 +105,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 				List
 						.of(columns)
 						.stream()
+						.filter(column -> !isAMember(table) || !isColumnReferencingAParent(column))
 						.map(
 								column -> new ColumnData()
 										.setConverterAttributeName(getDBOConverterAttributeName(column, model))
@@ -213,33 +214,31 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 						.filter(
 								column -> !(column.isPrimaryKey()
 										&& column.getTable().isOptionSet(AbstractClassCodeGenerator.SUBCLASS)))
-						.filter(column -> (column.getReferencedColumn() != null) || isEnum(column))
+						.filter(
+								column -> ((column.getReferencedColumn() != null) || isEnum(column))
+										&& !(isAMember(table) && isAParent(column.getReferencedTable())))
 						.map(column -> toConverterData(column, model))
 						.sorted((cd0, cd1) -> cd0.getClassName().compareTo(cd1.getClassName()))
 						.collect(Collectors.toSet())
 						.stream()
 						.collect(Collectors.toList());
-		OptionGetter
-				.getOptionByName(table, MEMBER_LIST)
-				.filter(om -> (om.getParameter() != null) && om.getParameter().toUpperCase().equals("PARENT"))
-				.ifPresent(om -> {
-					getReferencingColumns(table, table.getDataModel())
-							.stream()
-							.filter(
-									cm -> OptionGetter
-											.getParameterOfOptionByName(cm.getTable(), MEMBER_LIST)
-											.filter(s -> s.toUpperCase().equals("MEMBER"))
-											.isPresent())
-							.forEach(cm -> {
-								String cn = nameGenerator.getDBOConverterClassName(cm.getTable().getName(), model);
-								l
-										.add(
-												new ConverterData()
-														.setAttributeName(nameGenerator.getAttributeName(cn))
-														.setClassName(cn));
-							});
-				});
-		System.out.println(l);
+		table.ifOptionSetWithValueDo(MEMBER_LIST, "PARENT", om -> {
+			getReferencingColumns(table, table.getDataModel())
+					.stream()
+					.filter(
+							cm -> OptionGetter
+									.getParameterOfOptionByName(cm.getTable(), MEMBER_LIST)
+									.filter(s -> s.toUpperCase().equals("MEMBER"))
+									.isPresent())
+					.forEach(cm -> {
+						String cn = nameGenerator.getDBOConverterClassName(cm.getTable().getName(), model);
+						l
+								.add(
+										new ConverterData()
+												.setAttributeName(nameGenerator.getAttributeName(cn))
+												.setClassName(cn));
+					});
+		});
 		return l;
 	}
 

@@ -1,10 +1,13 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import static archimedes.codegenerators.DataModelReader.EXAMPLE_XMLS;
+import static archimedes.codegenerators.DataModelReader.readDataModel;
 import static archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator.GUI_EDITOR_POS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Types;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,13 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.legacy.scheme.Domain;
 import archimedes.legacy.scheme.Tabellenspalte;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 import archimedes.scheme.Option;
-import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
 public class DetailsLayoutClassCodeGeneratorTest {
@@ -27,11 +28,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 
 	@InjectMocks
 	private DetailsLayoutClassCodeGenerator unitUnderTest;
-
-	static DataModel readDataModel(String fileName) {
-		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		return reader.read("src/test/resources/dm/codegenerators/" + fileName);
-	}
 
 	@Nested
 	class TestsOfMethod_generate_String_TableModel {
@@ -1453,6 +1449,273 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "}";
 			DataModel dataModel = readDataModel("Model.xml");
 			TableModel tableModel = dataModel.getTableByName("BLOB_TABLE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class SimpleClass {
+
+		private String getExpected() {
+			return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+					"\n" + //
+					"import com.vaadin.flow.component.AttachEvent;\n" + //
+					"import com.vaadin.flow.component.textfield.IntegerField;\n" + //
+					"import com.vaadin.flow.component.textfield.TextField;\n" + //
+					"\n" + //
+					"import base.pack.age.name.core.model.ATable;\n" + //
+					"import base.pack.age.name.core.service.ATableService;\n" + //
+					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
+					"import base.pack.age.name.gui.SessionData;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+					"import lombok.Generated;\n" + //
+					"import lombok.RequiredArgsConstructor;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"@RequiredArgsConstructor\n" + //
+					"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
+					"\n" + //
+					"	private final ButtonFactory buttonFactory;\n" + //
+					"	private final ATable model;\n" + //
+					"	private final ATableService service;\n" + //
+					"	private final ResourceManager resourceManager;\n" + //
+					"	private final SessionData session;\n" + //
+					"	private final Observer observer;\n" + //
+					"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n" + //
+					"\n" + //
+					"	private IntegerField integerFieldCount;\n" + //
+					"	private TextField textFieldDescription;\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	public void onAttach(AttachEvent attachEvent) {\n" + //
+					"		super.onAttach(attachEvent);\n" + //
+					"		createButtons();\n" + //
+					"		integerFieldCount = createIntegerField(\"ATableDetailsLayout.field.count.label\", model.getCount(), 1, 10, null);\n"
+					+ //
+					"		textFieldDescription = createTextField(\"ATableDetailsLayout.field.description.label\", model.getDescription());\n"
+					+ //
+					"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
+					"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
+					"		getStyle().set(\"border-radius\", \"4px\");\n" + //
+					"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
+					"		getStyle()\n" + //
+					"				.set(\n" + //
+					"						\"box-shadow\",\n" + //
+					"						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n"
+					+ //
+					"		setMargin(false);\n" + //
+					"		setWidthFull();\n" + //
+					"		add(\n" + //
+					"				integerFieldCount,\n" + //
+					"				textFieldDescription,\n" + //
+					"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
+					"		integerFieldCount.focus();\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	protected ButtonFactory getButtonFactory() {\n" + //
+					"		return buttonFactory;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	protected ResourceManager getResourceManager() {\n" + //
+					"		return resourceManager;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	protected SessionData getSessionData() {\n" + //
+					"		return session;\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	protected void remove() {\n" + //
+					"		service.delete(model);\n" + //
+					"		observer.remove();\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	@Override\n" + //
+					"	protected void save() {\n" + //
+					"		model.setCount(integerFieldCount.getValue());\n" + //
+					"		model.setDescription(textFieldDescription.getValue());\n" + //
+					"		observer.save(service.update(model));\n" + //
+					"	}\n" + //
+					"\n" + //
+					"}";
+		}
+
+		@Test
+		@Disabled
+		void happyRunForAnObjectWithAMemberList() {
+			// Prepare
+			String expected =
+					"package de.ollie.bookstore.gui.vaadin.masterdata;\n" //
+							+ "\n" //
+							+ "import com.vaadin.flow.component.AttachEvent;\n" //
+							+ "import com.vaadin.flow.component.textfield.TextField;\n" //
+							+ "\n" //
+							+ "import de.ollie.bookstore.core.model.Book;\n" //
+							+ "import de.ollie.bookstore.core.service.BookService;\n" //
+							+ "import de.ollie.bookstore.core.service.localization.ResourceManager;\n" //
+							+ "import de.ollie.bookstore.gui.SessionData;\n" //
+							+ "import de.ollie.bookstore.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
+							+ "import de.ollie.bookstore.gui.vaadin.component.ButtonFactory;\n" //
+							+ "import lombok.Generated;\n" //
+							+ "import lombok.RequiredArgsConstructor;\n" //
+							+ "\n" //
+							+ "/**\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n" //
+							+ "@Generated\n" //
+							+ "@RequiredArgsConstructor\n" //
+							+ "public class BookDetailsLayout extends AbstractMasterDataBaseLayout {\n" //
+							+ "\n" //
+							+ "	private final ButtonFactory buttonFactory;\n" //
+							+ "	private final Book model;\n" //
+							+ "	private final BookService service;\n" //
+							+ "	private final ResourceManager resourceManager;\n" //
+							+ "	private final SessionData session;\n" //
+							+ "	private final Observer observer;\n" //
+							+ "	private final DetailsLayoutComboBoxItemLabelGenerator<Book> comboBoxItemLabelGenerator;\n" //
+							+ "\n" //
+							+ "	private TextField textFieldTitle;\n" //
+							+ "	private TextField textFieldIsbn;\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public void onAttach(AttachEvent attachEvent) {\n" //
+							+ "		super.onAttach(attachEvent);\n" //
+							+ "		createButtons();\n" //
+							+ "		textFieldTitle = createTextField(\"BookDetailsLayout.field.title.label\", model.getTitle());\n" //
+							+ "		textFieldIsbn = createTextField(\"BookDetailsLayout.field.isbn.label\", model.getIsbn());\n" //
+							+ "		Button buttonAddImageTokenInfo = buttonFactory.createAddButton(resourceManager, event -> {\n" //
+							+ "			new ChapterDialog(\n" //
+							+ "					resourceManager,\n" //
+							+ "					buttonFactory,\n" //
+							+ "					guiConfiguration,\n" //
+							+ "					session,\n" //
+							+ "					(chapter, newItem) -> {\n" //
+							+ "						model.getChapters().add(chapter);\n" //
+							+ "						gridChapter.setItems(model.getChapters());\n" //
+							+ "					},\n" //
+							+ "					null,\n" //
+							+ "					true).open();\n" //
+							+ "		}, session);\n" //
+							+ "		Button buttonDuplicateChapter = buttonFactory.createDuplicateButton(resourceManager, event -> {\n" //
+							+ "			new ChapterDialog(\n" //
+							+ "					resourceManager,\n" //
+							+ "					buttonFactory,\n" //
+							+ "					guiConfiguration,\n" //
+							+ "					session,\n" //
+							+ "					(chapter, newItem) -> {\n" //
+							+ "						model.getChapters().add(chapter);\n" //
+							+ "						gridChapter.setItems(model.getChapters());\n" //
+							+ "					},\n" //
+							+ "					gridChapter.getSelectedItems().toArray(new Chapter[0])[0],\n" //
+							+ "					true).open();\n" //
+							+ "		}, session);\n" //
+							+ "		Button buttonEditChapter = buttonFactory.createEditButton(resourceManager, event -> {\n" //
+							+ "			new ChapterDialog(\n" //
+							+ "					resourceManager,\n" //
+							+ "					buttonFactory,\n" //
+							+ "					guiConfiguration,\n" //
+							+ "					session,\n" //
+							+ "					(chapter, newItem) -> {\n" //
+							+ "						Chapter c = gridChapter.getSelectedItems().toArray(new Chapter[0])[0];\n" //
+							+ "						c.setContent(chapter.getContent());\n" //
+							+ "						c.setSortOrder(chapter.getSortOrder());\n" //
+							+ "						c.setSummary(chapter.getSummary());\n" //
+							+ "						c.getTitle(chapter.getTitle());\n" //
+							+ "					},\n" //
+							+ "					gridChapter.getSelectedItems().toArray(new Chapter[0])[0],\n" //
+							+ "					false).open();\n" //
+							+ "		}, session);\n" //
+							+ "		Button buttonRemoveChapter = buttonFactory.createRemoveButton(resourceManager, event -> {\n" //
+							+ "			Chapter iti = gridChapter.getSelectedItems().toArray(new Chapter[0])[0];\n" //
+							+ "			model.getChapters().remove(iti);\n" //
+							+ "			gridChapter.setItems(model.getChapters());\n" //
+							+ "		}, session);\n" //
+							+ "		HorizontalLayout buttonsChapters =\n" //
+							+ "				new HorizontalLayout(\n" //
+							+ "						buttonAddChapter,\n" //
+							+ "						buttonEditChapter,\n" //
+							+ "						buttonDuplicateChapter,\n" //
+							+ "						buttonRemoveChapter);\n" //
+							+ "		gridChapter = new Grid<>();\n" //
+							+ "		gridChapter\n" //
+							+ "				.addColumn(chapter -> chapter.getTitle())\n" //
+							+ "				.setHeader(\n" //
+							+ "						resourceManager\n" //
+							+ "								.getLocalizedString(\n" //
+							+ "										\"BookDetailsLayout.field.gridChapter.columnTitle.label\",\n" //
+							+ "										session.getLocalization()))\n" //
+							+ "				.setSortable(true)\n" //
+							+ "				.setWidth(\"90%\");\n" //
+							+ "		gridChapter\n" //
+							+ "				.addColumn(chapter -> chapter.getSortOrder())\n" //
+							+ "				.setHeader(\n" //
+							+ "						resourceManager\n" //
+							+ "								.getLocalizedString(\n" //
+							+ "										\"BookDetailsLayout.field.gridChapter.columnSortOrder.label\",\n" //
+							+ "										session.getLocalization()))\n" //
+							+ "				.setSortable(true)\n" //
+							+ "				.setWidth(\"10%\");\n" //
+							+ "		gridChapter.setItems(model.getChapters().stream().sorted().collect(Collectors.toList()));\n" //
+							+ "		gridChapter.setWidthFull();\r\n"
+							+ "		getStyle().set(\"-moz-border-radius\", \"4px\");\n" //
+							+ "		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" //
+							+ "		getStyle().set(\"border-radius\", \"4px\");\n" //
+							+ "		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" //
+							+ "		getStyle()\n" //
+							+ "				.set(\n" //
+							+ "						\"box-shadow\",\n" //
+							+ "						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n" //
+							+ "		setMargin(false);\n" //
+							+ "		setWidthFull();\n" //
+							+ "		add(\n" //
+							+ "				textFieldTitle,\n" //
+							+ "				textFieldIsbn,\n" //
+							+ "				getMasterDataButtonLayout(model.getId() > 0));\n" //
+							+ "		textFieldTitle.focus();\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected ButtonFactory getButtonFactory() {\n" //
+							+ "		return buttonFactory;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected ResourceManager getResourceManager() {\n" //
+							+ "		return resourceManager;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected SessionData getSessionData() {\n" //
+							+ "		return session;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected void remove() {\n" //
+							+ "		service.delete(model);\n" //
+							+ "		observer.remove();\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected void save() {\n" //
+							+ "		model.setTitle(textFieldTitle.getValue());\n" //
+							+ "		model.setIsbn(textFieldIsbn.getValue());\n" //
+							+ "		observer.save(service.update(model));\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "}";
+			DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+			TableModel tableModel = dataModel.getTableByName("BOOK");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
 			// Check

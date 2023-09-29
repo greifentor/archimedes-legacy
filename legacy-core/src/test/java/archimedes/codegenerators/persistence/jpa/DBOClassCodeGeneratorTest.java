@@ -1,5 +1,7 @@
 package archimedes.codegenerators.persistence.jpa;
 
+import static archimedes.codegenerators.DataModelReader.EXAMPLE_XMLS;
+import static archimedes.codegenerators.DataModelReader.readDataModel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Nested;
@@ -9,35 +11,21 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.legacy.scheme.Relation;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 import archimedes.model.ViewModel;
 import archimedes.scheme.Option;
-import archimedes.scheme.xml.ModelXMLReader;
 import corent.base.Direction;
 
 @ExtendWith(MockitoExtension.class)
 public class DBOClassCodeGeneratorTest {
 
-	private static final String EXAMPLE_XMLS = "src/test/resources/examples/dm/";
-	private static final String TEST_XMLS = "src/test/resources/dm/codegenerators/";
-
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
 	private DBOClassCodeGenerator unitUnderTest;
-
-	static DataModel readDataModel(String fileName) {
-		return readDataModel(fileName, null);
-	}
-
-	static DataModel readDataModel(String fileName, String path) {
-		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		return reader.read((path == null ? TEST_XMLS : path) + fileName);
-	}
 
 	@Nested
 	class TestsOfMethod_generate_String_TableModel {

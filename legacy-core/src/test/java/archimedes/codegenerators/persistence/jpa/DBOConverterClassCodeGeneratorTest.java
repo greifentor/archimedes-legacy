@@ -1046,85 +1046,177 @@ public class DBOConverterClassCodeGeneratorTest {
 	@Nested
 	class TestsOfMethod_generate_String_TableModel_MemberList {
 
-		private DataModel readDataModel(String fileName) {
-			ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-			return reader.read("src/test/resources/examples/dm/" + fileName);
+		@Nested
+		class TheParent {
+
+			private DataModel readDataModel(String fileName) {
+				ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+				return reader.read("src/test/resources/examples/dm/" + fileName);
+			}
+
+			@Test
+			void happyRun() {
+				// Prepare
+				String expected = "package de.ollie.bookstore.persistence.converter;\n" + //
+						"\n" + //
+						"import java.util.List;\n" + //
+						"import java.util.stream.Collectors;\n" + //
+						"\n" + //
+						"import javax.inject.Named;\n" + //
+						"\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.RequiredArgsConstructor;\n" + //
+						"\n" + //
+						"import de.ollie.bookstore.persistence.entity.BookDBO;\n" + //
+						"import de.ollie.bookstore.core.model.Book;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * A DBO converter for books.\n" + //
+						" *\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n" + //
+						"@Generated\n" + //
+						"@Named\n" + //
+						"@RequiredArgsConstructor\n" + //
+						"public class BookDBOConverter implements ToModelConverter<Book, BookDBO> {\n" + //
+						"\n" + //
+						"	private final ChapterDBOConverter chapterDBOConverter;\n" + //
+						"\n" + //
+						"	public BookDBO toDBO(Book model) {\n" + //
+						"		if (model == null) {\n" + //
+						"			return null;\n" + //
+						"		}\n" + //
+						"		return new BookDBO()\n" + //
+						"				.setId(model.getId())\n" + //
+						"				.setIsbn(model.getIsbn())\n" + //
+						"				.setTitle(model.getTitle())\n" + //
+						"				.setChapters(chapterDBOConverter.toDBO(model.getChapters()));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public List<BookDBO> toDBO(List<Book> models) {\n" + //
+						"		if (models == null) {\n" + //
+						"			return null;\n" + //
+						"		}\n" + //
+						"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public Book toModel(BookDBO dbo) {\n" + //
+						"		if (dbo == null) {\n" + //
+						"			return null;\n" + //
+						"		}\n" + //
+						"		return new Book()\n" + //
+						"				.setId(dbo.getId())\n" + //
+						"				.setIsbn(dbo.getIsbn())\n" + //
+						"				.setTitle(dbo.getTitle())\n" + //
+						"				.setChapters(chapterDBOConverter.toModel(dbo.getChapters()));\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	@Override\n" + //
+						"	public List<Book> toModel(List<BookDBO> dbos) {\n" + //
+						"		if (dbos == null) {\n" + //
+						"			return null;\n" + //
+						"		}\n" + //
+						"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
+						"	}\n" + //
+						"\n" + //
+						"}";
+				DataModel dataModel = readDataModel("Example-BookStore.xml");
+				dataModel.addOption(new Option("REFERENCE_MODE", "OBJECT"));
+				TableModel table = dataModel.getTableByName("BOOK");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+				// Check
+				assertEquals(expected, returned);
+			}
+
 		}
 
-		@Test
-		void happyRun() {
-			// Prepare
-			String expected = "package de.ollie.bookstore.persistence.converter;\n" + //
-					"\n" + //
-					"import java.util.List;\n" + //
-					"import java.util.stream.Collectors;\n" + //
-					"\n" + //
-					"import javax.inject.Named;\n" + //
-					"\n" + //
-					"import lombok.Generated;\n" + //
-					"import lombok.RequiredArgsConstructor;\n" + //
-					"\n" + //
-					"import de.ollie.bookstore.persistence.entity.BookDBO;\n" + //
-					"import de.ollie.bookstore.core.model.Book;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A DBO converter for books.\n" + //
-					" *\n" + //
-					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-					" */\n" + //
-					"@Generated\n" + //
-					"@Named\n" + //
-					"@RequiredArgsConstructor\n" + //
-					"public class BookDBOConverter implements ToModelConverter<Book, BookDBO> {\n" + //
-					"\n" + //
-					"	private final ChapterDBOConverter chapterDBOConverter;\n" + //
-					"\n" + //
-					"	public BookDBO toDBO(Book model) {\n" + //
-					"		if (model == null) {\n" + //
-					"			return null;\n" + //
-					"		}\n" + //
-					"		return new BookDBO()\n" + //
-					"				.setId(model.getId())\n" + //
-					"				.setIsbn(model.getIsbn())\n" + //
-					"				.setTitle(model.getTitle())\n" + //
-					"				.setChapters(chapterDBOConverter.toDBO(model.getChapters()));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	public List<BookDBO> toDBO(List<Book> models) {\n" + //
-					"		if (models == null) {\n" + //
-					"			return null;\n" + //
-					"		}\n" + //
-					"		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public Book toModel(BookDBO dbo) {\n" + //
-					"		if (dbo == null) {\n" + //
-					"			return null;\n" + //
-					"		}\n" + //
-					"		return new Book()\n" + //
-					"				.setId(dbo.getId())\n" + //
-					"				.setIsbn(dbo.getIsbn())\n" + //
-					"				.setTitle(dbo.getTitle())\n" + //
-					"				.setChapters(chapterDBOConverter.toModel(dbo.getChapters()));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public List<Book> toModel(List<BookDBO> dbos) {\n" + //
-					"		if (dbos == null) {\n" + //
-					"			return null;\n" + //
-					"		}\n" + //
-					"		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" + //
-					"	}\n" + //
-					"\n" + //
-					"}";
-			DataModel dataModel = readDataModel("Example-BookStore.xml");
-			dataModel.addOption(new Option("REFERENCE_MODE", "OBJECT"));
-			TableModel table = dataModel.getTableByName("BOOK");
-			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
-			// Check
-			assertEquals(expected, returned);
+		@Nested
+		class TheMember {
+
+			private DataModel readDataModel(String fileName) {
+				ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+				return reader.read("src/test/resources/examples/dm/" + fileName);
+			}
+
+			@Test
+			void happyRun() {
+				// Prepare
+				String expected =
+						"package de.ollie.bookstore.persistence.converter;\n" //
+								+ "\n" //
+								+ "import java.util.List;\n" //
+								+ "import java.util.stream.Collectors;\n" //
+								+ "\n" //
+								+ "import javax.inject.Named;\n" //
+								+ "\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.RequiredArgsConstructor;\n" //
+								+ "\n" //
+								+ "import de.ollie.bookstore.persistence.entity.ChapterDBO;\n" //
+								+ "import de.ollie.bookstore.core.model.Chapter;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A DBO converter for chapters.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Generated\n" //
+								+ "@Named\n" //
+								+ "@RequiredArgsConstructor\n" //
+								+ "public class ChapterDBOConverter implements ToModelConverter<Chapter, ChapterDBO> {\n" //
+								+ "\n" //
+								+ "	public ChapterDBO toDBO(Chapter model) {\n" //
+								+ "		if (model == null) {\n" //
+								+ "			return null;\n" //
+								+ "		}\n" //
+								+ "		return new ChapterDBO()\n" //
+								+ "				.setId(model.getId())\n" //
+								+ "				.setContent(model.getContent())\n" //
+								+ "				.setSortOrder(model.getSortOrder())\n" //
+								+ "				.setSummary(model.getSummary())\n" //
+								+ "				.setTitle(model.getTitle());\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	public List<ChapterDBO> toDBO(List<Chapter> models) {\n" //
+								+ "		if (models == null) {\n" //
+								+ "			return null;\n" //
+								+ "		}\n" //
+								+ "		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	@Override\n" //
+								+ "	public Chapter toModel(ChapterDBO dbo) {\n" //
+								+ "		if (dbo == null) {\n" //
+								+ "			return null;\n" //
+								+ "		}\n" //
+								+ "		return new Chapter()\n" //
+								+ "				.setId(dbo.getId())\n" //
+								+ "				.setContent(dbo.getContent())\n" //
+								+ "				.setSortOrder(dbo.getSortOrder())\n" //
+								+ "				.setSummary(dbo.getSummary())\n" //
+								+ "				.setTitle(dbo.getTitle());\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	@Override\n" //
+								+ "	public List<Chapter> toModel(List<ChapterDBO> dbos) {\n" //
+								+ "		if (dbos == null) {\n" //
+								+ "			return null;\n" //
+								+ "		}\n" //
+								+ "		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "}";
+				DataModel dataModel = readDataModel("Example-BookStore.xml");
+				dataModel.addOption(new Option("REFERENCE_MODE", "OBJECT"));
+				TableModel table = dataModel.getTableByName("CHAPTER");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+				// Check
+				assertEquals(expected, returned);
+			}
+
 		}
 
 	}

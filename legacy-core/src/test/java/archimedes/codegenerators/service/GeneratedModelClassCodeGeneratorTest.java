@@ -1,5 +1,7 @@
 package archimedes.codegenerators.service;
 
+import static archimedes.codegenerators.DataModelReader.EXAMPLE_XMLS;
+import static archimedes.codegenerators.DataModelReader.readDataModel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Nested;
@@ -12,34 +14,21 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.legacy.scheme.Relation;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 import archimedes.model.ViewModel;
 import archimedes.scheme.Option;
-import archimedes.scheme.xml.ModelXMLReader;
 import corent.base.Direction;
 
 @ExtendWith(MockitoExtension.class)
 public class GeneratedModelClassCodeGeneratorTest {
-
-	private static final String EXAMPLE_XMLS = "src/test/resources/examples/dm/";
-	private static final String TEST_XMLS = "src/test/resources/dm/codegenerators/";
+	
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@InjectMocks
 	private GeneratedModelClassCodeGenerator unitUnderTest;
-
-	static DataModel readDataModel(String fileName) {
-		return readDataModel(fileName, null);
-	}
-
-	static DataModel readDataModel(String fileName, String path) {
-		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		return reader.read((path == null ? TEST_XMLS : path) + fileName);
-	}
 
 	@Nested
 	class TestsOfMethod_generate_String_TableModel {
@@ -341,50 +330,110 @@ public class GeneratedModelClassCodeGeneratorTest {
 	}
 
 	@Nested
-	class List_Composition_Parent {
+	class List_Composition {
 
-		@Test
-		void happyRunForASimpleObject() {
-			// Prepare
-			String expected = getExpected(false, false);
-			DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
-			// Run
-			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("BOOK"));
-			// Check
-			assertEquals(expected, returned);
+		@Nested
+		class TheParent {
+
+			@Test
+			void happyRunForASimpleObject() {
+				// Prepare
+				String expected = getExpected(false, false);
+				DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("BOOK"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			private String getExpected(boolean isSuperclass, boolean isExtends) {
+				String s = "package de.ollie.bookstore.core.model;\n" + //
+						"\n" + //
+						"import java.util.List;\n" + //
+						"\n" + //
+						"import lombok.Data;\n" + //
+						"import lombok.Generated;\n" + //
+						"import lombok.experimental.Accessors;\n" + //
+						"\n" + //
+						"/**\n" + //
+						" * A model for books.\n" + //
+						" *\n" + //
+						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+						" */\n" + //
+						"@Accessors(chain = true)\n" + //
+						"@Data\n" + //
+						"@Generated\n" + //
+						"public class GeneratedBook {\n" + //
+						"\n" + //
+						"	public static final String ID = \"ID\";\n" + //
+						"	public static final String ISBN = \"ISBN\";\n" + //
+						"	public static final String TITLE = \"TITLE\";\n" + //
+						"	public static final String CHAPTERS = \"CHAPTERS\";\n" + //
+						"\n" + //
+						"	private long id;\n" + //
+						"	private String isbn;\n" + //
+						"	private String title;\n" + //
+						"	private List<Chapter> chapters;\n" + //
+						"\n" + //
+						"}";
+				return s;
+			}
+
 		}
 
-		private String getExpected(boolean isSuperclass, boolean isExtends) {
-			String s = "package de.ollie.bookstore.core.model;\n" + //
-					"\n" + //
-					"import java.util.List;\n" + //
-					"\n" + //
-					"import lombok.Data;\n" + //
-					"import lombok.Generated;\n" + //
-					"import lombok.experimental.Accessors;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A model for books.\n" + //
-					" *\n" + //
-					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-					" */\n" + //
-					"@Accessors(chain = true)\n" + //
-					"@Data\n" + //
-					"@Generated\n" + //
-					"public class GeneratedBook {\n" + //
-					"\n" + //
-					"	public static final String ID = \"ID\";\n" + //
-					"	public static final String ISBN = \"ISBN\";\n" + //
-					"	public static final String TITLE = \"TITLE\";\n" + //
-					"	public static final String CHAPTERS = \"CHAPTERS\";\n" + //
-					"\n" + //
-					"	private long id;\n" + //
-					"	private String isbn;\n" + //
-					"	private String title;\n" + //
-					"	private List<Chapter> chapters;\n" + //
-					"\n" + //
-					"}";
-			return s;
+		@Nested
+		class TheMember {
+
+			@Test
+			void happyRunForASimpleObject() {
+				// Prepare
+				String expected = getExpected(false, false);
+				DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("CHAPTER"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			private String getExpected(boolean isSuperclass, boolean isExtends) {
+				String s =
+						"package de.ollie.bookstore.core.model;\n" //
+								+ "\n" //
+								+ "import lombok.ToString;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A model for chapters.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@Generated\n" //
+								+ "public class GeneratedChapter {\n" //
+								+ "\n" //
+								+ "	public static final String ID = \"ID\";\n" //
+								+ "	public static final String CONTENT = \"CONTENT\";\n" //
+								+ "	public static final String SORTORDER = \"SORTORDER\";\n" //
+								+ "	public static final String SUMMARY = \"SUMMARY\";\n" //
+								+ "	public static final String TITLE = \"TITLE\";\n" //
+								+ "\n" //
+								+ "	private long id;\n" //
+								+ "	@ToString.Exclude\n" //
+								+ "	private String content;\n" //
+								+ "	private int sortOrder;\n" //
+								+ "	private String summary;\n" //
+								+ "	private String title;\n" //
+								+ "\n" //
+								+ "}";
+				return s;
+			}
+
 		}
 
 	}

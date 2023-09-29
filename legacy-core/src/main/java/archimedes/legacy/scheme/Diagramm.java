@@ -9,6 +9,21 @@
 
 package archimedes.legacy.scheme;
 
+import static corentx.util.Checks.ensure;
+
+import java.awt.Color;
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Vector;
+
+import javax.swing.JOptionPane;
+
 import archimedes.connections.ArchimedesImportJDBCDataSourceRecord;
 import archimedes.connections.DatabaseConnection;
 import archimedes.gui.diagram.ComponentDiagramm;
@@ -101,20 +116,6 @@ import corent.xml.ToXMLAttributes;
 import corentx.util.Str;
 import gengen.metadata.ClassMetaData;
 import logging.Logger;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Vector;
-
-import static corentx.util.Checks.ensure;
 
 /**
  * Diese Klasse stellt eine konkrete Auspr&auml;gung des DiagrammModels dar, die ein Diagramm innerhalb der
@@ -4073,51 +4074,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	 * @changed OLI 17.12.2013 - Added.
 	 */
 	@Override
-	public OptionModel getOptionAt(int i) {
-		return this.options.get(i);
-	}
-
-	/**
-	 * @changed OLI 10.03.2016 - Added.
-	 */
-	@Override
-	public OptionModel getOptionByName(String name) {
-		for (OptionModel o : this.options) {
-			if (o.getName().equals(name)) {
-				return o;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * @changed OLI 17.12.2013 - Added.
-	 */
-	@Override
-	public int getOptionCount() {
-		return this.options.size();
-	}
-
-	/**
-	 * @changed OLI 17.12.2013 - Added.
-	 */
-	@Override
 	public OptionModel[] getOptions() {
 		return this.options.toArray(new OptionModel[0]);
-	}
-
-	/**
-	 * @changed OLI 25.05.2016 - Added.
-	 */
-	@Override
-	public OptionModel[] getOptionsByName(String name) {
-		List<OptionModel> l = new LinkedList<OptionModel>();
-		for (OptionModel o : this.options) {
-			if (o.getName().equals(name)) {
-				l.add(o);
-			}
-		}
-		return l.toArray(new OptionModel[0]);
 	}
 
 	/**
@@ -4325,14 +4283,6 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	 */
 	public IndexMetaData[] getAllComplexIndices() {
 		return this.complexIndices.toArray(new IndexMetaData[0]);
-	}
-
-	/**
-	 * @changed OLI 26.05.2016 - Added.
-	 */
-	@Override
-	public boolean isOptionSet(String optionName) {
-		return this.getOptionByName(optionName) != null;
 	}
 
 	/**

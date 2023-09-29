@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -604,11 +605,13 @@ public class GUIVaadinNameGeneratorTest {
 			String prefix = "prefix";
 			String expected = "prefix.gui.vaadin.go";
 			when(model.getBasePackageName()).thenReturn(null);
-			when(table.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
+			when(table.findOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
 					.thenReturn(
-							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
-									prefix));
+							Optional
+									.of(
+											new Option(
+													archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
+													prefix)));
 			// Run
 			String returned = unitUnderTest.getGOPackageName(model, table);
 			// Check
@@ -941,11 +944,13 @@ public class GUIVaadinNameGeneratorTest {
 			String prefix = "prefix";
 			String expected = "prefix.gui.vaadin.masterdata";
 			when(model.getBasePackageName()).thenReturn(null);
-			when(table.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
+			when(table.findOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
 					.thenReturn(
-							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
-									prefix));
+							Optional
+									.of(
+											new Option(
+													archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
+													prefix)));
 			// Run
 			String returned = unitUnderTest.getMaintenanceViewPackageName(model, table);
 			// Check
@@ -1212,10 +1217,7 @@ public class GUIVaadinNameGeneratorTest {
 			// Prepare
 			String expected = "AnotherMasterDataView";
 			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_VIEW_CLASS_NAME))
-					.thenReturn(
-							new Option(
-									GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_VIEW_CLASS_NAME,
-									expected));
+					.thenReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_VIEW_CLASS_NAME, expected));
 			// Run
 			String returned = unitUnderTest.getMasterDataViewClassName(model);
 			// Check
@@ -1472,11 +1474,13 @@ public class GUIVaadinNameGeneratorTest {
 			String prefix = "prefix";
 			String expected = "prefix.gui.vaadin.masterdata";
 			when(model.getBasePackageName()).thenReturn(null);
-			when(table.getOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
+			when(table.findOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
 					.thenReturn(
-							new Option(
-									archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
-									prefix));
+							Optional
+									.of(
+											new Option(
+													archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
+													prefix)));
 			// Run
 			String returned = unitUnderTest.getPageViewPackageName(model, table);
 			// Check

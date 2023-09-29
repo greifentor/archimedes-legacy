@@ -100,6 +100,16 @@ public class ServiceInterfaceCodeGeneratorTest {
 				assertFalse(unitUnderTest.isToIgnoreFor(dataModel, table));
 			}
 
+			@Test
+			void passAMemberModel_returnsTrue() {
+				// Prepare
+				ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+				DataModel dataModel = reader.read("src/test/resources/examples/dm/Example-BookStore.xml");
+				TableModel table = dataModel.getTableByName("CHAPTER");
+				// Run & Check
+				assertTrue(unitUnderTest.isToIgnoreFor(dataModel, table));
+			}
+
 		}
 
 	}

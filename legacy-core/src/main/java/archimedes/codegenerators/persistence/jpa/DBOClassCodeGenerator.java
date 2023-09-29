@@ -226,6 +226,10 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 			annotations
 					.add(new AnnotationData().setName("Column").setParameters(getColumnAnnotationParameters(column)));
 		}
+		column.ifOptionSetWithValueDo("TO_STRING", "EXCLUDE", om -> {
+			importDeclarations.add("lombok", "ToString");
+			annotations.add(new AnnotationData().setName("ToString.Exclude"));
+		});
 		return annotations;
 	}
 

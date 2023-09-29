@@ -482,20 +482,6 @@ public class Domain implements Attributed, DomainModel, ListViewSelectable, Tabb
 	 * @changed OLI 25.05.2016 - Added.
 	 */
 	@Override
-	public OptionModel[] getOptionsByName(String name) {
-		List<OptionModel> l = new corentx.util.SortedVector<OptionModel>();
-		for (OptionModel o : this.getOptions()) {
-			if (o.getName().equals(name)) {
-				l.add(o);
-			}
-		}
-		return l.toArray(new OptionModel[0]);
-	}
-
-	/**
-	 * @changed OLI 25.05.2016 - Added.
-	 */
-	@Override
 	public void addOption(OptionModel option) {
 		ensure(option != null, "option to add cannot be null.");
 		for (OptionModel o : this.getOptions()) {
@@ -508,43 +494,6 @@ public class Domain implements Attributed, DomainModel, ListViewSelectable, Tabb
 				+ option.getName()
 				+ ((option.getParameter() != null) && !option.getParameter().isEmpty() ? ":" + option.getParameter()
 						: ""));
-	}
-
-	/**
-	 * @changed OLI 25.05.2016 - Added.
-	 */
-	@Override
-	public OptionModel getOptionAt(int i) {
-		return this.getOptions()[i];
-	}
-
-	/**
-	 * @changed OLI 25.05.2016 - Added.
-	 */
-	@Override
-	public OptionModel getOptionByName(String name) {
-		for (OptionModel o : this.getOptions()) {
-			if (o.getName().equals(name)) {
-				return o;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * @changed OLI 25.05.2016 - Added.
-	 */
-	@Override
-	public int getOptionCount() {
-		return this.getOptions().length;
-	}
-
-	/**
-	 * @changed OLI 26.05.2016 - Added.
-	 */
-	@Override
-	public boolean isOptionSet(String optionName) {
-		return this.getOptionByName(optionName) != null;
 	}
 
 	/**
