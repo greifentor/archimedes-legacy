@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.Scroller;
@@ -104,12 +105,16 @@ public abstract class ${ClassName} extends Scroller implements BeforeEnterObserv
 		return checkBox;
 	}
 
-	protected <T> ComboBox<T> createComboBox(String resourceId, T fieldContent, T[] valuesToSelect) {
+	protected <T> ComboBox<T> createComboBox(String resourceId, T fieldContent, T[] valuesToSelect,
+			ItemLabelGenerator<T> itemLabelGenerator) {
 		ComboBox<T> comboBox =
 				new ComboBox<>(getResourceManager().getLocalizedString(resourceId, getSessionData().getLocalization()));
 		comboBox.setItems(valuesToSelect);
 		comboBox.setValue(fieldContent);
 		comboBox.setWidthFull();
+		if (itemLabelGenerator != null) {
+			comboBox.setItemLabelGenerator(itemLabelGenerator);
+		}
 		return comboBox;
 	}
 

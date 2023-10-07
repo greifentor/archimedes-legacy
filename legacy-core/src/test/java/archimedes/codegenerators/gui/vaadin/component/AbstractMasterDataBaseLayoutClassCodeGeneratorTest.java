@@ -54,6 +54,7 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "import com.vaadin.flow.component.AttachEvent;\n" //
 							+ "import com.vaadin.flow.component.Component;\n" //
+							+ "import com.vaadin.flow.component.ItemLabelGenerator;\n" //
 							+ "import com.vaadin.flow.component.checkbox.Checkbox;\n" //
 							+ "import com.vaadin.flow.component.combobox.ComboBox;\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.Scroller;\n" //
@@ -151,12 +152,16 @@ public class AbstractMasterDataBaseLayoutClassCodeGeneratorTest {
 							+ "		return checkBox;\n" //
 							+ "	}\n" //
 							+ "\n" //
-							+ "	protected <T> ComboBox<T> createComboBox(String resourceId, T fieldContent, T[] valuesToSelect) {\n" //
+							+ "	protected <T> ComboBox<T> createComboBox(String resourceId, T fieldContent, T[] valuesToSelect,\n" //
+							+ "			ItemLabelGenerator<T> itemLabelGenerator) {\n" //
 							+ "		ComboBox<T> comboBox =\n" //
 							+ "				new ComboBox<>(getResourceManager().getLocalizedString(resourceId, getSessionData().getLocalization()));\n" //
 							+ "		comboBox.setItems(valuesToSelect);\n" //
 							+ "		comboBox.setValue(fieldContent);\n" //
 							+ "		comboBox.setWidthFull();\n" //
+							+ "		if (itemLabelGenerator != null) {\n" //
+							+ "			comboBox.setItemLabelGenerator(itemLabelGenerator);\n" //
+							+ "		}\n" //
 							+ "		return comboBox;\n" //
 							+ "	}\n" //
 							+ "\n" //
