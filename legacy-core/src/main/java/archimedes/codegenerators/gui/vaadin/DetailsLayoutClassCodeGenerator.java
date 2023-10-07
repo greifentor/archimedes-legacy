@@ -42,12 +42,23 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		String serviceInterfaceName = getServiceInterfaceName(table);
 		String sessionDataClassName = nameGenerator.getSessionDataClassName(model);
 		List<GUIReferenceData> guiReferenceData = getGUIReferenceData(table);
+		GUIColumnDataCollection guiColumnDataCollection =
+				getGUIColumnDataCollection(new GUIColumnDataCollection(), table);
 		context.put("AbstractMasterDataBaseLayoutClassName", abstractMasterDataBaseLayoutClassName);
 		context.put("ButtonFactoryClassName", buttonFactoryClassName);
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
-		context.put("GUIColumnDataCollection", getGUIColumnDataCollection(new GUIColumnDataCollection(), table));
+		context.put("GUIColumnDataCollection", guiColumnDataCollection);
 		context.put("GUIReferences", guiReferenceData);
+		context.put("HasSelectionElement", hasSelectionElements(guiReferenceData, guiColumnDataCollection));
+		context
+				.put(
+						"ItemLabelGeneratorCollectionClassName",
+						nameGenerator.getItemLabelGeneratorCollectionClassName(model, table));
+		context
+				.put(
+						"ItemLabelGeneratorCollectionPackageName",
+						nameGenerator.getItemLabelGeneratorCollectionPackageName(model));
 		context.put("ModelClassName", modelClassName);
 		context.put("ModelSuperClassName", modelSuperClassName);
 		context.put("PackageName", getPackageName(model, table));
@@ -69,6 +80,12 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
 		importDeclarations.add(nameGenerator.getSessionDataPackageName(model), sessionDataClassName);
 		addGUIReferencesToFieldDeclarations(guiReferenceData);
+	}
+
+	private boolean hasSelectionElements(List<GUIReferenceData> guiReferenceData,
+			GUIColumnDataCollection guiColumnDataCollection) {
+		return ((guiReferenceData != null) && (guiReferenceData.size() > 0))
+				|| (guiColumnDataCollection.hasFieldType("ENUM"));
 	}
 
 	private GUIColumnDataCollection getGUIColumnDataCollection(GUIColumnDataCollection collection, TableModel table) {
