@@ -1,0 +1,30 @@
+package ${PackageName};
+
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.vaadin.flow.component.ItemLabelGenerator;
+
+#foreach (${ItemLabelGenerator} in ${ItemLabelGeneratorData})
+import ${ItemLabelGenerator.getTypePackageName()}.${ItemLabelGenerator.getTypeName()};
+#end
+import lombok.Generated;
+import lombok.Getter;
+
+/**
+ * ${Generated}
+ */
+@Named
+@Getter
+@Generated
+public class ${ClassName} {
+
+#foreach (${ItemLabelGenerator} in ${ItemLabelGeneratorData})
+	@Autowired(required = false)
+	private ItemLabelGenerator<${ItemLabelGenerator.getTypeName()}> ${ItemLabelGenerator.getAttributeName()}ItemLabelGenerator;
+	#if ($foreach.hasNext) #else
+
+	#end
+#end
+}

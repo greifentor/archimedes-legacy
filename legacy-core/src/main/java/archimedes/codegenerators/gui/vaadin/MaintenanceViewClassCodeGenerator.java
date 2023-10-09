@@ -33,8 +33,9 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		String modelClassName = serviceNameGenerator.getModelClassName(table);
 		String serviceInterfaceName = serviceNameGenerator.getServiceInterfaceName(table);
 		GUIReferenceDataCollection guiReferenceDataCollection = getGUIReferenceDataCollection(table, MAINTENANCE_VIEW);
-		SubclassDataCollection subclassDataCollection = getSubclassDataCollection(table);
-		List<SubclassReferenceData> uniqueSubclassReferenceDataCollection = getUniqueSubclassReferenceData(table);
+		SubclassDataCollection subclassDataCollection = getSubclassDataCollection(model, table);
+		List<SubclassReferenceData> uniqueSubclassReferenceDataCollection =
+				getUniqueSubclassReferenceData(model, table);
 		context.put("BaseURL", getBaseURL(model, table));
 		context.put("AbstractMasterDataBaseLayoutClassName", nameGenerator.getAbstractMasterDataBaseLayoutClassName());
 		context.put("AbstractMasterDataBaseLayoutPackageName", nameGenerator.getVaadinComponentPackageName(model));
@@ -47,9 +48,18 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		context.put("DetailsLayoutClassName", nameGenerator.getDetailsLayoutClassName(model, table));
 		context.put("GridData", getGridData(table));
 		context.put("GUIReferenceDataCollection", guiReferenceDataCollection);
+		context.put("HasSelectionElement", hasSelectionElements(guiReferenceDataCollection.getReferences()));
 		context.put("HeaderLayoutClassName", nameGenerator.getHeaderLayoutClassName(model));
 		context.put("HeaderLayoutPackageName", nameGenerator.getHeaderLayoutPackageName(model));
 		context.put("HeaderAttributeName", getNameFieldName(table));
+		context
+				.put(
+						"ItemLabelGeneratorCollectionClassName",
+						nameGenerator.getItemLabelGeneratorCollectionClassName(model, table));
+		context
+				.put(
+						"ItemLabelGeneratorCollectionPackageName",
+						nameGenerator.getItemLabelGeneratorCollectionPackageName(model));
 		context.put("MaintenanceLayoutClassName", nameGenerator.getMaintenanceViewClassName(model, table));
 		context.put("MasterDataGUIConfigurationClassName", nameGenerator.getMasterDataGUIConfigurationClassName(model));
 		context
@@ -81,6 +91,10 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		addImportsFromUniqueSubclassReferenceData(uniqueSubclassReferenceDataCollection);
 		addGUIReferencesToFieldDeclarations(guiReferenceDataCollection.getReferences());
 		cleanUpFieldDeclarationsFromSubClassReferences(subclassDataCollection);
+	}
+
+	private boolean hasSelectionElements(List<GUIReferenceData> guiReferenceData) {
+		return (guiReferenceData != null) && (guiReferenceData.size() > 0);
 	}
 
 	private String getBaseURL(DataModel model, TableModel table) {

@@ -52,6 +52,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
+						+ //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -70,6 +72,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
 						+ //
+						"	private final ATableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private IntegerField integerFieldCount;\n" + //
 						"	private TextField textFieldDescription;\n" + //
@@ -165,6 +168,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
+						+ //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -183,6 +188,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
 						+ //
+						"	private final ATableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private DateTimePicker dateTimePickerAdate;\n" + //
 						"\n" + //
@@ -303,7 +309,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxRef = createComboBox(\"ATableDetailsLayout.field.ref.label\", model.getRef(), anotherTableService.findAll().toArray(new AnotherTable[0]), itemLabelGeneratorCollection.getAnotherTableItemLabelGenerator());\n"
+						"		comboBoxRef = createComboBox(\"ATableDetailsLayout.field.ref.label\", model.getRef(), anotherTableService.findAll().toArray(new AnotherTable[0]));\n"
 						+ //
 						"		comboBoxRef\n" + //
 						"				.setItemLabelGenerator(\n" + //
@@ -525,6 +531,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.masterdata.renderer.TableWithNumberFieldItemLabelGeneratorCollection;\n"
+						+ //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -542,6 +550,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<TableWithNumberField> comboBoxItemLabelGenerator;\n"
+						+ //
+						"	private final TableWithNumberFieldItemLabelGeneratorCollection itemLabelGeneratorCollection;\n"
 						+ //
 						"\n" + //
 						"	private IntegerField integerFieldCounter;\n" + //
@@ -648,6 +658,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
+						+ //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -666,6 +678,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
 						+ //
+						"	private final ATableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private TextField textFieldDescription;\n" + //
 						"	private Checkbox checkboxFlag;\n" + //
@@ -758,6 +771,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.masterdata.renderer.AnotherTableItemLabelGeneratorCollection;\n"
+						+ //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -776,6 +791,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
 						+ //
+						"	private final AnotherTableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private TextField textFieldDescription;\n" + //
 						"	private TextField textFieldName;\n" + //
@@ -903,7 +919,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxAnotherTable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.anothertable.label\", model.getAnotherTable(), aTableService.findAllAnotherTable().toArray(new AnotherTable[0]), itemLabelGeneratorCollection.getAnotherTableItemLabelGenerator());\n"
+						"		comboBoxAnotherTable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.anothertable.label\", model.getAnotherTable(), aTableService.findAllAnotherTable().toArray(new AnotherTable[0]));\n"
 						+ //
 						"		comboBoxAnotherTable\n" + //
 						"				.setItemLabelGenerator(\n" + //
@@ -911,7 +927,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"								? comboBoxItemLabelGenerator.getLabel(DifferentSubclassReferences.ANOTHERTABLE, anotherTable)\n"
 						+ //
 						"								: \"\" + anotherTable.getDescription());\n" + //
-						"		comboBoxATable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.atable.label\", model.getATable(), aTableService.findAll().toArray(new ATable[0]), itemLabelGeneratorCollection.getATableItemLabelGenerator());\n"
+						"		comboBoxATable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.atable.label\", model.getATable(), aTableService.findAll().toArray(new ATable[0]));\n"
 						+ //
 						"		comboBoxATable\n" + //
 						"				.setItemLabelGenerator(\n" + //
@@ -1026,7 +1042,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxReference = createComboBox(\"BTableDetailsLayout.field.reference.label\", model.getReference(), bReferencedTableService.findAll().toArray(new BReferencedTable[0]), itemLabelGeneratorCollection.getBReferencedTableItemLabelGenerator());\n"
+						"		comboBoxReference = createComboBox(\"BTableDetailsLayout.field.reference.label\", model.getReference(), bReferencedTableService.findAll().toArray(new BReferencedTable[0]));\n"
 						+ //
 						"		comboBoxReference\n" + //
 						"				.setItemLabelGenerator(\n" + //
@@ -1158,7 +1174,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxAnotherTable = createComboBox(\"ATableDetailsLayout.field.anothertable.label\", model.getAnotherTable(), anotherTableService.findAll().toArray(new AnotherTable[0]), itemLabelGeneratorCollection.getAnotherTableItemLabelGenerator());\n"
+						"		comboBoxAnotherTable = createComboBox(\"ATableDetailsLayout.field.anothertable.label\", model.getAnotherTable(), anotherTableService.findAll().toArray(new AnotherTable[0]));\n"
 						+ //
 						"		comboBoxAnotherTable\n" + //
 						"				.setItemLabelGenerator(\n" + //
@@ -1254,6 +1270,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.masterdata.renderer.BTableItemLabelGeneratorCollection;\n"
+						+ //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -1275,6 +1293,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<BTable> comboBoxItemLabelGenerator;\n"
 						+ //
+						"	private final BTableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private TextField textFieldDescription;\n" + //
 						"	private IntegerField integerFieldCounter;\n" + //
@@ -1379,6 +1398,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import base.pack.age.name.gui.SessionData;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
+							+ "import base.pack.age.name.gui.vaadin.masterdata.renderer.BlobTableItemLabelGeneratorCollection;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
 							+ "\n" //
@@ -1396,6 +1416,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "	private final SessionData session;\n" //
 							+ "	private final Observer observer;\n" //
 							+ "	private final DetailsLayoutComboBoxItemLabelGenerator<BlobTable> comboBoxItemLabelGenerator;\n" //
+							+ "	private final BlobTableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" //
 							+ "\n" //
 							+ "	private Upload uploadBlob;\n" //
 							+ "\n" //
