@@ -44,6 +44,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX = "ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME = "ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME";
 	public static final String ALTERNATE_IMAGE_CLASS_NAME_SUFFIX = "ALTERNATE_IMAGE_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_CLASS_NAME_SUFFIX =
+			"ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME =
+			"ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME";
 	public static final String ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX =
 			"ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME = "ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME";
@@ -223,6 +227,23 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getHeaderLayoutPackageName(DataModel model) {
 		return createPackageName(model, null, "gui.vaadin.component", ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME);
+	}
+
+	public String getItemLabelGeneratorCollectionClassName(DataModel model, TableModel table) {
+		return table == null
+				? null
+				: getClassName(table) + getNameOrAlternativeFromOption(
+						model,
+						"ItemLabelGeneratorCollection",
+						ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_CLASS_NAME_SUFFIX);
+	}
+
+	public String getItemLabelGeneratorCollectionPackageName(DataModel model) {
+		return createPackageName(
+				model,
+				null,
+				"gui.vaadin.masterdata.renderer",
+				ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME);
 	}
 
 	public String getImageClassName(DataModel model) {

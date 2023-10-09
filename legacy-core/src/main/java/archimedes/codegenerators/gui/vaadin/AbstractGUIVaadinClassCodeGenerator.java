@@ -110,7 +110,7 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 				.orElse("FIELD_NAME");
 	}
 
-	protected SubclassDataCollection getSubclassDataCollection(TableModel table) {
+	protected SubclassDataCollection getSubclassDataCollection(DataModel model, TableModel table) {
 		return new SubclassDataCollection()
 				.addSubclasses(
 						getSubclassTables(table)
@@ -123,6 +123,18 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 										t -> new SubclassData()
 												.setDetailsLayoutClassName(
 														nameGenerator.getDetailsLayoutClassName(t.getDataModel(), t))
+												.setItemLabelGeneratorCollectionAttributeName(
+														nameGenerator
+																.getAttributeName(
+																		nameGenerator
+																				.getItemLabelGeneratorCollectionClassName(
+																						model,
+																						t)))
+												.setItemLabelGeneratorCollectionClassName(
+														nameGenerator
+																.getItemLabelGeneratorCollectionClassName(model, t))
+												.setItemLabelGeneratorCollectionPackageName(
+														nameGenerator.getItemLabelGeneratorCollectionPackageName(model))
 												.setModelClassName(serviceNameGenerator.getModelClassName(t))
 												.setModelPackageName(
 														serviceNameGenerator.getModelPackageName(t.getDataModel(), t))
@@ -156,8 +168,8 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 						serviceNameGenerator.getServiceInterfacePackageName(model, referencedSuperTable));
 	}
 
-	protected List<SubclassReferenceData> getUniqueSubclassReferenceData(TableModel table) {
-		return getSubclassDataCollection(table)
+	protected List<SubclassReferenceData> getUniqueSubclassReferenceData(DataModel model, TableModel table) {
+		return getSubclassDataCollection(model, table)
 				.getSubclasses()
 				.stream()
 				.flatMap(subclass -> subclass.getReferences().stream())
