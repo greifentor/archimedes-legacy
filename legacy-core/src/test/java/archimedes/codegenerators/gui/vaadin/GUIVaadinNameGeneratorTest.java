@@ -767,6 +767,194 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class ItemLabelGeneratorCollectionClassNameClassNameTests {
+
+		@Test
+		void getItemLabelGeneratorCollectionClassNameClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getItemLabelGeneratorCollectionClassName(model, table);
+			});
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionClassNameClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getItemLabelGeneratorCollectionClassName(model, null));
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionClassNameClassName_PassTableModelWithNameCamelCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TestTableItemLabelGeneratorCollection";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUpperCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableItemLabelGeneratorCollection";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNameItemLabelGeneratorCollection";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNameItemLabelGeneratorCollection";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableNameItemLabelGeneratorCollection";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameLowerCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableItemLabelGeneratorCollection";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TItemLabelGeneratorCollection";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TItemLabelGeneratorCollection";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionClassName_PassDataModelWithALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectGOName() {
+			// Prepare
+			String expected = "TableGO";
+			when(table.getName()).thenReturn("Table");
+			doReturn(
+					new Option(
+							GUIVaadinNameGenerator.ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_CLASS_NAME_SUFFIX,
+							"GO"))
+									.when(model)
+									.getOptionByName(
+											GUIVaadinNameGenerator.ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_CLASS_NAME_SUFFIX);
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class ItemLabelGeneratorCollectionPackageNameTests {
+
+		@Test
+		void getItemLabelGeneratorCollectionPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getItemLabelGeneratorCollectionPackageName(null));
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals(
+					"gui.vaadin.masterdata.renderer",
+					unitUnderTest.getItemLabelGeneratorCollectionPackageName(model));
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionPackageName_PassAValidTableModel_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".gui.vaadin.masterdata.renderer";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = "gui.vaadin.masterdata.renderer";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = "gui.vaadin.masterdata.renderer";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getItemLabelGeneratorCollectionPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getItemLabelGeneratorCollectionPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME))
+					.thenReturn(
+							new Option(
+									GUIVaadinNameGenerator.ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME,
+									"vaadin.gos"));
+			// Run & Check
+			assertEquals("vaadin.gos", unitUnderTest.getItemLabelGeneratorCollectionPackageName(model));
+		}
+
+	}
+
+	@Nested
 	class MaintenanceViewClassNameTests {
 
 		@Test

@@ -6,13 +6,10 @@ import java.io.InputStream;
 
 #end
 import com.vaadin.flow.component.AttachEvent;
-#if ($GUIReferences && $GUIReferences.size() > 0)
-import com.vaadin.flow.component.combobox.ComboBox;
-#end
 #if (${GUIColumnDataCollection.hasFieldType("BOOLEAN")} == true)
 import com.vaadin.flow.component.checkbox.Checkbox;
 #end
-#if (${GUIColumnDataCollection.hasFieldType("ENUM")} == true)
+#if (${HasSelectionElement} == true)
 import com.vaadin.flow.component.combobox.ComboBox;
 #end
 #if (${GUIColumnDataCollection.hasFieldType("TIMESTAMP")} == true)
@@ -38,6 +35,7 @@ import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 #foreach ($ImportDeclaration in $ImportDeclarations.toList())
 import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
+import ${ItemLabelGeneratorCollectionPackageName}.${ItemLabelGeneratorCollectionClassName};
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -80,6 +78,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	private final ${SessionDataClassName} session;
 	private final Observer observer;
 	private final DetailsLayoutComboBoxItemLabelGenerator<#if(${ModelSuperClassName})${ModelSuperClassName}#else${ModelClassName}#end> comboBoxItemLabelGenerator;
+	private final ${ItemLabelGeneratorCollectionClassName} itemLabelGeneratorCollection;
 
 #foreach ($Reference in $GUIReferences)
 	private ComboBox<${Reference.getReferencedModelClassName()}> comboBox${Reference.getFieldNameCamelCase()};
@@ -133,7 +132,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		checkbox${FieldName} = createCheckbox("$ResourceId", model.${GetterPrefix}${FieldName}());
 	#elseif (${Column.getType()} == "COMBOBOX")
 	#elseif (${Column.getType()} == "ENUM")
-		comboBox${FieldName} = createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values());
+		comboBox${FieldName} = createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values(), itemLabelGeneratorCollection.get${Column.FieldTypeName}ItemLabelGenerator());
 		#if (${Column.isNullable()} == true)
 		comboBox${FieldName}.setClearButtonVisible(true);
 		#end

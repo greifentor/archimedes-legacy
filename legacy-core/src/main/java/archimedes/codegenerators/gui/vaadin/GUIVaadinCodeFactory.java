@@ -75,6 +75,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new GUIConfigurationClassCodeGenerator(this),
 						new HeaderLayoutClassCodeGenerator(this),
 						new ImageClassCodeGenerator(this),
+						new ItemLabelGeneratorCollectionClassCodeGenerator(this),
 						new JWTNotValidExceptionClassCodeGenerator(this),
 						new JWTServiceConfigurationClassCodeGenerator(this),
 						new JWTServiceImplClassCodeGenerator(this),
