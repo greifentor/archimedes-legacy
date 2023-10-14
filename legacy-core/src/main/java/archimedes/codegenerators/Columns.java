@@ -16,6 +16,7 @@ public class Columns {
 	@Accessors(chain = true)
 	@Data
 	public static class ParameterData {
+
 		private String name;
 		private String value;
 
@@ -27,6 +28,7 @@ public class Columns {
 	@Accessors(chain = true)
 	@Data
 	public static class AnnotationData {
+
 		private String name;
 		private List<ParameterData> parameters = new ArrayList<>();
 
@@ -51,6 +53,7 @@ public class Columns {
 	@Accessors(chain = true)
 	@Data
 	public static class ColumnData {
+
 		private List<AnnotationData> annotations = new ArrayList<>();
 		private String columnName;
 		private String converterAttributeName;
@@ -61,6 +64,7 @@ public class Columns {
 		private String fieldType;
 		private String getterCall;
 		private String getterName;
+		private String initWith;
 		private boolean notNull;
 		private boolean pkMember;
 		private boolean reference;

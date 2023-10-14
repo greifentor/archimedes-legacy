@@ -80,6 +80,15 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
 		importDeclarations.add(nameGenerator.getSessionDataPackageName(model), sessionDataClassName);
 		addGUIReferencesToFieldDeclarations(guiReferenceData);
+		guiColumnDataCollection
+				.getColumns()
+				.forEach(
+						cd -> LabelPropertiesGenerator
+								.addLabel(
+										getClassName(table) + ".field."
+												+ cd.getFieldNameCamelCase().toLowerCase()
+												+ ".label",
+										nameGenerator.getClassName(cd.getFieldNameCamelCase())));
 	}
 
 	private boolean hasSelectionElements(List<GUIReferenceData> guiReferenceData,
@@ -247,13 +256,12 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 	}
 
 	private ColumnModel getNextField(ColumnModel column) {
-		List<ColumnModel> columns =
-				List
-						.of(column.getTable().getColumns())
-						.stream()
-						.filter(c -> c.isOptionSet(GUI_EDITOR_POS))
-						.sorted((c0, c1) -> getGuiEditorPos(c0) - getGuiEditorPos(c1))
-						.collect(Collectors.toList());
+		List<ColumnModel> columns = List
+				.of(column.getTable().getColumns())
+				.stream()
+				.filter(c -> c.isOptionSet(GUI_EDITOR_POS))
+				.sorted((c0, c1) -> getGuiEditorPos(c0) - getGuiEditorPos(c1))
+				.collect(Collectors.toList());
 		int i = columns.indexOf(column);
 		ColumnModel nextColumn = columns.get(0);
 		if (i < columns.size() - 1) {

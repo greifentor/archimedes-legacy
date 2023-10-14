@@ -15,6 +15,7 @@ import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -68,8 +69,17 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 												referenceMode,
 												c -> nameGenerator.getModelClassName(c.getReferencedTable()),
 												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model)))
+								.setInitWith(getInitWithValue(column))
 								.setPkMember(column.isPrimaryKey()))
 				.collect(Collectors.toList());
+	}
+
+	private String getInitWithValue(ColumnModel column) {
+		OptionModel initWith = column.getOptionByName(INIT_WITH);
+		if (initWith != null) {
+			return initWith.getParameter();
+		}
+		return null;
 	}
 
 	@Override

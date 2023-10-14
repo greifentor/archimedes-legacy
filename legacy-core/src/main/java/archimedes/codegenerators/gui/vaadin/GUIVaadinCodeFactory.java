@@ -49,9 +49,8 @@ import archimedes.model.PredeterminedOptionProvider;
 public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements CodeFactoryProgressionEventProvider,
 		PredeterminedOptionProvider, StandardCodeFactoryProgressionFrameUser {
 
-	public static final String TEMPLATE_FOLDER_PATH =
-			AbstractCodeFactory.TEMPLATE_PATH + System
-					.getProperty(GUIVaadinCodeFactory.class.getSimpleName() + ".templates.folder", "/gui-vaadin");
+	public static final String TEMPLATE_FOLDER_PATH = AbstractCodeFactory.TEMPLATE_PATH
+			+ System.getProperty(GUIVaadinCodeFactory.class.getSimpleName() + ".templates.folder", "/gui-vaadin");
 
 	@Override
 	protected List<CodeGenerator<?>> getCodeGenerators() {
@@ -100,8 +99,9 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new TextFieldFactoryClassCodeGenerator(this),
 						// new ToGOConverterInterfaceCodeGenerator(this),
 						new UserAuthorizationCheckerClassCodeGenerator(this),
-						new WebAppConfigurationClassCodeGenerator(this)
-				);
+						new WebAppConfigurationClassCodeGenerator(this),
+						// Label property generator must called at last !!!
+						new LabelPropertiesGenerator(this));
 	}
 
 	@Override

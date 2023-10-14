@@ -17,6 +17,8 @@ import archimedes.model.TableModel;
  */
 public class NameGenerator {
 
+	public static final NameGenerator INSTANCE = new NameGenerator();
+
 	public static final String MODULE = "MODULE";
 	public static final String PLURAL_NAME = "PLURAL_NAME";
 	public static final String TECHNICAL_CONTEXT = "TECHNICAL_CONTEXT";
@@ -256,11 +258,10 @@ public class NameGenerator {
 			}
 		}
 		if (optionListProvider != null) {
-			prefix =
-					OptionGetter
-							.getOptionByName(optionListProvider, MODULE)
-							.map(option -> addDotIfNecessary(option.getParameter(), false))
-							.orElse("");
+			prefix = OptionGetter
+					.getOptionByName(optionListProvider, MODULE)
+					.map(option -> addDotIfNecessary(option.getParameter(), false))
+					.orElse("");
 		}
 		return model != null
 				? getBasePackageNameWithDotExtension(

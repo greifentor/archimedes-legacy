@@ -55,6 +55,9 @@ public class MainMenuViewClassCodeGenerator extends AbstractVaadinModelCodeGener
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
+		LabelPropertiesGenerator
+				.addLabel("commons.header.main-menu.label", model.getApplicationName() + " (@app.version@)");
+		LabelPropertiesGenerator.addLabel("main-menu.button.master-data.text", "Stammdaten");
 	}
 
 	private List<MasterDataData> getMasterDataInfos(DataModel model) {

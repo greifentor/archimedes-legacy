@@ -48,12 +48,8 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 	private String templatePathName;
 	private Map<String, Template> templateCache = new HashMap<>();
 
-	public AbstractCodeGenerator(
-			String templateFileName,
-			String templatePathName,
-			N nameGenerator,
-			TypeGenerator typeGenerator,
-			AbstractCodeFactory codeFactory) {
+	public AbstractCodeGenerator(String templateFileName, String templatePathName, N nameGenerator,
+			TypeGenerator typeGenerator, AbstractCodeFactory codeFactory) {
 		super();
 		this.codeFactory = codeFactory;
 		this.nameGenerator = nameGenerator;
@@ -133,9 +129,8 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 
 	@Override
 	public String getSourceFileName(String path, DataModel dataModel, T t) {
-		String pathName =
-				path + SLASH + getBaseCodeFolderName(dataModel) + SLASH
-						+ getPackageName(dataModel, t).replace(".", SLASH);
+		String pathName = path + SLASH + getBaseCodeFolderName(dataModel) + SLASH
+				+ getPackageName(dataModel, t).replace(".", SLASH);
 		File packagePath = new File(pathName);
 		if (!packagePath.exists()) {
 			packagePath.mkdirs();
@@ -144,11 +139,22 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 	}
 
 	protected String getBaseCodeFolderName(DataModel dataModel) {
+		return getBaseFolderName(dataModel, "java");
+	}
+
+	protected String getBaseResourceFolderName(DataModel dataModel) {
+		return getBaseFolderName(dataModel, "resources");
+	}
+
+	protected String getBaseFolderName(DataModel dataModel, String subject) {
 		return (isModuleModeSet(dataModel) && (getModuleName(dataModel) != null) ? getModuleName(dataModel) + "/" : "")
 				+ System
 						.getProperty(
 								PROPERTY_PREFIX + getClass().getSimpleName() + ".base.code.folder.name",
-								System.getProperty(PROPERTY_PREFIX + "base.code.folder.name", "src/main/java"));
+								System
+										.getProperty(
+												PROPERTY_PREFIX + "base." + subject + ".folder.name",
+												"src/main/" + subject));
 	}
 
 	protected String getClassFileExtension(DataModel dataModel) {

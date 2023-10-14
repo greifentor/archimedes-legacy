@@ -22,9 +22,8 @@ import archimedes.model.PredeterminedOptionProvider;
 public class ServiceCodeFactory extends AbstractClassCodeFactory implements CodeFactoryProgressionEventProvider,
 		PredeterminedOptionProvider, StandardCodeFactoryProgressionFrameUser {
 
-	public static final String TEMPLATE_FOLDER_PATH =
-			AbstractCodeFactory.TEMPLATE_PATH
-					+ System.getProperty(ServiceCodeFactory.class.getSimpleName() + ".templates.folder", "/service");
+	public static final String TEMPLATE_FOLDER_PATH = AbstractCodeFactory.TEMPLATE_PATH
+			+ System.getProperty(ServiceCodeFactory.class.getSimpleName() + ".templates.folder", "/service");
 
 	@Override
 	protected List<CodeGenerator<?>> getCodeGenerators() {
@@ -71,6 +70,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 			return new String[] {
 					AbstractClassCodeGenerator.AUTO_INCREMENT,
 					FindByUtils.FIND_BY,
+					AbstractClassCodeGenerator.INIT_WITH,
 					AbstractClassCodeGenerator.LIST_ACCESS };
 		case DOMAIN:
 			return new String[] { AbstractClassCodeGenerator.ENUM };
