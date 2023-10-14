@@ -58,7 +58,7 @@ public class ${ClassName} #if($Subclass)extends ${SuperclassName} #end{
 
 #foreach($Column in $ColumnData)
 #if(!${Subclass} or !${Column.isPkMember()})
-	private ${Column.getFieldType()} ${Column.getFieldName()};
+	private ${Column.getFieldType()} ${Column.getFieldName()}#if (${Column.getInitWith()}) = ${Column.getInitWith()}#end;
 #end
 #end
 

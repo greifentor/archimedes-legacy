@@ -105,6 +105,10 @@ public abstract class ${ClassName} extends Scroller implements BeforeEnterObserv
 		return checkBox;
 	}
 
+	protected <T> ComboBox<T> createComboBox(String resourceId, T fieldContent, T[] valuesToSelect) {
+		return createComboBox(resourceId, fieldContent, valuesToSelect, null);
+	}
+
 	protected <T> ComboBox<T> createComboBox(String resourceId, T fieldContent, T[] valuesToSelect,
 			ItemLabelGenerator<T> itemLabelGenerator) {
 		ComboBox<T> comboBox =

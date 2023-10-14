@@ -22,6 +22,29 @@ Signature: List<TableClass> findAllByColumnName(ColumnClass)
 
 All classes will be model classes.
 
+##### INIT_WITH
+
+Allows to initialize a field with a valid expression.
+
+E. g.:
+
+```
+INIT_WITH:LocalDateTime.now()
+```
+
+on field "START_DATE" in a table will initialize the field with the current local time. It produces the following line
+
+```
+	private LocalDateTime startDate = LocalDateTime.now();
+```
+
+in the generated model class.
+
+**Note:** The initialization will only be made in the generated model class. It will neither affect the DBO nor
+respected while creating the DB update script.
+
+
+
 ##### LIST_ACCESS
 
 Provides a method which returns a list of objects for the table selected by the marked attribute.

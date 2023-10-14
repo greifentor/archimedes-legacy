@@ -38,72 +38,45 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 		initializeProgress(generators.size());
 		for (DomainModel domainModel : dataModel.getAllDomains()) {
 			try {
-			generators
-					.stream()
-					.filter(codeGenerator -> codeGenerator instanceof AbstractDomainCodeGenerator<?>)
-					.map(codeGenerator -> (AbstractDomainCodeGenerator<?>) codeGenerator)
-					.forEach(codeGenerator -> {
-						String fileName = codeGenerator.getSourceFileName(path, dataModel, domainModel);
-						String generatorName = codeGenerator.getName();
-						if (isReadyToOverride(fileName)) {
-							if (!codeGenerator.isToIgnoreFor(dataModel, domainModel)) {
-								// incrementStepProgress(stepCounter, "- writing file: " + fileName);
-								codeGenerator.generate(path, basePackageName, dataModel, domainModel);
-								LOG.info("- wrote file to: {}", fileName);
+				generators
+						.stream()
+						.filter(codeGenerator -> codeGenerator instanceof AbstractDomainCodeGenerator<?>)
+						.map(codeGenerator -> (AbstractDomainCodeGenerator<?>) codeGenerator)
+						.forEach(codeGenerator -> {
+							String fileName = codeGenerator.getSourceFileName(path, dataModel, domainModel);
+							String generatorName = codeGenerator.getName();
+							if (isReadyToOverride(fileName)) {
+								if (!codeGenerator.isToIgnoreFor(dataModel, domainModel)) {
+									// incrementStepProgress(stepCounter, "- writing file: " + fileName);
+									LOG.info("CALLED generate for: " + generatorName);
+									codeGenerator.generate(path, basePackageName, dataModel, domainModel);
+									LOG.info("- wrote file to: {}", fileName);
+									LOG.info("FINISHED generation for: " + generatorName);
+								} else {
+									// incrementStepProgress(stepCounter, "- ignored by generator: " + generatorName);
+									LOG
+											.info(
+													"- ignored domain '{}' by generator: {}",
+													domainModel.getName(),
+													generatorName);
+								}
+								System.gc();
 							} else {
-								// incrementStepProgress(stepCounter, "- ignored by generator: " + generatorName);
+								// incrementStepProgress(
+								// stepCounter,
+								// "- ignored by not ready to override for generator: " + generatorName);
 								LOG
 										.info(
-												"- ignored domain '{}' by generator: {}",
+												"- ignored domain '{}' by not ready to override: {}",
 												domainModel.getName(),
 												generatorName);
 							}
-							System.gc();
-						} else {
-							// incrementStepProgress(
-							// stepCounter,
-							// "- ignored by not ready to override for generator: " + generatorName);
-							LOG
-									.info(
-											"- ignored domain '{}' by not ready to override: {}",
-											domainModel.getName(),
-											generatorName);
-						}
-					});
+						});
 			} catch (RuntimeException e) {
 				LOG.error("error while creating code for domain: " + domainModel.getName(), e);
 				throw e;
 			}
 		}
-		generators
-				.stream()
-				.filter(codeGenerator -> codeGenerator instanceof AbstractModelCodeGenerator<?>)
-				.map(codeGenerator -> (AbstractModelCodeGenerator<?>) codeGenerator)
-				.forEach(codeGenerator -> {
-					String fileName = codeGenerator.getSourceFileName(path, dataModel, dataModel);
-					String generatorName = codeGenerator.getName();
-					if (isReadyToOverride(fileName)) {
-						if (!codeGenerator.isToIgnoreFor(dataModel, dataModel)) {
-							// incrementStepProgress(stepCounter, "- writing file: " + fileName);
-							codeGenerator.generate(path, basePackageName, dataModel);
-							LOG.info("- wrote file to: {}", fileName);
-						} else {
-							// incrementStepProgress(stepCounter, "- ignored by generator: " + generatorName);
-							LOG.info("- ignored model '{}' by generator: {}", dataModel.getName(), generatorName);
-						}
-						System.gc();
-					} else {
-						// incrementStepProgress(
-						// stepCounter,
-						// "- ignored by not ready to override for generator: " + generatorName);
-						LOG
-								.info(
-										"- ignored model '{}' by not ready to override: {} - {}",
-										dataModel.getName(),
-										generatorName,
-										fileName);
-					}
-				});
 		for (TableModel tableModel : dataModel.getTables()) {
 			try {
 				incrementProcessProgress(processCounter, "processing table: " + tableModel.getName());
@@ -120,7 +93,9 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 								if (isReadyToOverride(fileName)) {
 									if (!codeGenerator.isToIgnoreFor(dataModel, tableModel)) {
 										incrementStepProgress(stepCounter, null);
+										LOG.info("CALLED generate for: " + generatorName);
 										codeGenerator.generate(path, basePackageName, dataModel, tableModel);
+										LOG.info("FINISHED generation for: " + generatorName);
 										LOG.info("- wrote file to: {}", fileName);
 									} else {
 										incrementStepProgress(stepCounter, null);
@@ -155,6 +130,37 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 				throw e;
 			}
 		}
+		generators
+				.stream()
+				.filter(codeGenerator -> codeGenerator instanceof AbstractModelCodeGenerator<?>)
+				.map(codeGenerator -> (AbstractModelCodeGenerator<?>) codeGenerator)
+				.forEach(codeGenerator -> {
+					String fileName = codeGenerator.getSourceFileName(path, dataModel, dataModel);
+					String generatorName = codeGenerator.getName();
+					if (codeGenerator.isOverrideAlways() || isReadyToOverride(fileName)) {
+						if (!codeGenerator.isToIgnoreFor(dataModel, dataModel)) {
+							// incrementStepProgress(stepCounter, "- writing file: " + fileName);
+							LOG.info("CALLED generate for: " + generatorName);
+							codeGenerator.generate(path, basePackageName, dataModel);
+							LOG.info("FINISHED generation for: " + generatorName);
+							LOG.info("- wrote file to: {}", fileName);
+						} else {
+							// incrementStepProgress(stepCounter, "- ignored by generator: " + generatorName);
+							LOG.info("- ignored model '{}' by generator: {}", dataModel.getName(), generatorName);
+						}
+						System.gc();
+					} else {
+						// incrementStepProgress(
+						// stepCounter,
+						// "- ignored by not ready to override for generator: " + generatorName);
+						LOG
+								.info(
+										"- ignored model '{}' by not ready to override: {} - {}",
+										dataModel.getName(),
+										generatorName,
+										fileName);
+					}
+				});
 		System.gc();
 		return true;
 	}
@@ -204,7 +210,7 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 		return !tableModel.isOptionSet(GENERATE_ONLY_FOR) && !tableModel.isOptionSet(NO_GENERATION);
 	}
 
-	private boolean isReadyToOverride(String fileName) {
+	protected boolean isReadyToOverride(String fileName) {
 		if (new File(fileName).exists()) {
 			try {
 				String fileContent = Files.readString(Path.of(fileName));

@@ -332,6 +332,52 @@ public class GeneratedModelClassCodeGeneratorTest {
 
 		}
 
+		@Nested
+		class InitWith {
+
+			@Test
+			void simpleClass() {
+				// Prepare
+				String expected = "package base.pack.age.name.core.model;\n" //
+						+ "\n" //
+						+ "import lombok.Data;\n" //
+						+ "import lombok.Generated;\n" //
+						+ "import lombok.experimental.Accessors;\n" //
+						+ "\n" //
+						+ "/**\n" //
+						+ " * A model for table_with_grid_fieldss.\n" //
+						+ " *\n" //
+						+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+						+ " */\n" //
+						+ "@Accessors(chain = true)\n" //
+						+ "@Data\n" //
+						+ "@Generated\n" //
+						+ "public class GeneratedTableWithGridFields {\n" //
+						+ "\n" //
+						+ "	public static final String ID = \"ID\";\n" //
+						+ "	public static final String ENUMFIELD = \"ENUMFIELD\";\n" //
+						+ "	public static final String FLAG = \"FLAG\";\n" //
+						+ "	public static final String LONGTEXT = \"LONGTEXT\";\n" //
+						+ "\n" //
+						+ "	private Long id;\n" //
+						+ "	private EnumType enumField = EnumType.ONE;\n" //
+						+ "	private Boolean flag = true;\n" //
+						+ "	private String longtext = \"a long text\";\n" //
+						+ "\n" //
+						+ "}";
+				DataModel dataModel = readDataModel("Model.xml");
+				// Run
+				TableModel table = dataModel.getTableByName("TABLE_WITH_GRID_FIELDS");
+				table.getColumnByName("EnumField").addOption(new Option("INIT_WITH", "EnumType.ONE"));
+				table.getColumnByName("Flag").addOption(new Option("INIT_WITH", "true"));
+				table.getColumnByName("Longtext").addOption(new Option("INIT_WITH", "\"a long text\""));
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+		}
+
 	}
 
 }

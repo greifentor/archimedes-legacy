@@ -91,6 +91,10 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		addImportsFromUniqueSubclassReferenceData(uniqueSubclassReferenceDataCollection);
 		addGUIReferencesToFieldDeclarations(guiReferenceDataCollection.getReferences());
 		cleanUpFieldDeclarationsFromSubClassReferences(subclassDataCollection);
+		LabelPropertiesGenerator
+				.addLabel(
+						getClassName(table) + ".header.prefix.label",
+						nameGenerator.getClassName(table.getName()) + " - ");
 	}
 
 	private boolean hasSelectionElements(List<GUIReferenceData> guiReferenceData) {

@@ -33,6 +33,7 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
+		List<GridData> gridData = getGridData(table);
 		context.put("BaseURL", getBaseURL(model, table));
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));
 		context.put("ButtonFactoryClassName", nameGenerator.getButtonFactoryClassName(model));
@@ -41,7 +42,7 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("Filters", getFilters(model, table));
-		context.put("GridData", getGridData(table));
+		context.put("GridData", gridData);
 		context.put("HeaderLayoutClassName", nameGenerator.getHeaderLayoutClassName(model));
 		context.put("HeaderLayoutPackageName", nameGenerator.getHeaderLayoutPackageName(model));
 		context.put("MaintenanceViewClassName", nameGenerator.getMaintenanceViewClassName(model, table));
@@ -74,6 +75,16 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 		context.put("SubclassDataCollection", getSubclassDataCollection(model, table));
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
+		LabelPropertiesGenerator
+				.addLabel(getClassName(table) + ".header.label", nameGenerator.getClassName(table.getName()));
+		gridData
+				.forEach(
+						gd -> LabelPropertiesGenerator
+								.addLabel(
+										getClassName(table) + ".grid.header."
+												+ gd.getFieldNameCamelCase().toLowerCase()
+												+ ".label",
+										nameGenerator.getClassName(gd.getFieldNameCamelCase())));
 	}
 
 	private String getBaseURL(DataModel model, TableModel table) {
@@ -96,10 +107,9 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 	}
 
 	private List<GridData> getGridData(TableModel table) {
-		Function<ColumnModel, Boolean> isInGrid =
-				hasGridFieldColumn(table)
-						? column -> column.isOptionSet(GRID_FIELD)
-						: column -> column.isOptionSet(GUI_EDITOR_POS);
+		Function<ColumnModel, Boolean> isInGrid = hasGridFieldColumn(table)
+				? column -> column.isOptionSet(GRID_FIELD)
+				: column -> column.isOptionSet(GUI_EDITOR_POS);
 		return List
 				.of(table.getColumns())
 				.stream()
