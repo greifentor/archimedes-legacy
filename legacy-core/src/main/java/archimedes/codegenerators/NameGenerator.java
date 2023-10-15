@@ -17,6 +17,8 @@ import archimedes.model.TableModel;
  */
 public class NameGenerator {
 
+	public static final NameGenerator INSTANCE = new NameGenerator();
+
 	public static final String MODULE = "MODULE";
 	public static final String PLURAL_NAME = "PLURAL_NAME";
 	public static final String TECHNICAL_CONTEXT = "TECHNICAL_CONTEXT";

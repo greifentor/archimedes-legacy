@@ -19,6 +19,7 @@ import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -77,6 +78,7 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 														c -> nameGenerator.getModelClassName(c.getReferencedTable()),
 														(c, m) -> nameGenerator
 																.getModelClassName(c.getDomain(), model)))
+										.setInitWith(getInitWithValue(column))
 										.setPkMember(column.isPrimaryKey()))
 						.collect(Collectors.toList());
 		getCompositionLists(table).forEach(cld -> {
@@ -123,6 +125,30 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 			importDeclarations.add("java.util", "List");
 		}
 		return l;
+//		return Arrays
+//				.asList(columns)
+//				.stream()
+//				.map(
+//						column -> new ColumnData()
+//								.setFieldName(nameGenerator.getAttributeName(column))
+//								.setFieldType(
+//										getType(
+//												column,
+//												model,
+//												referenceMode,
+//												c -> nameGenerator.getModelClassName(c.getReferencedTable()),
+//												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model)))
+//								.setInitWith(getInitWithValue(column))
+//								.setPkMember(column.isPrimaryKey()))
+//				.collect(Collectors.toList());
+	}
+
+	private String getInitWithValue(ColumnModel column) {
+		OptionModel initWith = column.getOptionByName(INIT_WITH);
+		if (initWith != null) {
+			return initWith.getParameter();
+		}
+		return null;
 	}
 
 	@Override

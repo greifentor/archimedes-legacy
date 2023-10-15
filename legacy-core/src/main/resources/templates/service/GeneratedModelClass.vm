@@ -67,7 +67,7 @@ public class ${ClassName} #if($Subclass)extends ${SuperclassName} #end{
 #foreach($Annotation in ${Column.getAnnotations()})
 	${Annotation.toJavaCode()}
 #end	
-	private ${Column.getFieldType()} ${Column.getFieldName()};
+	private ${Column.getFieldType()} ${Column.getFieldName()}#if (${Column.getInitWith()}) = ${Column.getInitWith()}#end;
 #end
 #end
 

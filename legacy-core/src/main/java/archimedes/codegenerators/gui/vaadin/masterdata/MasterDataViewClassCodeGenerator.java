@@ -11,6 +11,7 @@ import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.AbstractVaadinModelCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
+import archimedes.codegenerators.gui.vaadin.LabelPropertiesGenerator;
 import archimedes.codegenerators.gui.vaadin.MasterDataData;
 import archimedes.codegenerators.localization.LocalizationNameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
@@ -76,6 +77,7 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
+		LabelPropertiesGenerator.addLabel("master-data.header.menu.label", "Stammdaten");
 	}
 
 	private List<MasterDataData> getMasterDataInfos(DataModel model) {
@@ -94,6 +96,11 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 	}
 
 	private MasterDataData createMasterDataDataForTable(TableModel table) {
+		LabelPropertiesGenerator
+				.addLabel(
+						"master-data.button." + ServiceNameGenerator.INSTANCE.getModelClassName(table).toLowerCase()
+								+ ".text",
+						nameGenerator.getClassName(table));
 		return new MasterDataData()
 				.setModelClassName(ServiceNameGenerator.INSTANCE.getModelClassName(table))
 				.setPageViewName(nameGenerator.getPageViewClassName(table))

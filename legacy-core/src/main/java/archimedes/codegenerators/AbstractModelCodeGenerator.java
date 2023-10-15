@@ -19,7 +19,12 @@ public abstract class AbstractModelCodeGenerator<N extends NameGenerator> extend
 	}
 
 	public void generate(String path, String basePackageName, DataModel dataModel) {
-		String code = generate(basePackageName, dataModel, dataModel);
+		String code = null;
+		if (this instanceof FileManipulator) {
+			code = ((FileManipulator) this).generate(path, dataModel);
+		} else {
+			code = generate(basePackageName, dataModel, dataModel);
+		}
 		String fileName = getSourceFileName(path, dataModel, dataModel);
 		try (FileWriter writer = new FileWriter(fileName)) {
 			writer.write(code);
@@ -42,6 +47,10 @@ public abstract class AbstractModelCodeGenerator<N extends NameGenerator> extend
 	@Override
 	public Type getType() {
 		return Type.MODEL;
+	}
+
+	protected boolean isOverrideAlways() {
+		return false;
 	}
 
 }

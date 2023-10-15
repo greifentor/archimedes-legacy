@@ -41,6 +41,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String COMMENTS = "COMMENTS";
 	public static final String GENERATE_ID_CLASS = "GENERATE_ID_CLASS";
 	public static final String INHERITANCE_MODE_JOINED = "JOINED";
+	public static final String INIT_WITH = "INIT_WITH";
 	public static final String LIST_ACCESS = "LIST_ACCESS";
 	public static final String MAPPERS = "MAPPERS";
 	public static final String MAX = "MAX";
