@@ -1,6 +1,5 @@
 package archimedes.codegenerators.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -13,11 +12,9 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.CommonImportAdder;
-import archimedes.codegenerators.CompositionListData;
 import archimedes.codegenerators.FieldDeclarations;
 import archimedes.codegenerators.ImportDeclarations;
 import archimedes.codegenerators.NullableUtils;
-import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -92,6 +89,7 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 															nameGenerator
 																	.getAttributeName(cld.getMemberTable().getName())
 																	+ "s")));
+			importDeclarations.add("java.util", "List");
 		});
 		return l;
 	}
@@ -108,32 +106,6 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 			i.add(packageName, typeName);
 		}
 		return i;
-	}
-
-	private List<CompositionListData> getCompositionLists(TableModel table) {
-		List<CompositionListData> l = new ArrayList<>();
-		OptionGetter
-				.getOptionByName(table, MEMBER_LIST)
-				.filter(om -> (om.getParameter() != null) && om.getParameter().toUpperCase().equals("PARENT"))
-				.ifPresent(om -> {
-					getReferencingColumns(table, table.getDataModel())
-							.stream()
-							.filter(
-									cm -> OptionGetter
-											.getParameterOfOptionByName(cm.getTable(), MEMBER_LIST)
-											.filter(s -> s.toUpperCase().equals("MEMBER"))
-											.isPresent())
-							.forEach(
-									cm -> l
-											.add(
-													new CompositionListData()
-															.setBackReferenceColumn(cm)
-															.setMemberTable(cm.getTable())));
-				});
-		if (l.size() > 0) {
-			importDeclarations.add("java.util", "List");
-		}
-		return l;
 	}
 
 	@Override

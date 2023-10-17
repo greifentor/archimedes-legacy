@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Types;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -1512,6 +1511,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.SessionData;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+					"import de.ollie.bookstore.gui.vaadin.masterdata.renderer.BookItemLabelGeneratorCollection;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -1530,6 +1530,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 					"	private final Observer observer;\n" + //
 					"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n" + //
 					"\n" + //
+					"	private final BookItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 					"	private IntegerField integerFieldCount;\n" + //
 					"	private TextField textFieldDescription;\n" + //
 					"\n" + //
@@ -1591,7 +1592,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 		}
 
 		@Test
-		@Disabled
 		void happyRunForAnObjectWithAMemberList() {
 			// Prepare
 			String expected =
@@ -1606,6 +1606,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import de.ollie.bookstore.gui.SessionData;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.component.ButtonFactory;\n" //
+							+ "import de.ollie.bookstore.gui.vaadin.masterdata.layout.list.ChapterListDetailsLayout;\n" //
+							+ "import de.ollie.bookstore.gui.vaadin.masterdata.renderer.BookItemLabelGeneratorCollection;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
 							+ "\n" //
@@ -1623,6 +1625,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "	private final SessionData session;\n" //
 							+ "	private final Observer observer;\n" //
 							+ "	private final DetailsLayoutComboBoxItemLabelGenerator<Book> comboBoxItemLabelGenerator;\n" //
+							+ "	private final BookItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" //
 							+ "\n" //
 							+ "	private TextField textFieldTitle;\n" //
 							+ "	private TextField textFieldIsbn;\n" //
@@ -1633,80 +1636,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "		createButtons();\n" //
 							+ "		textFieldTitle = createTextField(\"BookDetailsLayout.field.title.label\", model.getTitle());\n" //
 							+ "		textFieldIsbn = createTextField(\"BookDetailsLayout.field.isbn.label\", model.getIsbn());\n" //
-							+ "		Button buttonAddImageTokenInfo = buttonFactory.createAddButton(resourceManager, event -> {\n" //
-							+ "			new ChapterDialog(\n" //
-							+ "					resourceManager,\n" //
-							+ "					buttonFactory,\n" //
-							+ "					guiConfiguration,\n" //
-							+ "					session,\n" //
-							+ "					(chapter, newItem) -> {\n" //
-							+ "						model.getChapters().add(chapter);\n" //
-							+ "						gridChapter.setItems(model.getChapters());\n" //
-							+ "					},\n" //
-							+ "					null,\n" //
-							+ "					true).open();\n" //
-							+ "		}, session);\n" //
-							+ "		Button buttonDuplicateChapter = buttonFactory.createDuplicateButton(resourceManager, event -> {\n" //
-							+ "			new ChapterDialog(\n" //
-							+ "					resourceManager,\n" //
-							+ "					buttonFactory,\n" //
-							+ "					guiConfiguration,\n" //
-							+ "					session,\n" //
-							+ "					(chapter, newItem) -> {\n" //
-							+ "						model.getChapters().add(chapter);\n" //
-							+ "						gridChapter.setItems(model.getChapters());\n" //
-							+ "					},\n" //
-							+ "					gridChapter.getSelectedItems().toArray(new Chapter[0])[0],\n" //
-							+ "					true).open();\n" //
-							+ "		}, session);\n" //
-							+ "		Button buttonEditChapter = buttonFactory.createEditButton(resourceManager, event -> {\n" //
-							+ "			new ChapterDialog(\n" //
-							+ "					resourceManager,\n" //
-							+ "					buttonFactory,\n" //
-							+ "					guiConfiguration,\n" //
-							+ "					session,\n" //
-							+ "					(chapter, newItem) -> {\n" //
-							+ "						Chapter c = gridChapter.getSelectedItems().toArray(new Chapter[0])[0];\n" //
-							+ "						c.setContent(chapter.getContent());\n" //
-							+ "						c.setSortOrder(chapter.getSortOrder());\n" //
-							+ "						c.setSummary(chapter.getSummary());\n" //
-							+ "						c.getTitle(chapter.getTitle());\n" //
-							+ "					},\n" //
-							+ "					gridChapter.getSelectedItems().toArray(new Chapter[0])[0],\n" //
-							+ "					false).open();\n" //
-							+ "		}, session);\n" //
-							+ "		Button buttonRemoveChapter = buttonFactory.createRemoveButton(resourceManager, event -> {\n" //
-							+ "			Chapter iti = gridChapter.getSelectedItems().toArray(new Chapter[0])[0];\n" //
-							+ "			model.getChapters().remove(iti);\n" //
-							+ "			gridChapter.setItems(model.getChapters());\n" //
-							+ "		}, session);\n" //
-							+ "		HorizontalLayout buttonsChapters =\n" //
-							+ "				new HorizontalLayout(\n" //
-							+ "						buttonAddChapter,\n" //
-							+ "						buttonEditChapter,\n" //
-							+ "						buttonDuplicateChapter,\n" //
-							+ "						buttonRemoveChapter);\n" //
-							+ "		gridChapter = new Grid<>();\n" //
-							+ "		gridChapter\n" //
-							+ "				.addColumn(chapter -> chapter.getTitle())\n" //
-							+ "				.setHeader(\n" //
-							+ "						resourceManager\n" //
-							+ "								.getLocalizedString(\n" //
-							+ "										\"BookDetailsLayout.field.gridChapter.columnTitle.label\",\n" //
-							+ "										session.getLocalization()))\n" //
-							+ "				.setSortable(true)\n" //
-							+ "				.setWidth(\"90%\");\n" //
-							+ "		gridChapter\n" //
-							+ "				.addColumn(chapter -> chapter.getSortOrder())\n" //
-							+ "				.setHeader(\n" //
-							+ "						resourceManager\n" //
-							+ "								.getLocalizedString(\n" //
-							+ "										\"BookDetailsLayout.field.gridChapter.columnSortOrder.label\",\n" //
-							+ "										session.getLocalization()))\n" //
-							+ "				.setSortable(true)\n" //
-							+ "				.setWidth(\"10%\");\n" //
-							+ "		gridChapter.setItems(model.getChapters().stream().sorted().collect(Collectors.toList()));\n" //
-							+ "		gridChapter.setWidthFull();\r\n"
 							+ "		getStyle().set(\"-moz-border-radius\", \"4px\");\n" //
 							+ "		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" //
 							+ "		getStyle().set(\"border-radius\", \"4px\");\n" //
@@ -1720,6 +1649,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "		add(\n" //
 							+ "				textFieldTitle,\n" //
 							+ "				textFieldIsbn,\n" //
+							+ "				new ChapterListDetailsLayout(buttonFactory, guiConfiguration, model, resourceManager, session),\n" //
 							+ "				getMasterDataButtonLayout(model.getId() > 0));\n" //
 							+ "		textFieldTitle.focus();\n" //
 							+ "	}\n" //

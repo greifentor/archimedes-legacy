@@ -233,7 +233,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getDetailsLayoutClassName_PassTableModelWithNameCamelCase_ReturnsACorrectGOName() {
+		void getDetailsLayoutClassName_PassTableModelWithNameCamelCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TestTableDetailsLayout";
 			when(table.getName()).thenReturn("TestTable");
@@ -244,7 +244,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getDetailsLayoutClassName_PassTableModelWithNameUpperCase_ReturnsACorrectGOName() {
+		void getDetailsLayoutClassName_PassTableModelWithNameUpperCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableDetailsLayout";
 			when(table.getName()).thenReturn("TABLE");
@@ -255,7 +255,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectGOName() {
+		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameDetailsLayout";
 			when(table.getName()).thenReturn("TABLE_NAME");
@@ -266,7 +266,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectGOName() {
+		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameDetailsLayout";
 			when(table.getName()).thenReturn("table_name");
@@ -277,7 +277,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectGOName() {
+		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameDetailsLayout";
 			when(table.getName()).thenReturn("Table_Name");
@@ -288,7 +288,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getDetailsLayoutClassName_PassTableModelWithNameLowerCase_ReturnsACorrectGOName() {
+		void getDetailsLayoutClassName_PassTableModelWithNameLowerCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableDetailsLayout";
 			when(table.getName()).thenReturn("table");
@@ -299,7 +299,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getDetailsLayoutClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectGOName() {
+		void getDetailsLayoutClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TDetailsLayout";
 			when(table.getName()).thenReturn("T");
@@ -310,7 +310,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getDetailsLayoutClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectGOName() {
+		void getDetailsLayoutClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TDetailsLayout";
 			when(table.getName()).thenReturn("t");
@@ -321,7 +321,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getDetailsLayoutClassName_PassDataModelWithALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectGOName() {
+		void getDetailsLayoutClassName_PassDataModelWithALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableGO";
 			when(table.getName()).thenReturn("Table");
@@ -383,7 +383,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getGOClassName_PassTableModelWithNameCamelCase_ReturnsACorrectGOName() {
+		void getGOClassName_PassTableModelWithNameCamelCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TestTableGO";
 			when(table.getName()).thenReturn("TestTable");
@@ -394,7 +394,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getGOClassName_PassTableModelWithNameUpperCase_ReturnsACorrectGOName() {
+		void getGOClassName_PassTableModelWithNameUpperCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableGO";
 			when(table.getName()).thenReturn("TABLE");
@@ -405,7 +405,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getGOClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectGOName() {
+		void getGOClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameGO";
 			when(table.getName()).thenReturn("TABLE_NAME");
@@ -416,7 +416,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getGOClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectGOName() {
+		void getGOClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameGO";
 			when(table.getName()).thenReturn("table_name");
@@ -427,7 +427,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getGOClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectGOName() {
+		void getGOClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameGO";
 			when(table.getName()).thenReturn("Table_Name");
@@ -438,7 +438,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getGOClassName_PassTableModelWithNameLowerCase_ReturnsACorrectGOName() {
+		void getGOClassName_PassTableModelWithNameLowerCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableGO";
 			when(table.getName()).thenReturn("table");
@@ -449,7 +449,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getGOClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectGOName() {
+		void getGOClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TGO";
 			when(table.getName()).thenReturn("T");
@@ -460,7 +460,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getGOClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectGOName() {
+		void getGOClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TGO";
 			when(table.getName()).thenReturn("t");
@@ -471,7 +471,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getGOClassName_PassDataModelWithALTERNATE_GO_CLASS_NAME_SUFFIXOption_ReturnsACorrectGOName() {
+		void getGOClassName_PassDataModelWithALTERNATE_GO_CLASS_NAME_SUFFIXOption_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableGO";
 			when(table.getName()).thenReturn("Table");
@@ -788,7 +788,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getItemLabelGeneratorCollectionClassNameClassName_PassTableModelWithNameCamelCase_ReturnsACorrectGOName() {
+		void getItemLabelGeneratorCollectionClassNameClassName_PassTableModelWithNameCamelCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TestTableItemLabelGeneratorCollection";
 			when(table.getName()).thenReturn("TestTable");
@@ -799,7 +799,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUpperCase_ReturnsACorrectGOName() {
+		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUpperCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableItemLabelGeneratorCollection";
 			when(table.getName()).thenReturn("TABLE");
@@ -810,7 +810,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectGOName() {
+		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameItemLabelGeneratorCollection";
 			when(table.getName()).thenReturn("TABLE_NAME");
@@ -821,7 +821,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectGOName() {
+		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameItemLabelGeneratorCollection";
 			when(table.getName()).thenReturn("table_name");
@@ -832,7 +832,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectGOName() {
+		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameItemLabelGeneratorCollection";
 			when(table.getName()).thenReturn("Table_Name");
@@ -843,7 +843,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameLowerCase_ReturnsACorrectGOName() {
+		void getItemLabelGeneratorCollectionClassName_PassTableModelWithNameLowerCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableItemLabelGeneratorCollection";
 			when(table.getName()).thenReturn("table");
@@ -854,7 +854,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getItemLabelGeneratorCollectionClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectGOName() {
+		void getItemLabelGeneratorCollectionClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TItemLabelGeneratorCollection";
 			when(table.getName()).thenReturn("T");
@@ -865,7 +865,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getItemLabelGeneratorCollectionClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectGOName() {
+		void getItemLabelGeneratorCollectionClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TItemLabelGeneratorCollection";
 			when(table.getName()).thenReturn("t");
@@ -876,7 +876,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getItemLabelGeneratorCollectionClassName_PassDataModelWithALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectGOName() {
+		void getItemLabelGeneratorCollectionClassName_PassDataModelWithALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableGO";
 			when(table.getName()).thenReturn("Table");
@@ -958,6 +958,185 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class ListDetailsLayoutClassNameClassNameTests {
+
+		@Test
+		void getListDetailsLayoutClassNameClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getListDetailsLayoutClassName(model, table);
+			});
+		}
+
+		@Test
+		void getListDetailsLayoutClassNameClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getListDetailsLayoutClassName(model, null));
+		}
+
+		@Test
+		void getListDetailsLayoutClassNameClassName_PassTableModelWithNameCamelCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TestTableListDetailsLayout";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutClassName_PassTableModelWithNameUpperCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableListDetailsLayout";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableNameListDetailsLayout";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableNameListDetailsLayout";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableNameListDetailsLayout";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutClassName_PassTableModelWithNameLowerCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableListDetailsLayout";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TListDetailsLayout";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TListDetailsLayout";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutClassName_PassDataModelWithALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableGO";
+			when(table.getName()).thenReturn("Table");
+			doReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIX, "GO"))
+					.when(model)
+					.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIX);
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class ListDetailsLayoutPackageNameTests {
+
+		@Test
+		void getListDetailsLayoutPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getListDetailsLayoutPackageName(null));
+		}
+
+		@Test
+		void getListDetailsLayoutPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals("gui.vaadin.masterdata.layout.list", unitUnderTest.getListDetailsLayoutPackageName(model));
+		}
+
+		@Test
+		void getListDetailsLayoutPackageName_PassAValidTableModel_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".gui.vaadin.masterdata.layout.list";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = "gui.vaadin.masterdata.layout.list";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = "gui.vaadin.masterdata.layout.list";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getListDetailsLayoutPackageName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getListDetailsLayoutPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_LIST_DETAILS_LAYOUT_PACKAGE_NAME)).thenReturn(
+					new Option(GUIVaadinNameGenerator.ALTERNATE_LIST_DETAILS_LAYOUT_PACKAGE_NAME, "vaadin.gos"));
+			// Run & Check
+			assertEquals("vaadin.gos", unitUnderTest.getListDetailsLayoutPackageName(model));
+		}
+
+	}
+
+	@Nested
 	class MaintenanceViewClassNameTests {
 
 		@Test
@@ -976,7 +1155,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameCamelCase_ReturnsACorrectGOName() {
+		void getMaintenanceViewClassName_PassTableModelWithNameCamelCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TestTableMaintenanceView";
 			when(table.getName()).thenReturn("TestTable");
@@ -987,7 +1166,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameUpperCase_ReturnsACorrectGOName() {
+		void getMaintenanceViewClassName_PassTableModelWithNameUpperCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableMaintenanceView";
 			when(table.getName()).thenReturn("TABLE");
@@ -998,7 +1177,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectGOName() {
+		void getMaintenanceViewClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameMaintenanceView";
 			when(table.getName()).thenReturn("TABLE_NAME");
@@ -1009,7 +1188,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectGOName() {
+		void getMaintenanceViewClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameMaintenanceView";
 			when(table.getName()).thenReturn("table_name");
@@ -1020,7 +1199,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectGOName() {
+		void getMaintenanceViewClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNameMaintenanceView";
 			when(table.getName()).thenReturn("Table_Name");
@@ -1031,7 +1210,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameLowerCase_ReturnsACorrectGOName() {
+		void getMaintenanceViewClassName_PassTableModelWithNameLowerCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableMaintenanceView";
 			when(table.getName()).thenReturn("table");
@@ -1042,7 +1221,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getMaintenanceViewClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectGOName() {
+		void getMaintenanceViewClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TMaintenanceView";
 			when(table.getName()).thenReturn("T");
@@ -1053,7 +1232,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getMaintenanceViewClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectGOName() {
+		void getMaintenanceViewClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TMaintenanceView";
 			when(table.getName()).thenReturn("t");
@@ -1064,7 +1243,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getMaintenanceViewClassName_PassDataModelWithALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectGOName() {
+		void getMaintenanceViewClassName_PassDataModelWithALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableGO";
 			when(table.getName()).thenReturn("Table");
@@ -1506,7 +1685,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getPageViewClassName_PassTableModelWithNameCamelCase_ReturnsACorrectGOName() {
+		void getPageViewClassName_PassTableModelWithNameCamelCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TestTablePageView";
 			when(table.getName()).thenReturn("TestTable");
@@ -1517,7 +1696,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getPageViewClassName_PassTableModelWithNameUpperCase_ReturnsACorrectGOName() {
+		void getPageViewClassName_PassTableModelWithNameUpperCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TablePageView";
 			when(table.getName()).thenReturn("TABLE");
@@ -1528,7 +1707,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getPageViewClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectGOName() {
+		void getPageViewClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNamePageView";
 			when(table.getName()).thenReturn("TABLE_NAME");
@@ -1539,7 +1718,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getPageViewClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectGOName() {
+		void getPageViewClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNamePageView";
 			when(table.getName()).thenReturn("table_name");
@@ -1550,7 +1729,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getPageViewClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectGOName() {
+		void getPageViewClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableNamePageView";
 			when(table.getName()).thenReturn("Table_Name");
@@ -1561,7 +1740,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getPageViewClassName_PassTableModelWithNameLowerCase_ReturnsACorrectGOName() {
+		void getPageViewClassName_PassTableModelWithNameLowerCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TablePageView";
 			when(table.getName()).thenReturn("table");
@@ -1572,7 +1751,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getPageViewClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectGOName() {
+		void getPageViewClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TPageView";
 			when(table.getName()).thenReturn("T");
@@ -1583,7 +1762,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getPageViewClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectGOName() {
+		void getPageViewClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TPageView";
 			when(table.getName()).thenReturn("t");
@@ -1594,7 +1773,7 @@ public class GUIVaadinNameGeneratorTest {
 		}
 
 		@Test
-		void getPageViewClassName_PassDataModelWithALTERNATE_PAGE_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectGOName() {
+		void getPageViewClassName_PassDataModelWithALTERNATE_PAGE_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectClassName() {
 			// Prepare
 			String expected = "TableGO";
 			when(table.getName()).thenReturn("Table");

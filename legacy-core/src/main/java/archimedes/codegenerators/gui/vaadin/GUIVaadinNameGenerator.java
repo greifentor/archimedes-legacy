@@ -48,6 +48,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 			"ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME =
 			"ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME";
+	public static final String ALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIX = "ALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_LIST_DETAILS_LAYOUT_PACKAGE_NAME = "ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME";
 	public static final String ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX =
 			"ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME = "ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME";
@@ -244,6 +246,17 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 				null,
 				"gui.vaadin.masterdata.renderer",
 				ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME);
+	}
+
+	public String getListDetailsLayoutClassName(DataModel model, TableModel table) {
+		return table == null ? null
+				: getClassName(table) + getNameOrAlternativeFromOption(model, "ListDetailsLayout",
+						ALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIX);
+	}
+
+	public String getListDetailsLayoutPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin.masterdata.layout.list",
+				ALTERNATE_LIST_DETAILS_LAYOUT_PACKAGE_NAME);
 	}
 
 	public String getImageClassName(DataModel model) {

@@ -44,6 +44,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		List<GUIReferenceData> guiReferenceData = getGUIReferenceData(table);
 		GUIColumnDataCollection guiColumnDataCollection =
 				getGUIColumnDataCollection(new GUIColumnDataCollection(), table);
+		List<ListGridData> listGridData = getListGridData(model, table);
 		context.put("AbstractMasterDataBaseLayoutClassName", abstractMasterDataBaseLayoutClassName);
 		context.put("ButtonFactoryClassName", buttonFactoryClassName);
 		context.put("ClassName", getClassName(model, table));
@@ -51,6 +52,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("GUIColumnDataCollection", guiColumnDataCollection);
 		context.put("GUIReferences", guiReferenceData);
 		context.put("HasSelectionElement", hasSelectionElements(guiReferenceData, guiColumnDataCollection));
+		context.put("HasListGridDataCollection", !listGridData.isEmpty());
 		context
 				.put(
 						"ItemLabelGeneratorCollectionClassName",
@@ -59,6 +61,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 				.put(
 						"ItemLabelGeneratorCollectionPackageName",
 						nameGenerator.getItemLabelGeneratorCollectionPackageName(model));
+		context.put("ListGridDataCollection", listGridData);
 		context.put("ModelClassName", modelClassName);
 		context.put("ModelSuperClassName", modelSuperClassName);
 		context.put("PackageName", getPackageName(model, table));
@@ -85,10 +88,20 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 				.forEach(
 						cd -> LabelPropertiesGenerator
 								.addLabel(
-										getClassName(table) + ".field."
-												+ cd.getFieldNameCamelCase().toLowerCase()
+										getClassName(table) + ".field." + cd.getFieldNameCamelCase().toLowerCase()
 												+ ".label",
 										nameGenerator.getClassName(cd.getFieldNameCamelCase())));
+	}
+
+	private List<ListGridData> getListGridData(DataModel model, TableModel table) {
+		return getCompositionLists(table).stream().map(cld -> {
+			String className = nameGenerator.getListDetailsLayoutClassName(model, cld.getMemberTable());
+			String packageName = nameGenerator.getListDetailsLayoutPackageName(model);
+			importDeclarations.add(packageName, className);
+			return new ListGridData()
+					.setListDetailsLayoutClassName(className)
+					.setListDetailsLayoutPackageName(packageName);
+		}).collect(Collectors.toList());
 	}
 
 	private boolean hasSelectionElements(List<GUIReferenceData> guiReferenceData,
@@ -256,12 +269,13 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 	}
 
 	private ColumnModel getNextField(ColumnModel column) {
-		List<ColumnModel> columns = List
-				.of(column.getTable().getColumns())
-				.stream()
-				.filter(c -> c.isOptionSet(GUI_EDITOR_POS))
-				.sorted((c0, c1) -> getGuiEditorPos(c0) - getGuiEditorPos(c1))
-				.collect(Collectors.toList());
+		List<ColumnModel> columns =
+				List
+						.of(column.getTable().getColumns())
+						.stream()
+						.filter(c -> c.isOptionSet(GUI_EDITOR_POS))
+						.sorted((c0, c1) -> getGuiEditorPos(c0) - getGuiEditorPos(c1))
+						.collect(Collectors.toList());
 		int i = columns.indexOf(column);
 		ColumnModel nextColumn = columns.get(0);
 		if (i < columns.size() - 1) {

@@ -39,9 +39,11 @@ import ${ItemLabelGeneratorCollectionPackageName}.${ItemLabelGeneratorCollection
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
+#if (${Generated})
 /**
  * ${Generated}
  */
+#end
 @Generated
 @RequiredArgsConstructor
 public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
@@ -203,6 +205,9 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	#else
 				textField${Column.getFieldNameCamelCase()},
 	#end
+#end
+#foreach (${ListGridData} in ${ListGridDataCollection})
+				new ${ListGridData.getListDetailsLayoutClassName()}(buttonFactory, guiConfiguration, model, resourceManager, session),
 #end
 				getMasterDataButtonLayout(model.getId() > 0));
 #if (${PreferenceData})
