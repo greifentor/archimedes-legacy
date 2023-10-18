@@ -12,9 +12,7 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.CommonImportAdder;
-import archimedes.codegenerators.CompositionListData;
 import archimedes.codegenerators.FieldDeclarations;
-import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -61,27 +59,26 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns, TableModel table, DataModel model,
 			ReferenceMode referenceMode) {
-		List<ColumnData> l =
-				Arrays
-						.asList(columns)
-						.stream()
-						.filter(column -> !isAMember(table) || !isColumnReferencingAParent(column))
-						.map(
-								column -> new ColumnData()
-										.setAnnotations(getAnnotationsForColumn(column))
-										.setFieldName(nameGenerator.getAttributeName(column))
-										.setFieldType(
-												getType(
-														column,
-														model,
-														referenceMode,
-														c -> nameGenerator.getModelClassName(c.getReferencedTable()),
-														(c, m) -> nameGenerator
-																.getModelClassName(c.getDomain(), model)))
-										.setInitWith(getInitWithValue(column))
-										.setPkMember(column.isPrimaryKey()))
-						.collect(Collectors.toList());
+		List<ColumnData> l = Arrays
+				.asList(columns)
+				.stream()
+				.filter(column -> !isAMember(table) || !isColumnReferencingAParent(column))
+				.map(
+						column -> new ColumnData()
+								.setAnnotations(getAnnotationsForColumn(column))
+								.setFieldName(nameGenerator.getAttributeName(column))
+								.setFieldType(
+										getType(
+												column,
+												model,
+												referenceMode,
+												c -> nameGenerator.getModelClassName(c.getReferencedTable()),
+												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model)))
+								.setInitWith(getInitWithValue(column))
+								.setPkMember(column.isPrimaryKey()))
+				.collect(Collectors.toList());
 		getCompositionLists(table).forEach(cld -> {
+			importDeclarations.add("java.util", "List");
 			l
 					.add(
 							new ColumnData()
@@ -99,48 +96,6 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 			annotations.add(new AnnotationData().setName("ToString.Exclude"));
 		});
 		return annotations;
-	}
-
-	private List<CompositionListData> getCompositionLists(TableModel table) {
-		List<CompositionListData> l = new ArrayList<>();
-		OptionGetter
-				.getOptionByName(table, MEMBER_LIST)
-				.filter(om -> (om.getParameter() != null) && om.getParameter().toUpperCase().equals("PARENT"))
-				.ifPresent(om -> {
-					getReferencingColumns(table, table.getDataModel())
-							.stream()
-							.filter(
-									cm -> OptionGetter
-											.getParameterOfOptionByName(cm.getTable(), MEMBER_LIST)
-											.filter(s -> s.toUpperCase().equals("MEMBER"))
-											.isPresent())
-							.forEach(
-									cm -> l
-											.add(
-													new CompositionListData()
-															.setBackReferenceColumn(cm)
-															.setMemberTable(cm.getTable())));
-				});
-		if (l.size() > 0) {
-			importDeclarations.add("java.util", "List");
-		}
-		return l;
-//		return Arrays
-//				.asList(columns)
-//				.stream()
-//				.map(
-//						column -> new ColumnData()
-//								.setFieldName(nameGenerator.getAttributeName(column))
-//								.setFieldType(
-//										getType(
-//												column,
-//												model,
-//												referenceMode,
-//												c -> nameGenerator.getModelClassName(c.getReferencedTable()),
-//												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model)))
-//								.setInitWith(getInitWithValue(column))
-//								.setPkMember(column.isPrimaryKey()))
-//				.collect(Collectors.toList());
 	}
 
 	private String getInitWithValue(ColumnModel column) {
