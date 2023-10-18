@@ -29,6 +29,9 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 			"ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_DETAILS_LAYOUT_COMBO_BOX_ITEM_LABEL_GENERATOR_INTERFACE_NAME =
 			"ALTERNATE_DETAILS_LAYOUT_COMBO_BOX_ITEM_LABEL_GENERATOR_INTERFACE_NAME";
+	public static final String ALTERNATE_DETAILS_DIALOG_CLASS_NAME_SUFFIX =
+			"ALTERNATE_DETAILS_DIALOG_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_DETAILS_DIALOG_PACKAGE_NAME = "ALTERNATE_DETAILS_DIALOG_PACKAGE_NAME";
 	public static final String ALTERNATE_GUI_APPLICATION_STARTER_CLASS_NAME_SUFFIX =
 			"ALTERNATE_GUI_APPLICATION_STARTER_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_GUI_VAADIN_MODULE_PREFIX = "ALTERNATE_GUI_VAADIN_MODULE_PREFIX";
@@ -48,8 +51,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 			"ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME =
 			"ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME";
-	public static final String ALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIX = "ALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIX";
-	public static final String ALTERNATE_LIST_DETAILS_LAYOUT_PACKAGE_NAME = "ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME";
+	public static final String ALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIX =
+			"ALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_LIST_DETAILS_LAYOUT_PACKAGE_NAME =
+			"ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME";
 	public static final String ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX =
 			"ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME = "ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME";
@@ -165,6 +170,21 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 				ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX);
 	}
 
+	public String getDetailsDialogClassName(DataModel model, TableModel table) {
+		return table != null ? getClassName(table) + getDetailsDialogClassNameSuffix(table) : null;
+	}
+
+	private String getDetailsDialogClassNameSuffix(TableModel table) {
+		return getNameOrAlternativeFromOption(
+				table.getDataModel(),
+				"DetailsDialog",
+				ALTERNATE_DETAILS_DIALOG_CLASS_NAME_SUFFIX);
+	}
+
+	public String getDetailsDialogPackageName(DataModel model) {
+		return createPackageName(model, null, "gui.vaadin.masterdata.dialog", ALTERNATE_DETAILS_DIALOG_PACKAGE_NAME);
+	}
+
 	public String getDetailsLayoutComboBoxItemLabelGeneratorInterfaceName(DataModel model) {
 		return model == null
 				? null
@@ -249,13 +269,19 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	}
 
 	public String getListDetailsLayoutClassName(DataModel model, TableModel table) {
-		return table == null ? null
-				: getClassName(table) + getNameOrAlternativeFromOption(model, "ListDetailsLayout",
+		return table == null
+				? null
+				: getClassName(table) + getNameOrAlternativeFromOption(
+						model,
+						"ListDetailsLayout",
 						ALTERNATE_LIST_DETAILS_LAYOUT_CLASS_NAME_SUFFIX);
 	}
 
 	public String getListDetailsLayoutPackageName(DataModel model) {
-		return createPackageName(model, null, "gui.vaadin.masterdata.layout.list",
+		return createPackageName(
+				model,
+				null,
+				"gui.vaadin.masterdata.layout.list",
 				ALTERNATE_LIST_DETAILS_LAYOUT_PACKAGE_NAME);
 	}
 

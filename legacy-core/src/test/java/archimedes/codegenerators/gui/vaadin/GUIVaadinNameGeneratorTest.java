@@ -363,6 +363,154 @@ public class GUIVaadinNameGeneratorTest {
 
 	}
 
+	@Nested
+	class DetailsDialogClassNameTests {
+
+		@Test
+		void getDetailsDialogClassName_PassTableModelWithEmptyName_ThrowsException() {
+			// Prepare
+			when(table.getName()).thenReturn("");
+			// Run
+			assertThrows(IllegalArgumentException.class, () -> {
+				unitUnderTest.getDetailsDialogClassName(model, table);
+			});
+		}
+
+		@Test
+		void getDetailsDialogClassName_PassNullValue_ReturnsNullValue() {
+			assertNull(unitUnderTest.getDetailsDialogClassName(model, null));
+		}
+
+		@Test
+		void getDetailsDialogClassName_PassTableModelWithNameCamelCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TestTableDetailsDialog";
+			when(table.getName()).thenReturn("TestTable");
+			// Run
+			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsDialogClassName_PassTableModelWithNameUpperCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableDetailsDialog";
+			when(table.getName()).thenReturn("TABLE");
+			// Run
+			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsDialogClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableNameDetailsDialog";
+			when(table.getName()).thenReturn("TABLE_NAME");
+			// Run
+			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsDialogClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableNameDetailsDialog";
+			when(table.getName()).thenReturn("table_name");
+			// Run
+			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsDialogClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableNameDetailsDialog";
+			when(table.getName()).thenReturn("Table_Name");
+			// Run
+			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsDialogClassName_PassTableModelWithNameLowerCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableDetailsDialog";
+			when(table.getName()).thenReturn("table");
+			// Run
+			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsDialogClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TDetailsDialog";
+			when(table.getName()).thenReturn("T");
+			// Run
+			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsDialogClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TDetailsDialog";
+			when(table.getName()).thenReturn("t");
+			// Run
+			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getDetailsDialogClassName_PassDataModelWithALTERNATE_DETAILS_DIALOG_CLASS_NAME_SUFFIXOption_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "TableGO";
+			when(table.getName()).thenReturn("Table");
+			when(table.getDataModel()).thenReturn(model);
+			doReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_DETAILS_DIALOG_CLASS_NAME_SUFFIX, "GO"))
+					.when(model)
+					.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_DETAILS_DIALOG_CLASS_NAME_SUFFIX);
+			// Run
+			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class DetailsDialogPackageNameTests extends AbstractPackageNameTest {
+
+		@Override
+		protected Function<DataModel, String> calledMethod() {
+			return model -> unitUnderTest.getDetailsDialogPackageName(model);
+		}
+
+		@Override
+		protected String getAlternativeIdentifier() {
+			return GUIVaadinNameGenerator.ALTERNATE_DETAILS_DIALOG_PACKAGE_NAME;
+		}
+
+		@Override
+		protected String getExpectedPackageName() {
+			return "gui.vaadin.masterdata.dialog";
+		}
+
+		@Override
+		protected DataModel getModel() {
+			return model;
+		}
+
+	}
+
 	@DisplayName("tests for GO class names")
 	@Nested
 	class GOClassNameTests {
@@ -896,63 +1044,26 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
-	class ItemLabelGeneratorCollectionPackageNameTests {
+	class ItemLabelGeneratorCollectionPackageNameTests extends AbstractPackageNameTest {
 
-		@Test
-		void getItemLabelGeneratorCollectionPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getItemLabelGeneratorCollectionPackageName(null));
+		@Override
+		protected Function<DataModel, String> calledMethod() {
+			return model -> unitUnderTest.getItemLabelGeneratorCollectionPackageName(model);
 		}
 
-		@Test
-		void getItemLabelGeneratorCollectionPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals(
-					"gui.vaadin.masterdata.renderer",
-					unitUnderTest.getItemLabelGeneratorCollectionPackageName(model));
+		@Override
+		protected String getAlternativeIdentifier() {
+			return GUIVaadinNameGenerator.ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME;
 		}
 
-		@Test
-		void getItemLabelGeneratorCollectionPackageName_PassAValidTableModel_ReturnsACorrecGOName() {
-			// Prepare
-			String expected = BASE_PACKAGE_NAME + ".gui.vaadin.masterdata.renderer";
-			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
-			// Run
-			String returned = unitUnderTest.getItemLabelGeneratorCollectionPackageName(model);
-			// Check
-			assertEquals(expected, returned);
+		@Override
+		protected String getExpectedPackageName() {
+			return "gui.vaadin.masterdata.renderer";
 		}
 
-		@Test
-		void getItemLabelGeneratorCollectionPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecGOName() {
-			// Prepare
-			String expected = "gui.vaadin.masterdata.renderer";
-			when(model.getBasePackageName()).thenReturn("");
-			// Run
-			String returned = unitUnderTest.getItemLabelGeneratorCollectionPackageName(model);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getItemLabelGeneratorCollectionPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecGOName() {
-			// Prepare
-			String expected = "gui.vaadin.masterdata.renderer";
-			when(model.getBasePackageName()).thenReturn(null);
-			// Run
-			String returned = unitUnderTest.getItemLabelGeneratorCollectionPackageName(model);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getItemLabelGeneratorCollectionPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
-			// Prepare
-			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME))
-					.thenReturn(
-							new Option(
-									GUIVaadinNameGenerator.ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME,
-									"vaadin.gos"));
-			// Run & Check
-			assertEquals("vaadin.gos", unitUnderTest.getItemLabelGeneratorCollectionPackageName(model));
+		@Override
+		protected DataModel getModel() {
+			return model;
 		}
 
 	}
@@ -1080,181 +1191,26 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
-	class ListDetailsLayoutPackageNameTests {
+	class ListDetailsLayoutPackageNameTests extends AbstractPackageNameTest {
 
-		@Test
-		void getListDetailsLayoutPackageName_PassANullValueAsModel_ReturnsANullValue() {
-			assertNull(unitUnderTest.getListDetailsLayoutPackageName(null));
+		@Override
+		protected Function<DataModel, String> calledMethod() {
+			return model -> unitUnderTest.getListDetailsLayoutPackageName(model);
 		}
 
-		@Test
-		void getListDetailsLayoutPackageName_PassANullValueAsTable_ReturnsANullValue() {
-			assertEquals("gui.vaadin.masterdata.layout.list", unitUnderTest.getListDetailsLayoutPackageName(model));
+		@Override
+		protected String getAlternativeIdentifier() {
+			return GUIVaadinNameGenerator.ALTERNATE_LIST_DETAILS_LAYOUT_PACKAGE_NAME;
 		}
 
-		@Test
-		void getListDetailsLayoutPackageName_PassAValidTableModel_ReturnsACorrecGOName() {
-			// Prepare
-			String expected = BASE_PACKAGE_NAME + ".gui.vaadin.masterdata.layout.list";
-			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
-			// Run
-			String returned = unitUnderTest.getListDetailsLayoutPackageName(model);
-			// Check
-			assertEquals(expected, returned);
+		@Override
+		protected String getExpectedPackageName() {
+			return "gui.vaadin.masterdata.layout.list";
 		}
 
-		@Test
-		void getListDetailsLayoutPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecGOName() {
-			// Prepare
-			String expected = "gui.vaadin.masterdata.layout.list";
-			when(model.getBasePackageName()).thenReturn("");
-			// Run
-			String returned = unitUnderTest.getListDetailsLayoutPackageName(model);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getListDetailsLayoutPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecGOName() {
-			// Prepare
-			String expected = "gui.vaadin.masterdata.layout.list";
-			when(model.getBasePackageName()).thenReturn(null);
-			// Run
-			String returned = unitUnderTest.getListDetailsLayoutPackageName(model);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getListDetailsLayoutPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
-			// Prepare
-			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_LIST_DETAILS_LAYOUT_PACKAGE_NAME)).thenReturn(
-					new Option(GUIVaadinNameGenerator.ALTERNATE_LIST_DETAILS_LAYOUT_PACKAGE_NAME, "vaadin.gos"));
-			// Run & Check
-			assertEquals("vaadin.gos", unitUnderTest.getListDetailsLayoutPackageName(model));
-		}
-
-	}
-
-	@Nested
-	class MaintenanceViewClassNameTests {
-
-		@Test
-		void getMaintenanceViewClassName_PassTableModelWithEmptyName_ThrowsException() {
-			// Prepare
-			when(table.getName()).thenReturn("");
-			// Run
-			assertThrows(IllegalArgumentException.class, () -> {
-				unitUnderTest.getMaintenanceViewClassName(model, table);
-			});
-		}
-
-		@Test
-		void getMaintenanceViewClassName_PassNullValue_ReturnsNullValue() {
-			assertNull(unitUnderTest.getMaintenanceViewClassName(model, null));
-		}
-
-		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameCamelCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TestTableMaintenanceView";
-			when(table.getName()).thenReturn("TestTable");
-			// Run
-			String returned = unitUnderTest.getMaintenanceViewClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameUpperCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableMaintenanceView";
-			when(table.getName()).thenReturn("TABLE");
-			// Run
-			String returned = unitUnderTest.getMaintenanceViewClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableNameMaintenanceView";
-			when(table.getName()).thenReturn("TABLE_NAME");
-			// Run
-			String returned = unitUnderTest.getMaintenanceViewClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableNameMaintenanceView";
-			when(table.getName()).thenReturn("table_name");
-			// Run
-			String returned = unitUnderTest.getMaintenanceViewClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableNameMaintenanceView";
-			when(table.getName()).thenReturn("Table_Name");
-			// Run
-			String returned = unitUnderTest.getMaintenanceViewClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getMaintenanceViewClassName_PassTableModelWithNameLowerCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableMaintenanceView";
-			when(table.getName()).thenReturn("table");
-			// Run
-			String returned = unitUnderTest.getMaintenanceViewClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getMaintenanceViewClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TMaintenanceView";
-			when(table.getName()).thenReturn("T");
-			// Run
-			String returned = unitUnderTest.getMaintenanceViewClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getMaintenanceViewClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TMaintenanceView";
-			when(table.getName()).thenReturn("t");
-			// Run
-			String returned = unitUnderTest.getMaintenanceViewClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getMaintenanceViewClassName_PassDataModelWithALTERNATE_MAINTENANCE_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableGO";
-			when(table.getName()).thenReturn("Table");
-			when(table.getDataModel()).thenReturn(model);
-			doReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX, "GO"))
-					.when(model)
-					.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_MAINTENANCE_VIEW_CLASS_NAME_SUFFIX);
-			// Run
-			String returned = unitUnderTest.getMaintenanceViewClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
+		@Override
+		protected DataModel getModel() {
+			return model;
 		}
 
 	}
