@@ -220,152 +220,29 @@ public class GUIVaadinNameGeneratorTest {
 
 		@Override
 		protected BiFunction<DataModel, TableModel, String> calledMethod() {
-			// TODO Auto-generated method stub
-			return null;
+			return (model, table) -> unitUnderTest.getDetailsLayoutClassName(model, table);
 		}
 
 		@Override
 		protected String getAlternativeIdentifier() {
-			// TODO Auto-generated method stub
-			return null;
+			return GUIVaadinNameGenerator.ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX;
 		}
 
 		@Override
 		protected String getExpectedClassNameSuffix() {
-			// TODO Auto-generated method stub
-			return null;
+			return "DetailsLayout";
 		}
 
 		@Override
 		protected DataModel getModel() {
-			// TODO Auto-generated method stub
-			return null;
+			return model;
 		}
 
 		@Override
 		protected TableModel getTable() {
-			// TODO Auto-generated method stub
-			return null;
+			return table;
 		}
 
-//		@Test
-//		void getDetailsLayoutClassName_PassTableModelWithEmptyName_ThrowsException() {
-//			// Prepare
-//			when(table.getName()).thenReturn("");
-//			// Run
-//			assertThrows(IllegalArgumentException.class, () -> {
-//				unitUnderTest.getDetailsLayoutClassName(model, table);
-//			});
-//		}
-//
-//		@Test
-//		void getDetailsLayoutClassName_PassNullValue_ReturnsNullValue() {
-//			assertNull(unitUnderTest.getDetailsLayoutClassName(model, null));
-//		}
-//
-//		@Test
-//		void getDetailsLayoutClassName_PassTableModelWithNameCamelCase_ReturnsACorrectClassName() {
-//			// Prepare
-//			String expected = "TestTableDetailsLayout";
-//			when(table.getName()).thenReturn("TestTable");
-//			// Run
-//			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
-//			// Check
-//			assertEquals(expected, returned);
-//		}
-//
-//		@Test
-//		void getDetailsLayoutClassName_PassTableModelWithNameUpperCase_ReturnsACorrectClassName() {
-//			// Prepare
-//			String expected = "TableDetailsLayout";
-//			when(table.getName()).thenReturn("TABLE");
-//			// Run
-//			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
-//			// Check
-//			assertEquals(expected, returned);
-//		}
-//
-//		@Test
-//		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectClassName() {
-//			// Prepare
-//			String expected = "TableNameDetailsLayout";
-//			when(table.getName()).thenReturn("TABLE_NAME");
-//			// Run
-//			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
-//			// Check
-//			assertEquals(expected, returned);
-//		}
-//
-//		@Test
-//		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectClassName() {
-//			// Prepare
-//			String expected = "TableNameDetailsLayout";
-//			when(table.getName()).thenReturn("table_name");
-//			// Run
-//			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
-//			// Check
-//			assertEquals(expected, returned);
-//		}
-//
-//		@Test
-//		void getDetailsLayoutClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectClassName() {
-//			// Prepare
-//			String expected = "TableNameDetailsLayout";
-//			when(table.getName()).thenReturn("Table_Name");
-//			// Run
-//			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
-//			// Check
-//			assertEquals(expected, returned);
-//		}
-//
-//		@Test
-//		void getDetailsLayoutClassName_PassTableModelWithNameLowerCase_ReturnsACorrectClassName() {
-//			// Prepare
-//			String expected = "TableDetailsLayout";
-//			when(table.getName()).thenReturn("table");
-//			// Run
-//			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
-//			// Check
-//			assertEquals(expected, returned);
-//		}
-//
-//		@Test
-//		void getDetailsLayoutClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectClassName() {
-//			// Prepare
-//			String expected = "TDetailsLayout";
-//			when(table.getName()).thenReturn("T");
-//			// Run
-//			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
-//			// Check
-//			assertEquals(expected, returned);
-//		}
-//
-//		@Test
-//		void getDetailsLayoutClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectClassName() {
-//			// Prepare
-//			String expected = "TDetailsLayout";
-//			when(table.getName()).thenReturn("t");
-//			// Run
-//			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
-//			// Check
-//			assertEquals(expected, returned);
-//		}
-//
-//		@Test
-//		void getDetailsLayoutClassName_PassDataModelWithALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIXOption_ReturnsACorrectClassName() {
-//			// Prepare
-//			String expected = "TableGO";
-//			when(table.getName()).thenReturn("Table");
-//			when(table.getDataModel()).thenReturn(model);
-//			doReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX, "GO"))
-//					.when(model)
-//					.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX);
-//			// Run
-//			String returned = unitUnderTest.getDetailsLayoutClassName(model, table);
-//			// Check
-//			assertEquals(expected, returned);
-//		}
-//
 	}
 
 	@Nested
@@ -395,124 +272,31 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
-	class DetailsDialogClassNameTests {
+	class DetailsDialogClassNameTests extends AbstractClassNameTest {
 
-		@Test
-		void getDetailsDialogClassName_PassTableModelWithEmptyName_ThrowsException() {
-			// Prepare
-			when(table.getName()).thenReturn("");
-			// Run
-			assertThrows(IllegalArgumentException.class, () -> {
-				unitUnderTest.getDetailsDialogClassName(model, table);
-			});
+		@Override
+		protected BiFunction<DataModel, TableModel, String> calledMethod() {
+			return (model, table) -> unitUnderTest.getDetailsDialogClassName(model, table);
 		}
 
-		@Test
-		void getDetailsDialogClassName_PassNullValue_ReturnsNullValue() {
-			assertNull(unitUnderTest.getDetailsDialogClassName(model, null));
+		@Override
+		protected String getAlternativeIdentifier() {
+			return GUIVaadinNameGenerator.ALTERNATE_DETAILS_DIALOG_CLASS_NAME_SUFFIX;
 		}
 
-		@Test
-		void getDetailsDialogClassName_PassTableModelWithNameCamelCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TestTableDetailsDialog";
-			when(table.getName()).thenReturn("TestTable");
-			// Run
-			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
+		@Override
+		protected String getExpectedClassNameSuffix() {
+			return "DetailsDialog";
 		}
 
-		@Test
-		void getDetailsDialogClassName_PassTableModelWithNameUpperCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableDetailsDialog";
-			when(table.getName()).thenReturn("TABLE");
-			// Run
-			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
+		@Override
+		protected DataModel getModel() {
+			return model;
 		}
 
-		@Test
-		void getDetailsDialogClassName_PassTableModelWithNameUnderScoreUpperCaseOnly_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableNameDetailsDialog";
-			when(table.getName()).thenReturn("TABLE_NAME");
-			// Run
-			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getDetailsDialogClassName_PassTableModelWithNameUnderScoreLowerCaseOnly_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableNameDetailsDialog";
-			when(table.getName()).thenReturn("table_name");
-			// Run
-			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getDetailsDialogClassName_PassTableModelWithNameUnderScoreMixedCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableNameDetailsDialog";
-			when(table.getName()).thenReturn("Table_Name");
-			// Run
-			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getDetailsDialogClassName_PassTableModelWithNameLowerCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableDetailsDialog";
-			when(table.getName()).thenReturn("table");
-			// Run
-			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getDetailsDialogClassName_PassTableModelNameSingleUpperCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TDetailsDialog";
-			when(table.getName()).thenReturn("T");
-			// Run
-			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getDetailsDialogClassName_PassTableModelNameSinglelowerCase_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TDetailsDialog";
-			when(table.getName()).thenReturn("t");
-			// Run
-			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void getDetailsDialogClassName_PassDataModelWithALTERNATE_DETAILS_DIALOG_CLASS_NAME_SUFFIXOption_ReturnsACorrectClassName() {
-			// Prepare
-			String expected = "TableGO";
-			when(table.getName()).thenReturn("Table");
-			when(table.getDataModel()).thenReturn(model);
-			doReturn(new Option(GUIVaadinNameGenerator.ALTERNATE_DETAILS_DIALOG_CLASS_NAME_SUFFIX, "GO"))
-					.when(model)
-					.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_DETAILS_DIALOG_CLASS_NAME_SUFFIX);
-			// Run
-			String returned = unitUnderTest.getDetailsDialogClassName(model, table);
-			// Check
-			assertEquals(expected, returned);
+		@Override
+		protected TableModel getTable() {
+			return table;
 		}
 
 	}
@@ -521,7 +305,7 @@ public class GUIVaadinNameGeneratorTest {
 	class DetailsDialogPackageNameTests extends AbstractPackageNameTest {
 
 		@Override
-		protected Function<DataModel, TableModel, String> calledMethod() {
+		protected Function<DataModel, String> calledMethod() {
 			return model -> unitUnderTest.getDetailsDialogPackageName(model);
 		}
 
