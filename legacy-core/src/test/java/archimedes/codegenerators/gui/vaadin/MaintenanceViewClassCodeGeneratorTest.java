@@ -154,7 +154,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
-					"		return new ATableDetailsLayout(buttonFactory, model, service, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new ATableDetailsLayout(buttonFactory, model, service, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -334,7 +334,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
-					"		return new ATableDetailsLayout(buttonFactory, model, service, anotherTableService, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new ATableDetailsLayout(buttonFactory, model, service, anotherTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -555,6 +555,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					(AnotherHeirTable) model,\n" + //
 					"					service,\n" + //
+					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this,\n" + //
@@ -567,6 +568,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					(AnotherHeirTableWithSameReference) model,\n" + //
 					"					service,\n" + //
 					"					referencedTableService,\n" + //
+					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this,\n" + //
@@ -578,6 +580,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					(AnotherTable) model,\n" + //
 					"					service,\n" + //
+					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this,\n" + //
@@ -590,13 +593,14 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					(HeirTableWithReference) model,\n" + //
 					"					service,\n" + //
 					"					referencedTableService,\n" + //
+					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this,\n" + //
 					"					comboBoxItemLabelGenerator,\n" + //
 					"					heirTableWithReferenceItemLabelGeneratorCollection);\n" + //
 					"		}\n" + //
-					"		return new ATableDetailsLayout(buttonFactory, model, service, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new ATableDetailsLayout(buttonFactory, model, service, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -778,7 +782,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(DifferentSubclassReferences model) {\n" + //
-					"		return new DifferentSubclassReferencesDetailsLayout(buttonFactory, model, service, aTableService, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new DifferentSubclassReferencesDetailsLayout(buttonFactory, model, service, aTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -972,13 +976,14 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					(BHeirTable) model,\n" + //
 					"					service,\n" + //
 					"					bReferencedTableService,\n" + //
+					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this,\n" + //
 					"					comboBoxItemLabelGenerator,\n" + //
 					"					bHeirTableItemLabelGeneratorCollection);\n" + //
 					"		}\n" + //
-					"		return new BTableDetailsLayout(buttonFactory, model, service, bReferencedTableService, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new BTableDetailsLayout(buttonFactory, model, service, bReferencedTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -1168,6 +1173,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					(CTableSub0) model,\n" + //
 					"					service,\n" + //
 					"					cAnotherTableService,\n" + //
+					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this,\n" + //
@@ -1180,13 +1186,14 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					(CTableSub1) model,\n" + //
 					"					service,\n" + //
 					"					cAnotherTableService,\n" + //
+					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this,\n" + //
 					"					comboBoxItemLabelGenerator,\n" + //
 					"					cTableSub1ItemLabelGeneratorCollection);\n" + //
 					"		}\n" + //
-					"		return new CTableDetailsLayout(buttonFactory, model, service, cAnotherTableService, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new CTableDetailsLayout(buttonFactory, model, service, cAnotherTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //

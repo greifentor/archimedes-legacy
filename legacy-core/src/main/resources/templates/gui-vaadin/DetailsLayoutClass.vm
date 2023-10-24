@@ -36,6 +36,7 @@ import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
 import ${ItemLabelGeneratorCollectionPackageName}.${ItemLabelGeneratorCollectionClassName};
+import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -76,6 +77,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 #foreach ($FieldDeclaration in $FieldDeclarations.toList())
 	private final ${FieldDeclaration.getTypeName()} ${FieldDeclaration.getAttributeName()};
 #end
+	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${SessionDataClassName} session;
 	private final Observer observer;

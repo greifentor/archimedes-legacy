@@ -169,6 +169,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 			return new String[] {
 					AbstractClassCodeFactory.NO_GENERATION,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
+					AbstractGUIVaadinClassCodeGenerator.DETAILS_LAYOUT_ONLY,
 					AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI,
 					NameGenerator.MODULE,
 					NameGenerator.PLURAL_NAME,

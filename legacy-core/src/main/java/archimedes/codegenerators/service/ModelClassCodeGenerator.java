@@ -61,28 +61,30 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 			ReferenceMode referenceMode) {
 		List<ColumnData> l =
 				Arrays
-				.asList(columns)
-				.stream()
-				.map(
-						column -> new ColumnData()
-								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(
-										getType(
-												column,
-												model,
-												referenceMode,
-												c -> nameGenerator.getModelClassName(c.getReferencedTable()),
-												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model)))
-								.setPkMember(column.isPrimaryKey())
-								.setSetterName(nameGenerator.getCamelCase(nameGenerator.getAttributeName(column))))
-				.collect(Collectors.toList());
+						.asList(columns)
+						.stream()
+						.filter(column -> !isAMember(table) || !isColumnReferencingAParent(column))
+						.map(
+								column -> new ColumnData()
+										.setFieldName(nameGenerator.getAttributeName(column))
+										.setFieldType(
+												getType(
+														column,
+														model,
+														referenceMode,
+														c -> nameGenerator.getModelClassName(c.getReferencedTable()),
+														(c, m) -> nameGenerator
+																.getModelClassName(c.getDomain(), model)))
+										.setPkMember(column.isPrimaryKey())
+										.setSetterName(
+												nameGenerator.getCamelCase(nameGenerator.getAttributeName(column))))
+						.collect(Collectors.toList());
 		getCompositionLists(table).forEach(cld -> {
 			l
 					.add(
 							new ColumnData()
 									.setFieldType("List<" + nameGenerator.getModelClassName(cld.getMemberTable()) + ">")
-									.setFieldName(
-											nameGenerator.getAttributeName(cld.getMemberTable().getName()) + "s")
+									.setFieldName(nameGenerator.getAttributeName(cld.getMemberTable().getName()) + "s")
 									.setSetterName(
 											nameGenerator
 													.getCamelCase(

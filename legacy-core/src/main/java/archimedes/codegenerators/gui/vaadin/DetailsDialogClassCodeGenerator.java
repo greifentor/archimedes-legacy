@@ -22,11 +22,11 @@ import archimedes.model.TableModel;
  *
  * @author ollie (11.04.2022)
  */
-public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
+public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
 
 	public static final String PREFERENCE = "PREFERENCE";
 
-	public DetailsLayoutClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	public DetailsDialogClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super("DetailsLayoutClass.vm", codeFactory);
 	}
 
@@ -62,11 +62,6 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 						"ItemLabelGeneratorCollectionPackageName",
 						nameGenerator.getItemLabelGeneratorCollectionPackageName(model));
 		context.put("ListGridDataCollection", listGridData);
-		context.put("MasterDataGUIConfigurationClassName", nameGenerator.getMasterDataGUIConfigurationClassName(model));
-		context
-				.put(
-						"MasterDataGUIConfigurationPackageName",
-						nameGenerator.getMasterDataGUIConfigurationPackageName(model));
 		context.put("ModelClassName", modelClassName);
 		context.put("ModelSuperClassName", modelSuperClassName);
 		context.put("PackageName", getPackageName(model, table));
@@ -330,7 +325,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) && !t.isOptionSet(DETAILS_LAYOUT_ONLY);
+		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI);
 	}
 
 }

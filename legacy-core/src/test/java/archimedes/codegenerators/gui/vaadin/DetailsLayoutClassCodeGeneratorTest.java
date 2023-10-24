@@ -49,6 +49,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -62,6 +63,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -165,6 +167,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -178,6 +181,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -276,6 +280,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -290,6 +295,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
 						"	private final AnotherTableService anotherTableService;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -394,6 +400,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.TableWithSpecialsItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -407,6 +414,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final TableWithSpecials model;\n" + //
 						"	private final TableWithSpecialsService service;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -528,6 +536,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.TableWithNumberFieldItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -541,6 +550,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final TableWithNumberField model;\n" + //
 						"	private final TableWithNumberFieldService service;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -655,6 +665,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -668,6 +679,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -768,6 +780,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.AnotherTableItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -781,6 +794,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final AnotherTable model;\n" + //
 						"	private final ATableService service;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -884,6 +898,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.DifferentSubclassReferencesItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -899,6 +914,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final DifferentSubclassReferences model;\n" + //
 						"	private final DifferentSubclassReferencesService service;\n" + //
 						"	private final ATableService aTableService;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -1008,6 +1024,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.BHeirTableItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -1022,6 +1039,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final BHeirTable model;\n" + //
 						"	private final BTableService service;\n" + //
 						"	private final BReferencedTableService bReferencedTableService;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -1137,6 +1155,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -1154,6 +1173,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
 						"	private final AnotherTableService anotherTableService;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -1267,6 +1287,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.BTableItemLabelGeneratorCollection;\n"
 						+ //
+						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -1283,6 +1304,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final BTable model;\n" + //
 						"	private final BTableService service;\n" + //
+						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
@@ -1394,6 +1416,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
 							+ "import base.pack.age.name.gui.vaadin.masterdata.renderer.BlobTableItemLabelGeneratorCollection;\n" //
+							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
 							+ "\n" //
@@ -1407,6 +1430,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "	private final ButtonFactory buttonFactory;\n" //
 							+ "	private final BlobTable model;\n" //
 							+ "	private final BlobTableService service;\n" //
+							+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
 							+ "	private final ResourceManager resourceManager;\n" //
 							+ "	private final SessionData session;\n" //
 							+ "	private final Observer observer;\n" //
@@ -1511,7 +1535,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.SessionData;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
-					"import de.ollie.bookstore.gui.vaadin.masterdata.renderer.BookItemLabelGeneratorCollection;\n" + //
+					"import base.pack.age.name.gui.vaadin.masterdata.renderer.BookItemLabelGeneratorCollection;\n" + //
+					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -1525,6 +1550,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 					"	private final ButtonFactory buttonFactory;\n" + //
 					"	private final ATable model;\n" + //
 					"	private final ATableService service;\n" + //
+					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final SessionData session;\n" + //
 					"	private final Observer observer;\n" + //
@@ -1608,6 +1634,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import de.ollie.bookstore.gui.vaadin.component.ButtonFactory;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.layout.list.ChapterListDetailsLayout;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.renderer.BookItemLabelGeneratorCollection;\n" //
+							+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
 							+ "\n" //
@@ -1621,6 +1648,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "	private final ButtonFactory buttonFactory;\n" //
 							+ "	private final Book model;\n" //
 							+ "	private final BookService service;\n" //
+							+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
 							+ "	private final ResourceManager resourceManager;\n" //
 							+ "	private final SessionData session;\n" //
 							+ "	private final Observer observer;\n" //

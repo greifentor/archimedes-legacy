@@ -515,4 +515,76 @@ class ModelClassCodeGeneratorTest {
 
 	}
 
+	@Nested
+	class List_Composition_Member {
+
+		@Test
+		void happyRunForASimpleObject() {
+			// Prepare
+			String expected = getExpected(false, false);
+			DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("CHAPTER"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String getExpected(boolean isSuperclass, boolean isExtends) {
+			String s =
+					"package de.ollie.bookstore.core.model;\n" //
+							+ "\n" //
+							+ "import lombok.Data;\n" //
+							+ "import lombok.EqualsAndHashCode;\n" //
+							+ "import lombok.Generated;\n" //
+							+ "import lombok.ToString;\n" //
+							+ "import lombok.experimental.Accessors;\n" //
+							+ "\n" //
+							+ "/**\n" //
+							+ " * A model for chapters.\n" //
+							+ " *\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n" //
+							+ "@Accessors(chain = true)\n" //
+							+ "@Data\n" //
+							+ "@EqualsAndHashCode(callSuper = true)\n" //
+							+ "@Generated\n" //
+							+ "@ToString(callSuper = true)\n" //
+							+ "public class Chapter extends GeneratedChapter {\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public Chapter setId(long id) {\n" //
+							+ "		super.setId(id);\n" //
+							+ "		return this;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public Chapter setContent(String content) {\n" //
+							+ "		super.setContent(content);\n" //
+							+ "		return this;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public Chapter setSortOrder(int sortOrder) {\n" //
+							+ "		super.setSortOrder(sortOrder);\n" //
+							+ "		return this;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public Chapter setSummary(String summary) {\n" //
+							+ "		super.setSummary(summary);\n" //
+							+ "		return this;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public Chapter setTitle(String title) {\n" //
+							+ "		super.setTitle(title);\n" //
+							+ "		return this;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "}";
+			return s;
+		}
+
+	}
+
 }

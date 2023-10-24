@@ -148,6 +148,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	#foreach($SubclassReference in ${Subclass.getReferences()}) 
 					${SubclassReference.getServiceAttributeName()},
 	#end
+					guiConfiguration,
 					resourceManager,
 					session,
 					this,
@@ -155,7 +156,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 					${Subclass.getItemLabelGeneratorCollectionAttributeName()});
 		}
 #end
-		return new ${DetailsLayoutClassName}(buttonFactory, model, service,#if($GUIReferenceDataCollection.getServiceAttributeNameList()) $GUIReferenceDataCollection.getServiceAttributeNameList(),#{end} resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);
+		return new ${DetailsLayoutClassName}(buttonFactory, model, service,#if($GUIReferenceDataCollection.getServiceAttributeNameList()) $GUIReferenceDataCollection.getServiceAttributeNameList(),#{end} guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);
 	}
 
 	@Override
