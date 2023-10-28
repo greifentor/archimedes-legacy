@@ -1,0 +1,240 @@
+package ${PackageName};
+
+import com.vaadin.flow.component.AttachEvent;
+#if (${GUIColumnDataCollection.hasFieldType("BOOLEAN")} == true)
+import com.vaadin.flow.component.checkbox.Checkbox;
+#end
+#if (${HasSelectionElement} == true)
+import com.vaadin.flow.component.combobox.ComboBox;
+#end
+#if (${GUIColumnDataCollection.hasFieldType("TIMESTAMP")} == true)
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
+#end
+#if (${GUIColumnDataCollection.hasFieldType("INTEGER")} == true)
+import com.vaadin.flow.component.textfield.IntegerField;
+#end
+#if (${GUIColumnDataCollection.hasFieldType("NUMERIC")} == true)
+import com.vaadin.flow.component.textfield.NumberField;
+#end
+#if (${GUIColumnDataCollection.hasFieldType("TEXT")} == true)
+import com.vaadin.flow.component.textfield.TextArea;
+#end
+#if (${GUIColumnDataCollection.hasFieldType("STRING")} == true)
+import com.vaadin.flow.component.textfield.TextField;
+#end
+#if (${GUIColumnDataCollection.hasFieldType("UPLOAD")} == true)
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
+#end
+
+import ${ButtonPackageName}.${ButtonClassName};
+#foreach ($ImportDeclaration in $ImportDeclarations.toList())
+import ${ImportDeclaration.getSingleImportDeclaration()};
+#end
+import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
+
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
+
+#if (!${CommentsOff})
+/**
+ * ${Generated}
+ */
+#end
+@Generated
+@RequiredArgsConstructor
+public class ${ClassName} extends Dialog {
+
+	public interface Observer {
+
+		void changed(${ModelClassName} model, boolean newItem);
+
+	}
+
+	private final ${ComponentFactoryClassName} componentFactory;
+	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
+	private final Observer observer;
+
+	private ${ButtonClassName} buttonCancel;
+	private ${ButtonClassName} buttonSave;
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+	#if (${Column.getType()} == "BOOLEAN")
+	private Checkbox checkbox${Column.getFieldNameCamelCase()};
+	#elseif (${Column.getType()} == "COMBOBOX")
+	#elseif (${Column.getType()} == "ENUM")
+	private ComboBox<${Column.getFieldTypeName()}> comboBox${Column.getFieldNameCamelCase()};
+	#elseif (${Column.getType()} == "INTEGER")
+	private IntegerField integerField${Column.getFieldNameCamelCase()};
+	#elseif (${Column.getType()} == "NUMERIC")
+	private NumberField numberField${Column.getFieldNameCamelCase()};
+	#elseif (${Column.getType()} == "TEXT")
+	private TextArea textArea${Column.getFieldNameCamelCase()};
+	#elseif (${Column.getType()} == "TIMESTAMP")
+	private DateTimePicker dateTimePicker${Column.getFieldNameCamelCase()};
+	#elseif (${Column.getType()} == "UPLOAD")
+	private Upload upload${Column.getFieldNameCamelCase()};
+	#else
+	private TextField textField${Column.getFieldNameCamelCase()};
+	#end
+#end
+	private VerticalLayout mainLayout;
+
+	private ${ModelClassName} model = new ${ModelClassName}();
+	private boolean newItem;
+
+	public ${ClassName}(${ComponentFactoryClassName} componentFactory, ${MasterDataGUIConfigurationClassName} guiConfiguration,
+			Observer observer, ${ModelClassName} model, boolean newItem) {
+		this.componentFactory = componentFactory;
+		this.guiConfiguration = guiConfiguration;
+		this.newItem = newItem;
+		this.observer = observer;
+		if (model != null) {
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+	#set($FieldName = "${Column.getFieldNameCamelCase()}")
+	#set($ResourceId = "${Column.getFieldOwnerClassName()}DetailsLayout.field.${Column.getResourceName()}.label")
+	#if (${Column.getType()} == "BOOLEAN")
+		#if(${Column.isSimpleBoolean()} == "true")
+			#set($GetterPrefix = "is")
+		#else
+			#set($GetterPrefix = "get")
+		#end
+			this.model.set${FieldName}(model.${GetterPrefix}${FieldName}())
+	#else
+			this.model.set${FieldName}(model.get${FieldName}())
+	#end
+#end
+		}
+		mainLayout = new VerticalLayout();
+		addComponents();
+		buttonCancel = componentFactory.createCancelButton(event -> close());
+		buttonCancel.setWidthFull();
+		buttonSave = componentFactory.createSaveButton(event -> save());
+		buttonSave.setWidthFull();
+		mainLayout.add(buttonCancel, buttonSave);
+		setWidth("90%");
+		add(mainLayout);
+		updateSaveButton();
+	}
+
+	private void addComponents() {
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+	#set($FieldName = "${Column.getFieldNameCamelCase()}")
+	#set($ResourceId = "${Column.getFieldOwnerClassName()}DetailsLayout.field.${Column.getResourceName()}.label")
+	#if (${Column.getType()} == "BOOLEAN")
+		#if(${Column.isSimpleBoolean()} == "true")
+			#set($GetterPrefix = "is")
+		#else
+			#set($GetterPrefix = "get")
+		#end
+		checkbox${FieldName} = componentFactory.createCheckbox("$ResourceId", model.${GetterPrefix}${FieldName}());
+	#elseif (${Column.getType()} == "COMBOBOX")
+	#elseif (${Column.getType()} == "ENUM")
+		comboBox${FieldName} = componentFactory.createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values(), itemLabelGeneratorCollection.get${Column.FieldTypeName}ItemLabelGenerator());
+		#if (${Column.isNullable()} == true)
+		comboBox${FieldName}.setClearButtonVisible(true);
+		#end
+	#elseif (${Column.getType()} == "INTEGER")
+		integerField${FieldName} = componentFactory.createIntegerField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()});
+	#elseif (${Column.getType()} == "NUMERIC")
+		numberField${FieldName} = componentFactory.createNumberField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()});
+	#elseif (${Column.getType()} == "TEXT")
+		textArea${FieldName} = componentFactory.createTextArea("$ResourceId", model.get${FieldName}());
+	#elseif (${Column.getType()} == "TIMESTAMP")
+		dateTimePicker${FieldName} = new DateTimePicker(resourceManager.getLocalizedString("$ResourceId", session.getLocalization()), model.get${FieldName}(), event -> {});
+	#elseif (${Column.getType()} == "UPLOAD")
+		MultiFileMemoryBuffer buffer${FieldName} = new MultiFileMemoryBuffer();
+		upload${FieldName} = new Upload(buffer${FieldName});
+		upload${FieldName}.setMaxFiles(1);
+		upload${FieldName}.setMaxFileSize(Integer.MAX_VALUE);
+		upload${FieldName}.addSucceededListener(event -> {
+			System.out.println("upload (${FieldName}) started.");
+			String fileName = event.getFileName();
+			InputStream inputStream = buffer${FieldName}.getInputStream(fileName);
+			System.out.println("upload complete!");
+			try {
+				model.set${FieldName}(inputStream.readAllBytes());
+			} catch (IOException ioe) {
+				System.out.println("while uploading file: " + fileName);
+				ioe.printStackTrace();
+			} finally {
+				try {
+					inputStream.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		upload${FieldName}.setWidthFull();
+	#else
+		textField${FieldName} = componentFactory.createTextField("$ResourceId", model.get${FieldName}());
+	#end
+#end
+		mainLayout.add(
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+	#set($FieldName = "${Column.getFieldNameCamelCase()}")
+	#if (${Column.getType()} == "BOOLEAN")
+				checkbox${FieldName}#if ($foreach.hasNext),#end
+	#elseif (${Column.getType()} == "COMBOBOX")
+	#elseif (${Column.getType()} == "ENUM")
+				comboBox${FieldName}#if ($foreach.hasNext),#end
+	#elseif (${Column.getType()} == "INTEGER")
+				integerField${FieldName}#if ($foreach.hasNext),#end
+	#elseif (${Column.getType()} == "NUMERIC")
+				numberField${FieldName}#if ($foreach.hasNext),#end
+	#elseif (${Column.getType()} == "TEXT")
+				textArea${FieldName}#if ($foreach.hasNext),#end
+	#elseif (${Column.getType()} == "TIMESTAMP")
+				dateTimePicker${FieldName}#if ($foreach.hasNext),#end
+	#elseif (${Column.getType()} == "UPLOAD")
+				upload${FieldName}#if ($foreach.hasNext),#end
+	#else
+				textField${FieldName}#if ($foreach.hasNext),#end
+	#end
+#end
+		);
+	}
+
+	private void updateSaveButton() {
+		setButtonEnabled(buttonSave,
+#foreach ($Column in ${GUIColumnDataCollection.getNotNullableColumns()})
+	#set($FieldName = "${Column.getFieldNameCamelCase()}")
+	#if (${Column.getType()} == "BOOLEAN")
+				(checkbox${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
+	#elseif (${Column.getType()} == "COMBOBOX")
+	#elseif (${Column.getType()} == "ENUM")
+				(comboBox${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
+	#elseif (${Column.getType()} == "INTEGER")
+				(integerField${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
+	#elseif (${Column.getType()} == "NUMERIC")
+				(numberField${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
+	#elseif (${Column.getType()} == "TEXT")
+				(textArea${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
+	#elseif (${Column.getType()} == "TIMESTAMP")
+				(dateTimePicker${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
+	#elseif (${Column.getType()} == "UPLOAD")
+				(upload${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
+	#else
+				(textField${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
+	#end
+#end
+		);
+	}
+
+	private void setButtonEnabled(Button button, boolean enabled) {
+		button.setEnabled(enabled);
+		if (enabled) {
+			button.setBackgroundImage(guiConfiguration.getButtonEnabledBackgroundFileName());
+			button.setBorderColor(guiConfiguration.getButtonEnabledBorderColor());
+		} else {
+			button.setBackgroundImage(guiConfiguration.getButtonDisabledBackgroundFileName());
+			button.setBorderColor(guiConfiguration.getButtonDisabledBorderColor());
+		}
+	}
+
+	private void save() {
+		if (observer != null) {
+			observer.changed(model, newItem);
+		}
+		close();
+	}
+}

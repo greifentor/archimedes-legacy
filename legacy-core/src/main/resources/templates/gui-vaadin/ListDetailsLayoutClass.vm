@@ -1,0 +1,81 @@
+package ${PackageName};
+
+import java.util.stream.Collectors;
+
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import ${DetailsDialogPackageName}.${DetailsDialogClassName};
+
+#foreach ($ImportDeclaration in $ImportDeclarations.toList())
+import ${ImportDeclaration.getSingleImportDeclaration()};
+#end
+
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
+
+#if (!${CommentsOff})
+/**
+ * ${Generated}
+ */
+#end
+@Generated
+@RequiredArgsConstructor
+public class ${ClassName} extends VerticalLayout {
+
+	private final ${ButtonFactoryClassName} buttonFactory;
+	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
+	private final ${ParentModelClassName} model;
+	private final ${ResourceManagerInterfaceName} resourceManager;
+	private final ${SessionDataClassName} session;
+
+	private Grid<Chapter> grid;
+
+	@Override
+	public void onAttach(AttachEvent attachEvent) {
+		Button buttonAdd = buttonFactory.createAddButton(resourceManager, event -> {
+			new ${DetailsDialogClassName}(resourceManager, buttonFactory, guiConfiguration, session,
+					(mmbr, newItem) -> {
+						model.get${ModelClassName}s().add(mmbr);
+						grid.setItems(model.get${ModelClassName}s());
+					}, null, true).open();
+		}, session);
+		Button buttonDuplicate = buttonFactory.createDuplicateButton(resourceManager, event -> {
+			new ${DetailsDialogClassName}(resourceManager, buttonFactory, guiConfiguration, session,
+					(mmbr, newItem) -> {
+						model.get${ModelClassName}s().add(mmbr);
+						grid.setItems(model.get${ModelClassName}s());
+					}, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], true).open();
+		}, session);
+		Button buttonEdit = buttonFactory.createEditButton(resourceManager, event -> {
+			new ${DetailsDialogClassName}(resourceManager, buttonFactory, guiConfiguration, session,
+					(toEdit, newItem) -> {
+						${ModelClassName} mmbr = grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0];
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+	#set($FieldName = "${Column.getFieldNameCamelCase()}")
+	#if(${Column.isSimpleBoolean()} == "true")
+		#set($GetterPrefix = "is")
+	#else
+		#set($GetterPrefix = "get")
+	#end
+						mmbr.set${FieldName}(toEdit.${GetterPrefix}${FieldName}());
+#end
+						grid.setItems(model.get${ModelClassName}s());
+					}, grid.getSelectedItems().toArray(new Chapter[0])[0], false).open();
+		}, session);
+		Button buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> {
+			${ModelClassName} mmbr = grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0];
+			model.get${ModelClassName}s().remove(mmbr);
+			grid.setItems(model.get${ModelClassName}s());
+		}, session);
+		HorizontalLayout buttons = new HorizontalLayout(buttonAdd, buttonEdit, buttonDuplicate, buttonRemove);
+		grid = new Grid<>();
+		grid.setItems(model.get${ModelClassName}s().stream().sorted().collect(Collectors.toList()));
+		grid.setWidthFull();
+		add(buttons, grid);
+	}
+
+}

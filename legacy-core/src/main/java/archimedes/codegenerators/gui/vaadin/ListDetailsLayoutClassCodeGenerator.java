@@ -22,12 +22,12 @@ import archimedes.model.TableModel;
  *
  * @author ollie (11.04.2022)
  */
-public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
+public class ListDetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
 
 	public static final String PREFERENCE = "PREFERENCE";
 
-	public DetailsDialogClassCodeGenerator(AbstractCodeFactory codeFactory) {
-		super("DetailsDialogClass.vm", codeFactory);
+	public ListDetailsLayoutClassCodeGenerator(AbstractCodeFactory codeFactory) {
+		super("ListDetailsLayoutClass.vm", codeFactory);
 	}
 
 	@Override
@@ -47,10 +47,13 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		List<ListGridData> listGridData = getListGridData(model, table);
 		context.put("AbstractMasterDataBaseLayoutClassName", abstractMasterDataBaseLayoutClassName);
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));
+		context.put("ButtonFactoryClassName", nameGenerator.getButtonFactoryClassName(model));
 		context.put("ButtonPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("ComponentFactoryClassName", componentFactoryClassName);
+		context.put("DetailsDialogClassName", nameGenerator.getDetailsDialogClassName(model, table));
+		context.put("DetailsDialogPackageName", nameGenerator.getDetailsDialogPackageName(model));
 		context.put("GUIColumnDataCollection", guiColumnDataCollection);
 		context.put("GUIReferences", guiReferenceData);
 		context.put("HasSelectionElement", hasSelectionElements(guiReferenceData, guiColumnDataCollection));
@@ -69,9 +72,11 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 				.put(
 						"MasterDataGUIConfigurationPackageName",
 						nameGenerator.getMasterDataGUIConfigurationPackageName(model));
+		context.put("ModelAttributeName", nameGenerator.getAttributeName(modelClassName));
 		context.put("ModelClassName", modelClassName);
 		context.put("ModelSuperClassName", modelSuperClassName);
 		context.put("PackageName", getPackageName(model, table));
+		context.put("ParentModelClassName", nameGenerator.getClassName(getParent(table)));
 		context.put("PreferenceData", getPreferenceData(table));
 		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
 		context.put("SessionDataClassName", sessionDataClassName);
@@ -93,6 +98,16 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 										getClassName(table) + ".field." + cd.getFieldNameCamelCase().toLowerCase()
 												+ ".label",
 										nameGenerator.getClassName(cd.getFieldNameCamelCase())));
+	}
+
+	private TableModel getParent(TableModel table) {
+		return List
+				.of(table.getColumns())
+				.stream()
+				.filter(c -> isAParent(c.getReferencedTable()))
+				.map(c -> c.getTable())
+				.findFirst()
+				.orElse(null);
 	}
 
 	private List<ListGridData> getListGridData(DataModel model, TableModel table) {
@@ -307,7 +322,7 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	@Override
 	public String getClassName(DataModel model, TableModel table) {
-		return nameGenerator.getDetailsDialogClassName(model, table);
+		return nameGenerator.getListDetailsLayoutClassName(model, table);
 	}
 
 	@Override
@@ -317,7 +332,7 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getDetailsDialogPackageName(model);
+		return nameGenerator.getListDetailsLayoutPackageName(model);
 	}
 
 	@Override
@@ -327,7 +342,7 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI);
+		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) || !t.isOptionSetWithValue(MEMBER_LIST, "MEMBER");
 	}
 
 }

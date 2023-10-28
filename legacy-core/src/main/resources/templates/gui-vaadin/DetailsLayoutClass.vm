@@ -40,7 +40,7 @@ import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClas
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
-#if (${Generated})
+#if (!${CommentsOff})
 /**
  * ${Generated}
  */

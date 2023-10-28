@@ -68,6 +68,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new ButtonGridClassCodeGenerator(this),
 						// new GOClassCodeGenerator(this),
 						// new GOConverterClassCodeGenerator(this),
+						new DetailsDialogClassCodeGenerator(this),
 						new DetailsLayoutClassCodeGenerator(this),
 						new DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator(this),
 						new GUIApplicationStarterClassCodeGenerator(this),

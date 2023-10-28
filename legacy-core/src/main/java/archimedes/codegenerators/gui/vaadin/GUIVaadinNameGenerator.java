@@ -23,6 +23,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX =
 			"ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX = "ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_COMPONENT_FACTORY_CLASS_NAME_SUFFIX =
+			"ALTERNATE_COMPONENT_FACTORY_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MASTER_DATA_VIEW_BUTTON_ADDER_CLASS_NAME_SUFFIX =
 			"ALTERNATE_MASTER_DATA_VIEW_BUTTON_ADDER_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_DETAILS_LAYOUT_CLASS_NAME_SUFFIX =
@@ -157,6 +159,15 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return model == null
 				? null
 				: getNameOrAlternativeFromOption(model, "ButtonGrid", ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX);
+	}
+
+	public String getComponentFactoryClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"ComponentFactory",
+						ALTERNATE_COMPONENT_FACTORY_CLASS_NAME_SUFFIX);
 	}
 
 	public String getDetailsLayoutClassName(DataModel model, TableModel table) {

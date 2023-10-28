@@ -149,6 +149,39 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class ComponentFactoryClassNameTests {
+
+		@Test
+		void getComponentFactoryClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getComponentFactoryClassName(null));
+		}
+
+		@Test
+		void getComponentFactoryClassName_passAValidTable_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "ComponentFactory";
+			// Run
+			String returned = unitUnderTest.getComponentFactoryClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getComponentFactoryClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherComponentFactory";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_COMPONENT_FACTORY_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(GUIVaadinNameGenerator.ALTERNATE_COMPONENT_FACTORY_CLASS_NAME_SUFFIX, expected));
+			// Run
+			String returned = unitUnderTest.getComponentFactoryClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
 	class ButtonFactoryConfigurationClassNameTests {
 
 		@Test

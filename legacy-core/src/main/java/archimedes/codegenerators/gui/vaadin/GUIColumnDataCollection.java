@@ -30,4 +30,8 @@ public class GUIColumnDataCollection {
 		return columns.stream().sorted((c0, c1) -> c0.getPosition() - c1.getPosition()).collect(Collectors.toList());
 	}
 
+	public List<GUIColumnData> getNotNullableColumns() {
+		return getColumns().stream().filter(c -> !c.isNullable()).collect(Collectors.toList());
+	}
+
 }
