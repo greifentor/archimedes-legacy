@@ -19,6 +19,7 @@ import ${SessionDataPackageName}.${SessionDataClassName};
 import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};
 import ${AbstractMasterDataBaseLayoutPackageName}.${AbstractMasterDataBaseLayoutClassName};
 import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
+import ${ComponentFactoryPackageName}.${ComponentFactoryClassName};
 import ${HeaderLayoutPackageName}.${HeaderLayoutClassName};
 import ${HeaderLayoutPackageName}.${HeaderLayoutClassName}.HeaderLayoutMode;
 import ${ItemLabelGeneratorCollectionPackageName}.${ItemLabelGeneratorCollectionClassName};
@@ -53,6 +54,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	private DetailsLayoutComboBoxItemLabelGenerator<${ModelClassName}> comboBoxItemLabelGenerator;
 
 	private final ${ButtonFactoryClassName} buttonFactory;
+	private final ${ComponentFactoryClassName} componentFactory;
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final ${ServiceInterfaceName} service;
@@ -143,6 +145,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 		if (model instanceof ${Subclass.getModelClassName()}) {
 			return new ${Subclass.getDetailsLayoutClassName()}(
 					buttonFactory,
+					componentFactory,
 					(${Subclass.getModelClassName()}) model,
 					service,
 	#foreach($SubclassReference in ${Subclass.getReferences()}) 
@@ -156,7 +159,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 					${Subclass.getItemLabelGeneratorCollectionAttributeName()});
 		}
 #end
-		return new ${DetailsLayoutClassName}(buttonFactory, model, service,#if($GUIReferenceDataCollection.getServiceAttributeNameList()) $GUIReferenceDataCollection.getServiceAttributeNameList(),#{end} guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);
+		return new ${DetailsLayoutClassName}(buttonFactory, componentFactory, model, service,#if($GUIReferenceDataCollection.getServiceAttributeNameList()) $GUIReferenceDataCollection.getServiceAttributeNameList(),#{end} guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);
 	}
 
 	@Override

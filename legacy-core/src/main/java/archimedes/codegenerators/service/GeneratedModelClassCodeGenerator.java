@@ -78,13 +78,15 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 								.setPkMember(column.isPrimaryKey()))
 				.collect(Collectors.toList());
 		getCompositionLists(table).forEach(cld -> {
+			importDeclarations.add("java.util", "ArrayList");
 			importDeclarations.add("java.util", "List");
 			l
 					.add(
 							new ColumnData()
 									.setFieldType("List<" + nameGenerator.getModelClassName(cld.getMemberTable()) + ">")
 									.setFieldName(
-											nameGenerator.getAttributeName(cld.getMemberTable().getName()) + "s"));
+											nameGenerator.getAttributeName(cld.getMemberTable().getName()) + "s")
+									.setInitWith("new ArrayList<>()"));
 		});
 		return l;
 	}

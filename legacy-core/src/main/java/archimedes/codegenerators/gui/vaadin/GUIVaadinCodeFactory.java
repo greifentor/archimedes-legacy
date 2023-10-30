@@ -15,6 +15,7 @@ import archimedes.codegenerators.gui.vaadin.component.ButtonClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonFactoryConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonGridClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.ComponentFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.HeaderLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClassCodeGenerator;
@@ -66,6 +67,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new ButtonFactoryClassCodeGenerator(this),
 						new ButtonFactoryConfigurationClassCodeGenerator(this),
 						new ButtonGridClassCodeGenerator(this),
+						new ComponentFactoryClassCodeGenerator(this),
 						// new GOClassCodeGenerator(this),
 						// new GOConverterClassCodeGenerator(this),
 						new DetailsDialogClassCodeGenerator(this),
@@ -80,6 +82,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new JWTServiceConfigurationClassCodeGenerator(this),
 						new JWTServiceImplClassCodeGenerator(this),
 						new JWTServiceInterfaceCodeGenerator(this),
+						new ListDetailsLayoutClassCodeGenerator(this),
 						new MainMenuViewClassCodeGenerator(this),
 						new MaintenanceViewClassCodeGenerator(this),
 						new MaintenanceViewRendererInterfaceCodeGenerator(this),

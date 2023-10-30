@@ -33,11 +33,13 @@ public class DetailsDialogClassCodeGeneratorTest {
 						"package de.ollie.bookstore.gui.vaadin.masterdata.dialog;\n" //
 								+ "\n" //
 								+ "import com.vaadin.flow.component.AttachEvent;\n" //
+								+ "import com.vaadin.flow.component.dialog.Dialog;\n" //
+								+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
 								+ "import com.vaadin.flow.component.textfield.TextField;\n" //
 								+ "\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.component.Button;\n" //
 								+ "import de.ollie.bookstore.core.model.Book;\n" //
-								+ "import de.ollie.bookstore.core.service.BookService;\n" //
+								+ "import de.ollie.bookstore.gui.SessionData;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.masterdata.layout.list.ChapterListDetailsLayout;\n" //
@@ -62,6 +64,7 @@ public class DetailsDialogClassCodeGeneratorTest {
 								+ "	private final ComponentFactory componentFactory;\n" //
 								+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
 								+ "	private final Observer observer;\n" //
+								+ "	private final SessionData session;\n" //
 								+ "\n" //
 								+ "	private Button buttonCancel;\n" //
 								+ "	private Button buttonSave;\n" //
@@ -73,20 +76,21 @@ public class DetailsDialogClassCodeGeneratorTest {
 								+ "	private boolean newItem;\n" //
 								+ "\n" //
 								+ "	public BookDetailsDialog(ComponentFactory componentFactory, MasterDataGUIConfiguration guiConfiguration,\n" //
-								+ "			Observer observer, Book model, boolean newItem) {\n" //
+								+ "			Observer observer, Book model, boolean newItem, SessionData session) {\n" //
 								+ "		this.componentFactory = componentFactory;\n" //
 								+ "		this.guiConfiguration = guiConfiguration;\n" //
 								+ "		this.newItem = newItem;\n" //
 								+ "		this.observer = observer;\n" //
+								+ "		this.session = session;\n" //
 								+ "		if (model != null) {\n" //
-								+ "			this.model.setTitle(model.getTitle())\n" //
-								+ "			this.model.setIsbn(model.getIsbn())\n" //
+								+ "			this.model.setTitle(model.getTitle());\n" //
+								+ "			this.model.setIsbn(model.getIsbn());\n" //
 								+ "		}\n" //
 								+ "		mainLayout = new VerticalLayout();\n" //
 								+ "		addComponents();\n" //
-								+ "		buttonCancel = componentFactory.createCancelButton(event -> close());\n" //
+								+ "		buttonCancel = componentFactory.createCancelButton(event -> close(), session);\n" //
 								+ "		buttonCancel.setWidthFull();\n" //
-								+ "		buttonSave = componentFactory.createSaveButton(event -> save());\n" //
+								+ "		buttonSave = componentFactory.createSaveButton(event -> save(), session);\n" //
 								+ "		buttonSave.setWidthFull();\n" //
 								+ "		mainLayout.add(buttonCancel, buttonSave);\n" //
 								+ "		setWidth(\"90%\");\n" //
@@ -95,8 +99,10 @@ public class DetailsDialogClassCodeGeneratorTest {
 								+ "	}\n" //
 								+ "\n" //
 								+ "	private void addComponents() {\n" //
-								+ "		textFieldTitle = componentFactory.createTextField(\"BookDetailsLayout.field.title.label\", model.getTitle());\n" //
-								+ "		textFieldIsbn = componentFactory.createTextField(\"BookDetailsLayout.field.isbn.label\", model.getIsbn());\n" //
+								+ "		textFieldTitle = componentFactory.createTextField(\"BookDetailsLayout.field.title.label\", model.getTitle(), session);\n" //
+								+ "		textFieldTitle.addValueChangeListener(event -> model.setTitle(event.getValue()));\n"
+								+ "		textFieldIsbn = componentFactory.createTextField(\"BookDetailsLayout.field.isbn.label\", model.getIsbn(), session);\n" //
+								+ "		textFieldIsbn.addValueChangeListener(event -> model.setIsbn(event.getValue()));\n"
 								+ "		mainLayout.add(\n" //
 								+ "				textFieldTitle,\n" //
 								+ "				textFieldIsbn\n" //

@@ -49,6 +49,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n" + //
@@ -82,6 +83,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
+					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 					"	private final ATableService service;\n" + //
@@ -154,7 +156,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
-					"		return new ATableDetailsLayout(buttonFactory, model, service, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new ATableDetailsLayout(buttonFactory, componentFactory, model, service, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -228,6 +230,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n" + //
@@ -261,6 +264,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
+					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 					"	private final ATableService service;\n" + //
@@ -334,7 +338,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
-					"		return new ATableDetailsLayout(buttonFactory, model, service, anotherTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new ATableDetailsLayout(buttonFactory, componentFactory, model, service, anotherTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -412,6 +416,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n" + //
@@ -453,6 +458,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
+					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 					"	private final ATableService service;\n" + //
@@ -553,6 +559,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		if (model instanceof AnotherHeirTable) {\n" + //
 					"			return new AnotherHeirTableDetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
+					"					componentFactory,\n" + //
 					"					(AnotherHeirTable) model,\n" + //
 					"					service,\n" + //
 					"					guiConfiguration,\n" + //
@@ -565,6 +572,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		if (model instanceof AnotherHeirTableWithSameReference) {\n" + //
 					"			return new AnotherHeirTableWithSameReferenceDetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
+					"					componentFactory,\n" + //
 					"					(AnotherHeirTableWithSameReference) model,\n" + //
 					"					service,\n" + //
 					"					referencedTableService,\n" + //
@@ -578,6 +586,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		if (model instanceof AnotherTable) {\n" + //
 					"			return new AnotherTableDetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
+					"					componentFactory,\n" + //
 					"					(AnotherTable) model,\n" + //
 					"					service,\n" + //
 					"					guiConfiguration,\n" + //
@@ -590,6 +599,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		if (model instanceof HeirTableWithReference) {\n" + //
 					"			return new HeirTableWithReferenceDetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
+					"					componentFactory,\n" + //
 					"					(HeirTableWithReference) model,\n" + //
 					"					service,\n" + //
 					"					referencedTableService,\n" + //
@@ -600,7 +610,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					comboBoxItemLabelGenerator,\n" + //
 					"					heirTableWithReferenceItemLabelGeneratorCollection);\n" + //
 					"		}\n" + //
-					"		return new ATableDetailsLayout(buttonFactory, model, service, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new ATableDetailsLayout(buttonFactory, componentFactory, model, service, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -671,6 +681,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.renderer.DifferentSubclassReferencesItemLabelGeneratorCollection;\n"
@@ -708,6 +719,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					+ //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
+					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 					"	private final DifferentSubclassReferencesService service;\n" + //
@@ -782,7 +794,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(DifferentSubclassReferences model) {\n" + //
-					"		return new DifferentSubclassReferencesDetailsLayout(buttonFactory, model, service, aTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new DifferentSubclassReferencesDetailsLayout(buttonFactory, componentFactory, model, service, aTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -853,6 +865,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.renderer.BTableItemLabelGeneratorCollection;\n" + //
@@ -888,6 +901,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private DetailsLayoutComboBoxItemLabelGenerator<BTable> comboBoxItemLabelGenerator;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
+					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 					"	private final BTableService service;\n" + //
@@ -973,6 +987,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		if (model instanceof BHeirTable) {\n" + //
 					"			return new BHeirTableDetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
+					"					componentFactory,\n" + //
 					"					(BHeirTable) model,\n" + //
 					"					service,\n" + //
 					"					bReferencedTableService,\n" + //
@@ -983,7 +998,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					comboBoxItemLabelGenerator,\n" + //
 					"					bHeirTableItemLabelGeneratorCollection);\n" + //
 					"		}\n" + //
-					"		return new BTableDetailsLayout(buttonFactory, model, service, bReferencedTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new BTableDetailsLayout(buttonFactory, componentFactory, model, service, bReferencedTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -1050,6 +1065,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.renderer.CTableItemLabelGeneratorCollection;\n" + //
@@ -1085,6 +1101,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private DetailsLayoutComboBoxItemLabelGenerator<CTable> comboBoxItemLabelGenerator;\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
+					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 					"	private final CTableService service;\n" + //
@@ -1170,6 +1187,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		if (model instanceof CTableSub0) {\n" + //
 					"			return new CTableSub0DetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
+					"					componentFactory,\n" + //
 					"					(CTableSub0) model,\n" + //
 					"					service,\n" + //
 					"					cAnotherTableService,\n" + //
@@ -1183,6 +1201,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		if (model instanceof CTableSub1) {\n" + //
 					"			return new CTableSub1DetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
+					"					componentFactory,\n" + //
 					"					(CTableSub1) model,\n" + //
 					"					service,\n" + //
 					"					cAnotherTableService,\n" + //
@@ -1193,7 +1212,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					comboBoxItemLabelGenerator,\n" + //
 					"					cTableSub1ItemLabelGeneratorCollection);\n" + //
 					"		}\n" + //
-					"		return new CTableDetailsLayout(buttonFactory, model, service, cAnotherTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
+					"		return new CTableDetailsLayout(buttonFactory, componentFactory, model, service, cAnotherTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //

@@ -170,6 +170,8 @@ public class DBOClassCodeGeneratorTest {
 								+ "\n" //
 								+ "import javax.persistence.Column;\n" //
 								+ "import javax.persistence.Entity;\n" //
+								+ "import javax.persistence.GeneratedValue;\n" //
+								+ "import javax.persistence.GenerationType;\n" //
 								+ "import javax.persistence.Id;\n" //
 								+ "import javax.persistence.Table;\n" //
 								+ "import javax.persistence.CascadeType;\n" //
@@ -194,6 +196,7 @@ public class DBOClassCodeGeneratorTest {
 								+ "public class BookDBO {\n" //
 								+ "\n" //
 								+ "	@Id\n" //
+								+ "	@GeneratedValue(strategy = GenerationType.IDENTITY)\n" //
 								+ "	@Column(name = \"ID\", nullable = false)\n" //
 								+ "	private long id;\n" //
 								+ "	@Column(name = \"ISBN\")\n" //
@@ -262,6 +265,73 @@ public class DBOClassCodeGeneratorTest {
 								+ "	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)\n" //
 								+ "	@JoinColumn(name = \"PARENT\")\n" //
 								+ "	private List<CHeirTableMemberDBO> cHeirTableMembers;\n" //
+								+ "\n" //
+								+ "}";
+				return s;
+			}
+
+		}
+
+		@Nested
+		class List_Composition_Member {
+
+			@Test
+			void happyRunForASimpleObject() {
+				// Prepare
+				String expected = getExpectedForASimpleObject(false, false);
+				DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("CHAPTER"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			private String getExpectedForASimpleObject(boolean isSuperclass, boolean isExtends) {
+				String s =
+						"package de.ollie.bookstore.persistence.entity;\n" //
+								+ "\n" //
+								+ "import lombok.ToString;\n" //
+								+ "\n" //
+								+ "import javax.persistence.Column;\n" //
+								+ "import javax.persistence.Entity;\n" //
+								+ "import javax.persistence.FetchType;\n" //
+								+ "import javax.persistence.GeneratedValue;\n" //
+								+ "import javax.persistence.GenerationType;\n" //
+								+ "import javax.persistence.Id;\n" //
+								+ "import javax.persistence.JoinColumn;\n" //
+								+ "import javax.persistence.ManyToOne;\n" //
+								+ "import javax.persistence.Table;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A DBO for chapters.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@Generated\n" //
+								+ "@Entity(name = \"Chapter\")\n" //
+								+ "@Table(name = \"CHAPTER\")\n" //
+								+ "public class ChapterDBO {\n" //
+								+ "\n" //
+								+ "	@Id\n" //
+								+ "	@GeneratedValue(strategy = GenerationType.IDENTITY)\n" //
+								+ "	@Column(name = \"ID\", nullable = false)\n" //
+								+ "	private long id;\n" //
+								+ "	@Column(name = \"CONTENT\")\n" //
+								+ "	@ToString.Exclude\n" //
+								+ "	private String content;\n" //
+								+ "	@Column(name = \"SORT_ORDER\", nullable = false)\n" //
+								+ "	private int sortOrder;\n" //
+								+ "	@Column(name = \"SUMMARY\")\n" //
+								+ "	private String summary;\n" //
+								+ "	@Column(name = \"TITLE\", nullable = false)\n" //
+								+ "	private String title;\n" //
 								+ "\n" //
 								+ "}";
 				return s;

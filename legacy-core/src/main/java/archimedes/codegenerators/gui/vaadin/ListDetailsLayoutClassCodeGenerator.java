@@ -37,7 +37,7 @@ public class ListDetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 		String abstractMasterDataBaseLayoutClassName = nameGenerator.getAbstractMasterDataBaseLayoutClassName();
 		String componentFactoryClassName = nameGenerator.getComponentFactoryClassName(model);
 		String modelClassName = serviceNameGenerator.getModelClassName(table);
-		String modelSuperClassName = getSuperclassName(table, serviceNameGenerator::getModelClassName);
+		String modelParentClassName = nameGenerator.getClassName(getParent(table));
 		String resourceManagerInterfaceName = localizationNameGenerator.getResourceManagerInterfaceName();
 		String serviceInterfaceName = getServiceInterfaceName(table);
 		String sessionDataClassName = nameGenerator.getSessionDataClassName(model);
@@ -45,15 +45,14 @@ public class ListDetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 		GUIColumnDataCollection guiColumnDataCollection =
 				getGUIColumnDataCollection(new GUIColumnDataCollection(), table);
 		List<ListGridData> listGridData = getListGridData(model, table);
-		context.put("AbstractMasterDataBaseLayoutClassName", abstractMasterDataBaseLayoutClassName);
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));
-		context.put("ButtonFactoryClassName", nameGenerator.getButtonFactoryClassName(model));
 		context.put("ButtonPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("ComponentFactoryClassName", componentFactoryClassName);
 		context.put("DetailsDialogClassName", nameGenerator.getDetailsDialogClassName(model, table));
 		context.put("DetailsDialogPackageName", nameGenerator.getDetailsDialogPackageName(model));
+		context.put("GridData", getGridData(table));
 		context.put("GUIColumnDataCollection", guiColumnDataCollection);
 		context.put("GUIReferences", guiReferenceData);
 		context.put("HasSelectionElement", hasSelectionElements(guiReferenceData, guiColumnDataCollection));
@@ -67,6 +66,11 @@ public class ListDetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 						"ItemLabelGeneratorCollectionPackageName",
 						nameGenerator.getItemLabelGeneratorCollectionPackageName(model));
 		context.put("ListGridDataCollection", listGridData);
+		context
+				.put(
+						"MasterDataGridFieldRendererInterfaceName",
+						nameGenerator.getMasterDataGridFieldRendererInterfaceName(model));
+		context.put("MasterDataGridFieldRendererPackageName", nameGenerator.getMasterDataPackageName(model));
 		context.put("MasterDataGUIConfigurationClassName", nameGenerator.getMasterDataGUIConfigurationClassName(model));
 		context
 				.put(
@@ -74,21 +78,23 @@ public class ListDetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 						nameGenerator.getMasterDataGUIConfigurationPackageName(model));
 		context.put("ModelAttributeName", nameGenerator.getAttributeName(modelClassName));
 		context.put("ModelClassName", modelClassName);
-		context.put("ModelSuperClassName", modelSuperClassName);
+		context.put("ModelSuperClassName", modelParentClassName);
 		context.put("PackageName", getPackageName(model, table));
-		context.put("ParentModelClassName", nameGenerator.getClassName(getParent(table)));
+		context.put("ParentModelClassName", modelParentClassName);
 		context.put("PreferenceData", getPreferenceData(table));
 		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
+		context.put("ResourceManagerPackageName", serviceNameGenerator.getResourceManagerInterfacePackageName(model));
 		context.put("SessionDataClassName", sessionDataClassName);
-		context.put("ServiceInterfaceName", serviceInterfaceName);
-		importDeclarations
-				.add(nameGenerator.getVaadinComponentPackageName(model), abstractMasterDataBaseLayoutClassName);
+		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
 		importDeclarations.add(nameGenerator.getVaadinComponentPackageName(model), componentFactoryClassName);
 		importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelClassName);
-		if (modelSuperClassName != null) {
-			importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelSuperClassName);
+		if (modelParentClassName != null) {
+			importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelParentClassName);
 		}
-		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
+		importDeclarations
+				.add(
+						nameGenerator.getDetailsDialogPackageName(model),
+						nameGenerator.getDetailsDialogClassName(model, table));
 		addGUIReferencesToFieldDeclarations(guiReferenceData);
 		guiColumnDataCollection
 				.getColumns()
@@ -105,7 +111,7 @@ public class ListDetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 				.of(table.getColumns())
 				.stream()
 				.filter(c -> isAParent(c.getReferencedTable()))
-				.map(c -> c.getTable())
+				.map(c -> c.getReferencedTable())
 				.findFirst()
 				.orElse(null);
 	}

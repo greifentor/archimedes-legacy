@@ -6,6 +6,8 @@ import java.io.InputStream;
 
 #end
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 #if (${GUIColumnDataCollection.hasFieldType("BOOLEAN")} == true)
 import com.vaadin.flow.component.checkbox.Checkbox;
 #end
@@ -72,6 +74,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 
 #end
 	private final ${ButtonFactoryClassName} buttonFactory;
+	private final ${ComponentFactoryClassName} componentFactory;
 	private final ${ModelClassName} model;
 	private final ${ServiceInterfaceName} service;
 #foreach ($FieldDeclaration in $FieldDeclarations.toList())
@@ -209,7 +212,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	#end
 #end
 #foreach (${ListGridData} in ${ListGridDataCollection})
-				new ${ListGridData.getListDetailsLayoutClassName()}(buttonFactory, guiConfiguration, model, resourceManager, session),
+				new ${ListGridData.getListDetailsLayoutClassName()}(componentFactory, guiConfiguration, model, resourceManager, session),
 #end
 				getMasterDataButtonLayout(model.getId() > 0));
 #if (${PreferenceData})

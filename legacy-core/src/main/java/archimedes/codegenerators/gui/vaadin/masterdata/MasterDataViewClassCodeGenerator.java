@@ -92,7 +92,8 @@ public class MasterDataViewClassCodeGenerator extends AbstractVaadinModelCodeGen
 
 	private boolean isInMasterDataGUI(TableModel table) {
 		return table.isOptionSet(AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI)
-				&& !table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS);
+				&& !table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)
+				&& !table.isOptionSetWithValue(AbstractClassCodeGenerator.MEMBER_LIST, "MEMBER");
 	}
 
 	private MasterDataData createMasterDataDataForTable(TableModel table) {

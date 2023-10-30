@@ -2,7 +2,10 @@ package archimedes.codegenerators.gui.vaadin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
@@ -18,6 +21,7 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 	public static final String CUBE_APPLICATION = "CUBE_APPLICATION";
 	public static final String DETAILS_LAYOUT_ONLY = "DETAILS_LAYOUT_ONLY";
 	public static final String GENERATE_MASTER_DATA_GUI = "GENERATE_MASTER_DATA_GUI";
+	public static final String GRID_FIELD = "GRID_FIELD";
 	public static final String GUI_BASE_URL = "GUI_BASE_URL";
 	public static final String GUI_EDITOR_POS = "GUI_EDITOR_POS";
 	public static final String GUI_LABEL_TEXT = "GUI_LABEL_TEXT";
@@ -44,6 +48,55 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 	protected String getServiceInterfaceName(TableModel table) {
 		TableModel supertable = getSuperclassTable(table);
 		return serviceNameGenerator.getServiceInterfaceName(supertable != null ? supertable : table);
+	}
+
+	protected List<GridData> getGridData(TableModel table) {
+		Function<ColumnModel, Boolean> isInGrid =
+				hasGridFieldColumn(table)
+						? column -> column.isOptionSet(GRID_FIELD)
+						: column -> column.isOptionSet(GUI_EDITOR_POS);
+		return List
+				.of(table.getColumns())
+				.stream()
+				.filter(column -> isInGrid.apply(column))
+				.map(
+						column -> new GridData()
+								.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
+								.setPosition(getPosition(column))
+								.setResourceName(getResourceName(column))
+								.setSimpleBoolean(isSimpleBoolean(column))
+								.setWidth(getWidth(column)))
+				.sorted((gd0, gd1) -> gd0.getPosition() - gd1.getPosition())
+				.collect(Collectors.toList());
+	}
+
+	private boolean hasGridFieldColumn(TableModel table) {
+		return table.getColumnsWithOption(GRID_FIELD).length > 0;
+	}
+
+	private int getPosition(ColumnModel column) {
+		if ((column.getOptionByName(GRID_FIELD) != null)
+				&& (column.getOptionByName(GRID_FIELD).getParameter() != null)) {
+			return Integer.valueOf(StringUtils.split(column.getOptionByName(GRID_FIELD).getParameter(), ',')[0]);
+		}
+		return column.isOptionSet(GUI_EDITOR_POS)
+				? Integer.valueOf(column.getOptionByName(GUI_EDITOR_POS).getParameter())
+				: 0;
+	}
+
+	private String getResourceName(ColumnModel column) {
+		return nameGenerator.getCamelCase(column.getName()).toLowerCase();
+	}
+
+	private Integer getWidth(ColumnModel column) {
+		if ((column.getOptionByName(GRID_FIELD) != null)
+				&& (column.getOptionByName(GRID_FIELD).getParameter() != null)) {
+			String[] parameters = StringUtils.split(column.getOptionByName(GRID_FIELD).getParameter(), ',');
+			if (parameters.length > 1) {
+				return Integer.valueOf(parameters[1]);
+			}
+		}
+		return null;
 	}
 
 	protected GUIReferenceDataCollection getGUIReferenceDataCollection(TableModel table) {

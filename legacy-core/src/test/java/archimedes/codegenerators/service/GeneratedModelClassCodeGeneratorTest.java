@@ -396,6 +396,8 @@ public class GeneratedModelClassCodeGeneratorTest {
 			private String getExpected(boolean isSuperclass, boolean isExtends) {
 				String s = "package de.ollie.bookstore.core.model;\n" + //
 						"\n" + //
+						"import java.util.ArrayList;\n" + //
+						"\n" + //
 						"import java.util.List;\n" + //
 						"\n" + //
 						"import lombok.Data;\n" + //
@@ -420,7 +422,7 @@ public class GeneratedModelClassCodeGeneratorTest {
 						"	private long id;\n" + //
 						"	private String isbn;\n" + //
 						"	private String title;\n" + //
-						"	private List<Chapter> chapters;\n" + //
+						"	private List<Chapter> chapters = new ArrayList<>();\n" + //
 						"\n" + //
 						"}";
 				return s;

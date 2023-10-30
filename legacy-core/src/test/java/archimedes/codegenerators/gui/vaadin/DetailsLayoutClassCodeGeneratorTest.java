@@ -38,6 +38,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.textfield.IntegerField;\n" + //
 						"import com.vaadin.flow.component.textfield.TextField;\n" + //
 						"\n" + //
@@ -47,6 +49,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -61,6 +64,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
@@ -157,6 +161,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.datetimepicker.DateTimePicker;\n" + //
 						"\n" + //
 						"import base.pack.age.name.core.model.ATable;\n" + //
@@ -165,6 +171,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -179,6 +186,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
@@ -268,6 +276,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
 						"\n" + //
 						"import base.pack.age.name.core.model.AnotherTable;\n" + //
@@ -278,6 +288,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -292,6 +303,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
 						"	private final AnotherTableService anotherTableService;\n" + //
@@ -387,6 +399,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.checkbox.Checkbox;\n" + //
 						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
 						"import com.vaadin.flow.component.textfield.TextArea;\n" + //
@@ -398,6 +412,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.TableWithSpecialsItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -412,6 +427,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"public class TableWithSpecialsDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final TableWithSpecials model;\n" + //
 						"	private final TableWithSpecialsService service;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
@@ -525,6 +541,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.textfield.IntegerField;\n" + //
 						"import com.vaadin.flow.component.textfield.NumberField;\n" + //
 						"\n" + //
@@ -534,6 +552,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.TableWithNumberFieldItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -548,6 +567,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"public class TableWithNumberFieldDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final TableWithNumberField model;\n" + //
 						"	private final TableWithNumberFieldService service;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
@@ -654,6 +674,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.checkbox.Checkbox;\n" + //
 						"import com.vaadin.flow.component.textfield.TextField;\n" + //
 						"\n" + //
@@ -663,6 +685,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -677,6 +700,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
@@ -768,6 +792,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.checkbox.Checkbox;\n" + //
 						"import com.vaadin.flow.component.textfield.TextField;\n" + //
 						"\n" + //
@@ -778,6 +804,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.AnotherTableItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -792,6 +819,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"public class AnotherTableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final AnotherTable model;\n" + //
 						"	private final ATableService service;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
@@ -885,6 +913,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
 						"\n" + //
 						"import base.pack.age.name.core.model.AnotherTable;\n" + //
@@ -896,6 +926,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.DifferentSubclassReferencesItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -911,6 +942,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						+ //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final DifferentSubclassReferences model;\n" + //
 						"	private final DifferentSubclassReferencesService service;\n" + //
 						"	private final ATableService aTableService;\n" + //
@@ -1010,6 +1042,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
 						"import com.vaadin.flow.component.textfield.TextField;\n" + //
 						"\n" + //
@@ -1022,6 +1056,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.BHeirTableItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -1036,6 +1071,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"public class BHeirTableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final BHeirTable model;\n" + //
 						"	private final BTableService service;\n" + //
 						"	private final BReferencedTableService bReferencedTableService;\n" + //
@@ -1141,6 +1177,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.checkbox.Checkbox;\n" + //
 						"import com.vaadin.flow.component.combobox.ComboBox;\n" + //
 						"import com.vaadin.flow.component.textfield.TextField;\n" + //
@@ -1153,6 +1191,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -1170,6 +1209,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						+ //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final ATable model;\n" + //
 						"	private final ATableService service;\n" + //
 						"	private final AnotherTableService anotherTableService;\n" + //
@@ -1276,6 +1316,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 						"\n" + //
 						"import com.vaadin.flow.component.AttachEvent;\n" + //
+						"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+						"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 						"import com.vaadin.flow.component.textfield.IntegerField;\n" + //
 						"import com.vaadin.flow.component.textfield.TextField;\n" + //
 						"\n" + //
@@ -1285,6 +1327,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.SessionData;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.renderer.BTableItemLabelGeneratorCollection;\n"
 						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
@@ -1302,6 +1345,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						+ //
 						"\n" + //
 						"	private final ButtonFactory buttonFactory;\n" + //
+						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final BTable model;\n" + //
 						"	private final BTableService service;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
@@ -1321,6 +1365,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		createButtons();\n" + //
 						"		textFieldDescription = createTextField(\"BTableDetailsLayout.field.description.label\", model.getDescription());\n"
 						+ //
+
 						"		integerFieldCounter = createIntegerField(\"BTableDetailsLayout.field.counter.label\", model.getCounter(), null, null, null);\n"
 						+ //
 						"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
@@ -1406,6 +1451,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import java.io.InputStream;\n" //
 							+ "\n" //
 							+ "import com.vaadin.flow.component.AttachEvent;\n" //
+							+ "import com.vaadin.flow.component.dialog.Dialog;\n" //
+							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
 							+ "import com.vaadin.flow.component.upload.Upload;\n"
 							+ "import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;\n" //
 							+ "\n" //
@@ -1415,6 +1462,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import base.pack.age.name.gui.SessionData;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" //
 							+ "import base.pack.age.name.gui.vaadin.masterdata.renderer.BlobTableItemLabelGeneratorCollection;\n" //
 							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 							+ "import lombok.Generated;\n" //
@@ -1428,6 +1476,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "public class BlobTableDetailsLayout extends AbstractMasterDataBaseLayout {\n" //
 							+ "\n" //
 							+ "	private final ButtonFactory buttonFactory;\n" //
+							+ "	private final ComponentFactory componentFactory;\n" //
 							+ "	private final BlobTable model;\n" //
 							+ "	private final BlobTableService service;\n" //
 							+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
@@ -1526,6 +1575,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 			return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
 					"\n" + //
 					"import com.vaadin.flow.component.AttachEvent;\n" + //
+					"import com.vaadin.flow.component.dialog.Dialog;\n" + //
+					"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
 					"import com.vaadin.flow.component.textfield.IntegerField;\n" + //
 					"import com.vaadin.flow.component.textfield.TextField;\n" + //
 					"\n" + //
@@ -1535,6 +1586,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.SessionData;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.renderer.BookItemLabelGeneratorCollection;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 					"import lombok.Generated;\n" + //
@@ -1548,6 +1600,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 					"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
 					"\n" + //
 					"	private final ButtonFactory buttonFactory;\n" + //
+					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ATable model;\n" + //
 					"	private final ATableService service;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
@@ -1624,6 +1677,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 					"package de.ollie.bookstore.gui.vaadin.masterdata;\n" //
 							+ "\n" //
 							+ "import com.vaadin.flow.component.AttachEvent;\n" //
+							+ "import com.vaadin.flow.component.dialog.Dialog;\n" //
+							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
 							+ "import com.vaadin.flow.component.textfield.TextField;\n" //
 							+ "\n" //
 							+ "import de.ollie.bookstore.core.model.Book;\n" //
@@ -1632,6 +1687,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import de.ollie.bookstore.gui.SessionData;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.component.ButtonFactory;\n" //
+							+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.layout.list.ChapterListDetailsLayout;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.renderer.BookItemLabelGeneratorCollection;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
@@ -1646,6 +1702,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "public class BookDetailsLayout extends AbstractMasterDataBaseLayout {\n" //
 							+ "\n" //
 							+ "	private final ButtonFactory buttonFactory;\n" //
+							+ "	private final ComponentFactory componentFactory;\n" //
 							+ "	private final Book model;\n" //
 							+ "	private final BookService service;\n" //
 							+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
@@ -1677,7 +1734,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "		add(\n" //
 							+ "				textFieldTitle,\n" //
 							+ "				textFieldIsbn,\n" //
-							+ "				new ChapterListDetailsLayout(buttonFactory, guiConfiguration, model, resourceManager, session),\n" //
+							+ "				new ChapterListDetailsLayout(componentFactory, guiConfiguration, model, resourceManager, session),\n" //
 							+ "				getMasterDataButtonLayout(model.getId() > 0));\n" //
 							+ "		textFieldTitle.focus();\n" //
 							+ "	}\n" //

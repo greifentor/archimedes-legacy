@@ -88,6 +88,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		List<ColumnData> l = Arrays
 				.asList(table.getColumns())
 				.stream()
+				.filter(column -> !isAMember(table) || !isColumnReferencingAParent(column))
 				.map(
 						column -> new ColumnData()
 								.setAnnotations(getAnnotations(column, referenceMode))

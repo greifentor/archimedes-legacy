@@ -1,6 +1,8 @@
 package ${PackageName};
 
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 #if (${GUIColumnDataCollection.hasFieldType("BOOLEAN")} == true)
 import com.vaadin.flow.component.checkbox.Checkbox;
 #end
@@ -54,6 +56,7 @@ public class ${ClassName} extends Dialog {
 	private final ${ComponentFactoryClassName} componentFactory;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final Observer observer;
+	private final ${SessionDataClassName} session;
 
 	private ${ButtonClassName} buttonCancel;
 	private ${ButtonClassName} buttonSave;
@@ -83,11 +86,12 @@ public class ${ClassName} extends Dialog {
 	private boolean newItem;
 
 	public ${ClassName}(${ComponentFactoryClassName} componentFactory, ${MasterDataGUIConfigurationClassName} guiConfiguration,
-			Observer observer, ${ModelClassName} model, boolean newItem) {
+			Observer observer, ${ModelClassName} model, boolean newItem, ${SessionDataClassName} session) {
 		this.componentFactory = componentFactory;
 		this.guiConfiguration = guiConfiguration;
 		this.newItem = newItem;
 		this.observer = observer;
+		this.session = session;
 		if (model != null) {
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
 	#set($FieldName = "${Column.getFieldNameCamelCase()}")
@@ -98,17 +102,17 @@ public class ${ClassName} extends Dialog {
 		#else
 			#set($GetterPrefix = "get")
 		#end
-			this.model.set${FieldName}(model.${GetterPrefix}${FieldName}())
+			this.model.set${FieldName}(model.${GetterPrefix}${FieldName}());
 	#else
-			this.model.set${FieldName}(model.get${FieldName}())
+			this.model.set${FieldName}(model.get${FieldName}());
 	#end
 #end
 		}
 		mainLayout = new VerticalLayout();
 		addComponents();
-		buttonCancel = componentFactory.createCancelButton(event -> close());
+		buttonCancel = componentFactory.createCancelButton(event -> close(), session);
 		buttonCancel.setWidthFull();
-		buttonSave = componentFactory.createSaveButton(event -> save());
+		buttonSave = componentFactory.createSaveButton(event -> save(), session);
 		buttonSave.setWidthFull();
 		mainLayout.add(buttonCancel, buttonSave);
 		setWidth("90%");
@@ -126,21 +130,27 @@ public class ${ClassName} extends Dialog {
 		#else
 			#set($GetterPrefix = "get")
 		#end
-		checkbox${FieldName} = componentFactory.createCheckbox("$ResourceId", model.${GetterPrefix}${FieldName}());
+		checkbox${FieldName} = componentFactory.createCheckbox("$ResourceId", model.${GetterPrefix}${FieldName}(), session);
+		checkbox${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
 	#elseif (${Column.getType()} == "COMBOBOX")
 	#elseif (${Column.getType()} == "ENUM")
-		comboBox${FieldName} = componentFactory.createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values(), itemLabelGeneratorCollection.get${Column.FieldTypeName}ItemLabelGenerator());
+		comboBox${FieldName} = componentFactory.createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values(), itemLabelGeneratorCollection.get${Column.FieldTypeName}ItemLabelGenerator(), session);
 		#if (${Column.isNullable()} == true)
 		comboBox${FieldName}.setClearButtonVisible(true);
 		#end
+		comboBox${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
 	#elseif (${Column.getType()} == "INTEGER")
-		integerField${FieldName} = componentFactory.createIntegerField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()});
+		integerField${FieldName} = componentFactory.createIntegerField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()}, session);
+		integerField${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
 	#elseif (${Column.getType()} == "NUMERIC")
-		numberField${FieldName} = componentFactory.createNumberField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()});
+		numberField${FieldName} = componentFactory.createNumberField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()}, session);
+		numberField${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
 	#elseif (${Column.getType()} == "TEXT")
-		textArea${FieldName} = componentFactory.createTextArea("$ResourceId", model.get${FieldName}());
+		textArea${FieldName} = componentFactory.createTextArea("$ResourceId", model.get${FieldName}(), session);
+		textArea${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
 	#elseif (${Column.getType()} == "TIMESTAMP")
 		dateTimePicker${FieldName} = new DateTimePicker(resourceManager.getLocalizedString("$ResourceId", session.getLocalization()), model.get${FieldName}(), event -> {});
+		dateTimePicker${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
 	#elseif (${Column.getType()} == "UPLOAD")
 		MultiFileMemoryBuffer buffer${FieldName} = new MultiFileMemoryBuffer();
 		upload${FieldName} = new Upload(buffer${FieldName});
@@ -166,7 +176,8 @@ public class ${ClassName} extends Dialog {
 		});
 		upload${FieldName}.setWidthFull();
 	#else
-		textField${FieldName} = componentFactory.createTextField("$ResourceId", model.get${FieldName}());
+		textField${FieldName} = componentFactory.createTextField("$ResourceId", model.get${FieldName}(), session);
+		textField${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
 	#end
 #end
 		mainLayout.add(

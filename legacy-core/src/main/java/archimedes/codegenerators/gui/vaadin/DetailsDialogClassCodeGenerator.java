@@ -39,7 +39,6 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		String modelClassName = serviceNameGenerator.getModelClassName(table);
 		String modelSuperClassName = getSuperclassName(table, serviceNameGenerator::getModelClassName);
 		String resourceManagerInterfaceName = localizationNameGenerator.getResourceManagerInterfaceName();
-		String serviceInterfaceName = getServiceInterfaceName(table);
 		String sessionDataClassName = nameGenerator.getSessionDataClassName(model);
 		List<GUIReferenceData> guiReferenceData = getGUIReferenceData(table);
 		GUIColumnDataCollection guiColumnDataCollection =
@@ -75,7 +74,6 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("PreferenceData", getPreferenceData(table));
 		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
 		context.put("SessionDataClassName", sessionDataClassName);
-		context.put("ServiceInterfaceName", serviceInterfaceName);
 		importDeclarations
 				.add(nameGenerator.getVaadinComponentPackageName(model), abstractMasterDataBaseLayoutClassName);
 		importDeclarations.add(nameGenerator.getVaadinComponentPackageName(model), componentFactoryClassName);
@@ -83,7 +81,7 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		if (modelSuperClassName != null) {
 			importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelSuperClassName);
 		}
-		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
+		importDeclarations.add(nameGenerator.getSessionDataPackageName(model), sessionDataClassName);
 		addGUIReferencesToFieldDeclarations(guiReferenceData);
 		guiColumnDataCollection
 				.getColumns()
@@ -327,7 +325,8 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI);
+		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) || t.isOptionSetWithValue(MEMBER_LIST, "PARENT")
+				|| !t.isOptionSet(MEMBER_LIST);
 	}
 
 }

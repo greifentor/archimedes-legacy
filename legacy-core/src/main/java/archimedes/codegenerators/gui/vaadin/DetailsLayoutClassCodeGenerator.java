@@ -36,6 +36,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		fieldDeclarations = new FieldDeclarations();
 		String abstractMasterDataBaseLayoutClassName = nameGenerator.getAbstractMasterDataBaseLayoutClassName();
 		String buttonFactoryClassName = nameGenerator.getButtonFactoryClassName(model);
+		String componentFactoryClassName = nameGenerator.getComponentFactoryClassName(model);
 		String modelClassName = serviceNameGenerator.getModelClassName(table);
 		String modelSuperClassName = getSuperclassName(table, serviceNameGenerator::getModelClassName);
 		String resourceManagerInterfaceName = localizationNameGenerator.getResourceManagerInterfaceName();
@@ -49,6 +50,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("ButtonFactoryClassName", buttonFactoryClassName);
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
+		context.put("ComponentFactoryClassName", componentFactoryClassName);
 		context.put("GUIColumnDataCollection", guiColumnDataCollection);
 		context.put("GUIReferences", guiReferenceData);
 		context.put("HasSelectionElement", hasSelectionElements(guiReferenceData, guiColumnDataCollection));
@@ -77,6 +79,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		importDeclarations
 				.add(nameGenerator.getVaadinComponentPackageName(model), abstractMasterDataBaseLayoutClassName);
 		importDeclarations.add(nameGenerator.getVaadinComponentPackageName(model), buttonFactoryClassName);
+		importDeclarations.add(nameGenerator.getVaadinComponentPackageName(model), componentFactoryClassName);
 		importDeclarations
 				.add(
 						localizationNameGenerator.getResourceManagerPackageName(model, table),
@@ -330,7 +333,8 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) && !t.isOptionSet(DETAILS_LAYOUT_ONLY);
+		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) && !t.isOptionSet(DETAILS_LAYOUT_ONLY)
+				|| t.isOptionSetWithValue(MEMBER_LIST, "MEMBER");
 	}
 
 }
