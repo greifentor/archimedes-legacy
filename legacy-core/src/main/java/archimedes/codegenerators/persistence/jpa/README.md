@@ -5,9 +5,14 @@
 
 ### Columns
 
-#### AUTOINCREMENT
+#### AUTO_INCREMENT
 
-Activates the generation of an autoincrement field as key attribute in the entity class and adds different annotations to the ``@Id`` field(s).
+Activates the generation of an autoincrement field as key attribute in the entity class and adds different annotations
+to the ``@Id`` field(s). As a parameter a method for the id generation could be specified:
+
+|Parameter|Description|Code|
+|---------|-----------|----|
+|IDENTITY |Specifies GenerationType IDENTITY|@GeneratedValue(strategy = GenerationType.IDENTITY)|
 
 #### FIND_BY
 
