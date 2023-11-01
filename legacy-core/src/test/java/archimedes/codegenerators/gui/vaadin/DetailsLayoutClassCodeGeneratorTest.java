@@ -1679,9 +1679,11 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import com.vaadin.flow.component.AttachEvent;\n" //
 							+ "import com.vaadin.flow.component.dialog.Dialog;\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
+							+ "import com.vaadin.flow.component.combobox.ComboBox;\n" //
 							+ "import com.vaadin.flow.component.textfield.TextField;\n" //
 							+ "\n" //
 							+ "import de.ollie.bookstore.core.model.Book;\n" //
+							+ "import de.ollie.bookstore.core.model.PublicationType;\n" //
 							+ "import de.ollie.bookstore.core.service.BookService;\n" //
 							+ "import de.ollie.bookstore.core.service.localization.ResourceManager;\n" //
 							+ "import de.ollie.bookstore.gui.SessionData;\n" //
@@ -1714,6 +1716,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	private TextField textFieldTitle;\n" //
 							+ "	private TextField textFieldIsbn;\n" //
+							+ "	private ComboBox<PublicationType> comboBoxPublicationType;\n" //
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	public void onAttach(AttachEvent attachEvent) {\n" //
@@ -1721,6 +1724,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "		createButtons();\n" //
 							+ "		textFieldTitle = createTextField(\"BookDetailsLayout.field.title.label\", model.getTitle());\n" //
 							+ "		textFieldIsbn = createTextField(\"BookDetailsLayout.field.isbn.label\", model.getIsbn());\n" //
+							+ "		comboBoxPublicationType = createComboBox(\"BookDetailsLayout.field.publicationtype.label\", model.getPublicationType(), PublicationType.values(), itemLabelGeneratorCollection.getPublicationTypeItemLabelGenerator());\n" //
 							+ "		getStyle().set(\"-moz-border-radius\", \"4px\");\n" //
 							+ "		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" //
 							+ "		getStyle().set(\"border-radius\", \"4px\");\n" //
@@ -1734,6 +1738,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "		add(\n" //
 							+ "				textFieldTitle,\n" //
 							+ "				textFieldIsbn,\n" //
+							+ "				comboBoxPublicationType,\n" //
 							+ "				new ChapterListDetailsLayout(componentFactory, guiConfiguration, model, resourceManager, session),\n" //
 							+ "				getMasterDataButtonLayout(model.getId() > 0));\n" //
 							+ "		textFieldTitle.focus();\n" //
@@ -1764,6 +1769,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "	protected void save() {\n" //
 							+ "		model.setTitle(textFieldTitle.getValue());\n" //
 							+ "		model.setIsbn(textFieldIsbn.getValue());\n" //
+							+ "		model.setPublicationType(comboBoxPublicationType.getValue());\n" //
 							+ "		observer.save(service.update(model));\n" //
 							+ "	}\n" //
 							+ "\n" //

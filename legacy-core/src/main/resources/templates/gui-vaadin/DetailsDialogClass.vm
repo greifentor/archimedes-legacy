@@ -33,6 +33,7 @@ import ${ButtonPackageName}.${ButtonClassName};
 #foreach ($ImportDeclaration in $ImportDeclarations.toList())
 import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
+import ${ItemLabelGeneratorCollectionPackageName}.${ItemLabelGeneratorCollectionClassName};
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
 
 import lombok.Generated;
@@ -55,6 +56,7 @@ public class ${ClassName} extends Dialog {
 
 	private final ${ComponentFactoryClassName} componentFactory;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
+	private final ${ItemLabelGeneratorCollectionClassName} itemLabelGeneratorCollection;
 	private final Observer observer;
 	private final ${SessionDataClassName} session;
 

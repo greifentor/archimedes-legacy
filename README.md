@@ -100,9 +100,10 @@ values of the configurations should work in standard cases.
 
 Select "Export / Explore" (Export / Untersuchen) for each data model to compare with options
 
-```
-TO_UPPER_CASE|SUPPRESS_LENGTH|FK_BY_COLUMNNAME
-```
+|Option|Description|
+|TO_UPPER_CASE|TODO|
+|SUPPRESS_LENGTH|TODO|
+|FK_BY_COLUMNNAME|TODO|
 
 Save the results and compare the files via a diff tool.
 

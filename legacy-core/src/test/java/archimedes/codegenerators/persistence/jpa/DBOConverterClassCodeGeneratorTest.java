@@ -1080,6 +1080,7 @@ public class DBOConverterClassCodeGeneratorTest {
 						"@RequiredArgsConstructor\n" + //
 						"public class BookDBOConverter implements ToModelConverter<Book, BookDBO> {\n" + //
 						"\n" + //
+						"	private final PublicationTypeDBOConverter publicationTypeDBOConverter;\n" + //
 						"	private final ChapterDBOConverter chapterDBOConverter;\n" + //
 						"\n" + //
 						"	public BookDBO toDBO(Book model) {\n" + //
@@ -1089,6 +1090,8 @@ public class DBOConverterClassCodeGeneratorTest {
 						"		return new BookDBO()\n" + //
 						"				.setId(model.getId())\n" + //
 						"				.setIsbn(model.getIsbn())\n" + //
+						"				.setPublicationType(publicationTypeDBOConverter.toDBO(model.getPublicationType()))\n"
+						+ //
 						"				.setTitle(model.getTitle())\n" + //
 						"				.setChapters(chapterDBOConverter.toDBO(model.getChapters()));\n" + //
 						"	}\n" + //
@@ -1108,6 +1111,8 @@ public class DBOConverterClassCodeGeneratorTest {
 						"		return new Book()\n" + //
 						"				.setId(dbo.getId())\n" + //
 						"				.setIsbn(dbo.getIsbn())\n" + //
+						"				.setPublicationType(publicationTypeDBOConverter.toModel(dbo.getPublicationType()))\n"
+						+ //
 						"				.setTitle(dbo.getTitle())\n" + //
 						"				.setChapters(chapterDBOConverter.toModel(dbo.getChapters()));\n" + //
 						"	}\n" + //

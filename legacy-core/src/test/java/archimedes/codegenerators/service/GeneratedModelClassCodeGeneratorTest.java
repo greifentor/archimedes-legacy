@@ -416,11 +416,13 @@ public class GeneratedModelClassCodeGeneratorTest {
 						"\n" + //
 						"	public static final String ID = \"ID\";\n" + //
 						"	public static final String ISBN = \"ISBN\";\n" + //
+						"	public static final String PUBLICATIONTYPE = \"PUBLICATIONTYPE\";\n" + //
 						"	public static final String TITLE = \"TITLE\";\n" + //
 						"	public static final String CHAPTERS = \"CHAPTERS\";\n" + //
 						"\n" + //
 						"	private long id;\n" + //
 						"	private String isbn;\n" + //
+						"	private PublicationType publicationType;\n" + //
 						"	private String title;\n" + //
 						"	private List<Chapter> chapters = new ArrayList<>();\n" + //
 						"\n" + //

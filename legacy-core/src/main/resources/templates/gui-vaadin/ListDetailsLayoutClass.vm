@@ -40,7 +40,7 @@ public class ${ClassName} extends VerticalLayout {
 	@Autowired(required = false)
 	private ${MasterDataGridFieldRendererInterfaceName}<${ModelClassName}> masterDataGridFieldRenderer;
 
-	private Grid<Chapter> grid;
+	private Grid<${ModelClassName}> grid;
 
 	@Override
 	public void onAttach(AttachEvent attachEvent) {
@@ -69,7 +69,7 @@ public class ${ClassName} extends VerticalLayout {
 				mmbr.set${FieldName}(toEdit.${GetterPrefix}${FieldName}());
 #end
 				grid.setItems(model.get${ModelClassName}s());
-			}, grid.getSelectedItems().toArray(new Chapter[0])[0], false, session).open();
+			}, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], false, session).open();
 		}, session);
 		Button buttonRemove = componentFactory.createRemoveButton(event -> {
 			${ModelClassName} mmbr = grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0];

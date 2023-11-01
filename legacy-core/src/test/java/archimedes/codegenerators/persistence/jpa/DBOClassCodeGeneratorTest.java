@@ -170,6 +170,8 @@ public class DBOClassCodeGeneratorTest {
 								+ "\n" //
 								+ "import javax.persistence.Column;\n" //
 								+ "import javax.persistence.Entity;\n" //
+								+ "import javax.persistence.EnumType;\n" //
+								+ "import javax.persistence.Enumerated;\n" //
 								+ "import javax.persistence.GeneratedValue;\n" //
 								+ "import javax.persistence.GenerationType;\n" //
 								+ "import javax.persistence.Id;\n" //
@@ -201,6 +203,9 @@ public class DBOClassCodeGeneratorTest {
 								+ "	private long id;\n" //
 								+ "	@Column(name = \"ISBN\")\n" //
 								+ "	private String isbn;\n" //
+								+ "	@Enumerated(EnumType.STRING)\n" //
+								+ "	@Column(name = \"PUBLICATION_TYPE\", nullable = false)\n" //
+								+ "	private PublicationTypeDBO publicationType;\n" //
 								+ "	@Column(name = \"TITLE\", nullable = false)\n" //
 								+ "	private String title;\n" //
 								+ "	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)\n" //

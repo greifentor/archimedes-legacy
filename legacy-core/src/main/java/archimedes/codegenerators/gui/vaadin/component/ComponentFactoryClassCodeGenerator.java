@@ -30,6 +30,7 @@ public class ComponentFactoryClassCodeGenerator extends AbstractModelCodeGenerat
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
+		System.out.println("\n\n\nGOTCHA!!!\n\n\n");
 		context.put("ApplicationStartViewClassName", nameGenerator.getApplicationStartViewClassName());
 		context.put("ApplicationStartViewPackageName", nameGenerator.getApplicationStartViewPackageName(model));
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));

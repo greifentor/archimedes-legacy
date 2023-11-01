@@ -498,6 +498,12 @@ class ModelClassCodeGeneratorTest {
 							"	}\n" + //
 							"\n" + //
 							"	@Override\n" + //
+							"	public Book setPublicationType(PublicationType publicationType) {\n" + //
+							"		super.setPublicationType(publicationType);\n" + //
+							"		return this;\n" + //
+							"	}\n" + //
+							"\n" + //
+							"	@Override\n" + //
 							"	public Book setTitle(String title) {\n" + //
 							"		super.setTitle(title);\n" + //
 							"		return this;\n" + //

@@ -94,9 +94,16 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 									if (!codeGenerator.isToIgnoreFor(dataModel, tableModel)) {
 										incrementStepProgress(stepCounter, null);
 										LOG.info("CALLED generate for: " + generatorName);
+										try {
 										codeGenerator.generate(path, basePackageName, dataModel, tableModel);
 										LOG.info("FINISHED generation for: " + generatorName);
 										LOG.info("- wrote file to: {}", fileName);
+										} catch (Exception e) {
+											LOG
+													.error(
+															"Error while generating with: " + generatorName
+																	+ ", table: " + tableModel.getName());
+										}
 									} else {
 										incrementStepProgress(stepCounter, null);
 										LOG
