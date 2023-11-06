@@ -9,80 +9,77 @@
 
 package baccara.acf;
 
-import archimedes.acf.*;
-import archimedes.acf.checker.*;
-import archimedes.acf.param.*;
-import archimedes.acf.util.*;
-import archimedes.model.*;
-import baccara.*;
-import baccara.acf.checkers.*;
-import baccara.gui.*;
+import archimedes.acf.AbstractCodeFactory;
+import archimedes.acf.CodeGeneratorListFactory;
+import archimedes.acf.checker.ModelChecker;
+import archimedes.acf.checker.ModelCheckerCodeGeneratorOptionFieldNotEmpty;
+import archimedes.acf.checker.ModelCheckerDomainSetForAllColumns;
+import archimedes.acf.checker.ModelCheckerEditorMemberHasNoLabelText;
+import archimedes.acf.checker.ModelCheckerNReferencesAreSetProperly;
+import archimedes.acf.checker.ModelCheckerTableNameDoesNotContainSpecialCharacters;
+import archimedes.acf.param.DomainParamIds;
+import archimedes.acf.util.ParamIdGetter;
+import archimedes.model.MessageCollector;
+import archimedes.model.OptionType;
+import archimedes.model.PredeterminedOptionProvider;
+import baccara.acf.checkers.BaccaraModelCheckerCodePathForTables;
+import baccara.acf.checkers.BaccaraModelCheckerPanelTitleValidation;
+import baccara.acf.checkers.BaccaraModelCheckerParameterTableReferences;
+import baccara.acf.checkers.BaccaraModelCheckerSelectionMemberPrintExpressionValid;
+import baccara.gui.GUIBundle;
 
 
 /**
- * An implementation of the Archimedes code factory interface. This is the main class of the
- * project.
+ * An implementation of the Archimedes code factory interface. This is the main class of the project.
  *
  * <TABLE BORDER=1 WIDTH="100%">
- *     <TR>
- *         <TH>Version</TH>
- *         <TH>Changes</TH>
- *     </TR>
- *     <TR>
- *         <TD ALIGN=CENTER><B>1.11</B></TD>
- *         <TD>
- *            <BR>
- *            <UL>
- *                <LI>
- *                    Implementation of a data writer generation suppress option
- *                    (NO_DATA_WRITER).
- *                </LI>
- *            </UL>
- *            <BR>
- *         </TD>
- *     </TR>
- *     <TR>
- *         <TD ALIGN=CENTER><B>1.10</B></TD>
- *         <TD>
- *            <BR>
- *            <UL>
- *                <LI>
- *                    Extended the by the logic for application data manager listeners.
- *                </LI>
- *            </UL>
- *            <BR>
- *         </TD>
- *     </TR>
- *     <TR>
- *         <TD ALIGN=CENTER><B>1.2</B></TD>
- *         <TD>
- *            <BR>
- *            <UL>
- *                <LI>
- *                    Extended the interface <CODE>CodeGenerator</CODE> by the method
- *                    <CODE>setIndividualPreferences(IndividualPreferences)</CODE>.
- *                </LI>
- *            </UL>
- *            <BR>
- *         </TD>
- *     </TR>
- *     <TR>
- *         <TD ALIGN=CENTER><B>1.1</B></TD>
- *         <TD>
- *            <BR>
- *            <UL>
- *                <LI>
- *                    Basic functionallity.
- *                </LI>
- *            </UL>
- *            <BR>
- *         </TD>
- *     </TR>
+ * <TR>
+ * <TH>Version</TH>
+ * <TH>Changes</TH>
+ * </TR>
+ * <TR>
+ * <TD ALIGN=CENTER><B>1.11</B></TD>
+ * <TD><BR>
+ * <UL>
+ * <LI>Implementation of a data writer generation suppress option (NO_DATA_WRITER).</LI>
+ * </UL>
+ * <BR>
+ * </TD>
+ * </TR>
+ * <TR>
+ * <TD ALIGN=CENTER><B>1.10</B></TD>
+ * <TD><BR>
+ * <UL>
+ * <LI>Extended the by the logic for application data manager listeners.</LI>
+ * </UL>
+ * <BR>
+ * </TD>
+ * </TR>
+ * <TR>
+ * <TD ALIGN=CENTER><B>1.2</B></TD>
+ * <TD><BR>
+ * <UL>
+ * <LI>Extended the interface <CODE>CodeGenerator</CODE> by the method
+ * <CODE>setIndividualPreferences(IndividualPreferences)</CODE>.</LI>
+ * </UL>
+ * <BR>
+ * </TD>
+ * </TR>
+ * <TR>
+ * <TD ALIGN=CENTER><B>1.1</B></TD>
+ * <TD><BR>
+ * <UL>
+ * <LI>Basic functionallity.</LI>
+ * </UL>
+ * <BR>
+ * </TD>
+ * </TR>
  * </TABLE>
  *
  * @author O.Lieshoff
  *
  * @changed OLI 16.09.2015 - Added based on the <CODE>Isis</CODE> implementation.
+ * @changed OLI 02.11.2023 - Added the MessageCollector.
  */
 
 public class BaccaraCodeFactory extends AbstractCodeFactory
@@ -94,6 +91,7 @@ public class BaccaraCodeFactory extends AbstractCodeFactory
     public static final String NAME = "BaccaraACF";
 
     private ParamIdGetter parameterIdGetter = new ParamIdGetter();
+	private MessageCollector messageCollector;
 
     /**
      * Creates a new Isis code factory.
@@ -185,5 +183,10 @@ public class BaccaraCodeFactory extends AbstractCodeFactory
     @Override public String getName() {
         return NAME;
     }
+
+	@Override
+	public void setMessageCollector(MessageCollector messageCollector) {
+		this.messageCollector = messageCollector;
+	}
 
 }

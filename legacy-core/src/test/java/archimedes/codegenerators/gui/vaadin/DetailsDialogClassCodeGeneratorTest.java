@@ -45,17 +45,14 @@ public class DetailsDialogClassCodeGeneratorTest {
 								+ "import de.ollie.bookstore.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.masterdata.layout.list.ChapterListDetailsLayout;\n" //
-								+ "import de.ollie.bookstore.gui.vaadin.masterdata.renderer.BookItemLabelGeneratorCollection;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 								+ "\n" //
 								+ "import lombok.Generated;\n" //
-								+ "import lombok.RequiredArgsConstructor;\n" //
 								+ "\n" //
 								+ "/**\n" //
 								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
 								+ " */\n" //
 								+ "@Generated\n" //
-								+ "@RequiredArgsConstructor\n" //
 								+ "public class BookDetailsDialog extends Dialog {\n" //
 								+ "\n" //
 								+ "	public interface Observer {\n" //
@@ -66,7 +63,6 @@ public class DetailsDialogClassCodeGeneratorTest {
 								+ "\n" //
 								+ "	private final ComponentFactory componentFactory;\n" //
 								+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
-								+ "	private final BookItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" //
 								+ "	private final Observer observer;\n" //
 								+ "	private final SessionData session;\n" //
 								+ "\n" //
@@ -81,7 +77,7 @@ public class DetailsDialogClassCodeGeneratorTest {
 								+ "	private boolean newItem;\n" //
 								+ "\n" //
 								+ "	public BookDetailsDialog(ComponentFactory componentFactory, MasterDataGUIConfiguration guiConfiguration,\n" //
-								+ "			Observer observer, Book model, boolean newItem, SessionData session) {\n" //
+								+ "			Observer observer, SessionData session, Book model, boolean newItem) {\n" //
 								+ "		this.componentFactory = componentFactory;\n" //
 								+ "		this.guiConfiguration = guiConfiguration;\n" //
 								+ "		this.newItem = newItem;\n" //
@@ -106,11 +102,20 @@ public class DetailsDialogClassCodeGeneratorTest {
 								+ "\n" //
 								+ "	private void addComponents() {\n" //
 								+ "		textFieldTitle = componentFactory.createTextField(\"BookDetailsLayout.field.title.label\", model.getTitle(), session);\n" //
-								+ "		textFieldTitle.addValueChangeListener(event -> model.setTitle(event.getValue()));\n" //
+								+ "		textFieldTitle.addValueChangeListener(event -> {\n" //
+								+ "			model.setTitle(event.getValue());\n" //
+								+ "			updateSaveButton();\n" //
+								+ "		});\n" //
 								+ "		textFieldIsbn = componentFactory.createTextField(\"BookDetailsLayout.field.isbn.label\", model.getIsbn(), session);\n" //
-								+ "		textFieldIsbn.addValueChangeListener(event -> model.setIsbn(event.getValue()));\n" //
-								+ "		comboBoxPublicationType = componentFactory.createComboBox(\"BookDetailsLayout.field.publicationtype.label\", model.getPublicationType(), PublicationType.values(), itemLabelGeneratorCollection.getPublicationTypeItemLabelGenerator(), session);\n" //
-								+ "		comboBoxPublicationType.addValueChangeListener(event -> model.setPublicationType(event.getValue()));\n" //
+								+ "		textFieldIsbn.addValueChangeListener(event -> {\n" //
+								+ "			model.setIsbn(event.getValue());\n" //
+								+ "			updateSaveButton();\n" //
+								+ "		});\n" //
+								+ "		comboBoxPublicationType = componentFactory.createComboBox(\"BookDetailsLayout.field.publicationtype.label\", model.getPublicationType(), PublicationType.values(), componentFactory.getPublicationTypeItemLabelGenerator(), session);\n" //
+								+ "		comboBoxPublicationType.addValueChangeListener(event -> {\n"
+								+ "			model.setPublicationType(event.getValue());\n" //
+								+ "			updateSaveButton();\n" //
+								+ "		});\n" //
 								+ "		mainLayout.add(\n" //
 								+ "				textFieldTitle,\n" //
 								+ "				textFieldIsbn,\n" //
@@ -121,6 +126,7 @@ public class DetailsDialogClassCodeGeneratorTest {
 								+ "	private void updateSaveButton() {\n" //
 								+ "		setButtonEnabled(buttonSave,\n" //
 								+ "				(textFieldTitle.getValue() != null) &&\n" //
+								+ "				(textFieldIsbn.getValue() != null) && !textFieldIsbn.isEmpty() &&\n" //
 								+ "				(comboBoxPublicationType.getValue() != null)\n" //
 								+ "		);\n" //
 								+ "	}\n" //

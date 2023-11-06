@@ -4,6 +4,7 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.model.DataModel;
+import archimedes.model.DomainModel;
 import archimedes.model.TableModel;
 
 /**
@@ -49,6 +50,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX = "ALTERNATE_HEADER_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME = "ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME";
 	public static final String ALTERNATE_IMAGE_CLASS_NAME_SUFFIX = "ALTERNATE_IMAGE_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_ITEM_LABEL_GENERATOR_CLASS_NAME_SUFFIX =
+			"ALTERNATE_ITEM_LABEL_GENERATOR_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_ITEM_LABEL_GENERATOR_PACKAGE_NAME =
+			"ALTERNATE_ITEM_LABEL_GENERATOR_PACKAGE_NAME";
 	public static final String ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_CLASS_NAME_SUFFIX =
 			"ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_PACKAGE_NAME =
@@ -262,6 +267,15 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 		return createPackageName(model, null, "gui.vaadin.component", ALTERNATE_HEADER_LAYOUT_PACKAGE_NAME);
 	}
 
+	public String getItemLabelGeneratorClassName(DataModel model, DomainModel domain) {
+		return domain == null
+				? null
+				: getClassName(domain.getName()) + getNameOrAlternativeFromOption(
+						model,
+						"ItemLabelGenerator",
+						ALTERNATE_ITEM_LABEL_GENERATOR_CLASS_NAME_SUFFIX);
+	}
+
 	public String getItemLabelGeneratorCollectionClassName(DataModel model, TableModel table) {
 		return table == null
 				? null
@@ -269,6 +283,14 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 						model,
 						"ItemLabelGeneratorCollection",
 						ALTERNATE_ITEM_LABEL_GENERATOR_COLLECTION_CLASS_NAME_SUFFIX);
+	}
+
+	public String getItemLabelGeneratorPackageName(DataModel model) {
+		return createPackageName(
+				model,
+				null,
+				"gui.vaadin.masterdata.renderer",
+				ALTERNATE_ITEM_LABEL_GENERATOR_PACKAGE_NAME);
 	}
 
 	public String getItemLabelGeneratorCollectionPackageName(DataModel model) {

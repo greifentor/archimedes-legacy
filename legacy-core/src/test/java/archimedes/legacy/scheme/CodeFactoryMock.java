@@ -18,6 +18,7 @@ import archimedes.legacy.Archimedes;
 import archimedes.legacy.model.DiagrammModel;
 import archimedes.model.CodeFactory;
 import archimedes.model.DataModel;
+import archimedes.model.MessageCollector;
 import baccara.gui.GUIBundle;
 import corentx.io.FileUtil;
 
@@ -156,6 +157,10 @@ public class CodeFactoryMock implements CodeFactory {
 	@Override
 	public String getVersion() {
 		return Archimedes.GetVersion();
+	}
+
+	@Override
+	public void setMessageCollector(MessageCollector messageCollector) {
 	}
 
 }

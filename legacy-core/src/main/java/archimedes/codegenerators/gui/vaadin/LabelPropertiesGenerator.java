@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,12 +22,23 @@ import archimedes.model.DataModel;
 
 public class LabelPropertiesGenerator extends AbstractModelCodeGenerator<NameGenerator> implements FileManipulator {
 
+	public static final String ALTERNATIVE_LABEL_MODULE_NAME = "ALTERNATIVE_LABEL_MODULE_NAME";
+
 	private static final Logger LOG = LogManager.getLogger(LabelPropertiesGenerator.class);
 
 	private static Map<String, String> labels = new HashMap<>();
 
 	public static void addLabel(String id, String content) {
 		labels.put(id, content);
+	}
+
+	public static List<String> getLabels() {
+		return labels
+				.entrySet()
+				.stream()
+				.map(e -> e.getKey() + " - " + e.getValue())
+				.sorted()
+				.collect(Collectors.toList());
 	}
 
 	public LabelPropertiesGenerator(AbstractCodeFactory codeFactory) {
@@ -69,11 +81,14 @@ public class LabelPropertiesGenerator extends AbstractModelCodeGenerator<NameGen
 
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
-		return "gui-web";
+		return !dataModel.isOptionSet(ALTERNATIVE_LABEL_MODULE_NAME)
+				? "gui-web"
+				: dataModel.getOptionByName(ALTERNATIVE_LABEL_MODULE_NAME).getParameter();
 	}
 
 	@Override
 	public String generate(String path, DataModel model) {
+		// LabelPropertiesGenerator.getLabels().forEach(System.out::println);
 		return toString(updateLabelFileContent(getLabelFileContent(path, model)));
 	}
 

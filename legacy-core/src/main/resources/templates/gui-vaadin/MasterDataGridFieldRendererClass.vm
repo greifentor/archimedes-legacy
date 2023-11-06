@@ -1,14 +1,25 @@
 package ${PackageName};
 
+#if ($HasEnums == "true")
+import javax.inject.Inject;
+#end
 import javax.inject.Named;
 
 import ${ModelClassPackageName}.${ModelClassName};
+#foreach ($EnumData in $EnumColumns)
+import ${EnumData.getEnumPackageName()}.${EnumData.getEnumClassName()};
+#end
+#if ($HasEnums == "true")
+import ${ComponentFactoryPackageName}.${ComponentFactoryClassName};
+#end
 
 import lombok.Generated;
 
 #if (!$CommentsOff)
 /**
  * An implementation of the MasterDataGridFieldRenderer interface for ${ModelDescription}s.
+ *
+ * If necessary to override, remove 'GENERATED CODE ...' comment and annotation.
  *
  * ${Generated}
  */
@@ -17,11 +28,21 @@ import lombok.Generated;
 @Named
 public class ${ClassName} implements MasterDataGridFieldRenderer<${ModelClassName}> {
 
+#if ($HasEnums == "true")
+	@Inject
+	private ${ComponentFactoryClassName} componentFactory;
+
+#end
 	@Override
 	public Object getHeaderString(String fieldName, ${ModelClassName} model) {
 		#foreach($Column in $ReferencedColumnData)
 		if (${ModelClassName}.${Column.getFieldNameCamelCase().toUpperCase()}.equals(fieldName)) {
 			return model.get${Column.getFieldNameCamelCase()}() != null ? model.get${Column.getFieldNameCamelCase()}().get${Column.getReferencedModelNameFieldName()}() : "-";
+		}
+		#end
+		#foreach ($EnumData in $EnumColumns)
+		if (${ModelClassName}.${EnumData.getEnumAttributeName().toUpperCase()}.equals(fieldName)) {
+			return componentFactory.get${EnumData.getItemLabelGeneratorClassName()}().apply(model.get${EnumData.getEnumAttributeNameCamelCase()}());
 		}
 		#end
 		return null;
@@ -31,6 +52,11 @@ public class ${ClassName} implements MasterDataGridFieldRenderer<${ModelClassNam
 	public boolean hasRenderingFor(String fieldName) {
 		#foreach($Column in $ReferencedColumnData)
 		if (${ModelClassName}.${Column.getFieldNameCamelCase().toUpperCase()}.equals(fieldName)) {
+			return true;
+		}
+		#end
+		#foreach ($EnumData in $EnumColumns)
+		if (${ModelClassName}.${EnumData.getEnumAttributeName().toUpperCase()}.equals(fieldName) && (componentFactory.get${EnumData.getItemLabelGeneratorClassName()}() != null)) {
 			return true;
 		}
 		#end

@@ -47,9 +47,9 @@ public class ListDetailsLayoutClassCodeGeneratorTest {
 								+ "import de.ollie.bookstore.core.model.Chapter;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.masterdata.dialog.ChapterDetailsDialog;\n" //
+								+ "import de.ollie.bookstore.core.service.localization.ResourceManager;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGridFieldRenderer;\n" //
-								+ "import de.ollie.bookstore.core.service.localization.ResourceManager;\n" //
 								+ "import de.ollie.bookstore.gui.SessionData;\n" //
 								+ "\n" //
 								+ "import lombok.Generated;\n" //
@@ -68,9 +68,6 @@ public class ListDetailsLayoutClassCodeGeneratorTest {
 								+ "	private final ResourceManager resourceManager;\n" //
 								+ "	private final SessionData session;\n" //
 								+ "\n" //
-								+ "	@Autowired(required = false)\n" //
-								+ "	private MasterDataGridFieldRenderer<Chapter> masterDataGridFieldRenderer;\n" //
-								+ "\n" //
 								+ "	private Grid<Chapter> grid;\n" //
 								+ "\n" //
 								+ "	@Override\n" //
@@ -79,23 +76,23 @@ public class ListDetailsLayoutClassCodeGeneratorTest {
 								+ "			new ChapterDetailsDialog(componentFactory, guiConfiguration, (mmbr, newItem) -> {\n" //
 								+ "				model.getChapters().add(mmbr);\n" //
 								+ "				grid.setItems(model.getChapters());\n" //
-								+ "			}, null, true, session).open();\n" //
+								+ "			}, session, new Chapter(), true).open();\n" //
 								+ "		}, session);\n" //
 								+ "		Button buttonDuplicate = componentFactory.createDuplicateButton(event -> {\n" //
 								+ "			new ChapterDetailsDialog(componentFactory, guiConfiguration, (mmbr, newItem) -> {\n" //
 								+ "				model.getChapters().add(mmbr);\n" //
 								+ "				grid.setItems(model.getChapters());\n" //
-								+ "			}, grid.getSelectedItems().toArray(new Chapter[0])[0], true, session).open();\n" //
+								+ "			}, session, grid.getSelectedItems().toArray(new Chapter[0])[0], true).open();\n" //
 								+ "		}, session);\n" //
 								+ "		Button buttonEdit = componentFactory.createEditButton(event -> {\n" //
 								+ "			new ChapterDetailsDialog(componentFactory, guiConfiguration, (toEdit, newItem) -> {\n" //
 								+ "				Chapter mmbr = grid.getSelectedItems().toArray(new Chapter[0])[0];\n" //
-								+ "				mmbr.setSortOrder(toEdit.getSortOrder());\n" //
 								+ "				mmbr.setTitle(toEdit.getTitle());\n" //
+								+ "				mmbr.setSortOrder(toEdit.getSortOrder());\n" //
 								+ "				mmbr.setSummary(toEdit.getSummary());\n" //
 								+ "				mmbr.setContent(toEdit.getContent());\n" //
 								+ "				grid.setItems(model.getChapters());\n" //
-								+ "			}, grid.getSelectedItems().toArray(new Chapter[0])[0], false, session).open();\n" //
+								+ "			}, session, grid.getSelectedItems().toArray(new Chapter[0])[0], false).open();\n" //
 								+ "		}, session);\n" //
 								+ "		Button buttonRemove = componentFactory.createRemoveButton(event -> {\n" //
 								+ "			Chapter mmbr = grid.getSelectedItems().toArray(new Chapter[0])[0];\n" //
@@ -131,9 +128,12 @@ public class ListDetailsLayoutClassCodeGeneratorTest {
 								+ "	}\n" //
 								+ "\n" //
 								+ "	private Object getCellString(String fieldName, Chapter aTable, Supplier<?> f) {\n" //
-								+ "		return masterDataGridFieldRenderer != null && masterDataGridFieldRenderer.hasRenderingFor(fieldName)\n" //
-								+ "				? masterDataGridFieldRenderer.getHeaderString(fieldName, aTable)\n" //
-								+ "				: f.get();\n" //
+								+ "		return componentFactory.getChapterMasterDataGridFieldRenderer() != null\n" //
+								+ "				&& componentFactory.getChapterMasterDataGridFieldRenderer().hasRenderingFor(fieldName)\n" //
+								+ "						? componentFactory\n" //
+								+ "								.getChapterMasterDataGridFieldRenderer()\n" //
+								+ "								.getHeaderString(fieldName, aTable)\n" //
+								+ "						: f.get();\n" //
 								+ "	}\n" //
 								+ "\n" //
 								+ "}";

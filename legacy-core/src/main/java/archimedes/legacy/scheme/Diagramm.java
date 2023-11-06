@@ -75,6 +75,7 @@ import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
 import archimedes.model.IndexMetaData;
+import archimedes.model.MessageCollector;
 import archimedes.model.OptionModel;
 import archimedes.model.OptionType;
 import archimedes.model.OrderMemberModel;
@@ -3113,6 +3114,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		int leni = 0;
 		java.util.List<String> lcfn = StrUtil.SplitToList(this.getCodeFactoryClassName(), ",");
 		String cfn = null;
+		MessageCollector messageCollector = new MessageCollector();
 		try {
 			leni = lcfn.size();
 			if (leni > 0) {
@@ -3125,6 +3127,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 					}
 					cf.setGUIBundle(guiBundle);
 					cf.setDataModel(this);
+					cf.setMessageCollector(messageCollector);
 					ok = ok && cf.generate(path);
 				}
 			} else {
@@ -3133,6 +3136,13 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 					ok = dcf.generate(path);
 				}
 			}
+			messageCollector
+					.getMessages()
+					.forEach(
+							m -> System.out
+									.println(
+											"> " + m.getTimestamp() + " - " + m.getPriority() + " - "
+													+ m.getCodeGeneratorName() + " - " + m.getMessage()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;

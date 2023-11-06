@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ItemLabelGenerator;
@@ -18,11 +19,19 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.QueryParameters;
 
+#foreach($EnumData in ${EnumDataCollection})
+import ${EnumData.getEnumPackageName()}.${EnumData.getEnumClassName()};
+#end
+#foreach($MasterDataGridFieldRendererData in ${MasterDataGridFieldRendererCollection})
+import ${MasterDataGridFieldRendererData.getModelPackageName()}.${MasterDataGridFieldRendererData.getModelClassName()};
+#end
 import ${ResourceManagerInterfacePackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
 import ${ApplicationStartViewPackageName}.${ApplicationStartViewClassName};
+import ${MasterDataGridFieldRendererPackageName}.${MasterDataGridFieldRendererInterfaceName};
 
 import lombok.Generated;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 #if (!$CommentsOff )
@@ -33,12 +42,23 @@ import lombok.RequiredArgsConstructor;
  */
 #end
 @Generated
+@Getter
 @Named
 @RequiredArgsConstructor
 public class ${ClassName} {
 
 	private final ${ButtonFactoryConfigurationClassName} buttonFactoryConfiguration;
 	private final ${ResourceManagerInterfaceName} resourceManager;
+
+#foreach($EnumData in ${EnumDataCollection})
+	@Autowired(required = false)
+	private ItemLabelGenerator<${EnumData.getEnumClassName()}> ${EnumData.getEnumAttributeName()}ItemLabelGenerator;
+#end
+
+#foreach($MasterDataGridFieldRendererData in ${MasterDataGridFieldRendererCollection})
+	@Autowired(required = false)
+	private MasterDataGridFieldRenderer<${MasterDataGridFieldRendererData.getModelClassName()}> ${MasterDataGridFieldRendererData.getAttributeName()}MasterDataGridFieldRenderer;
+#end
 
 	public Button createButton(String text) {
 		Button button =

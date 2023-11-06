@@ -19,6 +19,7 @@ import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
+import archimedes.model.MessageCollector;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
@@ -135,6 +136,7 @@ public class TemporalDataCodeFactoryTest {
 			FileWriter writer = new FileWriter(fileName);
 			writer.write(content);
 			writer.close();
+			unitUnderTest.setMessageCollector(new MessageCollector());
 			// Run
 			unitUnderTest.generate(tempDir.toAbsolutePath().toString());
 			// Check

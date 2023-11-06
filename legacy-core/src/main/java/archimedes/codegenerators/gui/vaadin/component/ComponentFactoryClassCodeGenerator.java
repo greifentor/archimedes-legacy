@@ -1,9 +1,16 @@
 package archimedes.codegenerators.gui.vaadin.component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.velocity.VelocityContext;
 
+import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractDomainCodeGenerator;
 import archimedes.codegenerators.AbstractModelCodeGenerator;
+import archimedes.codegenerators.EnumData;
+import archimedes.codegenerators.MasterDataGridFieldRendererData;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
@@ -30,14 +37,20 @@ public class ComponentFactoryClassCodeGenerator extends AbstractModelCodeGenerat
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
-		System.out.println("\n\n\nGOTCHA!!!\n\n\n");
 		context.put("ApplicationStartViewClassName", nameGenerator.getApplicationStartViewClassName());
 		context.put("ApplicationStartViewPackageName", nameGenerator.getApplicationStartViewPackageName(model));
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));
 		context.put("ButtonFactoryConfigurationClassName", nameGenerator.getButtonFactoryConfigurationClassName(model));
+		context.put("EnumDataCollection", getEnumDataColection(model));
 		context.put("ClassName", getClassName(model, model));
 		context.put("CommentsOff", isCommentsOff(model));
 		context.put("PackageName", getPackageName(model, model));
+		context.put("MasterDataGridFieldRendererPackageName", nameGenerator.getMasterDataPackageName(model));
+		context
+				.put(
+						"MasterDataGridFieldRendererInterfaceName",
+						nameGenerator.getMasterDataGridFieldRendererInterfaceName(model));
+		context.put("MasterDataGridFieldRendererCollection", getMasterDataGridFieldRendererData(model));
 		context.put("ResourceManagerInterfaceName", serviceNameGenerator.getResourceManagerInterfaceName());
 		context
 				.put(
@@ -45,6 +58,33 @@ public class ComponentFactoryClassCodeGenerator extends AbstractModelCodeGenerat
 						serviceNameGenerator.getResourceManagerInterfacePackageName(model));
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
+	}
+
+	private List<EnumData> getEnumDataColection(DataModel model) {
+		return List
+				.of(model.getAllDomains())
+				.stream()
+				.filter(domain -> domain.isOptionSet(AbstractDomainCodeGenerator.ENUM))
+				.sorted((d0, d1) -> d0.getName().compareTo(d1.getName()))
+				.map(
+						domain -> new EnumData()
+								.setEnumAttributeName(nameGenerator.getAttributeName(domain.getName()))
+								.setEnumClassName(nameGenerator.getClassName(domain.getName()))
+								.setEnumPackageName(serviceNameGenerator.getModelPackageName(model, domain)))
+				.collect(Collectors.toList());
+	}
+
+	private List<MasterDataGridFieldRendererData> getMasterDataGridFieldRendererData(DataModel model) {
+		return List
+				.of(model.getTables())
+				.stream()
+				.filter(table -> !table.isOptionSet(AbstractClassCodeFactory.NO_GENERATION))
+				.map(
+						table -> new MasterDataGridFieldRendererData()
+								.setAttributeName(nameGenerator.getAttributeName(table.getName()))
+								.setModelClassName(serviceNameGenerator.getModelClassName(table))
+								.setModelPackageName(serviceNameGenerator.getModelPackageName(model, model)))
+				.collect(Collectors.toList());
 	}
 
 	@Override

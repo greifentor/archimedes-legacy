@@ -9,10 +9,10 @@
  
 package archimedes.model;
 
-import archimedes.acf.checker.*;
-import archimedes.acf.event.*;
-import archimedes.gui.checker.*;
-import baccara.gui.*;
+import archimedes.acf.checker.ModelChecker;
+import archimedes.acf.event.CodeFactoryListener;
+import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
+import baccara.gui.GUIBundle;
 
 
 /** 
@@ -130,5 +130,14 @@ public interface CodeFactory {
      */
     abstract public void setModelCheckerMessageListFrameListeners(
             ModelCheckerMessageListFrameListener... listeners);
+
+	/**
+	 * Sets the passed message collector for the code generator.
+	 *
+	 * @param messageCollector The message collector which is to use by the code generator.
+	 *
+	 * @changed OLI 02.11.2023 - Added.
+	 */
+	abstract public void setMessageCollector(MessageCollector messageCollector);
 
 }

@@ -33,11 +33,9 @@ import ${ButtonPackageName}.${ButtonClassName};
 #foreach ($ImportDeclaration in $ImportDeclarations.toList())
 import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
-import ${ItemLabelGeneratorCollectionPackageName}.${ItemLabelGeneratorCollectionClassName};
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
 
 import lombok.Generated;
-import lombok.RequiredArgsConstructor;
 
 #if (!${CommentsOff})
 /**
@@ -45,7 +43,6 @@ import lombok.RequiredArgsConstructor;
  */
 #end
 @Generated
-@RequiredArgsConstructor
 public class ${ClassName} extends Dialog {
 
 	public interface Observer {
@@ -56,7 +53,6 @@ public class ${ClassName} extends Dialog {
 
 	private final ${ComponentFactoryClassName} componentFactory;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
-	private final ${ItemLabelGeneratorCollectionClassName} itemLabelGeneratorCollection;
 	private final Observer observer;
 	private final ${SessionDataClassName} session;
 
@@ -88,7 +84,7 @@ public class ${ClassName} extends Dialog {
 	private boolean newItem;
 
 	public ${ClassName}(${ComponentFactoryClassName} componentFactory, ${MasterDataGUIConfigurationClassName} guiConfiguration,
-			Observer observer, ${ModelClassName} model, boolean newItem, ${SessionDataClassName} session) {
+			Observer observer, ${SessionDataClassName} session, ${ModelClassName} model, boolean newItem) {
 		this.componentFactory = componentFactory;
 		this.guiConfiguration = guiConfiguration;
 		this.newItem = newItem;
@@ -133,31 +129,38 @@ public class ${ClassName} extends Dialog {
 			#set($GetterPrefix = "get")
 		#end
 		checkbox${FieldName} = componentFactory.createCheckbox("$ResourceId", model.${GetterPrefix}${FieldName}(), session);
-		checkbox${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
+		checkbox${FieldName}.addValueChangeListener(event -> {
+			model.set${FieldName}(event.getValue());
 	#elseif (${Column.getType()} == "COMBOBOX")
 	#elseif (${Column.getType()} == "ENUM")
-		comboBox${FieldName} = componentFactory.createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values(), itemLabelGeneratorCollection.get${Column.FieldTypeName}ItemLabelGenerator(), session);
+		comboBox${FieldName} = componentFactory.createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values(), componentFactory.get${Column.FieldTypeName}ItemLabelGenerator(), session);
 		#if (${Column.isNullable()} == true)
 		comboBox${FieldName}.setClearButtonVisible(true);
 		#end
-		comboBox${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
+		comboBox${FieldName}.addValueChangeListener(event -> {
+			model.set${FieldName}(event.getValue());
 	#elseif (${Column.getType()} == "INTEGER")
 		integerField${FieldName} = componentFactory.createIntegerField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()}, session);
-		integerField${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
+		integerField${FieldName}.addValueChangeListener(event -> {
+			model.set${FieldName}(event.getValue());
 	#elseif (${Column.getType()} == "NUMERIC")
 		numberField${FieldName} = componentFactory.createNumberField("$ResourceId", model.get${FieldName}(), ${Column.getMin()}, ${Column.getMax()}, ${Column.getStep()}, session);
-		numberField${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
+		numberField${FieldName}.addValueChangeListener(event -> {
+			model.set${FieldName}(event.getValue());
 	#elseif (${Column.getType()} == "TEXT")
 		textArea${FieldName} = componentFactory.createTextArea("$ResourceId", model.get${FieldName}(), session);
-		textArea${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
+		textArea${FieldName}.addValueChangeListener(event -> {
+			model.set${FieldName}(event.getValue());
 	#elseif (${Column.getType()} == "TIMESTAMP")
 		dateTimePicker${FieldName} = new DateTimePicker(resourceManager.getLocalizedString("$ResourceId", session.getLocalization()), model.get${FieldName}(), event -> {});
-		dateTimePicker${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
+		dateTimePicker${FieldName}.addValueChangeListener(event -> {
+			model.set${FieldName}(event.getValue());
 	#elseif (${Column.getType()} == "UPLOAD")
 		MultiFileMemoryBuffer buffer${FieldName} = new MultiFileMemoryBuffer();
 		upload${FieldName} = new Upload(buffer${FieldName});
 		upload${FieldName}.setMaxFiles(1);
 		upload${FieldName}.setMaxFileSize(Integer.MAX_VALUE);
+		upload${FieldName}.setWidthFull();
 		upload${FieldName}.addSucceededListener(event -> {
 			System.out.println("upload (${FieldName}) started.");
 			String fileName = event.getFileName();
@@ -175,12 +178,13 @@ public class ${ClassName} extends Dialog {
 					e.printStackTrace();
 				}
 			}
-		});
-		upload${FieldName}.setWidthFull();
 	#else
 		textField${FieldName} = componentFactory.createTextField("$ResourceId", model.get${FieldName}(), session);
-		textField${FieldName}.addValueChangeListener(event -> model.set${FieldName}(event.getValue()));
+		textField${FieldName}.addValueChangeListener(event -> {
+			model.set${FieldName}(event.getValue());
 	#end
+			updateSaveButton();
+		});
 #end
 		mainLayout.add(
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
@@ -221,13 +225,13 @@ public class ${ClassName} extends Dialog {
 	#elseif (${Column.getType()} == "NUMERIC")
 				(numberField${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
 	#elseif (${Column.getType()} == "TEXT")
-				(textArea${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
+				(textArea${FieldName}.getValue() != null)#if(${Column.isRequired()}) && !textArea${FieldName}.isEmpty()#end#if ($foreach.hasNext) &&#end
 	#elseif (${Column.getType()} == "TIMESTAMP")
 				(dateTimePicker${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
 	#elseif (${Column.getType()} == "UPLOAD")
 				(upload${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
 	#else
-				(textField${FieldName}.getValue() != null)#if ($foreach.hasNext) &&#end
+				(textField${FieldName}.getValue() != null)#if(${Column.isRequired()}) && !textField${FieldName}.isEmpty()#end#if ($foreach.hasNext) &&#end
 	#end
 #end
 		);

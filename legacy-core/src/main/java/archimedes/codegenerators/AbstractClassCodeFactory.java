@@ -14,6 +14,8 @@ import archimedes.gui.checker.ModelCheckerMessageListFrameListener;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEvent;
 import archimedes.legacy.gui.Counter;
 import archimedes.model.DomainModel;
+import archimedes.model.MessageCollector.Message;
+import archimedes.model.MessageCollector.Priority;
 import archimedes.model.TableModel;
 
 /**
@@ -54,6 +56,12 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 									LOG.info("FINISHED generation for: " + generatorName);
 								} else {
 									// incrementStepProgress(stepCounter, "- ignored by generator: " + generatorName);
+									messageCollector
+											.add(
+													new Message(
+															generatorName,
+															Priority.WARN,
+															"Domain ignored: " + domainModel.getName()));
 									LOG
 											.info(
 													"- ignored domain '{}' by generator: {}",
@@ -65,6 +73,12 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 								// incrementStepProgress(
 								// stepCounter,
 								// "- ignored by not ready to override for generator: " + generatorName);
+								messageCollector
+										.add(
+												new Message(
+														generatorName,
+														Priority.WARN,
+														"Domain not ready to override: " + domainModel.getName()));
 								LOG
 										.info(
 												"- ignored domain '{}' by not ready to override: {}",
@@ -106,6 +120,12 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 										}
 									} else {
 										incrementStepProgress(stepCounter, null);
+										messageCollector
+												.add(
+														new Message(
+																generatorName,
+																Priority.WARN,
+																"Table ignored: " + tableModel.getName()));
 										LOG
 												.info(
 														"- ignored table '{}' by generator: {}",
@@ -117,6 +137,12 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 									incrementStepProgress(
 											stepCounter,
 											"- ignored by not ready to override for generator: " + generatorName);
+									messageCollector
+											.add(
+													new Message(
+															generatorName,
+															Priority.WARN,
+															"Table not ready to override: " + tableModel.getName()));
 									LOG
 											.info(
 													"- ignored table '{}' by not ready to override: {}",

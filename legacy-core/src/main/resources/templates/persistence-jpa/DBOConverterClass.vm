@@ -76,6 +76,8 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 #foreach($Column in $ColumnData)
 #if ((${Column.isReference()} && ${ReferenceMode} == "OBJECT" && !${Column.isPkMember()}) or ${Column.isEnumType()})
 		dbo.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(model.${Column.getGetterCall()}));
+#elseif (${Column.getFieldType()} == "LIST")
+		dbo.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(model.${Column.getGetterCall()}));
 #else
 		dbo.${Column.getSetterName()}(model.${Column.getGetterCall()});
 #end
@@ -122,6 +124,8 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 		${ModelClassName} model = new ${ModelClassName}();
 #foreach($Column in $ColumnData)
 #if ((${Column.isReference()} && ${ReferenceMode} == "OBJECT" && !${Column.isPkMember()}) or ${Column.isEnumType()})
+		model.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToModelMethodName}(dbo.${Column.getGetterCall()}));
+#elseif (${Column.getFieldType()} == "LIST")
 		model.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToModelMethodName}(dbo.${Column.getGetterCall()}));
 #else
 		model.${Column.getSetterName()}(dbo.${Column.getGetterCall()});

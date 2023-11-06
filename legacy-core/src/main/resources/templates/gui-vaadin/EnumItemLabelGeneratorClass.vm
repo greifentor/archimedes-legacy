@@ -1,0 +1,30 @@
+package ${PackageName};
+
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.vaadin.flow.component.ItemLabelGenerator;
+
+import ${EnumPackageName}.${EnumClassName};
+import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
+import lombok.Generated;
+import lombok.Getter;
+
+/**
+ * ${Generated}
+ */
+@Named
+@Getter
+@Generated
+public class ${ClassName} implements ItemLabelGenerator<${EnumClassName}> {
+
+	@Autowired
+	private ${ResourceManagerInterfaceName} resourceManager;
+
+	@Override
+	public String apply(${EnumClassName} item) {
+		return item != null ? resourceManager.getLocalizedString("${EnumClassName}." + item.name() + ".label") : "-";
+	}
+
+}

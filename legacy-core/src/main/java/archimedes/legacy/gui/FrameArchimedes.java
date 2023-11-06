@@ -124,6 +124,9 @@ import archimedes.model.ColumnModel;
 import archimedes.model.CompoundPredeterminedOptionProvider;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
+import archimedes.model.MessageCollector;
+import archimedes.model.MessageCollector.Message;
+import archimedes.model.MessageCollector.Priority;
 import archimedes.model.OptionType;
 import archimedes.model.PredeterminedOptionProvider;
 import archimedes.model.SequenceModel;
@@ -303,13 +306,14 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		this.serverMode = serverMode;
 		GlobalEventManager.AddGlobalListener(this);
 		this.guiBundle = guiBundle;
-		buildInModelCheckers = Arrays
-				.asList(
-						new ModelCheckerDomainNotInuse(guiBundle),
-						new ModelCheckerDomainSetForAllColumns(guiBundle),
-						new ModelCheckerPotentialForeignKeyNotSet(guiBundle),
-						new ModelCheckerNoPrimaryKeySet(guiBundle),
-						new ModelCheckerByScript(guiBundle));
+		buildInModelCheckers =
+				Arrays
+						.asList(
+								new ModelCheckerDomainNotInuse(guiBundle),
+								new ModelCheckerDomainSetForAllColumns(guiBundle),
+								new ModelCheckerPotentialForeignKeyNotSet(guiBundle),
+								new ModelCheckerNoPrimaryKeySet(guiBundle),
+								new ModelCheckerByScript(guiBundle));
 		int i = 0;
 		JMenuItem menuItem = null;
 
@@ -328,15 +332,16 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						(GUIViewModel) Archimedes.Factory
 								.createMainView("Main", "Diese Sicht beinhaltet alle Tabellen des Schemas", true));
 		this.guiObjectCreator = new DiagramGUIObjectCreator(this.diagramm);
-		this.component = new DiagramComponentPanel<GUIObjectTypes>(
-				this.diagramm.getViews().get(0),
-				ComponentDiagramm.DOTSPERPAGEX * ComponentDiagramm.PAGESPERROW,
-				ComponentDiagramm.DOTSPERPAGEY * ComponentDiagramm.PAGESPERCOLUMN,
-				this.diagramm,
-				this.guiObjectCreator,
-				this,
-				new ArchimedesStatusBarRenderer(),
-				new DefaultCopyAndPasteController());
+		this.component =
+				new DiagramComponentPanel<GUIObjectTypes>(
+						this.diagramm.getViews().get(0),
+						ComponentDiagramm.DOTSPERPAGEX * ComponentDiagramm.PAGESPERROW,
+						ComponentDiagramm.DOTSPERPAGEY * ComponentDiagramm.PAGESPERCOLUMN,
+						this.diagramm,
+						this.guiObjectCreator,
+						this,
+						new ArchimedesStatusBarRenderer(),
+						new DefaultCopyAndPasteController());
 		this.component.updateWarnings(this.guiBundle.getResourceText(RES_WARNING_MESSAGES_NO_WARNINGS));
 		this.component.addDiagramComponentPanelListener(this);
 		this.datenpfad = this.getInifile().readStr("Datei", "Default", this.datenpfad);
@@ -434,15 +439,16 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		menu.add(this.createMenuItem("menu.edit.item.new.version", null, e -> {
 			final VersionIncrementer.State rc = new VersionIncrementer().increment(diagramm);
 			if (rc == VersionIncrementer.State.SCRIPTS_CLEANED_ONLY) {
-				final Object version = JOptionPane
-						.showInputDialog(
-								null,
-								StrUtil.ToHTML("Version konnte nicht erh&ouml;ht werden!"),
-								StrUtil.ToHTML("Problem: Versionserh&ouml;hung"),
-								JOptionPane.QUESTION_MESSAGE,
-								null,
-								null,
-								diagramm.getVersion());
+				final Object version =
+						JOptionPane
+								.showInputDialog(
+										null,
+										StrUtil.ToHTML("Version konnte nicht erh&ouml;ht werden!"),
+										StrUtil.ToHTML("Problem: Versionserh&ouml;hung"),
+										JOptionPane.QUESTION_MESSAGE,
+										null,
+										null,
+										diagramm.getVersion());
 				if (version != null) {
 					diagramm.setVersion(String.valueOf(version));
 				}
@@ -455,8 +461,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		menuBar.add(menu);
 		menu = this.createMenu("menu.zoom", "zoom");
 		for (i = 1; i < 11; i++) {
-			menuItem = new JMenuItem(
-					this.guiBundle.getResourceText("menu.zoom.item.zoom.title").replace("{0}", String.valueOf(i * 10)));
+			menuItem =
+					new JMenuItem(
+							this.guiBundle
+									.getResourceText("menu.zoom.item.zoom.title")
+									.replace("{0}", String.valueOf(i * 10)));
 			menuItem.setMnemonic(new Integer(i).toString().charAt(0));
 			if (i == 10) {
 				menuItem.setMnemonic('0');
@@ -495,25 +504,28 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		this.viewmenu.setEnabled(isViewLogicEnabled());
 		this.menuitemtabletoview =
 				this.createMenuItem("menu.views.item.add.table", "tableinsert", e -> doViewsEinfuegen());
-		this.menuitemswitchrelationtoview = new JCheckBoxMenuItem(
-				this.guiBundle.getResourceText("menu.views.item.show.relations.title"),
-				((ViewModel) this.component.getView()).isShowReferencedColumns());
+		this.menuitemswitchrelationtoview =
+				new JCheckBoxMenuItem(
+						this.guiBundle.getResourceText("menu.views.item.show.relations.title"),
+						((ViewModel) this.component.getView()).isShowReferencedColumns());
 		this.menuitemswitchrelationtoview.addActionListener(e -> {
 			((ViewModel) component.getView()).setShowReferencedColumns(((JCheckBoxMenuItem) e.getSource()).getState());
 			raiseAltered();
 			doRepaint();
 		});
-		this.menuitemswitchtechnicalfieldstoview = new JCheckBoxMenuItem(
-				this.guiBundle.getResourceText("menu.views.item.hide.technical.fields.title"),
-				((ViewModel) this.component.getView()).isHideTechnicalFields());
+		this.menuitemswitchtechnicalfieldstoview =
+				new JCheckBoxMenuItem(
+						this.guiBundle.getResourceText("menu.views.item.hide.technical.fields.title"),
+						((ViewModel) this.component.getView()).isHideTechnicalFields());
 		this.menuitemswitchtechnicalfieldstoview.addActionListener(e -> {
 			((ViewModel) component.getView()).setHideTechnicalFields(((JCheckBoxMenuItem) e.getSource()).getState());
 			raiseAltered();
 			doRepaint();
 		});
-		this.menuitemswitchtransientfieldstoview = new JCheckBoxMenuItem(
-				this.guiBundle.getResourceText("menu.views.item.hide.transient.fields.title"),
-				((ViewModel) this.component.getView()).isHideTransientFields());
+		this.menuitemswitchtransientfieldstoview =
+				new JCheckBoxMenuItem(
+						this.guiBundle.getResourceText("menu.views.item.hide.transient.fields.title"),
+						((ViewModel) this.component.getView()).isHideTransientFields());
 		this.menuitemswitchtransientfieldstoview.addActionListener(e -> {
 			((ViewModel) component.getView()).setHideTransientFields(((JCheckBoxMenuItem) e.getSource()).getState());
 			raiseAltered();
@@ -593,10 +605,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	}
 
 	private void createUserInformations(final Inifile ini) {
-		this.userInformation = new DefaultUserInformation(
-				System.getProperty("archimedes.user.name", "UNKNOWN"),
-				System.getProperty("archimedes.user.token", "N/A"),
-				System.getProperty("archimedes.user.company", "UNKNOWN"));
+		this.userInformation =
+				new DefaultUserInformation(
+						System.getProperty("archimedes.user.name", "UNKNOWN"),
+						System.getProperty("archimedes.user.token", "N/A"),
+						System.getProperty("archimedes.user.company", "UNKNOWN"));
 	}
 
 	/**
@@ -604,15 +617,16 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void doDateiOeffnen() {
 		if (this.diagramm.isAltered()) {
-			final int option = JOptionPane
-					.showConfirmDialog(
-							null,
-							StrUtil
-									.FromHTML(
-											"Das Diagramm "
-													+ "ist ge&auml;ndert worden!\nM&ouml;chten Sie es speichern?"),
-							"Diagramm nicht" + " gespeichert",
-							JOptionPane.YES_NO_CANCEL_OPTION);
+			final int option =
+					JOptionPane
+							.showConfirmDialog(
+									null,
+									StrUtil
+											.FromHTML(
+													"Das Diagramm "
+															+ "ist ge&auml;ndert worden!\nM&ouml;chten Sie es speichern?"),
+									"Diagramm nicht" + " gespeichert",
+									JOptionPane.YES_NO_CANCEL_OPTION);
 
 			if (option == JOptionPane.YES_OPTION) {
 				if ((this.dateiname.length() == 0) || (this.dateiname.equalsIgnoreCase("unbenannt.ads"))) {
@@ -663,16 +677,17 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	public void doDateiOeffnen(final String fileName, final boolean ask) {
 		if (ask && this.diagramm.isAltered()) {
 			final boolean errors = this.isErrorsFound(this.diagramm, false);
-			final int option = JOptionPane
-					.showConfirmDialog(
-							null,
-							this.guiBundle
-									.getResourceText(
-											(errors
-													? "archimedes.open.file.altered.warning.with.errors.text"
-													: "archimedes.open.file.altered.warning.text")),
-							this.guiBundle.getResourceText("archimedes.open.file.altered.warning.title"),
-							JOptionPane.YES_NO_CANCEL_OPTION);
+			final int option =
+					JOptionPane
+							.showConfirmDialog(
+									null,
+									this.guiBundle
+											.getResourceText(
+													(errors
+															? "archimedes.open.file.altered.warning.with.errors.text"
+															: "archimedes.open.file.altered.warning.text")),
+									this.guiBundle.getResourceText("archimedes.open.file.altered.warning.title"),
+									JOptionPane.YES_NO_CANCEL_OPTION);
 			if (option == JOptionPane.YES_OPTION) {
 				if ((this.dateiname.length() == 0) || (this.dateiname.equalsIgnoreCase("unbenannt.ads"))) {
 					this.doDateiSpeichernUnter();
@@ -786,12 +801,15 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 			try {
 				if (name.endsWith("ads")) {
-					final int option = JOptionPane
-							.showConfirmDialog(
-									null,
-									this.guiBundle.getResourceText("archimedes.save.file.old.format.warning.text"),
-									this.guiBundle.getResourceText("archimedes.save.file.old.format.warning.title"),
-									JOptionPane.YES_NO_OPTION);
+					final int option =
+							JOptionPane
+									.showConfirmDialog(
+											null,
+											this.guiBundle
+													.getResourceText("archimedes.save.file.old.format.warning.text"),
+											this.guiBundle
+													.getResourceText("archimedes.save.file.old.format.warning.title"),
+											JOptionPane.YES_NO_OPTION);
 
 					if (option == JOptionPane.YES_OPTION) {
 						StructuredTextFile stf = this.diagramm.toSTF(DiagramSaveMode.REGULAR);
@@ -956,17 +974,20 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			this.semSpeichern.P();
 			final boolean errorsFound = this.isErrorsFound(this.diagramm, false);
 			if (this.diagramm.isAltered()) {
-				final int answer = JOptionPane
-						.showConfirmDialog(
-								null,
-								StrUtil
-										.FromHTML(
-												"Das Diagramm ist ge&auml;ndert worden!\n"
-														+ (errorsFound ? "DAS MODELL ENTH&Auml;LT FEHLER!\n" : "")
-														+ "M&ouml;chten Sie es " + (errorsFound ? "trotzdem " : "")
-														+ "speichern?"),
-								"Diagramm nicht gespeichert",
-								JOptionPane.YES_NO_CANCEL_OPTION);
+				final int answer =
+						JOptionPane
+								.showConfirmDialog(
+										null,
+										StrUtil
+												.FromHTML(
+														"Das Diagramm ist ge&auml;ndert worden!\n"
+																+ (errorsFound
+																		? "DAS MODELL ENTH&Auml;LT FEHLER!\n"
+																		: "")
+																+ "M&ouml;chten Sie es "
+																+ (errorsFound ? "trotzdem " : "") + "speichern?"),
+										"Diagramm nicht gespeichert",
+										JOptionPane.YES_NO_CANCEL_OPTION);
 				if (answer == JOptionPane.YES_OPTION) {
 					this.semSpeichern.V();
 					if ((this.dateiname.length() == 0) || (this.dateiname.equalsIgnoreCase("unbenannt.ads"))) {
@@ -1035,25 +1056,32 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 				return;
 			}
 			new File("tmp-db").mkdir();
-			final Connection connection = ConnectionManager
-					.GetConnection(
-							new JDBCDataSourceRecord("org.h2.Driver", "jdbc:h2:mem:updatedb;MODE=PostgreSQL", "", ""));
+			final Connection connection =
+					ConnectionManager
+							.GetConnection(
+									new JDBCDataSourceRecord(
+											"org.h2.Driver",
+											"jdbc:h2:mem:updatedb;MODE=PostgreSQL",
+											"",
+											""));
 			Database database =
 					DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
-			Liquibase liquibase = new liquibase.Liquibase(
-					fileName,
-					new FileSystemResourceAccessor(
-							new File("/home/ollie/eclipse-workspace/library/src/main/resources/db/change-log")),
-					database);
+			Liquibase liquibase =
+					new liquibase.Liquibase(
+							fileName,
+							new FileSystemResourceAccessor(
+									new File("/home/ollie/eclipse-workspace/library/src/main/resources/db/change-log")),
+							database);
 			liquibase.update(new Contexts(), new LabelExpression());
 			liquibase.close();
-			JDBCImportData importData = new JDBCImportData()
-					.setAdjustment(Adjustment.LEFT_BY_NAME)
-					.setConnection(connection)
-					.setIgnoreIndices(false)
-					.setImportOnlyTablePatterns("*")
-					.setPassword("")
-					.setSchema("PUBLIC");
+			JDBCImportData importData =
+					new JDBCImportData()
+							.setAdjustment(Adjustment.LEFT_BY_NAME)
+							.setConnection(connection)
+							.setIgnoreIndices(false)
+							.setImportOnlyTablePatterns("*")
+							.setPassword("")
+							.setSchema("PUBLIC");
 			final FrameArchimedes frameArchimedes = this;
 			final Thread t = new Thread(() -> {
 				ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 5);
@@ -1147,8 +1175,9 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	public void doInfoVersionsToClipboard() {
 		String versions = "";
 		for (Object cf : this.getCodeFactories("")) {
-			versions += this.versionStringBuilder.getVersions(((cf instanceof CodeFactory) ? (CodeFactory) cf : null))
-					+ "\n";
+			versions +=
+					this.versionStringBuilder.getVersions(((cf instanceof CodeFactory) ? (CodeFactory) cf : null))
+							+ "\n";
 		}
 		final Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
 		cb.setContents(new StringSelection(versions), null);
@@ -1278,39 +1307,40 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void doBearbeitenDomains() {
 		final DiagrammModel dm = this.diagramm;
-		final FrameSelectionEditorDjinn fsd = new FrameSelectionEditorDjinn(
-				"Auswahl Domain",
-				dm.getDomainsReference(),
-				(Domain) dm.createDomain(),
-				this.getInifile(),
-				true) {
-			@Override
-			public boolean permitDelete(final Object obj) {
-				final TableModel[] tables = dm.getTables();
+		final FrameSelectionEditorDjinn fsd =
+				new FrameSelectionEditorDjinn(
+						"Auswahl Domain",
+						dm.getDomainsReference(),
+						(Domain) dm.createDomain(),
+						this.getInifile(),
+						true) {
+					@Override
+					public boolean permitDelete(final Object obj) {
+						final TableModel[] tables = dm.getTables();
 
-				for (final TableModel tm : tables) {
-					for (final ColumnModel cm : tm.getColumns()) {
-						if (cm.getDomain() == obj) {
-							JOptionPane
-									.showMessageDialog(
-											null,
-											StrUtil
-													.FromHTML(
-															"Die Domain " + "wird durch " + cm.getFullName()
-																	+ " genutzt!\n"
-																	+ "L&ouml;schen nicht m&ouml;glich!"),
-											"Referenzproblem!",
-											JOptionPane.YES_OPTION);
-							LOG.warn("Domain wird benutzt durch " + cm.getFullName());
+						for (final TableModel tm : tables) {
+							for (final ColumnModel cm : tm.getColumns()) {
+								if (cm.getDomain() == obj) {
+									JOptionPane
+											.showMessageDialog(
+													null,
+													StrUtil
+															.FromHTML(
+																	"Die Domain " + "wird durch " + cm.getFullName()
+																			+ " genutzt!\n"
+																			+ "L&ouml;schen nicht m&ouml;glich!"),
+													"Referenzproblem!",
+													JOptionPane.YES_OPTION);
+									LOG.warn("Domain wird benutzt durch " + cm.getFullName());
 
-							return false;
+									return false;
+								}
+							}
 						}
-					}
-				}
 
-				return true;
-			}
-		};
+						return true;
+					}
+				};
 		fsd.addSelectionDjinnListener(new SelectionDjinnAdapter() {
 			@Override
 			public void selectionUpdated() {
@@ -1325,35 +1355,38 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void doEditSequences() {
 		final DiagrammModel dm = this.diagramm;
-		final FrameSelectionEditorDjinn fsd = new FrameSelectionEditorDjinn(
-				this.guiBundle.getResourceText("sequences.maintenance.title"),
-				dm.getSequencesByReference(),
-				(Sequence) dm.createSequence(),
-				this.getInifile(),
-				true) {
-			@Override
-			public boolean permitDelete(final Object obj) {
-				for (final TableModel tm : dm.getTables()) {
-					for (final ColumnModel cm : tm.getColumns()) {
-						if (cm.getSequenceForKeyGeneration() == obj) {
-							JOptionPane
-									.showMessageDialog(
-											null,
-											guiBundle
-													.getResourceText("sequences.maintenance.permit.delete.text")
-													.replace("$NAME$", ((SequenceModel) obj).getName())
-													.replace("$COLUMNNAME$", cm.getFullName()),
-											guiBundle.getResourceText("sequences.maintenance.permit.delete.title"),
-											JOptionPane.YES_OPTION);
+		final FrameSelectionEditorDjinn fsd =
+				new FrameSelectionEditorDjinn(
+						this.guiBundle.getResourceText("sequences.maintenance.title"),
+						dm.getSequencesByReference(),
+						(Sequence) dm.createSequence(),
+						this.getInifile(),
+						true) {
+					@Override
+					public boolean permitDelete(final Object obj) {
+						for (final TableModel tm : dm.getTables()) {
+							for (final ColumnModel cm : tm.getColumns()) {
+								if (cm.getSequenceForKeyGeneration() == obj) {
+									JOptionPane
+											.showMessageDialog(
+													null,
+													guiBundle
+															.getResourceText("sequences.maintenance.permit.delete.text")
+															.replace("$NAME$", ((SequenceModel) obj).getName())
+															.replace("$COLUMNNAME$", cm.getFullName()),
+													guiBundle
+															.getResourceText(
+																	"sequences.maintenance.permit.delete.title"),
+													JOptionPane.YES_OPTION);
 
-							return false;
+									return false;
+								}
+							}
 						}
-					}
-				}
 
-				return true;
-			}
-		};
+						return true;
+					}
+				};
 		fsd.addSelectionDjinnListener(new SelectionDjinnAdapter() {
 			@Override
 			public void selectionUpdated() {
@@ -1379,37 +1412,38 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void doBearbeitenStereotype() {
 		final DiagrammModel dm = this.diagramm;
-		final FrameSelectionEditorDjinn fsd = new FrameSelectionEditorDjinn(
-				"Auswahl Stereotypen",
-				dm.getStereotypeReference(),
-				(Stereotype) dm.createStereotype(),
-				this.getInifile(),
-				true) {
-			@Override
-			public boolean permitDelete(final Object obj) {
-				for (final TableModel tm : dm.getTables()) {
-					for (final StereotypeModel stm : tm.getStereotypes()) {
-						if (stm == obj) {
-							JOptionPane
-									.showMessageDialog(
-											null,
-											StrUtil
-													.FromHTML(
-															"Die " + "Stereotype wird durch " + tm.getName()
-																	+ " genutzt!\n"
-																	+ "L&ouml;schen nicht m&ouml;glich!"),
-											"Referenzproblem!",
-											JOptionPane.YES_OPTION);
-							LOG.warn("Stereotype wird benutzt durch " + tm.getName());
+		final FrameSelectionEditorDjinn fsd =
+				new FrameSelectionEditorDjinn(
+						"Auswahl Stereotypen",
+						dm.getStereotypeReference(),
+						(Stereotype) dm.createStereotype(),
+						this.getInifile(),
+						true) {
+					@Override
+					public boolean permitDelete(final Object obj) {
+						for (final TableModel tm : dm.getTables()) {
+							for (final StereotypeModel stm : tm.getStereotypes()) {
+								if (stm == obj) {
+									JOptionPane
+											.showMessageDialog(
+													null,
+													StrUtil
+															.FromHTML(
+																	"Die " + "Stereotype wird durch " + tm.getName()
+																			+ " genutzt!\n"
+																			+ "L&ouml;schen nicht m&ouml;glich!"),
+													"Referenzproblem!",
+													JOptionPane.YES_OPTION);
+									LOG.warn("Stereotype wird benutzt durch " + tm.getName());
 
-							return false;
+									return false;
+								}
+							}
 						}
-					}
-				}
 
-				return true;
-			}
-		};
+						return true;
+					}
+				};
 		fsd.addSelectionDjinnListener(new SelectionDjinnAdapter() {
 			@Override
 			public void selectionUpdated() {
@@ -1424,17 +1458,18 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	 */
 	public void doBearbeitenViews() {
 		final DiagrammModel dm = this.diagramm;
-		final FrameSelectionEditorDjinn fsd = new FrameSelectionEditorDjinn(
-				"Auswahl Views",
-				(Vector<?>) dm.getViews(),
-				(View) Archimedes.Factory.createView(),
-				this.getInifile(),
-				true) {
-			@Override
-			public boolean permitDelete(final Object obj) {
-				return true;
-			}
-		};
+		final FrameSelectionEditorDjinn fsd =
+				new FrameSelectionEditorDjinn(
+						"Auswahl Views",
+						(Vector<?>) dm.getViews(),
+						(View) Archimedes.Factory.createView(),
+						this.getInifile(),
+						true) {
+					@Override
+					public boolean permitDelete(final Object obj) {
+						return true;
+					}
+				};
 		fsd.addSelectionDjinnListener(new SelectionDjinnAdapter() {
 			@Override
 			public void selectionUpdated() {
@@ -1458,10 +1493,11 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		bc.setUserName(System.getProperty("archimedes.user.name", ""));
 		bc.setUserToken(System.getProperty("archimedes.user.token", ""));
 
-		final BaseConfigurationFrame bcf = new BaseConfigurationFrame(
-				bc,
-				this.guiBundle.getResourceText("BaseconfigurationFrame.title"),
-				this.guiBundle);
+		final BaseConfigurationFrame bcf =
+				new BaseConfigurationFrame(
+						bc,
+						this.guiBundle.getResourceText("BaseconfigurationFrame.title"),
+						this.guiBundle);
 		bcf.addEditorFrameListener(this);
 		bcf.setVisible(true);
 	}
@@ -1486,20 +1522,19 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		compoundOptionProvider
 				.addOptions(
 						OptionType.COLUMN,
-		                new String[] {
-		                        ModelCheckerPotentialForeignKeyNotSet.SUPPRESS_POTENTIAL_FK_WARNING });
+						new String[] { ModelCheckerPotentialForeignKeyNotSet.SUPPRESS_POTENTIAL_FK_WARNING });
 		compoundOptionProvider
-		        .addOptions(
-		                OptionType.MODEL,
-		                new String[] {
-		                        DataModel.ALTERNATE_FK_NAME,
-		                        ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE,
-		                        DataModel.SCHEMA_NAME });
+				.addOptions(
+						OptionType.MODEL,
+						new String[] {
+								DataModel.ALTERNATE_FK_NAME,
+								ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE,
+								DataModel.SCHEMA_NAME });
 		compoundOptionProvider
 				.addOptions(
 						OptionType.TABLE,
 						new String[] {
-		                        ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE,
+								ModelCheckerPotentialForeignKeyNotSet.POTENTIAL_FK_WARNING_MODE,
 								ModelCheckerNoPrimaryKeySet.SUPPRESS_NO_PK_WARNING,
 								ModelChecker.IGNORE_CHECKER_OPTION });
 		for (Object cf : getCodeFactories("")) {
@@ -1590,6 +1625,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 	public void doGenerateCode() {
 		final CodePathProvider codePathProvider = new CodePathProvider(this.guiBundle, this.diagramm);
 		final String path = codePathProvider.getCodePath();
+		MessageCollector messageCollector = new MessageCollector();
+		messageCollector.add(new Message("Archimedes", Priority.INFO, "GENERATION PROCESS STARTED."));
 		if (!path.isEmpty()) {
 			List<Object> codeFactories = getCodeFactories(path);
 			final FrameArchimedes fa = this;
@@ -1603,22 +1640,23 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 					progressionFrame.updateFactory(factoryCount.getValue(), codeFactories.size(), null, null);
 				}).start();
 			}
-			for (Object cf : codeFactories) {
-				if (cf instanceof CodeGenerator) {
-					try {
-						((CodeGenerator) cf).generate(this.diagramm);
-					} catch (Exception e) {
-						new JDialogThrowable(
-								e,
-								"Error while running code generator " + cf.getClass().getSimpleName() + "!",
-								this.getInifile(),
-								new PropertyRessourceManager());
-					}
-				} else {
-					final Thread t = new Thread(() -> {
+			final Thread t = new Thread(() -> {
+				for (Object cf : codeFactories) {
+					if (cf instanceof CodeGenerator) {
+						try {
+							((CodeGenerator) cf).generate(this.diagramm);
+						} catch (Exception e) {
+							new JDialogThrowable(
+									e,
+									"Error while running code generator " + cf.getClass().getSimpleName() + "!",
+									this.getInifile(),
+									new PropertyRessourceManager());
+						}
+					} else {
 						LOG.info("Called code factory: " + cf.getClass().getSimpleName());
 						((CodeFactory) cf).addCodeFactoryListener(fa);
 						((CodeFactory) cf).setDataModel(fa.diagramm);
+						((CodeFactory) cf).setMessageCollector(messageCollector);
 						if (cf instanceof CodeFactoryProgressionEventProvider) {
 							((CodeFactoryProgressionEventProvider) cf).addCodeFactoryProgressionListener(event -> {
 								if (progressionFrame != null) {
@@ -1650,13 +1688,21 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 															+ "--------------------------------------------------------------------------------\n\n\n"
 													: null);
 						}
-					});
-					t.start();
+					}
 				}
-			}
-			if (progressionFrame != null) {
-				progressionFrame.enableCloseButton();
-			}
+				if (progressionFrame != null) {
+					progressionFrame.enableCloseButton();
+				}
+				messageCollector.add(new Message("Archimedes", Priority.INFO, "GENERATION PROCESS FINISHED."));
+				messageCollector
+						.getMessages()
+						.forEach(
+								m -> System.out
+										.println(
+												"> " + m.getTimestamp() + " - " + m.getPriority() + " - "
+														+ m.getCodeGeneratorName() + " - " + m.getMessage()));
+			});
+			t.start();
 		}
 	}
 
@@ -1689,11 +1735,12 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		CodeGenerator cg = null;
 		try {
 			if ((cfcn == null) || (cfcn.length() == 0)) {
-				cfcn = this.ini
-						.readStr(
-								"CodeGenerator",
-								"Class",
-								System.getProperty("archimedes.default.codefactory.class", "CODEFACTORYCLASS"));
+				cfcn =
+						this.ini
+								.readStr(
+										"CodeGenerator",
+										"Class",
+										System.getProperty("archimedes.default.codefactory.class", "CODEFACTORYCLASS"));
 			}
 			if (cfcn.startsWith("gengen:")) {
 				try {
@@ -1936,9 +1983,10 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 			if (bcfe.getEventType() == EditorFrameEventType.OK) {
 				final BaseConfiguration bc = bcfe.getEditedObject();
-				final String propfn = corentx.io.FileUtil
-						.completePath(System.getProperty("user.home"))
-						.concat(".archimedes.properties");
+				final String propfn =
+						corentx.io.FileUtil
+								.completePath(System.getProperty("user.home"))
+								.concat(".archimedes.properties");
 				System.setProperty("archimedes.user.company", bc.getCompany());
 				System.getProperty("archimedes.user.database.name", bc.getDBName());
 				System.getProperty("archimedes.user.database.server.name", bc.getDBServerName());
@@ -2207,15 +2255,17 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			final int warnCount = this.getMessageCount(mcms, ModelCheckerMessage.Level.WARNING);
 			String s = "";
 			if (infoCount > 0) {
-				s += ((s.length() > 0) ? ", " : "")
-						+ this.guiBundle.getResourceText(RES_WARNING_MESSAGES_INFOS_DETECTED, infoCount);
+				s +=
+						((s.length() > 0) ? ", " : "")
+								+ this.guiBundle.getResourceText(RES_WARNING_MESSAGES_INFOS_DETECTED, infoCount);
 			}
 			if (errorCount > 0) {
 				s += this.guiBundle.getResourceText(RES_WARNING_MESSAGES_ERRORS_DETECTED, errorCount);
 			}
 			if (warnCount > 0) {
-				s += ((s.length() > 0) ? ", " : "")
-						+ this.guiBundle.getResourceText(RES_WARNING_MESSAGES_WARNINGS_DETECTED, warnCount);
+				s +=
+						((s.length() > 0) ? ", " : "")
+								+ this.guiBundle.getResourceText(RES_WARNING_MESSAGES_WARNINGS_DETECTED, warnCount);
 			}
 			this.updateWarnings(s, warnCount > 0, errorCount > 0);
 		} else {

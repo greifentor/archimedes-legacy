@@ -24,6 +24,7 @@ public class GUIColumnData {
 	private String min;
 	private boolean nullable;
 	private int position;
+	private boolean required;
 	private String resourceName;
 	private boolean simpleBoolean;
 	private String step;

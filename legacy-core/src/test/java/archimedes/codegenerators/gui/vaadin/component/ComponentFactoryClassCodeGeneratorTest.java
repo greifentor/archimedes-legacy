@@ -36,6 +36,7 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ "import javax.inject.Named;\n" //
 							+ "\n" //
 							+ "import org.apache.logging.log4j.Logger;\n" //
+							+ "import org.springframework.beans.factory.annotation.Autowired;\n" //
 							+ "\n" //
 							+ "import com.vaadin.flow.component.ClickEvent;\n" //
 							+ "import com.vaadin.flow.component.ItemLabelGenerator;\n" //
@@ -47,11 +48,16 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ "import com.vaadin.flow.component.textfield.TextArea;\n" //
 							+ "import com.vaadin.flow.router.QueryParameters;\n" //
 							+ "\n" //
+							+ "import de.ollie.bookstore.core.model.PublicationType;\n" //
+							+ "import de.ollie.bookstore.core.model.Book;\n" //
+							+ "import de.ollie.bookstore.core.model.Chapter;\n" //
 							+ "import de.ollie.bookstore.core.service.localization.ResourceManager;\n" //
 							+ "import de.ollie.bookstore.gui.SessionData;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.ApplicationStartView;\n" //
+							+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGridFieldRenderer;\n" //
 							+ "\n" //
 							+ "import lombok.Generated;\n" //
+							+ "import lombok.Getter;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
 							+ "\n" //
 							+ "/**\n" //
@@ -60,12 +66,21 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
 							+ " */\n" //
 							+ "@Generated\n" //
+							+ "@Getter\n" //
 							+ "@Named\n" //
 							+ "@RequiredArgsConstructor\n" //
 							+ "public class ComponentFactory {\n" //
 							+ "\n" //
 							+ "	private final ButtonFactoryConfiguration buttonFactoryConfiguration;\n" //
 							+ "	private final ResourceManager resourceManager;\n" //
+							+ "\n" //
+							+ "	@Autowired(required = false)\n" //
+							+ "	private ItemLabelGenerator<PublicationType> publicationTypeItemLabelGenerator;\n" //
+							+ "\n" //
+							+ "	@Autowired(required = false)\n" //
+							+ "	private MasterDataGridFieldRenderer<Book> bookMasterDataGridFieldRenderer;\n" //
+							+ "	@Autowired(required = false)\n" //
+							+ "	private MasterDataGridFieldRenderer<Chapter> chapterMasterDataGridFieldRenderer;\n" //
 							+ "\n" //
 							+ "	public Button createButton(String text) {\n" //
 							+ "		Button button =\n" //

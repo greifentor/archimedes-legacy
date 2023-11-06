@@ -35,6 +35,7 @@ import archimedes.model.CodeFactory;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
+import archimedes.model.MessageCollector;
 import archimedes.model.NReferenceModel;
 import archimedes.model.StereotypeModel;
 import archimedes.model.ToStringContainerModel;
@@ -50,9 +51,8 @@ import corent.dates.PTimestamp;
 import logging.Logger;
 
 /**
- * Diese Code-Factory generiert Java-Code aus dem Archimedes-Standard-Modell.
- * Der Code mu&szlig; zum Einsatz mit einer Datenbank erheblich erweitert
- * werden.
+ * Diese Code-Factory generiert Java-Code aus dem Archimedes-Standard-Modell. Der Code mu&szlig; zum Einsatz mit einer
+ * Datenbank erheblich erweitert werden.
  * <P>
  * Die CodeFactory reagiert auf folgende Stereotypen: <BR>
  * &nbsp;
@@ -63,40 +63,33 @@ import logging.Logger;
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>Cached</TD>
- * <TD>Es wird ein Cache als statische Variable in die Klasse eingebaut.
- * Au&szlig;erdem wird das Interface EditorDjinnMaster implementiert und damit
- * eine Cacheaktualisierung angeregt, wenn ein EditorDjinn, der ein Objekt
+ * <TD>Es wird ein Cache als statische Variable in die Klasse eingebaut. Au&szlig;erdem wird das Interface
+ * EditorDjinnMaster implementiert und damit eine Cacheaktualisierung angeregt, wenn ein EditorDjinn, der ein Objekt
  * dieser Klasse anzeigt, mit &Uuml;bernahme ge&auml;ndert wird.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>ColumnViewable</TD>
- * <TD>Eine automatische Implementierung der Methodenr&uuml;pfe des
- * ColumnViewable-Interfaces.</TD>
+ * <TD>Eine automatische Implementierung der Methodenr&uuml;pfe des ColumnViewable-Interfaces.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>Deactivatable (Deaktivierbar)</TD>
- * <TD>Die eigentliche Implementierung dieses Interfaces findet im Udschebti
- * statt. Hier wird immer eine vorsorgliche Implementierung vorgehalten. Das
- * Interface Deactivatable kennzeichnet quasi nur noch die Klassen, die von der
- * DB-Schicht tats&auml;chlich entsprechend behandelt werden sollen (Setzen
- * einer Gel&ouml;schtflagge, statt eines physikalischen L&ouml;schens).</TD>
+ * <TD>Die eigentliche Implementierung dieses Interfaces findet im Udschebti statt. Hier wird immer eine vorsorgliche
+ * Implementierung vorgehalten. Das Interface Deactivatable kennzeichnet quasi nur noch die Klassen, die von der
+ * DB-Schicht tats&auml;chlich entsprechend behandelt werden sollen (Setzen einer Gel&ouml;schtflagge, statt eines
+ * physikalischen L&ouml;schens).</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>LastModificationTracker</TD>
- * <TD>Mit diesem Interface verh&auml;lt es sich ebenso, wie mit dem Interface
- * Deactivatable. Die Implementierung der Methoden sollte &uuml;ber den
- * Udschebti erledigt werden. Hei&szlig;t die Tabellenspalte zur Aufnahme des
- * Zeitstempels der letzten &Auml;nderung anders als "LastModificationDate"
- * m&uuml;ssen die beiden Methoden des Interfaces per Hand implementiert werden.
- * </TD>
+ * <TD>Mit diesem Interface verh&auml;lt es sich ebenso, wie mit dem Interface Deactivatable. Die Implementierung der
+ * Methoden sollte &uuml;ber den Udschebti erledigt werden. Hei&szlig;t die Tabellenspalte zur Aufnahme des Zeitstempels
+ * der letzten &Auml;nderung anders als "LastModificationDate" m&uuml;ssen die beiden Methoden des Interfaces per Hand
+ * implementiert werden.</TD>
  * </TR>
  * <TR VALIGN=TOP>
  * <TD>Traceable</TD>
- * <TD>&Uuml;ber dieses Interface wird eine Klasse kennzeichnet, die den Zustand
- * ihrer Datens&auml;tze nach jeder &Auml;nderung festhalten soll. Hierzu ist es
- * allerdings erforderlich, da&szlig; es sich bei der Applikation um eine
- * "ArchimedesTracingApplication" handelt, die in der Lage ist auf die "trace
- * events" zu reagieren.</TD>
+ * <TD>&Uuml;ber dieses Interface wird eine Klasse kennzeichnet, die den Zustand ihrer Datens&auml;tze nach jeder
+ * &Auml;nderung festhalten soll. Hierzu ist es allerdings erforderlich, da&szlig; es sich bei der Applikation um eine
+ * "ArchimedesTracingApplication" handelt, die in der Lage ist auf die "trace events" zu reagieren.</TD>
  * </TR>
  * </TABLE>
  * 
@@ -112,23 +105,22 @@ import logging.Logger;
  * <TD>archimedes.scheme.DefaultCodeFactory.ts.package</TD>
  * <TD>String</TD>
  * <TD>corentx.dates</TD>
- * <TD>&Uuml;ber diese Property kann der Name des Packages gesetzt werden, in
- * dem sich die Zeitstempelimplementierungen zum System befinden.</TD>
+ * <TD>&Uuml;ber diese Property kann der Name des Packages gesetzt werden, in dem sich die Zeitstempelimplementierungen
+ * zum System befinden.</TD>
  * </TR>
  * </TABLE>
  * 
  * <P>
- * Zudem wird das Interface Ordered automatisch implementiert, wenn das
- * TabellenModel zur einer Tabelle wenigsten ein OrderMember hat.
+ * Zudem wird das Interface Ordered automatisch implementiert, wenn das TabellenModel zur einer Tabelle wenigsten ein
+ * OrderMember hat.
  * 
  * @author ollie
  * 
- * @changed OLI 11.02.2008 - Implementierung der Beachtung einer alternativen
- *          Udschebti-Basisklasse, sofern eine solche angegeben ist.
- * @changed OLI 26.03.2008 - Erste Implementierungen zum Thema generierte
- *          Ressourcendateien.
- * @changed OLI 16.08.2008 - Anpassungen der generierten Klassenkommentare an
- *          das aktuelle Format.
+ * @changed OLI 11.02.2008 - Implementierung der Beachtung einer alternativen Udschebti-Basisklasse, sofern eine solche
+ *          angegeben ist.
+ * @changed OLI 26.03.2008 - Erste Implementierungen zum Thema generierte Ressourcendateien.
+ * @changed OLI 16.08.2008 - Anpassungen der generierten Klassenkommentare an das aktuelle Format.
+ * @changed OLI 02.11.2023 - MessageCollector eingef&uuml;gt.
  */
 
 public class DefaultCodeFactory implements CodeFactory {
@@ -140,6 +132,7 @@ public class DefaultCodeFactory implements CodeFactory {
 	/* Liste der zu importierenden Packages. */
 	private Hashtable imports = new Hashtable();
 	private GUIBundle guiBundle = null;
+	private MessageCollector messageCollector;
 	private DataModel dataModel = null;
 
 	/** Generiert eine CodeFactory mit Defaultwerten. */
@@ -1885,6 +1878,11 @@ public class DefaultCodeFactory implements CodeFactory {
 	@Override
 	public String getVersion() {
 		return Archimedes.GetVersion();
+	}
+
+	@Override
+	public void setMessageCollector(MessageCollector messageCollector) {
+		this.messageCollector = messageCollector;
 	}
 
 }

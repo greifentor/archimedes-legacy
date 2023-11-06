@@ -22,10 +22,6 @@ import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
 import ${ComponentFactoryPackageName}.${ComponentFactoryClassName};
 import ${HeaderLayoutPackageName}.${HeaderLayoutClassName};
 import ${HeaderLayoutPackageName}.${HeaderLayoutClassName}.HeaderLayoutMode;
-import ${ItemLabelGeneratorCollectionPackageName}.${ItemLabelGeneratorCollectionClassName};
-#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
-import ${Subclass.getItemLabelGeneratorCollectionPackageName()}.${Subclass.getItemLabelGeneratorCollectionClassName()};
-#end
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -65,10 +61,6 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	private final ${FieldDeclaration.getTypeName()} ${FieldDeclaration.getAttributeName()};
 #end
 	private final ${SessionDataClassName} session;
-	private final ${ItemLabelGeneratorCollectionClassName} itemLabelGeneratorCollection;
-#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
-	private final ${Subclass.getItemLabelGeneratorCollectionClassName()} ${Subclass.getItemLabelGeneratorCollectionAttributeName()};
-#end
 
 	private ${ModelClassName} model;
 
@@ -155,11 +147,10 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 					resourceManager,
 					session,
 					this,
-					comboBoxItemLabelGenerator,
-					${Subclass.getItemLabelGeneratorCollectionAttributeName()});
+					comboBoxItemLabelGenerator);
 		}
 #end
-		return new ${DetailsLayoutClassName}(buttonFactory, componentFactory, model, service,#if($GUIReferenceDataCollection.getServiceAttributeNameList()) $GUIReferenceDataCollection.getServiceAttributeNameList(),#{end} guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);
+		return new ${DetailsLayoutClassName}(buttonFactory, componentFactory, model, service,#if($GUIReferenceDataCollection.getServiceAttributeNameList()) $GUIReferenceDataCollection.getServiceAttributeNameList(),#{end} guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);
 	}
 
 	@Override

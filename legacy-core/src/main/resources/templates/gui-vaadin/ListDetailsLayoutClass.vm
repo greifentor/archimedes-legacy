@@ -14,9 +14,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 #foreach ($ImportDeclaration in $ImportDeclarations.toList())
 import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
+import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
 import ${MasterDataGridFieldRendererPackageName}.${MasterDataGridFieldRendererInterfaceName};
-import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
 
 import lombok.Generated;
@@ -37,9 +37,6 @@ public class ${ClassName} extends VerticalLayout {
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${SessionDataClassName} session;
 
-	@Autowired(required = false)
-	private ${MasterDataGridFieldRendererInterfaceName}<${ModelClassName}> masterDataGridFieldRenderer;
-
 	private Grid<${ModelClassName}> grid;
 
 	@Override
@@ -48,13 +45,13 @@ public class ${ClassName} extends VerticalLayout {
 			new ${DetailsDialogClassName}(componentFactory, guiConfiguration, (mmbr, newItem) -> {
 				model.get${ModelClassName}s().add(mmbr);
 				grid.setItems(model.get${ModelClassName}s());
-			}, null, true, session).open();
+			}, session, new ${ModelClassName}(), true).open();
 		}, session);
 		Button buttonDuplicate = componentFactory.createDuplicateButton(event -> {
 			new ${DetailsDialogClassName}(componentFactory, guiConfiguration, (mmbr, newItem) -> {
 				model.get${ModelClassName}s().add(mmbr);
 				grid.setItems(model.get${ModelClassName}s());
-			}, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], true, session).open();
+			}, session, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], true).open();
 		}, session);
 		Button buttonEdit = componentFactory.createEditButton(event -> {
 			new ${DetailsDialogClassName}(componentFactory, guiConfiguration, (toEdit, newItem) -> {
@@ -69,7 +66,7 @@ public class ${ClassName} extends VerticalLayout {
 				mmbr.set${FieldName}(toEdit.${GetterPrefix}${FieldName}());
 #end
 				grid.setItems(model.get${ModelClassName}s());
-			}, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], false, session).open();
+			}, session, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], false).open();
 		}, session);
 		Button buttonRemove = componentFactory.createRemoveButton(event -> {
 			${ModelClassName} mmbr = grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0];
@@ -107,9 +104,12 @@ public class ${ClassName} extends VerticalLayout {
 	}
 
 	private Object getCellString(String fieldName, ${ModelClassName} aTable, Supplier<?> f) {
-		return masterDataGridFieldRenderer != null && masterDataGridFieldRenderer.hasRenderingFor(fieldName)
-				? masterDataGridFieldRenderer.getHeaderString(fieldName, aTable)
-				: f.get();
+		return componentFactory.get${ModelClassName}MasterDataGridFieldRenderer() != null
+				&& componentFactory.get${ModelClassName}MasterDataGridFieldRenderer().hasRenderingFor(fieldName)
+						? componentFactory
+								.get${ModelClassName}MasterDataGridFieldRenderer()
+								.getHeaderString(fieldName, aTable)
+						: f.get();
 	}
 
 }

@@ -50,8 +50,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -73,7 +71,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
 						+ //
-						"	private final ATableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private IntegerField integerFieldCount;\n" + //
 						"	private TextField textFieldDescription;\n" + //
@@ -172,8 +169,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -195,7 +190,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
 						+ //
-						"	private final ATableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private DateTimePicker dateTimePickerAdate;\n" + //
 						"\n" + //
@@ -289,8 +283,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -314,7 +306,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
 
 						+ //
-						"	private final ATableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private ComboBox<AnotherTable> comboBoxRef;\n" + //
 						"\n" + //
@@ -413,8 +404,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.TableWithSpecialsItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -436,8 +425,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<TableWithSpecials> comboBoxItemLabelGenerator;\n"
 						+ //
-						"	private final TableWithSpecialsItemLabelGeneratorCollection itemLabelGeneratorCollection;\n"
-						+ //
 						"\n" + //
 						"	private ComboBox<EnumType> comboBoxEnumField;\n" + //
 						"	private Checkbox checkboxFlag;\n" + //
@@ -447,7 +434,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxEnumField = createComboBox(\"TableWithSpecialsDetailsLayout.field.enumfield.label\", model.getEnumField(), EnumType.values(), itemLabelGeneratorCollection.getEnumTypeItemLabelGenerator());\n"
+						"		comboBoxEnumField = createComboBox(\"TableWithSpecialsDetailsLayout.field.enumfield.label\", model.getEnumField(), EnumType.values(), componentFactory.getEnumTypeItemLabelGenerator());\n"
 						+ //
 						"		comboBoxEnumField.setClearButtonVisible(true);\n" + //
 						"		checkboxFlag = createCheckbox(\"TableWithSpecialsDetailsLayout.field.flag.label\", model."
@@ -553,8 +540,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.TableWithNumberFieldItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -575,8 +560,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<TableWithNumberField> comboBoxItemLabelGenerator;\n"
-						+ //
-						"	private final TableWithNumberFieldItemLabelGeneratorCollection itemLabelGeneratorCollection;\n"
 						+ //
 						"\n" + //
 						"	private IntegerField integerFieldCounter;\n" + //
@@ -686,8 +669,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -709,7 +690,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
 						+ //
-						"	private final ATableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private TextField textFieldDescription;\n" + //
 						"	private Checkbox checkboxFlag;\n" + //
@@ -805,8 +785,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.AnotherTableItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -828,7 +806,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
 						+ //
-						"	private final AnotherTableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private TextField textFieldDescription;\n" + //
 						"	private TextField textFieldName;\n" + //
@@ -927,8 +904,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.DifferentSubclassReferencesItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -951,8 +926,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final SessionData session;\n" + //
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<DifferentSubclassReferences> comboBoxItemLabelGenerator;\n"
-						+ //
-						"	private final DifferentSubclassReferencesItemLabelGeneratorCollection itemLabelGeneratorCollection;\n"
 						+ //
 						"\n" + //
 						"	private ComboBox<AnotherTable> comboBoxAnotherTable;\n" + //
@@ -1057,8 +1030,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.BHeirTableItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -1081,7 +1052,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<BTable> comboBoxItemLabelGenerator;\n"
 						+ //
-						"	private final BHeirTableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private ComboBox<BReferencedTable> comboBoxReference;\n" + //
 						"	private TextField textFieldDescription;\n" + //
@@ -1192,8 +1162,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.ATableItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -1219,7 +1187,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n"
 						+ //
-						"	private final ATableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private ComboBox<AnotherTable> comboBoxAnotherTable;\n" + //
 						"	private TextField textFieldDescription;\n" + //
@@ -1328,8 +1295,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-						"import base.pack.age.name.gui.vaadin.masterdata.renderer.BTableItemLabelGeneratorCollection;\n"
-						+ //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -1354,7 +1319,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final Observer observer;\n" + //
 						"	private final DetailsLayoutComboBoxItemLabelGenerator<BTable> comboBoxItemLabelGenerator;\n"
 						+ //
-						"	private final BTableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 						"\n" + //
 						"	private TextField textFieldDescription;\n" + //
 						"	private IntegerField integerFieldCounter;\n" + //
@@ -1463,7 +1427,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" //
-							+ "import base.pack.age.name.gui.vaadin.masterdata.renderer.BlobTableItemLabelGeneratorCollection;\n" //
 							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
@@ -1484,7 +1447,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "	private final SessionData session;\n" //
 							+ "	private final Observer observer;\n" //
 							+ "	private final DetailsLayoutComboBoxItemLabelGenerator<BlobTable> comboBoxItemLabelGenerator;\n" //
-							+ "	private final BlobTableItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" //
 							+ "\n" //
 							+ "	private Upload uploadBlob;\n" //
 							+ "\n" //
@@ -1587,7 +1549,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-					"import base.pack.age.name.gui.vaadin.masterdata.renderer.BookItemLabelGeneratorCollection;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
@@ -1609,7 +1570,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 					"	private final Observer observer;\n" + //
 					"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n" + //
 					"\n" + //
-					"	private final BookItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" + //
 					"	private IntegerField integerFieldCount;\n" + //
 					"	private TextField textFieldDescription;\n" + //
 					"\n" + //
@@ -1691,7 +1651,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import de.ollie.bookstore.gui.vaadin.component.ButtonFactory;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.layout.list.ChapterListDetailsLayout;\n" //
-							+ "import de.ollie.bookstore.gui.vaadin.masterdata.renderer.BookItemLabelGeneratorCollection;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
@@ -1712,7 +1671,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "	private final SessionData session;\n" //
 							+ "	private final Observer observer;\n" //
 							+ "	private final DetailsLayoutComboBoxItemLabelGenerator<Book> comboBoxItemLabelGenerator;\n" //
-							+ "	private final BookItemLabelGeneratorCollection itemLabelGeneratorCollection;\n" //
 							+ "\n" //
 							+ "	private TextField textFieldTitle;\n" //
 							+ "	private TextField textFieldIsbn;\n" //
@@ -1724,7 +1682,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "		createButtons();\n" //
 							+ "		textFieldTitle = createTextField(\"BookDetailsLayout.field.title.label\", model.getTitle());\n" //
 							+ "		textFieldIsbn = createTextField(\"BookDetailsLayout.field.isbn.label\", model.getIsbn());\n" //
-							+ "		comboBoxPublicationType = createComboBox(\"BookDetailsLayout.field.publicationtype.label\", model.getPublicationType(), PublicationType.values(), itemLabelGeneratorCollection.getPublicationTypeItemLabelGenerator());\n" //
+							+ "		comboBoxPublicationType = createComboBox(\"BookDetailsLayout.field.publicationtype.label\", model.getPublicationType(), PublicationType.values(), componentFactory.getPublicationTypeItemLabelGenerator());\n" //
 							+ "		getStyle().set(\"-moz-border-radius\", \"4px\");\n" //
 							+ "		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" //
 							+ "		getStyle().set(\"border-radius\", \"4px\");\n" //

@@ -1,5 +1,6 @@
 package archimedes.codegenerators.gui.vaadin;
 
+import static archimedes.codegenerators.DataModelReader.EXAMPLE_XMLS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -9,8 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import archimedes.codegenerators.DataModelReader;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
+import archimedes.model.TableModel;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +57,8 @@ public class MasterDataGridFieldRendererClassCodeGeneratorTest {
 					"/**\n" + //
 					" * An implementation of the MasterDataGridFieldRenderer interface for gui tables.\n" + //
 					" *\n" + //
+					" * If necessary to override, remove 'GENERATED CODE ...' comment and annotation.\n" + //
+					" *\n" + //
 					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
 					" */\n" + //
 					"@Generated\n" + //
@@ -84,6 +89,71 @@ public class MasterDataGridFieldRendererClassCodeGeneratorTest {
 					unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("GUI_TABLE"));
 			// Check
 			assertEquals(expected, returned);
+			assertFalse(unitUnderTest.isToIgnoreFor(dataModel, dataModel.getTableByName("GUI_TABLE")));
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_generate_String_TableModel {
+
+		@Nested
+		class SimpleClass {
+
+			@Test
+			void happyRunForASimpleObjectWithEnumField() {
+				String expected =
+						"package de.ollie.bookstore.gui.vaadin.masterdata;\n" //
+								+ "\n" //
+								+ "import javax.inject.Inject;\n" //
+								+ "import javax.inject.Named;\n" //
+								+ "\n" //
+								+ "import de.ollie.bookstore.core.model.Book;\n" //
+								+ "import de.ollie.bookstore.core.model.PublicationType;\n" //
+								+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
+								+ "\n" //
+								+ "import lombok.Generated;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * An implementation of the MasterDataGridFieldRenderer interface for books.\n" //
+								+ " *\n" //
+								+ " * If necessary to override, remove 'GENERATED CODE ...' comment and annotation.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Generated\n" //
+								+ "@Named\n" //
+								+ "public class BookMasterDataGridFieldRenderer implements MasterDataGridFieldRenderer<Book> {\n" //
+								+ "\n" //
+								+ "	@Inject\n" //
+								+ "	private ComponentFactory componentFactory;\n" //
+								+ "\n" //
+								+ "	@Override\n" //
+								+ "	public Object getHeaderString(String fieldName, Book model) {\n" //
+								+ "		if (Book.PUBLICATIONTYPE.equals(fieldName)) {\n" //
+								+ "			return componentFactory.getPublicationTypeItemLabelGenerator().apply(model.getPublicationType());\n" //
+								+ "		}\n" //
+								+ "		return null;\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	@Override\n" //
+								+ "	public boolean hasRenderingFor(String fieldName) {\n" //
+								+ "		if (Book.PUBLICATIONTYPE.equals(fieldName) && (componentFactory.getPublicationTypeItemLabelGenerator() != null)) {\n" //
+								+ "			return true;\n" //
+								+ "		}\n" //
+								+ "		return false;\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "}";
+				DataModel dataModel = DataModelReader.readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+				TableModel tableModel = dataModel.getTableByName("BOOK");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+				assertFalse(unitUnderTest.isToIgnoreFor(dataModel, dataModel.getTableByName("BOOK")));
+			}
+
 		}
 
 	}
