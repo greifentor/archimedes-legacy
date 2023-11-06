@@ -78,23 +78,10 @@ class ModelClassCodeGeneratorTest {
 					"@EqualsAndHashCode(callSuper = true)\n" + //
 					"@Generated\n" + //
 					"@ToString(callSuper = true)\n" + //
-					"public class ATable extends GeneratedATable {\n" + //
+					"public class ATable extends GeneratedATable<ATable> {\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	public ATable setId(Long id) {\n" + //
-					"		super.setId(id);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setADate(LocalDate aDate) {\n" + //
-					"		super.setADate(aDate);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setDescription(String description) {\n" + //
-					"		super.setDescription(description);\n" + //
+					"	public ATable self() {\n" + //
 					"		return this;\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -195,23 +182,10 @@ class ModelClassCodeGeneratorTest {
 					"@EqualsAndHashCode(callSuper = true)\n" + //
 					"@Generated\n" + //
 					"@ToString(callSuper = true)\n" + //
-					"public class ATable extends GeneratedATable {\n" + //
+					"public class ATable extends GeneratedATable<ATable> {\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	public ATable setId(Long id) {\n" + //
-					"		super.setId(id);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setADate(LocalDate aDate) {\n" + //
-					"		super.setADate(aDate);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setDescription(String description) {\n" + //
-					"		super.setDescription(description);\n" + //
+					"	public ATable self() {\n" + //
 					"		return this;\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -284,23 +258,10 @@ class ModelClassCodeGeneratorTest {
 						"@EqualsAndHashCode(callSuper = true)\n" + //
 						"@Generated\n" + //
 						"@ToString(callSuper = true)\n" + //
-						"public class ATable extends GeneratedATable {\n" + //
+						"public class ATable extends GeneratedATable<ATable> {\n" + //
 						"\n" + //
 						"	@Override\n" + //
-						"	public ATable setId(Long id) {\n" + //
-						"		super.setId(id);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setADate(LocalDate aDate) {\n" + //
-						"		super.setADate(aDate);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setDescription(String description) {\n" + //
-						"		super.setDescription(description);\n" + //
+						"	public ATable self() {\n" + //
 						"		return this;\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -352,23 +313,10 @@ class ModelClassCodeGeneratorTest {
 								"@EqualsAndHashCode(callSuper = true)\n" + //
 								"@Generated\n" + //
 								"@ToString(callSuper = true)\n" + //
-								"public class ATable extends GeneratedATable {\n" + //
+								"public class ATable extends GeneratedATable<ATable> {\n" + //
 								"\n" + //
 								"	@Override\n" + //
-								"	public ATable setId(Long id) {\n" + //
-								"		super.setId(id);\n" + //
-								"		return this;\n" + //
-								"	}\n" + //
-								"\n" + //
-								"	@Override\n" + //
-								"	public ATable setADate(LocalDate aDate) {\n" + //
-								"		super.setADate(aDate);\n" + //
-								"		return this;\n" + //
-								"	}\n" + //
-								"\n" + //
-								"	@Override\n" + //
-								"	public ATable setDescription(String description) {\n" + //
-								"		super.setDescription(description);\n" + //
+								"	public ATable self() {\n" + //
 								"		return this;\n" + //
 								"	}\n" + //
 								"\n" + //
@@ -411,23 +359,11 @@ class ModelClassCodeGeneratorTest {
 						"@EqualsAndHashCode(callSuper = true)\n" + //
 						"@Generated\n" + //
 						"@ToString(callSuper = true)\n" + //
-						"public class ATable extends GeneratedATable implements TheInterface1, TheSecondInterface {\n" + //
+						"public class ATable extends GeneratedATable<ATable> implements TheInterface1, TheSecondInterface {\n"
+						+ //
 						"\n" + //
 						"	@Override\n" + //
-						"	public ATable setId(Long id) {\n" + //
-						"		super.setId(id);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setADate(LocalDate aDate) {\n" + //
-						"		super.setADate(aDate);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setDescription(String description) {\n" + //
-						"		super.setDescription(description);\n" + //
+						"	public ATable self() {\n" + //
 						"		return this;\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -483,35 +419,10 @@ class ModelClassCodeGeneratorTest {
 							"@EqualsAndHashCode(callSuper = true)\n" + //
 							"@Generated\n" + //
 							"@ToString(callSuper = true)\n" + //
-							"public class Book extends GeneratedBook {\n" + //
+							"public class Book extends GeneratedBook<Book> {\n" + //
 							"\n" + //
 							"	@Override\n" + //
-							"	public Book setId(long id) {\n" + //
-							"		super.setId(id);\n" + //
-							"		return this;\n" + //
-							"	}\n" + //
-							"\n" + //
-							"	@Override\n" + //
-							"	public Book setIsbn(String isbn) {\n" + //
-							"		super.setIsbn(isbn);\n" + //
-							"		return this;\n" + //
-							"	}\n" + //
-							"\n" + //
-							"	@Override\n" + //
-							"	public Book setPublicationType(PublicationType publicationType) {\n" + //
-							"		super.setPublicationType(publicationType);\n" + //
-							"		return this;\n" + //
-							"	}\n" + //
-							"\n" + //
-							"	@Override\n" + //
-							"	public Book setTitle(String title) {\n" + //
-							"		super.setTitle(title);\n" + //
-							"		return this;\n" + //
-							"	}\n" + //
-							"\n" + //
-							"	@Override\n" + //
-							"	public Book setChapters(List<Chapter> chapters) {\n" + //
-							"		super.setChapters(chapters);\n" + //
+							"	public Book self() {\n" + //
 							"		return this;\n" + //
 							"	}\n" + //
 							"\n" + //
@@ -555,35 +466,10 @@ class ModelClassCodeGeneratorTest {
 							+ "@EqualsAndHashCode(callSuper = true)\n" //
 							+ "@Generated\n" //
 							+ "@ToString(callSuper = true)\n" //
-							+ "public class Chapter extends GeneratedChapter {\n" //
+							+ "public class Chapter extends GeneratedChapter<Chapter> {\n" //
 							+ "\n" //
 							+ "	@Override\n" //
-							+ "	public Chapter setId(long id) {\n" //
-							+ "		super.setId(id);\n" //
-							+ "		return this;\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "	@Override\n" //
-							+ "	public Chapter setContent(String content) {\n" //
-							+ "		super.setContent(content);\n" //
-							+ "		return this;\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "	@Override\n" //
-							+ "	public Chapter setSortOrder(int sortOrder) {\n" //
-							+ "		super.setSortOrder(sortOrder);\n" //
-							+ "		return this;\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "	@Override\n" //
-							+ "	public Chapter setSummary(String summary) {\n" //
-							+ "		super.setSummary(summary);\n" //
-							+ "		return this;\n" //
-							+ "	}\n" //
-							+ "\n" //
-							+ "	@Override\n" //
-							+ "	public Chapter setTitle(String title) {\n" //
-							+ "		super.setTitle(title);\n" //
+							+ "	public Chapter self() {\n" //
 							+ "		return this;\n" //
 							+ "	}\n" //
 							+ "\n" //

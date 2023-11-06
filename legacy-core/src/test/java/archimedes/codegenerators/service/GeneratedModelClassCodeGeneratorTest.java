@@ -73,7 +73,7 @@ public class GeneratedModelClassCodeGeneratorTest {
 			s += "@Accessors(chain = true)\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
-					"public class GeneratedATable {\n" + //
+					"public abstract class GeneratedATable<T extends ATable> {\n" + //
 					"\n" + //
 					"	public static final String ID = \"ID\";\n" + //
 					"	public static final String ADATE = \"ADATE\";\n" + //
@@ -82,6 +82,23 @@ public class GeneratedModelClassCodeGeneratorTest {
 					"	private Long id;\n" + //
 					"	private LocalDate aDate;\n" + //
 					"	private String description;\n" + //
+					"\n" + //
+					"	protected abstract T self();\n" + //
+					"\n" + //
+					"	public T setId(Long id) {\n" + //
+					"		this.id = id;\n" + //
+					"		return self();\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public T setADate(LocalDate aDate) {\n" + //
+					"		this.aDate = aDate;\n" + //
+					"		return self();\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public T setDescription(String description) {\n" + //
+					"		this.description = description;\n" + //
+					"		return self();\n" + //
+					"	}\n" + //
 					"\n" + //
 					"}";
 			return s;
@@ -156,37 +173,54 @@ public class GeneratedModelClassCodeGeneratorTest {
 		}
 
 		private String getExpectedPOJOModeBuilder(String packageName, String generatedValue) {
-			return "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" + //
-					"\n" + //
-					"import java.time.LocalDate;\n" + //
-					"\n" + //
-					"import lombok.AllArgsConstructor;\n" + //
-					"import lombok.Builder;\n" + //
-					"import lombok.NoArgsConstructor;\n" + //
-					"import lombok.Data;\n" + //
-					"import lombok.Generated;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * A model for a_tables.\n" + //
-					" *\n" + //
-					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
-					" */\n" + //
-					"@Builder\n" + //
-					"@AllArgsConstructor\n" + //
-					"@NoArgsConstructor\n" + //
-					"@Data\n" + //
-					"@Generated\n" + //
-					"public class GeneratedATable {\n" + //
-					"\n" + //
-					"	public static final String ID = \"ID\";\n" + //
-					"	public static final String ADATE = \"ADATE\";\n" + //
-					"	public static final String DESCRIPTION = \"DESCRIPTION\";\n" + //
-					"\n" + //
-					"	private Long id;\n" + //
-					"	private LocalDate aDate;\n" + //
-					"	private String description;\n" + //
-					"\n" + //
-					"}";
+			return "package " + BASE_PACKAGE_NAME + "." + packageName + ";\n" //
+					+ "\n" //
+					+ "import java.time.LocalDate;\n" //
+					+ "\n" //
+					+ "import lombok.AllArgsConstructor;\n" //
+					+ "import lombok.Builder;\n" //
+					+ "import lombok.NoArgsConstructor;\n" //
+					+ "import lombok.Data;\n" //
+					+ "import lombok.Generated;\n" //
+					+ "\n" //
+					+ "/**\n" //
+					+ " * A model for a_tables.\n" //
+					+ " *\n" //
+					+ " * " + AbstractCodeGenerator.GENERATED_CODE + "\n" //
+					+ " */\n" //
+					+ "@Builder\n" //
+					+ "@AllArgsConstructor\n" //
+					+ "@NoArgsConstructor\n" //
+					+ "@Data\n" //
+					+ "@Generated\n" //
+					+ "public abstract class GeneratedATable<T extends ATable> {\n" //
+					+ "\n" //
+					+ "	public static final String ID = \"ID\";\n" //
+					+ "	public static final String ADATE = \"ADATE\";\n" //
+					+ "	public static final String DESCRIPTION = \"DESCRIPTION\";\n" //
+					+ "\n" //
+					+ "	private Long id;\n" //
+					+ "	private LocalDate aDate;\n" //
+					+ "	private String description;\n" //
+					+ "\n" //
+					+ "	protected abstract T self();\n" //
+					+ "\n" //
+					+ "	public T setId(Long id) {\n" //
+					+ "		this.id = id;\n" //
+					+ "		return self();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	public T setADate(LocalDate aDate) {\n" //
+					+ "		this.aDate = aDate;\n" //
+					+ "		return self();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	public T setDescription(String description) {\n" //
+					+ "		this.description = description;\n" //
+					+ "		return self();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "}";
 		}
 
 		@Test
@@ -235,35 +269,46 @@ public class GeneratedModelClassCodeGeneratorTest {
 			@Test
 			void modelWithSubclass() {
 				// Prepare
-				String expected = "package base.pack.age.name.core.model;\n" + //
-						"\n" + //
-						"import java.time.LocalDate;\n" + //
-						"\n" + //
-						"import lombok.Data;\n" + //
-						"import lombok.EqualsAndHashCode;\n" + //
-						"import lombok.Generated;\n" + //
-						"import lombok.ToString;\n" + //
-						"import lombok.experimental.Accessors;\n" + //
-						"\n" + //
-						"/**\n" + //
-						" * A model for a_tables.\n" + //
-						" *\n" + //
-						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-						" */\n" + //
-						"@Accessors(chain = true)\n" + //
-						"@Data\n" + //
-						"@EqualsAndHashCode(callSuper = true)\n" + //
-						"@Generated\n" + //
-						"@ToString(callSuper = true)\n" + //
-						"public class GeneratedATable extends AnotherTable {\n" + //
-						"\n" + //
-						"	public static final String ADATE = \"ADATE\";\n" + //
-						"	public static final String DESCRIPTION = \"DESCRIPTION\";\n" + //
-						"\n" + //
-						"	private LocalDate aDate;\n" + //
-						"	private String description;\n" + //
-						"\n" + //
-						"}";
+				String expected =
+						"package base.pack.age.name.core.model;\n" //
+								+ "\n" //
+								+ "import java.time.LocalDate;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.EqualsAndHashCode;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.ToString;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A model for a_tables.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@EqualsAndHashCode(callSuper = true)\n" //
+								+ "@Generated\n" //
+								+ "@ToString(callSuper = true)\n" //
+								+ "public abstract class GeneratedATable<T extends ATable> extends AnotherTable {\n" //
+								+ "\n" //
+								+ "	public static final String ADATE = \"ADATE\";\n" //
+								+ "	public static final String DESCRIPTION = \"DESCRIPTION\";\n" //
+								+ "\n" //
+								+ "	private LocalDate aDate;\n" //
+								+ "	private String description;\n" //
+								+ "\n" //
+								+ "	public T setADate(LocalDate aDate) {\n" //
+								+ "		this.aDate = aDate;\n" //
+								+ "		return (T) self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	public T setDescription(String description) {\n" //
+								+ "		this.description = description;\n" //
+								+ "		return (T) self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "}";
 				DataModel dataModel = readDataModel("Model.xml");
 				TableModel table = dataModel.getTableByName("A_TABLE");
 				table.addOption(new Option(AbstractClassCodeGenerator.SUBCLASS));
@@ -290,33 +335,51 @@ public class GeneratedModelClassCodeGeneratorTest {
 			@Test
 			void modelNoSubclass() {
 				// Prepare
-				String expected = "package base.pack.age.name.core.model;\n" + //
-						"\n" + //
-						"import java.time.LocalDate;\n" + //
-						"\n" + //
-						"import lombok.Data;\n" + //
-						"import lombok.Generated;\n" + //
-						"import lombok.experimental.Accessors;\n" + //
-						"\n" + //
-						"/**\n" + //
-						" * A model for a_tables.\n" + //
-						" *\n" + //
-						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-						" */\n" + //
-						"@Accessors(chain = true)\n" + //
-						"@Data\n" + //
-						"@Generated\n" + //
-						"public class GeneratedATable {\n" + //
-						"\n" + //
-						"	public static final String ID = \"ID\";\n" + //
-						"	public static final String ADATE = \"ADATE\";\n" + //
-						"	public static final String DESCRIPTION = \"DESCRIPTION\";\n" + //
-						"\n" + //
-						"	private Long id;\n" + //
-						"	private LocalDate aDate;\n" + //
-						"	private String description;\n" + //
-						"\n" + //
-						"}";
+				String expected =
+						"package base.pack.age.name.core.model;\n" //
+								+ "\n" //
+								+ "import java.time.LocalDate;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A model for a_tables.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@Generated\n" //
+								+ "public abstract class GeneratedATable<T extends ATable> {\n" //
+								+ "\n" //
+								+ "	public static final String ID = \"ID\";\n" //
+								+ "	public static final String ADATE = \"ADATE\";\n" //
+								+ "	public static final String DESCRIPTION = \"DESCRIPTION\";\n" //
+								+ "\n" //
+								+ "	private Long id;\n" //
+								+ "	private LocalDate aDate;\n" //
+								+ "	private String description;\n" //
+								+ "\n" // //
+								+ "	protected abstract T self();\n" //
+								+ "\n" //
+								+ "	public T setId(Long id) {\n" //
+								+ "		this.id = id;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	public T setADate(LocalDate aDate) {\n" //
+								+ "		this.aDate = aDate;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	public T setDescription(String description) {\n" //
+								+ "		this.description = description;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "}";
 				DataModel dataModel = readDataModel("Model.xml");
 				// Run
 				String returned =
@@ -347,7 +410,7 @@ public class GeneratedModelClassCodeGeneratorTest {
 						+ "@Accessors(chain = true)\n" //
 						+ "@Data\n" //
 						+ "@Generated\n" //
-						+ "public class GeneratedTableWithGridFields {\n" //
+						+ "public abstract class GeneratedTableWithGridFields<T extends TableWithGridFields> {\n" //
 						+ "\n" //
 						+ "	public static final String ID = \"ID\";\n" //
 						+ "	public static final String ENUMFIELD = \"ENUMFIELD\";\n" //
@@ -358,6 +421,28 @@ public class GeneratedModelClassCodeGeneratorTest {
 						+ "	private EnumType enumField = EnumType.ONE;\n" //
 						+ "	private Boolean flag = true;\n" //
 						+ "	private String longtext = \"a long text\";\n" //
+						+ "\n" //
+						+ "	protected abstract T self();\n" //
+						+ "\n" //
+						+ "	public T setId(Long id) {\n" //
+						+ "		this.id = id;\n" //
+						+ "		return self();\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public T setEnumField(EnumType enumField) {\n" //
+						+ "		this.enumField = enumField;\n" //
+						+ "		return self();\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public T setFlag(Boolean flag) {\n" //
+						+ "		this.flag = flag;\n" //
+						+ "		return self();\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public T setLongtext(String longtext) {\n" //
+						+ "		this.longtext = longtext;\n" //
+						+ "		return self();\n" //
+						+ "	}\n" //
 						+ "\n" //
 						+ "}";
 				DataModel dataModel = readDataModel("Model.xml");
@@ -412,7 +497,7 @@ public class GeneratedModelClassCodeGeneratorTest {
 						"@Accessors(chain = true)\n" + //
 						"@Data\n" + //
 						"@Generated\n" + //
-						"public class GeneratedBook {\n" + //
+						"public abstract class GeneratedBook<T extends Book> {\n" + //
 						"\n" + //
 						"	public static final String ID = \"ID\";\n" + //
 						"	public static final String ISBN = \"ISBN\";\n" + //
@@ -425,6 +510,33 @@ public class GeneratedModelClassCodeGeneratorTest {
 						"	private PublicationType publicationType;\n" + //
 						"	private String title;\n" + //
 						"	private List<Chapter> chapters = new ArrayList<>();\n" + //
+						"\n" + //
+						"	protected abstract T self();\n" + //
+						"\n" + //
+						"	public T setId(long id) {\n" + //
+						"		this.id = id;\n" + //
+						"		return self();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public T setIsbn(String isbn) {\n" + //
+						"		this.isbn = isbn;\n" + //
+						"		return self();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public T setPublicationType(PublicationType publicationType) {\n" + //
+						"		this.publicationType = publicationType;\n" + //
+						"		return self();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public T setTitle(String title) {\n" + //
+						"		this.title = title;\n" + //
+						"		return self();\n" + //
+						"	}\n" + //
+						"\n" + //
+						"	public T setChapters(List<Chapter> chapters) {\n" + //
+						"		this.chapters = chapters;\n" + //
+						"		return self();\n" + //
+						"	}\n" + //
 						"\n" + //
 						"}";
 				return s;
@@ -465,7 +577,7 @@ public class GeneratedModelClassCodeGeneratorTest {
 								+ "@Accessors(chain = true)\n" //
 								+ "@Data\n" //
 								+ "@Generated\n" //
-								+ "public class GeneratedChapter {\n" //
+								+ "public abstract class GeneratedChapter<T extends Chapter> {\n" //
 								+ "\n" //
 								+ "	public static final String ID = \"ID\";\n" //
 								+ "	public static final String CONTENT = \"CONTENT\";\n" //
@@ -479,6 +591,33 @@ public class GeneratedModelClassCodeGeneratorTest {
 								+ "	private int sortOrder;\n" //
 								+ "	private String summary;\n" //
 								+ "	private String title;\n" //
+								+ "\n" //
+								+ "	protected abstract T self();\n" //
+								+ "\n" //
+								+ "	public T setId(long id) {\n" //
+								+ "		this.id = id;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	public T setContent(String content) {\n" //
+								+ "		this.content = content;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	public T setSortOrder(int sortOrder) {\n" //
+								+ "		this.sortOrder = sortOrder;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	public T setSummary(String summary) {\n" //
+								+ "		this.summary = summary;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	public T setTitle(String title) {\n" //
+								+ "		this.title = title;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
 								+ "\n" //
 								+ "}";
 				return s;

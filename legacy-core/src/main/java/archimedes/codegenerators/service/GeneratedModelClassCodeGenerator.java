@@ -48,6 +48,7 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 		context.put("EntityName", nameGenerator.getClassName(table));
 		context.put("HasEnums", hasEnums(table.getColumns()));
 		context.put("HasReferences", hasReferences(table.getColumns()));
+		context.put("ModelClassName", nameGenerator.getModelClassName(table));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
 		context.put("ReferenceMode", getReferenceMode(model, table).name());
@@ -75,7 +76,8 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 												c -> nameGenerator.getModelClassName(c.getReferencedTable()),
 												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model)))
 								.setInitWith(getInitWithValue(column))
-								.setPkMember(column.isPrimaryKey()))
+								.setPkMember(column.isPrimaryKey())
+								.setSetterName(nameGenerator.getClassName(column.getName())))
 				.collect(Collectors.toList());
 		getCompositionLists(table).forEach(cld -> {
 			importDeclarations.add("java.util", "ArrayList");
@@ -86,7 +88,13 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 									.setFieldType("List<" + nameGenerator.getModelClassName(cld.getMemberTable()) + ">")
 									.setFieldName(
 											nameGenerator.getAttributeName(cld.getMemberTable().getName()) + "s")
-									.setInitWith("new ArrayList<>()"));
+									.setInitWith("new ArrayList<>()")
+									.setSetterName(
+											nameGenerator
+													.getClassName(
+															nameGenerator
+																	.getAttributeName(cld.getMemberTable().getName())
+																	+ "s")));
 		});
 		return l;
 	}

@@ -54,7 +54,7 @@ import lombok.experimental.Accessors;
 #if ($Subclass)
 @ToString(callSuper = true)
 #end
-public class ${ClassName} #if($Subclass)extends ${SuperclassName} #end{
+public abstract class ${ClassName}<T extends ${ModelClassName}> #if($Subclass)extends ${SuperclassName} #end{
 
 #foreach($Column in $ColumnData)
 #if(!${Subclass} or !${Column.isPkMember()})
@@ -71,4 +71,17 @@ public class ${ClassName} #if($Subclass)extends ${SuperclassName} #end{
 #end
 #end
 
+#if (!${Subclass})
+	protected abstract T self();
+
+#end
+#foreach($Column in $ColumnData)
+#if(!${Subclass} || !$Column.isPkMember())
+	public T set${Column.getSetterName()}(${Column.getFieldType()} ${Column.getFieldName()}) {
+		this.${Column.getFieldName()} = ${Column.getFieldName()};
+		return#if ($Subclass) (T)#end self();
+	}
+
+#end
+#end
 }
