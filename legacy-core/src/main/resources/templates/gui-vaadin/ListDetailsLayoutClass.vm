@@ -17,6 +17,7 @@ import ${ImportDeclaration.getSingleImportDeclaration()};
 import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
 import ${MasterDataGridFieldRendererPackageName}.${MasterDataGridFieldRendererInterfaceName};
+import ${VaadinComponentPackageName}.${ServiceProviderClassName};
 import ${SessionDataPackageName}.${SessionDataClassName};
 
 import lombok.Generated;
@@ -35,6 +36,7 @@ public class ${ClassName} extends VerticalLayout {
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final ${ParentModelClassName} model;
 	private final ${ResourceManagerInterfaceName} resourceManager;
+	private final ${ServiceProviderClassName} serviceProvider;
 	private final ${SessionDataClassName} session;
 
 	private Grid<${ModelClassName}> grid;
@@ -45,13 +47,13 @@ public class ${ClassName} extends VerticalLayout {
 			new ${DetailsDialogClassName}(componentFactory, guiConfiguration, (mmbr, newItem) -> {
 				model.get${ModelClassName}s().add(mmbr);
 				grid.setItems(model.get${ModelClassName}s());
-			}, session, new ${ModelClassName}(), true).open();
+			}, session, new ${ModelClassName}(), serviceProvider, true).open();
 		}, session);
 		Button buttonDuplicate = componentFactory.createDuplicateButton(event -> {
 			new ${DetailsDialogClassName}(componentFactory, guiConfiguration, (mmbr, newItem) -> {
 				model.get${ModelClassName}s().add(mmbr);
 				grid.setItems(model.get${ModelClassName}s());
-			}, session, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], true).open();
+			}, session, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], serviceProvider, true).open();
 		}, session);
 		Button buttonEdit = componentFactory.createEditButton(event -> {
 			new ${DetailsDialogClassName}(componentFactory, guiConfiguration, (toEdit, newItem) -> {
@@ -66,7 +68,7 @@ public class ${ClassName} extends VerticalLayout {
 				mmbr.set${FieldName}(toEdit.${GetterPrefix}${FieldName}());
 #end
 				grid.setItems(model.get${ModelClassName}s());
-			}, session, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], false).open();
+			}, session, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], serviceProvider, false).open();
 		}, session);
 		Button buttonRemove = componentFactory.createRemoveButton(event -> {
 			${ModelClassName} mmbr = grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0];

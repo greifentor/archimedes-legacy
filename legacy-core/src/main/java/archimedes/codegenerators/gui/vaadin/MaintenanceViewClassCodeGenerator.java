@@ -79,12 +79,15 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
 		context.put("ServiceInterfaceName", serviceInterfaceName);
+		context.put("ServiceProviderClassName", nameGenerator.getServiceProviderClassName(model));
 		context.put("SubclassDataCollection", subclassDataCollection);
 		context.put("UniqueSubclassReferenceDataCollection", uniqueSubclassReferenceDataCollection);
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
+		context.put("VaadinComponentPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelClassName);
-		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
+		// importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table),
+		// serviceInterfaceName);
 		addImportsFromSubClassDataCollection(subclassDataCollection);
 		addImportsFromUniqueSubclassReferenceData(uniqueSubclassReferenceDataCollection);
 		addGUIReferencesToFieldDeclarations(guiReferenceDataCollection.getReferences());

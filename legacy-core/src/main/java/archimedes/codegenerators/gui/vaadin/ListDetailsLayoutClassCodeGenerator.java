@@ -67,8 +67,10 @@ public class ListDetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassC
 		context.put("PreferenceData", getPreferenceData(table));
 		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
 		context.put("ResourceManagerPackageName", serviceNameGenerator.getResourceManagerInterfacePackageName(model));
+		context.put("ServiceProviderClassName", nameGenerator.getServiceProviderClassName(model));
 		context.put("SessionDataClassName", sessionDataClassName);
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
+		context.put("VaadinComponentPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		importDeclarations.add(nameGenerator.getVaadinComponentPackageName(model), componentFactoryClassName);
 		importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelClassName);
 		if (modelParentClassName != null) {

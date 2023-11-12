@@ -1865,6 +1865,39 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class ServiceProviderClassNameTests {
+
+		@Test
+		void getServiceProviderClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getServiceProviderClassName(null));
+		}
+
+		@Test
+		void getServiceProviderClassName_passAValidModel_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "ServiceProvider";
+			// Run
+			String returned = unitUnderTest.getServiceProviderClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getServiceProviderClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherServiceProvider";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATE_SERVICE_PROVIDER_CLASS_NAME_SUFFIX))
+					.thenReturn(
+							new Option(GUIVaadinNameGenerator.ALTERNATE_SERVICE_PROVIDER_CLASS_NAME_SUFFIX, expected));
+			// Run
+			String returned = unitUnderTest.getServiceProviderClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
 	class SessionDataClassNameTests {
 
 		@Test

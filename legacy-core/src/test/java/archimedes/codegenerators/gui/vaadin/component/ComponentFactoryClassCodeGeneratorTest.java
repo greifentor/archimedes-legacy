@@ -78,6 +78,9 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ "	private ItemLabelGenerator<PublicationType> publicationTypeItemLabelGenerator;\n" //
 							+ "\n" //
 							+ "	@Autowired(required = false)\n" //
+							+ "	private ItemLabelGenerator<Book> bookItemLabelGenerator;\n" //
+							+ "\n" //
+							+ "	@Autowired(required = false)\n" //
 							+ "	private MasterDataGridFieldRenderer<Book> bookMasterDataGridFieldRenderer;\n" //
 							+ "	@Autowired(required = false)\n" //
 							+ "	private MasterDataGridFieldRenderer<Chapter> chapterMasterDataGridFieldRenderer;\n" //

@@ -51,6 +51,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -64,7 +65,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final ATable model;\n" + //
-						"	private final ATableService service;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -118,7 +119,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getATableService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -126,7 +127,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	protected void save() {\n" + //
 						"		model.setCount(integerFieldCount.getValue());\n" + //
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -170,6 +171,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -183,7 +185,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final ATable model;\n" + //
-						"	private final ATableService service;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -233,14 +235,14 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getATableService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void save() {\n" + //
 						"		model.setAdate(dateTimePickerAdate.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -284,6 +286,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -297,8 +300,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final ATable model;\n" + //
-						"	private final ATableService service;\n" + //
-						"	private final AnotherTableService anotherTableService;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -313,7 +315,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxRef = createComboBox(\"ATableDetailsLayout.field.ref.label\", model.getRef(), anotherTableService.findAll().toArray(new AnotherTable[0]));\n"
+						"		comboBoxRef = createComboBox(\"ATableDetailsLayout.field.ref.label\", model.getRef(), serviceProvider.getAnotherTableService()"
+						+ ".findAll().toArray(new AnotherTable[0]));\n"
 						+ //
 						"		comboBoxRef\n" + //
 						"				.setItemLabelGenerator(\n" + //
@@ -356,14 +359,14 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getATableService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void save() {\n" + //
 						"		model.setRef(comboBoxRef.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -405,6 +408,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -418,7 +422,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final TableWithSpecials model;\n" + //
-						"	private final TableWithSpecialsService service;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -477,7 +481,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getTableWithSpecialsService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -486,7 +490,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setEnumField(comboBoxEnumField.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
 						"		model.setLongtext(textAreaLongtext.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getTableWithSpecialsService().update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -541,6 +545,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -554,7 +559,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final TableWithNumberField model;\n" + //
-						"	private final TableWithNumberFieldService service;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -620,7 +625,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getTableWithNumberFieldService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -631,7 +636,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setAmountWithLimits(numberFieldAmountWithLimits.getValue());\n" + //
 						"		model.setCounterWithLimits(integerFieldCounterWithLimits.getValue());\n" + //
 						"		model.setWithSpecialDomain(integerFieldWithSpecialDomain.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getTableWithNumberFieldService().update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -670,6 +675,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -683,7 +689,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final ATable model;\n" + //
-						"	private final ATableService service;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -737,7 +743,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getATableService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -745,7 +751,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	protected void save() {\n" + //
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -786,6 +792,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -799,7 +806,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final AnotherTable model;\n" + //
-						"	private final ATableService service;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -857,7 +864,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getATableService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -866,7 +873,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setName(textFieldName.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -905,6 +912,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -919,8 +927,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final DifferentSubclassReferences model;\n" + //
-						"	private final DifferentSubclassReferencesService service;\n" + //
-						"	private final ATableService aTableService;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -935,7 +942,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxAnotherTable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.anothertable.label\", model.getAnotherTable(), aTableService.findAllAnotherTable().toArray(new AnotherTable[0]));\n"
+						"		comboBoxAnotherTable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.anothertable.label\", model.getAnotherTable(), serviceProvider.getATableService().findAllAnotherTable().toArray(new AnotherTable[0]));\n"
 						+ //
 						"		comboBoxAnotherTable\n" + //
 						"				.setItemLabelGenerator(\n" + //
@@ -943,7 +950,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"								? comboBoxItemLabelGenerator.getLabel(DifferentSubclassReferences.ANOTHERTABLE, anotherTable)\n"
 						+ //
 						"								: \"\" + anotherTable.getDescription());\n" + //
-						"		comboBoxATable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.atable.label\", model.getATable(), aTableService.findAll().toArray(new ATable[0]));\n"
+						"		comboBoxATable = createComboBox(\"DifferentSubclassReferencesDetailsLayout.field.atable.label\", model.getATable(), serviceProvider.getATableService().findAll().toArray(new ATable[0]));\n"
 						+ //
 						"		comboBoxATable\n" + //
 						"				.setItemLabelGenerator(\n" + //
@@ -986,7 +993,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getDifferentSubclassReferencesService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -994,7 +1001,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	protected void save() {\n" + //
 						"		model.setAnotherTable(comboBoxAnotherTable.getValue());\n" + //
 						"		model.setATable(comboBoxATable.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getDifferentSubclassReferencesService().update(model));\n"
+						+ //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -1031,6 +1039,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -1044,8 +1053,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final BHeirTable model;\n" + //
-						"	private final BTableService service;\n" + //
-						"	private final BReferencedTableService bReferencedTableService;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -1061,7 +1069,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxReference = createComboBox(\"BTableDetailsLayout.field.reference.label\", model.getReference(), bReferencedTableService.findAll().toArray(new BReferencedTable[0]));\n"
+						"		comboBoxReference = createComboBox(\"BTableDetailsLayout.field.reference.label\", model.getReference(), serviceProvider.getBReferencedTableService().findAll().toArray(new BReferencedTable[0]));\n"
 						+ //
 						"		comboBoxReference\n" + //
 						"				.setItemLabelGenerator(\n" + //
@@ -1109,7 +1117,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getBTableService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -1118,7 +1126,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setName(textFieldName.getValue());\n" + //
 						"		model.setReference(comboBoxReference.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getBTableService().update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -1163,6 +1171,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -1179,8 +1188,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final ATable model;\n" + //
-						"	private final ATableService service;\n" + //
-						"	private final AnotherTableService anotherTableService;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -1196,7 +1204,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	public void onAttach(AttachEvent attachEvent) {\n" + //
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
-						"		comboBoxAnotherTable = createComboBox(\"ATableDetailsLayout.field.anothertable.label\", model.getAnotherTable(), anotherTableService.findAll().toArray(new AnotherTable[0]));\n"
+						"		comboBoxAnotherTable = createComboBox(\"ATableDetailsLayout.field.anothertable.label\", model.getAnotherTable(), serviceProvider.getAnotherTableService().findAll().toArray(new AnotherTable[0]));\n"
 						+ //
 						"		comboBoxAnotherTable\n" + //
 						"				.setItemLabelGenerator(\n" + //
@@ -1254,7 +1262,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getATableService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -1265,7 +1273,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setAnotherTable(comboBoxAnotherTable.getValue());\n" + //
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -1296,6 +1304,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -1312,7 +1321,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	private final ButtonFactory buttonFactory;\n" + //
 						"	private final ComponentFactory componentFactory;\n" + //
 						"	private final BTable model;\n" + //
-						"	private final BTableService service;\n" + //
+						"	private final ServiceProvider serviceProvider;\n" + //
 						"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
 						"	private final ResourceManager resourceManager;\n" + //
 						"	private final SessionData session;\n" + //
@@ -1376,7 +1385,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		service.delete(model);\n" + //
+						"		serviceProvider.getBTableService().delete(model);\n" + //
 						"		observer.remove();\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -1386,7 +1395,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						+ //
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setCounter(integerFieldCounter.getValue());\n" + //
-						"		observer.save(service.update(model));\n" + //
+						"		observer.save(serviceProvider.getBTableService().update(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -1428,6 +1437,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" //
 							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
 							+ "\n" //
@@ -1441,7 +1451,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "	private final ButtonFactory buttonFactory;\n" //
 							+ "	private final ComponentFactory componentFactory;\n" //
 							+ "	private final BlobTable model;\n" //
-							+ "	private final BlobTableService service;\n" //
+							+ "	private final ServiceProvider serviceProvider;\n" //
 							+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
 							+ "	private final ResourceManager resourceManager;\n" //
 							+ "	private final SessionData session;\n" //
@@ -1510,13 +1520,13 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	protected void remove() {\n" //
-							+ "		service.delete(model);\n" //
+							+ "		serviceProvider.getBlobTableService().delete(model);\n" //
 							+ "		observer.remove();\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	protected void save() {\n" //
-							+ "		observer.save(service.update(model));\n" //
+							+ "		observer.save(serviceProvider.getBlobTableService().update(model));\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "}";
@@ -1532,103 +1542,6 @@ public class DetailsLayoutClassCodeGeneratorTest {
 
 	@Nested
 	class SimpleClass {
-
-		private String getExpected() {
-			return "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
-					"\n" + //
-					"import com.vaadin.flow.component.AttachEvent;\n" + //
-					"import com.vaadin.flow.component.dialog.Dialog;\n" + //
-					"import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" + //
-					"import com.vaadin.flow.component.textfield.IntegerField;\n" + //
-					"import com.vaadin.flow.component.textfield.TextField;\n" + //
-					"\n" + //
-					"import base.pack.age.name.core.model.ATable;\n" + //
-					"import base.pack.age.name.core.service.ATableService;\n" + //
-					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
-					"import base.pack.age.name.gui.SessionData;\n" + //
-					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
-					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
-					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
-					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
-					"import lombok.Generated;\n" + //
-					"import lombok.RequiredArgsConstructor;\n" + //
-					"\n" + //
-					"/**\n" + //
-					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-					" */\n" + //
-					"@Generated\n" + //
-					"@RequiredArgsConstructor\n" + //
-					"public class ATableDetailsLayout extends AbstractMasterDataBaseLayout {\n" + //
-					"\n" + //
-					"	private final ButtonFactory buttonFactory;\n" + //
-					"	private final ComponentFactory componentFactory;\n" + //
-					"	private final ATable model;\n" + //
-					"	private final ATableService service;\n" + //
-					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
-					"	private final ResourceManager resourceManager;\n" + //
-					"	private final SessionData session;\n" + //
-					"	private final Observer observer;\n" + //
-					"	private final DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n" + //
-					"\n" + //
-					"	private IntegerField integerFieldCount;\n" + //
-					"	private TextField textFieldDescription;\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void onAttach(AttachEvent attachEvent) {\n" + //
-					"		super.onAttach(attachEvent);\n" + //
-					"		createButtons();\n" + //
-					"		integerFieldCount = createIntegerField(\"ATableDetailsLayout.field.count.label\", model.getCount(), 1, 10, null);\n"
-					+ //
-					"		textFieldDescription = createTextField(\"ATableDetailsLayout.field.description.label\", model.getDescription());\n"
-					+ //
-					"		getStyle().set(\"-moz-border-radius\", \"4px\");\n" + //
-					"		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" + //
-					"		getStyle().set(\"border-radius\", \"4px\");\n" + //
-					"		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" + //
-					"		getStyle()\n" + //
-					"				.set(\n" + //
-					"						\"box-shadow\",\n" + //
-					"						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n"
-					+ //
-					"		setMargin(false);\n" + //
-					"		setWidthFull();\n" + //
-					"		add(\n" + //
-					"				integerFieldCount,\n" + //
-					"				textFieldDescription,\n" + //
-					"				getMasterDataButtonLayout(model.getId() > 0));\n" + //
-					"		integerFieldCount.focus();\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	protected ButtonFactory getButtonFactory() {\n" + //
-					"		return buttonFactory;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	protected ResourceManager getResourceManager() {\n" + //
-					"		return resourceManager;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	protected SessionData getSessionData() {\n" + //
-					"		return session;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	protected void remove() {\n" + //
-					"		service.delete(model);\n" + //
-					"		observer.remove();\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	protected void save() {\n" + //
-					"		model.setCount(integerFieldCount.getValue());\n" + //
-					"		model.setDescription(textFieldDescription.getValue());\n" + //
-					"		observer.save(service.update(model));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"}";
-		}
 
 		@Test
 		void happyRunForAnObjectWithAMemberList() {
@@ -1652,6 +1565,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.layout.list.ChapterListDetailsLayout;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
+							+ "import de.ollie.bookstore.gui.vaadin.component.ServiceProvider;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
 							+ "\n" //
@@ -1665,7 +1579,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "	private final ButtonFactory buttonFactory;\n" //
 							+ "	private final ComponentFactory componentFactory;\n" //
 							+ "	private final Book model;\n" //
-							+ "	private final BookService service;\n" //
+							+ "	private final ServiceProvider serviceProvider;\n" //
 							+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
 							+ "	private final ResourceManager resourceManager;\n" //
 							+ "	private final SessionData session;\n" //
@@ -1697,7 +1611,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "				textFieldTitle,\n" //
 							+ "				textFieldIsbn,\n" //
 							+ "				comboBoxPublicationType,\n" //
-							+ "				new ChapterListDetailsLayout(componentFactory, guiConfiguration, model, resourceManager, session),\n" //
+							+ "				new ChapterListDetailsLayout(componentFactory, guiConfiguration, model, resourceManager, serviceProvider, session),\n" //
 							+ "				getMasterDataButtonLayout(model.getId() > 0));\n" //
 							+ "		textFieldTitle.focus();\n" //
 							+ "	}\n" //
@@ -1719,7 +1633,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	protected void remove() {\n" //
-							+ "		service.delete(model);\n" //
+							+ "		serviceProvider.getBookService().delete(model);\n" //
 							+ "		observer.remove();\n" //
 							+ "	}\n" //
 							+ "\n" //
@@ -1728,7 +1642,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "		model.setTitle(textFieldTitle.getValue());\n" //
 							+ "		model.setIsbn(textFieldIsbn.getValue());\n" //
 							+ "		model.setPublicationType(comboBoxPublicationType.getValue());\n" //
-							+ "		observer.save(service.update(model));\n" //
+							+ "		observer.save(serviceProvider.getBookService().update(model));\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "}";

@@ -1,0 +1,21 @@
+/* ${Generated} */
+[part="input-field"] {
+    background-color: beige;
+    border-color: gray;
+    border-style: solid;
+    border-width: thin;
+    color: black;
+}
+
+:host([focused]) [part="input-field"] {
+    background-color: white;
+    border-color: darkred;
+    border-style: solid;
+    border-width: thin;
+    color: black;
+    opacity: 1;
+}
+
+:host([focused]:not([readonly])) [part="label"] {
+    color: darkred;
+}

@@ -20,6 +20,7 @@ import archimedes.codegenerators.gui.vaadin.component.HeaderLayoutClassCodeGener
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataViewButtonAdderInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.ServiceProviderClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.AccessCheckerInterfaceCodeGenerator;
@@ -36,6 +37,12 @@ import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewRendererIn
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataGUIConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataViewClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.modelcheckers.ModelCheckerGuiEditorPosHasAValue;
+import archimedes.codegenerators.gui.vaadin.styles.READMEmdFileGenerator;
+import archimedes.codegenerators.gui.vaadin.styles.SharedStylesCssFileGenerator;
+import archimedes.codegenerators.gui.vaadin.styles.VaadinCheckboxStylesCssFileGenerator;
+import archimedes.codegenerators.gui.vaadin.styles.VaadinComboBoxStylesCssFileGenerator;
+import archimedes.codegenerators.gui.vaadin.styles.VaadinTextAreaStylesCssFileGenerator;
+import archimedes.codegenerators.gui.vaadin.styles.VaadinTextFieldStylesCssFileGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
@@ -98,12 +105,19 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new PageParametersGOClassCodeGenerator(this),
 						// new PageParametersGOConverterClassCodeGenerator(this),
 						// new PageGOConverterClassCodeGenerator(this),
+						new READMEmdFileGenerator(this),
+						new ServiceProviderClassCodeGenerator(this),
 						new SessionDataClassCodeGenerator(this),
 						new SessionIdClassCodeGenerator(this),
+						new SharedStylesCssFileGenerator(this),
 						new TextFieldClassCodeGenerator(this),
 						new TextFieldFactoryClassCodeGenerator(this),
 						// new ToGOConverterInterfaceCodeGenerator(this),
 						new UserAuthorizationCheckerClassCodeGenerator(this),
+						new VaadinCheckboxStylesCssFileGenerator(this),
+						new VaadinComboBoxStylesCssFileGenerator(this),
+						new VaadinTextAreaStylesCssFileGenerator(this),
+						new VaadinTextFieldStylesCssFileGenerator(this),
 						new WebAppConfigurationClassCodeGenerator(this),
 						// Label property generator must called at last !!!
 						new LabelPropertiesGenerator(this));

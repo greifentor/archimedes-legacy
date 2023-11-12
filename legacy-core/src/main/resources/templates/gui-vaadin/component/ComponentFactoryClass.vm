@@ -55,6 +55,11 @@ public class ${ClassName} {
 	private ItemLabelGenerator<${EnumData.getEnumClassName()}> ${EnumData.getEnumAttributeName()}ItemLabelGenerator;
 #end
 
+#foreach($ServiceData in ${Services})
+	@Autowired(required = false)
+	private ItemLabelGenerator<${ServiceData.getServiceModelClassName()}> ${ServiceData.getServiceModelAttributeName()}ItemLabelGenerator;
+#end
+
 #foreach($MasterDataGridFieldRendererData in ${MasterDataGridFieldRendererCollection})
 	@Autowired(required = false)
 	private MasterDataGridFieldRenderer<${MasterDataGridFieldRendererData.getModelClassName()}> ${MasterDataGridFieldRendererData.getAttributeName()}MasterDataGridFieldRenderer;

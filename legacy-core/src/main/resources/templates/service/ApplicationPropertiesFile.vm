@@ -1,0 +1,15 @@
+# ${Generated}
+
+app.version=@project.version@
+
+# spring.liquibase.change-log=classpath:liquibase/change-log/change-log-master.xml
+spring-jpa-hobernate.dll-auto=update
+
+logging.level.root=INFO
+
+spring.datasource.url=jdbc:hsqldb:mem:${DBName}
+spring.datasource.driverClassName=org.hsqldb.jdbc.JDBCDriver
+spring.datasource.username=sa
+spring.datasource.password=
+
+spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

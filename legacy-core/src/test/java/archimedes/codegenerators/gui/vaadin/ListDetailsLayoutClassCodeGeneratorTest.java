@@ -50,6 +50,7 @@ public class ListDetailsLayoutClassCodeGeneratorTest {
 								+ "import de.ollie.bookstore.core.service.localization.ResourceManager;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGridFieldRenderer;\n" //
+								+ "import de.ollie.bookstore.gui.vaadin.component.ServiceProvider;\n" //
 								+ "import de.ollie.bookstore.gui.SessionData;\n" //
 								+ "\n" //
 								+ "import lombok.Generated;\n" //
@@ -66,6 +67,7 @@ public class ListDetailsLayoutClassCodeGeneratorTest {
 								+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
 								+ "	private final Book model;\n" //
 								+ "	private final ResourceManager resourceManager;\n" //
+								+ "	private final ServiceProvider serviceProvider;\n" //
 								+ "	private final SessionData session;\n" //
 								+ "\n" //
 								+ "	private Grid<Chapter> grid;\n" //
@@ -76,13 +78,13 @@ public class ListDetailsLayoutClassCodeGeneratorTest {
 								+ "			new ChapterDetailsDialog(componentFactory, guiConfiguration, (mmbr, newItem) -> {\n" //
 								+ "				model.getChapters().add(mmbr);\n" //
 								+ "				grid.setItems(model.getChapters());\n" //
-								+ "			}, session, new Chapter(), true).open();\n" //
+								+ "			}, session, new Chapter(), serviceProvider, true).open();\n" //
 								+ "		}, session);\n" //
 								+ "		Button buttonDuplicate = componentFactory.createDuplicateButton(event -> {\n" //
 								+ "			new ChapterDetailsDialog(componentFactory, guiConfiguration, (mmbr, newItem) -> {\n" //
 								+ "				model.getChapters().add(mmbr);\n" //
 								+ "				grid.setItems(model.getChapters());\n" //
-								+ "			}, session, grid.getSelectedItems().toArray(new Chapter[0])[0], true).open();\n" //
+								+ "			}, session, grid.getSelectedItems().toArray(new Chapter[0])[0], serviceProvider, true).open();\n" //
 								+ "		}, session);\n" //
 								+ "		Button buttonEdit = componentFactory.createEditButton(event -> {\n" //
 								+ "			new ChapterDetailsDialog(componentFactory, guiConfiguration, (toEdit, newItem) -> {\n" //
@@ -92,7 +94,7 @@ public class ListDetailsLayoutClassCodeGeneratorTest {
 								+ "				mmbr.setSummary(toEdit.getSummary());\n" //
 								+ "				mmbr.setContent(toEdit.getContent());\n" //
 								+ "				grid.setItems(model.getChapters());\n" //
-								+ "			}, session, grid.getSelectedItems().toArray(new Chapter[0])[0], false).open();\n" //
+								+ "			}, session, grid.getSelectedItems().toArray(new Chapter[0])[0], serviceProvider, false).open();\n" //
 								+ "		}, session);\n" //
 								+ "		Button buttonRemove = componentFactory.createRemoveButton(event -> {\n" //
 								+ "			Chapter mmbr = grid.getSelectedItems().toArray(new Chapter[0])[0];\n" //

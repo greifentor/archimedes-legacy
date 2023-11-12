@@ -68,6 +68,8 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
 		context.put("SessionDataClassName", sessionDataClassName);
 		context.put("ServiceInterfaceName", serviceInterfaceName);
+		context.put("ServiceProviderClassName", nameGenerator.getServiceProviderClassName(model));
+		context.put("VaadinComponentPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		importDeclarations
 				.add(nameGenerator.getVaadinComponentPackageName(model), abstractMasterDataBaseLayoutClassName);
 		importDeclarations.add(nameGenerator.getVaadinComponentPackageName(model), buttonFactoryClassName);

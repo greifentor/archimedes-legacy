@@ -89,6 +89,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_SELECTION_DIALOG_CLASS_NAME_SUFFIX =
 			"ALTERNATE_SELECTION_DIALOG_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME = "ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME";
+	public static final String ALTERNATE_SERVICE_PROVIDER_CLASS_NAME_SUFFIX =
+			"ALTERNATE_SERVICE_PROVIDER_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX = "ALTERNATE_SESSION_DATA_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_SESSION_DATA_PACKAGE_NAME = "ALTERNATE_SESSION_DATA_PACKAGE_NAME";
 	public static final String ALTERNATE_SESSION_ID_CLASS_NAME = "ALTERNATE_SESSION_ID_CLASS_NAME";
@@ -101,6 +103,7 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 			"ALTERNATE_USER_AUTHORIZATION_CHECKER_PACKAGE_NAME";
 	public static final String ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME = "ALTERNATE_VAADIN_COMPONENT_PACKAGE_NAME";
 	public static final String ALTERNATE_VAADIN_PACKAGE_NAME = "ALTERNATE_VAADIN_PACKAGE_NAME";
+	public static final String ALTERNATE_VAADIN_STYLES_PACKAGE_NAME = "ALTERNATE_VAADIN_STYLES_PACKAGE_NAME";
 
 	public String getAbstractMasterDataBaseLayoutClassName() {
 		return "AbstractMasterDataBaseLayout";
@@ -137,6 +140,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getVaadinPackageName(DataModel model) {
 		return createPackageName(model, null, "gui.vaadin", ALTERNATE_VAADIN_PACKAGE_NAME);
+	}
+
+	public String getVaadinStylesPackageName(DataModel model) {
+		return "styles";
 	}
 
 	public String getButtonClassName(DataModel model) {
@@ -484,6 +491,15 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getSelectionDialogPackageName(DataModel model) {
 		return createPackageName(model, null, "gui.vaadin.component", ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME);
+	}
+
+	public String getServiceProviderClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"ServiceProvider",
+						ALTERNATE_SERVICE_PROVIDER_CLASS_NAME_SUFFIX);
 	}
 
 	public String getSessionDataClassName(DataModel model) {

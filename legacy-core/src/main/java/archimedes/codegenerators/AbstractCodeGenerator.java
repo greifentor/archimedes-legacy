@@ -164,7 +164,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 						System.getProperty(PROPERTY_PREFIX + "class.file.extension", ".java"));
 	}
 
-	private boolean isModuleModeSet(DataModel dataModel) {
+	protected boolean isModuleModeSet(DataModel dataModel) {
 		return dataModel.getOptionByName(MODULE_MODE) != null;
 	}
 

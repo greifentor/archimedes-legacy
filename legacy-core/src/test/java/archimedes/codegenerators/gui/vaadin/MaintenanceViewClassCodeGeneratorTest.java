@@ -43,7 +43,6 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.router.Route;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.ATable;\n" + //
-					"import base.pack.age.name.core.service.ATableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
@@ -52,6 +51,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -85,7 +85,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
-					"	private final ATableService service;\n" + //
+					"	private final ServiceProvider serviceProvider;\n" + //
 					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private ATable model;\n" + //
@@ -110,7 +110,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		long id = parametersMap.containsKey(\"id\") && (parametersMap.get(\"id\").size() > 0)\n" + //
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
-					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		model = serviceProvider.getATableService().findById(id).orElse(createNewModel());\n" + //
 					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
 					+ //
 					"			model.setId(-1);\n" + //
@@ -154,7 +154,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
-					"		return new ATableDetailsLayout(buttonFactory, componentFactory, model, service, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
+					"		return new ATableDetailsLayout(buttonFactory, componentFactory, model, serviceProvider, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -183,7 +183,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void remove() {\n" + //
-					"		service.delete(model);\n" + //
+					"		serviceProvider.getATableService().delete(model);\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -222,7 +222,6 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"\n" + //
 					"import base.pack.age.name.core.model.ATable;\n" + //
 					"import base.pack.age.name.core.service.AnotherTableService;\n" + //
-					"import base.pack.age.name.core.service.ATableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
@@ -231,6 +230,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -264,8 +264,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
-					"	private final ATableService service;\n" + //
-					"	private final AnotherTableService anotherTableService;\n" + //
+					"	private final ServiceProvider serviceProvider;\n" + //
 					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private ATable model;\n" + //
@@ -290,7 +289,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		long id = parametersMap.containsKey(\"id\") && (parametersMap.get(\"id\").size() > 0)\n" + //
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
-					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		model = serviceProvider.getATableService().findById(id).orElse(createNewModel());\n" + //
 					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
 					+ //
 					"			model.setId(-1);\n" + //
@@ -334,7 +333,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
-					"		return new ATableDetailsLayout(buttonFactory, componentFactory, model, service, anotherTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
+					"		return new ATableDetailsLayout(buttonFactory, componentFactory, model, serviceProvider, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -363,7 +362,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void remove() {\n" + //
-					"		service.delete(model);\n" + //
+					"		serviceProvider.getATableService().delete(model);\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -405,7 +404,6 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.core.model.AnotherTable;\n" + //
 					"import base.pack.age.name.core.model.ATable;\n" + //
 					"import base.pack.age.name.core.model.HeirTableWithReference;\n" + //
-					"import base.pack.age.name.core.service.ATableService;\n" + //
 					"import base.pack.age.name.core.service.ReferencedTableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
@@ -416,6 +414,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n"
 					+ //
+					"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -449,8 +448,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
-					"	private final ATableService service;\n" + //
-					"	private final ReferencedTableService referencedTableService;\n" + //
+					"	private final ServiceProvider serviceProvider;\n" + //
 					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private ATable model;\n" + //
@@ -475,7 +473,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		long id = parametersMap.containsKey(\"id\") && (parametersMap.get(\"id\").size() > 0)\n" + //
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
-					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		model = serviceProvider.getATableService().findById(id).orElse(createNewModel());\n" + //
 					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
 					+ //
 					"			model.setId(-1);\n" + //
@@ -540,7 +538,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
 					"					(AnotherHeirTable) model,\n" + //
-					"					service,\n" + //
+					"					serviceProvider,\n" + //
 					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
@@ -552,8 +550,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
 					"					(AnotherHeirTableWithSameReference) model,\n" + //
-					"					service,\n" + //
-					"					referencedTableService,\n" + //
+					"					serviceProvider,\n" + //
 					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
@@ -565,7 +562,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
 					"					(AnotherTable) model,\n" + //
-					"					service,\n" + //
+					"					serviceProvider,\n" + //
 					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
@@ -577,15 +574,14 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
 					"					(HeirTableWithReference) model,\n" + //
-					"					service,\n" + //
-					"					referencedTableService,\n" + //
+					"					serviceProvider,\n" + //
 					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this,\n" + //
 					"					comboBoxItemLabelGenerator);\n" + //
 					"		}\n" + //
-					"		return new ATableDetailsLayout(buttonFactory, componentFactory, model, service, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
+					"		return new ATableDetailsLayout(buttonFactory, componentFactory, model, serviceProvider, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -614,7 +610,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void remove() {\n" + //
-					"		service.delete(model);\n" + //
+					"		serviceProvider.getATableService().delete(model);\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -650,7 +646,6 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"\n" + //
 					"import base.pack.age.name.core.model.DifferentSubclassReferences;\n" + //
 					"import base.pack.age.name.core.service.ATableService;\n" + //
-					"import base.pack.age.name.core.service.DifferentSubclassReferencesService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
@@ -659,6 +654,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -695,8 +691,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
-					"	private final DifferentSubclassReferencesService service;\n" + //
-					"	private final ATableService aTableService;\n" + //
+					"	private final ServiceProvider serviceProvider;\n" + //
 					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private DifferentSubclassReferences model;\n" + //
@@ -721,7 +716,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		long id = parametersMap.containsKey(\"id\") && (parametersMap.get(\"id\").size() > 0)\n" + //
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
-					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		model = serviceProvider.getDifferentSubclassReferencesService().findById(id).orElse(createNewModel());\n"
+					+ //
 					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
 					+ //
 					"			model.setId(-1);\n" + //
@@ -765,7 +761,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(DifferentSubclassReferences model) {\n" + //
-					"		return new DifferentSubclassReferencesDetailsLayout(buttonFactory, componentFactory, model, service, aTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
+					"		return new DifferentSubclassReferencesDetailsLayout(buttonFactory, componentFactory, model, serviceProvider, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -794,7 +790,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void remove() {\n" + //
-					"		service.delete(model);\n" + //
+					"		serviceProvider.getDifferentSubclassReferencesService().delete(model);\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(DifferentSubclassReferencesPageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -830,7 +826,6 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.core.model.BHeirTable;\n" + //
 					"import base.pack.age.name.core.model.BTable;\n" + //
 					"import base.pack.age.name.core.service.BReferencedTableService;\n" + //
-					"import base.pack.age.name.core.service.BTableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
@@ -839,6 +834,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -872,8 +868,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
-					"	private final BTableService service;\n" + //
-					"	private final BReferencedTableService bReferencedTableService;\n" + //
+					"	private final ServiceProvider serviceProvider;\n" + //
 					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private BTable model;\n" + //
@@ -898,7 +893,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		long id = parametersMap.containsKey(\"id\") && (parametersMap.get(\"id\").size() > 0)\n" + //
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
-					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		model = serviceProvider.getBTableService().findById(id).orElse(createNewModel());\n" + //
 					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n"
 					+ //
 					"			model.setId(-1);\n" + //
@@ -954,15 +949,14 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
 					"					(BHeirTable) model,\n" + //
-					"					service,\n" + //
-					"					bReferencedTableService,\n" + //
+					"					serviceProvider,\n" + //
 					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this,\n" + //
 					"					comboBoxItemLabelGenerator);\n" + //
 					"		}\n" + //
-					"		return new BTableDetailsLayout(buttonFactory, componentFactory, model, service, bReferencedTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
+					"		return new BTableDetailsLayout(buttonFactory, componentFactory, model, serviceProvider, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -991,7 +985,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void remove() {\n" + //
-					"		service.delete(model);\n" + //
+					"		serviceProvider.getBTableService().delete(model);\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(BTablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -1023,7 +1017,6 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.core.model.CTableSub0;\n" + //
 					"import base.pack.age.name.core.model.CTableSub1;\n" + //
 					"import base.pack.age.name.core.service.CAnotherTableService;\n" + //
-					"import base.pack.age.name.core.service.CTableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
@@ -1032,6 +1025,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -1063,8 +1057,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private final ComponentFactory componentFactory;\n" + //
 					"	private final ResourceManager resourceManager;\n" + //
 					"	private final MasterDataGUIConfiguration guiConfiguration;\n" + //
-					"	private final CTableService service;\n" + //
-					"	private final CAnotherTableService cAnotherTableService;\n" + //
+					"	private final ServiceProvider serviceProvider;\n" + //
 					"	private final SessionData session;\n" + //
 					"\n" + //
 					"	private CTable model;\n" + //
@@ -1089,7 +1082,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		long id = parametersMap.containsKey(\"id\") && (parametersMap.get(\"id\").size() > 0)\n" + //
 					"				? Long.parseLong(parametersMap.get(\"id\").get(0))\n" + //
 					"				: -1;\n" + //
-					"		model = service.findById(id).orElse(createNewModel());\n" + //
+					"		model = serviceProvider.getCTableService().findById(id).orElse(createNewModel());\n" + //
 					"		if (parametersMap.containsKey(\"duplicate\") && \"true\".equals(parametersMap.get(\"duplicate\").get(0))) {\n" + //
 					"			model.setId(-1);\n" + //
 					"		}\n" + //
@@ -1143,8 +1136,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
 					"					(CTableSub0) model,\n" + //
-					"					service,\n" + //
-					"					cAnotherTableService,\n" + //
+					"					serviceProvider,\n" + //
 					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
@@ -1156,15 +1148,14 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
 					"					(CTableSub1) model,\n" + //
-					"					service,\n" + //
-					"					cAnotherTableService,\n" + //
+					"					serviceProvider,\n" + //
 					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
 					"					session,\n" + //
 					"					this,\n" + //
 					"					comboBoxItemLabelGenerator);\n" + //
 					"		}\n" + //
-					"		return new CTableDetailsLayout(buttonFactory, componentFactory, model, service, cAnotherTableService, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
+					"		return new CTableDetailsLayout(buttonFactory, componentFactory, model, serviceProvider, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);\n"
 					+ //
 					"	}\n" + //
 					"\n" + //
@@ -1193,7 +1184,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void remove() {\n" + //
-					"		service.delete(model);\n" + //
+					"		serviceProvider.getCTableService().delete(model);\n" + //
 					"		getUI().ifPresent(ui -> ui.navigate(CTablePageView.URL));\n" + //
 					"	}\n" + //
 					"\n" + //

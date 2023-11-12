@@ -65,9 +65,9 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("PackageName", getPackageName(model, table));
 		context.put("PreferenceData", getPreferenceData(table));
 		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
+		context.put("ServiceProviderClassName", nameGenerator.getServiceProviderClassName(model));
 		context.put("SessionDataClassName", sessionDataClassName);
-		importDeclarations
-				.add(nameGenerator.getVaadinComponentPackageName(model), abstractMasterDataBaseLayoutClassName);
+		context.put("VaadinComponentPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		importDeclarations.add(nameGenerator.getVaadinComponentPackageName(model), componentFactoryClassName);
 		importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelClassName);
 		if (modelSuperClassName != null) {
@@ -75,6 +75,7 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		}
 		importDeclarations.add(nameGenerator.getSessionDataPackageName(model), sessionDataClassName);
 		addGUIReferencesToFieldDeclarations(guiReferenceData);
+		LabelPropertiesGenerator.addLabel("commons.button.cancel.text", "Abbruch");
 		guiColumnDataCollection
 				.getColumns()
 				.forEach(
