@@ -2,7 +2,6 @@ package archimedes.codegenerators.gui.vaadin;
 
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.AbstractModelCodeGenerator;
-import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.OptionModel;
@@ -21,8 +20,8 @@ public abstract class AbstractVaadinModelCodeGenerator extends AbstractModelCode
 	}
 
 	protected String getBaseURL(DataModel model) {
-		return OptionGetter
-				.getOptionByName(model, GUI_BASE_URL)
+		return model
+				.findOptionByName(GUI_BASE_URL)
 				.map(OptionModel::getParameter)
 				.orElseGet(() -> model.getApplicationName().toLowerCase());
 	}

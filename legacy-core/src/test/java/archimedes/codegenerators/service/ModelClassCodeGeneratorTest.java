@@ -1,5 +1,7 @@
 package archimedes.codegenerators.service;
 
+import static archimedes.codegenerators.DataModelReader.EXAMPLE_XMLS;
+import static archimedes.codegenerators.DataModelReader.readDataModel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Nested;
@@ -10,16 +12,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.DataModelReader;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.legacy.scheme.Relation;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 import archimedes.model.ViewModel;
 import archimedes.scheme.Option;
-import archimedes.scheme.xml.ModelXMLReader;
 import corent.base.Direction;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,11 +31,6 @@ class ModelClassCodeGeneratorTest {
 	@InjectMocks
 	private ModelClassCodeGenerator unitUnderTest;
 
-	static DataModel readDataModel(String fileName) {
-		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		return reader.read("src/test/resources/dm/codegenerators/" + fileName);
-	}
-
 	@Nested
 	class TestsOfMethod_generate_String_TableModel {
 
@@ -42,7 +38,7 @@ class ModelClassCodeGeneratorTest {
 		void happyRunForASimpleObject() {
 			// Prepare
 			String expected = getExpected("core.model");
-			DataModel dataModel = readDataModel("Model.xml");
+			DataModel dataModel = DataModelReader.readDataModel("Model.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("A_TABLE"));
 			// Check
@@ -82,23 +78,10 @@ class ModelClassCodeGeneratorTest {
 					"@EqualsAndHashCode(callSuper = true)\n" + //
 					"@Generated\n" + //
 					"@ToString(callSuper = true)\n" + //
-					"public class ATable extends GeneratedATable {\n" + //
+					"public class ATable extends GeneratedATable<ATable> {\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	public ATable setId(Long id) {\n" + //
-					"		super.setId(id);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setADate(LocalDate aDate) {\n" + //
-					"		super.setADate(aDate);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setDescription(String description) {\n" + //
-					"		super.setDescription(description);\n" + //
+					"	public ATable self() {\n" + //
 					"		return this;\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -199,23 +182,10 @@ class ModelClassCodeGeneratorTest {
 					"@EqualsAndHashCode(callSuper = true)\n" + //
 					"@Generated\n" + //
 					"@ToString(callSuper = true)\n" + //
-					"public class ATable extends GeneratedATable {\n" + //
+					"public class ATable extends GeneratedATable<ATable> {\n" + //
 					"\n" + //
 					"	@Override\n" + //
-					"	public ATable setId(Long id) {\n" + //
-					"		super.setId(id);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setADate(LocalDate aDate) {\n" + //
-					"		super.setADate(aDate);\n" + //
-					"		return this;\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public ATable setDescription(String description) {\n" + //
-					"		super.setDescription(description);\n" + //
+					"	public ATable self() {\n" + //
 					"		return this;\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -288,23 +258,10 @@ class ModelClassCodeGeneratorTest {
 						"@EqualsAndHashCode(callSuper = true)\n" + //
 						"@Generated\n" + //
 						"@ToString(callSuper = true)\n" + //
-						"public class ATable extends GeneratedATable {\n" + //
+						"public class ATable extends GeneratedATable<ATable> {\n" + //
 						"\n" + //
 						"	@Override\n" + //
-						"	public ATable setId(Long id) {\n" + //
-						"		super.setId(id);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setADate(LocalDate aDate) {\n" + //
-						"		super.setADate(aDate);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setDescription(String description) {\n" + //
-						"		super.setDescription(description);\n" + //
+						"	public ATable self() {\n" + //
 						"		return this;\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -356,23 +313,10 @@ class ModelClassCodeGeneratorTest {
 								"@EqualsAndHashCode(callSuper = true)\n" + //
 								"@Generated\n" + //
 								"@ToString(callSuper = true)\n" + //
-								"public class ATable extends GeneratedATable {\n" + //
+								"public class ATable extends GeneratedATable<ATable> {\n" + //
 								"\n" + //
 								"	@Override\n" + //
-								"	public ATable setId(Long id) {\n" + //
-								"		super.setId(id);\n" + //
-								"		return this;\n" + //
-								"	}\n" + //
-								"\n" + //
-								"	@Override\n" + //
-								"	public ATable setADate(LocalDate aDate) {\n" + //
-								"		super.setADate(aDate);\n" + //
-								"		return this;\n" + //
-								"	}\n" + //
-								"\n" + //
-								"	@Override\n" + //
-								"	public ATable setDescription(String description) {\n" + //
-								"		super.setDescription(description);\n" + //
+								"	public ATable self() {\n" + //
 								"		return this;\n" + //
 								"	}\n" + //
 								"\n" + //
@@ -415,23 +359,11 @@ class ModelClassCodeGeneratorTest {
 						"@EqualsAndHashCode(callSuper = true)\n" + //
 						"@Generated\n" + //
 						"@ToString(callSuper = true)\n" + //
-						"public class ATable extends GeneratedATable implements TheInterface1, TheSecondInterface {\n" + //
+						"public class ATable extends GeneratedATable<ATable> implements TheInterface1, TheSecondInterface {\n"
+						+ //
 						"\n" + //
 						"	@Override\n" + //
-						"	public ATable setId(Long id) {\n" + //
-						"		super.setId(id);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setADate(LocalDate aDate) {\n" + //
-						"		super.setADate(aDate);\n" + //
-						"		return this;\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	@Override\n" + //
-						"	public ATable setDescription(String description) {\n" + //
-						"		super.setDescription(description);\n" + //
+						"	public ATable self() {\n" + //
 						"		return this;\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -446,6 +378,103 @@ class ModelClassCodeGeneratorTest {
 				assertEquals(expected, returned);
 			}
 
+		}
+
+	}
+
+	@Nested
+	class List_Composition_Parent {
+
+		@Test
+		void happyRunForASimpleObject() {
+			// Prepare
+			String expected = getExpected(false, false);
+			DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+			// Run
+			String returned =
+					unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("BOOK"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String getExpected(boolean isSuperclass, boolean isExtends) {
+			String s =
+					"package de.ollie.bookstore.core.model;\n" + //
+							"\n" + //
+							"import java.util.List;\n" + //
+							"\n" + //
+							"import lombok.Data;\n" + //
+							"import lombok.EqualsAndHashCode;\n" + //
+							"import lombok.Generated;\n" + //
+							"import lombok.ToString;\n" + //
+							"import lombok.experimental.Accessors;\n" + //
+							"\n" + //
+							"/**\n" + //
+							" * A model for books.\n" + //
+							" *\n" + //
+							" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+							" */\n" + //
+							"@Accessors(chain = true)\n" + //
+							"@Data\n" + //
+							"@EqualsAndHashCode(callSuper = true)\n" + //
+							"@Generated\n" + //
+							"@ToString(callSuper = true)\n" + //
+							"public class Book extends GeneratedBook<Book> {\n" + //
+							"\n" + //
+							"	@Override\n" + //
+							"	public Book self() {\n" + //
+							"		return this;\n" + //
+							"	}\n" + //
+							"\n" + //
+							"}";
+			return s;
+		}
+
+	}
+
+	@Nested
+	class List_Composition_Member {
+
+		@Test
+		void happyRunForASimpleObject() {
+			// Prepare
+			String expected = getExpected(false, false);
+			DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("CHAPTER"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String getExpected(boolean isSuperclass, boolean isExtends) {
+			String s =
+					"package de.ollie.bookstore.core.model;\n" //
+							+ "\n" //
+							+ "import lombok.Data;\n" //
+							+ "import lombok.EqualsAndHashCode;\n" //
+							+ "import lombok.Generated;\n" //
+							+ "import lombok.ToString;\n" //
+							+ "import lombok.experimental.Accessors;\n" //
+							+ "\n" //
+							+ "/**\n" //
+							+ " * A model for chapters.\n" //
+							+ " *\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n" //
+							+ "@Accessors(chain = true)\n" //
+							+ "@Data\n" //
+							+ "@EqualsAndHashCode(callSuper = true)\n" //
+							+ "@Generated\n" //
+							+ "@ToString(callSuper = true)\n" //
+							+ "public class Chapter extends GeneratedChapter<Chapter> {\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public Chapter self() {\n" //
+							+ "		return this;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "}";
+			return s;
 		}
 
 	}

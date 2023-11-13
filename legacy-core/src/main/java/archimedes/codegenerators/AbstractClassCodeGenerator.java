@@ -4,6 +4,7 @@ import static corentx.util.Checks.ensure;
 
 import java.io.FileWriter;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -20,6 +21,7 @@ import archimedes.codegenerators.ListAccess.ListAccessConverterData;
 import archimedes.codegenerators.ListAccess.ListAccessData;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -43,6 +45,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String LIST_ACCESS = "LIST_ACCESS";
 	public static final String MAPPERS = "MAPPERS";
 	public static final String MAX = "MAX";
+	public static final String MEMBER_LIST = "MEMBER_LIST";
 	public static final String MIN = "MIN";
 	public static final String POJO_MODE = "POJO_MODE";
 	public static final String POJO_MODE_BUILDER = "BUILDER";
@@ -53,6 +56,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	public static final String STEP = "STEP";
 	public static final String SUBCLASS = "SUBCLASS";
 	public static final String SUPERCLASS = "SUPERCLASS";
+	public static final String TO_STRING = "TO_STRING";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
@@ -90,6 +94,14 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		return columns.stream().anyMatch(column -> column.getDomain().isOptionSet(ENUM));
 	}
 
+	protected boolean hasMemberLists(TableModel table) {
+		return OptionGetter
+				.getOptionByName(table, MEMBER_LIST)
+				.map(om -> (om.getParameter() != null) && om.getParameter().toUpperCase().equals("PARENT"))
+				.orElse(false);
+
+	}
+
 	protected boolean hasReferences(ColumnModel[] columns) {
 		return List.of(columns).stream().anyMatch(column -> column.getReferencedTable() != null);
 	}
@@ -106,8 +118,20 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		return processTemplate(context, "JavaGetterName.vm", GENERAL_TEMPLATE_FOLDER_PATH).trim();
 	}
 
+	protected String getGetterName(String columnName) {
+		VelocityContext context = new VelocityContext();
+		context.put("FieldName", getAttributeNameFirstLetterUpperCase(columnName));
+		return processTemplate(context, "JavaGetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
+	}
+
 	private String getAttributeNameFirstLetterUpperCase(ColumnModel column) {
 		String attrName = nameGenerator.getAttributeName(column);
+		return attrName.substring(0, 1).toUpperCase()
+				+ (attrName.length() == 1 ? "" : attrName.substring(1, attrName.length()));
+	}
+
+	private String getAttributeNameFirstLetterUpperCase(String columnName) {
+		String attrName = nameGenerator.getAttributeName(columnName);
 		return attrName.substring(0, 1).toUpperCase()
 				+ (attrName.length() == 1 ? "" : attrName.substring(1, attrName.length()));
 	}
@@ -118,6 +142,14 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		context.put("NotNull", column.isNotNull());
 		context.put("BooleanType", "boolean".equalsIgnoreCase(column.getDomain().getName()));
 		return processTemplate(context, "JavaSetterName.vm", GENERAL_TEMPLATE_FOLDER_PATH).trim();
+	}
+
+	protected String getSetterName(String columnName) {
+		VelocityContext context = new VelocityContext();
+		context.put("FieldName", getAttributeNameFirstLetterUpperCase(columnName));
+		context.put("NotNull", "true");
+		context.put("BooleanType", "false");
+		return processTemplate(context, "JavaSetterName.vm", AbstractCodeFactory.TEMPLATE_PATH).trim();
 	}
 
 	protected boolean isGenerateIdClass(DataModel model, TableModel table) {
@@ -207,6 +239,16 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 								.getOptionByName(model, REFERENCE_MODE)
 								.map(option -> ReferenceMode.valueOf(option.getParameter()))
 								.orElse(ReferenceMode.ID));
+	}
+
+	protected List<ColumnModel> getReferencingColumns(TableModel table, DataModel dataModel) {
+		List<ColumnModel> columns = new ArrayList<>();
+		for (ColumnModel column : dataModel.getAllColumns()) {
+			if (column.getReferencedTable() == table) {
+				columns.add(column);
+			}
+		}
+		return columns;
 	}
 
 	protected List<ColumnModel> getAllColumns(List<ColumnModel> columns, TableModel table) {
@@ -334,6 +376,44 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	@Override
 	public Type getType() {
 		return Type.TABLE;
+	}
+
+	protected boolean isAMember(TableModel table) {
+		return OptionGetter
+				.getOptionByName(table, MEMBER_LIST)
+				.map(om -> isParameterEquals(om, "MEMBER"))
+				.orElse(false);
+	}
+
+	protected boolean isParameterEquals(OptionModel om, String value) {
+		return (om.getParameter() != null) && om.getParameter().toUpperCase().equals(value);
+	}
+
+	protected boolean isColumnReferencingAParent(ColumnModel column) {
+		return (column.getReferencedTable() != null) && isAParent(column.getReferencedTable());
+	}
+
+	protected boolean isAParent(TableModel table) {
+		return table != null
+				? OptionGetter
+						.getOptionByName(table, MEMBER_LIST)
+						.map(om -> isParameterEquals(om, "PARENT"))
+						.orElse(false)
+				: false;
+	}
+
+	protected List<CompositionListData> getCompositionLists(TableModel table) {
+		List<CompositionListData> l = new ArrayList<>();
+		OptionGetter.getOptionByName(table, MEMBER_LIST)
+				.filter(om -> (om.getParameter() != null) && om.getParameter().toUpperCase().equals("PARENT"))
+				.ifPresent(om -> {
+					getReferencingColumns(table, table.getDataModel()).stream()
+							.filter(cm -> OptionGetter.getParameterOfOptionByName(cm.getTable(), MEMBER_LIST)
+									.filter(s -> s.toUpperCase().equals("MEMBER")).isPresent())
+							.forEach(cm -> l.add(new CompositionListData().setBackReferenceColumn(cm)
+									.setMemberTable(cm.getTable())));
+				});
+		return l;
 	}
 
 }

@@ -187,40 +187,8 @@ class PhantomTable implements TableModel {
 	 * @changed OLI 30.10.2013 - Added.
 	 */
 	@Override
-	public OptionModel getOptionAt(int arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * @changed OLI 30.10.2013 - Added.
-	 */
-	@Override
-	public int getOptionCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/**
-	 * @changed OLI 30.10.2013 - Added.
-	 */
-	@Override
 	public OptionModel[] getOptions() {
 		return this.options.toArray(new OptionModel[0]);
-	}
-
-	/**
-	 * @changed OLI 25.05.2016 - Added.
-	 */
-	@Override
-	public OptionModel[] getOptionsByName(String name) {
-		List<OptionModel> l = new LinkedList<OptionModel>();
-		for (OptionModel o : this.options) {
-			if (o.getName().equals(name)) {
-				l.add(o);
-			}
-		}
-		return l.toArray(new OptionModel[0]);
 	}
 
 	/**
@@ -494,15 +462,6 @@ class PhantomTable implements TableModel {
 	public OrderMemberModel[] getSelectionViewOrderMembers() {
 		// TODO Auto-generated method stub
 		return new OrderMemberModel[0];
-	}
-
-	/**
-	 * @changed OLI 10.03.2016 - Added.
-	 */
-	@Override
-	public OptionModel getOptionByName(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**
@@ -798,14 +757,6 @@ class PhantomTable implements TableModel {
 			}
 		}
 		return l.toArray(new ColumnModel[0]);
-	}
-
-	/**
-	 * @changed OLI 26.05.2016 - Added.
-	 */
-	@Override
-	public boolean isOptionSet(String optionName) {
-		return this.getOptionByName(optionName) != null;
 	}
 
 	/**

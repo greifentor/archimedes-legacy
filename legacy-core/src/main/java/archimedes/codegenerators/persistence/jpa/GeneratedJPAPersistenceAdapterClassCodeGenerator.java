@@ -248,7 +248,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
-		return hasDependentAttribute(model, table) || isSubclass(table);
+		return hasDependentAttribute(model, table) || isSubclass(table) || isAMember(table);
 	}
 
 	private boolean hasDependentAttribute(DataModel model, TableModel table) {

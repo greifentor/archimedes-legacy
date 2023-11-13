@@ -16,7 +16,7 @@ import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
-public class RESTControllerSpringBootClassCodeGeneratorTest {
+class RESTControllerSpringBootClassCodeGeneratorTest {
 
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 

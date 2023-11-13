@@ -10,6 +10,7 @@ import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.event.CodeFactoryProgressionListener;
 import archimedes.model.CodeFactory;
 import archimedes.model.DataModel;
+import archimedes.model.MessageCollector;
 import baccara.gui.GUIBundle;
 
 /**
@@ -24,6 +25,7 @@ public abstract class AbstractCodeFactory implements CodeFactory, CodeFactoryPro
 
 	protected DataModel dataModel;
 	protected GUIBundle guiBundle;
+	protected MessageCollector messageCollector;
 	protected ModelCheckerMessageListFrameListener[] modelCheckerMessagelisteners =
 			new ModelCheckerMessageListFrameListener[0];
 
@@ -77,6 +79,11 @@ public abstract class AbstractCodeFactory implements CodeFactory, CodeFactoryPro
 	@Override
 	public void setGUIBundle(GUIBundle guiBundle) {
 		this.guiBundle = guiBundle;
+	}
+
+	@Override
+	public void setMessageCollector(MessageCollector messageCollector) {
+		this.messageCollector = messageCollector;
 	}
 
 	@Override

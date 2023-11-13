@@ -1,5 +1,7 @@
 package archimedes.codegenerators.persistence.jpa;
 
+import static archimedes.codegenerators.DataModelReader.EXAMPLE_XMLS;
+import static archimedes.codegenerators.DataModelReader.readDataModel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Nested;
@@ -9,14 +11,12 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
-import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.legacy.scheme.Relation;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 import archimedes.model.ViewModel;
 import archimedes.scheme.Option;
-import archimedes.scheme.xml.ModelXMLReader;
 import corent.base.Direction;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,11 +26,6 @@ public class DBOClassCodeGeneratorTest {
 
 	@InjectMocks
 	private DBOClassCodeGenerator unitUnderTest;
-
-	static DataModel readDataModel(String fileName) {
-		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
-		return reader.read("src/test/resources/dm/codegenerators/" + fileName);
-	}
 
 	@Nested
 	class TestsOfMethod_generate_String_TableModel {
@@ -90,7 +85,7 @@ public class DBOClassCodeGeneratorTest {
 					"\n";
 			if (!isExtends) {
 				s += "	@Id\n" + //
-					"	@Column(name = \"ID\")\n" + //
+						"	@Column(name = \"ID\")\n" + //
 						"	private Long id;\n";
 			}
 			s += "	@Column(name = \"ADate\")\n" + //
@@ -150,6 +145,203 @@ public class DBOClassCodeGeneratorTest {
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+		@Nested
+		class List_Composition_Parent {
+
+			@Test
+			void happyRunForASimpleObject() {
+				// Prepare
+				String expected = getExpectedForASimpleObject(false, false);
+				DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("BOOK"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			private String getExpectedForASimpleObject(boolean isSuperclass, boolean isExtends) {
+				String s =
+						"package de.ollie.bookstore.persistence.entity;\n" //
+								+ "\n" //
+								+ "import java.util.List;\n" //
+								+ "\n" //
+								+ "import javax.persistence.Column;\n" //
+								+ "import javax.persistence.Entity;\n" //
+								+ "import javax.persistence.EnumType;\n" //
+								+ "import javax.persistence.Enumerated;\n" //
+								+ "import javax.persistence.GeneratedValue;\n" //
+								+ "import javax.persistence.GenerationType;\n" //
+								+ "import javax.persistence.Id;\n" //
+								+ "import javax.persistence.Table;\n" //
+								+ "import javax.persistence.CascadeType;\n" //
+								+ "import javax.persistence.FetchType;\n" //
+								+ "import javax.persistence.JoinColumn;\n" //
+								+ "import javax.persistence.OneToMany;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A DBO for books.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@Generated\n" //
+								+ "@Entity(name = \"Book\")\n" //
+								+ "@Table(name = \"BOOK\")\n" //
+								+ "public class BookDBO {\n" //
+								+ "\n" //
+								+ "	@Id\n" //
+								+ "	@GeneratedValue(strategy = GenerationType.IDENTITY)\n" //
+								+ "	@Column(name = \"ID\", nullable = false)\n" //
+								+ "	private long id;\n" //
+								+ "	@Column(name = \"ISBN\")\n" //
+								+ "	private String isbn;\n" //
+								+ "	@Enumerated(EnumType.STRING)\n" //
+								+ "	@Column(name = \"PUBLICATION_TYPE\", nullable = false)\n" //
+								+ "	private PublicationTypeDBO publicationType;\n" //
+								+ "	@Column(name = \"TITLE\", nullable = false)\n" //
+								+ "	private String title;\n" //
+								+ "	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)\n" //
+								+ "	@JoinColumn(name = \"BOOK_ID\")\n" //
+								+ "	private List<ChapterDBO> chapters;\n" //
+								+ "\n" //
+								+ "}";
+				return s;
+			}
+
+			@Test
+			void happyRunForAHeirObject() {
+				// Prepare
+				String expected = getExpectedForAHeirObject(false, false);
+				DataModel dataModel = readDataModel("Model-Inheritance.xml");
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("C_HEIR_TABLE"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			private String getExpectedForAHeirObject(boolean isSuperclass, boolean isExtends) {
+				String s =
+						"package base.pack.age.name.persistence.entity;\n" //
+								+ "\n" //
+								+ "import java.util.List;\n" //
+								+ "\n" //
+								+ "import javax.persistence.Column;\n" //
+								+ "import javax.persistence.Entity;\n" //
+								+ "import javax.persistence.Id;\n" //
+								+ "import javax.persistence.PrimaryKeyJoinColumn;\n" //
+								+ "import javax.persistence.Table;\n" //
+								+ "import javax.persistence.CascadeType;\n" //
+								+ "import javax.persistence.FetchType;\n" //
+								+ "import javax.persistence.JoinColumn;\n" //
+								+ "import javax.persistence.OneToMany;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.EqualsAndHashCode;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.ToString;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A DBO for c_heir_tables.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@Generated\n" //
+								+ "@Entity(name = \"CHeirTable\")\n" //
+								+ "@EqualsAndHashCode(callSuper = true)\n" //
+								+ "@PrimaryKeyJoinColumn(name = \"ID\")\n" //
+								+ "@Table(name = \"C_HEIR_TABLE\")\n" //
+								+ "@ToString(callSuper = true)\n" //
+								+ "public class CHeirTableDBO extends CTableDBO {\n" //
+								+ "\n" //
+								+ "	@Column(name = \"NAME\")\n" //
+								+ "	private String name;\n" //
+								+ "	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)\n" //
+								+ "	@JoinColumn(name = \"PARENT\")\n" //
+								+ "	private List<CHeirTableMemberDBO> cHeirTableMembers;\n" //
+								+ "\n" //
+								+ "}";
+				return s;
+			}
+
+		}
+
+		@Nested
+		class List_Composition_Member {
+
+			@Test
+			void happyRunForASimpleObject() {
+				// Prepare
+				String expected = getExpectedForASimpleObject(false, false);
+				DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+				// Run
+				String returned =
+						unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("CHAPTER"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			private String getExpectedForASimpleObject(boolean isSuperclass, boolean isExtends) {
+				String s =
+						"package de.ollie.bookstore.persistence.entity;\n" //
+								+ "\n" //
+								+ "import lombok.ToString;\n" //
+								+ "\n" //
+								+ "import javax.persistence.Column;\n" //
+								+ "import javax.persistence.Entity;\n" //
+								+ "import javax.persistence.FetchType;\n" //
+								+ "import javax.persistence.GeneratedValue;\n" //
+								+ "import javax.persistence.GenerationType;\n" //
+								+ "import javax.persistence.Id;\n" //
+								+ "import javax.persistence.JoinColumn;\n" //
+								+ "import javax.persistence.ManyToOne;\n" //
+								+ "import javax.persistence.Table;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A DBO for chapters.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@Generated\n" //
+								+ "@Entity(name = \"Chapter\")\n" //
+								+ "@Table(name = \"CHAPTER\")\n" //
+								+ "public class ChapterDBO {\n" //
+								+ "\n" //
+								+ "	@Id\n" //
+								+ "	@GeneratedValue(strategy = GenerationType.IDENTITY)\n" //
+								+ "	@Column(name = \"ID\", nullable = false)\n" //
+								+ "	private long id;\n" //
+								+ "	@Column(name = \"CONTENT\")\n" //
+								+ "	@ToString.Exclude\n" //
+								+ "	private String content;\n" //
+								+ "	@Column(name = \"SORT_ORDER\", nullable = false)\n" //
+								+ "	private int sortOrder;\n" //
+								+ "	@Column(name = \"SUMMARY\")\n" //
+								+ "	private String summary;\n" //
+								+ "	@Column(name = \"TITLE\", nullable = false)\n" //
+								+ "	private String title;\n" //
+								+ "\n" //
+								+ "}";
+				return s;
+			}
+
 		}
 
 	}

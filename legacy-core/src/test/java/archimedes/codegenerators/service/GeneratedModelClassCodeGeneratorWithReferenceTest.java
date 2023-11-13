@@ -72,18 +72,27 @@ class GeneratedModelClassCodeGeneratorWithReferenceTest {
 			s += "@Accessors(chain = true)\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
-					"public class GeneratedATable {\n" + //
+					"public abstract class GeneratedATable<T extends ATable> {\n" + //
 					"\n" + //
 					"	public static final String ID = \"ID\";\n" + //
 					"	public static final String REF = \"REF\";\n" + //
 					"\n" + //
 					"	private Long id;\n";
-			if (refMode) {
-				s += "	private AnotherTable ref;\n";
-			} else {
-				s += "	private " + (refNotNull ? "long" : "Long") + " ref;\n";
-			}
+			String refType = refMode ? "AnotherTable" : (refNotNull ? "long" : "Long");
+			s += "	private " + refType + " ref;\n";
 			s += "\n" + //
+					"	protected abstract T self();\n" + //
+					"\n" + //
+					"	public T setId(Long id) {\n" + //
+					"		this.id = id;\n" + //
+					"		return self();\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public T setRef(" + refType + " ref) {\n" + //
+					"		this.ref = ref;\n" + //
+					"		return self();\n" + //
+					"	}\n" + //
+					"\n" + //
 					"}";
 			return s;
 		}
@@ -193,13 +202,25 @@ class GeneratedModelClassCodeGeneratorWithReferenceTest {
 					"@NoArgsConstructor\n" + //
 					"@Data\n" + //
 					"@Generated\n" + //
-					"public class GeneratedATable {\n" + //
+					"public abstract class GeneratedATable<T extends ATable> {\n" + //
 					"\n" + //
 					"	public static final String ID = \"ID\";\n" + //
 					"	public static final String REF = \"REF\";\n" + //
 					"\n" + //
 					"	private Long id;\n" + //
 					"	private Long ref;\n" + //
+					"\n" + //
+					"	protected abstract T self();\n" + //
+					"\n" + //
+					"	public T setId(Long id) {\n" + //
+					"		this.id = id;\n" + //
+					"		return self();\n" + //
+					"	}\n" + //
+					"\n" + //
+					"	public T setRef(Long ref) {\n" + //
+					"		this.ref = ref;\n" + //
+					"		return self();\n" + //
+					"	}\n" + //
 					"\n" + //
 					"}";
 		}

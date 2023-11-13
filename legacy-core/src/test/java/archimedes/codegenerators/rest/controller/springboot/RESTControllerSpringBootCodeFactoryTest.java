@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.nio.file.Path;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
+import archimedes.model.MessageCollector;
 import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
@@ -29,6 +31,11 @@ public class RESTControllerSpringBootCodeFactoryTest {
 	static DataModel readDataModel(String fileName) {
 		ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 		return reader.read("src/test/resources/dm/codegenerators/" + fileName);
+	}
+
+	@BeforeEach
+	void setUp() {
+		unitUnderTest.setMessageCollector(new MessageCollector());
 	}
 
 	@Nested

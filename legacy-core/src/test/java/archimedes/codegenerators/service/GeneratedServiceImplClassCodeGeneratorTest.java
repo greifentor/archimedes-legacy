@@ -461,12 +461,22 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 			}
 
 			@Test
-			void passANoSubnlassModel_returnsFalse() {
+			void passANoSubclassModel_returnsFalse() {
 				// Prepare
 				DataModel dataModel = readDataModel("Model.xml");
 				TableModel table = dataModel.getTableByName("A_TABLE");
 				// Run & Check
 				assertFalse(unitUnderTest.isToIgnoreFor(dataModel, table));
+			}
+
+			@Test
+			void passAMemberModel_returnsTrue() {
+				// Prepare
+				ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+				DataModel dataModel = reader.read("src/test/resources/examples/dm/Example-BookStore.xml");
+				TableModel table = dataModel.getTableByName("CHAPTER");
+				// Run & Check
+				assertTrue(unitUnderTest.isToIgnoreFor(dataModel, table));
 			}
 
 		}

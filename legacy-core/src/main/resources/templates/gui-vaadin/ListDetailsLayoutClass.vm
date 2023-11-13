@@ -1,0 +1,117 @@
+package ${PackageName};
+
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+#foreach ($ImportDeclaration in $ImportDeclarations.toList())
+import ${ImportDeclaration.getSingleImportDeclaration()};
+#end
+import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
+import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
+import ${MasterDataGridFieldRendererPackageName}.${MasterDataGridFieldRendererInterfaceName};
+import ${VaadinComponentPackageName}.${ServiceProviderClassName};
+import ${SessionDataPackageName}.${SessionDataClassName};
+
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
+
+#if (!${CommentsOff})
+/**
+ * ${Generated}
+ */
+#end
+@Generated
+@RequiredArgsConstructor
+public class ${ClassName} extends VerticalLayout {
+
+	private final ${ComponentFactoryClassName} componentFactory;
+	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
+	private final ${ParentModelClassName} model;
+	private final ${ResourceManagerInterfaceName} resourceManager;
+	private final ${ServiceProviderClassName} serviceProvider;
+	private final ${SessionDataClassName} session;
+
+	private Grid<${ModelClassName}> grid;
+
+	@Override
+	public void onAttach(AttachEvent attachEvent) {
+		Button buttonAdd = componentFactory.createAddButton(event -> {
+			new ${DetailsDialogClassName}(componentFactory, guiConfiguration, (mmbr, newItem) -> {
+				model.get${ModelClassName}s().add(mmbr);
+				grid.setItems(model.get${ModelClassName}s());
+			}, session, new ${ModelClassName}(), serviceProvider, true).open();
+		}, session);
+		Button buttonDuplicate = componentFactory.createDuplicateButton(event -> {
+			new ${DetailsDialogClassName}(componentFactory, guiConfiguration, (mmbr, newItem) -> {
+				model.get${ModelClassName}s().add(mmbr);
+				grid.setItems(model.get${ModelClassName}s());
+			}, session, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], serviceProvider, true).open();
+		}, session);
+		Button buttonEdit = componentFactory.createEditButton(event -> {
+			new ${DetailsDialogClassName}(componentFactory, guiConfiguration, (toEdit, newItem) -> {
+				${ModelClassName} mmbr = grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0];
+#foreach ($Column in ${GUIColumnDataCollection.getColumns()})
+	#set($FieldName = "${Column.getFieldNameCamelCase()}")
+	#if(${Column.isSimpleBoolean()} == "true")
+		#set($GetterPrefix = "is")
+	#else
+		#set($GetterPrefix = "get")
+	#end
+				mmbr.set${FieldName}(toEdit.${GetterPrefix}${FieldName}());
+#end
+				grid.setItems(model.get${ModelClassName}s());
+			}, session, grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0], serviceProvider, false).open();
+		}, session);
+		Button buttonRemove = componentFactory.createRemoveButton(event -> {
+			${ModelClassName} mmbr = grid.getSelectedItems().toArray(new ${ModelClassName}[0])[0];
+			model.get${ModelClassName}s().remove(mmbr);
+			grid.setItems(model.get${ModelClassName}s());
+		}, session);
+		HorizontalLayout buttons = new HorizontalLayout(buttonAdd, buttonEdit, buttonDuplicate, buttonRemove);
+		grid = new Grid<>();
+#foreach($Column in $GridData)
+	#set($FieldName = "${Column.getFieldNameCamelCase()}")
+	#if(${Column.isSimpleBoolean()} == "true")
+		#set($GetterPrefix = "is")
+	#else
+		#set($GetterPrefix = "get")
+	#end
+		grid
+				.addColumn(model -> getCellString("${FieldName.toUpperCase()}", model, () -> model.${GetterPrefix}${FieldName}()))
+				.setHeader(
+						resourceManager
+								.getLocalizedString(
+										"${ClassName}.grid.header.${Column.getResourceName()}.label",
+										session.getLocalization()))
+				.setSortable(true)#if (!${Column.getWidth()});#end
+#if (${Column.getWidth()} > 0)
+				.setWidth("${Column.getWidth()}%");
+#end
+#end
+		if (!model.get${ModelClassName}s().isEmpty() && (model.get${ModelClassName}s().get(0) instanceof Comparable)) {
+			grid.setItems(model.get${ModelClassName}s().stream().sorted().collect(Collectors.toList()));
+		} else {
+			grid.setItems(model.get${ModelClassName}s());
+		}
+		grid.setWidthFull();
+		add(buttons, grid);
+	}
+
+	private Object getCellString(String fieldName, ${ModelClassName} aTable, Supplier<?> f) {
+		return componentFactory.get${ModelClassName}MasterDataGridFieldRenderer() != null
+				&& componentFactory.get${ModelClassName}MasterDataGridFieldRenderer().hasRenderingFor(fieldName)
+						? componentFactory
+								.get${ModelClassName}MasterDataGridFieldRenderer()
+								.getHeaderString(fieldName, aTable)
+						: f.get();
+	}
+
+}

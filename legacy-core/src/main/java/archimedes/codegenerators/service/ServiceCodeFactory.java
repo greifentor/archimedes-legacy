@@ -33,6 +33,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 						new ModelEnumCodeGenerator(this),
 						// Table
 						new ApplicationClassCodeGenerator(this),
+						new ApplicationPropertiesFileGenerator(this),
 						new CheckClassCodeGenerator(this),
 						new GeneratedModelClassCodeGenerator(this),
 						new GeneratedPersistencePortInterfaceCodeGenerator(this),

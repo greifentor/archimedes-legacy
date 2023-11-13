@@ -9,6 +9,21 @@
 
 package archimedes.legacy.scheme;
 
+import static corentx.util.Checks.ensure;
+
+import java.awt.Color;
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Vector;
+
+import javax.swing.JOptionPane;
+
 import archimedes.connections.ArchimedesImportJDBCDataSourceRecord;
 import archimedes.connections.DatabaseConnection;
 import archimedes.gui.diagram.ComponentDiagramm;
@@ -60,6 +75,7 @@ import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
 import archimedes.model.IndexMetaData;
+import archimedes.model.MessageCollector;
 import archimedes.model.OptionModel;
 import archimedes.model.OptionType;
 import archimedes.model.OrderMemberModel;
@@ -102,20 +118,6 @@ import corentx.util.Str;
 import gengen.metadata.ClassMetaData;
 import logging.Logger;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Vector;
-
-import static corentx.util.Checks.ensure;
-
 /**
  * Diese Klasse stellt eine konkrete Auspr&auml;gung des DiagrammModels dar, die ein Diagramm innerhalb der
  * Archimedes-Applikation repr&auml;sentiert.
@@ -144,51 +146,51 @@ import static corentx.util.Checks.ensure;
  * @author ollie
  * @changed OLI 29.08.2007 - Erweiterung der Methode <TT>toSTF()</TT> um zus&auml;tzliche Konsolenausgaben.
  * @changed OLI 19.12.2007 - Anpassung der alter-table-Statements an PostgreSQL in der Methode
- * <TT>(buildUpdateScript(SortedVector, boolean, boolean, boolean, DBExecMode, Vector,
+ *          <TT>(buildUpdateScript(SortedVector, boolean, boolean, boolean, DBExecMode, Vector,
  * Vector)</TT>.
  * @changed OLI 09.01.2008 - Einbau einer Debugausgabe (&uuml;ber die Properties <I>archimedes.scheme.Diagramm.debug</I>
- * oder <I>archimedes.Archimedes.debug</I> zuschaltbar). Dabei Korrektur des Abgleiches mit der Datenbank
- * (Text-Felder, Indices) f&uuml;r PostgreSQL. Alles in der Methode <TT>buildUpdateScript(...)</TT> erfolgt.
+ *          oder <I>archimedes.Archimedes.debug</I> zuschaltbar). Dabei Korrektur des Abgleiches mit der Datenbank
+ *          (Text-Felder, Indices) f&uuml;r PostgreSQL. Alles in der Methode <TT>buildUpdateScript(...)</TT> erfolgt.
  * @changed OLI 11.01.2008 - Arbeiten am Debugging des Abgleiches mit HSQL-Datenbanken (numeric-Problem) (ebenfalls in
- * der Methode <TT>buildUpdateScript(...)</TT>).
+ *          der Methode <TT>buildUpdateScript(...)</TT>).
  * @changed OLI 20.01.2008 - Arbeiten am Debugging des Abgleiches der Indices zwischen Modell und Datenbank f&uuml;r
- * mySQL und PostgreSQL in der Methode <TT>buildUpdateScript(...)</TT>.
+ *          mySQL und PostgreSQL in der Methode <TT>buildUpdateScript(...)</TT>.
  * @changed OLI 11.02.2008 - Erweiterung um das Attribut <TT>UdschebtiBaseClassName</TT>.
  * @changed OLI 16.02.2008 - Korrektur des Drop-Index-Statements f&uuml;r PostgreSQL beim Bau von Update-Scripts.
  * @changed OLI 17.02.2008 - Umbau Feldtypenvergleich beim Bau eines Updatescriptes auf einen Namensvergleich. Die
- * Zahlenwerte f&uuml;r die SQL-Datentypen f&uuml;hrten zu Problemen.
+ *          Zahlenwerte f&uuml;r die SQL-Datentypen f&uuml;hrten zu Problemen.
  * @changed OLI 11.05.2008 - Erweiterung der Implementierung des Interfaces <TT>TabbedEditable</TT> um die Methode
- * <TT>isTabEnabled(int)</TT>.
+ *          <TT>isTabEnabled(int)</TT>.
  * @changed OLI 09.08.2008 - Erweiterung um die Implementierung der Methoden <TT>isPaintTechnicalFieldsInGray()</TT> und
- * <TT>setPaintTechnicalFieldsInGray(boolean)</TT>. Hierdurch k&ouml;nnen als technisch gekennzeichnete Felder
- * in den Diagrammen ausgegraut dargestellt werden.
+ *          <TT>setPaintTechnicalFieldsInGray(boolean)</TT>. Hierdurch k&ouml;nnen als technisch gekennzeichnete Felder
+ *          in den Diagrammen ausgegraut dargestellt werden.
  * @changed OLI 10.08.2008 - Erweiterung der Schreib- und Leseroutine nach Erweiterung des ViewModels um die
- * M&ouml;glichkeit eine Ausblendung technischer Felder anzugeben.
+ *          M&ouml;glichkeit eine Ausblendung technischer Felder anzugeben.
  * @changed OLI 16.08.2008 - Erweiterung der Schreibroutine um die M&ouml;glichkeit ein abgespeckte Version der
- * ads-Datei zu erzeugen, die nur die f&uuml;r die Applikation notwendigen Daten enth&auml;lt und auf den
- * grafischen Overhead verzichtet.
+ *          ads-Datei zu erzeugen, die nur die f&uuml;r die Applikation notwendigen Daten enth&auml;lt und auf den
+ *          grafischen Overhead verzichtet.
  * @changed OLI 04.09.2008 - Erweiterung um die Implementierung der Methoden <TT>getWriteChangeScript()</TT> und
- * <TT>setAfterWriteScript(String)</TT>.
+ *          <TT>setAfterWriteScript(String)</TT>.
  * @changed OLI 15.09.2008 - Einbau der Lese- und Schreibroutine f&uuml;r die Codegeneratoroptionen.
  * @changed OLI 16.09.2008 - Erweiterung der Debugausgaben.
  * @changed OLI 22.09.2008 - Erweiterung um das Schreiben und Lesen des Tabellenspaltenattributs <TT>listItemField</TT>.
  * @changed OLI 15.12.2008 - Erweiterung um die Ber&uuml;cksichtigung der Referenzdaten beim Import von Datenmodellen.
  * @changed OLI 08.03.2009 - Erweiterung um die Implementierung der Methode
- * <TT>getCodegeneratorOptionsListTag(String, String)</TT>.
+ *          <TT>getCodegeneratorOptionsListTag(String, String)</TT>.
  * @changed OLI 09.03.2009 - Erweiterung der Schreib- und Leseroutine f&uuml;r die Attribute Parameter und Unique.
  * @changed OLI 21.03.2009 - Erweiterung um die Implementierung der Methode <TT>generateCode(CodeFactory, String)</TT>.
  * @changed OLI 22.03.2009 - Einbindung der im Datenmodell definierten SQLScriptListener in der Methode
- * <TT>buildUpdateScript(SortedVector, boolean, boolean, boolean, DBExecMode,
- * Vector, Vector)</TT>. Erweiterung um die Implementierung der Methoden
- * <TT>getAdditionalSQLScriptListener()</TT> und <TT>setAdditionalSQLScriptListener(String)</TT>, sowie der
- * Logik zur Anbindung der Listener an das Datenmodell durch die Methoden
- * <TT>addSQLScriptListener(SQLScriptListener)</TT> and <TT>removeSQLScriptListener(SQLScriptListener)</TT>.
+ *          <TT>buildUpdateScript(SortedVector, boolean, boolean, boolean, DBExecMode,
+ * Vector, Vector)</TT>. Erweiterung um die Implementierung der Methoden <TT>getAdditionalSQLScriptListener()</TT> und
+ *          <TT>setAdditionalSQLScriptListener(String)</TT>, sowie der Logik zur Anbindung der Listener an das
+ *          Datenmodell durch die Methoden <TT>addSQLScriptListener(SQLScriptListener)</TT> and
+ *          <TT>removeSQLScriptListener(SQLScriptListener)</TT>.
  * @changed OLI 25.03.2009 - Erweiterung der SQLScriptEvent-Konstruktoraufrufe um eine Referenz auf das aktuelle
- * SQL-Update-Script.
+ *          SQL-Update-Script.
  * @changed OLI 26.03.2009 - Erweiterung des Event-Handlings beim Bau von SQL-Update-Script's auf ein Event, das vor dem
- * Einf&uuml;gen des DBVersion-Statements geworfen wird.
+ *          Einf&uuml;gen des DBVersion-Statements geworfen wird.
  * @changed OLI 01.06.2009 - Anpassung an die &Auml;nderungen des DiagrammModel-Interfaces
- * (<TT>isDifferentToScheme(List, List)</TT> und <TT>getKeyColumns()</TT>).
+ *          (<TT>isDifferentToScheme(List, List)</TT> und <TT>getKeyColumns()</TT>).
  * @changed OLI 30.09.2009 - Erweiterung um die Implementierung der Methode <TT>getProjectToken()</TT>.
  * @changed OLI 21.05.2010 - Die Angaben zur Version-Tabelle werden nun unabh&uml;ngig vom Modus geschrieben.
  * @changed OLI 01.11.2011 - Erweiterung um den <TT>HistoryOwner</TT>.
@@ -414,74 +416,74 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	@Override
 	public Object get(int id) throws IllegalArgumentException {
 		switch (id) {
-			case ID_NAME:
-				return this.getName();
-			case ID_AUTOR:
-				return this.getAuthor();
-			case ID_COMMENT:
-				return this.getComment();
-			case ID_VERSION:
-				return this.getVersion();
-			case ID_VERSIONSDATUM:
-				return this.getDate();
-			case ID_VERSIONSKOMMENTAR:
-				return this.getVersionComment();
-			case ID_SCHRIFTGROESSE_TABELLEN:
-				return new Integer(this.getFontSizeTableContents());
-			case ID_SCHRIFTGROESSE_UEBERSCHRIFT:
-				return new Integer(this.getFontSizeDiagramHeadline());
-			case ID_SCHRIFTGROESSE_UNTERTITEL:
-				return new Integer(this.getFontSizeSubtitles());
-			case ID_HIDE_DEPRECATED:
-				return new Boolean(this.isAufgehobeneAusblenden());
-			case ID_CODEPFAD:
-				return this.getCodePfad();
-			case ID_APPLICATIONNAME:
-				return this.getApplicationName();
-			case ID_DBVERSIONTABLENAME:
-				return this.getDBVersionTablename();
-			case ID_SHOWREFERENCEDCOLUMNAMES:
-				return new Boolean(this.isShowReferencedColumns());
-			case ID_DBVERSIONDBVERSIONCOLUMN:
-				return this.getDBVersionDBVersionColumn();
-			case ID_DBVERSIONDESCRIPTIONCOLUMN:
-				return this.getDBVersionDescriptionColumn();
-			case ID_VIEWS:
-				return this.getViews();
-			case ID_MARKUPWRITEABLEMEMBER:
-				return new Boolean(this.markUpRequiredFieldNames);
-			case ID_BASEPACKAGENAME:
-				return this.getBasePackageName();
-			case ID_CODEFACTORYCLASSNAME:
-				return this.getCodeFactoryClassName();
-			case ID_UDSCHEBTIBASECLASSNAME:
-				return this.getUdschebtiBaseClassName();
-			case ID_PAINTTECHNICALFIELDSINGRAY:
-				return this.isPaintTechnicalFieldsInGray();
-			case ID_AFTERWRITESCRIPT:
-				return this.getAfterWriteScript();
-			case ID_ADDITIONALSCRIPTLISTENER:
-				return this.getAdditionalSQLScriptListener();
-			case ID_HISTORY:
-				return this.getHistory();
-			case ID_SCHEMA_NAME:
-				return this.getSchemaName();
-			case ID_OPTIONS:
-				return this.getOptions();
-			case ID_RELATION_COLOR_EXTERNAL_TABLES:
-				return this.getRelationColorToExternalTables();
-			case ID_RELATION_COLOR_REGULAR:
-				return this.getRelationColorRegular();
-			case ID_PAINTTRANSIENTFIELDSINGRAY:
-				return this.isPaintTransientFieldsInGray();
-			case ID_OWNER:
-				return this.getOwner();
-			case ID_ADDITIONAL_DIAGRAM_INFO:
-				return this.getAdditionalDiagramInfo();
-			case ID_DOMAIN_SHOW_MODE:
-				return this.getDomainShowMode();
-			case ID_MODEL_CHECKER_SCRIPT:
-				return getModelCheckerScript();
+		case ID_NAME:
+			return this.getName();
+		case ID_AUTOR:
+			return this.getAuthor();
+		case ID_COMMENT:
+			return this.getComment();
+		case ID_VERSION:
+			return this.getVersion();
+		case ID_VERSIONSDATUM:
+			return this.getDate();
+		case ID_VERSIONSKOMMENTAR:
+			return this.getVersionComment();
+		case ID_SCHRIFTGROESSE_TABELLEN:
+			return new Integer(this.getFontSizeTableContents());
+		case ID_SCHRIFTGROESSE_UEBERSCHRIFT:
+			return new Integer(this.getFontSizeDiagramHeadline());
+		case ID_SCHRIFTGROESSE_UNTERTITEL:
+			return new Integer(this.getFontSizeSubtitles());
+		case ID_HIDE_DEPRECATED:
+			return new Boolean(this.isAufgehobeneAusblenden());
+		case ID_CODEPFAD:
+			return this.getCodePfad();
+		case ID_APPLICATIONNAME:
+			return this.getApplicationName();
+		case ID_DBVERSIONTABLENAME:
+			return this.getDBVersionTablename();
+		case ID_SHOWREFERENCEDCOLUMNAMES:
+			return new Boolean(this.isShowReferencedColumns());
+		case ID_DBVERSIONDBVERSIONCOLUMN:
+			return this.getDBVersionDBVersionColumn();
+		case ID_DBVERSIONDESCRIPTIONCOLUMN:
+			return this.getDBVersionDescriptionColumn();
+		case ID_VIEWS:
+			return this.getViews();
+		case ID_MARKUPWRITEABLEMEMBER:
+			return new Boolean(this.markUpRequiredFieldNames);
+		case ID_BASEPACKAGENAME:
+			return this.getBasePackageName();
+		case ID_CODEFACTORYCLASSNAME:
+			return this.getCodeFactoryClassName();
+		case ID_UDSCHEBTIBASECLASSNAME:
+			return this.getUdschebtiBaseClassName();
+		case ID_PAINTTECHNICALFIELDSINGRAY:
+			return this.isPaintTechnicalFieldsInGray();
+		case ID_AFTERWRITESCRIPT:
+			return this.getAfterWriteScript();
+		case ID_ADDITIONALSCRIPTLISTENER:
+			return this.getAdditionalSQLScriptListener();
+		case ID_HISTORY:
+			return this.getHistory();
+		case ID_SCHEMA_NAME:
+			return this.getSchemaName();
+		case ID_OPTIONS:
+			return this.getOptions();
+		case ID_RELATION_COLOR_EXTERNAL_TABLES:
+			return this.getRelationColorToExternalTables();
+		case ID_RELATION_COLOR_REGULAR:
+			return this.getRelationColorRegular();
+		case ID_PAINTTRANSIENTFIELDSINGRAY:
+			return this.isPaintTransientFieldsInGray();
+		case ID_OWNER:
+			return this.getOwner();
+		case ID_ADDITIONAL_DIAGRAM_INFO:
+			return this.getAdditionalDiagramInfo();
+		case ID_DOMAIN_SHOW_MODE:
+			return this.getDomainShowMode();
+		case ID_MODEL_CHECKER_SCRIPT:
+			return getModelCheckerScript();
 		}
 		throw new IllegalArgumentException("Klasse Domain verfuegt nicht ueber ein Attribut " + id + " (get)!");
 	}
@@ -489,102 +491,102 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	@Override
 	public void set(int id, Object value) throws ClassCastException, IllegalArgumentException {
 		switch (id) {
-			case ID_NAME:
-				this.setName((String) value);
-				return;
-			case ID_AUTOR:
-				this.setAuthor((String) value);
-				return;
-			case ID_COMMENT:
-				this.setComment((String) value);
-				return;
-			case ID_VERSION:
-				this.setVersion((String) value);
-				return;
-			case ID_VERSIONSDATUM:
-				this.setDate((PDate) value);
-				return;
-			case ID_VERSIONSKOMMENTAR:
-				this.setVersionComment((String) value);
-				return;
-			case ID_SCHRIFTGROESSE_TABELLEN:
-				this.setFontSizeTableContents(((Integer) value).intValue());
-				return;
-			case ID_SCHRIFTGROESSE_UEBERSCHRIFT:
-				this.setFontSizeDiagramHeadline(((Integer) value).intValue());
-				return;
-			case ID_SCHRIFTGROESSE_UNTERTITEL:
-				this.setFontSizeSubtitles(((Integer) value).intValue());
-				return;
-			case ID_HIDE_DEPRECATED:
-				this.setAufgehobeneAusblenden(((Boolean) value).booleanValue());
-				return;
-			case ID_CODEPFAD:
-				this.setCodePfad((String) value);
-				return;
-			case ID_APPLICATIONNAME:
-				this.setApplicationName((String) value);
-				return;
-			case ID_DBVERSIONTABLENAME:
-				this.setDBVersionTablename((String) value);
-				return;
-			case ID_SHOWREFERENCEDCOLUMNAMES:
-				this.setShowReferencedColumns(((Boolean) value).booleanValue());
-				return;
-			case ID_DBVERSIONDBVERSIONCOLUMN:
-				this.setDBVersionDBVersionColumn((String) value);
-				return;
-			case ID_DBVERSIONDESCRIPTIONCOLUMN:
-				this.setDBVersionDescriptionColumn((String) value);
-				return;
-			case ID_MARKUPWRITEABLEMEMBER:
-				this.markWriteablemembers(((Boolean) value).booleanValue());
-				return;
-			case ID_BASEPACKAGENAME:
-				this.setBasePackageName((String) value);
-				return;
-			case ID_CODEFACTORYCLASSNAME:
-				this.setCodeFactoryClassName((String) value);
-				return;
-			case ID_UDSCHEBTIBASECLASSNAME:
-				this.setUdschebtiBaseClassName((String) value);
-				return;
-			case ID_PAINTTECHNICALFIELDSINGRAY:
-				this.setPaintTechnicalFieldsInGray(((Boolean) value).booleanValue());
-				return;
-			case ID_AFTERWRITESCRIPT:
-				this.setAfterWriteScript((String) value);
-				return;
-			case ID_ADDITIONALSCRIPTLISTENER:
-				this.setAdditionalSQLScriptListener((String) value);
-				return;
-			case ID_HISTORY:
-				this.setHistory((String) value);
-				return;
-			case ID_SCHEMA_NAME:
-				this.setSchemaName((String) value);
-				return;
-			case ID_RELATION_COLOR_EXTERNAL_TABLES:
-				this.setRelationColorExternalTables((Color) value);
-				return;
-			case ID_RELATION_COLOR_REGULAR:
-				this.setRelationColorRegular((Color) value);
-				return;
-			case ID_PAINTTRANSIENTFIELDSINGRAY:
-				this.setPaintTransientFieldsInGray(((Boolean) value).booleanValue());
-				return;
-			case ID_OWNER:
-				this.setOwner((String) value);
-				return;
-			case ID_ADDITIONAL_DIAGRAM_INFO:
-				this.setAdditionalDiagramInfo((String) value);
-				return;
-			case ID_DOMAIN_SHOW_MODE:
-				this.setDomainShowMode((DomainShowMode) value);
-				return;
-			case ID_MODEL_CHECKER_SCRIPT:
-				setModelCheckerScript((String) value);
-				return;
+		case ID_NAME:
+			this.setName((String) value);
+			return;
+		case ID_AUTOR:
+			this.setAuthor((String) value);
+			return;
+		case ID_COMMENT:
+			this.setComment((String) value);
+			return;
+		case ID_VERSION:
+			this.setVersion((String) value);
+			return;
+		case ID_VERSIONSDATUM:
+			this.setDate((PDate) value);
+			return;
+		case ID_VERSIONSKOMMENTAR:
+			this.setVersionComment((String) value);
+			return;
+		case ID_SCHRIFTGROESSE_TABELLEN:
+			this.setFontSizeTableContents(((Integer) value).intValue());
+			return;
+		case ID_SCHRIFTGROESSE_UEBERSCHRIFT:
+			this.setFontSizeDiagramHeadline(((Integer) value).intValue());
+			return;
+		case ID_SCHRIFTGROESSE_UNTERTITEL:
+			this.setFontSizeSubtitles(((Integer) value).intValue());
+			return;
+		case ID_HIDE_DEPRECATED:
+			this.setAufgehobeneAusblenden(((Boolean) value).booleanValue());
+			return;
+		case ID_CODEPFAD:
+			this.setCodePfad((String) value);
+			return;
+		case ID_APPLICATIONNAME:
+			this.setApplicationName((String) value);
+			return;
+		case ID_DBVERSIONTABLENAME:
+			this.setDBVersionTablename((String) value);
+			return;
+		case ID_SHOWREFERENCEDCOLUMNAMES:
+			this.setShowReferencedColumns(((Boolean) value).booleanValue());
+			return;
+		case ID_DBVERSIONDBVERSIONCOLUMN:
+			this.setDBVersionDBVersionColumn((String) value);
+			return;
+		case ID_DBVERSIONDESCRIPTIONCOLUMN:
+			this.setDBVersionDescriptionColumn((String) value);
+			return;
+		case ID_MARKUPWRITEABLEMEMBER:
+			this.markWriteablemembers(((Boolean) value).booleanValue());
+			return;
+		case ID_BASEPACKAGENAME:
+			this.setBasePackageName((String) value);
+			return;
+		case ID_CODEFACTORYCLASSNAME:
+			this.setCodeFactoryClassName((String) value);
+			return;
+		case ID_UDSCHEBTIBASECLASSNAME:
+			this.setUdschebtiBaseClassName((String) value);
+			return;
+		case ID_PAINTTECHNICALFIELDSINGRAY:
+			this.setPaintTechnicalFieldsInGray(((Boolean) value).booleanValue());
+			return;
+		case ID_AFTERWRITESCRIPT:
+			this.setAfterWriteScript((String) value);
+			return;
+		case ID_ADDITIONALSCRIPTLISTENER:
+			this.setAdditionalSQLScriptListener((String) value);
+			return;
+		case ID_HISTORY:
+			this.setHistory((String) value);
+			return;
+		case ID_SCHEMA_NAME:
+			this.setSchemaName((String) value);
+			return;
+		case ID_RELATION_COLOR_EXTERNAL_TABLES:
+			this.setRelationColorExternalTables((Color) value);
+			return;
+		case ID_RELATION_COLOR_REGULAR:
+			this.setRelationColorRegular((Color) value);
+			return;
+		case ID_PAINTTRANSIENTFIELDSINGRAY:
+			this.setPaintTransientFieldsInGray(((Boolean) value).booleanValue());
+			return;
+		case ID_OWNER:
+			this.setOwner((String) value);
+			return;
+		case ID_ADDITIONAL_DIAGRAM_INFO:
+			this.setAdditionalDiagramInfo((String) value);
+			return;
+		case ID_DOMAIN_SHOW_MODE:
+			this.setDomainShowMode((DomainShowMode) value);
+			return;
+		case ID_MODEL_CHECKER_SCRIPT:
+			setModelCheckerScript((String) value);
+			return;
 		}
 		throw new IllegalArgumentException("Klasse Domain verfuegt nicht ueber ein Attribut " + id + " (set)!");
 	}
@@ -728,8 +730,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 								StrUtil.FromHTML("Zus&auml;tzliche Diagramminfo"),
 								'Z',
 								null,
-								"Hier k&ouml;nnen Sie zus&auml;tzliche Informationen zur Ausgabe auf dem Arbeitsblatt " +
-								 "angeben."));
+								"Hier k&ouml;nnen Sie zus&auml;tzliche Informationen zur Ausgabe auf dem Arbeitsblatt "
+										+ "angeben."));
 		dedl
 				.addElement(
 						new DefaultEditorDescriptor(
@@ -830,10 +832,10 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 								ID_DOMAIN_SHOW_MODE,
 								dlf,
 								dcfdsm,
-								Str.fromHTML("Farbe regul&auml;re Relationen"),
+								Str.fromHTML("Anzeigemodus DB-Feld-Typen"),
 								'\0',
 								null,
-								Str.fromHTML("Setzen sie hier die Farbe f&uuml;r regul&auml;re Relationen.")));
+								Str.fromHTML("Setzen sie hier den Anzeigemodus für die DB-Feld-Typen.")));
 		dedl.addElement(new DefaultSubEditorDescriptor(3, this, new CommentSubEditorFactory()));
 		dedl.addElement(new DefaultSubEditorDescriptor(4, this, new HistoryOwnerSubEditorFactory()));
 		dedl
@@ -954,9 +956,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 								StrUtil
 										.FromHTML(
 												"Der Name der Klasse, die als SQLScripListener &uuml;ber "
-														+
-														"&Auml;nderungen bei Bau von SQL-Aktualisierungscripten " +
-														 "benachrichtigt werden"
+														+ "&Auml;nderungen bei Bau von SQL-Aktualisierungscripten "
+														+ "benachrichtigt werden"
 														+ "sollen.")));
 		dedl
 				.addElement(
@@ -1014,7 +1015,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	@Override
 	public TabbedPaneFactory getTabbedPaneFactory() {
 		return new DefaultTabbedPaneFactory(
-				new TabDescriptor[]{
+				new TabDescriptor[] {
 						new DefaultTabDescriptor("Allgemeines", 'A', null),
 						new DefaultTabDescriptor("Version", 'V', null),
 						new DefaultTabDescriptor("Schrift", 'S', null),
@@ -1023,8 +1024,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 						new DefaultTabDescriptor("Codegenerator", 'C', null),
 						new DefaultTabDescriptor("SQL-Generator", 'Q', null),
 						new DefaultTabDescriptor("Optionen", 'O', null),
-						new DefaultTabDescriptor("Model-Checker-Script", 'M', null)
-				});
+						new DefaultTabDescriptor("Model-Checker-Script", 'M', null) });
 	}
 
 	@Override
@@ -1211,10 +1211,9 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	}
 
 	/**
-	 * @changed OLI 29.08.2007 - Erweiterung um Konsolenausgaben zwecks Zuordnung von Fehlermeldungen beim Speichern
-	  * von
-	 * Diagrammen. Diese werden allerdings nur dann angezeigt, wenn die Property
-	 * <TT>archimedes.scheme.Diagramm</TT> (Boolean) gesetzt wird.
+	 * @changed OLI 29.08.2007 - Erweiterung um Konsolenausgaben zwecks Zuordnung von Fehlermeldungen beim Speichern von
+	 *          Diagrammen. Diese werden allerdings nur dann angezeigt, wenn die Property
+	 *          <TT>archimedes.scheme.Diagramm</TT> (Boolean) gesetzt wird.
 	 * @changed OLI 21.05.2010 - Die Daten zur Versionstabelle werden immer geschrieben.
 	 */
 	@Override
@@ -1229,13 +1228,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		stf.setHTMLCoding(true);
 		if (dsm == DiagramSaveMode.REGULAR) {
 			if (this.importDSR != null) {
-				this.importDSR.toSTF(
-						stf,
-						new String[]{
-								"Diagramm",
-								"DataSource",
-								"Import"
-						});
+				this.importDSR.toSTF(stf, new String[] { "Diagramm", "DataSource", "Import" });
 				if (cout) {
 					LOG.info("    import dsr written.");
 				}
@@ -1259,27 +1252,11 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		new STFAdditionalSQLCodeWriter().write(stf, this);
 		new STFStereotypeWriter().write(stf, this.getAllStereotypes(), dsm);
 		int len = this.defaultComments.size();
-		stf.writeStr(new String[]{
-				"Diagramm",
-				"Factories",
-				"Object"
-		}, Archimedes.Factory.getClass().getName());
-		stf.writeLong(new String[]{
-				"Diagramm",
-				"Pages",
-				"PerColumn"
-		}, ComponentDiagramm.PAGESPERCOLUMN);
-		stf.writeLong(new String[]{
-				"Diagramm",
-				"Pages",
-				"PerRow"
-		}, ComponentDiagramm.PAGESPERROW);
+		stf.writeStr(new String[] { "Diagramm", "Factories", "Object" }, Archimedes.Factory.getClass().getName());
+		stf.writeLong(new String[] { "Diagramm", "Pages", "PerColumn" }, ComponentDiagramm.PAGESPERCOLUMN);
+		stf.writeLong(new String[] { "Diagramm", "Pages", "PerRow" }, ComponentDiagramm.PAGESPERROW);
 		if (dsm == DiagramSaveMode.REGULAR) {
-			stf.writeLong(new String[]{
-					"Diagramm",
-					"DefaultComment",
-					"Anzahl"
-			}, len);
+			stf.writeLong(new String[] { "Diagramm", "DefaultComment", "Anzahl" }, len);
 			if (cout) {
 				LOG.info("    default comments");
 			}
@@ -1287,21 +1264,11 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				DefaultCommentModel dcm = (DefaultCommentModel) this.defaultComments.elementAt(i);
 				stf
 						.writeStr(
-								new String[]{
-										"Diagramm",
-										"DefaultComment",
-										"DefaultComment" + i,
-										"Muster"
-								},
+								new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Muster" },
 								this.toHTML(dcm.getPattern()));
 				stf
 						.writeStr(
-								new String[]{
-										"Diagramm",
-										"DefaultComment",
-										"DefaultComment" + i,
-										"Kommentar"
-								},
+								new String[] { "Diagramm", "DefaultComment", "DefaultComment" + i, "Kommentar" },
 								this.toHTML(dcm.getDefaultComment()));
 				if (cout) {
 					LOG.info("        " + dcm.getPattern() + " written.");
@@ -1310,60 +1277,29 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		}
 		new STFDiagrammParameterWriter().write(stf, this, dsm);
 		len = this.tables.size();
-		stf.writeLong(new String[]{
-				"Diagramm",
-				"Tabellen",
-				"Anzahl"
-		}, len);
+		stf.writeLong(new String[] { "Diagramm", "Tabellen", "Anzahl" }, len);
 		if (cout) {
 			LOG.info("    tables:");
 		}
 		for (int i = 0; i < len; i++) {
 			TabellenModel tm = this.tables.elementAt(i);
-			stf.writeStr(new String[]{
-					"Diagramm",
-					"Tabellen",
-					"Tabelle" + i,
-					"Name"
-			}, this.toHTML(tm.getName()));
+			stf.writeStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Name" }, this.toHTML(tm.getName()));
 			stf
 					.writeStr(
-							new String[]{
-									"Diagramm",
-									"Tabellen",
-									"Tabelle" + i,
-									"Aufgehoben"
-							},
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Aufgehoben" },
 							new Boolean(tm.isDeprecated()).toString());
 			if (dsm == DiagramSaveMode.REGULAR) {
 				stf
 						.writeStr(
-								new String[]{
-										"Diagramm",
-										"Tabellen",
-										"Tabelle" + i,
-										"Kommentar"
-								},
+								new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Kommentar" },
 								this.toHTML(tm.getComment()));
 				stf
 						.writeStr(
-								new String[]{
-										"Diagramm",
-										"Tabellen",
-										"Tabelle" + i,
-										"Farben",
-										"Schrift"
-								},
+								new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Schrift" },
 								this.toHTML(tm.getSchriftfarbe().toString()));
 				stf
 						.writeStr(
-								new String[]{
-										"Diagramm",
-										"Tabellen",
-										"Tabelle" + i,
-										"Farben",
-										"Hintergrund"
-								},
+								new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Hintergrund" },
 								this
 										.toHTML(
 												(tm.getHintergrundfarbe() != null
@@ -1372,39 +1308,19 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			}
 			stf
 					.writeStr(
-							new String[]{
-									"Diagramm",
-									"Tabellen",
-									"Tabelle" + i,
-									"NMRelation"
-							},
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "NMRelation" },
 							new Boolean(tm.isNMRelation()).toString());
 			stf
 					.writeStr(
-							new String[]{
-									"Diagramm",
-									"Tabellen",
-									"Tabelle" + i,
-									"InDevelopment"
-							},
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "InDevelopment" },
 							new Boolean(tm.isDraft()).toString());
 			stf
 					.writeStr(
-							new String[]{
-									"Diagramm",
-									"Tabellen",
-									"Tabelle" + i,
-									"ExternalTable"
-							},
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "ExternalTable" },
 							new Boolean(tm.isExternalTable()).toString());
 			stf
 					.writeStr(
-							new String[]{
-									"Diagramm",
-									"Tabellen",
-									"Tabelle" + i,
-									"FirstGenerationDone"
-							},
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "FirstGenerationDone" },
 							new Boolean(tm.isFirstGenerationDone()).toString());
 			/*
 			 * stf.writeLong(new String[] {"Diagramm", "Tabellen", "Tabelle" + i, "X"}, tm.getX(
@@ -1413,13 +1329,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			 */
 			if (dsm == DiagramSaveMode.REGULAR) {
 				tvms = tm.getViews();
-				stf.writeLong(new String[]{
-						"Diagramm",
-						"Tabellen",
-						"Tabelle" + i,
-						"Views",
-						"Anzahl"
-				}, tvms.size());
+				stf.writeLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "Anzahl" }, tvms.size());
 				if (cout) {
 					LOG.info("        views for table:");
 				}
@@ -1427,36 +1337,15 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 					ViewModel vm = tvms.get(j);
 					stf
 							.writeStr(
-									new String[]{
-											"Diagramm",
-											"Tabellen",
-											"Tabelle" + i,
-											"Views",
-											"View" + j,
-											"Name"
-									},
+									new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Name" },
 									this.toHTML(vm.getName()));
 					stf
 							.writeLong(
-									new String[]{
-											"Diagramm",
-											"Tabellen",
-											"Tabelle" + i,
-											"Views",
-											"View" + j,
-											"X"
-									},
+									new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "X" },
 									tm.getX(vm));
 					stf
 							.writeLong(
-									new String[]{
-											"Diagramm",
-											"Tabellen",
-											"Tabelle" + i,
-											"Views",
-											"View" + j,
-											"Y"
-									},
+									new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Y" },
 									tm.getY(vm));
 					if (cout) {
 						LOG.info("            " + vm.getName() + " written.");
@@ -1464,154 +1353,122 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				}
 				stf
 						.writeStr(
-								new String[]{
-										"Diagramm",
-										"Tabellen",
-										"Tabelle" + i,
-										"History"
-								},
+								new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "History" },
 								this.toHTML(tm.getHistory()));
 			}
 			stf
 					.writeLong(
-							new String[]{
-									"Diagramm",
-									"Tabellen",
-									"Tabelle" + i,
-									"Stereotype",
-									"Anzahl"
-							},
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype", "Anzahl" },
 							tm.getStereotypenCount());
 			for (int j = 0, lenj = tm.getStereotypenCount(); j < lenj; j++) {
 				stf
 						.writeStr(
-								new String[]{
-										"Diagramm",
-										"Tabellen",
-										"Tabelle" + i,
-										"Stereotype" + j
-								},
+								new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype" + j },
 								this.toHTML(tm.getStereotypeAt(j).toString()));
 			}
 			stf
 					.writeStr(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Spalten",
 									"Codegenerator",
-									"Codieren"
-							},
+									"Codieren" },
 							new Boolean(tm.isGenerateCode()).toString());
 			stf
 					.writeStr(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Spalten",
 									"Codegenerator",
-									"Codegeneratoroptionen"
-							},
+									"Codegeneratoroptionen" },
 							tm.getGenerateCodeOptions());
 			stf
 					.writeStr(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Spalten",
 									"Codegenerator",
-									"Codeverzeichnis"
-							},
+									"Codeverzeichnis" },
 							tm.getCodeVerzeichnis());
 			stf
 					.writeStr(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Spalten",
 									"Codegenerator",
-									"Kontextname"
-							},
+									"Kontextname" },
 							tm.getContextName());
 			stf
 					.writeStr(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Spalten",
 									"Codegenerator",
-									"ComplexForeignKey"
-							},
+									"ComplexForeignKey" },
 							tm.getComplexForeignKeyDefinition());
 			stf
 					.writeStr(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Spalten",
 									"Codegenerator",
-									"UniqueFormula"
-							},
+									"UniqueFormula" },
 							tm.getComplexUniqueSpecification());
 			stf
 					.writeStr(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Spalten",
 									"Codegenerator",
-									"DynamicCode"
-							},
+									"DynamicCode" },
 							new Boolean(tm.isDynamicCode()).toString());
 			stf
 					.writeStr(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Spalten",
 									"Codegenerator",
-									"Inherited"
-							},
+									"Inherited" },
 							new Boolean(tm.isInherited()).toString());
 			stf
 					.writeStr(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Spalten",
 									"Codegenerator",
-									"ActiveInApplication"
-							},
+									"ActiveInApplication" },
 							new Boolean(tm.isActiveInApplication()).toString());
 			stf
 					.writeStr(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Spalten",
 									"Codegenerator",
-									"AdditionalCreateConstraints"
-							},
+									"AdditionalCreateConstraints" },
 							tm.getAdditionalCreateConstraints());
 			stf
 					.writeLong(
-							new String[]{
-									"Diagramm",
-									"Tabellen",
-									"Tabelle" + i,
-									"Spalten",
-									"Anzahl"
-							},
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" },
 							tm.getTabellenspaltenCount());
 			if (cout) {
 				LOG.info("        columns of the table:");
@@ -1628,196 +1485,181 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			int lenj = equalsMembers.length;
 			stf
 					.writeLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"Equalsmembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							lenj);
 			for (int j = 0; j < lenj; j++) {
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"Equalsmembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								equalsMembers[j].getName());
 			}
 			ColumnModel[] cs = ((TableModel) tm).getCompareMembers();
 			stf
 					.writeLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"CompareMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							cs.length);
 			for (int j = 0; j < cs.length; j++) {
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"CompareMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								cs[j].getName());
 			}
 			ColumnModel[] hashCodeMembers = tm.getHashCodeMembers();
 			lenj = hashCodeMembers.length;
 			stf
 					.writeLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"HashCodeMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							lenj);
 			for (int j = 0; j < lenj; j++) {
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"HashCodeMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								hashCodeMembers[j].getName());
 			}
 			ToStringContainer[] tscs = (ToStringContainer[]) tm.getToStringMembers();
 			lenj = tscs.length;
 			stf
 					.writeLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"ToStringMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							lenj);
 			for (int j = 0; j < lenj; j++) {
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToStringMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								tscs[j].getTabellenspalte().getName());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToStringMembers",
 										"Member" + j,
-										"Prefix"
-								},
+										"Prefix" },
 								tscs[j].getPrefix());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToStringMembers",
 										"Member" + j,
-										"Suffix"
-								},
+										"Suffix" },
 								tscs[j].getSuffix());
 			}
 			tscs = (ToStringContainer[]) tm.getComboStringMembers();
 			lenj = tscs.length;
 			stf
 					.writeLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"ToComboStringMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							lenj);
 			for (int j = 0; j < lenj; j++) {
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToComboStringMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								tscs[j].getTabellenspalte().getName());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToComboStringMembers",
 										"Member" + j,
-										"Prefix"
-								},
+										"Prefix" },
 								tscs[j].getPrefix());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToComboStringMembers",
 										"Member" + j,
-										"Suffix"
-								},
+										"Suffix" },
 								tscs[j].getSuffix());
 			}
 			Vector v = tm.getAuswahlMembers();
 			lenj = v.size();
 			stf
 					.writeLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"AuswahlMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							lenj);
 			for (int j = 0; j < lenj; j++) {
 				// TabellenspaltenModel tsm0 = (TabellenspaltenModel)
@@ -1825,67 +1667,60 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				SelectionMemberModel smm = (SelectionMemberModel) v.elementAt(j);
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"AuswahlMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								smm.getColumn().getName());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"AuswahlMembers",
 										"Member" + j,
-										"Tabelle"
-								},
+										"Tabelle" },
 								smm.getColumn().getTable().getName());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"AuswahlMembers",
 										"Member" + j,
-										"Attribute"
-								},
+										"Attribute" },
 								smm.getAttribute().toString());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"AuswahlMembers",
 										"Member" + j,
-										"PrintExpression"
-								},
-								(smm.getPrintExpression() == null
-										? ""
-										: smm.getPrintExpression()));
+										"PrintExpression" },
+								(smm.getPrintExpression() == null ? "" : smm.getPrintExpression()));
 			}
 			OrderMemberModel[] oms = tm.getSelectionViewOrderMembers();
 			lenj = oms.length;
 			stf
 					.writeLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"OrderMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							lenj);
 			if (cout) {
 				LOG.info("        order members:");
@@ -1893,42 +1728,37 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			for (int j = 0; j < lenj; j++) {
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"OrderMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								oms[j].getOrderColumn().getName());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"OrderMembers",
 										"Member" + j,
-										"Tabelle"
-								},
+										"Tabelle" },
 								oms[j].getOrderColumn().getTable().getName());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"OrderMembers",
 										"Member" + j,
-										"Richtung"
-								},
-								(oms[j].getOrderDirection() != null
-										? oms[j].getOrderDirection().toString()
-										: "ASC"));
+										"Richtung" },
+								(oms[j].getOrderDirection() != null ? oms[j].getOrderDirection().toString() : "ASC"));
 				if (cout) {
 					LOG.info("            " + oms[j].toString() + " written.");
 				}
@@ -1937,13 +1767,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			new STFOptionWriter().write(stf, tm, i);
 			stf
 					.writeLong(
-							new String[]{
-									"Diagramm",
-									"Tabellen",
-									"Tabelle" + i,
-									"Panels",
-									"Anzahl"
-							},
+							new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Anzahl" },
 							tm.getPanelCount());
 			lenj = tm.getPanelCount();
 			if (cout) {
@@ -1953,58 +1777,53 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				PanelModel pm = tm.getPanelAt(j);
 				stf
 						.writeLong(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Panels",
 										"Panel" + j,
-										"PanelNumber"
-								},
+										"PanelNumber" },
 								pm.getPanelNumber());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Panels",
 										"Panel" + j,
-										"TabTitle"
-								},
+										"TabTitle" },
 								pm.getTabTitle());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Panels",
 										"Panel" + j,
-										"TabMnemonic"
-								},
+										"TabMnemonic" },
 								pm.getTabMnemonic());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Panels",
 										"Panel" + j,
-										"TabToolTipText"
-								},
+										"TabToolTipText" },
 								pm.getTabToolTipText());
 				stf
 						.writeStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Panels",
 										"Panel" + j,
-										"PanelClass"
-								},
+										"PanelClass" },
 								pm.getPanelClass());
 				if (cout) {
 					LOG.info("        " + pm.getPanelNumber() + " written.");
@@ -2050,30 +1869,16 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		sb.append("    </domains>").append("\n");
 		;
 		len = this.stereotypes.size();
-		stf.writeLong(new String[]{
-				"Diagramm",
-				"Stereotype",
-				"Anzahl"
-		}, len);
+		stf.writeLong(new String[] { "Diagramm", "Stereotype", "Anzahl" }, len);
 		for (int i = 0; i < len; i++) {
 			StereotypeModel stm = this.stereotypes.elementAt(i);
 			stf
 					.writeStr(
-							new String[]{
-									"Diagramm",
-									"Stereotype",
-									"Stereotype" + i,
-									"Name"
-							},
+							new String[] { "Diagramm", "Stereotype", "Stereotype" + i, "Name" },
 							this.toHTML(stm.getName()));
 			stf
 					.writeStr(
-							new String[]{
-									"Diagramm",
-									"Stereotype",
-									"Stereotype" + i,
-									"Kommentar"
-							},
+							new String[] { "Diagramm", "Stereotype", "Stereotype" + i, "Kommentar" },
 							this.toHTML(stm.getComment()));
 		}
 		len = this.defaultComments.size();
@@ -2087,18 +1892,16 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				|| Boolean.getBoolean("archimedes.scheme.Diagramm.debug");
 		boolean suppressDots = Boolean.getBoolean("archimedes.scheme.Diagramm.suppress.dots");
 		String ofn = stf
-				.readStr(new String[]{
-						"Diagramm",
-						"Factories",
-						"Object"
-				}, Archimedes.Factory.getClass().getName());
+				.readStr(new String[] { "Diagramm", "Factories", "Object" }, Archimedes.Factory.getClass().getName());
 		if (!Archimedes.Factory.getClass().getName().equals(ofn)) {
 			JOptionPane
 					.showMessageDialog(
 							null,
 							"Die aktuelle ObjectFactory (" + Archimedes.Factory.getClass().getName()
 									+ ") unterscheidet sich von\n"
-									+ "der ObjectFactory, unter das Modell zuletzt bearbeitet wurde (" + ofn + ")!",
+									+ "der ObjectFactory, unter das Modell zuletzt bearbeitet wurde ("
+									+ ofn
+									+ ")!",
 							"ObjectFactory unterschiedlich",
 							JOptionPane.WARNING_MESSAGE);
 		}
@@ -2107,24 +1910,12 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		if (d.importDSR == null) {
 			d.importDSR = new ArchimedesImportJDBCDataSourceRecord();
 		}
-		d.importDSR.fromSTF(
-				stf,
-				new String[]{
-						"Diagramm",
-						"DataSource",
-						"Import"
-				});
+		d.importDSR.fromSTF(stf, new String[] { "Diagramm", "DataSource", "Import" });
 		if (d.updateDSR == null) {
 			d.updateDSR = new ArchimedesJDBCDataSourceRecord();
 		}
 		ArchimedesJDBCDataSourceRecord dsr = new ArchimedesJDBCDataSourceRecord();
-		dsr.fromSTF(
-				stf,
-				new String[]{
-						"Diagramm",
-						"DataSource",
-						"Update"
-				});
+		dsr.fromSTF(stf, new String[] { "Diagramm", "DataSource", "Update" });
 		if (dsr.getDBName().length() > 0) {
 			d
 					.addDatabaseConnection(
@@ -2139,11 +1930,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 									dsr.isReferenzenSetzen(),
 									dsr.getQuoteCharacter()));
 		}
-		int len = (int) stf.readLong(new String[]{
-				"Diagramm",
-				"Colors",
-				"Anzahl"
-		}, 0);
+		int len = (int) stf.readLong(new String[] { "Diagramm", "Colors", "Anzahl" }, 0);
 		if (len > 0) {
 			Archimedes.PALETTE.removeColors();
 			new STFColorReader().read(stf, d);
@@ -2154,22 +1941,14 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		new STFDomainReader().read(stf, d);
 		new STFSequenceReader().read(stf, d);
 		new STFAdditionalSQLCodeReader().read(stf, d);
-		int pp = (int) stf.readLong(new String[]{
-				"Diagramm",
-				"Pages",
-				"PerColumn"
-		}, 0);
+		int pp = (int) stf.readLong(new String[] { "Diagramm", "Pages", "PerColumn" }, 0);
 		if (pp > ComponentDiagramm.PAGESPERCOLUMN) {
 			LOG.error("\n\n**************************************************");
 			LOG.error("\nZuwenig Seiten pro Spalte " + pp + " (" + ComponentDiagramm.PAGESPERCOLUMN + ")");
 			LOG.error("\n\n**************************************************");
 			System.exit(1);
 		}
-		pp = (int) stf.readLong(new String[]{
-				"Diagramm",
-				"Pages",
-				"PerRow"
-		}, 0);
+		pp = (int) stf.readLong(new String[] { "Diagramm", "Pages", "PerRow" }, 0);
 		if (pp > ComponentDiagramm.PAGESPERROW) {
 			LOG.error("\n\n**************************************************");
 			LOG.error("\nZuwenig Seiten pro Zeile" + pp + " (" + ComponentDiagramm.PAGESPERROW + ")");
@@ -2178,33 +1957,27 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		}
 		ComponentDiagramm.MAXPAGECOUNT = ComponentDiagramm.PAGESPERROW * ComponentDiagramm.PAGESPERCOLUMN;
 		new STFStereotypeReader().read(stf, d);
-		len = (int) stf.readLong(new String[]{
-				"Diagramm",
-				"DefaultComment",
-				"Anzahl"
-		}, 0);
+		len = (int) stf.readLong(new String[] { "Diagramm", "DefaultComment", "Anzahl" }, 0);
 		for (int i = 0; i < len; i++) {
 			String n = this
 					.fromHTML(
 							stf
 									.readStr(
-											new String[]{
+											new String[] {
 													"Diagramm",
 													"DefaultComment",
 													"DefaultComment" + i,
-													"Muster"
-											},
+													"Muster" },
 											null));
 			String k = this
 					.fromHTML(
 							stf
 									.readStr(
-											new String[]{
+											new String[] {
 													"Diagramm",
 													"DefaultComment",
 													"DefaultComment" + i,
-													"Kommentar"
-											},
+													"Kommentar" },
 											""));
 			DefaultCommentModel dcm = Archimedes.Factory.createDefaultComment(n, k);
 			d.addDefaultComment(dcm);
@@ -2214,119 +1987,57 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 						new Boolean(
 								stf
 										.readStr(
-												new String[]{
+												new String[] {
 														"Diagramm",
 														"Parameter",
-														"ReferenzierteSpaltenAnzeigen"
-												},
+														"ReferenzierteSpaltenAnzeigen" },
 												"TRUE")).booleanValue());
 		GUIViewModel vm = null;
 		GUIViewModel mvm = (GUIViewModel) new STFViewReader().read(stf, d);
 		new STFDiagrammParameterReader().read(stf, d);
-		len = (int) stf.readLong(new String[]{
-				"Diagramm",
-				"Tabellen",
-				"Anzahl"
-		}, 0);
+		len = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Anzahl" }, 0);
 		if (!suppressDots) {
 			LOG.info("found " + len + " tables.");
 		}
 		for (int i = 0; i < len; i++) {
-			String n = this.fromHTML(stf.readStr(new String[]{
-					"Diagramm",
-					"Tabellen",
-					"Tabelle" + i,
-					"Name"
-			}, null));
+			String n = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Name" }, null));
 			String k =
-					this.fromHTML(stf.readStr(new String[]{
-							"Diagramm",
-							"Tabellen",
-							"Tabelle" + i,
-							"Kommentar"
-					}, ""));
-			history = this.fromHTML(stf.readStr(new String[]{
-					"Diagramm",
-					"Tabellen",
-					"Tabelle" + i,
-					"History"
-			}, ""));
+					this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Kommentar" }, ""));
+			history = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "History" }, ""));
 			boolean aufgh = new Boolean(
-					stf.readStr(new String[]{
-							"Diagramm",
-							"Tabellen",
-							"Tabelle" + i,
-							"Aufgehoben"
-					}, "FALSE"))
-					.booleanValue();
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Aufgehoben" }, "FALSE"))
+							.booleanValue();
 			String fs = this
 					.fromHTML(
 							stf
 									.readStr(
-											new String[]{
-													"Diagramm",
-													"Tabellen",
-													"Tabelle" + i,
-													"Farben",
-													"Schrift"
-											},
+											new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Farben", "Schrift" },
 											"schwarz"));
 			String fhg = this
 					.fromHTML(
 							stf
 									.readStr(
-											new String[]{
+											new String[] {
 													"Diagramm",
 													"Tabellen",
 													"Tabelle" + i,
 													"Farben",
-													"Hintergrund"
-											},
+													"Hintergrund" },
 											StrUtil.FromHTML("wei&szlig;")));
 			boolean nmrelation = new Boolean(
-					stf.readStr(new String[]{
-							"Diagramm",
-							"Tabellen",
-							"Tabelle" + i,
-							"NMRelation"
-					}, "FALSE"))
-					.booleanValue();
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "NMRelation" }, "FALSE"))
+							.booleanValue();
 			boolean indevelopmentprocess = new Boolean(
-					stf.readStr(new String[]{
-							"Diagramm",
-							"Tabellen",
-							"Tabelle" + i,
-							"InDevelopment"
-					}, "FALSE"))
-					.booleanValue();
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "InDevelopment" }, "FALSE"))
+							.booleanValue();
 			boolean externalTable = new Boolean(
-					stf.readStr(new String[]{
-							"Diagramm",
-							"Tabellen",
-							"Tabelle" + i,
-							"ExternalTable"
-					}, "FALSE"))
-					.booleanValue();
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "ExternalTable" }, "FALSE"))
+							.booleanValue();
 			boolean firstGenerationDone = new Boolean(
-					stf.readStr(new String[]{
-							"Diagramm",
-							"Tabellen",
-							"Tabelle" + i,
-							"FirstGenerationDone"
-					}, "FALSE"))
-					.booleanValue();
-			int x = (int) stf.readLong(new String[]{
-					"Diagramm",
-					"Tabellen",
-					"Tabelle" + i,
-					"X"
-			}, 0);
-			int y = (int) stf.readLong(new String[]{
-					"Diagramm",
-					"Tabellen",
-					"Tabelle" + i,
-					"Y"
-			}, 0);
+					stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "FirstGenerationDone" }, "FALSE"))
+							.booleanValue();
+			int x = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "X" }, 0);
+			int y = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Y" }, 0);
 			vm = mvm;
 			TabellenModel tm = Archimedes.Factory.createTabelle((ViewModel) vm, x, y, d, false);
 			tm.setSchriftfarbe(Archimedes.PALETTE.get(fs, Color.black));
@@ -2338,13 +2049,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.setExternalTable(externalTable);
 			vm.addObject(tm);
 			int lenj =
-					(int) stf.readLong(new String[]{
-							"Diagramm",
-							"Tabellen",
-							"Tabelle" + i,
-							"Panels",
-							"Anzahl"
-					}, 0);
+					(int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Panels", "Anzahl" }, 0);
 			if (lenj > 0) {
 				tm.clearPanels();
 				for (int j = 0; j < lenj; j++) {
@@ -2353,66 +2058,61 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 							.setPanelNumber(
 									(int) stf
 											.readLong(
-													new String[]{
+													new String[] {
 															"Diagramm",
 															"Tabellen",
 															"Tabelle" + i,
 															"Panels",
 															"Panel" + j,
-															"PanelNumber"
-													},
+															"PanelNumber" },
 													0));
 					pm
 							.setTabTitle(
 									stf
 											.readStr(
-													new String[]{
+													new String[] {
 															"Diagramm",
 															"Tabellen",
 															"Tabelle" + i,
 															"Panels",
 															"Panel" + j,
-															"TabTitle"
-													},
+															"TabTitle" },
 													"" + (j + 1) + ".Tab"));
 					pm
 							.setTabMnemonic(
 									stf
 											.readStr(
-													new String[]{
+													new String[] {
 															"Diagramm",
 															"Tabellen",
 															"Tabelle" + i,
 															"Panels",
 															"Panel" + j,
-															"TabMnemonic"
-													},
+															"TabMnemonic" },
 													"" + (j + 1)));
 					pm
 							.setTabToolTipText(
 									stf
 											.readStr(
-													new String[]{
+													new String[] {
 															"Diagramm",
 															"Tabellen",
 															"Tabelle" + i,
 															"Panels",
 															"Panel" + j,
-															"TabToolTipText"
-													},
+															"TabToolTipText" },
 													""));
 					pm
 							.setPanelClass(
 									stf
 											.readStr(
-													new String[]{
+													new String[] {
 															"Diagramm",
 															"Tabellen",
 															"Tabelle" + i,
 															"Panels",
 															"Panel" + j,
-															"PanelClass"
-													},
+															"PanelClass" },
 													""));
 					tm.addPanel(pm);
 				}
@@ -2423,50 +2123,29 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 				pm.setTabMnemonic("1");
 				tm.addPanel(pm);
 			}
-			lenj = (int) stf.readLong(new String[]{
-					"Diagramm",
-					"Tabellen",
-					"Tabelle" + i,
-					"Views",
-					"Anzahl"
-			}, 0);
+			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "Anzahl" }, 0);
 			for (int j = 0; j < lenj; j++) {
 				String viewname = this
 						.fromHTML(
 								stf
 										.readStr(
-												new String[]{
+												new String[] {
 														"Diagramm",
 														"Tabellen",
 														"Tabelle" + i,
 														"Views",
 														"View" + j,
-														"Name"
-												},
+														"Name" },
 												""));
 				vm = d.getView(viewname);
 				if (vm != null) {
 					x = (int) stf
 							.readLong(
-									new String[]{
-											"Diagramm",
-											"Tabellen",
-											"Tabelle" + i,
-											"Views",
-											"View" + j,
-											"X"
-									},
+									new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "X" },
 									0);
 					y = (int) stf
 							.readLong(
-									new String[]{
-											"Diagramm",
-											"Tabellen",
-											"Tabelle" + i,
-											"Views",
-											"View" + j,
-											"Y"
-									},
+									new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Views", "View" + j, "Y" },
 									0);
 					tm.setXY(vm, x, y);
 					vm.addObject(tm);
@@ -2478,24 +2157,17 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.setComment(k);
 			tm.setDeprecated(aufgh);
 			lenj = (int) stf
-					.readLong(new String[]{
-							"Diagramm",
-							"Tabellen",
-							"Tabelle" + i,
-							"Stereotype",
-							"Anzahl"
-					}, 0);
+					.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Stereotype", "Anzahl" }, 0);
 			for (int j = 0; j < lenj; j++) {
 				String st = this
 						.fromHTML(
 								stf
 										.readStr(
-												new String[]{
+												new String[] {
 														"Diagramm",
 														"Tabellen",
 														"Tabelle" + i,
-														"Stereotype" + j
-												},
+														"Stereotype" + j },
 												""));
 				try {
 					tm.addStereotype(d.getStereotype(st));
@@ -2505,140 +2177,124 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			boolean codieren = new Boolean(
 					stf
 							.readStr(
-									new String[]{
+									new String[] {
 											"Diagramm",
 											"Tabellen",
 											"Tabelle" + i,
 											"Spalten",
 											"Codegenerator",
-											"Codieren"
-									},
+											"Codieren" },
 									"FALSE")).booleanValue();
 			tm.setGenerateCode(codieren);
 			tm
 					.setGenerateCodeOptions(
 							stf
 									.readStr(
-											new String[]{
+											new String[] {
 													"Diagramm",
 													"Tabellen",
 													"Tabelle" + i,
 													"Spalten",
 													"Codegenerator",
-													"Codegeneratoroptionen"
-											},
+													"Codegeneratoroptionen" },
 											""));
 			tm
 					.setCodeVerzeichnis(
 							stf
 									.readStr(
-											new String[]{
+											new String[] {
 													"Diagramm",
 													"Tabellen",
 													"Tabelle" + i,
 													"Spalten",
 													"Codegenerator",
-													"Codeverzeichnis"
-											},
+													"Codeverzeichnis" },
 											""));
 			tm
 					.setContextName(
 							stf
 									.readStr(
-											new String[]{
+											new String[] {
 													"Diagramm",
 													"Tabellen",
 													"Tabelle" + i,
 													"Spalten",
 													"Codegenerator",
-													"Kontextname"
-											},
+													"Kontextname" },
 											""));
 			tm
 					.setComplexForeignKeyDefinition(
 							stf
 									.readStr(
-											new String[]{
+											new String[] {
 													"Diagramm",
 													"Tabellen",
 													"Tabelle" + i,
 													"Spalten",
 													"Codegenerator",
-													"ComplexForeignKey"
-											},
+													"ComplexForeignKey" },
 											""));
 			tm
 					.setComplexUniqueSpecification(
 							stf
 									.readStr(
-											new String[]{
+											new String[] {
 													"Diagramm",
 													"Tabellen",
 													"Tabelle" + i,
 													"Spalten",
 													"Codegenerator",
-													"UniqueFormula"
-											},
+													"UniqueFormula" },
 											""));
 			boolean dynamicCode = new Boolean(
 					stf
 							.readStr(
-									new String[]{
+									new String[] {
 											"Diagramm",
 											"Tabellen",
 											"Tabelle" + i,
 											"Spalten",
 											"Codegenerator",
-											"DynamicCode"
-									},
+											"DynamicCode" },
 									"FALSE")).booleanValue();
 			tm.setDynamicCode(dynamicCode);
 			boolean inherited = new Boolean(
 					stf
 							.readStr(
-									new String[]{
+									new String[] {
 											"Diagramm",
 											"Tabellen",
 											"Tabelle" + i,
 											"Spalten",
 											"Codegenerator",
-											"Inherited"
-									},
+											"Inherited" },
 									"FALSE")).booleanValue();
 			tm.setInherited(inherited);
 			boolean activeInApplication = new Boolean(
 					stf
 							.readStr(
-									new String[]{
+									new String[] {
 											"Diagramm",
 											"Tabellen",
 											"Tabelle" + i,
 											"Spalten",
 											"Codegenerator",
-											"ActiveInApplication"
-									},
+											"ActiveInApplication" },
 									"FALSE")).booleanValue();
 			tm.setActiveInApplication(activeInApplication);
 			tm
 					.setAdditionalCreateConstraints(
 							stf
 									.readStr(
-											new String[]{
+											new String[] {
 													"Diagramm",
 													"Tabellen",
 													"Tabelle" + i,
 													"Spalten",
 													"Codegenerator",
-													"AdditionalCreateConstraints"
-											},
+													"AdditionalCreateConstraints" },
 											""));
-			lenj = (int) stf.readLong(new String[]{
-					"Diagramm",
-					"Tabellen",
-					"Tabelle" + i,
-					"Spalten",
-					"Anzahl"
-			}, 0);
+			lenj = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" }, 0);
 			for (int j = 0; j < lenj; j++) {
 				new STFColumnReader().read(stf, d, tm, i, j);
 			}
@@ -2652,53 +2308,36 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		if (!output && !suppressDots) {
 			System.out.println();
 		}
-		len = (int) stf.readLong(new String[]{
-				"Diagramm",
-				"Tabellen",
-				"Anzahl"
-		}, 0);
+		len = (int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Anzahl" }, 0);
 		for (int i = 0; i < len; i++) {
-			String n = this.fromHTML(stf.readStr(new String[]{
-					"Diagramm",
-					"Tabellen",
-					"Tabelle" + i,
-					"Name"
-			}, null));
+			String n = this.fromHTML(stf.readStr(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Name" }, null));
 			TabellenModel tm = d.getTabelle(n);
 			int lenj =
-					(int) stf.readLong(new String[]{
-							"Diagramm",
-							"Tabellen",
-							"Tabelle" + i,
-							"Spalten",
-							"Anzahl"
-					}, 0);
+					(int) stf.readLong(new String[] { "Diagramm", "Tabellen", "Tabelle" + i, "Spalten", "Anzahl" }, 0);
 			for (int j = 0; j < lenj; j++) {
 				n = this
 						.fromHTML(
 								stf
 										.readStr(
-												new String[]{
+												new String[] {
 														"Diagramm",
 														"Tabellen",
 														"Tabelle" + i,
 														"Spalten",
 														"Spalte" + j,
-														"Name"
-												},
+														"Name" },
 												null));
 				TabellenspaltenModel tsm = tm.getTabellenspalte(n);
 				boolean fk = new Boolean(
 						stf
 								.readStr(
-										new String[]{
+										new String[] {
 												"Diagramm",
 												"Tabellen",
 												"Tabelle" + i,
 												"Spalten",
 												"Spalte" + j,
-												"ForeignKey"
-										},
+												"ForeignKey" },
 										"false")).booleanValue();
 				if (fk) {
 					new STFRelationReader().read(stf, d, tsm, i, j, (ViewModel) mvm);
@@ -2707,27 +2346,25 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.clearEqualsMembers();
 			lenj = (int) stf
 					.readLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"Equalsmembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							0);
 			for (int j = 0; j < lenj; j++) {
 				String spaltenname = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"Equalsmembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								"");
 				ColumnModel c = tm.getColumnByName(spaltenname);
 				tm.addEqualsMember(c);
@@ -2735,27 +2372,25 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			((TableModel) tm).clearCompareToMembers();
 			lenj = (int) stf
 					.readLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"CompareMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							0);
 			for (int j = 0; j < lenj; j++) {
 				String columnName = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"CompareMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								"");
 				ColumnModel c = tm.getColumnByName(columnName);
 				((TableModel) tm).addCompareMember(c);
@@ -2763,27 +2398,25 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.clearHashCodeMembers();
 			lenj = (int) stf
 					.readLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"HashCodeMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							0);
 			for (int j = 0; j < lenj; j++) {
 				String spaltenname = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"HashCodeMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								"");
 				ColumnModel c0 = tm.getColumnByName(spaltenname);
 				tm.addHashCodeMember(c0);
@@ -2791,51 +2424,47 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.clearToStringMembers();
 			lenj = (int) stf
 					.readLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"ToStringMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							0);
 			for (int j = 0; j < lenj; j++) {
 				String spaltenname = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToStringMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								"");
 				String prefix = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToStringMembers",
 										"Member" + j,
-										"Prefix"
-								},
+										"Prefix" },
 								"");
 				String suffix = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToStringMembers",
 										"Member" + j,
-										"Suffix"
-								},
+										"Suffix" },
 								"");
 				TabellenspaltenModel tsm0 = tm.getTabellenspalte(spaltenname);
 				ToStringContainer tsc = new ToStringContainer(tsm0, tm);
@@ -2846,51 +2475,47 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.clearComboStringMembers();
 			lenj = (int) stf
 					.readLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"ToComboStringMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							0);
 			for (int j = 0; j < lenj; j++) {
 				String spaltenname = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToComboStringMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								"");
 				String prefix = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToComboStringMembers",
 										"Member" + j,
-										"Prefix"
-								},
+										"Prefix" },
 								"");
 				String suffix = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"ToComboStringMembers",
 										"Member" + j,
-										"Suffix"
-								},
+										"Suffix" },
 								"");
 				TabellenspaltenModel tsm0 = tm.getTabellenspalte(spaltenname);
 				ToStringContainer tsc = new ToStringContainer(tsm0, tm);
@@ -2901,63 +2526,58 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.getAuswahlMembers().removeAllElements();
 			lenj = (int) stf
 					.readLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"AuswahlMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							0);
 			for (int j = 0; j < lenj; j++) {
 				String spaltenname = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"AuswahlMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								"");
 				String tabellenname = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"AuswahlMembers",
 										"Member" + j,
-										"Tabelle"
-								},
+										"Tabelle" },
 								tm.getName());
 				String attribute = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"AuswahlMembers",
 										"Member" + j,
-										"Attribute"
-								},
+										"Attribute" },
 								"OPTIONAL");
 				String printExpression = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"AuswahlMembers",
 										"Member" + j,
-										"PrintExpression"
-								},
+										"PrintExpression" },
 								"");
 				TableModel table = ((DataModel) d).getTableByName(tabellenname);
 				ColumnModel column = table.getColumnByName(spaltenname);
@@ -2968,51 +2588,47 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 			tm.clearSelectionViewOrderMembers();
 			lenj = (int) stf
 					.readLong(
-							new String[]{
+							new String[] {
 									"Diagramm",
 									"Tabellen",
 									"Tabelle" + i,
 									"Codegenerator",
 									"OrderMembers",
-									"Anzahl"
-							},
+									"Anzahl" },
 							0);
 			for (int j = 0; j < lenj; j++) {
 				String spaltenname = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"OrderMembers",
 										"Member" + j,
-										"Spalte"
-								},
+										"Spalte" },
 								"");
 				String tabellenname = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"OrderMembers",
 										"Member" + j,
-										"Tabelle"
-								},
+										"Tabelle" },
 								tm.getName());
 				String richtung = stf
 						.readStr(
-								new String[]{
+								new String[] {
 										"Diagramm",
 										"Tabellen",
 										"Tabelle" + i,
 										"Codegenerator",
 										"OrderMembers",
 										"Member" + j,
-										"Richtung"
-								},
+										"Richtung" },
 								OrderClauseDirection.ASC.toString());
 				TabellenModel tm0 = d.getTabelle(tabellenname);
 				TabellenspaltenModel tsm0 = tm0.getTabellenspalte(spaltenname);
@@ -3361,7 +2977,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 
 	@Override
 	public boolean containsTablename(String tablename) {
-		return this.containsTablenames(new String[]{tablename});
+		return this.containsTablenames(new String[] { tablename });
 	}
 
 	@Override
@@ -3489,7 +3105,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 
 	/**
 	 * @changed OLI 21.03.2009 - Hinzugef&uuml;gt.
-	 * <p>
+	 *          <p>
 	 */
 	@Override
 	public boolean generateCode(CodeFactory dcf, String path, GUIBundle guiBundle) {
@@ -3498,6 +3114,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 		int leni = 0;
 		java.util.List<String> lcfn = StrUtil.SplitToList(this.getCodeFactoryClassName(), ",");
 		String cfn = null;
+		MessageCollector messageCollector = new MessageCollector();
 		try {
 			leni = lcfn.size();
 			if (leni > 0) {
@@ -3510,6 +3127,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 					}
 					cf.setGUIBundle(guiBundle);
 					cf.setDataModel(this);
+					cf.setMessageCollector(messageCollector);
 					ok = ok && cf.generate(path);
 				}
 			} else {
@@ -3518,6 +3136,13 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 					ok = dcf.generate(path);
 				}
 			}
+			messageCollector
+					.getMessages()
+					.forEach(
+							m -> System.out
+									.println(
+											"> " + m.getTimestamp() + " - " + m.getPriority() + " - "
+													+ m.getCodeGeneratorName() + " - " + m.getMessage()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -3603,9 +3228,9 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	/**
 	 * @changed OLI 16.12.2011 - Hinzugef&uuml;gt. /
 	 * @Override public List<IndexMetaData> getComplexIndices() { return this.complexIndices; }
-	 * <p>
-	 * <p>
-	 * /**
+	 *           <p>
+	 *           <p>
+	 *           /**
 	 * @changed OLI 20.12.2011 - Hinzugef&uuml;gt.
 	 */
 	@Override
@@ -3893,9 +3518,7 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	 */
 	@Override
 	public void setComment(String comment) {
-		this.comment = (comment == null
-				? ""
-				: comment);
+		this.comment = (comment == null ? "" : comment);
 	}
 
 	/**
@@ -4073,51 +3696,8 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	 * @changed OLI 17.12.2013 - Added.
 	 */
 	@Override
-	public OptionModel getOptionAt(int i) {
-		return this.options.get(i);
-	}
-
-	/**
-	 * @changed OLI 10.03.2016 - Added.
-	 */
-	@Override
-	public OptionModel getOptionByName(String name) {
-		for (OptionModel o : this.options) {
-			if (o.getName().equals(name)) {
-				return o;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * @changed OLI 17.12.2013 - Added.
-	 */
-	@Override
-	public int getOptionCount() {
-		return this.options.size();
-	}
-
-	/**
-	 * @changed OLI 17.12.2013 - Added.
-	 */
-	@Override
 	public OptionModel[] getOptions() {
 		return this.options.toArray(new OptionModel[0]);
-	}
-
-	/**
-	 * @changed OLI 25.05.2016 - Added.
-	 */
-	@Override
-	public OptionModel[] getOptionsByName(String name) {
-		List<OptionModel> l = new LinkedList<OptionModel>();
-		for (OptionModel o : this.options) {
-			if (o.getName().equals(name)) {
-				l.add(o);
-			}
-		}
-		return l.toArray(new OptionModel[0]);
 	}
 
 	/**
@@ -4325,14 +3905,6 @@ public class Diagramm extends AbstractGUIDiagramModel implements DiagrammModel {
 	 */
 	public IndexMetaData[] getAllComplexIndices() {
 		return this.complexIndices.toArray(new IndexMetaData[0]);
-	}
-
-	/**
-	 * @changed OLI 26.05.2016 - Added.
-	 */
-	@Override
-	public boolean isOptionSet(String optionName) {
-		return this.getOptionByName(optionName) != null;
 	}
 
 	/**

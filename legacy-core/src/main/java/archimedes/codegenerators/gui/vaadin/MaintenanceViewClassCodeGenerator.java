@@ -1,7 +1,6 @@
 package archimedes.codegenerators.gui.vaadin;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
 
@@ -9,7 +8,6 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CommonImportAdder;
 import archimedes.codegenerators.FieldDeclarations;
-import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
@@ -42,11 +40,11 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));
 		context.put("ButtonFactoryClassName", nameGenerator.getButtonFactoryClassName(model));
 		context.put("ButtonFactoryPackageName", nameGenerator.getVaadinComponentPackageName(model));
-		context.put("ButtonPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
+		context.put("ComponentFactoryClassName", nameGenerator.getComponentFactoryClassName(model));
+		context.put("ComponentFactoryPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("DetailsLayoutClassName", nameGenerator.getDetailsLayoutClassName(model, table));
-		context.put("GridData", getGridData(table));
 		context.put("GUIReferenceDataCollection", guiReferenceDataCollection);
 		context.put("HasSelectionElement", hasSelectionElements(guiReferenceDataCollection.getReferences()));
 		context.put("HeaderLayoutClassName", nameGenerator.getHeaderLayoutClassName(model));
@@ -81,12 +79,15 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
 		context.put("ServiceInterfaceName", serviceInterfaceName);
+		context.put("ServiceProviderClassName", nameGenerator.getServiceProviderClassName(model));
 		context.put("SubclassDataCollection", subclassDataCollection);
 		context.put("UniqueSubclassReferenceDataCollection", uniqueSubclassReferenceDataCollection);
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
+		context.put("VaadinComponentPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelClassName);
-		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
+		// importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table),
+		// serviceInterfaceName);
 		addImportsFromSubClassDataCollection(subclassDataCollection);
 		addImportsFromUniqueSubclassReferenceData(uniqueSubclassReferenceDataCollection);
 		addGUIReferencesToFieldDeclarations(guiReferenceDataCollection.getReferences());
@@ -107,30 +108,6 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 				: model.isOptionSet(GUI_BASE_URL)
 						? model.getOptionByName(GUI_BASE_URL).getParameter()
 						: model.getApplicationName().toLowerCase();
-	}
-
-	private List<GridData> getGridData(TableModel table) {
-		return List
-				.of(table.getColumns())
-				.stream()
-				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
-				.map(
-						column -> new GridData()
-								.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
-								.setPosition(getPosition(column))
-								.setResourceName(getResourceName(column)))
-				.sorted((gd0, gd1) -> gd0.getPosition() - gd1.getPosition())
-				.collect(Collectors.toList());
-	}
-
-	private int getPosition(ColumnModel column) {
-		return column.isOptionSet(GUI_EDITOR_POS)
-				? Integer.valueOf(column.getOptionByName(GUI_EDITOR_POS).getParameter())
-				: 0;
-	}
-
-	private String getResourceName(ColumnModel column) {
-		return nameGenerator.getCamelCase(column.getName()).toLowerCase();
 	}
 
 	private void addImportsFromSubClassDataCollection(SubclassDataCollection subclassDataCollection) {
@@ -181,7 +158,8 @@ public class MaintenanceViewClassCodeGenerator extends AbstractGUIVaadinClassCod
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) || t.isOptionSet(AbstractClassCodeGenerator.SUBCLASS);
+		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) || t.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)
+				|| t.isOptionSetWithValue(MEMBER_LIST, "MEMBER");
 	}
 
 }

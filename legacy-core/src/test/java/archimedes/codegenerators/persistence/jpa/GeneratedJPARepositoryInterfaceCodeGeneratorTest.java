@@ -1,6 +1,7 @@
 package archimedes.codegenerators.persistence.jpa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -261,6 +262,21 @@ public class GeneratedJPARepositoryInterfaceCodeGeneratorTest {
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_isToIgnoreFor_DataModel_TableModel {
+
+		@Test
+		void passAMemberModel_returnsTrue() {
+			// Prepare
+			ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+			DataModel dataModel = reader.read("src/test/resources/examples/dm/Example-BookStore.xml");
+			TableModel table = dataModel.getTableByName("CHAPTER");
+			// Run & Check
+			assertTrue(unitUnderTest.isToIgnoreFor(dataModel, table));
 		}
 
 	}

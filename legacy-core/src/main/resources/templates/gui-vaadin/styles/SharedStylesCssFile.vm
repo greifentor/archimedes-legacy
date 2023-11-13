@@ -1,0 +1,12 @@
+/*
+    CSS styling examples for Vaadin apps.
+    See also: https://vaadin.com/docs/flow/theme/theming-overview.html and/or
+    https://vaadin.com/themes/lumo for more information.
+
+    ${Generated}
+*/
+
+.centered-content {
+    margin: 0 auto;
+    max-width: 600px;
+}

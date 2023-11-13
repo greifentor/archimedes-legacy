@@ -24,6 +24,7 @@ import archimedes.legacy.model.TabellenspaltenModel;
 import archimedes.legacy.scheme.Diagramm;
 import archimedes.model.CodeFactory;
 import archimedes.model.DataModel;
+import archimedes.model.MessageCollector;
 import archimedes.model.RelationModel;
 import baccara.gui.GUIBundle;
 import corent.files.StructuredTextFile;
@@ -42,6 +43,7 @@ public class ArchimedesCodeWriter implements CodeFactory {
 	private static final Logger log = Logger.getLogger(ArchimedesCodeWriter.class);
 
 	private DataModel dataModel = null;
+	private MessageCollector messageCollector;
 
 	/** Erzeugt ein CodeFactory-Objekt */
 	public ArchimedesCodeWriter() {
@@ -270,6 +272,11 @@ public class ArchimedesCodeWriter implements CodeFactory {
 	@Override
 	public String getVersion() {
 		return Archimedes.GetVersion();
+	}
+
+	@Override
+	public void setMessageCollector(MessageCollector messageCollector) {
+		this.messageCollector = messageCollector;
 	}
 
 }

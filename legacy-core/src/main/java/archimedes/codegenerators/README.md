@@ -23,3 +23,18 @@ a foreign key as shown below:
 ```
 FK_Team_Company_Id_TO_Company_Id
 ```
+
+#### ALTERNATE_MODULE_PREFIX
+
+Allows to change the module prefix (working with MODULE_MODE only). Default is the application name as configured by 
+"Bearbeiten > Diagrammparameter > Codegenerator > Applikationsname".
+
+Let the option parameter empty to have no prefix.
+
+Change default module names can be done in the specific module by ``ALTERNATE_..._MODULE_PREFIX`` options.
+
+
+##### MODULE_MODE
+
+Set this option to get different modules for service other layers (e. g. GUI). If not set, all code will be written to
+the ``src`` folder of the configured by "Bearbeiten > Diagrammparameter > Codegenerator > Code-Basis-Pfad".

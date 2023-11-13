@@ -11,5 +11,6 @@ public class GridData {
 	private int position;
 	private String resourceName;
 	private boolean simpleBoolean;
+	private Integer width;
 
 }

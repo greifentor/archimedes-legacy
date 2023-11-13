@@ -1,0 +1,31 @@
+package ${PackageName};
+
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+#foreach($ServiceData in ${Services})
+import ${ServiceData.getServicePackageName()}.${ServiceData.getServiceInterfaceName()};
+#end
+
+import lombok.Generated;
+import lombok.Getter;
+
+#if (!$CommentsOff )
+/**
+ * A service provider.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+@Getter
+@Named
+public class ${ClassName} {
+
+#foreach($ServiceData in ${Services})
+	@Autowired(required = false)
+	private ${ServiceData.getServiceInterfaceName()} ${ServiceData.getServiceAttributeName()};
+#end
+
+}

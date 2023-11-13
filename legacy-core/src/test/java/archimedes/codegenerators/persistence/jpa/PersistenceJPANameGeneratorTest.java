@@ -7,6 +7,8 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -301,8 +303,8 @@ public class PersistenceJPANameGeneratorTest {
 			String prefix = "prefix";
 			String expected = "prefix.persistence.entity";
 			when(model.getBasePackageName()).thenReturn(null);
-			when(table.getOptionByName(PersistenceJPANameGenerator.MODULE))
-					.thenReturn(new Option(PersistenceJPANameGenerator.MODULE, prefix));
+			when(table.findOptionByName(PersistenceJPANameGenerator.MODULE))
+					.thenReturn(Optional.of(new Option(PersistenceJPANameGenerator.MODULE, prefix)));
 			// Run
 			String returned = unitUnderTest.getDBOPackageName(model, table);
 			// Check

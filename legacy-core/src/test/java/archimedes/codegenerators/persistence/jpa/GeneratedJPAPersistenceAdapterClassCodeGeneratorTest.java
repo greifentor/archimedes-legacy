@@ -983,7 +983,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 	}
 
 	@Nested
-	class TestsOfMethod_isToIgnoreFo_DataModel_TableModel {
+	class TestsOfMethod_isToIgnoreFor_DataModel_TableModel {
 
 		@Test
 		void passTableModelAsNullValue_ThrowsAnException() {
@@ -1010,6 +1010,16 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 			table
 					.getColumnByName("Description")
 					.addOption(new Option(JPAPersistenceAdapterDependentClassCodeGenerator.DEPENDENT_ATTRIBUTE));
+			// Run & Check
+			assertTrue(unitUnderTest.isToIgnoreFor(dataModel, table));
+		}
+
+		@Test
+		void passAMemberModel_returnsTrue() {
+			// Prepare
+			ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+			DataModel dataModel = reader.read("src/test/resources/examples/dm/Example-BookStore.xml");
+			TableModel table = dataModel.getTableByName("CHAPTER");
 			// Run & Check
 			assertTrue(unitUnderTest.isToIgnoreFor(dataModel, table));
 		}

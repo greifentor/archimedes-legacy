@@ -113,7 +113,7 @@ public class GeneratedPersistencePortInterfaceCodeGenerator extends AbstractClas
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
-		return super.isToIgnoreFor(model, table) || isSubclass(table);
+		return super.isToIgnoreFor(model, table) || isSubclass(table) || isAMember(table);
 	}
 
 }

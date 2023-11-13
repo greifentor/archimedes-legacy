@@ -6,6 +6,8 @@ import java.io.InputStream;
 
 #end
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 #if (${GUIColumnDataCollection.hasFieldType("BOOLEAN")} == true)
 import com.vaadin.flow.component.checkbox.Checkbox;
 #end
@@ -35,13 +37,16 @@ import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 #foreach ($ImportDeclaration in $ImportDeclarations.toList())
 import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
-import ${ItemLabelGeneratorCollectionPackageName}.${ItemLabelGeneratorCollectionClassName};
+import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
+import ${VaadinComponentPackageName}.${ServiceProviderClassName};
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
+#if (!${CommentsOff})
 /**
  * ${Generated}
  */
+#end
 @Generated
 @RequiredArgsConstructor
 public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
@@ -69,16 +74,14 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 
 #end
 	private final ${ButtonFactoryClassName} buttonFactory;
+	private final ${ComponentFactoryClassName} componentFactory;
 	private final ${ModelClassName} model;
-	private final ${ServiceInterfaceName} service;
-#foreach ($FieldDeclaration in $FieldDeclarations.toList())
-	private final ${FieldDeclaration.getTypeName()} ${FieldDeclaration.getAttributeName()};
-#end
+	private final ${ServiceProviderClassName} serviceProvider;
+	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${SessionDataClassName} session;
 	private final Observer observer;
 	private final DetailsLayoutComboBoxItemLabelGenerator<#if(${ModelSuperClassName})${ModelSuperClassName}#else${ModelClassName}#end> comboBoxItemLabelGenerator;
-	private final ${ItemLabelGeneratorCollectionClassName} itemLabelGeneratorCollection;
 
 #foreach ($Reference in $GUIReferences)
 	private ComboBox<${Reference.getReferencedModelClassName()}> comboBox${Reference.getFieldNameCamelCase()};
@@ -110,7 +113,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		createButtons();
 #foreach ($Reference in $GUIReferences)
 	#set($ResourceId = "${Reference.getTableName()}DetailsLayout.field.${Reference.getResourceName()}.label")
-		comboBox${Reference.getFieldNameCamelCase()} = createComboBox("$ResourceId", model.get${Reference.getFieldNameCamelCase()}(), ${Reference.getServiceAttributeName()}.findAll${Reference.getFindAllMethodNameExtension()}().toArray(new ${Reference.getReferencedModelClassName()}[0]));
+		comboBox${Reference.getFieldNameCamelCase()} = createComboBox("$ResourceId", model.get${Reference.getFieldNameCamelCase()}(), serviceProvider.get${Reference.getServiceInterfaceName()}().findAll${Reference.getFindAllMethodNameExtension()}().toArray(new ${Reference.getReferencedModelClassName()}[0]));
 		comboBox${Reference.getFieldNameCamelCase()}
 				.setItemLabelGenerator(
 						${Reference.getReferencedModelClassFieldName()}  -> comboBoxItemLabelGenerator != null
@@ -132,7 +135,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 		checkbox${FieldName} = createCheckbox("$ResourceId", model.${GetterPrefix}${FieldName}());
 	#elseif (${Column.getType()} == "COMBOBOX")
 	#elseif (${Column.getType()} == "ENUM")
-		comboBox${FieldName} = createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values(), itemLabelGeneratorCollection.get${Column.FieldTypeName}ItemLabelGenerator());
+		comboBox${FieldName} = createComboBox("$ResourceId", model.get${FieldName}(), ${Column.getFieldTypeName()}.values(), componentFactory.get${Column.FieldTypeName}ItemLabelGenerator());
 		#if (${Column.isNullable()} == true)
 		comboBox${FieldName}.setClearButtonVisible(true);
 		#end
@@ -203,6 +206,9 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 	#else
 				textField${Column.getFieldNameCamelCase()},
 	#end
+#end
+#foreach (${ListGridData} in ${ListGridDataCollection})
+				new ${ListGridData.getListDetailsLayoutClassName()}(componentFactory, guiConfiguration, model, resourceManager, serviceProvider, session),
 #end
 				getMasterDataButtonLayout(model.getId() > 0));
 #if (${PreferenceData})
@@ -329,7 +335,7 @@ textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
 
 	@Override
 	protected void remove() {
-		service.delete(model);
+		serviceProvider.get${ServiceInterfaceName}().delete(model);
 		observer.remove();
 	}
 
@@ -375,7 +381,7 @@ textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
 		// UNKNOWN ${Column.getFieldNameCamelCase()}
 	#end
 #end
-		observer.save(service.update(model));
+		observer.save(serviceProvider.get${ServiceInterfaceName}().update(model));
 	}
 
 }

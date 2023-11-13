@@ -1,5 +1,11 @@
 package ${PackageName};
 
+#foreach($Import in $ImportDeclarations.toList())
+import $Import.getSingleImportDeclaration();
+#if($velocityCount == $ImportDeclarations.size()) 
+
+#end
+#end
 #if ($ImportLocalDate || $ImportLocalDateTime)
 	#if ($ImportLocalDate)
 import ${ImportLocalDate};
@@ -54,14 +60,11 @@ import lombok.experimental.Accessors;
 #if ($Subclass)
 @ToString(callSuper = true)
 #end
-public class ${ClassName} extends ${GeneratedModelClassName}#if (!${Implements.toList().isEmpty()}) implements #foreach ($I in ${Implements.toList()})${I.getTypeName()}#if ($foreach.hasNext), #end#end#end {
+public class ${ClassName} extends ${GeneratedModelClassName}<${ClassName}>#if (!${Implements.toList().isEmpty()}) implements #foreach ($I in ${Implements.toList()})${I.getTypeName()}#if ($foreach.hasNext), #end#end#end {
 
-#foreach($Column in $ColumnData)
 	@Override
-	public ${ClassName} set${Column.getSetterName()}(${Column.getFieldType()} ${Column.getFieldName()}) {
-		super.set${Column.getSetterName()}(${Column.getFieldName()});
+	public ${ClassName} self() {
 		return this;
 	}
 
-#end
 }

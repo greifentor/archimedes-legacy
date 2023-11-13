@@ -1,7 +1,6 @@
 package archimedes.codegenerators.gui.vaadin;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
@@ -11,7 +10,6 @@ import archimedes.codegenerators.Filters;
 import archimedes.codegenerators.Filters.Filter;
 import archimedes.codegenerators.localization.LocalizationNameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
-import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
@@ -21,8 +19,6 @@ import archimedes.model.TableModel;
  * @author ollie (07.04.2022)
  */
 public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenerator {
-
-	public static final String GRID_FIELD = "GRID_FIELD";
 
 	private static final LocalizationNameGenerator localizationNameGenerator = new LocalizationNameGenerator();
 	private static final ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
@@ -106,38 +102,6 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 				.collect(Collectors.toList());
 	}
 
-	private List<GridData> getGridData(TableModel table) {
-		Function<ColumnModel, Boolean> isInGrid = hasGridFieldColumn(table)
-				? column -> column.isOptionSet(GRID_FIELD)
-				: column -> column.isOptionSet(GUI_EDITOR_POS);
-		return List
-				.of(table.getColumns())
-				.stream()
-				.filter(column -> isInGrid.apply(column))
-				.map(
-						column -> new GridData()
-								.setFieldNameCamelCase(nameGenerator.getCamelCase(column.getName()))
-								.setPosition(getPosition(column))
-								.setResourceName(getResourceName(column))
-								.setSimpleBoolean(isSimpleBoolean(column)))
-				.sorted((gd0, gd1) -> gd0.getPosition() - gd1.getPosition())
-				.collect(Collectors.toList());
-	}
-
-	private boolean hasGridFieldColumn(TableModel table) {
-		return table.getColumnsWithOption(GRID_FIELD).length > 0;
-	}
-
-	private int getPosition(ColumnModel column) {
-		return column.isOptionSet(GUI_EDITOR_POS)
-				? Integer.valueOf(column.getOptionByName(GUI_EDITOR_POS).getParameter())
-				: 0;
-	}
-
-	private String getResourceName(ColumnModel column) {
-		return nameGenerator.getCamelCase(column.getName()).toLowerCase();
-	}
-
 	@Override
 	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getPageViewClassName(table);
@@ -160,7 +124,8 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel t) {
-		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) || t.isOptionSet(SUBCLASS);
+		return !t.isOptionSet(GENERATE_MASTER_DATA_GUI) || t.isOptionSet(SUBCLASS)
+				|| t.isOptionSetWithValue(MEMBER_LIST, "MEMBER");
 	}
 
 }

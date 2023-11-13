@@ -11,6 +11,8 @@ import archimedes.model.DomainModel;
 public abstract class AbstractDomainCodeGenerator<N extends NameGenerator>
 		extends AbstractCodeGenerator<N, DomainModel> {
 
+	public static final String COMMENTS = "COMMENTS";
+
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeGenerator.class);
 
 	public AbstractDomainCodeGenerator(String templateFileName, String templatePathName, N nameGenerator,
@@ -27,6 +29,16 @@ public abstract class AbstractDomainCodeGenerator<N extends NameGenerator>
 		} catch (Exception e) {
 			LOG.error("error while generating class code for domain: " + domainModel.getName(), e);
 		}
+	}
+
+	protected boolean isCommentsOff(DataModel model, DomainModel domain) {
+		if ((model == null) || (domain == null)) {
+			return false;
+		}
+		return OptionGetter
+				.getOptionByName(model, COMMENTS)
+				.map(option -> "off".equalsIgnoreCase(option.getParameter()))
+				.orElse(false);
 	}
 
 	@Override

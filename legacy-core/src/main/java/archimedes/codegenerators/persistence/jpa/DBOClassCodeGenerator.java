@@ -42,7 +42,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		commonImportAdder = new CommonImportAdder();
 		fieldDeclarations = new FieldDeclarations();
-		List<ColumnData> columnData = getColumnData(table.getColumns(), model, getReferenceMode(model, table));
+		List<ColumnData> columnData = getColumnData(table, model, getReferenceMode(model, table));
 		commonImportAdder.addCommonImports(context, columnData);
 		context.put("Autoincrement", getAutoincrementMode(columnData));
 		context.put("ClassName", getClassName(table));
@@ -51,6 +51,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		context.put("EntityName", nameGenerator.getClassName(table));
 		context.put("HasEnums", hasEnums(table.getColumns()));
 		context.put("HasReferences", hasReferences(table.getColumns()));
+		context.put("HasCompositionLists", !getCompositionLists(table).isEmpty());
 		context.put("IdColumnName", table.getPrimaryKeyColumns()[0].getName());
 		context.put("PackageName", getPackageName(model, table));
 		context.put("POJOMode", getPOJOMode(model, table).name());
@@ -83,10 +84,11 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 				.orElse(null);
 	}
 
-	private List<ColumnData> getColumnData(ColumnModel[] columns, DataModel model, ReferenceMode referenceMode) {
-		return Arrays
-				.asList(columns)
+	private List<ColumnData> getColumnData(TableModel table, DataModel model, ReferenceMode referenceMode) {
+		List<ColumnData> l = Arrays
+				.asList(table.getColumns())
 				.stream()
+				.filter(column -> !isAMember(table) || !isColumnReferencingAParent(column))
 				.map(
 						column -> new ColumnData()
 								.setAnnotations(getAnnotations(column, referenceMode))
@@ -100,6 +102,43 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 												(c, m) -> nameGenerator.getDBOClassName(c.getDomain(), model)))
 								.setPkMember(column.isPrimaryKey()))
 				.collect(Collectors.toList());
+		getCompositionLists(table).forEach(cld -> {
+			importDeclarations.add("java.util", "List");
+			l
+					.add(
+							new ColumnData()
+									.setAnnotations(
+											Arrays
+													.asList(
+															new AnnotationData()
+																	.setName("OneToMany")
+																	.addParameter(
+																			new ParameterData()
+																					.setName("cascade")
+																					.setValue("CascadeType.ALL"))
+																	.addParameter(
+																			new ParameterData()
+																					.setName("fetch")
+																					.setValue("FetchType.EAGER"))
+																	.addParameter(
+																			new ParameterData()
+																					.setName("orphanRemoval")
+																					.setValue("true")),
+															new AnnotationData()
+																	.setName("JoinColumn")
+																	.addParameter(
+																			new ParameterData()
+																					.setName("name")
+																					.setValue(
+																							"\"" + cld
+																									.getBackReferenceColumn()
+																									.getName()
+																									+ "\""))))
+									.setFieldType("List<" + nameGenerator.getDBOClassName(cld.getMemberTable()) + ">")
+									.setFieldName(
+											nameGenerator.getAttributeName(cld.getMemberTable().getName()) + "s"));
+		});
+		return l;
 	}
 
 	private List<AnnotationData> getAnnotations(ColumnModel column, ReferenceMode referenceMode) {
@@ -177,15 +216,18 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 									.setName("referencedColumnName")
 									.setValue("\"" + column.getReferencedColumn().getName() + "\""));
 			annotations.add(annotationData);
-			annotationData =
-					new AnnotationData()
-							.setName("ManyToOne")
-							.addParameter(new ParameterData().setName("fetch").setValue("FetchType.EAGER"));
+			annotationData = new AnnotationData()
+					.setName("ManyToOne")
+					.addParameter(new ParameterData().setName("fetch").setValue("FetchType.EAGER"));
 			annotations.add(annotationData);
 		} else {
 			annotations
 					.add(new AnnotationData().setName("Column").setParameters(getColumnAnnotationParameters(column)));
 		}
+		column.ifOptionSetWithValueDo("TO_STRING", "EXCLUDE", om -> {
+			importDeclarations.add("lombok", "ToString");
+			annotations.add(new AnnotationData().setName("ToString.Exclude"));
+		});
 		return annotations;
 	}
 

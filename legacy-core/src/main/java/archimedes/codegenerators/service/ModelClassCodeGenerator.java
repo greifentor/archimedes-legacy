@@ -44,7 +44,7 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		commonImportAdder = new CommonImportAdder();
 		fieldDeclarations = new FieldDeclarations();
-		List<ColumnData> columnData = getColumnData(table.getColumns(), model, getReferenceMode(model, table));
+		List<ColumnData> columnData = getColumnData(table.getColumns(), table, model, getReferenceMode(model, table));
 		commonImportAdder.addCommonImports(context, columnData);
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
@@ -57,23 +57,43 @@ public class ModelClassCodeGenerator extends AbstractClassCodeGenerator<ServiceN
 		context.put("TableName", table.getName());
 	}
 
-	private List<ColumnData> getColumnData(ColumnModel[] columns, DataModel model, ReferenceMode referenceMode) {
-		return Arrays
-				.asList(columns)
-				.stream()
-				.map(
-						column -> new ColumnData()
-								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(
-										getType(
-												column,
-												model,
-												referenceMode,
-												c -> nameGenerator.getModelClassName(c.getReferencedTable()),
-												(c, m) -> nameGenerator.getModelClassName(c.getDomain(), model)))
-								.setPkMember(column.isPrimaryKey())
-								.setSetterName(nameGenerator.getCamelCase(nameGenerator.getAttributeName(column))))
-				.collect(Collectors.toList());
+	private List<ColumnData> getColumnData(ColumnModel[] columns, TableModel table, DataModel model,
+			ReferenceMode referenceMode) {
+		List<ColumnData> l =
+				Arrays
+						.asList(columns)
+						.stream()
+						.filter(column -> !isAMember(table) || !isColumnReferencingAParent(column))
+						.map(
+								column -> new ColumnData()
+										.setFieldName(nameGenerator.getAttributeName(column))
+										.setFieldType(
+												getType(
+														column,
+														model,
+														referenceMode,
+														c -> nameGenerator.getModelClassName(c.getReferencedTable()),
+														(c, m) -> nameGenerator
+																.getModelClassName(c.getDomain(), model)))
+										.setPkMember(column.isPrimaryKey())
+										.setSetterName(
+												nameGenerator.getCamelCase(nameGenerator.getAttributeName(column))))
+						.collect(Collectors.toList());
+		getCompositionLists(table).forEach(cld -> {
+			l
+					.add(
+							new ColumnData()
+									.setFieldType("List<" + nameGenerator.getModelClassName(cld.getMemberTable()) + ">")
+									.setFieldName(nameGenerator.getAttributeName(cld.getMemberTable().getName()) + "s")
+									.setSetterName(
+											nameGenerator
+													.getCamelCase(
+															nameGenerator
+																	.getAttributeName(cld.getMemberTable().getName())
+																	+ "s")));
+			importDeclarations.add("java.util", "List");
+		});
+		return l;
 	}
 
 	private ImportDeclarations getImplements(DataModel model, TableModel table) {

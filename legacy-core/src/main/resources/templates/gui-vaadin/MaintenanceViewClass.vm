@@ -19,12 +19,10 @@ import ${SessionDataPackageName}.${SessionDataClassName};
 import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};
 import ${AbstractMasterDataBaseLayoutPackageName}.${AbstractMasterDataBaseLayoutClassName};
 import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
+import ${ComponentFactoryPackageName}.${ComponentFactoryClassName};
 import ${HeaderLayoutPackageName}.${HeaderLayoutClassName};
 import ${HeaderLayoutPackageName}.${HeaderLayoutClassName}.HeaderLayoutMode;
-import ${ItemLabelGeneratorCollectionPackageName}.${ItemLabelGeneratorCollectionClassName};
-#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
-import ${Subclass.getItemLabelGeneratorCollectionPackageName()}.${Subclass.getItemLabelGeneratorCollectionClassName()};
-#end
+import ${VaadinComponentPackageName}.${ServiceProviderClassName};
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -53,20 +51,11 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	private DetailsLayoutComboBoxItemLabelGenerator<${ModelClassName}> comboBoxItemLabelGenerator;
 
 	private final ${ButtonFactoryClassName} buttonFactory;
+	private final ${ComponentFactoryClassName} componentFactory;
 	private final ${ResourceManagerInterfaceName} resourceManager;
 	private final ${MasterDataGUIConfigurationClassName} guiConfiguration;
-	private final ${ServiceInterfaceName} service;
-#foreach($SubclassReference in ${UniqueSubclassReferenceDataCollection})
-	private final ${SubclassReference.getServiceInterfaceName()} ${SubclassReference.getServiceAttributeName()};
-#end
-#foreach ($FieldDeclaration in $FieldDeclarations.toList())
-	private final ${FieldDeclaration.getTypeName()} ${FieldDeclaration.getAttributeName()};
-#end
+	private final ${ServiceProviderClassName} serviceProvider;
 	private final ${SessionDataClassName} session;
-	private final ${ItemLabelGeneratorCollectionClassName} itemLabelGeneratorCollection;
-#foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
-	private final ${Subclass.getItemLabelGeneratorCollectionClassName()} ${Subclass.getItemLabelGeneratorCollectionAttributeName()};
-#end
 
 	private ${ModelClassName} model;
 
@@ -90,7 +79,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 		long id = parametersMap.containsKey("id") && (parametersMap.get("id").size() > 0)
 				? Long.parseLong(parametersMap.get("id").get(0))
 				: -1;
-		model = service.findById(id).orElse(createNewModel());
+		model = serviceProvider.get${ServiceInterfaceName}().findById(id).orElse(createNewModel());
 		if (parametersMap.containsKey("duplicate") && "true".equals(parametersMap.get("duplicate").get(0))) {
 			model.setId(-1);
 		}
@@ -143,19 +132,17 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 		if (model instanceof ${Subclass.getModelClassName()}) {
 			return new ${Subclass.getDetailsLayoutClassName()}(
 					buttonFactory,
+					componentFactory,
 					(${Subclass.getModelClassName()}) model,
-					service,
-	#foreach($SubclassReference in ${Subclass.getReferences()}) 
-					${SubclassReference.getServiceAttributeName()},
-	#end
+					serviceProvider,
+					guiConfiguration,
 					resourceManager,
 					session,
 					this,
-					comboBoxItemLabelGenerator,
-					${Subclass.getItemLabelGeneratorCollectionAttributeName()});
+					comboBoxItemLabelGenerator);
 		}
 #end
-		return new ${DetailsLayoutClassName}(buttonFactory, model, service,#if($GUIReferenceDataCollection.getServiceAttributeNameList()) $GUIReferenceDataCollection.getServiceAttributeNameList(),#{end} resourceManager, session, this, comboBoxItemLabelGenerator, itemLabelGeneratorCollection);
+		return new ${DetailsLayoutClassName}(buttonFactory, componentFactory, model, serviceProvider, guiConfiguration, resourceManager, session, this, comboBoxItemLabelGenerator);
 	}
 
 	@Override
@@ -183,7 +170,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 
 	@Override
 	public void remove() {
-		service.delete(model);
+		serviceProvider.get${ServiceInterfaceName}().delete(model);
 		getUI().ifPresent(ui -> ui.navigate(${PageLayoutClassName}.URL));
 	}
 

@@ -15,10 +15,12 @@ import archimedes.codegenerators.gui.vaadin.component.ButtonClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonFactoryConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ButtonGridClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.ComponentFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.HeaderLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataViewButtonAdderInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.ServiceProviderClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.AccessCheckerInterfaceCodeGenerator;
@@ -35,6 +37,12 @@ import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewRendererIn
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataGUIConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataViewClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.modelcheckers.ModelCheckerGuiEditorPosHasAValue;
+import archimedes.codegenerators.gui.vaadin.styles.READMEmdFileGenerator;
+import archimedes.codegenerators.gui.vaadin.styles.SharedStylesCssFileGenerator;
+import archimedes.codegenerators.gui.vaadin.styles.VaadinCheckboxStylesCssFileGenerator;
+import archimedes.codegenerators.gui.vaadin.styles.VaadinComboBoxStylesCssFileGenerator;
+import archimedes.codegenerators.gui.vaadin.styles.VaadinTextAreaStylesCssFileGenerator;
+import archimedes.codegenerators.gui.vaadin.styles.VaadinTextFieldStylesCssFileGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
@@ -66,19 +74,23 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new ButtonFactoryClassCodeGenerator(this),
 						new ButtonFactoryConfigurationClassCodeGenerator(this),
 						new ButtonGridClassCodeGenerator(this),
+						new ComponentFactoryClassCodeGenerator(this),
 						// new GOClassCodeGenerator(this),
 						// new GOConverterClassCodeGenerator(this),
+						new DetailsDialogClassCodeGenerator(this),
 						new DetailsLayoutClassCodeGenerator(this),
 						new DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator(this),
+						new EnumItemLabelGeneratorClassCodeGenerator(this),
 						new GUIApplicationStarterClassCodeGenerator(this),
 						new GUIConfigurationClassCodeGenerator(this),
 						new HeaderLayoutClassCodeGenerator(this),
 						new ImageClassCodeGenerator(this),
-						new ItemLabelGeneratorCollectionClassCodeGenerator(this),
+						// new ItemLabelGeneratorCollectionClassCodeGenerator(this),
 						new JWTNotValidExceptionClassCodeGenerator(this),
 						new JWTServiceConfigurationClassCodeGenerator(this),
 						new JWTServiceImplClassCodeGenerator(this),
 						new JWTServiceInterfaceCodeGenerator(this),
+						new ListDetailsLayoutClassCodeGenerator(this),
 						new MainMenuViewClassCodeGenerator(this),
 						new MaintenanceViewClassCodeGenerator(this),
 						new MaintenanceViewRendererInterfaceCodeGenerator(this),
@@ -93,12 +105,19 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new PageParametersGOClassCodeGenerator(this),
 						// new PageParametersGOConverterClassCodeGenerator(this),
 						// new PageGOConverterClassCodeGenerator(this),
+						new READMEmdFileGenerator(this),
+						new ServiceProviderClassCodeGenerator(this),
 						new SessionDataClassCodeGenerator(this),
 						new SessionIdClassCodeGenerator(this),
+						new SharedStylesCssFileGenerator(this),
 						new TextFieldClassCodeGenerator(this),
 						new TextFieldFactoryClassCodeGenerator(this),
 						// new ToGOConverterInterfaceCodeGenerator(this),
 						new UserAuthorizationCheckerClassCodeGenerator(this),
+						new VaadinCheckboxStylesCssFileGenerator(this),
+						new VaadinComboBoxStylesCssFileGenerator(this),
+						new VaadinTextAreaStylesCssFileGenerator(this),
+						new VaadinTextFieldStylesCssFileGenerator(this),
 						new WebAppConfigurationClassCodeGenerator(this),
 						// Label property generator must called at last !!!
 						new LabelPropertiesGenerator(this));
@@ -158,6 +177,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
+					LabelPropertiesGenerator.ALTERNATIVE_LABEL_MODULE_NAME,
 					AbstractGUIVaadinClassCodeGenerator.CUBE_APPLICATION,
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
@@ -169,6 +189,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 			return new String[] {
 					AbstractClassCodeFactory.NO_GENERATION,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
+					AbstractGUIVaadinClassCodeGenerator.DETAILS_LAYOUT_ONLY,
 					AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI,
 					NameGenerator.MODULE,
 					NameGenerator.PLURAL_NAME,

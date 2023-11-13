@@ -1,6 +1,5 @@
 package archimedes.codegenerators.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -125,16 +124,6 @@ public class GeneratedServiceImplClassCodeGenerator extends AbstractClassCodeGen
 				.setPersistencePortPackageName(nameGenerator.getPersistencePortPackageName(model, column.getTable()));
 	}
 
-	private List<ColumnModel> getReferencingColumns(TableModel table, DataModel dataModel) {
-		List<ColumnModel> columns = new ArrayList<>();
-		for (ColumnModel column : dataModel.getAllColumns()) {
-			if (column.getReferencedTable() == table) {
-				columns.add(column);
-			}
-		}
-		return columns;
-	}
-
 	@Override
 	public String getClassName(DataModel model, TableModel table) {
 		return nameGenerator.getGeneratedServiceImplClassName(table);
@@ -152,7 +141,7 @@ public class GeneratedServiceImplClassCodeGenerator extends AbstractClassCodeGen
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
-		return super.isToIgnoreFor(model, table) || isSubclass(table);
+		return super.isToIgnoreFor(model, table) || isSubclass(table) || isAMember(table);
 	}
 
 }

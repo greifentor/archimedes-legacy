@@ -1,6 +1,7 @@
 package archimedes.codegenerators.persistence.jpa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
+import archimedes.model.TableModel;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,6 +50,21 @@ public class JPARepositoryInterfaceCodeGeneratorTest {
 					"\n" + //
 					"public interface ATableDBORepository extends ATableGeneratedDBORepository {\n" + //
 					"}";
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_isToIgnoreFor_DataModel_TableModel {
+
+		@Test
+		void passAMemberModel_returnsTrue() {
+			// Prepare
+			ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
+			DataModel dataModel = reader.read("src/test/resources/examples/dm/Example-BookStore.xml");
+			TableModel table = dataModel.getTableByName("CHAPTER");
+			// Run & Check
+			assertTrue(unitUnderTest.isToIgnoreFor(dataModel, table));
 		}
 
 	}
