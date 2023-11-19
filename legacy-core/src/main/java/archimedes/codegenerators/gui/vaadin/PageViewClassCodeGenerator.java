@@ -30,6 +30,7 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, TableModel table) {
 		List<GridData> gridData = getGridData(table);
+		SubclassDataCollection subclassDataCollection = getSubclassDataCollection(model, table);
 		context.put("BaseURL", getBaseURL(model, table));
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));
 		context.put("ButtonFactoryClassName", nameGenerator.getButtonFactoryClassName(model));
@@ -68,7 +69,7 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 		context.put("ServiceInterfacePackageName", serviceNameGenerator.getServiceInterfacePackageName(model, table));
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
-		context.put("SubclassDataCollection", getSubclassDataCollection(model, table));
+		context.put("SubclassDataCollection", subclassDataCollection);
 		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
 		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
 		LabelPropertiesGenerator
@@ -81,6 +82,14 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 												+ gd.getFieldNameCamelCase().toLowerCase()
 												+ ".label",
 										nameGenerator.getClassName(gd.getFieldNameCamelCase())));
+		subclassDataCollection
+				.getSubclasses()
+				.forEach(
+						sd -> LabelPropertiesGenerator
+								.addLabel(
+										getClassName(table) + ".subclass.selection." + sd.getModelClassName()
+												+ ".label",
+										sd.getModelClassName()));
 	}
 
 	private String getBaseURL(DataModel model, TableModel table) {

@@ -533,7 +533,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(ATable model) {\n" + //
-					"		if (model instanceof AnotherHeirTable) {\n" + //
+					"		if (model.getClass() == AnotherHeirTable.class) {\n" + //
 					"			return new AnotherHeirTableDetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
@@ -545,7 +545,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					this,\n" + //
 					"					comboBoxItemLabelGenerator);\n" + //
 					"		}\n" + //
-					"		if (model instanceof AnotherHeirTableWithSameReference) {\n" + //
+					"		if (model.getClass() == AnotherHeirTableWithSameReference.class) {\n" + //
 					"			return new AnotherHeirTableWithSameReferenceDetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
@@ -557,7 +557,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					this,\n" + //
 					"					comboBoxItemLabelGenerator);\n" + //
 					"		}\n" + //
-					"		if (model instanceof AnotherTable) {\n" + //
+					"		if (model.getClass() == AnotherTable.class) {\n" + //
 					"			return new AnotherTableDetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
@@ -569,7 +569,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					this,\n" + //
 					"					comboBoxItemLabelGenerator);\n" + //
 					"		}\n" + //
-					"		if (model instanceof HeirTableWithReference) {\n" + //
+					"		if (model.getClass() == HeirTableWithReference.class) {\n" + //
 					"			return new HeirTableWithReferenceDetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
@@ -823,6 +823,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.router.BeforeEvent;\n" + //
 					"import com.vaadin.flow.router.Route;\n" + //
 					"\n" + //
+					"import base.pack.age.name.core.model.BHeirHeirTable;\n" + //
 					"import base.pack.age.name.core.model.BHeirTable;\n" + //
 					"import base.pack.age.name.core.model.BTable;\n" + //
 					"import base.pack.age.name.core.service.BReferencedTableService;\n" + //
@@ -908,6 +909,9 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		if (modelClassName.equals(\"BHeirTable\")) {\n" + //
 					"			return new BHeirTable();\n" + //
 					"		}\n" + //
+					"		if (modelClassName.equals(\"BHeirHeirTable\")) {\n" + //
+					"			return new BHeirHeirTable();\n" + //
+					"		}\n" + //
 					"		return new BTable();\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -944,11 +948,23 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(BTable model) {\n" + //
-					"		if (model instanceof BHeirTable) {\n" + //
+					"		if (model.getClass() == BHeirTable.class) {\n" + //
 					"			return new BHeirTableDetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
 					"					(BHeirTable) model,\n" + //
+					"					serviceProvider,\n" + //
+					"					guiConfiguration,\n" + //
+					"					resourceManager,\n" + //
+					"					session,\n" + //
+					"					this,\n" + //
+					"					comboBoxItemLabelGenerator);\n" + //
+					"		}\n" + //
+					"		if (model.getClass() == BHeirHeirTable.class) {\n" + //
+					"			return new BHeirHeirTableDetailsLayout(\n" + //
+					"					buttonFactory,\n" + //
+					"					componentFactory,\n" + //
+					"					(BHeirHeirTable) model,\n" + //
 					"					serviceProvider,\n" + //
 					"					guiConfiguration,\n" + //
 					"					resourceManager,\n" + //
@@ -1131,7 +1147,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private AbstractMasterDataBaseLayout getDetailsLayout(CTable model) {\n" + //
-					"		if (model instanceof CTableSub0) {\n" + //
+					"		if (model.getClass() == CTableSub0.class) {\n" + //
 					"			return new CTableSub0DetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //
@@ -1143,7 +1159,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"					this,\n" + //
 					"					comboBoxItemLabelGenerator);\n" + //
 					"		}\n" + //
-					"		if (model instanceof CTableSub1) {\n" + //
+					"		if (model.getClass() == CTableSub1.class) {\n" + //
 					"			return new CTableSub1DetailsLayout(\n" + //
 					"					buttonFactory,\n" + //
 					"					componentFactory,\n" + //

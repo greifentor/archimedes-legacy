@@ -147,6 +147,51 @@ public class DBOClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void subSubclassObject() {
+			// Prepare
+			String expected =
+					"package base.pack.age.name.persistence.entity;\n" //
+							+ "\n" //
+							+ "import javax.persistence.Column;\n" //
+							+ "import javax.persistence.Entity;\n" //
+							+ "import javax.persistence.Id;\n" //
+							+ "import javax.persistence.PrimaryKeyJoinColumn;\n" //
+							+ "import javax.persistence.Table;\n" //
+							+ "\n" //
+							+ "import lombok.Data;\n" //
+							+ "import lombok.EqualsAndHashCode;\n" //
+							+ "import lombok.Generated;\n" //
+							+ "import lombok.ToString;\n" //
+							+ "import lombok.experimental.Accessors;\n" //
+							+ "\n" //
+							+ "/**\n" //
+							+ " * A DBO for b_heir_heir_tables.\n" //
+							+ " *\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n" //
+							+ "@Accessors(chain = true)\n" //
+							+ "@Data\n" //
+							+ "@Generated\n" //
+							+ "@Entity(name = \"BHeirHeirTable\")\n" //
+							+ "@EqualsAndHashCode(callSuper = true)\n" //
+							+ "@PrimaryKeyJoinColumn(name = \"ID\")\n" //
+							+ "@Table(name = \"B_HEIR_HEIR_TABLE\")\n" //
+							+ "@ToString(callSuper = true)\n" //
+							+ "public class BHeirHeirTableDBO extends BHeirTableDBO {\n" //
+							+ "\n" //
+							+ "	@Column(name = \"ADDITIONAL_DESCRIPTION\")\n" //
+							+ "	private String additionalDescription;\n" //
+							+ "\n" //
+							+ "}";
+			DataModel dataModel = readDataModel("Model-Inheritance.xml");
+			TableModel table = dataModel.getTableByName("B_HEIR_HEIR_TABLE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 		@Nested
 		class List_Composition_Parent {
 

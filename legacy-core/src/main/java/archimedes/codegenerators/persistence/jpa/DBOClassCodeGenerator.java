@@ -58,7 +58,7 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 		context.put("ReferenceMode", getReferenceMode(model, table).name());
 		context.put("Subclass", table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS));
 		context.put("Superclass", table.isOptionSet(AbstractClassCodeGenerator.SUPERCLASS));
-		context.put("SuperclassName", getSuperclassName(table, nameGenerator::getDBOClassName));
+		context.put("SuperclassName", getDirectSuperclassName(table, nameGenerator::getDBOClassName));
 		context.put("TableName", table.getName());
 	}
 

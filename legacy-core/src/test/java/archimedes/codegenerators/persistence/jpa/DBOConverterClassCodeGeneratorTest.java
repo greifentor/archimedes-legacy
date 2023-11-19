@@ -697,6 +697,175 @@ public class DBOConverterClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void subSubClass() {
+			// Prepare
+			String expected = "package base.pack.age.name.persistence.converter;\n" //
+					+ "\n" //
+					+ "import java.util.List;\n" //
+					+ "import java.util.stream.Collectors;\n" //
+					+ "\n" //
+					+ "import javax.inject.Named;\n" //
+					+ "\n" //
+					+ "import lombok.Generated;\n" //
+					+ "import lombok.RequiredArgsConstructor;\n" //
+					+ "\n" //
+					+ "import base.pack.age.name.persistence.entity.BHeirHeirTableDBO;\n" //
+					+ "import base.pack.age.name.core.model.BHeirHeirTable;\n" //
+					+ "\n" //
+					+ "/**\n" //
+					+ " * A DBO converter for b_heir_heir_tables.\n" //
+					+ " *\n" //
+					+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+					+ " */\n" //
+					+ "@Generated\n" //
+					+ "@Named\n" //
+					+ "@RequiredArgsConstructor\n" //
+					+ "public class BHeirHeirTableDBOConverter implements ToModelConverter<BHeirHeirTable, BHeirHeirTableDBO> {\n" //
+					+ "\n" //
+					+ "	private final BReferencedTableDBOConverter bReferencedTableDBOConverter;\n" //
+					+ "\n" //
+					+ "	public BHeirHeirTableDBO toDBO(BHeirHeirTable model) {\n" //
+					+ "		if (model == null) {\n" //
+					+ "			return null;\n" //
+					+ "		}\n" //
+					+ "		BHeirHeirTableDBO dbo = new BHeirHeirTableDBO();\n" //
+					+ "		dbo.setId(model.getId());\n" //
+					+ "		dbo.setAdditionalDescription(model.getAdditionalDescription());\n" //
+					+ "		dbo.setReference(bReferencedTableDBOConverter.toDBO(model.getReference()));\n" //
+					+ "		dbo.setDescription(model.getDescription());\n" //
+					+ "		dbo.setName(model.getName());\n" //
+					+ "		return dbo;\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	public List<BHeirHeirTableDBO> toDBO(List<BHeirHeirTable> models) {\n" //
+					+ "		if (models == null) {\n" //
+					+ "			return null;\n" //
+					+ "		}\n" //
+					+ "		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public BHeirHeirTable toModel(BHeirHeirTableDBO dbo) {\n" //
+					+ "		if (dbo == null) {\n" //
+					+ "			return null;\n" //
+					+ "		}\n" //
+					+ "		BHeirHeirTable model = new BHeirHeirTable();\n" //
+					+ "		model.setId(dbo.getId());\n" //
+					+ "		model.setAdditionalDescription(dbo.getAdditionalDescription());\n" //
+					+ "		model.setReference(bReferencedTableDBOConverter.toModel(dbo.getReference()));\n" //
+					+ "		model.setDescription(dbo.getDescription());\n" //
+					+ "		model.setName(dbo.getName());\n" //
+					+ "		return model;\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public List<BHeirHeirTable> toModel(List<BHeirHeirTableDBO> dbos) {\n" //
+					+ "		if (dbos == null) {\n" //
+					+ "			return null;\n" //
+					+ "		}\n" //
+					+ "		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "}";
+			DataModel dataModel = readDataModel("Model-Inheritance.xml");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.REFERENCE_MODE, "OBJECT"));
+			// Run
+			String returned =
+					unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("B_HEIR_HEIR_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void subSubClassParent() {
+			// Prepare
+			String expected =
+					"package base.pack.age.name.persistence.converter;\n" //
+							+ "\n" //
+							+ "import java.util.List;\n" //
+							+ "import java.util.stream.Collectors;\n" //
+							+ "\n" //
+							+ "import javax.inject.Named;\n" //
+							+ "\n" //
+							+ "import lombok.Generated;\n" //
+							+ "import lombok.RequiredArgsConstructor;\n" //
+							+ "\n" //
+							+ "import base.pack.age.name.persistence.entity.BHeirHeirTableDBO;\n" //
+							+ "import base.pack.age.name.persistence.entity.BHeirTableDBO;\n" //
+							+ "import base.pack.age.name.core.model.BHeirHeirTable;\n" //
+							+ "import base.pack.age.name.core.model.BHeirTable;\n" //
+							+ "\n" //
+							+ "/**\n" //
+							+ " * A DBO converter for b_heir_tables.\n" //
+							+ " *\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n" //
+							+ "@Generated\n" //
+							+ "@Named\n" //
+							+ "@RequiredArgsConstructor\n" //
+							+ "public class BHeirTableDBOConverter implements ToModelConverter<BHeirTable, BHeirTableDBO> {\n" //
+							+ "\n" //
+							+ "	private final BReferencedTableDBOConverter bReferencedTableDBOConverter;\n" //
+							+ "\n" //
+							+ "	private final BHeirHeirTableDBOConverter bHeirHeirTableDBOConverter;\n" //
+							+ "\n" //
+							+ "	public BHeirTableDBO toDBO(BHeirTable model) {\n" //
+							+ "		if (model == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		if (model instanceof BHeirHeirTable) {\n" //
+							+ "			return bHeirHeirTableDBOConverter.toDBO((BHeirHeirTable) model);\n" //
+							+ "		}\n" //
+							+ "		BHeirTableDBO dbo = new BHeirTableDBO();\n" //
+							+ "		dbo.setId(model.getId());\n" //
+							+ "		dbo.setName(model.getName());\n" //
+							+ "		dbo.setReference(bReferencedTableDBOConverter.toDBO(model.getReference()));\n" //
+							+ "		dbo.setDescription(model.getDescription());\n" //
+							+ "		return dbo;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	public List<BHeirTableDBO> toDBO(List<BHeirTable> models) {\n" //
+							+ "		if (models == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public BHeirTable toModel(BHeirTableDBO dbo) {\n" //
+							+ "		if (dbo == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		if (dbo instanceof BHeirHeirTableDBO) {\n" //
+							+ "			return bHeirHeirTableDBOConverter.toModel((BHeirHeirTableDBO) dbo);\n" //
+							+ "		}\n" //
+							+ "		BHeirTable model = new BHeirTable();\n" //
+							+ "		model.setId(dbo.getId());\n" //
+							+ "		model.setName(dbo.getName());\n" //
+							+ "		model.setReference(bReferencedTableDBOConverter.toModel(dbo.getReference()));\n" //
+							+ "		model.setDescription(dbo.getDescription());\n" //
+							+ "		return model;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public List<BHeirTable> toModel(List<BHeirTableDBO> dbos) {\n" //
+							+ "		if (dbos == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "}";
+			DataModel dataModel = readDataModel("Model-Inheritance.xml");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.REFERENCE_MODE, "OBJECT"));
+			// Run
+			String returned =
+					unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("B_HEIR_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 	@Nested

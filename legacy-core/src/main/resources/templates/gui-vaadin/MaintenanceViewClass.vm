@@ -129,7 +129,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 
 	private AbstractMasterDataBaseLayout getDetailsLayout(${ModelClassName} model) {
 #foreach($Subclass in ${SubclassDataCollection.getSubclasses()}) 
-		if (model instanceof ${Subclass.getModelClassName()}) {
+		if (model.getClass() == ${Subclass.getModelClassName()}.class) {
 			return new ${Subclass.getDetailsLayoutClassName()}(
 					buttonFactory,
 					componentFactory,

@@ -44,6 +44,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 		ReferenceMode referenceMode = getReferenceMode(model, table);
 		List<ColumnData> columnData = getColumnData(table.getColumns(), table, model, referenceMode);
 		columnData.addAll(getInheritedColumns(table, model, referenceMode));
+		List<SubclassData> subClasses = getSubclassData(model, table);
 		context.put("ClassName", getClassName(table));
 		context.put("ColumnData", columnData);
 		context
@@ -75,6 +76,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 		}
 		context.put("HasEnums", hasEnums(getColumnsIncludingInherited(table)));
 		context.put("HasMemberLists", hasMemberLists(table));
+		context.put("HasSubclasses", !subClasses.isEmpty());
 		context.put("HasReferences", hasReferences(table, model, referenceMode));
 		context.put("ModelClassName", SERVICE_NAME_GENERATOR.getModelClassName(table));
 		context
@@ -93,28 +95,29 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 										+ SERVICE_NAME_GENERATOR.getModelClassName(t)));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("ReferenceMode", referenceMode);
-		context.put("Subclasses", getSubclassData(model, table));
+		context.put("Subclasses", subClasses);
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(model));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(model));
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns, TableModel table, DataModel model,
 			ReferenceMode referenceMode) {
-		List<ColumnData> l = List
-				.of(columns)
-				.stream()
-				.filter(column -> !isAMember(table) || !isColumnReferencingAParent(column))
-				.map(
-						column -> new ColumnData()
-								.setConverterAttributeName(getDBOConverterAttributeName(column, model))
-								.setEnumType(isEnum(column))
-								.setFieldName(nameGenerator.getAttributeName(column))
-								.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false))
-								.setGetterCall(getGetterCall(column, model, referenceMode))
-								.setPkMember(column.isPrimaryKey())
-								.setReference(column.getReferencedColumn() != null)
-								.setSetterName(getSetterName(column)))
-				.collect(Collectors.toList());
+		List<ColumnData> l =
+				List
+						.of(columns)
+						.stream()
+						.filter(column -> !isAMember(table) || !isColumnReferencingAParent(column))
+						.map(
+								column -> new ColumnData()
+										.setConverterAttributeName(getDBOConverterAttributeName(column, model))
+										.setEnumType(isEnum(column))
+										.setFieldName(nameGenerator.getAttributeName(column))
+										.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false))
+										.setGetterCall(getGetterCall(column, model, referenceMode))
+										.setPkMember(column.isPrimaryKey())
+										.setReference(column.getReferencedColumn() != null)
+										.setSetterName(getSetterName(column)))
+						.collect(Collectors.toList());
 		getCompositionLists(table).forEach(cld -> {
 			l
 					.add(
@@ -179,20 +182,21 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 		if ((referenceMode != ReferenceMode.OBJECT) && !hasEnums(columns)) {
 			return List.of();
 		}
-		List<ConverterData> l = List
-				.of(columns)
-				.stream()
-				.filter(
-						column -> !(column.isPrimaryKey()
-								&& column.getTable().isOptionSet(AbstractClassCodeGenerator.SUBCLASS)))
-				.filter(
-						column -> ((column.getReferencedColumn() != null) || isEnum(column))
-								&& !(isAMember(table) && isAParent(column.getReferencedTable())))
-				.map(column -> toConverterData(column, model))
-				.sorted((cd0, cd1) -> cd0.getClassName().compareTo(cd1.getClassName()))
-				.collect(Collectors.toSet())
-				.stream()
-				.collect(Collectors.toList());
+		List<ConverterData> l =
+				List
+						.of(columns)
+						.stream()
+						.filter(
+								column -> !(column.isPrimaryKey()
+										&& column.getTable().isOptionSet(AbstractClassCodeGenerator.SUBCLASS)))
+						.filter(
+								column -> ((column.getReferencedColumn() != null) || isEnum(column))
+										&& !(isAMember(table) && isAParent(column.getReferencedTable())))
+						.map(column -> toConverterData(column, model))
+						.sorted((cd0, cd1) -> cd0.getClassName().compareTo(cd1.getClassName()))
+						.collect(Collectors.toSet())
+						.stream()
+						.collect(Collectors.toList());
 		table.ifOptionSetWithValueDo(MEMBER_LIST, "PARENT", om -> {
 			getReferencingColumns(table, table.getDataModel())
 					.stream()
@@ -214,49 +218,59 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 	}
 
 	private ConverterData toConverterData(ColumnModel column, DataModel model) {
-		String dboConverterClassName = isEnum(column)
-				? nameGenerator.getDBOConverterClassName(column.getDomain().getName(), model)
-				: getClassName(column.getReferencedTable());
+		String dboConverterClassName =
+				isEnum(column)
+						? nameGenerator.getDBOConverterClassName(column.getDomain().getName(), model)
+						: getClassName(column.getReferencedTable());
 		return new ConverterData()
 				.setAttributeName(nameGenerator.getAttributeName(dboConverterClassName))
 				.setClassName(dboConverterClassName);
 	}
 
 	private List<ColumnData> getInheritedColumns(TableModel table, DataModel model, ReferenceMode referenceMode) {
-		if (!table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)) {
-			return List.of();
+		List<ColumnData> l = new ArrayList<>();
+		if (table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)) {
+			addInheritedColumns(l, getDirectSuperclassTable(table), model, referenceMode);
 		}
-		TableModel superclassTable = getSuperclassTable(table);
-		return superclassTable == null
-				? List.of()
-				: List
-						.of(superclassTable.getColumns())
-						.stream()
-						.filter(column -> !column.isPrimaryKey())
-						.map(
-								column -> new ColumnData()
-										.setConverterAttributeName(getDBOConverterAttributeName(column, model))
-										.setEnumType(isEnum(column))
-										.setFieldName(nameGenerator.getAttributeName(column))
-										.setFieldType(typeGenerator.getJavaTypeString(column.getDomain(), false))
-										.setGetterCall(getGetterCall(column, model, referenceMode))
-										.setPkMember(column.isPrimaryKey())
-										.setReference(column.getReferencedColumn() != null)
-										.setSetterName(getSetterName(column)))
-						.collect(Collectors.toList());
+		return l;
+	}
+
+	private void addInheritedColumns(List<ColumnData> columnData, TableModel table, DataModel model,
+			ReferenceMode referenceMode) {
+		if (table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)) {
+			addInheritedColumns(columnData, getDirectSuperclassTable(table), model, referenceMode);
+		}
+		List
+				.of(table.getColumns())
+				.stream()
+				.filter(column -> !column.isPrimaryKey())
+				.forEach(
+						column -> columnData
+								.add(
+										new ColumnData()
+												.setConverterAttributeName(getDBOConverterAttributeName(column, model))
+												.setEnumType(isEnum(column))
+												.setFieldName(nameGenerator.getAttributeName(column))
+												.setFieldType(
+														typeGenerator.getJavaTypeString(column.getDomain(), false))
+												.setGetterCall(getGetterCall(column, model, referenceMode))
+												.setPkMember(column.isPrimaryKey())
+												.setReference(column.getReferencedColumn() != null)
+												.setSetterName(getSetterName(column))));
 	}
 
 	private List<SubclassData> getSubclassData(DataModel model, TableModel table) {
 		if (!table.isOptionSet(AbstractClassCodeGenerator.SUPERCLASS)) {
 			return List.of();
 		}
-		Set<TableModel> subclassTables = List
-				.of(model.getAllColumns())
-				.stream()
-				.filter(column -> column.getTable().isOptionSet(AbstractClassCodeGenerator.SUBCLASS))
-				.filter(column -> column.isPrimaryKey() && (column.getReferencedTable() == table))
-				.map(ColumnModel::getTable)
-				.collect(Collectors.toSet());
+		Set<TableModel> subclassTables =
+				List
+						.of(model.getAllColumns())
+						.stream()
+						.filter(column -> column.getTable().isOptionSet(AbstractClassCodeGenerator.SUBCLASS))
+						.filter(column -> column.isPrimaryKey() && (column.getReferencedTable() == table))
+						.map(ColumnModel::getTable)
+						.collect(Collectors.toSet());
 		return subclassTables
 				.stream()
 				.sorted((t0, t1) -> t0.getName().compareTo(t1.getName()))
@@ -288,7 +302,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 
 	private List<ColumnModel> getColumnsIncludingInherited(TableModel table) {
 		List<ColumnModel> columns = new ArrayList<>(List.of(table.getColumns()));
-		TableModel superclassTable = getSuperclassTable(table);
+		TableModel superclassTable = getDirectSuperclassTable(table);
 		if (superclassTable != null) {
 			columns.addAll(getColumnsIncludingInherited(superclassTable));
 		}

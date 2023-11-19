@@ -333,6 +333,48 @@ public class GeneratedModelClassCodeGeneratorTest {
 			}
 
 			@Test
+			void modelWithSubSubclass() {
+				// Prepare
+				String expected =
+						"package base.pack.age.name.core.model;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.EqualsAndHashCode;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.ToString;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A model for b_heir_heir_tables.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@EqualsAndHashCode(callSuper = true)\n" //
+								+ "@Generated\n" //
+								+ "@ToString(callSuper = true)\n" //
+								+ "public abstract class GeneratedBHeirHeirTable<T extends BHeirHeirTable> extends BHeirTable {\n" //
+								+ "\n" //
+								+ "	public static final String ADDITIONALDESCRIPTION = \"ADDITIONALDESCRIPTION\";\n" //
+								+ "\n" //
+								+ "	private String additionalDescription;\n" //
+								+ "\n" //
+								+ "	public T setAdditionalDescription(String additionalDescription) {\n" //
+								+ "		this.additionalDescription = additionalDescription;\n" //
+								+ "		return (T) self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "}";
+				DataModel dataModel = readDataModel("Model-Inheritance.xml");
+				TableModel table = dataModel.getTableByName("B_HEIR_HEIR_TABLE");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			@Test
 			void modelNoSubclass() {
 				// Prepare
 				String expected =

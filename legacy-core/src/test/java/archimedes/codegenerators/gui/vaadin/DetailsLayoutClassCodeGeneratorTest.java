@@ -1014,6 +1014,126 @@ public class DetailsLayoutClassCodeGeneratorTest {
 				assertEquals(expected, returned);
 			}
 
+			@Test
+			void subClassWithSubClass() {
+				// Prepare
+				String expected =
+						"package base.pack.age.name.gui.vaadin.masterdata;\n" //
+								+ "\n" //
+								+ "import com.vaadin.flow.component.AttachEvent;\n" //
+								+ "import com.vaadin.flow.component.dialog.Dialog;\n" //
+								+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
+								+ "import com.vaadin.flow.component.combobox.ComboBox;\n" //
+								+ "import com.vaadin.flow.component.textfield.TextField;\n" //
+								+ "\n" //
+								+ "import base.pack.age.name.core.model.BHeirHeirTable;\n" //
+								+ "import base.pack.age.name.core.model.BReferencedTable;\n" //
+								+ "import base.pack.age.name.core.model.BTable;\n" //
+								+ "import base.pack.age.name.core.service.BReferencedTableService;\n" //
+								+ "import base.pack.age.name.core.service.BTableService;\n" //
+								+ "import base.pack.age.name.core.service.localization.ResourceManager;\n" //
+								+ "import base.pack.age.name.gui.SessionData;\n" //
+								+ "import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
+								+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
+								+ "import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" //
+								+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
+								+ "import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.RequiredArgsConstructor;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Generated\n" //
+								+ "@RequiredArgsConstructor\n" //
+								+ "public class BHeirHeirTableDetailsLayout extends AbstractMasterDataBaseLayout {\n" //
+								+ "\n" //
+								+ "	private final ButtonFactory buttonFactory;\n" //
+								+ "	private final ComponentFactory componentFactory;\n" //
+								+ "	private final BHeirHeirTable model;\n" //
+								+ "	private final ServiceProvider serviceProvider;\n" //
+								+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
+								+ "	private final ResourceManager resourceManager;\n" //
+								+ "	private final SessionData session;\n" //
+								+ "	private final Observer observer;\n" //
+								+ "	private final DetailsLayoutComboBoxItemLabelGenerator<BTable> comboBoxItemLabelGenerator;\n" //
+								+ "\n" //
+								+ "	private ComboBox<BReferencedTable> comboBoxReference;\n" //
+								+ "	private TextField textFieldDescription;\n" //
+								+ "	private TextField textFieldName;\n" //
+								+ "	private TextField textFieldAdditionalDescription;\n" //
+								+ "\n" //
+								+ "	@Override\n" //
+								+ "	public void onAttach(AttachEvent attachEvent) {\n" //
+								+ "		super.onAttach(attachEvent);\n" //
+								+ "		createButtons();\n" //
+								+ "		comboBoxReference = createComboBox(\"BTableDetailsLayout.field.reference.label\", model.getReference(), serviceProvider.getBReferencedTableService().findAll().toArray(new BReferencedTable[0]));\n" //
+								+ "		comboBoxReference\n" //
+								+ "				.setItemLabelGenerator(\n" //
+								+ "						bReferencedTable  -> comboBoxItemLabelGenerator != null\n" //
+								+ "								? comboBoxItemLabelGenerator.getLabel(BHeirHeirTable.REFERENCE, bReferencedTable)\n" //
+								+ "								: \"\" + bReferencedTable.getDescription());\n" //
+								+ "		textFieldDescription = createTextField(\"BTableDetailsLayout.field.description.label\", model.getDescription());\n" //
+								+ "		textFieldName = createTextField(\"BHeirTableDetailsLayout.field.name.label\", model.getName());\n" //
+								+ "		textFieldAdditionalDescription = createTextField(\"BHeirHeirTableDetailsLayout.field.additionaldescription.label\", model.getAdditionalDescription());\n" //
+								+ "		getStyle().set(\"-moz-border-radius\", \"4px\");\n" //
+								+ "		getStyle().set(\"-webkit-border-radius\", \"4px\");\n" //
+								+ "		getStyle().set(\"border-radius\", \"4px\");\n" //
+								+ "		getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" //
+								+ "		getStyle()\n" //
+								+ "				.set(\n" //
+								+ "						\"box-shadow\",\n" //
+								+ "						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n" //
+								+ "		setMargin(false);\n" //
+								+ "		setWidthFull();\n" //
+								+ "		add(\n" //
+								+ "				textFieldDescription,\n" //
+								+ "				textFieldName,\n" //
+								+ "				textFieldAdditionalDescription,\n" //
+								+ "				comboBoxReference,\n" //
+								+ "				getMasterDataButtonLayout(model.getId() > 0));\n" //
+								+ "		textFieldDescription.focus();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	@Override\n" //
+								+ "	protected ButtonFactory getButtonFactory() {\n" //
+								+ "		return buttonFactory;\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	@Override\n" //
+								+ "	protected ResourceManager getResourceManager() {\n" //
+								+ "		return resourceManager;\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	@Override\n" //
+								+ "	protected SessionData getSessionData() {\n" //
+								+ "		return session;\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	@Override\n" //
+								+ "	protected void remove() {\n" //
+								+ "		serviceProvider.getBTableService().delete(model);\n" //
+								+ "		observer.remove();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	@Override\n" //
+								+ "	protected void save() {\n" //
+								+ "		model.setDescription(textFieldDescription.getValue());\n" //
+								+ "		model.setName(textFieldName.getValue());\n" //
+								+ "		model.setAdditionalDescription(textFieldAdditionalDescription.getValue());\n" //
+								+ "		model.setReference(comboBoxReference.getValue());\n" //
+								+ "		observer.save(serviceProvider.getBTableService().update(model));\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "}";
+				DataModel dataModel = readDataModel("Model-Inheritance.xml");
+				TableModel tableModel = dataModel.getTableByName("B_HEIR_HEIR_TABLE");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+			}
+
 		}
 
 		@Nested

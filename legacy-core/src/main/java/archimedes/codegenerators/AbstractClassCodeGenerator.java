@@ -296,9 +296,12 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected List<TableModel> getSubclassTables(TableModel tableToCheckFor) {
-		return forAllTables(tableToCheckFor.getDataModel())
+		List<TableModel> l =
+				forAllTables(tableToCheckFor.getDataModel())
 				.filter(tableToCheck -> isTableSubclassTableOf(tableToCheckFor, tableToCheck))
 				.collect(Collectors.toList());
+		List.of(l.toArray(new TableModel[l.size()])).forEach(t -> l.addAll(getSubclassTables(t)));
+		return l;
 	}
 
 	private Stream<TableModel> forAllTables(DataModel model) {
@@ -366,7 +369,25 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 		return null;
 	}
 
+	protected String getDirectSuperclassName(TableModel table, Function<TableModel, String> classNameProvider) {
+		TableModel referencedTable = getDirectSuperclassTable(table);
+		if (referencedTable != null) {
+			return classNameProvider.apply(referencedTable);
+		}
+		return null;
+	}
+
 	protected TableModel getSuperclassTable(TableModel table) {
+		if (table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)) {
+			TableModel superTable = table.getPrimaryKeyColumns()[0].getReferencedTable();
+			return superTable.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)
+					? getSuperclassTable(superTable)
+					: superTable;
+		}
+		return null;
+	}
+
+	protected TableModel getDirectSuperclassTable(TableModel table) {
 		if (table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)) {
 			return table.getPrimaryKeyColumns()[0].getReferencedTable();
 		}

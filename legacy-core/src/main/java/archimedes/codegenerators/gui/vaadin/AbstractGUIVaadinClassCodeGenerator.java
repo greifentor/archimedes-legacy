@@ -241,7 +241,7 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 
 	protected GUIColumnDataCollection getGUIColumnDataCollection(GUIColumnDataCollection collection, TableModel table) {
 		if (table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS)) {
-			collection = getGUIColumnDataCollection(collection, getSuperclassTable(table));
+			collection = getGUIColumnDataCollection(collection, getDirectSuperclassTable(table));
 		}
 		DataModel model = table.getDataModel();
 		ReferenceMode referenceMode = getReferenceMode(model, table);

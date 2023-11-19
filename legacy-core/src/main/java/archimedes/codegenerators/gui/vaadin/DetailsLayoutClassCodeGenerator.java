@@ -82,6 +82,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		if (modelSuperClassName != null) {
 			importDeclarations.add(serviceNameGenerator.getModelPackageName(model, table), modelSuperClassName);
 		}
+		// TODO OLI: Should be removed.
 		importDeclarations.add(serviceNameGenerator.getServiceInterfacePackageName(model, table), serviceInterfaceName);
 		importDeclarations.add(nameGenerator.getSessionDataPackageName(model), sessionDataClassName);
 		addGUIReferencesToFieldDeclarations(guiReferenceData);

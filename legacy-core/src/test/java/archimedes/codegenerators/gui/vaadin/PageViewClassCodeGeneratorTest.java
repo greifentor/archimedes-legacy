@@ -603,6 +603,267 @@ public class PageViewClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void objectWithSubSubClasses() {
+			// Prepare
+			String expected =
+					"package base.pack.age.name.gui.vaadin.masterdata;\n" //
+							+ "\n" //
+							+ "import java.util.List;\n" //
+							+ "import java.util.Map;\n" //
+							+ "import java.util.function.Supplier;\n" //
+							+ "\n" //
+							+ "import org.apache.logging.log4j.LogManager;\n" //
+							+ "import org.apache.logging.log4j.Logger;\n" //
+							+ "import org.springframework.beans.factory.annotation.Autowired;\n" //
+							+ "\n" //
+							+ "import com.vaadin.flow.component.AttachEvent;\n" //
+							+ "import com.vaadin.flow.component.DetachEvent;\n" //
+							+ "import com.vaadin.flow.component.grid.Grid;\n" //
+							+ "import com.vaadin.flow.component.orderedlayout.Scroller;\n" //
+							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
+							+ "import com.vaadin.flow.data.selection.SelectionEvent;\n" //
+							+ "import com.vaadin.flow.router.BeforeEnterEvent;\n" //
+							+ "import com.vaadin.flow.router.BeforeEnterObserver;\n" //
+							+ "import com.vaadin.flow.router.BeforeEvent;\n" //
+							+ "import com.vaadin.flow.router.HasUrlParameter;\n" //
+							+ "import com.vaadin.flow.router.OptionalParameter;\n" //
+							+ "import com.vaadin.flow.router.QueryParameters;\n" //
+							+ "import com.vaadin.flow.router.Route;\n" //
+							+ "\n" //
+							+ "import base.pack.age.name.core.model.BTable;\n" //
+							+ "import base.pack.age.name.core.model.PageParameters;\n" //
+							+ "import base.pack.age.name.core.service.BTableService;\n" //
+							+ "import base.pack.age.name.core.service.localization.ResourceManager;\n" //
+							+ "import base.pack.age.name.gui.SessionData;\n" //
+							+ "import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.Button;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.HeaderLayout;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.SelectionDialog;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.SelectionDialog.Selectable;\n" //
+							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
+							+ "import lombok.Generated;\n" //
+							+ "import lombok.RequiredArgsConstructor;\n" //
+							+ "\n" //
+							+ "/**\n" //
+							+ " * A view for paginated btable lists.\n" //
+							+ " *\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n" //
+							+ "@Generated\n" //
+							+ "@Route(BTablePageView.URL)\n" //
+							+ "@RequiredArgsConstructor\n" //
+							+ "public class BTablePageView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {\n" //
+							+ "\n" //
+							+ "	public static final String URL = \"test-project/masterdata/atabellen\";\n" //
+							+ "\n" //
+							+ "	private static final Logger logger = LogManager.getLogger(BTablePageView.class);\n" //
+							+ "\n" //
+							+ "	@Autowired(required = false)\n" //
+							+ "	private MasterDataGridFieldRenderer<BTable> masterDataGridFieldRenderer;\n" //
+							+ "\n" //
+							+ "	private final ButtonFactory buttonFactory;\n" //
+							+ "	private final ResourceManager resourceManager;\n" //
+							+ "	private final MasterDataGUIConfiguration guiConfiguration;\n" //
+							+ "	private final BTableService service;\n" //
+							+ "	private final SessionData session;\n" //
+							+ "\n" //
+							+ "	private Button buttonAdd;\n" //
+							+ "	private Button buttonDuplicate;\n" //
+							+ "	private Button buttonEdit;\n" //
+							+ "	private Button buttonRemove;\n" //
+							+ "	private Grid<BTable> grid;\n" //
+							+ "	private VerticalLayout mainLayout;\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {\n" //
+							+ "		logger.debug(\"setParameter\");\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {\n" //
+							+ "		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(session, beforeEnterEvent);\n" //
+							+ "		mainLayout = new VerticalLayout();\n" //
+							+ "		getStyle().set(\"background-image\", \"url('\" + guiConfiguration.getBackgroundFileName() + \"')\");\n" //
+							+ "		getStyle().set(\"background-size\", \"cover\");\n" //
+							+ "		getStyle().set(\"background-attachment\", \"fixed\");\n" //
+							+ "		buttonAdd = buttonFactory.createAddButton(resourceManager, event -> addRecord(), session);\n" //
+							+ "		buttonDuplicate = buttonFactory.createButton(resourceManager.getLocalizedString(\"commons.button.duplicate.text\", session.getLocalization()));\n" //
+							+ "		buttonDuplicate.addClickListener(event -> duplicateRecord());\n" //
+							+ "		buttonEdit = buttonFactory.createEditButton(resourceManager, event -> editRecord(), session);\n" //
+							+ "		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);\n" //
+							+ "		grid = new Grid<>();\n" //
+							+ "		grid\n" //
+							+ "				.addColumn(model -> getHeaderString(\"DESCRIPTION\", model, () -> model.getDescription()))\n" //
+							+ "				.setHeader(resourceManager.getLocalizedString(\"BTablePageView.grid.header.description.label\", session.getLocalization()))\n" //
+							+ "				.setSortable(true);\n" //
+							+ "		grid\n" //
+							+ "				.addColumn(model -> getHeaderString(\"REFERENCE\", model, () -> model.getReference()))\n" //
+							+ "				.setHeader(resourceManager.getLocalizedString(\"BTablePageView.grid.header.reference.label\", session.getLocalization()))\n" //
+							+ "				.setSortable(true);\n" //
+							+ "		grid.setMultiSort(true);\n" //
+							+ "		grid.setWidthFull();\n" //
+							+ "		grid.addSelectionListener(this::enabledButtons);\n" //
+							+ "		grid.getStyle().set(\"-moz-border-radius\", \"4px\");\n" //
+							+ "		grid.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" //
+							+ "		grid.getStyle().set(\"border-radius\", \"4px\");\n" //
+							+ "		grid.getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" //
+							+ "		MasterDataButtonLayout buttonLayout = new MasterDataButtonLayout(buttonAdd, buttonEdit, buttonDuplicate, buttonRemove);\n" //
+							+ "		buttonLayout.setMargin(false);\n" //
+							+ "		buttonLayout.setWidthFull();\n" //
+							+ "		mainLayout.setMargin(false);\n" //
+							+ "		mainLayout.setSizeFull();\n" //
+							+ "		setSizeFull();\n" //
+							+ "		VerticalLayout dataLayout = new VerticalLayout();\n" //
+							+ "		dataLayout.getStyle().set(\"-moz-border-radius\", \"4px\");\n" //
+							+ "		dataLayout.getStyle().set(\"-webkit-border-radius\", \"4px\");\n" //
+							+ "		dataLayout.getStyle().set(\"border-radius\", \"4px\");\n" //
+							+ "		dataLayout.getStyle().set(\"border\", \"1px solid #A9A9A9\");\n" //
+							+ "		dataLayout\n" //
+							+ "				.getStyle()\n" //
+							+ "				.set(\n" //
+							+ "						\"box-shadow\",\n" //
+							+ "						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n" //
+							+ "		dataLayout.setMargin(false);\n" //
+							+ "		dataLayout.setWidthFull();\n" //
+							+ "		dataLayout.add(grid, buttonLayout);\n" //
+							+ "		mainLayout.add(\n" //
+							+ "				new HeaderLayout(\n" //
+							+ "						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataView.URL, session),\n" //
+							+ "						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n" //
+							+ "						resourceManager.getLocalizedString(\"BTablePageView.header.label\", session.getLocalization()),\n" //
+							+ "						HeaderLayoutMode.PLAIN),\n" //
+							+ "				dataLayout);\n" //
+							+ "		updateGrid(0);\n" //
+							+ "		setButtonEnabled(buttonDuplicate, false);\n" //
+							+ "		setButtonEnabled(buttonEdit, false);\n" //
+							+ "		setButtonEnabled(buttonRemove, false);\n" //
+							+ "		setContent(mainLayout);\n" //
+							+ "		buttonAdd.focus();\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private Object getHeaderString(String fieldName, BTable aTable, Supplier<?> f) {\n" //
+							+ "		return masterDataGridFieldRenderer != null && masterDataGridFieldRenderer.hasRenderingFor(fieldName)\n" //
+							+ "				? masterDataGridFieldRenderer.getHeaderString(fieldName, aTable)\n" //
+							+ "				: f.get();\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private void enabledButtons(SelectionEvent<Grid<BTable>, BTable> event) {\n" //
+							+ "		if (event.getFirstSelectedItem().isEmpty()) {\n" //
+							+ "			setButtonEnabled(buttonAdd, true);\n" //
+							+ "			setButtonEnabled(buttonDuplicate, false);\n" //
+							+ "			setButtonEnabled(buttonEdit, false);\n" //
+							+ "			setButtonEnabled(buttonRemove, false);\n" //
+							+ "		} else {\n" //
+							+ "			setButtonEnabled(buttonAdd, false);\n" //
+							+ "			setButtonEnabled(buttonDuplicate, true);\n" //
+							+ "			setButtonEnabled(buttonEdit, true);\n" //
+							+ "			setButtonEnabled(buttonRemove, true);\n" //
+							+ "		}\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private void setButtonEnabled(Button button, boolean enabled) {\n" //
+							+ "		button.setEnabled(enabled);\n" //
+							+ "		if (enabled) {\n" //
+							+ "			button.setBackgroundImage(guiConfiguration.getButtonEnabledBackgroundFileName());\n" //
+							+ "			button.setBorderColor(guiConfiguration.getButtonEnabledBorderColor());\n" //
+							+ "		} else {\n" //
+							+ "			button.setBackgroundImage(guiConfiguration.getButtonDisabledBackgroundFileName());\n" //
+							+ "			button.setBorderColor(guiConfiguration.getButtonDisabledBorderColor());\n" //
+							+ "		}\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected void onAttach(AttachEvent attachEvent) {\n" //
+							+ "		logger.info(\"BTable page layout opened for user '{}'.\", session.getUserName());\n" //
+							+ "		super.onAttach(attachEvent);\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	protected void onDetach(DetachEvent detachEvent) {\n" //
+							+ "		logger.info(\"onDetach\");\n" //
+							+ "		super.onDetach(detachEvent);\n" //
+							+ "		getElement().removeFromTree();\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private void updateGrid(int pageNumber) {\n" //
+							+ "		grid\n" //
+							+ "				.setItems(\n" //
+							+ "						service\n" //
+							+ "								.findAll(new PageParameters().setEntriesPerPage(Integer.MAX_VALUE).setPageNumber(pageNumber))\n" //
+							+ "								.getEntries());\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private void addRecord() {\n" //
+							+ "		Selectable[] selectableSubclasses =\n" //
+							+ "				new SelectableSubclass[] {\n" //
+							+ "						new SelectableSubclass(\n" //
+							+ "								resourceManager\n" //
+							+ "										.getLocalizedString(\n" //
+							+ "												\"BTablePageView.subclass.selection.BHeirTable.label\",\n" //
+							+ "												session.getLocalization()),\n" //
+							+ "								\"BHeirTable\"),\n" //
+							+ "						new SelectableSubclass(\n" //
+							+ "								resourceManager\n" //
+							+ "										.getLocalizedString(\n" //
+							+ "												\"BTablePageView.subclass.selection.BHeirHeirTable.label\",\n" //
+							+ "												session.getLocalization()),\n" //
+							+ "								\"BHeirHeirTable\"),\n" //
+							+ "						new SelectableSubclass(\n" //
+							+ "								resourceManager\n" //
+							+ "										.getLocalizedString(\n" //
+							+ "												\"BTablePageView.subclass.selection.BTable.label\",\n" //
+							+ "												session.getLocalization()),\n" //
+							+ "								\"BTable\") };\n" //
+							+ "		new SelectionDialog(\n" //
+							+ "				buttonFactory,\n" //
+							+ "				selectable -> switchToMaintenanceViewForANewObject(\n" //
+							+ "						((SelectableSubclass) selectable).getSubclassName()),\n" //
+							+ "				resourceManager,\n" //
+							+ "				session,\n" //
+							+ "				selectableSubclasses).open();\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private void switchToMaintenanceViewForANewObject(String selectedSubclassName) {\n" //
+							+ "		QueryParameters parameters = new QueryParameters(Map.of(\"modelClass\", List.of(selectedSubclassName)));\n" //
+							+ "		getUI().ifPresent(ui -> ui.navigate(BTableMaintenanceView.URL, parameters));\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private void duplicateRecord() {\n" //
+							+ "		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" //
+							+ "			QueryParameters parameters =\n" //
+							+ "					new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId()), \"duplicate\", List.of(\"true\")));\n" //
+							+ "			getUI().ifPresent(ui -> ui.navigate(BTableMaintenanceView.URL, parameters));\n" //
+							+ "		});\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private void editRecord() {\n" //
+							+ "		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" //
+							+ "			QueryParameters parameters = new QueryParameters(Map.of(\"id\", List.of(\"\" + model.getId())));\n" //
+							+ "			getUI().ifPresent(ui -> ui.navigate(BTableMaintenanceView.URL, parameters));\n" //
+							+ "		});\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private void removeRecord() {\n" //
+							+ "		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" //
+							+ "			service.delete(model);\n" //
+							+ "			updateGrid(0);\n" //
+							+ "			buttonAdd.focus();\n" //
+							+ "		});\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "}";
+			DataModel dataModel = readDataModel("Model-Inheritance.xml");
+			TableModel tableModel = dataModel.getTableByName("B_TABLE");
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 	@Nested
