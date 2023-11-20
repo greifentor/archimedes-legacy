@@ -46,11 +46,12 @@ public class MasterDataGridFieldRendererClassCodeGeneratorTest {
 		@Test
 		void happyRun() {
 			// Prepare
-			String expected = "package base.pack.age.name.gui.vaadin.masterdata;\n" + //
+			String expected = "package base.pack.age.name.gui.vaadin.masterdata.renderer;\n" + //
 					"\n" + //
 					"import javax.inject.Named;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.GuiTable;\n" + //
+					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGridFieldRenderer;\n" + //
 					"\n" + //
 					"import lombok.Generated;\n" + //
 					"\n" + //
@@ -103,7 +104,7 @@ public class MasterDataGridFieldRendererClassCodeGeneratorTest {
 			@Test
 			void happyRunForASimpleObjectWithEnumField() {
 				String expected =
-						"package de.ollie.bookstore.gui.vaadin.masterdata;\n" //
+						"package de.ollie.bookstore.gui.vaadin.masterdata.renderer;\n" //
 								+ "\n" //
 								+ "import javax.inject.Inject;\n" //
 								+ "import javax.inject.Named;\n" //
@@ -111,6 +112,7 @@ public class MasterDataGridFieldRendererClassCodeGeneratorTest {
 								+ "import de.ollie.bookstore.core.model.Book;\n" //
 								+ "import de.ollie.bookstore.core.model.PublicationType;\n" //
 								+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
+								+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGridFieldRenderer;\n" //
 								+ "\n" //
 								+ "import lombok.Generated;\n" //
 								+ "\n" //

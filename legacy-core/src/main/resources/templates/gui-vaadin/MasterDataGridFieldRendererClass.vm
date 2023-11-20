@@ -12,6 +12,7 @@ import ${EnumData.getEnumPackageName()}.${EnumData.getEnumClassName()};
 #if ($HasEnums == "true")
 import ${ComponentFactoryPackageName}.${ComponentFactoryClassName};
 #end
+import ${MasterDataGridRendererInterfacePackageName}.${MasterDataGridRendererInterfaceName};
 
 import lombok.Generated;
 

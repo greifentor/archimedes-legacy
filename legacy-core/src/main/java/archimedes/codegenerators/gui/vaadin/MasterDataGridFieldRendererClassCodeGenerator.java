@@ -32,6 +32,11 @@ public class MasterDataGridFieldRendererClassCodeGenerator extends AbstractGUIVa
 		context.put("ComponentFactoryPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("EnumColumns", getEnumColumnData(table, model));
 		context.put("HasEnums", hasEnums(table.getColumns()));
+		context
+				.put(
+						"MasterDataGridRendererInterfaceName",
+						nameGenerator.getMasterDataGridFieldRendererInterfaceName(model));
+		context.put("MasterDataGridRendererInterfacePackageName", nameGenerator.getMasterDataPackageName(model));
 		context.put("ModelClassName", serviceNameGenerator.getModelClassName(table));
 		context
 				.put(
@@ -72,7 +77,7 @@ public class MasterDataGridFieldRendererClassCodeGenerator extends AbstractGUIVa
 
 	@Override
 	public String getPackageName(DataModel model, TableModel table) {
-		return nameGenerator.getPageViewPackageName(model, table);
+		return nameGenerator.getMasterDataGridFieldRendererClassPackageName(model, table);
 	}
 
 	@Override
