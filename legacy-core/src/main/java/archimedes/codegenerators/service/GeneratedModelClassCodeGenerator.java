@@ -13,6 +13,8 @@ import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.CommonImportAdder;
 import archimedes.codegenerators.FieldDeclarations;
+import archimedes.codegenerators.GlobalIdOptionChecker;
+import archimedes.codegenerators.GlobalIdType;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -79,6 +81,9 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 								.setPkMember(column.isPrimaryKey())
 								.setSetterName(nameGenerator.getClassName(column.getName())))
 				.collect(Collectors.toList());
+		if (GlobalIdOptionChecker.INSTANCE.hasGlobalIdTypeConfiguration(GlobalIdType.UUID, table)) {
+			importDeclarations.add("java.util", "UUID");
+		}
 		getCompositionLists(table).forEach(cld -> {
 			importDeclarations.add("java.util", "ArrayList");
 			importDeclarations.add("java.util", "List");

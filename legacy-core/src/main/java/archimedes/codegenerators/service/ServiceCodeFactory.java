@@ -6,6 +6,7 @@ import java.util.List;
 import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.codegenerators.FindByUtils;
 import archimedes.codegenerators.NameGenerator;
@@ -71,6 +72,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 			return new String[] {
 					AbstractClassCodeGenerator.AUTO_INCREMENT,
 					FindByUtils.FIND_BY,
+					AbstractModelCodeGenerator.GLOBAL_ID,
 					AbstractClassCodeGenerator.INIT_WITH,
 					AbstractClassCodeGenerator.LIST_ACCESS };
 		case DOMAIN:
@@ -82,6 +84,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 					ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_INTERFACE_NAME_SUFFIX,
+					AbstractModelCodeGenerator.GLOBAL_ID,
 					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
 					ServiceNameGenerator.ALTERNATE_PAGE_PACKAGE_NAME,
@@ -94,6 +97,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 		case TABLE:
 			return new String[] {
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
+					AbstractModelCodeGenerator.GLOBAL_ID,
 					ModelClassCodeGenerator.IMPLEMENTS,
 					NameGenerator.MODULE,
 					AbstractClassCodeFactory.NO_GENERATION,

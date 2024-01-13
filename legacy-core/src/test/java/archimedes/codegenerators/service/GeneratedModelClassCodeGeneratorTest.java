@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
+import archimedes.codegenerators.GlobalIdType;
 import archimedes.codegenerators.NameGenerator;
 import archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator;
 import archimedes.legacy.scheme.Relation;
@@ -663,6 +665,121 @@ public class GeneratedModelClassCodeGeneratorTest {
 								+ "\n" //
 								+ "}";
 				return s;
+			}
+
+		}
+
+		@Nested
+		class GlobalIdUUID {
+
+			@Test
+			void globalIdWithNoUUIDConfiguration() {
+				// Prepare
+				DataModel dataModel = readDataModel("Model.xml");
+				String expected =
+						"package base.pack.age.name.core.model;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A model for table_with_uuids.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@Generated\n" //
+								+ "public abstract class GeneratedTableWithUuid<T extends TableWithUuid> {\n" //
+								+ "\n" //
+								+ "	public static final String ID = \"ID\";\n" //
+								+ "	public static final String GLOBALID = \"GLOBALID\";\n" //
+								+ "\n" //
+								+ "	private Long id;\n" //
+								+ "	private String globalId;\n" //
+								+ "\n" //
+								+ "	protected abstract T self();\n" //
+								+ "\n" //
+								+ "	public T setId(Long id) {\n" //
+								+ "		this.id = id;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	public T setGlobalId(String globalId) {\n" //
+								+ "		this.globalId = globalId;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "}";
+				// Run
+				String returned =
+						unitUnderTest
+								.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("TABLE_WITH_UUID"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			@Test
+			void globalIdWithModelUUIDConfigurationInColumn() {
+				// Prepare
+				DataModel dataModel = readDataModel("Model.xml");
+				String expected =
+						"package base.pack.age.name.core.model;\n" //
+								+ "\n" //
+								+ "import java.util.UUID;\n" //
+								+ "\n" //
+								+ "import lombok.Data;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import lombok.experimental.Accessors;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A model for table_with_uuids.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Accessors(chain = true)\n" //
+								+ "@Data\n" //
+								+ "@Generated\n" //
+								+ "public abstract class GeneratedTableWithUuid<T extends TableWithUuid> {\n" //
+								+ "\n" //
+								+ "	public static final String ID = \"ID\";\n" //
+								+ "	public static final String GLOBALID = \"GLOBALID\";\n" //
+								+ "\n" //
+								+ "	private Long id;\n" //
+								+ "	private UUID globalId = UUID.randomUUID();\n" //
+								+ "\n" //
+								+ "	protected abstract T self();\n" //
+								+ "\n" //
+								+ "	public T setId(Long id) {\n" //
+								+ "		this.id = id;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "	public T setGlobalId(UUID globalId) {\n" //
+								+ "		this.globalId = globalId;\n" //
+								+ "		return self();\n" //
+								+ "	}\n" //
+								+ "\n" //
+								+ "}";
+				dataModel
+						.getTableByName("TABLE_WITH_UUID")
+						.getColumnByName("GLOBAL_ID")
+						.setParameters(AbstractModelCodeGenerator.GLOBAL_ID + ":" + GlobalIdType.UUID);
+				System.out
+						.println(
+								"\n\n" + dataModel
+										.getTableByName("TABLE_WITH_UUID")
+										.getColumnByName("GLOBAL_ID")
+										.getOptionByName(AbstractModelCodeGenerator.GLOBAL_ID)
+										.getParameter());
+
+				// Run
+				String returned =
+						unitUnderTest
+								.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("TABLE_WITH_UUID"));
+				// Check
+				assertEquals(expected, returned);
 			}
 
 		}

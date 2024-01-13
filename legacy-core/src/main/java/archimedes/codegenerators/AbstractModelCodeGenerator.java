@@ -16,6 +16,7 @@ import archimedes.model.TableModel;
 public abstract class AbstractModelCodeGenerator<N extends NameGenerator> extends AbstractCodeGenerator<N, DataModel> {
 
 	public static final String COMMENTS = "COMMENTS";
+	public static final String GLOBAL_ID = "GLOBAL_ID";
 
 	protected final static ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
 
