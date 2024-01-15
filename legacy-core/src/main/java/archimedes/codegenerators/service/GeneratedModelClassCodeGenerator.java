@@ -3,6 +3,8 @@ package archimedes.codegenerators.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
@@ -104,6 +106,15 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 		return l;
 	}
 
+	protected String getType(ColumnModel column, DataModel model, ReferenceMode referenceMode,
+			Function<ColumnModel, String> referencedClassNameProvider,
+			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider) {
+		if (GlobalIdOptionChecker.INSTANCE.getGlobalIdType(column) == GlobalIdType.UUID) {
+			return "UUID";
+		}
+		return super.getType(column, model, referenceMode, referencedClassNameProvider, enumClassNameProvider);
+	}
+
 	private List<AnnotationData> getAnnotationsForColumn(ColumnModel column) {
 		List<AnnotationData> annotations = new ArrayList<>();
 		column.ifOptionSetWithValueDo(TO_STRING, "EXCLUDE", om -> {
@@ -117,6 +128,9 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 		OptionModel initWith = column.getOptionByName(INIT_WITH);
 		if (initWith != null) {
 			return initWith.getParameter();
+		}
+		if (GlobalIdOptionChecker.INSTANCE.getGlobalIdType(column) == GlobalIdType.UUID) {
+			return "UUID.randomUUID()";
 		}
 		return null;
 	}

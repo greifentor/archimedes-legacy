@@ -3,10 +3,13 @@ package archimedes.codegenerators;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +23,7 @@ import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 
 @ExtendWith(MockitoExtension.class)
 class GlobalIdOptionCheckerTest {
@@ -36,12 +40,23 @@ class GlobalIdOptionCheckerTest {
 	@Mock
 	private OptionModel option;
 	@Mock
-	private OptionModel option1;
+	private OptionModel optionModel;
+	@Mock
+	private OptionModel optionTable;
 	@Mock
 	private TableModel table;
 
 	@InjectMocks
 	private GlobalIdOptionChecker unitUnderTest;
+
+	@BeforeEach
+	void setUp() {
+		lenient().when(column.getTable()).thenReturn(table);
+		lenient().when(table.getDataModel()).thenReturn(model);
+		lenient()
+				.when(column.getOptionByName(AbstractModelCodeGenerator.GLOBAL_ID))
+				.thenReturn(new Option(AbstractModelCodeGenerator.GLOBAL_ID));
+	}
 
 	@Nested
 	class TestsOfMethod_getGlobalIdType_ColumnModel {
@@ -54,7 +69,7 @@ class GlobalIdOptionCheckerTest {
 		@Test
 		void returnsTypeNONE_passingAColumnWithGlobalId_butNoGlobalIdTypeConfiguration() {
 			// Prepare
-			when(column.findOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(Optional.empty());
+			when(table.findOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(Optional.empty());
 			// Run & Check
 			assertEquals(GlobalIdType.NONE, unitUnderTest.getGlobalIdType(column));
 		}
@@ -62,7 +77,7 @@ class GlobalIdOptionCheckerTest {
 		@Test
 		void returnsTypeNONE_passingAGlobalIdColumnWithNoConfiguration() {
 			// Prepare
-			when(column.findOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(Optional.of(option));
+			when(table.findOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(Optional.empty());
 			// Run & Check
 			assertEquals(GlobalIdType.NONE, unitUnderTest.getGlobalIdType(column));
 		}
@@ -75,6 +90,49 @@ class GlobalIdOptionCheckerTest {
 			when(column.findOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(Optional.of(option));
 			// Run & Check
 			assertEquals(globalIdType, unitUnderTest.getGlobalIdType(column));
+		}
+
+		@Test
+		void returnsConfiguredTypeOfTheColumn_passingAGlobalIdColumnWithConfiguredGlobalIdTypeAndATableAlso_butAnotherOne() {
+			// Prepare
+			when(option.getParameter()).thenReturn(GlobalIdType.NONE.name());
+			when(column.findOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(Optional.of(option));
+			// Run & Check
+			assertEquals(GlobalIdType.NONE, unitUnderTest.getGlobalIdType(column));
+			verifyZeroInteractions(optionTable);
+			verifyZeroInteractions(optionModel);
+		}
+
+		@ParameterizedTest
+		@EnumSource(GlobalIdType.class)
+		void returnsConfiguredType_passingAGlobalIdColumnWithNoConfiguredGlobalIdType_butTableHas(
+				GlobalIdType globalIdType) {
+			// Prepare
+			when(column.findOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(Optional.empty());
+			when(optionTable.getParameter()).thenReturn(globalIdType.name());
+			when(table.findOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(Optional.of(optionTable));
+			// Run & Check
+			assertEquals(globalIdType, unitUnderTest.getGlobalIdType(column));
+		}
+
+		@ParameterizedTest
+		@EnumSource(GlobalIdType.class)
+		void returnsConfiguredType_passingAGlobalIdColumnWithNoConfiguredGlobalIdType_butModelHas(
+				GlobalIdType globalIdType) {
+			// Prepare
+			when(column.findOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(Optional.empty());
+			when(optionModel.getParameter()).thenReturn(globalIdType.name());
+			when(model.findOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(Optional.of(optionModel));
+			// Run & Check
+			assertEquals(globalIdType, unitUnderTest.getGlobalIdType(column));
+		}
+
+		@Test
+		void returnsConfiguredTypeOfTheColumn_passingANoGlobalIdTypeColumn_butTableHasGlobalIdTypeSet() {
+			// Prepare
+			when(column.getOptionByName(GLOBAL_ID_OPTION_NAME)).thenReturn(null);
+			// Run & Check
+			assertEquals(GlobalIdType.NONE, unitUnderTest.getGlobalIdType(column));
 		}
 
 	}

@@ -20,6 +20,9 @@ import ${DBOClassNameQualified};
 import ${Subclass.getModelClassNameQualified()};
 #end
 import ${ModelClassNameQualified};
+#foreach ($ImportDeclaration in $ImportDeclarations.toList())
+import ${ImportDeclaration.getSingleImportDeclaration()};
+#end
 
 /**
  * A DBO converter for ${PluralName}.
@@ -67,6 +70,8 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(model.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
 		#elseif (${Column.getFieldType()} == "LIST")
 				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(model.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
+		#elseif (${Column.isUuid()})
+				.${Column.getSetterName()}(model.${Column.getGetterCall()} != null ? model.${Column.getGetterCall()}.toString() : null)#if ( !$foreach.hasNext );#end
 		#else
 				.${Column.getSetterName()}(model.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
 		#end
@@ -89,6 +94,8 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 		dbo.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(model.${Column.getGetterCall()}));
 		#elseif (${Column.getFieldType()} == "LIST")
 		dbo.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToDBOMethodName}(model.${Column.getGetterCall()}));
+		#elseif (${Column.isUuid()})
+		dbo.${Column.getSetterName()}(model.${Column.getGetterCall()} != null ? model.${Column.getGetterCall()}.toString() : null);
 		#else
 		dbo.${Column.getSetterName()}(model.${Column.getGetterCall()});
 		#end
@@ -127,6 +134,8 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToModelMethodName}(dbo.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
 		#elseif (${Column.getFieldType()} == "LIST")
 				.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToModelMethodName}(dbo.${Column.getGetterCall()}))#if ( !$foreach.hasNext );#end
+		#elseif (${Column.isUuid()})
+				.${Column.getSetterName()}((dbo.${Column.getGetterCall()} != null) && !dbo.${Column.getGetterCall()}.isEmpty() ? UUID.fromString(dbo.${Column.getGetterCall()}) : null)#if ( !$foreach.hasNext );#end
 		#else
 				.${Column.getSetterName()}(dbo.${Column.getGetterCall()})#if ( !$foreach.hasNext );#end
 		#end
@@ -149,6 +158,8 @@ public class ${ClassName} implements ToModelConverter<${ModelClassName}, ${DBOCl
 		model.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToModelMethodName}(dbo.${Column.getGetterCall()}));
 		#elseif (${Column.getFieldType()} == "LIST")
 		model.${Column.getSetterName()}(${Column.getConverterAttributeName()}.${ToModelMethodName}(dbo.${Column.getGetterCall()}));
+		#elseif (${Column.isUuid()})
+		model.${Column.getSetterName()}((dbo.${Column.getGetterCall()} != null) && !dbo.${Column.getGetterCall()}.isEmpty() ? UUID.fromString(dbo.${Column.getGetterCall()}) : null);
 		#else
 		model.${Column.getSetterName()}(dbo.${Column.getGetterCall()});
 		#end

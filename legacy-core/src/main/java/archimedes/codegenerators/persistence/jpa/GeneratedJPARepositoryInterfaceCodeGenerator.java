@@ -5,8 +5,12 @@ import org.apache.velocity.VelocityContext;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.FindByUtils;
+import archimedes.codegenerators.GlobalIdOptionChecker;
+import archimedes.codegenerators.GlobalIdType;
+import archimedes.codegenerators.Layer;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
 
@@ -44,8 +48,9 @@ public class GeneratedJPARepositoryInterfaceCodeGenerator
 										nameGenerator::getDBOClassName,
 										t -> nameGenerator.getDBOPackageName(model, t),
 										typeGenerator,
-										(c, m) -> nameGenerator.getDBOClassName(c.getDomain(), m),
-										d -> nameGenerator.getDBOPackageName(model, d)));
+										this::getType,
+										d -> nameGenerator.getDBOPackageName(model, d),
+										Layer.PERSISTENCE));
 		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
 		context.put("HasNoUniques", FindByUtils.hasNoUniques(table.getColumns()));
 		context
@@ -60,7 +65,7 @@ public class GeneratedJPARepositoryInterfaceCodeGenerator
 								model,
 								table,
 								c -> nameGenerator.getDBOClassName(c.getReferencedTable()),
-								(c, m) -> nameGenerator.getDBOClassName(c.getDomain(), model),
+								this::getType,
 								c -> nameGenerator.getDBOPackageName(model, table) + "."
 										+ nameGenerator.getDBOClassName(c.getReferencedTable()),
 								(c, m) -> nameGenerator.getDBOPackageName(model, table) + "."
@@ -68,6 +73,13 @@ public class GeneratedJPARepositoryInterfaceCodeGenerator
 								null));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("Subclass", isSubclass(table));
+	}
+
+	private String getType(ColumnModel column, DataModel model) {
+		if (GlobalIdOptionChecker.INSTANCE.getGlobalIdType(column) == GlobalIdType.UUID) {
+			return "String";
+		}
+		return nameGenerator.getDBOClassName(column.getDomain(), model);
 	}
 
 	@Override

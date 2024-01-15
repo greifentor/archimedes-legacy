@@ -13,6 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
+import archimedes.codegenerators.GlobalIdType;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -338,6 +340,62 @@ public class GeneratedPersistencePortInterfaceCodeGeneratorTest {
 				table.getColumnByName("REF").addOption(new Option(AbstractClassCodeGenerator.LIST_ACCESS));
 				// Run
 				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+				// Check
+				assertEquals(expected, returned);
+			}
+
+		}
+
+		@Nested
+		class GlobalIdUUID {
+
+			@Test
+			void happyRunForASimpleObject() {
+				// Prepare
+				String expected =
+						"package base.pack.age.name.core.service.port.persistence;\n" //
+								+ "\n" //
+								+ "import java.util.List;\n" //
+								+ "import java.util.Optional;\n" //
+								+ "\n" //
+								+ "import base.pack.age.name.core.model.Page;\n" //
+								+ "import base.pack.age.name.core.model.PageParameters;\n" //
+								+ "import base.pack.age.name.core.model.TableWithUuid;\n" //
+								+ "import java.util.UUID;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A generated persistence port interface for TableWithUuid CRUD operations.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Generated\n" //
+								+ "public interface TableWithUuidGeneratedPersistencePort {\n" //
+								+ "\n" //
+								+ "	TableWithUuid create(TableWithUuid model);\n" //
+								+ "\n" //
+								+ "	List<TableWithUuid> findAll();\n" //
+								+ "\n" //
+								+ "	Page<TableWithUuid> findAll(PageParameters pageParameters);\n" //
+								+ "\n" //
+								+ "	Optional<TableWithUuid> findById(Long id);\n" //
+								+ "\n" //
+								+ "	TableWithUuid update(TableWithUuid model);\n" //
+								+ "\n" //
+								+ "	void delete(TableWithUuid model);\n" //
+								+ "\n" //
+								+ "	List<TableWithUuid> findAllByGlobalId(UUID globalId);\n" //
+								+ "\n" //
+								+ "}";
+				DataModel dataModel = readDataModel("Model.xml");
+				dataModel
+						.getTableByName("TABLE_WITH_UUID")
+						.getColumnByName("GLOBAL_ID")
+						.setParameters(AbstractModelCodeGenerator.GLOBAL_ID + ":" + GlobalIdType.UUID + "|FIND_BY");
+				// Run
+				String returned =
+						unitUnderTest
+								.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("TABLE_WITH_UUID"));
 				// Check
 				assertEquals(expected, returned);
 			}

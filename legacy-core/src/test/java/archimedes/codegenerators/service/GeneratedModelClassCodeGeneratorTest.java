@@ -765,15 +765,7 @@ public class GeneratedModelClassCodeGeneratorTest {
 				dataModel
 						.getTableByName("TABLE_WITH_UUID")
 						.getColumnByName("GLOBAL_ID")
-						.setParameters(AbstractModelCodeGenerator.GLOBAL_ID + ":" + GlobalIdType.UUID);
-				System.out
-						.println(
-								"\n\n" + dataModel
-										.getTableByName("TABLE_WITH_UUID")
-										.getColumnByName("GLOBAL_ID")
-										.getOptionByName(AbstractModelCodeGenerator.GLOBAL_ID)
-										.getParameter());
-
+						.setParameters(AbstractModelCodeGenerator.GLOBAL_ID + ":" + GlobalIdType.UUID + "|FIND_BY");
 				// Run
 				String returned =
 						unitUnderTest

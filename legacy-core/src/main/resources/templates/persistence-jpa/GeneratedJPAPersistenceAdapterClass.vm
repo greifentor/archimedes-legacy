@@ -61,6 +61,12 @@ import ${FindBy.getConverterPackageName()}.${FindBy.getConverterClassName()};
 #end
 #end
 #end
+#foreach($Import in $ImportDeclarations.toList())
+import $Import.getSingleImportDeclaration();
+#if($velocityCount == $ImportDeclarations.size()) 
+
+#end
+#end
 import lombok.Generated;
 
 #if (${HasObjectReferences})
@@ -188,6 +194,8 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 		return Optional.ofNullable(converter.toModel(repository.findBy${FindBy.getColumnName()}(${FindBy.getTypeDBOConverterAttributeName()}.${ToDBOMethodName}(${FindBy.getDBOAttributeName()})).orElse(null)));
 	#elseif (${FindBy.isObjectReference()})
 		return Optional.ofNullable(converter.toModel(repository.findBy${FindBy.getColumnName()}(${FindBy.getConverterAttributeName()}.${ToDBOMethodName}(${FindBy.getAttributeName()})).orElse(null)));
+	#elseif (${FindBy.isUuid()})
+		return Optional.ofNullable(converter.toModel(repository.findBy${FindBy.getColumnName()}(${FindBy.getAttributeName()} != null ? ${FindBy.getAttributeName()}.toString() : null).orElse(null)));
 	#else
 		return Optional.ofNullable(converter.toModel(repository.findBy${FindBy.getColumnName()}(${FindBy.getAttributeName()}).orElse(null)));
 	#end
@@ -196,6 +204,8 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 		return converter.${ToModelMethodName}(repository.findAllBy${FindBy.getColumnName()}(${FindBy.getTypeDBOConverterAttributeName()}.${ToDBOMethodName}(${FindBy.getAttributeName()})));
 	#elseif (${FindBy.isObjectReference()})
 		return converter.${ToModelMethodName}(repository.findAllBy${FindBy.getColumnName()}(${FindBy.getConverterAttributeName()}.${ToDBOMethodName}(${FindBy.getAttributeName()})));
+	#elseif (${FindBy.isUuid()})
+		return converter.${ToModelMethodName}(repository.findAllBy${FindBy.getColumnName()}(${FindBy.getAttributeName()} != null ? ${FindBy.getAttributeName()}.toString() : null));
 	#else
 		return converter.${ToModelMethodName}(repository.findAllBy${FindBy.getColumnName()}(${FindBy.getAttributeName()}));
 	#end
