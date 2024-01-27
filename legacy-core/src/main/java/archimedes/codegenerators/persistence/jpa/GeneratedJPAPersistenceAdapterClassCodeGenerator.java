@@ -11,6 +11,8 @@ import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.FindByUtils;
+import archimedes.codegenerators.GlobalIdOptionChecker;
+import archimedes.codegenerators.GlobalIdType;
 import archimedes.codegenerators.ListAccess.ListAccessConverterData;
 import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.OptionGetter;
@@ -141,6 +143,9 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(table));
 		context.put("UtilPackageName", ServiceNameGenerator.INSTANCE.getUtilPackageName(model));
+		if (GlobalIdOptionChecker.INSTANCE.hasGlobalIdTypeConfiguration(GlobalIdType.UUID, table)) {
+			importDeclarations.add("java.util", "UUID");
+		}
 	}
 
 	private String getNoKeyValue(TableModel table) {

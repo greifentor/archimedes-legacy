@@ -51,11 +51,31 @@ public class FindByUtils {
 				nameGenerator,
 				referenceClassNameProvider,
 				referenceClassPackageNameProvider,
+				referenceClassNameProvider,
+				referenceClassPackageNameProvider,
+				typeGenerator,
+				enumClassNameProvider,
+				enumPackagerNameProvider,
+				Layer.SERVICE);
+	}
+
+	public static List<FindByData> getFindBys(ColumnModel[] columns, ReferenceMode referenceMode,
+			NameGenerator nameGenerator, Function<TableModel, String> referenceClassNameProvider,
+			Function<TableModel, String> referenceClassPackageNameProvider, TypeGenerator typeGenerator,
+			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider,
+			Function<OptionListProvider, String> enumPackagerNameProvider, Layer layer) {
+		return getFindBys(
+				columns,
+				referenceMode,
+				nameGenerator,
+				referenceClassNameProvider,
+				referenceClassPackageNameProvider,
 				t -> "UNDEFINED",
 				t -> "UNDEFINED",
 				typeGenerator,
 				enumClassNameProvider,
-				enumPackagerNameProvider);
+				enumPackagerNameProvider,
+				layer);
 	}
 
 	public static List<FindByData> getFindBys(ColumnModel[] columns, ReferenceMode referenceMode,
@@ -65,6 +85,27 @@ public class FindByUtils {
 			Function<TableModel, String> referenceConverterPackageNameProvider, TypeGenerator typeGenerator,
 			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider,
 			Function<OptionListProvider, String> enumPackagerNameProvider) {
+		return getFindBys(
+				columns,
+				referenceMode,
+				nameGenerator,
+				referenceClassNameProvider,
+				referenceClassPackageNameProvider,
+				referenceConverterClassNameProvider,
+				referenceConverterPackageNameProvider,
+				typeGenerator,
+				enumClassNameProvider,
+				enumPackagerNameProvider,
+				Layer.SERVICE);
+	}
+
+	public static List<FindByData> getFindBys(ColumnModel[] columns, ReferenceMode referenceMode,
+			NameGenerator nameGenerator, Function<TableModel, String> referenceClassNameProvider,
+			Function<TableModel, String> referenceClassPackageNameProvider,
+			Function<TableModel, String> referenceConverterClassNameProvider,
+			Function<TableModel, String> referenceConverterPackageNameProvider, TypeGenerator typeGenerator,
+			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider,
+			Function<OptionListProvider, String> enumPackagerNameProvider, Layer layer) {
 		return List
 				.of(columns)
 				.stream()
@@ -79,13 +120,26 @@ public class FindByUtils {
 														getFromProvider(
 																column,
 																referenceConverterClassNameProvider,
-																referenceMode)))
+																referenceMode,
+																layer)))
 								.setConverterClassName(
-										getFromProvider(column, referenceConverterClassNameProvider, referenceMode))
+										getFromProvider(
+												column,
+												referenceConverterClassNameProvider,
+												referenceMode,
+												layer))
 								.setConverterClassName(
-										getFromProvider(column, referenceConverterClassNameProvider, referenceMode))
+										getFromProvider(
+												column,
+												referenceConverterClassNameProvider,
+												referenceMode,
+												layer))
 								.setConverterPackageName(
-										getFromProvider(column, referenceConverterPackageNameProvider, referenceMode))
+										getFromProvider(
+												column,
+												referenceConverterPackageNameProvider,
+												referenceMode,
+												layer))
 								.setObjectReference(isObjectReference(column, referenceMode))
 								.setTypePackageName(
 										isEnum(column)
@@ -93,14 +147,16 @@ public class FindByUtils {
 												: getFromProvider(
 														column,
 														referenceClassPackageNameProvider,
-														referenceMode))
+														referenceMode,
+														layer))
 								.setTypeName(
 										getType(
 												column,
 												referenceMode,
 												referenceClassNameProvider,
 												typeGenerator,
-												enumClassNameProvider))
+												enumClassNameProvider,
+												layer))
 								.setTypeDBOConverterAttributeName(
 										nameGenerator
 												.getAttributeName(
@@ -119,16 +175,31 @@ public class FindByUtils {
 														column.getTable().getDataModel(),
 														column.getDomain()))
 								.setEnumType(isEnum(column))
-								.setUnique(column.isUnique()))
+								.setUnique(column.isUnique())
+								.setUuid(
+										GlobalIdType.UUID
+												.name()
+												.equals(
+														getType(
+																column,
+																referenceMode,
+																referenceClassNameProvider,
+																typeGenerator,
+																enumClassNameProvider,
+																Layer.SERVICE))))
 				.collect(Collectors.toList());
 	}
 
 	private static String getFromProvider(ColumnModel column, Function<TableModel, String> provider,
-			ReferenceMode referenceMode) {
+			ReferenceMode referenceMode, Layer layer) {
 		TableModel referencedTable = column.getReferencedTable();
 		return (referencedTable != null) && (referenceMode == ReferenceMode.OBJECT)
 				? provider.apply(referencedTable)
-				: "java.lang";
+				: isAUUIDField(column) && (layer != Layer.PERSISTENCE) ? "java.util" : "java.lang";
+	}
+
+	private static boolean isAUUIDField(ColumnModel column) {
+		return GlobalIdOptionChecker.INSTANCE.getGlobalIdType(column) == GlobalIdType.UUID;
 	}
 
 	private static boolean isObjectReference(ColumnModel column, ReferenceMode referenceMode) {
@@ -137,8 +208,10 @@ public class FindByUtils {
 
 	private static String getType(ColumnModel column, ReferenceMode referenceMode,
 			Function<TableModel, String> referenceClassNameProvider, TypeGenerator typeGenerator,
-			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider) {
-		if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
+			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider, Layer layer) {
+		if ((GlobalIdOptionChecker.INSTANCE.getGlobalIdType(column) == GlobalIdType.UUID) && (layer == Layer.SERVICE)) {
+			return "UUID";
+		} else if ((column.getReferencedColumn() != null) && (referenceMode == ReferenceMode.OBJECT)) {
 			return referenceClassNameProvider.apply(column.getReferencedTable());
 		} else if (isEnum(column)) {
 			return enumClassNameProvider.apply(column, column.getTable().getDataModel());

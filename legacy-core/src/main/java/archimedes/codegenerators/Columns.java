@@ -72,6 +72,7 @@ public class Columns {
 		private String simpleName;
 		private boolean simpleType;
 		private boolean unique;
+		private boolean uuid;
 	}
 
 	public static boolean containsFieldWithType(List<ColumnData> columnData, String typeName) {

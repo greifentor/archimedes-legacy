@@ -3,6 +3,8 @@ package archimedes.codegenerators.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
@@ -13,6 +15,8 @@ import archimedes.codegenerators.Columns.AnnotationData;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.CommonImportAdder;
 import archimedes.codegenerators.FieldDeclarations;
+import archimedes.codegenerators.GlobalIdOptionChecker;
+import archimedes.codegenerators.GlobalIdType;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.TypeGenerator;
 import archimedes.model.ColumnModel;
@@ -79,6 +83,9 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 								.setPkMember(column.isPrimaryKey())
 								.setSetterName(nameGenerator.getClassName(column.getName())))
 				.collect(Collectors.toList());
+		if (GlobalIdOptionChecker.INSTANCE.hasGlobalIdTypeConfiguration(GlobalIdType.UUID, table)) {
+			importDeclarations.add("java.util", "UUID");
+		}
 		getCompositionLists(table).forEach(cld -> {
 			importDeclarations.add("java.util", "ArrayList");
 			importDeclarations.add("java.util", "List");
@@ -99,6 +106,15 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 		return l;
 	}
 
+	protected String getType(ColumnModel column, DataModel model, ReferenceMode referenceMode,
+			Function<ColumnModel, String> referencedClassNameProvider,
+			BiFunction<ColumnModel, DataModel, String> enumClassNameProvider) {
+		if (GlobalIdOptionChecker.INSTANCE.getGlobalIdType(column) == GlobalIdType.UUID) {
+			return "UUID";
+		}
+		return super.getType(column, model, referenceMode, referencedClassNameProvider, enumClassNameProvider);
+	}
+
 	private List<AnnotationData> getAnnotationsForColumn(ColumnModel column) {
 		List<AnnotationData> annotations = new ArrayList<>();
 		column.ifOptionSetWithValueDo(TO_STRING, "EXCLUDE", om -> {
@@ -112,6 +128,9 @@ public class GeneratedModelClassCodeGenerator extends AbstractClassCodeGenerator
 		OptionModel initWith = column.getOptionByName(INIT_WITH);
 		if (initWith != null) {
 			return initWith.getParameter();
+		}
+		if (GlobalIdOptionChecker.INSTANCE.getGlobalIdType(column) == GlobalIdType.UUID) {
+			return "UUID.randomUUID()";
 		}
 		return null;
 	}

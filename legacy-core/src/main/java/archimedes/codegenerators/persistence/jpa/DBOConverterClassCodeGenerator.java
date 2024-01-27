@@ -12,6 +12,8 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns;
 import archimedes.codegenerators.Columns.ColumnData;
 import archimedes.codegenerators.Converters.ConverterData;
+import archimedes.codegenerators.GlobalIdOptionChecker;
+import archimedes.codegenerators.GlobalIdType;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.Subclasses.SubclassData;
@@ -98,6 +100,18 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 		context.put("Subclasses", subClasses);
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(model));
 		context.put("ToModelMethodName", nameGenerator.getToModelMethodName(model));
+		if (hasGlobalIdTypeConfiguration(GlobalIdType.UUID, table)) {
+			importDeclarations.add("java.util", "UUID");
+		}
+	}
+
+	private boolean hasGlobalIdTypeConfiguration(GlobalIdType globalIdType, TableModel table) {
+		boolean b = GlobalIdOptionChecker.INSTANCE.hasGlobalIdTypeConfiguration(GlobalIdType.UUID, table);
+		while (getSuperclassTable(table) != null) {
+			table = getSuperclassTable(table);
+			b = b || GlobalIdOptionChecker.INSTANCE.hasGlobalIdTypeConfiguration(GlobalIdType.UUID, table);
+		}
+		return b;
 	}
 
 	private List<ColumnData> getColumnData(ColumnModel[] columns, TableModel table, DataModel model,
@@ -116,7 +130,8 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 										.setGetterCall(getGetterCall(column, model, referenceMode))
 										.setPkMember(column.isPrimaryKey())
 										.setReference(column.getReferencedColumn() != null)
-										.setSetterName(getSetterName(column)))
+										.setSetterName(getSetterName(column))
+										.setUuid(isUuid(column)))
 						.collect(Collectors.toList());
 		getCompositionLists(table).forEach(cld -> {
 			l
@@ -139,6 +154,10 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 																			model))));
 		});
 		return l;
+	}
+
+	private boolean isUuid(ColumnModel column) {
+		return GlobalIdOptionChecker.INSTANCE.getGlobalIdType(column) == GlobalIdType.UUID;
 	}
 
 	private String getDBOConverterAttributeName(ColumnModel column, DataModel model) {
@@ -256,7 +275,8 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 												.setGetterCall(getGetterCall(column, model, referenceMode))
 												.setPkMember(column.isPrimaryKey())
 												.setReference(column.getReferencedColumn() != null)
-												.setSetterName(getSetterName(column))));
+												.setSetterName(getSetterName(column))
+												.setUuid(isUuid(column))));
 	}
 
 	private List<SubclassData> getSubclassData(DataModel model, TableModel table) {

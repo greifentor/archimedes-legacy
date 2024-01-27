@@ -298,8 +298,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	protected List<TableModel> getSubclassTables(TableModel tableToCheckFor) {
 		List<TableModel> l =
 				forAllTables(tableToCheckFor.getDataModel())
-				.filter(tableToCheck -> isTableSubclassTableOf(tableToCheckFor, tableToCheck))
-				.collect(Collectors.toList());
+						.filter(tableToCheck -> isTableSubclassTableOf(tableToCheckFor, tableToCheck))
+						.collect(Collectors.toList());
 		List.of(l.toArray(new TableModel[l.size()])).forEach(t -> l.addAll(getSubclassTables(t)));
 		return l;
 	}
@@ -425,14 +425,23 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	protected List<CompositionListData> getCompositionLists(TableModel table) {
 		List<CompositionListData> l = new ArrayList<>();
-		OptionGetter.getOptionByName(table, MEMBER_LIST)
+		OptionGetter
+				.getOptionByName(table, MEMBER_LIST)
 				.filter(om -> (om.getParameter() != null) && om.getParameter().toUpperCase().equals("PARENT"))
 				.ifPresent(om -> {
-					getReferencingColumns(table, table.getDataModel()).stream()
-							.filter(cm -> OptionGetter.getParameterOfOptionByName(cm.getTable(), MEMBER_LIST)
-									.filter(s -> s.toUpperCase().equals("MEMBER")).isPresent())
-							.forEach(cm -> l.add(new CompositionListData().setBackReferenceColumn(cm)
-									.setMemberTable(cm.getTable())));
+					getReferencingColumns(table, table.getDataModel())
+							.stream()
+							.filter(
+									cm -> OptionGetter
+											.getParameterOfOptionByName(cm.getTable(), MEMBER_LIST)
+											.filter(s -> s.toUpperCase().equals("MEMBER"))
+											.isPresent())
+							.forEach(
+									cm -> l
+											.add(
+													new CompositionListData()
+															.setBackReferenceColumn(cm)
+															.setMemberTable(cm.getTable())));
 				});
 		return l;
 	}

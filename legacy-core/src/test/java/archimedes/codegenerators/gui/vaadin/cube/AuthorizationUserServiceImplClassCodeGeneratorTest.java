@@ -61,9 +61,15 @@ public class AuthorizationUserServiceImplClassCodeGeneratorTest {
 						+ "	@Override\n" //
 						+ "	public AuthorizationUser findByGlobalIdOrCreate(DecodedJWT decodedJWT) {\n" //
 						+ "//		return userService\n" //
-						+ "//				.findByGlobalId(getClaimAsString(decodedJWT, JWTService.CLAIM_NAME_USER_GLOBAL_ID))\n" //
+						+ "//				.findByGlobalId(getGlobalIdFromClaimString(decodedJWT))\n" //
 						+ "//				.orElseGet(() -> createUser(decodedJWT));\n" //
 						+ "		return null;\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	private UUID getGlobalIdFromClaimString(DecodedJWT decodedJWT) {\n" //
+						+ "		String globalId = getClaimAsString(decodedJWT, JWTService.CLAIM_NAME_USER_GLOBAL_ID);\n" //
+						+ "		return globalId;\n" //
+						+ "		// return (globalId != null) && !globalId.isEmpty() ? UUID.fromString(globalId) : null;\n" //
 						+ "	}\n" //
 						+ "\n" //
 						+ "	private String getClaimAsString(DecodedJWT decodedJWT, String claimIdentifier) {\n" //
@@ -76,10 +82,7 @@ public class AuthorizationUserServiceImplClassCodeGeneratorTest {
 						+ "//						userService\n" //
 						+ "//								.create(\n" //
 						+ "//										new User()\n" //
-						+ "//												.setGlobalId(\n" //
-						+ "//														getClaimAsString(\n" //
-						+ "//																decodedJWT,\n" //
-						+ "//																JWTService.CLAIM_NAME_USER_GLOBAL_ID))\n" //
+						+ "//												.setGlobalId(getGlobalIdFromClaimString(decodedJWT))\n" //
 						+ "//												.setName(getClaimAsString(decodedJWT, JWTService.CLAIM_NAME_USER_NAME))\n" //
 						+ "//												.setToken(\n" //
 						+ "//														getClaimAsString(\n" //

@@ -10,6 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
+import archimedes.codegenerators.GlobalIdType;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.legacy.scheme.Relation;
 import archimedes.model.ColumnModel;
@@ -700,74 +702,75 @@ public class DBOConverterClassCodeGeneratorTest {
 		@Test
 		void subSubClass() {
 			// Prepare
-			String expected = "package base.pack.age.name.persistence.converter;\n" //
-					+ "\n" //
-					+ "import java.util.List;\n" //
-					+ "import java.util.stream.Collectors;\n" //
-					+ "\n" //
-					+ "import javax.inject.Named;\n" //
-					+ "\n" //
-					+ "import lombok.Generated;\n" //
-					+ "import lombok.RequiredArgsConstructor;\n" //
-					+ "\n" //
-					+ "import base.pack.age.name.persistence.entity.BHeirHeirTableDBO;\n" //
-					+ "import base.pack.age.name.core.model.BHeirHeirTable;\n" //
-					+ "\n" //
-					+ "/**\n" //
-					+ " * A DBO converter for b_heir_heir_tables.\n" //
-					+ " *\n" //
-					+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
-					+ " */\n" //
-					+ "@Generated\n" //
-					+ "@Named\n" //
-					+ "@RequiredArgsConstructor\n" //
-					+ "public class BHeirHeirTableDBOConverter implements ToModelConverter<BHeirHeirTable, BHeirHeirTableDBO> {\n" //
-					+ "\n" //
-					+ "	private final BReferencedTableDBOConverter bReferencedTableDBOConverter;\n" //
-					+ "\n" //
-					+ "	public BHeirHeirTableDBO toDBO(BHeirHeirTable model) {\n" //
-					+ "		if (model == null) {\n" //
-					+ "			return null;\n" //
-					+ "		}\n" //
-					+ "		BHeirHeirTableDBO dbo = new BHeirHeirTableDBO();\n" //
-					+ "		dbo.setId(model.getId());\n" //
-					+ "		dbo.setAdditionalDescription(model.getAdditionalDescription());\n" //
-					+ "		dbo.setReference(bReferencedTableDBOConverter.toDBO(model.getReference()));\n" //
-					+ "		dbo.setDescription(model.getDescription());\n" //
-					+ "		dbo.setName(model.getName());\n" //
-					+ "		return dbo;\n" //
-					+ "	}\n" //
-					+ "\n" //
-					+ "	public List<BHeirHeirTableDBO> toDBO(List<BHeirHeirTable> models) {\n" //
-					+ "		if (models == null) {\n" //
-					+ "			return null;\n" //
-					+ "		}\n" //
-					+ "		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" //
-					+ "	}\n" //
-					+ "\n" //
-					+ "	@Override\n" //
-					+ "	public BHeirHeirTable toModel(BHeirHeirTableDBO dbo) {\n" //
-					+ "		if (dbo == null) {\n" //
-					+ "			return null;\n" //
-					+ "		}\n" //
-					+ "		BHeirHeirTable model = new BHeirHeirTable();\n" //
-					+ "		model.setId(dbo.getId());\n" //
-					+ "		model.setAdditionalDescription(dbo.getAdditionalDescription());\n" //
-					+ "		model.setReference(bReferencedTableDBOConverter.toModel(dbo.getReference()));\n" //
-					+ "		model.setDescription(dbo.getDescription());\n" //
-					+ "		model.setName(dbo.getName());\n" //
-					+ "		return model;\n" //
-					+ "	}\n" //
-					+ "\n" //
-					+ "	@Override\n" //
-					+ "	public List<BHeirHeirTable> toModel(List<BHeirHeirTableDBO> dbos) {\n" //
-					+ "		if (dbos == null) {\n" //
-					+ "			return null;\n" //
-					+ "		}\n" //
-					+ "		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" //
-					+ "	}\n" //
-					+ "\n" //
-					+ "}";
+			String expected =
+					"package base.pack.age.name.persistence.converter;\n" //
+							+ "\n" //
+							+ "import java.util.List;\n" //
+							+ "import java.util.stream.Collectors;\n" //
+							+ "\n" //
+							+ "import javax.inject.Named;\n" //
+							+ "\n" //
+							+ "import lombok.Generated;\n" //
+							+ "import lombok.RequiredArgsConstructor;\n" //
+							+ "\n" //
+							+ "import base.pack.age.name.persistence.entity.BHeirHeirTableDBO;\n" //
+							+ "import base.pack.age.name.core.model.BHeirHeirTable;\n" //
+							+ "\n" //
+							+ "/**\n" //
+							+ " * A DBO converter for b_heir_heir_tables.\n" //
+							+ " *\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n" //
+							+ "@Generated\n" //
+							+ "@Named\n" //
+							+ "@RequiredArgsConstructor\n" //
+							+ "public class BHeirHeirTableDBOConverter implements ToModelConverter<BHeirHeirTable, BHeirHeirTableDBO> {\n" //
+							+ "\n" //
+							+ "	private final BReferencedTableDBOConverter bReferencedTableDBOConverter;\n" //
+							+ "\n" //
+							+ "	public BHeirHeirTableDBO toDBO(BHeirHeirTable model) {\n" //
+							+ "		if (model == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		BHeirHeirTableDBO dbo = new BHeirHeirTableDBO();\n" //
+							+ "		dbo.setId(model.getId());\n" //
+							+ "		dbo.setAdditionalDescription(model.getAdditionalDescription());\n" //
+							+ "		dbo.setReference(bReferencedTableDBOConverter.toDBO(model.getReference()));\n" //
+							+ "		dbo.setDescription(model.getDescription());\n" //
+							+ "		dbo.setName(model.getName());\n" //
+							+ "		return dbo;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	public List<BHeirHeirTableDBO> toDBO(List<BHeirHeirTable> models) {\n" //
+							+ "		if (models == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public BHeirHeirTable toModel(BHeirHeirTableDBO dbo) {\n" //
+							+ "		if (dbo == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		BHeirHeirTable model = new BHeirHeirTable();\n" //
+							+ "		model.setId(dbo.getId());\n" //
+							+ "		model.setAdditionalDescription(dbo.getAdditionalDescription());\n" //
+							+ "		model.setReference(bReferencedTableDBOConverter.toModel(dbo.getReference()));\n" //
+							+ "		model.setDescription(dbo.getDescription());\n" //
+							+ "		model.setName(dbo.getName());\n" //
+							+ "		return model;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	@Override\n" //
+							+ "	public List<BHeirHeirTable> toModel(List<BHeirHeirTableDBO> dbos) {\n" //
+							+ "		if (dbos == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "}";
 			DataModel dataModel = readDataModel("Model-Inheritance.xml");
 			dataModel.addOption(new Option(AbstractClassCodeGenerator.REFERENCE_MODE, "OBJECT"));
 			// Run
@@ -1389,6 +1392,178 @@ public class DBOConverterClassCodeGeneratorTest {
 				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 				// Check
 				assertEquals(expected, returned);
+			}
+
+		}
+
+		@Nested
+		class GlobalIds {
+
+			@Nested
+			class UUID {
+
+				@Test
+				void happyRun() {
+					// Prepare
+					String expected =
+							"package base.pack.age.name.persistence.converter;\n" //
+									+ "\n" //
+									+ "import java.util.List;\n" //
+									+ "import java.util.stream.Collectors;\n" //
+									+ "\n" //
+									+ "import javax.inject.Named;\n" //
+									+ "\n" //
+									+ "import lombok.Generated;\n" //
+									+ "import lombok.RequiredArgsConstructor;\n" //
+									+ "\n" //
+									+ "import base.pack.age.name.persistence.entity.TableWithUuidDBO;\n" //
+									+ "import base.pack.age.name.core.model.TableWithUuid;\n" //
+									+ "import java.util.UUID;\n" //
+									+ "\n" //
+									+ "/**\n" //
+									+ " * A DBO converter for table_with_uuids.\n" //
+									+ " *\n" //
+									+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+									+ " */\n" //
+									+ "@Generated\n" //
+									+ "@Named\n" //
+									+ "@RequiredArgsConstructor\n" //
+									+ "public class TableWithUuidDBOConverter implements ToModelConverter<TableWithUuid, TableWithUuidDBO> {\n" //
+									+ "\n" //
+									+ "	public TableWithUuidDBO toDBO(TableWithUuid model) {\n" //
+									+ "		if (model == null) {\n" //
+									+ "			return null;\n" //
+									+ "		}\n" //
+									+ "		return new TableWithUuidDBO()\n" //
+									+ "				.setId(model.getId())\n" //
+									+ "				.setGlobalId(model.getGlobalId() != null ? model.getGlobalId().toString() : null);\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	public List<TableWithUuidDBO> toDBO(List<TableWithUuid> models) {\n" //
+									+ "		if (models == null) {\n" //
+									+ "			return null;\n" //
+									+ "		}\n" //
+									+ "		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public TableWithUuid toModel(TableWithUuidDBO dbo) {\n" //
+									+ "		if (dbo == null) {\n" //
+									+ "			return null;\n" //
+									+ "		}\n" //
+									+ "		return new TableWithUuid()\n" //
+									+ "				.setId(dbo.getId())\n" //
+									+ "				.setGlobalId((dbo.getGlobalId() != null) && !dbo.getGlobalId().isEmpty() ? UUID.fromString(dbo.getGlobalId()) : null);\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public List<TableWithUuid> toModel(List<TableWithUuidDBO> dbos) {\n" //
+									+ "		if (dbos == null) {\n" //
+									+ "			return null;\n" //
+									+ "		}\n" //
+									+ "		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "}";
+					DataModel dataModel = readDataModel("Model.xml");
+					dataModel
+							.getTableByName("TABLE_WITH_UUID")
+							.getColumnByName("GLOBAL_ID")
+							.setParameters(AbstractModelCodeGenerator.GLOBAL_ID + ":" + GlobalIdType.UUID);
+					// Run
+					String returned =
+							unitUnderTest
+									.generate(
+											BASE_PACKAGE_NAME,
+											dataModel,
+											dataModel.getTableByName("TABLE_WITH_UUID"));
+					// Check
+					assertEquals(expected, returned);
+				}
+
+				@Test
+				void subClassConverter() {
+					// Prepare
+					String expected =
+							"package base.pack.age.name.persistence.converter;\n" //
+									+ "\n" //
+									+ "import java.util.List;\n" //
+									+ "import java.util.stream.Collectors;\n" //
+									+ "\n" //
+									+ "import javax.inject.Named;\n" //
+									+ "\n" //
+									+ "import lombok.Generated;\n" //
+									+ "import lombok.RequiredArgsConstructor;\n" //
+									+ "\n" //
+									+ "import base.pack.age.name.persistence.entity.SubTableWithUuidDBO;\n" //
+									+ "import base.pack.age.name.core.model.SubTableWithUuid;\n" //
+									+ "import java.util.UUID;\n" //
+									+ "\n" //
+									+ "/**\n" //
+									+ " * A DBO converter for sub_table_with_uuids.\n" //
+									+ " *\n" //
+									+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+									+ " */\n" //
+									+ "@Generated\n" //
+									+ "@Named\n" //
+									+ "@RequiredArgsConstructor\n" //
+									+ "public class SubTableWithUuidDBOConverter implements ToModelConverter<SubTableWithUuid, SubTableWithUuidDBO> {\n" //
+									+ "\n" //
+									+ "	public SubTableWithUuidDBO toDBO(SubTableWithUuid model) {\n" //
+									+ "		if (model == null) {\n" //
+									+ "			return null;\n" //
+									+ "		}\n" //
+									+ "		SubTableWithUuidDBO dbo = new SubTableWithUuidDBO();\n" //
+									+ "		dbo.setId(model.getId());\n" //
+									+ "		dbo.setName(model.getName());\n" //
+									+ "		dbo.setGlobalId(model.getGlobalId() != null ? model.getGlobalId().toString() : null);\n" //
+									+ "		return dbo;\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	public List<SubTableWithUuidDBO> toDBO(List<SubTableWithUuid> models) {\n" //
+									+ "		if (models == null) {\n" //
+									+ "			return null;\n" //
+									+ "		}\n" //
+									+ "		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public SubTableWithUuid toModel(SubTableWithUuidDBO dbo) {\n" //
+									+ "		if (dbo == null) {\n" //
+									+ "			return null;\n" //
+									+ "		}\n" //
+									+ "		SubTableWithUuid model = new SubTableWithUuid();\n" //
+									+ "		model.setId(dbo.getId());\n" //
+									+ "		model.setName(dbo.getName());\n" //
+									+ "		model.setGlobalId((dbo.getGlobalId() != null) && !dbo.getGlobalId().isEmpty() ? UUID.fromString(dbo.getGlobalId()) : null);\n" //
+									+ "		return model;\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public List<SubTableWithUuid> toModel(List<SubTableWithUuidDBO> dbos) {\n" //
+									+ "		if (dbos == null) {\n" //
+									+ "			return null;\n" //
+									+ "		}\n" //
+									+ "		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "}";
+					DataModel dataModel = readDataModel("Model.xml");
+					dataModel
+							.getTableByName("SUPER_TABLE_WITH_UUID")
+							.getColumnByName("GLOBAL_ID")
+							.setParameters(AbstractModelCodeGenerator.GLOBAL_ID + ":" + GlobalIdType.UUID);
+					// Run
+					String returned =
+							unitUnderTest
+									.generate(
+											BASE_PACKAGE_NAME,
+											dataModel,
+											dataModel.getTableByName("SUB_TABLE_WITH_UUID"));
+					// Check
+					assertEquals(expected, returned);
+				}
+
 			}
 
 		}

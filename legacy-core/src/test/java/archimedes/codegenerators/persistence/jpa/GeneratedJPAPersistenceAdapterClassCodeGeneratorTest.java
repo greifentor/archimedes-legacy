@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeGenerator;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
+import archimedes.codegenerators.GlobalIdType;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.legacy.scheme.Tabellenspalte;
 import archimedes.model.ColumnModel;
@@ -848,7 +850,8 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 						"import base.pack.age.name.persistence.repository.HeirTableWithReferenceDBORepository;\n" + //
 						"import base.pack.age.name.persistence.repository.IgnoredHeirTableDBORepository;\n" + //
 						"import base.pack.age.name.persistence.converter.AnotherHeirTableDBOConverter;\n" + //
-						"import base.pack.age.name.persistence.converter.AnotherHeirTableWithSameReferenceDBOConverter;\n" + //
+						"import base.pack.age.name.persistence.converter.AnotherHeirTableWithSameReferenceDBOConverter;\n"
+						+ //
 						"import base.pack.age.name.persistence.converter.AnotherTableDBOConverter;\n" + //
 						"import base.pack.age.name.persistence.converter.HeirTableWithReferenceDBOConverter;\n" + //
 						"import base.pack.age.name.persistence.converter.IgnoredHeirTableDBOConverter;\n" + //
@@ -976,6 +979,228 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 				// Check
 				assertEquals(expected, returned);
+			}
+
+		}
+
+		@Nested
+		class GlobalIds {
+
+			@Nested
+			class UUID {
+
+				@Test
+				void unique() {
+					// Prepare
+					String expected =
+							"package base.pack.age.name.persistence;\n" //
+									+ "\n" //
+									+ "import static base.pack.age.name.util.Check.ensure;\n" //
+									+ "\n" //
+									+ "import java.util.List;\n" //
+									+ "import java.util.Optional;\n" //
+									+ "\n" //
+									+ "import javax.annotation.PostConstruct;\n" //
+									+ "import javax.inject.Inject;\n" //
+									+ "\n" //
+									+ "import base.pack.age.name.core.model.Page;\n" //
+									+ "import base.pack.age.name.core.model.PageParameters;\n" //
+									+ "import base.pack.age.name.core.model.TableWithUuid;\n" //
+									+ "import base.pack.age.name.core.service.exception.UniqueConstraintViolationException;\n" //
+									+ "import base.pack.age.name.core.service.port.persistence.TableWithUuidPersistencePort;\n" //
+									+ "import base.pack.age.name.persistence.converter.PageConverter;\n" //
+									+ "import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" //
+									+ "import base.pack.age.name.persistence.converter.TableWithUuidDBOConverter;\n" //
+									+ "import base.pack.age.name.persistence.entity.TableWithUuidDBO;\n" //
+									+ "import base.pack.age.name.persistence.repository.TableWithUuidDBORepository;\n" //
+									+ "import java.util.UUID;\n" //
+									+ "\n" //
+									+ "import lombok.Generated;\n" //
+									+ "\n" //
+									+ "/**\n" //
+									+ " * A generated JPA persistence adapter for table_with_uuids.\n" //
+									+ " *\n" //
+									+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+									+ " */\n" //
+									+ "@Generated\n" //
+									+ "public abstract class TableWithUuidGeneratedJPAPersistenceAdapter implements TableWithUuidPersistencePort {\n" //
+									+ "\n" //
+									+ "	@Inject\n" //
+									+ "	protected TableWithUuidDBOConverter converter;\n" //
+									+ "	@Inject\n" //
+									+ "	protected TableWithUuidDBORepository repository;\n" //
+									+ "\n" //
+									+ "	@Inject\n" //
+									+ "	protected PageParametersToPageableConverter pageParametersToPageableConverter;\n" //
+									+ "\n" //
+									+ "	protected PageConverter<TableWithUuid, TableWithUuidDBO> pageConverter;\n" //
+									+ "\n" //
+									+ "	@PostConstruct\n" //
+									+ "	public void postConstruct() {\n" //
+									+ "		pageConverter = new PageConverter<>(converter);\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public TableWithUuid create(TableWithUuid model) {\n" //
+									+ "		model.setId(null);\n" //
+									+ "		return converter.toModel(repository.save(converter.toDBO(model)));\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public List<TableWithUuid> findAll() {\n" //
+									+ "		return converter.toModel(repository.findAll());\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public Page<TableWithUuid> findAll(PageParameters pageParameters) {\n" //
+									+ "		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public Optional<TableWithUuid> findById(Long id) {\n" //
+									+ "		return repository.findById(id).map(dbo -> converter.toModel(dbo));\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public TableWithUuid update(TableWithUuid model) {\n" //
+									+ "		ensure(\n" //
+									+ "				findByGlobalId(model.getGlobalId())\n" //
+									+ "						.filter(tableWithUuid -> !tableWithUuid.getId().equals(model.getId()))\n" //
+									+ "						.isEmpty(),\n" //
+									+ "				() -> new UniqueConstraintViolationException(\"globalId '\" + model.getGlobalId() + \"' is already set for another record\", \"TableWithUuid\", \"globalId\"));\n" //
+									+ "		return converter.toModel(repository.save(converter.toDBO(model)));\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public void delete(TableWithUuid model) {\n" //
+									+ "		repository.deleteById(model.getId());\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public Optional<TableWithUuid> findByGlobalId(UUID globalId) {\n" //
+									+ "		return Optional.ofNullable(converter.toModel(repository.findByGlobalId(globalId != null ? globalId.toString() : null).orElse(null)));\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "}";
+					DataModel dataModel = readDataModel("Model.xml");
+					dataModel
+							.getTableByName("TABLE_WITH_UUID")
+							.getColumnByName("GLOBAL_ID")
+							.setParameters(AbstractModelCodeGenerator.GLOBAL_ID + ":" + GlobalIdType.UUID + "|FIND_BY");
+					dataModel.getTableByName("TABLE_WITH_UUID").getColumnByName("GLOBAL_ID").setUnique(true);
+					// Run
+					String returned =
+							unitUnderTest
+									.generate(
+											BASE_PACKAGE_NAME,
+											dataModel,
+											dataModel.getTableByName("TABLE_WITH_UUID"));
+					// Check
+					assertEquals(expected, returned);
+				}
+
+				@Test
+				void notUnique() {
+					// Prepare
+					String expected =
+							"package base.pack.age.name.persistence;\n" //
+									+ "\n" //
+									+ "import java.util.List;\n" //
+									+ "import java.util.Optional;\n" //
+									+ "\n" //
+									+ "import javax.annotation.PostConstruct;\n" //
+									+ "import javax.inject.Inject;\n" //
+									+ "\n" //
+									+ "import base.pack.age.name.core.model.Page;\n" //
+									+ "import base.pack.age.name.core.model.PageParameters;\n" //
+									+ "import base.pack.age.name.core.model.TableWithUuid;\n" //
+									+ "import base.pack.age.name.core.service.port.persistence.TableWithUuidPersistencePort;\n" //
+									+ "import base.pack.age.name.persistence.converter.PageConverter;\n" //
+									+ "import base.pack.age.name.persistence.converter.PageParametersToPageableConverter;\n" //
+									+ "import base.pack.age.name.persistence.converter.TableWithUuidDBOConverter;\n" //
+									+ "import base.pack.age.name.persistence.entity.TableWithUuidDBO;\n" //
+									+ "import base.pack.age.name.persistence.repository.TableWithUuidDBORepository;\n" //
+									+ "import java.util.UUID;\n" //
+									+ "\n" //
+									+ "import lombok.Generated;\n" //
+									+ "\n" //
+									+ "/**\n" //
+									+ " * A generated JPA persistence adapter for table_with_uuids.\n" //
+									+ " *\n" //
+									+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+									+ " */\n" //
+									+ "@Generated\n" //
+									+ "public abstract class TableWithUuidGeneratedJPAPersistenceAdapter implements TableWithUuidPersistencePort {\n" //
+									+ "\n" //
+									+ "	@Inject\n" //
+									+ "	protected TableWithUuidDBOConverter converter;\n" //
+									+ "	@Inject\n" //
+									+ "	protected TableWithUuidDBORepository repository;\n" //
+									+ "\n" //
+									+ "	@Inject\n" //
+									+ "	protected PageParametersToPageableConverter pageParametersToPageableConverter;\n" //
+									+ "\n" //
+									+ "	protected PageConverter<TableWithUuid, TableWithUuidDBO> pageConverter;\n" //
+									+ "\n" //
+									+ "	@PostConstruct\n" //
+									+ "	public void postConstruct() {\n" //
+									+ "		pageConverter = new PageConverter<>(converter);\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public TableWithUuid create(TableWithUuid model) {\n" //
+									+ "		model.setId(null);\n" //
+									+ "		return converter.toModel(repository.save(converter.toDBO(model)));\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public List<TableWithUuid> findAll() {\n" //
+									+ "		return converter.toModel(repository.findAll());\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public Page<TableWithUuid> findAll(PageParameters pageParameters) {\n" //
+									+ "		return pageConverter.convert(repository.findAll(pageParametersToPageableConverter.convert(pageParameters)));\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public Optional<TableWithUuid> findById(Long id) {\n" //
+									+ "		return repository.findById(id).map(dbo -> converter.toModel(dbo));\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public TableWithUuid update(TableWithUuid model) {\n" //
+									+ "		return converter.toModel(repository.save(converter.toDBO(model)));\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public void delete(TableWithUuid model) {\n" //
+									+ "		repository.deleteById(model.getId());\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "	@Override\n" //
+									+ "	public List<TableWithUuid> findAllByGlobalId(UUID globalId) {\n" //
+									+ "		return converter.toModel(repository.findAllByGlobalId(globalId != null ? globalId.toString() : null));\n" //
+									+ "	}\n" //
+									+ "\n" //
+									+ "}";
+					DataModel dataModel = readDataModel("Model.xml");
+					dataModel
+							.getTableByName("TABLE_WITH_UUID")
+							.getColumnByName("GLOBAL_ID")
+							.setParameters(AbstractModelCodeGenerator.GLOBAL_ID + ":" + GlobalIdType.UUID + "|FIND_BY");
+					dataModel.getTableByName("TABLE_WITH_UUID").getColumnByName("GLOBAL_ID").setUnique(false);
+					// Run
+					String returned =
+							unitUnderTest
+									.generate(
+											BASE_PACKAGE_NAME,
+											dataModel,
+											dataModel.getTableByName("TABLE_WITH_UUID"));
+					// Check
+					assertEquals(expected, returned);
+				}
+
 			}
 
 		}

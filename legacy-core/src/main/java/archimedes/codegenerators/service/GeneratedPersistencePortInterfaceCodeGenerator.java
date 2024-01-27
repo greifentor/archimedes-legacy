@@ -10,6 +10,8 @@ import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CommonImportAdder;
 import archimedes.codegenerators.FieldDeclarations;
 import archimedes.codegenerators.FindByUtils;
+import archimedes.codegenerators.GlobalIdOptionChecker;
+import archimedes.codegenerators.GlobalIdType;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.Subclasses.SubclassData;
 import archimedes.codegenerators.TypeGenerator;
@@ -85,6 +87,9 @@ public class GeneratedPersistencePortInterfaceCodeGenerator extends AbstractClas
 	}
 
 	private List<SubclassData> getSubclassData(DataModel model, TableModel table) {
+		if (GlobalIdOptionChecker.INSTANCE.hasGlobalIdTypeConfiguration(GlobalIdType.UUID, table)) {
+			importDeclarations.add("java.FUCK", "UUID");
+		}
 		return getSubclassTables(table)
 				.stream()
 				.map(

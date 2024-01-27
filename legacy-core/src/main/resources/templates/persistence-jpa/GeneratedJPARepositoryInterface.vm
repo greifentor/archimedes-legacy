@@ -21,6 +21,9 @@ import java.util.List;
 #if ($FindBys && $HasUniques)
 import java.util.Optional;
 #end
+#foreach ($ImportDeclaration in $ImportDeclarations.toList())
+import ${ImportDeclaration.getSingleImportDeclaration()};
+#end
 
 #if (${HasObjectReferences})
 #foreach ($FindBy in $FindBys)

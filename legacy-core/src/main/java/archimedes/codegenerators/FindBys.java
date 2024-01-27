@@ -29,6 +29,7 @@ public class FindBys {
 		private String typePackageName;
 		private boolean unique;
 		private boolean isEnumType;
+		private boolean uuid;
 
 		public boolean isSimpleType() {
 			return List

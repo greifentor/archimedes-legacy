@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import archimedes.codegenerators.AbstractClassCodeGenerator;
+import archimedes.codegenerators.AbstractModelCodeGenerator;
+import archimedes.codegenerators.GlobalIdType;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
@@ -262,6 +264,88 @@ public class GeneratedJPARepositoryInterfaceCodeGeneratorTest {
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+		@Nested
+		class GlobalId_UUID {
+
+			@Test
+			void unique() {
+				// Prepare
+				String expected =
+						"package base.pack.age.name.persistence.repository;\n" //
+								+ "\n" //
+								+ "import org.springframework.data.jpa.repository.JpaRepository;\n" //
+								+ "import org.springframework.stereotype.Repository;\n" //
+								+ "\n" //
+								+ "import base.pack.age.name.persistence.entity.TableWithUuidDBO;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import java.util.Optional;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A generated JPA repository for table_with_uuids.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Generated\n" //
+								+ "@Repository\n" //
+								+ "public interface TableWithUuidGeneratedDBORepository extends JpaRepository<TableWithUuidDBO, Long> {\n" //
+								+ "\n" //
+								+ "	Optional<TableWithUuidDBO> findByGlobalId(String globalId);\n" //
+								+ "\n" //
+								+ "}";
+				DataModel dataModel = readDataModel("Model.xml");
+				dataModel
+						.getTableByName("TABLE_WITH_UUID")
+						.getColumnByName("GLOBAL_ID")
+						.setParameters(AbstractModelCodeGenerator.GLOBAL_ID + ":" + GlobalIdType.UUID + "|FIND_BY");
+				dataModel.getTableByName("TABLE_WITH_UUID").getColumnByName("GLOBAL_ID").setUnique(true);
+				// Run
+				String returned =
+						unitUnderTest
+								.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("TABLE_WITH_UUID"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
+			@Test
+			void notUnique() {
+				// Prepare
+				String expected =
+						"package base.pack.age.name.persistence.repository;\n" //
+								+ "\n" //
+								+ "import org.springframework.data.jpa.repository.JpaRepository;\n" //
+								+ "import org.springframework.stereotype.Repository;\n" //
+								+ "\n" //
+								+ "import base.pack.age.name.persistence.entity.TableWithUuidDBO;\n" //
+								+ "import lombok.Generated;\n" //
+								+ "import java.util.List;\n" //
+								+ "\n" //
+								+ "/**\n" //
+								+ " * A generated JPA repository for table_with_uuids.\n" //
+								+ " *\n" //
+								+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+								+ " */\n" //
+								+ "@Generated\n" //
+								+ "@Repository\n" //
+								+ "public interface TableWithUuidGeneratedDBORepository extends JpaRepository<TableWithUuidDBO, Long> {\n" //
+								+ "\n" //
+								+ "	List<TableWithUuidDBO> findAllByGlobalId(String globalId);\n" //
+								+ "\n" //
+								+ "}";
+				DataModel dataModel = readDataModel("Model.xml");
+				dataModel
+						.getTableByName("TABLE_WITH_UUID")
+						.getColumnByName("GLOBAL_ID")
+						.setParameters(AbstractModelCodeGenerator.GLOBAL_ID + ":" + GlobalIdType.UUID + "|FIND_BY");
+				// Run
+				String returned =
+						unitUnderTest
+								.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("TABLE_WITH_UUID"));
+				// Check
+				assertEquals(expected, returned);
+			}
+
 		}
 
 	}
