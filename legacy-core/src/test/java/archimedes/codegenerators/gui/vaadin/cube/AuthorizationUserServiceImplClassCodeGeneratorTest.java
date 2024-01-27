@@ -69,10 +69,12 @@ public class AuthorizationUserServiceImplClassCodeGeneratorTest {
 						+ "	private UUID getGlobalIdFromClaimString(DecodedJWT decodedJWT) {\n" //
 						+ "		String globalId = getClaimAsString(decodedJWT, JWTService.CLAIM_NAME_USER_GLOBAL_ID);\n" //
 						+ "		return globalId;\n" //
-						+ "		// return (globalId != null) && !globalId.isEmpty() ? UUID.fromString(globalId) : null;\n" //
+						+ "//		return (globalId != null) && !globalId.isEmpty() ? UUID.fromString(globalId) : null;\n" //
 						+ "	}\n" //
 						+ "\n" //
 						+ "	private String getClaimAsString(DecodedJWT decodedJWT, String claimIdentifier) {\n" //
+						+ "//		String globalId = getClaimAsString(decodedJWT, JWTService.CLAIM_NAME_USER_GLOBAL_ID);\n" //
+						+ "//		return globalId;\n" //
 						+ "		return decodedJWT.getClaims().get(claimIdentifier).asString();\n" //
 						+ "	}\n" //
 						+ "\n" //

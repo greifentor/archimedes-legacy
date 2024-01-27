@@ -32,13 +32,14 @@ public class ${ClassName} implements ${AuthorizationUserServiceInterfaceName} {
 
 	private UUID getGlobalIdFromClaimString(DecodedJWT decodedJWT) {
 		String globalId = getClaimAsString(decodedJWT, JWTService.CLAIM_NAME_USER_GLOBAL_ID);
-		return (globalId != null) && !globalId.isEmpty() ? UUID.fromString(globalId) : null;
+		return globalId;
+//		return (globalId != null) && !globalId.isEmpty() ? UUID.fromString(globalId) : null;
 	}
 
 	private String getClaimAsString(DecodedJWT decodedJWT, String claimIdentifier) {
-		String globalId = getClaimAsString(decodedJWT, JWTService.CLAIM_NAME_USER_GLOBAL_ID);
-		return globalId;
-//		return decodedJWT.getClaims().get(claimIdentifier).asString();
+//		String globalId = getClaimAsString(decodedJWT, JWTService.CLAIM_NAME_USER_GLOBAL_ID);
+//		return globalId;
+		return decodedJWT.getClaims().get(claimIdentifier).asString();
 	}
 
 //	private User createUser(DecodedJWT decodedJWT) {

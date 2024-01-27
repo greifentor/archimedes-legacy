@@ -145,7 +145,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void delete(ATable model) {\n" + //
-					"		repository.deleteById(model.getId());\n" + //
+					"		repository.delete(converter.toDBO(model));\n" + //
 					"	}\n";
 			if (findByDescriptionUnique != null) {
 				if (findByDescriptionUnique) {
@@ -313,7 +313,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void delete(ATable model) {\n" + //
-					"		repository.deleteById(model.getId());\n" + //
+					"		repository.delete(converter.toDBO(model));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n";
@@ -409,7 +409,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 					"\n" + //
 					"	@Override\n" + //
 					"	public void delete(TableWithEnumType model) {\n" + //
-					"		repository.deleteById(model.getId());\n" + //
+					"		repository.delete(converter.toDBO(model));\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -550,7 +550,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	public void delete(ATable model) {\n" + //
-						"		repository.deleteById(model.getId());\n" + //
+						"		repository.delete(converter.toDBO(model));\n" + //
 						"	}\n";
 				s += "\n}";
 				return s;
@@ -664,7 +664,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	public void delete(ATable model) {\n" + //
-						"		repository.deleteById(model.getId());\n" + //
+						"		repository.delete(converter.toDBO(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -786,7 +786,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	public void delete(ATable model) {\n" + //
-						"		repository.deleteById(model.getId());\n" + //
+						"		repository.delete(converter.toDBO(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -969,7 +969,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	public void delete(ATable model) {\n" + //
-						"		repository.deleteById(model.getId());\n" + //
+						"		repository.delete(converter.toDBO(model));\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -1073,7 +1073,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 									+ "\n" //
 									+ "	@Override\n" //
 									+ "	public void delete(TableWithUuid model) {\n" //
-									+ "		repository.deleteById(model.getId());\n" //
+									+ "		repository.delete(converter.toDBO(model));\n" //
 									+ "	}\n" //
 									+ "\n" //
 									+ "	@Override\n" //
@@ -1175,7 +1175,7 @@ class GeneratedJPAPersistenceAdapterClassCodeGeneratorTest {
 									+ "\n" //
 									+ "	@Override\n" //
 									+ "	public void delete(TableWithUuid model) {\n" //
-									+ "		repository.deleteById(model.getId());\n" //
+									+ "		repository.delete(converter.toDBO(model));\n" //
 									+ "	}\n" //
 									+ "\n" //
 									+ "	@Override\n" //
