@@ -65,6 +65,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("ModelSuperClassName", modelSuperClassName);
 		context.put("PackageName", getPackageName(model, table));
 		context.put("PreferenceData", getPreferenceData(table));
+		context.put("RemoveConfirmDialogClassName", nameGenerator.getRemoveConfirmDialogClassName(model));
 		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
 		context.put("SessionDataClassName", sessionDataClassName);
 		context.put("ServiceInterfaceName", serviceInterfaceName);
