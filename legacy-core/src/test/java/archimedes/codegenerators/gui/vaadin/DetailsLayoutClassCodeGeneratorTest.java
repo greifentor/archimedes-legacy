@@ -119,8 +119,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getATableService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getATableService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -235,8 +237,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getATableService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getATableService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -316,8 +320,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		super.onAttach(attachEvent);\n" + //
 						"		createButtons();\n" + //
 						"		comboBoxRef = createComboBox(\"ATableDetailsLayout.field.ref.label\", model.getRef(), serviceProvider.getAnotherTableService()"
-						+ ".findAll().toArray(new AnotherTable[0]));\n"
-						+ //
+						+ ".findAll().toArray(new AnotherTable[0]));\n" + //
 						"		comboBoxRef\n" + //
 						"				.setItemLabelGenerator(\n" + //
 						"						anotherTable  -> comboBoxItemLabelGenerator != null\n" + //
@@ -359,8 +362,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getATableService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getATableService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -481,8 +486,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getTableWithSpecialsService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getTableWithSpecialsService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -625,8 +632,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getTableWithNumberFieldService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getTableWithNumberFieldService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -743,8 +752,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getATableService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getATableService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -864,8 +875,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getATableService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getATableService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -993,8 +1006,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getDifferentSubclassReferencesService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getDifferentSubclassReferencesService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -1112,8 +1127,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 								+ "\n" //
 								+ "	@Override\n" //
 								+ "	protected void remove() {\n" //
-								+ "		serviceProvider.getBTableService().delete(model);\n" //
-								+ "		observer.remove();\n" //
+								+ "		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" //
+								+ "			serviceProvider.getBTableService().delete(model);\n" //
+								+ "			observer.remove();\n" //
+								+ "		}, resourceManager, session).open();\n" //
 								+ "	}\n" //
 								+ "\n" //
 								+ "	@Override\n" //
@@ -1237,8 +1254,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getBTableService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getBTableService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -1382,8 +1401,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getATableService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getATableService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -1505,8 +1526,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"\n" + //
 						"	@Override\n" + //
 						"	protected void remove() {\n" + //
-						"		serviceProvider.getBTableService().delete(model);\n" + //
-						"		observer.remove();\n" + //
+						"		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" + //
+						"			serviceProvider.getBTableService().delete(model);\n" + //
+						"			observer.remove();\n" + //
+						"		}, resourceManager, session).open();\n" + //
 						"	}\n" + //
 						"\n" + //
 						"	@Override\n" + //
@@ -1640,8 +1663,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	protected void remove() {\n" //
-							+ "		serviceProvider.getBlobTableService().delete(model);\n" //
-							+ "		observer.remove();\n" //
+							+ "		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" //
+							+ "			serviceProvider.getBlobTableService().delete(model);\n" //
+							+ "			observer.remove();\n" //
+							+ "		}, resourceManager, session).open();\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "	@Override\n" //
@@ -1753,8 +1778,10 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	protected void remove() {\n" //
-							+ "		serviceProvider.getBookService().delete(model);\n" //
-							+ "		observer.remove();\n" //
+							+ "		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {\n" //
+							+ "			serviceProvider.getBookService().delete(model);\n" //
+							+ "			observer.remove();\n" //
+							+ "		}, resourceManager, session).open();\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "	@Override\n" //

@@ -335,8 +335,10 @@ textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
 
 	@Override
 	protected void remove() {
-		serviceProvider.get${ServiceInterfaceName}().delete(model);
-		observer.remove();
+		new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {
+			serviceProvider.get${ServiceInterfaceName}().delete(model);
+			observer.remove();
+		}, resourceManager, session).open();
 	}
 
 	@Override

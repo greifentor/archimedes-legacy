@@ -20,6 +20,7 @@ import archimedes.codegenerators.gui.vaadin.component.HeaderLayoutClassCodeGener
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataViewButtonAdderInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.RemoveConfirmDialogClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ServiceProviderClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
@@ -105,6 +106,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new PageParametersGOClassCodeGenerator(this),
 						// new PageParametersGOConverterClassCodeGenerator(this),
 						// new PageGOConverterClassCodeGenerator(this),
+						new RemoveConfirmDialogClassCodeGenerator(this),
 						new READMEmdFileGenerator(this),
 						new ServiceProviderClassCodeGenerator(this),
 						new SessionDataClassCodeGenerator(this),

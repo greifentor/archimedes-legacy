@@ -1,0 +1,71 @@
+package ${PackageName};
+
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+
+import ${ResourceManagerInterfacePackageName}.${ResourceManagerInterfaceName};
+import ${SessionDataPackageName}.${SessionDataClassName};
+
+#if (!$CommentsOff )
+/**
+ * A dialog to confirm data record remove actions.
+ *
+ * ${Generated}
+ */
+#end
+@Generated
+public class ${ClassName} extends Dialog {
+
+	public interface Observer {
+
+		void confirmed();
+
+	}
+
+	private Button buttonCancel;
+	private Button buttonConfirm;
+	private Observer observer;
+
+	public ${ClassName}(${ButtonFactoryClassName} buttonFactory, Observer observer, ${ResourceManagerInterfaceName} resourceManager,
+			${SessionDataClassName} session) {
+		this.observer = observer;
+		buttonCancel =
+				buttonFactory
+						.createButton(
+								resourceManager
+										.getLocalizedString(
+												"RemoveConfirmDialog.button.cancel.label",
+												session.getLocalization()));
+		buttonCancel.addClickListener(event -> cancel());
+		buttonConfirm =
+				buttonFactory
+						.createButton(
+								resourceManager
+										.getLocalizedString(
+												"RemoveConfirmDialog.button.confirm.label",
+												session.getLocalization()));
+		buttonConfirm.addClickListener(event -> confirmed());
+		HorizontalLayout buttonLayout = new HorizontalLayout();
+		buttonLayout.add(buttonConfirm, buttonCancel);
+		buttonLayout.setAlignItems(Alignment.END);
+		add(
+				new Label(
+						resourceManager
+								.getLocalizedString("RemoveConfirmDialog.message.label", session.getLocalization())),
+				buttonLayout);
+	}
+
+	public void cancel() {
+		close();
+	}
+
+	public void confirmed() {
+		if (observer != null) {
+			observer.confirmed();
+		}
+		close();
+	}
+
+}

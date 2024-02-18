@@ -88,6 +88,8 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME =
 			"ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME";
 	public static final String ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME = "ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME";
+	public static final String ALTERNATIVE_REMOVE_CONFIRM_DIALOG_CLASS_NAME =
+			"ALTERNATIVE_REMOVE_CONFIRM_DIALOG_CLASS_NAME";
 	public static final String ALTERNATE_SELECTION_DIALOG_CLASS_NAME_SUFFIX =
 			"ALTERNATE_SELECTION_DIALOG_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME = "ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME";
@@ -488,6 +490,15 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 				: table.isOptionSet(PLURAL_NAME)
 						? table.getOptionByName(PLURAL_NAME).getParameter()
 						: getPluralName(table.getName());
+	}
+
+	public String getRemoveConfirmDialogClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"RemoveConfirmDialog",
+						ALTERNATIVE_REMOVE_CONFIRM_DIALOG_CLASS_NAME);
 	}
 
 	public String getSelectionDialogClassName(DataModel model) {
