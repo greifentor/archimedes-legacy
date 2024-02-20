@@ -270,9 +270,11 @@ public class PageViewClassCodeGeneratorTest {
 						"\n" + //
 						"	private void removeRecord() {\n" + //
 						"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-						"			service.delete(model);\n" + //
-						"			updateGrid(0);\n" + //
-						"			buttonAdd.focus();\n" + //
+						"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+						"				service.delete(model);\n" + //
+						"				updateGrid(0);\n" + //
+						"				buttonAdd.focus();\n" + //
+						"			}, resourceManager, session).open();\n" + //
 						"		});\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -582,9 +584,11 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void removeRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-					"			service.delete(model);\n" + //
-					"			updateGrid(0);\n" + //
-					"			buttonAdd.focus();\n" + //
+					"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+					"				service.delete(model);\n" + //
+					"				updateGrid(0);\n" + //
+					"				buttonAdd.focus();\n" + //
+					"			}, resourceManager, session).open();\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -849,9 +853,11 @@ public class PageViewClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	private void removeRecord() {\n" //
 							+ "		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" //
-							+ "			service.delete(model);\n" //
-							+ "			updateGrid(0);\n" //
-							+ "			buttonAdd.focus();\n" //
+							+ "			new RemoveConfirmDialog(buttonFactory, () -> {\n" //
+							+ "				service.delete(model);\n" //
+							+ "				updateGrid(0);\n" //
+							+ "				buttonAdd.focus();\n" //
+							+ "			}, resourceManager, session).open();\n" //
 							+ "		});\n" //
 							+ "	}\n" //
 							+ "\n" //
@@ -1099,9 +1105,11 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void removeRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-					"			service.delete(model);\n" + //
-					"			updateGrid(0);\n" + //
-					"			buttonAdd.focus();\n" + //
+					"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+					"				service.delete(model);\n" + //
+					"				updateGrid(0);\n" + //
+					"				buttonAdd.focus();\n" + //
+					"			}, resourceManager, session).open();\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -1416,9 +1424,11 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void removeRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-					"			service.delete(model);\n" + //
-					"			updateGrid(0);\n" + //
-					"			textFieldFilter.focus();\n" + //
+					"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+					"				service.delete(model);\n" + //
+					"				updateGrid(0);\n" + //
+					"				textFieldFilter.focus();\n" + //
+					"			}, resourceManager, session).open();\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -1674,9 +1684,11 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void removeRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-					"			service.delete(model);\n" + //
-					"			updateGrid(0);\n" + //
-					"			buttonAdd.focus();\n" + //
+					"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+					"				service.delete(model);\n" + //
+					"				updateGrid(0);\n" + //
+					"				buttonAdd.focus();\n" + //
+					"			}, resourceManager, session).open();\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -1926,9 +1938,11 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void removeRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-					"			service.delete(model);\n" + //
-					"			updateGrid(0);\n" + //
-					"			buttonAdd.focus();\n" + //
+					"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+					"				service.delete(model);\n" + //
+					"				updateGrid(0);\n" + //
+					"				buttonAdd.focus();\n" + //
+					"			}, resourceManager, session).open();\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //

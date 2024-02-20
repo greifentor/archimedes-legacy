@@ -88,6 +88,7 @@ public class RemoveConfirmDialogClassCodeGeneratorTest {
 							+ "												\"RemoveConfirmDialog.button.cancel.label\",\n" //
 							+ "												session.getLocalization()));\n" //
 							+ "		buttonCancel.addClickListener(event -> cancel());\n" //
+							+ "		buttonCancel.setWidth(\"40%\");\n" //
 							+ "		buttonConfirm =\n" //
 							+ "				buttonFactory\n" //
 							+ "						.createButton(\n" //
@@ -96,13 +97,17 @@ public class RemoveConfirmDialogClassCodeGeneratorTest {
 							+ "												\"RemoveConfirmDialog.button.confirm.label\",\n" //
 							+ "												session.getLocalization()));\n" //
 							+ "		buttonConfirm.addClickListener(event -> confirmed());\n" //
+							+ "		buttonConfirm.setWidth(\"20%\");\n" //
+							+ "		Label label = new Label(\"\");\n" //
+							+ "		label.setWidth(\"40%\");\n" //
 							+ "		HorizontalLayout buttonLayout = new HorizontalLayout();\n" //
-							+ "		buttonLayout.add(buttonConfirm, buttonCancel);\n" //
-							+ "		buttonLayout.setAlignItems(Alignment.END);\n" //
+							+ "		buttonLayout.add(label, buttonConfirm, buttonCancel);\n" //
+							+ "		buttonLayout.setWidthFull();\n" //
 							+ "		add(\n" //
 							+ "				new Label(\n" //
 							+ "						resourceManager\n" //
 							+ "								.getLocalizedString(\"RemoveConfirmDialog.message.label\", session.getLocalization())),\n" //
+							+ "				new Label(\"\"),\n" //
 							+ "				buttonLayout);\n" //
 							+ "	}\n" //
 							+ "\n" //

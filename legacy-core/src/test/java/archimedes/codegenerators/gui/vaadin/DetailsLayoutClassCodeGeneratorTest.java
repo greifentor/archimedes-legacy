@@ -51,6 +51,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -173,6 +174,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -290,6 +292,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -413,6 +416,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -552,6 +556,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -684,6 +689,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -803,6 +809,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -925,6 +932,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -1052,6 +1060,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 								+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
 								+ "import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" //
 								+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
+								+ "import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" //
 								+ "import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" //
 								+ "import lombok.Generated;\n" //
 								+ "import lombok.RequiredArgsConstructor;\n" //
@@ -1176,6 +1185,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -1310,6 +1320,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -1445,6 +1456,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
@@ -1580,6 +1592,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" //
 							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
@@ -1710,6 +1723,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.layout.list.ChapterListDetailsLayout;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
+							+ "import de.ollie.bookstore.gui.vaadin.component.RemoveConfirmDialog;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.component.ServiceProvider;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //

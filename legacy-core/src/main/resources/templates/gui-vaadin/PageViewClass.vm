@@ -359,13 +359,15 @@ public class ${ClassName} extends Scroller implements BeforeEnterObserver, HasUr
 
 	private void removeRecord() {
 		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
-			service.delete(model);
-			updateGrid(0);
-			#if ($Filters)
-			textFieldFilter.focus();
-			#else
-			buttonAdd.focus();
-			#end
+			new RemoveConfirmDialog(buttonFactory, () -> {
+				service.delete(model);
+				updateGrid(0);
+				#if ($Filters)
+				textFieldFilter.focus();
+				#else
+				buttonAdd.focus();
+				#end
+			}, resourceManager, session).open();
 		});
 	}
 

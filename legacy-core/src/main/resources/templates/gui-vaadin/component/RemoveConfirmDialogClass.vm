@@ -39,6 +39,7 @@ public class ${ClassName} extends Dialog {
 												"RemoveConfirmDialog.button.cancel.label",
 												session.getLocalization()));
 		buttonCancel.addClickListener(event -> cancel());
+		buttonCancel.setWidth("40%");
 		buttonConfirm =
 				buttonFactory
 						.createButton(
@@ -47,13 +48,17 @@ public class ${ClassName} extends Dialog {
 												"RemoveConfirmDialog.button.confirm.label",
 												session.getLocalization()));
 		buttonConfirm.addClickListener(event -> confirmed());
+		buttonConfirm.setWidth("20%");
+		Label label = new Label("");
+		label.setWidth("40%");
 		HorizontalLayout buttonLayout = new HorizontalLayout();
-		buttonLayout.add(buttonConfirm, buttonCancel);
-		buttonLayout.setAlignItems(Alignment.END);
+		buttonLayout.add(label, buttonConfirm, buttonCancel);
+		buttonLayout.setWidthFull();
 		add(
 				new Label(
 						resourceManager
 								.getLocalizedString("RemoveConfirmDialog.message.label", session.getLocalization())),
+				new Label(""),
 				buttonLayout);
 	}
 

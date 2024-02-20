@@ -38,6 +38,7 @@ import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
+import ${RemoveConfirmDialogPackageName}.${RemoveConfirmDialogClassName};
 import ${VaadinComponentPackageName}.${ServiceProviderClassName};
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
