@@ -50,9 +50,11 @@ public class RemoveConfirmDialogClassCodeGeneratorTest {
 							+ "import com.vaadin.flow.component.html.Label;\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.HorizontalLayout;\n" //
+							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
 							+ "\n" //
 							+ "import base.pack.age.name.core.service.localization.ResourceManager;\n" //
 							+ "import base.pack.age.name.gui.SessionData;\n" //
+							+ "import lombok.Generated;\n" //
 							+ "\n" //
 							+ "";
 			if (!suppressComment) {
@@ -88,7 +90,6 @@ public class RemoveConfirmDialogClassCodeGeneratorTest {
 							+ "												\"RemoveConfirmDialog.button.cancel.label\",\n" //
 							+ "												session.getLocalization()));\n" //
 							+ "		buttonCancel.addClickListener(event -> cancel());\n" //
-							+ "		buttonCancel.setWidth(\"40%\");\n" //
 							+ "		buttonConfirm =\n" //
 							+ "				buttonFactory\n" //
 							+ "						.createButton(\n" //
@@ -97,18 +98,20 @@ public class RemoveConfirmDialogClassCodeGeneratorTest {
 							+ "												\"RemoveConfirmDialog.button.confirm.label\",\n" //
 							+ "												session.getLocalization()));\n" //
 							+ "		buttonConfirm.addClickListener(event -> confirmed());\n" //
-							+ "		buttonConfirm.setWidth(\"20%\");\n" //
-							+ "		Label label = new Label(\"\");\n" //
-							+ "		label.setWidth(\"40%\");\n" //
 							+ "		HorizontalLayout buttonLayout = new HorizontalLayout();\n" //
-							+ "		buttonLayout.add(label, buttonConfirm, buttonCancel);\n" //
+							+ "		buttonLayout.add(buttonConfirm, buttonCancel);\n" //
+							+ "		buttonLayout.setAlignItems(Alignment.END);\n" //
 							+ "		buttonLayout.setWidthFull();\n" //
-							+ "		add(\n" //
-							+ "				new Label(\n" //
-							+ "						resourceManager\n" //
-							+ "								.getLocalizedString(\"RemoveConfirmDialog.message.label\", session.getLocalization())),\n" //
+							+ "		VerticalLayout layout = new VerticalLayout();\n" //
+							+ "		layout.setWidthFull();\n" //
+							+ "		layout\n" //
+							+ "				.add(\n" //
+							+ "						new Label(\n" //
+							+ "								resourceManager\n" //
+							+ "										.getLocalizedString(\"RemoveConfirmDialog.message.label\", session.getLocalization())),\n" //
 							+ "				new Label(\"\"),\n" //
 							+ "				buttonLayout);\n" //
+							+ "		add(layout);\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "	public void cancel() {\n" //

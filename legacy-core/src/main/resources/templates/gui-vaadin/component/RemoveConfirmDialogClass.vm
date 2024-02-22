@@ -4,9 +4,11 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import ${ResourceManagerInterfacePackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
+import lombok.Generated;
 
 #if (!$CommentsOff )
 /**
@@ -39,7 +41,6 @@ public class ${ClassName} extends Dialog {
 												"RemoveConfirmDialog.button.cancel.label",
 												session.getLocalization()));
 		buttonCancel.addClickListener(event -> cancel());
-		buttonCancel.setWidth("40%");
 		buttonConfirm =
 				buttonFactory
 						.createButton(
@@ -48,18 +49,20 @@ public class ${ClassName} extends Dialog {
 												"RemoveConfirmDialog.button.confirm.label",
 												session.getLocalization()));
 		buttonConfirm.addClickListener(event -> confirmed());
-		buttonConfirm.setWidth("20%");
-		Label label = new Label("");
-		label.setWidth("40%");
 		HorizontalLayout buttonLayout = new HorizontalLayout();
-		buttonLayout.add(label, buttonConfirm, buttonCancel);
+		buttonLayout.add(buttonConfirm, buttonCancel);
+		buttonLayout.setAlignItems(Alignment.END);
 		buttonLayout.setWidthFull();
-		add(
-				new Label(
-						resourceManager
-								.getLocalizedString("RemoveConfirmDialog.message.label", session.getLocalization())),
+		VerticalLayout layout = new VerticalLayout();
+		layout.setWidthFull();
+		layout
+				.add(
+						new Label(
+								resourceManager
+										.getLocalizedString("RemoveConfirmDialog.message.label", session.getLocalization())),
 				new Label(""),
 				buttonLayout);
+		add(layout);
 	}
 
 	public void cancel() {

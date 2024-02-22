@@ -76,6 +76,7 @@ public class PageViewClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -343,6 +344,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.SelectionDialog;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.SelectionDialog.Selectable;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -649,6 +651,7 @@ public class PageViewClassCodeGeneratorTest {
 							+ "import base.pack.age.name.gui.vaadin.component.SelectionDialog;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.SelectionDialog.Selectable;\n" //
 							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
 							+ "\n" //
@@ -914,6 +917,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -1166,6 +1170,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -1482,6 +1487,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -1740,6 +1746,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
