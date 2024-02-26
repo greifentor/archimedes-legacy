@@ -38,7 +38,7 @@ public class ApplicationPropertiesFileGeneratorTest {
 						+ "app.version=@project.version@\n" //
 						+ "\n" //
 						+ "# spring.liquibase.change-log=classpath:liquibase/change-log/change-log-master.xml\n" //
-						+ "spring-jpa-hobernate.dll-auto=update\n" //
+						+ "# spring.jpa.hibernate.dll-auto=create\n" //
 						+ "\n" //
 						+ "logging.level.root=INFO\n" //
 						+ "\n" //

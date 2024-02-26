@@ -48,7 +48,7 @@ public class RemoveConfirmDialogClassCodeGeneratorTest {
 							+ "\n" //
 							+ "import com.vaadin.flow.component.dialog.Dialog;\n" //
 							+ "import com.vaadin.flow.component.html.Label;\n" //
-							+ "import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;\n" //
+							+ "import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.HorizontalLayout;\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
 							+ "\n" //
@@ -100,7 +100,7 @@ public class RemoveConfirmDialogClassCodeGeneratorTest {
 							+ "		buttonConfirm.addClickListener(event -> confirmed());\n" //
 							+ "		HorizontalLayout buttonLayout = new HorizontalLayout();\n" //
 							+ "		buttonLayout.add(buttonConfirm, buttonCancel);\n" //
-							+ "		buttonLayout.setAlignItems(Alignment.END);\n" //
+							+ "		buttonLayout.setJustifyContentMode(JustifyContentMode.END);\n" //
 							+ "		buttonLayout.setWidthFull();\n" //
 							+ "		VerticalLayout layout = new VerticalLayout();\n" //
 							+ "		layout.setWidthFull();\n" //
