@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 #if($CascadeDeleteCode)
-import javax.transaction.Transactional;
+import ${JavaxPackageName}.transaction.Transactional;
 #end
 
 import ${PagePackageName}.${PageClassName};

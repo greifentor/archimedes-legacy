@@ -38,3 +38,12 @@ Change default module names can be done in the specific module by ``ALTERNATE_..
 
 Set this option to get different modules for service other layers (e. g. GUI). If not set, all code will be written to
 the ``src`` folder of the configured by "Bearbeiten > Diagrammparameter > Codegenerator > Code-Basis-Pfad".
+
+
+#### JAVAX_PACKAGE_NAME
+
+Since some of the "javax" package contents have been moved to "jakarta" package, it is necessary to respect this changes 
+in the generated code also. Via this option, the "javax" package prefix could be changed to another prefix
+like "jakarta".
+
+```JAVA_PACKAGE_NAME:jakarta```

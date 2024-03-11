@@ -10,7 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator;
 import archimedes.model.DataModel;
+import archimedes.scheme.Option;
 
 @ExtendWith(MockitoExtension.class)
 public class ComponentFactoryClassCodeGeneratorTest {
@@ -26,7 +28,16 @@ public class ComponentFactoryClassCodeGeneratorTest {
 		@Test
 		void happyRun() {
 			// Prepare
-			String expected =
+			String expected = getExpected(23);
+			DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		private String getExpected(int vaadinVersion) {
+			String s =
 					"package de.ollie.bookstore.gui.vaadin.component;\n" //
 							+ "\n" //
 							+ "import java.util.Optional;\n" //
@@ -188,9 +199,14 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ "		}\n" //
 							+ "		if (min != null) {\n" //
 							+ "			integerField.setMin(min);\n" //
-							+ "		}\n" //
-							+ "		integerField.setHasControls(true);\n" //
-							+ "		integerField.setValue(fieldContent);\n" //
+							+ "		}\n"; //
+			if (vaadinVersion == 23) {
+				s += "		integerField.setHasControls(true);\n";
+			} else {
+				s += "		integerField.setStepButtonsVisible(true);\n";
+			}
+			s +=
+					"		integerField.setValue(fieldContent);\n" //
 							+ "		integerField.setWidthFull();\n" //
 							+ "		return integerField;\n" //
 							+ "	}\n" //
@@ -207,9 +223,14 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ "		}\n" //
 							+ "		if (step != null) {\n" //
 							+ "			integerField.setStep(step);\n" //
-							+ "		}\n" //
-							+ "		integerField.setHasControls(true);\n" //
-							+ "		integerField.setValue(fieldContent);\n" //
+							+ "		}\n"; //
+			if (vaadinVersion == 23) {
+				s += "		integerField.setHasControls(true);\n";
+			} else {
+				s += "		integerField.setStepButtonsVisible(true);\n";
+			}
+			s +=
+					"		integerField.setValue(fieldContent);\n" //
 							+ "		integerField.setWidthFull();\n" //
 							+ "		return integerField;\n" //
 							+ "	}\n" //
@@ -223,9 +244,14 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ "		}\n" //
 							+ "		if (min != null) {\n" //
 							+ "			integerField.setMin(min);\n" //
-							+ "		}\n" //
-							+ "		integerField.setHasControls(true);\n" //
-							+ "		integerField.setValue(fieldContent);\n" //
+							+ "		}\n"; //
+			if (vaadinVersion == 23) {
+				s += "		integerField.setHasControls(true);\n";
+			} else {
+				s += "		integerField.setStepButtonsVisible(true);\n";
+			}
+			s +=
+					"		integerField.setValue(fieldContent);\n" //
 							+ "		integerField.setWidthFull();\n" //
 							+ "		if (step != null) {\n" //
 							+ "			integerField.setStep(step);\n" //
@@ -250,7 +276,15 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ "	}\n" //
 							+ "\n" //
 							+ "}";
+			return s;
+		}
+
+		@Test
+		void happyRun_ForVaadin24() {
+			// Prepare
+			String expected = getExpected(24);
 			DataModel dataModel = readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+			dataModel.addOption(new Option(AbstractGUIVaadinClassCodeGenerator.VAADIN_VERSION, "24"));
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel);
 			// Check

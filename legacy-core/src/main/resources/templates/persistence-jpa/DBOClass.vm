@@ -15,40 +15,40 @@ import ${ImportLocalDateTime};
 #end
 
 #end
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import ${JavaxPackageName}.persistence.Column;
+import ${JavaxPackageName}.persistence.Entity;
 #if (${HasEnums})
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import ${JavaxPackageName}.persistence.EnumType;
+import ${JavaxPackageName}.persistence.Enumerated;
 #end
 #if ($ReferenceMode == "OBJECT" && ${HasReferences})
-import javax.persistence.FetchType;
+import ${JavaxPackageName}.persistence.FetchType;
 #end
 #if ($Autoincrement)
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import ${JavaxPackageName}.persistence.GeneratedValue;
+import ${JavaxPackageName}.persistence.GenerationType;
 #end
-import javax.persistence.Id;
+import ${JavaxPackageName}.persistence.Id;
 #if ($Superclass)
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import ${JavaxPackageName}.persistence.Inheritance;
+import ${JavaxPackageName}.persistence.InheritanceType;
 #end
 #if ($ReferenceMode == "OBJECT" && ${HasReferences})
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import ${JavaxPackageName}.persistence.JoinColumn;
+import ${JavaxPackageName}.persistence.ManyToOne;
 #end
 #if ($Subclass)
-import javax.persistence.PrimaryKeyJoinColumn;
+import ${JavaxPackageName}.persistence.PrimaryKeyJoinColumn;
 #end
 #if ($Autoincrement and ${Autoincrement.contains("SEQUENCE")})
-import javax.persistence.SequenceGenerator;
+import ${JavaxPackageName}.persistence.SequenceGenerator;
 #end
-import javax.persistence.Table;
+import ${JavaxPackageName}.persistence.Table;
 #if ($HasCompositionLists)
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import ${JavaxPackageName}.persistence.CascadeType;
+import ${JavaxPackageName}.persistence.FetchType;
+import ${JavaxPackageName}.persistence.JoinColumn;
+import ${JavaxPackageName}.persistence.OneToMany;
 #end
 
 #if ($POJOMode == "BUILDER")

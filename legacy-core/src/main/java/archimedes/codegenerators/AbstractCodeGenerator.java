@@ -32,6 +32,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 	public static final String ENUM = "ENUM";
 	public static final String CONTEXT_NAME = "CONTEXT_NAME";
 	public static final String MODULE_MODE = "MODULE_MODE";
+	public static final String JAVAX_PACKAGE_NAME = "JAVAX_PACKAGE_NAME";
 	public static final String TEXT = "TEXT";
 
 	protected static final String PROPERTY_PREFIX = "archimdes.code.generators.";
@@ -67,6 +68,10 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 	public String generate(String basePackageName, DataModel model, T t) {
 		importDeclarations = new ImportDeclarations();
 		VelocityContext context = new VelocityContext();
+		String javaxPackageName =
+				model.getOptionByName(JAVAX_PACKAGE_NAME) == null
+						? "javax"
+						: model.getOptionByName(JAVAX_PACKAGE_NAME).getParameter();
 		context.put("BasePackageName", basePackageName);
 		context.put("Dollar", "$");
 		context.put("Generated", GENERATED_CODE);
@@ -74,6 +79,7 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 		extendVelocityContext(context, model, t);
 		afterExtendVelocityContext(context, model, t);
 		context.put("ImportDeclarations", importDeclarations);
+		context.put("JavaxPackageName", javaxPackageName);
 		return processTemplate(context, templateFileName);
 	}
 

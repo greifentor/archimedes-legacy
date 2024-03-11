@@ -90,6 +90,9 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME = "ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME";
 	public static final String ALTERNATIVE_REMOVE_CONFIRM_DIALOG_CLASS_NAME =
 			"ALTERNATIVE_REMOVE_CONFIRM_DIALOG_CLASS_NAME";
+	public static final String ALTERNATE_SELECTABLE_SUBCLASS_CLASS_NAME_SUFFIX =
+			"ALTERNATE_SELECTABLE_SUBCLASS_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_SELECTABLE_SUBCLASS_PACKAGE_NAME = "ALTERNATE_SELECTABLE_SUBCLASS_PACKAGE_NAME";
 	public static final String ALTERNATE_SELECTION_DIALOG_CLASS_NAME_SUFFIX =
 			"ALTERNATE_SELECTION_DIALOG_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME = "ALTERNATE_SELECTION_DIALOG_PACKAGE_NAME";
@@ -499,6 +502,23 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 						model,
 						"RemoveConfirmDialog",
 						ALTERNATIVE_REMOVE_CONFIRM_DIALOG_CLASS_NAME);
+	}
+
+	public String getSelectableSubclassClassName(DataModel model) {
+		return model == null
+				? null
+				: getNameOrAlternativeFromOption(
+						model,
+						"SelectableSubclass",
+						ALTERNATE_SELECTABLE_SUBCLASS_CLASS_NAME_SUFFIX);
+	}
+
+	public String getSelectableSubclassPackageName(DataModel model) {
+		return createPackageName(
+				model,
+				null,
+				"gui.vaadin.masterdata",
+				ALTERNATE_SELECTABLE_SUBCLASS_PACKAGE_NAME);
 	}
 
 	public String getSelectionDialogClassName(DataModel model) {
