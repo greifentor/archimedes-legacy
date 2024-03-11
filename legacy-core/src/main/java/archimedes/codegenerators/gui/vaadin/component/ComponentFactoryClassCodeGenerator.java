@@ -12,10 +12,12 @@ import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.EnumData;
 import archimedes.codegenerators.MasterDataGridFieldRendererData;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
+import archimedes.model.OptionModel;
 
 /**
  * A code generator for button classes.
@@ -37,6 +39,8 @@ public class ComponentFactoryClassCodeGenerator extends AbstractModelCodeGenerat
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
+		OptionModel versionOption = model.getOptionByName(AbstractGUIVaadinClassCodeGenerator.VAADIN_VERSION);
+		String version = versionOption == null ? "23" : versionOption.getParameter();
 		context.put("ApplicationStartViewClassName", nameGenerator.getApplicationStartViewClassName());
 		context.put("ApplicationStartViewPackageName", nameGenerator.getApplicationStartViewPackageName(model));
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));
@@ -59,6 +63,7 @@ public class ComponentFactoryClassCodeGenerator extends AbstractModelCodeGenerat
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
 		context.put("Services", getServiceData(model));
+		context.put("VaadinVersion", version);
 	}
 
 	private List<EnumData> getEnumDataColection(DataModel model) {

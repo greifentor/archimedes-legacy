@@ -3,7 +3,7 @@
 app.version=@project.version@
 
 # spring.liquibase.change-log=classpath:liquibase/change-log/change-log-master.xml
-spring-jpa-hobernate.dll-auto=update
+# spring.jpa.hibernate.dll-auto=create
 
 logging.level.root=INFO
 

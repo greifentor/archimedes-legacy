@@ -5,23 +5,24 @@ import org.apache.velocity.VelocityContext;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.AbstractModelCodeGenerator;
 import archimedes.codegenerators.TypeGenerator;
-import archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
+import archimedes.codegenerators.gui.vaadin.LabelPropertiesGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.OptionModel;
 
 /**
- * A code generator for the abstract master data base layout.
+ * A code generator for selection dialog classes.
  *
- * @author ollie (08.12.2021)
+ * @author ollie (11.03.2024)
  */
-public class AbstractMasterDataBaseLayoutClassCodeGenerator extends AbstractModelCodeGenerator<GUIVaadinNameGenerator> {
+public class SelectionDialogClassCodeGenerator extends AbstractModelCodeGenerator<GUIVaadinNameGenerator> {
 
-	public AbstractMasterDataBaseLayoutClassCodeGenerator(AbstractCodeFactory codeFactory) {
+	private final static ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();
+
+	public SelectionDialogClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
-				"component/AbstractMasterDataBaseLayoutClass.vm",
+				"component/SelectionDialogClass.vm",
 				GUIVaadinCodeFactory.TEMPLATE_FOLDER_PATH,
 				GUIVaadinNameGenerator.INSTANCE,
 				TypeGenerator.INSTANCE,
@@ -30,31 +31,25 @@ public class AbstractMasterDataBaseLayoutClassCodeGenerator extends AbstractMode
 
 	@Override
 	protected void extendVelocityContext(VelocityContext context, DataModel model, DataModel sameModel) {
-		OptionModel versionOption = model.getOptionByName(AbstractGUIVaadinClassCodeGenerator.VAADIN_VERSION);
-		String version = versionOption == null ? "23" : versionOption.getParameter();
 		context.put("ButtonClassName", nameGenerator.getButtonClassName(model));
 		context.put("ButtonFactoryClassName", nameGenerator.getButtonFactoryClassName(model));
 		context.put("ClassName", getClassName(model, model));
 		context.put("CommentsOff", isCommentsOff(model));
-		context.put("MasterDataButtonLayoutClassName", nameGenerator.getMasterDataButtonLayoutClassName(model));
-		context.put("MasterDataButtonLayoutPackageName", nameGenerator.getMasterDataButtonLayoutPackageName(model));
 		context.put("PackageName", getPackageName(model, model));
-		context.put("ResourceManagerClassName", ServiceNameGenerator.INSTANCE.getResourceManagerInterfaceName());
+		context.put("ResourceManagerInterfaceName", serviceNameGenerator.getResourceManagerInterfaceName());
 		context
 				.put(
-						"ResourceManagerPackageName",
-						ServiceNameGenerator.INSTANCE.getResourceManagerInterfacePackageName(model));
+						"ResourceManagerInterfacePackageName",
+						serviceNameGenerator.getResourceManagerInterfacePackageName(model));
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
-		context.put("TextFieldFactoryClassName", nameGenerator.getTextFieldFactoryClassName(model));
-		context.put("UserAuthorizationCheckerClassName", nameGenerator.getUserAuthorizationCheckerClassName(model));
-		context.put("UserAuthorizationCheckerPackageName", nameGenerator.getUserAuthorizationCheckerPackageName(model));
-		context.put("VaadinVersion", version);
+		LabelPropertiesGenerator.addLabel("SelectionDialog.button.cancel.label", "Cancel");
+		LabelPropertiesGenerator.addLabel("SelectionDialog.button.select.label", "Select");
 	}
 
 	@Override
 	public String getClassName(DataModel model, DataModel sameModel) {
-		return nameGenerator.getAbstractMasterDataBaseLayoutClassName();
+		return nameGenerator.getSelectionDialogClassName(model);
 	}
 
 	@Override

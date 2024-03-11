@@ -100,6 +100,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
+					AbstractClassCodeGenerator.JAVAX_PACKAGE_NAME,
 			        AbstractCodeGenerator.MODULE_MODE,
 					AbstractClassCodeGenerator.REFERENCE_MODE,
 					PersistenceJPANameGenerator.ALTERNATE_TO_DBO_METHOD_NAME,

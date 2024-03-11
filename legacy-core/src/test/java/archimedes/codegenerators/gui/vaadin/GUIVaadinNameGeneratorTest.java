@@ -1805,6 +1805,39 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class RemoveConfirmDialogClassNameTests {
+
+		@Test
+		void getRemoveConfirmDialogClassName_passANullValueAsTableModel_returnsANullValue() {
+			assertNull(unitUnderTest.getRemoveConfirmDialogClassName(null));
+		}
+
+		@Test
+		void getRemoveConfirmDialogClassName_passAValidModel_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "RemoveConfirmDialog";
+			// Run
+			String returned = unitUnderTest.getRemoveConfirmDialogClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getRemoveConfirmDialogClassName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			// Prepare
+			String expected = "AnotherRemoveConfirmDialog";
+			when(model.getOptionByName(GUIVaadinNameGenerator.ALTERNATIVE_REMOVE_CONFIRM_DIALOG_CLASS_NAME))
+					.thenReturn(
+							new Option(GUIVaadinNameGenerator.ALTERNATIVE_REMOVE_CONFIRM_DIALOG_CLASS_NAME, expected));
+			// Run
+			String returned = unitUnderTest.getRemoveConfirmDialogClassName(model);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+	}
+
+	@Nested
 	class SelectionDialogClassNameTests {
 
 		@Test

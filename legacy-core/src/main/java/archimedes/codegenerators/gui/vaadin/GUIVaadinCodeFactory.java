@@ -20,6 +20,8 @@ import archimedes.codegenerators.gui.vaadin.component.HeaderLayoutClassCodeGener
 import archimedes.codegenerators.gui.vaadin.component.ImageClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataButtonLayoutClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.MasterDataViewButtonAdderInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.RemoveConfirmDialogClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.component.SelectionDialogClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.ServiceProviderClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.component.TextFieldFactoryClassCodeGenerator;
@@ -36,6 +38,7 @@ import archimedes.codegenerators.gui.vaadin.masterdata.DetailsLayoutComboBoxItem
 import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewRendererInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataGUIConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataViewClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.masterdata.SelectableSubclassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.modelcheckers.ModelCheckerGuiEditorPosHasAValue;
 import archimedes.codegenerators.gui.vaadin.styles.READMEmdFileGenerator;
 import archimedes.codegenerators.gui.vaadin.styles.SharedStylesCssFileGenerator;
@@ -105,7 +108,10 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new PageParametersGOClassCodeGenerator(this),
 						// new PageParametersGOConverterClassCodeGenerator(this),
 						// new PageGOConverterClassCodeGenerator(this),
+						new RemoveConfirmDialogClassCodeGenerator(this),
 						new READMEmdFileGenerator(this),
+						new SelectionDialogClassCodeGenerator(this),
+						new SelectableSubclassCodeGenerator(this),
 						new ServiceProviderClassCodeGenerator(this),
 						new SessionDataClassCodeGenerator(this),
 						new SessionIdClassCodeGenerator(this),
@@ -182,9 +188,10 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 					ApplicationStartViewClassCodeGenerator.GUI_BASE_URL,
-					AbstractClassCodeGenerator.MODULE_MODE,
 					GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
-					GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME };
+					GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME,
+					AbstractClassCodeGenerator.JAVAX_PACKAGE_NAME,
+					AbstractClassCodeGenerator.MODULE_MODE };
 		case TABLE:
 			return new String[] {
 					AbstractClassCodeFactory.NO_GENERATION,
@@ -193,7 +200,8 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 					AbstractGUIVaadinClassCodeGenerator.GENERATE_MASTER_DATA_GUI,
 					NameGenerator.MODULE,
 					NameGenerator.PLURAL_NAME,
-					AbstractClassCodeGenerator.POJO_MODE };
+					AbstractClassCodeGenerator.POJO_MODE,
+					AbstractGUIVaadinClassCodeGenerator.VAADIN_VERSION };
 		default:
 			return new String[0];
 		}

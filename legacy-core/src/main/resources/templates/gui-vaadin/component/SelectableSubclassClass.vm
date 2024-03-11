@@ -1,0 +1,23 @@
+package ${PackageName};
+
+import ${SelectionDialogPackageName}.${SelectionDialogClassName}.Selectable;
+import lombok.AllArgsConstructor;
+import lombok.Generated;
+import lombok.Getter;
+
+#if (!$CommentsOff )
+/**
+ * A container for sub class selections.
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
+ #end
+@Generated
+@AllArgsConstructor
+@Getter
+public class ${ClassName} implements Selectable {
+
+	private String label;
+	private String subclassName;
+
+}

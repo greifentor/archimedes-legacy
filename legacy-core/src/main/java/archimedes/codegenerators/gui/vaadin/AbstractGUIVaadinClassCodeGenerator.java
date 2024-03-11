@@ -32,6 +32,7 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 	public static final String NAME_FIELD = "NAME_FIELD";
 	public static final String PREFERENCE = "PREFERENCE";
 	public static final String REQUIRED = "REQUIRED";
+	public static final String VAADIN_VERSION = "VAADIN_VERSION";
 
 	protected static final LocalizationNameGenerator localizationNameGenerator = new LocalizationNameGenerator();
 	protected static final ServiceNameGenerator serviceNameGenerator = new ServiceNameGenerator();

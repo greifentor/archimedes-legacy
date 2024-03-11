@@ -76,6 +76,7 @@ public class PageViewClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import lombok.Generated;\n" + //
 						"import lombok.RequiredArgsConstructor;\n" + //
 						"\n" + //
@@ -270,9 +271,11 @@ public class PageViewClassCodeGeneratorTest {
 						"\n" + //
 						"	private void removeRecord() {\n" + //
 						"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-						"			service.delete(model);\n" + //
-						"			updateGrid(0);\n" + //
-						"			buttonAdd.focus();\n" + //
+						"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+						"				service.delete(model);\n" + //
+						"				updateGrid(0);\n" + //
+						"				buttonAdd.focus();\n" + //
+						"			}, resourceManager, session).open();\n" + //
 						"		});\n" + //
 						"	}\n" + //
 						"\n" + //
@@ -341,6 +344,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.SelectionDialog;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.SelectionDialog.Selectable;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -582,9 +586,11 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void removeRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-					"			service.delete(model);\n" + //
-					"			updateGrid(0);\n" + //
-					"			buttonAdd.focus();\n" + //
+					"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+					"				service.delete(model);\n" + //
+					"				updateGrid(0);\n" + //
+					"				buttonAdd.focus();\n" + //
+					"			}, resourceManager, session).open();\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -645,6 +651,7 @@ public class PageViewClassCodeGeneratorTest {
 							+ "import base.pack.age.name.gui.vaadin.component.SelectionDialog;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.SelectionDialog.Selectable;\n" //
 							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
+							+ "import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" //
 							+ "import lombok.Generated;\n" //
 							+ "import lombok.RequiredArgsConstructor;\n" //
 							+ "\n" //
@@ -849,9 +856,11 @@ public class PageViewClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	private void removeRecord() {\n" //
 							+ "		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" //
-							+ "			service.delete(model);\n" //
-							+ "			updateGrid(0);\n" //
-							+ "			buttonAdd.focus();\n" //
+							+ "			new RemoveConfirmDialog(buttonFactory, () -> {\n" //
+							+ "				service.delete(model);\n" //
+							+ "				updateGrid(0);\n" //
+							+ "				buttonAdd.focus();\n" //
+							+ "			}, resourceManager, session).open();\n" //
 							+ "		});\n" //
 							+ "	}\n" //
 							+ "\n" //
@@ -908,6 +917,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -1099,9 +1109,11 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void removeRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-					"			service.delete(model);\n" + //
-					"			updateGrid(0);\n" + //
-					"			buttonAdd.focus();\n" + //
+					"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+					"				service.delete(model);\n" + //
+					"				updateGrid(0);\n" + //
+					"				buttonAdd.focus();\n" + //
+					"			}, resourceManager, session).open();\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -1158,6 +1170,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -1416,9 +1429,11 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void removeRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-					"			service.delete(model);\n" + //
-					"			updateGrid(0);\n" + //
-					"			textFieldFilter.focus();\n" + //
+					"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+					"				service.delete(model);\n" + //
+					"				updateGrid(0);\n" + //
+					"				textFieldFilter.focus();\n" + //
+					"			}, resourceManager, session).open();\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -1472,6 +1487,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -1674,9 +1690,11 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void removeRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-					"			service.delete(model);\n" + //
-					"			updateGrid(0);\n" + //
-					"			buttonAdd.focus();\n" + //
+					"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+					"				service.delete(model);\n" + //
+					"				updateGrid(0);\n" + //
+					"				buttonAdd.focus();\n" + //
+					"			}, resourceManager, session).open();\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //
@@ -1728,6 +1746,7 @@ public class PageViewClassCodeGeneratorTest {
 					"import base.pack.age.name.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.MasterDataButtonLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
+					"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 					"import lombok.Generated;\n" + //
 					"import lombok.RequiredArgsConstructor;\n" + //
 					"\n" + //
@@ -1926,9 +1945,11 @@ public class PageViewClassCodeGeneratorTest {
 					"\n" + //
 					"	private void removeRecord() {\n" + //
 					"		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {\n" + //
-					"			service.delete(model);\n" + //
-					"			updateGrid(0);\n" + //
-					"			buttonAdd.focus();\n" + //
+					"			new RemoveConfirmDialog(buttonFactory, () -> {\n" + //
+					"				service.delete(model);\n" + //
+					"				updateGrid(0);\n" + //
+					"				buttonAdd.focus();\n" + //
+					"			}, resourceManager, session).open();\n" + //
 					"		});\n" + //
 					"	}\n" + //
 					"\n" + //

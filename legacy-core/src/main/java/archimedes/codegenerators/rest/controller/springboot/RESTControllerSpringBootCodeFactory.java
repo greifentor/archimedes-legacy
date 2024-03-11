@@ -66,6 +66,7 @@ public class RESTControllerSpringBootCodeFactory extends AbstractClassCodeFactor
 					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
 					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
 					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
+					AbstractClassCodeGenerator.JAVAX_PACKAGE_NAME,
 					AbstractClassCodeGenerator.MAPPERS,
 					AbstractClassCodeGenerator.MODULE_MODE,
 					RESTControllerNameGenerator.REST_URL_PREFIX };

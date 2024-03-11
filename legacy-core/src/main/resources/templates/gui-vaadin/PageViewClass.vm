@@ -53,6 +53,7 @@ import ${SelectionDialogPackageName}.${SelectionDialogClassName};
 import ${SelectionDialogPackageName}.${SelectionDialogClassName}.Selectable;
 #end
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
+import ${RemoveConfirmDialogPackageName}.${RemoveConfirmDialogClassName};
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -359,13 +360,15 @@ public class ${ClassName} extends Scroller implements BeforeEnterObserver, HasUr
 
 	private void removeRecord() {
 		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
-			service.delete(model);
-			updateGrid(0);
-			#if ($Filters)
-			textFieldFilter.focus();
-			#else
-			buttonAdd.focus();
-			#end
+			new ${RemoveConfirmDialogClassName}(buttonFactory, () -> {
+				service.delete(model);
+				updateGrid(0);
+				#if ($Filters)
+				textFieldFilter.focus();
+				#else
+				buttonAdd.focus();
+				#end
+			}, resourceManager, session).open();
 		});
 	}
 

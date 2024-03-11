@@ -58,6 +58,8 @@ public class PageViewClassCodeGenerator extends AbstractGUIVaadinClassCodeGenera
 		context.put("PageParametersPackageName", serviceNameGenerator.getPageParametersPackageName(model, table));
 		context.put("PluralName", nameGenerator.getPluralName(table).toLowerCase());
 		context.put("ReferencedColumnData", getGUIReferenceData(table));
+		context.put("RemoveConfirmDialogClassName", nameGenerator.getRemoveConfirmDialogClassName(model));
+		context.put("RemoveConfirmDialogPackageName", nameGenerator.getVaadinComponentPackageName(model));
 		context.put("ResourceManagerInterfaceName", localizationNameGenerator.getResourceManagerInterfaceName());
 		context
 				.put(

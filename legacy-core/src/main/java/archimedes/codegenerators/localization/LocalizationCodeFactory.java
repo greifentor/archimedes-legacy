@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import archimedes.codegenerators.AbstractClassCodeFactory;
+import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
@@ -55,7 +56,8 @@ public class LocalizationCodeFactory extends AbstractClassCodeFactory implements
 			return new String[] {
 					LocalizationNameGenerator.ALTERNATE_LOCALIZATION_SO_PACKAGE_NAME,
 					LocalizationNameGenerator.ALTERNATE_RESOURCE_MANAGER_IMPL_PACKAGE_NAME,
-					LocalizationNameGenerator.ALTERNATE_RESOURCE_MANAGER_PACKAGE_NAME };
+					LocalizationNameGenerator.ALTERNATE_RESOURCE_MANAGER_PACKAGE_NAME,
+					AbstractClassCodeGenerator.JAVAX_PACKAGE_NAME };
 		default:
 			return new String[0];
 		}

@@ -132,7 +132,11 @@ public abstract class ${ClassName} extends Scroller implements BeforeEnterObserv
 		if (min != null) {
 			integerField.setMin(min);
 		}
+		#if ( ${VaadinVersion} == "24" )
+		integerField.setStepButtonsVisible(true);
+		#else
 		integerField.setHasControls(true);
+		#end
 		integerField.setValue(fieldContent);
 		integerField.setWidthFull();
 		return integerField;
@@ -152,7 +156,11 @@ public abstract class ${ClassName} extends Scroller implements BeforeEnterObserv
 		if (step != null) {
 			integerField.setStep(step);
 		}
+		#if ( ${VaadinVersion} == "24" )
+		integerField.setStepButtonsVisible(true);
+		#else
 		integerField.setHasControls(true);
+		#end
 		integerField.setValue(fieldContent);
 		integerField.setWidthFull();
 		return integerField;
@@ -169,7 +177,11 @@ public abstract class ${ClassName} extends Scroller implements BeforeEnterObserv
 		if (min != null) {
 			integerField.setMin(min);
 		}
+		#if ( ${VaadinVersion} == "24" )
+		integerField.setStepButtonsVisible(true);
+		#else
 		integerField.setHasControls(true);
+		#end
 		integerField.setValue(fieldContent);
 		integerField.setWidthFull();
 		if (step != null) {
