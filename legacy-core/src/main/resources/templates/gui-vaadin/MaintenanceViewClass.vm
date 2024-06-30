@@ -46,6 +46,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	private static final Logger logger = LogManager.getLogger(${ClassName}.class);
 
 	@Autowired(required = false)
+	private MaintenanceViewCreateNewModelModification<${ModelClassName}> createNewModelModification;
+	@Autowired(required = false)
 	private MaintenanceViewRenderer<${ModelClassName}> maintenanceViewRenderer;
 	@Autowired(required = false)
 	private DetailsLayoutComboBoxItemLabelGenerator<${ModelClassName}> comboBoxItemLabelGenerator;
@@ -86,17 +88,25 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	}
 
 	private ${ModelClassName} createNewModel() {
+		${ModelClassName} model = new ${ModelClassName}();
 #if(${SubclassDataCollection.getSubclasses()})
 		String modelClassName = parametersMap.containsKey("modelClass") && (parametersMap.get("modelClass").size() > 0)
 				? parametersMap.get("modelClass").get(0)
 				: "${ModelClassName}";
 	#foreach($Subclass in ${SubclassDataCollection.getSubclasses()})
 		if (modelClassName.equals("${Subclass.getModelClassName()}")) {
-			return new ${Subclass.getModelClassName()}();
+			model = new ${Subclass.getModelClassName()}();
+			if (createNewModelModification != null) {
+				model = createNewModelModification.modify(model);
+			}
+			return model;
 		}
 	#end
 #end
-		return new ${ModelClassName}();
+		if (createNewModelModification != null) {
+			model = createNewModelModification.modify(model);
+		}
+		return model;
 	}
 
 	@Override

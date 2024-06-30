@@ -1141,6 +1141,113 @@ public class GUIVaadinNameGeneratorTest {
 	}
 
 	@Nested
+	class MaintenanceViewCreateNewModelModificationPackageNameTests {
+
+		@Test
+		void getMaintenanceViewCreateNewModelModificationPackageName_PassANullValueAsModel_ReturnsANullValue() {
+			assertNull(unitUnderTest.getMaintenanceViewCreateNewModelModificationPackageName(null, table));
+		}
+
+		@Test
+		void getMaintenanceViewCreateNewModelModificationPackageName_PassANullValueAsTable_ReturnsANullValue() {
+			assertEquals(
+					"gui.vaadin.masterdata",
+					unitUnderTest.getMaintenanceViewCreateNewModelModificationPackageName(model, null));
+		}
+
+		@Test
+		void getMaintenanceViewCreateNewModelModificationPackageName_PassAValidTableModel_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = BASE_PACKAGE_NAME + ".gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn(BASE_PACKAGE_NAME);
+			// Run
+			String returned = unitUnderTest.getMaintenanceViewCreateNewModelModificationPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceViewCreateNewModelModificationPackageName_PassAValidTableModelWithEmptyBasePackageName_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = "gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn("");
+			// Run
+			String returned = unitUnderTest.getMaintenanceViewCreateNewModelModificationPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceViewCreateNewModelModificationPackageName_PassAValidTableModelWithNullBasePackageName_ReturnsACorrecGOName() {
+			// Prepare
+			String expected = "gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn(null);
+			// Run
+			String returned = unitUnderTest.getMaintenanceViewCreateNewModelModificationPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceViewCreateNewModelModificationPackageName_PassAValidTableModelWithMODULEOption_ReturnsACorrecGOName() {
+			// Prepare
+			String prefix = "prefix";
+			String expected = "prefix.gui.vaadin.masterdata";
+			when(model.getBasePackageName()).thenReturn(null);
+			when(table.findOptionByName(archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE))
+					.thenReturn(
+							Optional
+									.of(
+											new Option(
+													archimedes.codegenerators.persistence.jpa.PersistenceJPANameGenerator.MODULE,
+													prefix)));
+			// Run
+			String returned = unitUnderTest.getMaintenanceViewCreateNewModelModificationPackageName(model, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void getMaintenanceViewCreateNewModelModificationPackageName_PassAValidTableButModelAsAlternateRepositoryNameOption_ReturnsACorrectPackageName() {
+			// Prepare
+			when(
+					model
+							.getOptionByName(
+									GUIVaadinNameGenerator.ALTERNATE_MAINTENANCE_VIEW_CREATE_NEW_MODEL_MODIFICATION_PACKAGE_NAME))
+											.thenReturn(
+													new Option(
+															GUIVaadinNameGenerator.ALTERNATE_MAINTENANCE_VIEW_CREATE_NEW_MODEL_MODIFICATION_PACKAGE_NAME,
+															"vaadin.gos"));
+			// Run & Check
+			assertEquals(
+					"vaadin.gos",
+					unitUnderTest.getMaintenanceViewCreateNewModelModificationPackageName(model, table));
+		}
+
+	}
+
+	@Nested
+	class MaintenanceViewCreateNewModelModificationInterfaceNameTests {
+
+		@Test
+		void getMaintenanceViewCreateNewModelModificationInterfaceName_passAValidModel_ReturnsACorrectClassName() {
+			assertCorrectClassName(
+					"MaintenanceViewCreateNewModelModification",
+					() -> unitUnderTest.getMaintenanceViewCreateNewModelModificationInterfaceName(model));
+		}
+
+		@Test
+		void getMaintenanceViewCreateNewModelModificationInterfaceName_passAValidModelWithAlternateComponentName_ReturnsACorrectClassName() {
+			assertCorrectAlternativeClassName(
+					"AnotherMaintenanceViewCreateNewModelModification",
+					GUIVaadinNameGenerator.ALTERNATE_MAINTENANCE_VIEW_CREATE_NEW_MODEL_MODIFICATION_CLASS_NAME_SUFFIX,
+					model,
+					m -> unitUnderTest.getMaintenanceViewCreateNewModelModificationInterfaceName(m));
+		}
+
+	}
+
+	@Nested
 	class MaintenanceViewRendererInterfaceNameTests {
 
 		@Test

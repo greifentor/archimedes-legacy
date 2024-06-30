@@ -77,6 +77,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceView.class);\n" + //
 					"\n" + //
 					"	@Autowired(required = false)\n" + //
+					"	private MaintenanceViewCreateNewModelModification<ATable> createNewModelModification;\n" + //
+					"	@Autowired(required = false)\n" + //
 					"	private MaintenanceViewRenderer<ATable> maintenanceViewRenderer;\n" + //
 					"	@Autowired(required = false)\n" + //
 					"	private DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n" + //
@@ -118,7 +120,11 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private ATable createNewModel() {\n" + //
-					"		return new ATable();\n" + //
+					"		ATable model = new ATable();\n" + //
+					"		if (createNewModelModification != null) {\n" + //
+					"			model = createNewModelModification.modify(model);\n" + //
+					"		}\n" + //
+					"		return model;\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -256,6 +262,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceView.class);\n" + //
 					"\n" + //
 					"	@Autowired(required = false)\n" + //
+					"	private MaintenanceViewCreateNewModelModification<ATable> createNewModelModification;\n" + //
+					"	@Autowired(required = false)\n" + //
 					"	private MaintenanceViewRenderer<ATable> maintenanceViewRenderer;\n" + //
 					"	@Autowired(required = false)\n" + //
 					"	private DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n" + //
@@ -297,7 +305,11 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private ATable createNewModel() {\n" + //
-					"		return new ATable();\n" + //
+					"		ATable model = new ATable();\n" + //
+					"		if (createNewModelModification != null) {\n" + //
+					"			model = createNewModelModification.modify(model);\n" + //
+					"		}\n" + //
+					"		return model;\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -440,6 +452,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private static final Logger logger = LogManager.getLogger(ATableMaintenanceView.class);\n" + //
 					"\n" + //
 					"	@Autowired(required = false)\n" + //
+					"	private MaintenanceViewCreateNewModelModification<ATable> createNewModelModification;\n" + //
+					"	@Autowired(required = false)\n" + //
 					"	private MaintenanceViewRenderer<ATable> maintenanceViewRenderer;\n" + //
 					"	@Autowired(required = false)\n" + //
 					"	private DetailsLayoutComboBoxItemLabelGenerator<ATable> comboBoxItemLabelGenerator;\n" + //
@@ -481,23 +495,43 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private ATable createNewModel() {\n" + //
+					"		ATable model = new ATable();\n" + //
 					"		String modelClassName = parametersMap.containsKey(\"modelClass\") && (parametersMap.get(\"modelClass\").size() > 0)\n"
 					+ //
 					"				? parametersMap.get(\"modelClass\").get(0)\n" + //
 					"				: \"ATable\";\n" + //
 					"		if (modelClassName.equals(\"AnotherHeirTable\")) {\n" + //
-					"			return new AnotherHeirTable();\n" + //
+					"			model = new AnotherHeirTable();\n" + //
+					"			if (createNewModelModification != null) {\n" + //
+					"				model = createNewModelModification.modify(model);\n" + //
+					"			}\n" + //
+					"			return model;\n" + //
 					"		}\n" + //
 					"		if (modelClassName.equals(\"AnotherHeirTableWithSameReference\")) {\n" + //
-					"			return new AnotherHeirTableWithSameReference();\n" + //
+					"			model = new AnotherHeirTableWithSameReference();\n" + //
+					"			if (createNewModelModification != null) {\n" + //
+					"				model = createNewModelModification.modify(model);\n" + //
+					"			}\n" + //
+					"			return model;\n" + //
 					"		}\n" + //
 					"		if (modelClassName.equals(\"AnotherTable\")) {\n" + //
-					"			return new AnotherTable();\n" + //
+					"			model = new AnotherTable();\n" + //
+					"			if (createNewModelModification != null) {\n" + //
+					"				model = createNewModelModification.modify(model);\n" + //
+					"			}\n" + //
+					"			return model;\n" + //
 					"		}\n" + //
 					"		if (modelClassName.equals(\"HeirTableWithReference\")) {\n" + //
-					"			return new HeirTableWithReference();\n" + //
+					"			model = new HeirTableWithReference();\n" + //
+					"			if (createNewModelModification != null) {\n" + //
+					"				model = createNewModelModification.modify(model);\n" + //
+					"			}\n" + //
+					"			return model;\n" + //
 					"		}\n" + //
-					"		return new ATable();\n" + //
+					"		if (createNewModelModification != null) {\n" + //
+					"			model = createNewModelModification.modify(model);\n" + //
+					"		}\n" + //
+					"		return model;\n" + //
 					"	}\n" + //
 					"\n" + // + //
 					"	@Override\n" + //
@@ -682,6 +716,9 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					+ //
 					"\n" + //
 					"	@Autowired(required = false)\n" + //
+					"	private MaintenanceViewCreateNewModelModification<DifferentSubclassReferences> createNewModelModification;\n"
+					+ //
+					"	@Autowired(required = false)\n" + //
 					"	private MaintenanceViewRenderer<DifferentSubclassReferences> maintenanceViewRenderer;\n" + //
 					"	@Autowired(required = false)\n" + //
 					"	private DetailsLayoutComboBoxItemLabelGenerator<DifferentSubclassReferences> comboBoxItemLabelGenerator;\n"
@@ -725,7 +762,11 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private DifferentSubclassReferences createNewModel() {\n" + //
-					"		return new DifferentSubclassReferences();\n" + //
+					"		DifferentSubclassReferences model = new DifferentSubclassReferences();\n" + //
+					"		if (createNewModelModification != null) {\n" + //
+					"			model = createNewModelModification.modify(model);\n" + //
+					"		}\n" + //
+					"		return model;\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -861,6 +902,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private static final Logger logger = LogManager.getLogger(BTableMaintenanceView.class);\n" + //
 					"\n" + //
 					"	@Autowired(required = false)\n" + //
+					"	private MaintenanceViewCreateNewModelModification<BTable> createNewModelModification;\n" + //
+					"	@Autowired(required = false)\n" + //
 					"	private MaintenanceViewRenderer<BTable> maintenanceViewRenderer;\n" + //
 					"	@Autowired(required = false)\n" + //
 					"	private DetailsLayoutComboBoxItemLabelGenerator<BTable> comboBoxItemLabelGenerator;\n" + //
@@ -902,17 +945,29 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private BTable createNewModel() {\n" + //
+					"		BTable model = new BTable();\n" + //
 					"		String modelClassName = parametersMap.containsKey(\"modelClass\") && (parametersMap.get(\"modelClass\").size() > 0)\n"
 					+ //
 					"				? parametersMap.get(\"modelClass\").get(0)\n" + //
 					"				: \"BTable\";\n" + //
 					"		if (modelClassName.equals(\"BHeirTable\")) {\n" + //
-					"			return new BHeirTable();\n" + //
+					"			model = new BHeirTable();\n" + //
+					"			if (createNewModelModification != null) {\n" + //
+					"				model = createNewModelModification.modify(model);\n" + //
+					"			}\n" + //
+					"			return model;\n" + //
 					"		}\n" + //
 					"		if (modelClassName.equals(\"BHeirHeirTable\")) {\n" + //
-					"			return new BHeirHeirTable();\n" + //
+					"			model = new BHeirHeirTable();\n" + //
+					"			if (createNewModelModification != null) {\n" + //
+					"				model = createNewModelModification.modify(model);\n" + //
+					"			}\n" + //
+					"			return model;\n" + //
 					"		}\n" + //
-					"		return new BTable();\n" + //
+					"		if (createNewModelModification != null) {\n" + //
+					"			model = createNewModelModification.modify(model);\n" + //
+					"		}\n" + //
+					"		return model;\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //
@@ -1065,6 +1120,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	private static final Logger logger = LogManager.getLogger(CTableMaintenanceView.class);\n" + //
 					"\n" + //
 					"	@Autowired(required = false)\n" + //
+					"	private MaintenanceViewCreateNewModelModification<CTable> createNewModelModification;\n" + //
+					"	@Autowired(required = false)\n" + //
 					"	private MaintenanceViewRenderer<CTable> maintenanceViewRenderer;\n" + //
 					"	@Autowired(required = false)\n" + //
 					"	private DetailsLayoutComboBoxItemLabelGenerator<CTable> comboBoxItemLabelGenerator;\n" + //
@@ -1105,16 +1162,28 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	private CTable createNewModel() {\n" + //
+					"		CTable model = new CTable();\n" + //
 					"		String modelClassName = parametersMap.containsKey(\"modelClass\") && (parametersMap.get(\"modelClass\").size() > 0)\n" + //
 					"				? parametersMap.get(\"modelClass\").get(0)\n" + //
 					"				: \"CTable\";\n" + //
 					"		if (modelClassName.equals(\"CTableSub0\")) {\n" + //
-					"			return new CTableSub0();\n" + //
+					"			model = new CTableSub0();\n" + //
+					"			if (createNewModelModification != null) {\n" + //
+					"				model = createNewModelModification.modify(model);\n" + //
+					"			}\n" + //
+					"			return model;\n" + //
 					"		}\n" + //
 					"		if (modelClassName.equals(\"CTableSub1\")) {\n" + //
-					"			return new CTableSub1();\n" + //
+					"			model = new CTableSub1();\n" + //
+					"			if (createNewModelModification != null) {\n" + //
+					"				model = createNewModelModification.modify(model);\n" + //
+					"			}\n" + //
+					"			return model;\n" + //
 					"		}\n" + //
-					"		return new CTable();\n" + //
+					"		if (createNewModelModification != null) {\n" + //
+					"			model = createNewModelModification.modify(model);\n" + //
+					"		}\n" + //
+					"		return model;\n" + //
 					"	}\n" + //
 					"\n" + //
 					"	@Override\n" + //

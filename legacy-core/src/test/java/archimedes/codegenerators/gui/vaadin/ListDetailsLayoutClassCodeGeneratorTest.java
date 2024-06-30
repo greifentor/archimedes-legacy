@@ -126,6 +126,8 @@ public class ListDetailsLayoutClassCodeGeneratorTest {
 								+ "			grid.setItems(model.getChapters());\n" //
 								+ "		}\n" //
 								+ "		grid.setWidthFull();\n" //
+								+ "		setMargin(false);\n" //
+								+ "		setPadding(false);\n" //
 								+ "		add(buttons, grid);\n" //
 								+ "	}\n" //
 								+ "\n" //

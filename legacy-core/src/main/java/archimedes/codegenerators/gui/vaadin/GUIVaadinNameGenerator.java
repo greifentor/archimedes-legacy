@@ -67,6 +67,10 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME = "ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME";
 	public static final String ALTERNATE_MAINTENANCE_VIEW_RENDERER_INTERFACE_NAME =
 			"ALTERNATE_MAINTENANCE_VIEW_RENDERER_INTERFACE_NAME_SUFFIX";
+	public static final String ALTERNATE_MAINTENANCE_VIEW_CREATE_NEW_MODEL_MODIFICATION_CLASS_NAME_SUFFIX =
+			"	ALTERNATE_MAINTENANCE_VIEW_CREATE_NEW_MODEL_MODIFICATION_CLASS_NAME_SUFFIX";
+	public static final String ALTERNATE_MAINTENANCE_VIEW_CREATE_NEW_MODEL_MODIFICATION_PACKAGE_NAME =
+			"ALTERNATE_MAINTENANCE_VIEW_CREATE_NEW_MODEL_MODIFICATION_PACKAGE_NAME";
 	public static final String ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX =
 			"ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX";
 	public static final String ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_PACKAGE_NAME =
@@ -353,6 +357,21 @@ public class GUIVaadinNameGenerator extends NameGenerator {
 
 	public String getMaintenanceViewPackageName(DataModel model, TableModel table) {
 		return createPackageName(model, table, "gui.vaadin.masterdata", ALTERNATE_MAINTENANCE_VIEW_PACKAGE_NAME);
+	}
+
+	public String getMaintenanceViewCreateNewModelModificationInterfaceName(DataModel model) {
+		return getNameOrAlternativeFromOption(
+				model,
+				"MaintenanceViewCreateNewModelModification",
+				ALTERNATE_MAINTENANCE_VIEW_CREATE_NEW_MODEL_MODIFICATION_CLASS_NAME_SUFFIX);
+	}
+
+	public String getMaintenanceViewCreateNewModelModificationPackageName(DataModel model, TableModel table) {
+		return createPackageName(
+				model,
+				table,
+				"gui.vaadin.masterdata",
+				ALTERNATE_MAINTENANCE_VIEW_CREATE_NEW_MODEL_MODIFICATION_PACKAGE_NAME);
 	}
 
 	public String getMaintenanceViewRendererInterfaceName(DataModel model) {

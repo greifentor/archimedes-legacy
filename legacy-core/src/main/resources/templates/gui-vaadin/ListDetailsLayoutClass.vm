@@ -102,6 +102,8 @@ public class ${ClassName} extends VerticalLayout {
 			grid.setItems(model.get${ModelClassName}s());
 		}
 		grid.setWidthFull();
+		setMargin(false);
+		setPadding(false);
 		add(buttons, grid);
 	}
 
