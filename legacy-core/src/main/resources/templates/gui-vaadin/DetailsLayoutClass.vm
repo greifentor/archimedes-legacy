@@ -6,6 +6,10 @@ import java.io.InputStream;
 
 #end
 import com.vaadin.flow.component.AttachEvent;
+#if ($ListGridDataCollection.size() != 0)
+import com.vaadin.flow.component.accordion.Accordion;
+import com.vaadin.flow.component.accordion.AccordionPanel;
+#end
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 #if (${GUIColumnDataCollection.hasFieldType("BOOLEAN")} == true)

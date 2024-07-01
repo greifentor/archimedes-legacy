@@ -1708,6 +1708,8 @@ public class DetailsLayoutClassCodeGeneratorTest {
 					"package de.ollie.bookstore.gui.vaadin.masterdata;\n" //
 							+ "\n" //
 							+ "import com.vaadin.flow.component.AttachEvent;\n" //
+							+ "import com.vaadin.flow.component.accordion.Accordion;\n" //
+							+ "import com.vaadin.flow.component.accordion.AccordionPanel;\n" //
 							+ "import com.vaadin.flow.component.dialog.Dialog;\n" //
 							+ "import com.vaadin.flow.component.orderedlayout.VerticalLayout;\n" //
 							+ "import com.vaadin.flow.component.combobox.ComboBox;\n" //
