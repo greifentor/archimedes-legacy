@@ -226,6 +226,9 @@ public class DBOClassCodeGeneratorTest {
 								+ "import javax.persistence.JoinColumn;\n" //
 								+ "import javax.persistence.OneToMany;\n" //
 								+ "\n" //
+								+ "import org.hibernate.annotations.Fetch;\n" //
+								+ "import org.hibernate.annotations.FetchMode;\n" //
+								+ "\n" //
 								+ "import lombok.Data;\n" //
 								+ "import lombok.Generated;\n" //
 								+ "import lombok.experimental.Accessors;\n" //
@@ -254,6 +257,7 @@ public class DBOClassCodeGeneratorTest {
 								+ "	@Column(name = \"TITLE\", nullable = false)\n" //
 								+ "	private String title;\n" //
 								+ "	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)\n" //
+								+ "	@Fetch(value = FetchMode.SUBSELECT)\n" //
 								+ "	@JoinColumn(name = \"BOOK_ID\")\n" //
 								+ "	private List<ChapterDBO> chapters;\n" //
 								+ "\n" //
@@ -289,6 +293,9 @@ public class DBOClassCodeGeneratorTest {
 								+ "import javax.persistence.JoinColumn;\n" //
 								+ "import javax.persistence.OneToMany;\n" //
 								+ "\n" //
+								+ "import org.hibernate.annotations.Fetch;\n" //
+								+ "import org.hibernate.annotations.FetchMode;\n" //
+								+ "\n" //
 								+ "import lombok.Data;\n" //
 								+ "import lombok.EqualsAndHashCode;\n" //
 								+ "import lombok.Generated;\n" //
@@ -313,6 +320,7 @@ public class DBOClassCodeGeneratorTest {
 								+ "	@Column(name = \"NAME\")\n" //
 								+ "	private String name;\n" //
 								+ "	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)\n" //
+								+ "	@Fetch(value = FetchMode.SUBSELECT)\n" //
 								+ "	@JoinColumn(name = \"PARENT\")\n" //
 								+ "	private List<CHeirTableMemberDBO> cHeirTableMembers;\n" //
 								+ "\n" //

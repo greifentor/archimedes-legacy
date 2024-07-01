@@ -125,6 +125,12 @@ public class DBOClassCodeGenerator extends AbstractClassCodeGenerator<Persistenc
 																					.setName("orphanRemoval")
 																					.setValue("true")),
 															new AnnotationData()
+																	.setName("Fetch")
+																	.addParameter(
+																			new ParameterData()
+																					.setName("value")
+																					.setValue("FetchMode.SUBSELECT")),
+															new AnnotationData()
 																	.setName("JoinColumn")
 																	.addParameter(
 																			new ParameterData()

@@ -49,6 +49,9 @@ import ${JavaxPackageName}.persistence.CascadeType;
 import ${JavaxPackageName}.persistence.FetchType;
 import ${JavaxPackageName}.persistence.JoinColumn;
 import ${JavaxPackageName}.persistence.OneToMany;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 #end
 
 #if ($POJOMode == "BUILDER")
