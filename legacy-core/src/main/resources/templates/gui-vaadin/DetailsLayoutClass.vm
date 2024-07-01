@@ -186,6 +186,16 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 						"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4");
 		setMargin(false);
 		setWidthFull();
+#if ($ListGridDataCollection.size() != 0)
+		Accordion accordion = new Accordion();
+	#foreach (${ListGridData} in ${ListGridDataCollection})
+		accordion.add(new AccordionPanel(
+				resourceManager.getLocalizedString("${ClassName}.accordion.${ListGridData.getListDetailsLayoutClassName()}.label"),
+				new ${ListGridData.getListDetailsLayoutClassName()}(
+						componentFactory, guiConfiguration, model, resourceManager, serviceProvider, session)));
+	#end
+		accordion.setWidthFull();
+#end
 		add(
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
 	#if (${Column.getType()} == "BOOLEAN")
@@ -208,8 +218,8 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} {
 				textField${Column.getFieldNameCamelCase()},
 	#end
 #end
-#foreach (${ListGridData} in ${ListGridDataCollection})
-				new ${ListGridData.getListDetailsLayoutClassName()}(componentFactory, guiConfiguration, model, resourceManager, serviceProvider, session),
+#if ($ListGridDataCollection.size() != 0)
+				accordion,
 #end
 				getMasterDataButtonLayout(model.getId() > 0));
 #if (${PreferenceData})

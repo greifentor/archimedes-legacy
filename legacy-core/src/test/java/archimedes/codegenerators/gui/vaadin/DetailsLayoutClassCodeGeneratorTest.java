@@ -1766,11 +1766,17 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "						\"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4\");\n" //
 							+ "		setMargin(false);\n" //
 							+ "		setWidthFull();\n" //
+							+ "		Accordion accordion = new Accordion();\n" //
+							+ "		accordion.add(new AccordionPanel(\n" //
+							+ "				resourceManager.getLocalizedString(\"BookDetailsLayout.accordion.ChapterListDetailsLayout.label\"),\n" //
+							+ "				new ChapterListDetailsLayout(\n" //
+							+ "						componentFactory, guiConfiguration, model, resourceManager, serviceProvider, session)));\n" //
+							+ "		accordion.setWidthFull();\n" //
 							+ "		add(\n" //
 							+ "				textFieldTitle,\n" //
 							+ "				textFieldIsbn,\n" //
 							+ "				comboBoxPublicationType,\n" //
-							+ "				new ChapterListDetailsLayout(componentFactory, guiConfiguration, model, resourceManager, serviceProvider, session),\n" //
+							+ "				accordion,\n" //
 							+ "				getMasterDataButtonLayout(model.getId() > 0));\n" //
 							+ "		textFieldTitle.focus();\n" //
 							+ "	}\n" //
