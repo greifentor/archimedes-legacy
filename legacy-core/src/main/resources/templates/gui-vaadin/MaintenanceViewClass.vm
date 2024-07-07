@@ -9,6 +9,7 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 
 #foreach ($ImportDeclaration in $ImportDeclarations.toList())
@@ -16,6 +17,7 @@ import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
 import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
+import ${SessionDataPackageName}.${SessionDataClassName}.ReturnUrlData;
 import ${UserAuthorizationCheckerPackageName}.${UserAuthorizationCheckerClassName};
 import ${AbstractMasterDataBaseLayoutPackageName}.${AbstractMasterDataBaseLayoutClassName};
 import ${ButtonFactoryPackageName}.${ButtonFactoryClassName};
@@ -123,7 +125,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 										.createBackButton(
 												resourceManager,
 												this::getUI,
-												${PageLayoutClassName}.URL,
+												session.getReturnUrl().orElse(new ReturnUrlData(${PageLayoutClassName}.URL)),
 												session),
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
 								resourceManager.getLocalizedString("${ClassName}.header.prefix.label", session.getLocalization()) + getHeaderSuffix(model),
@@ -170,7 +172,12 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 
 	@Override
 	public void save(Object model) {
-		getUI().ifPresent(ui -> ui.navigate(${PageLayoutClassName}.URL));
+		navigateBack();
+	}
+
+	private void navigateBack() {
+		ReturnUrlData urlBack = session.getReturnUrl().orElse(new ReturnUrlData(${PageLayoutClassName}.URL));
+		getUI().ifPresent(ui -> ui.navigate(urlBack.getUrl(), new QueryParameters(urlBack.getParameters())));
 	}
 
 	@Override
@@ -181,7 +188,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 	@Override
 	public void remove() {
 		serviceProvider.get${ServiceInterfaceName}().delete(model);
-		getUI().ifPresent(ui -> ui.navigate(${PageLayoutClassName}.URL));
+		navigateBack();
 	}
 
 }

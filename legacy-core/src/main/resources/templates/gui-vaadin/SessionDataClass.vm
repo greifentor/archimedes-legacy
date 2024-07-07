@@ -1,11 +1,15 @@
 package ${PackageName};
 
+import static ${CheckClassPackage}.${CheckClassName}.ensure;
+
 #if ($CubeApplication)
 import java.time.LocalDateTime;
 #end
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Stack;
 
 import org.springframework.stereotype.Component;
 
@@ -17,8 +21,11 @@ import ${ServicePackageName}.${JWTServiceInterfaceName}.${AuthorizationDataClass
 import ${AccessCheckerPackageName}.${AccessCheckerInterfaceName};
 #end
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Generated;
+import lombok.Getter;
 
 /**
  * An object to hold data during the session.
@@ -31,6 +38,20 @@ import lombok.Generated;
 @VaadinSessionScope
 public class ${ClassName} {
 
+	@AllArgsConstructor
+	@EqualsAndHashCode
+	@Getter
+	public static class ReturnUrlData {
+
+		public ReturnUrlData(String url) {
+			this(url, Map.of());
+		}
+
+		private String url;
+		private Map<String, List<String>> parameters;
+
+	}
+
 	private static int counter = 0;
 
 #if ($CubeApplication)
@@ -40,9 +61,25 @@ public class ${ClassName} {
 	private ${SessionIdClassName} id = new ${SessionIdClassName}("${ApplicationName.toLowerCase()}-" + (counter++));
 	private ${LocalizationSOClassName} localization = ${LocalizationSOClassName}.DE;
 	private Map<String, Object> parameters = new HashMap<>();
+	private Stack<ReturnUrlData> returnUrlDatas = new Stack<>();
 #if ($CubeApplication)
 	private LocalDateTime validUntil;
 #end
+
+	public void addReturnUrl(String url) {
+		addReturnUrl(url, Map.of());
+	}
+
+	public void addReturnUrl(String url, Map<String, List<String>> parameters) {
+		ensure(url != null, "url cannot be null!");
+		ensure(!url.isEmpty(), "url cannot be empty!");
+		ensure(parameters != null, "parameters cannot be null!");
+		returnUrlDatas.push(new ReturnUrlData(url, parameters));
+	}
+
+	public Optional<ReturnUrlData> getReturnUrl() {
+		return Optional.ofNullable(!returnUrlDatas.isEmpty() ? returnUrlDatas.pop() : null);
+	}
 
 	public String getUserName() {
 #if ($CubeApplication)

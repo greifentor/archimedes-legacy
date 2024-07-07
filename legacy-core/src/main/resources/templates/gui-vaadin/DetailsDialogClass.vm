@@ -170,9 +170,8 @@ public class ${ClassName} extends Dialog {
 		textArea${FieldName}.addValueChangeListener(event -> {
 			model.set${FieldName}(event.getValue());
 	#elseif (${Column.getType()} == "TIMESTAMP")
-		dateTimePicker${FieldName} = new DateTimePicker(resourceManager.getLocalizedString("$ResourceId", session.getLocalization()), model.get${FieldName}(), event -> {});
-		dateTimePicker${FieldName}.addValueChangeListener(event -> {
-			model.set${FieldName}(event.getValue());
+		dateTimePicker${FieldName} = componentFactory.createDateTimePicker("$ResourceId", session.getLocalization(), model.get${FieldName}(), event -> {
+			model.setCreationDate(event.getValue());
 	#elseif (${Column.getType()} == "UPLOAD")
 		MultiFileMemoryBuffer buffer${FieldName} = new MultiFileMemoryBuffer();
 		upload${FieldName} = new Upload(buffer${FieldName});

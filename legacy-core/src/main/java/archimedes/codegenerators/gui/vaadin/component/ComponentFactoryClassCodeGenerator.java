@@ -15,6 +15,7 @@ import archimedes.codegenerators.TypeGenerator;
 import archimedes.codegenerators.gui.vaadin.AbstractGUIVaadinClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinCodeFactory;
 import archimedes.codegenerators.gui.vaadin.GUIVaadinNameGenerator;
+import archimedes.codegenerators.localization.LocalizationNameGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.OptionModel;
@@ -48,6 +49,11 @@ public class ComponentFactoryClassCodeGenerator extends AbstractModelCodeGenerat
 		context.put("EnumDataCollection", getEnumDataColection(model));
 		context.put("ClassName", getClassName(model, model));
 		context.put("CommentsOff", isCommentsOff(model));
+		context.put("LocalizationSOClassName", LocalizationNameGenerator.INSTANCE.getLocalizationSOClassName());
+		context
+				.put(
+						"LocalizationSOPackageName",
+						LocalizationNameGenerator.INSTANCE.getLocalizationSOPackageName(model));
 		context.put("PackageName", getPackageName(model, model));
 		context.put("MasterDataGridFieldRendererPackageName", nameGenerator.getMasterDataPackageName(model));
 		context
