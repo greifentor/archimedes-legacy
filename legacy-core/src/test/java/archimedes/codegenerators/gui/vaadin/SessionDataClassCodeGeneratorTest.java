@@ -34,52 +34,88 @@ public class SessionDataClassCodeGeneratorTest {
 		class SimpleClass {
 
 			private String getExpected() {
-				return "package base.pack.age.name.gui;\n" + //
-						"\n" + //
-						"import java.util.HashMap;\n" + //
-						"import java.util.Map;\n" + //
-						"import java.util.Optional;\n" + //
-						"\n" + //
-						"import org.springframework.stereotype.Component;\n" + //
-						"\n" + //
-						"import com.vaadin.flow.spring.annotation.VaadinSessionScope;\n" + //
-						"\n" + //
-						"import base.pack.age.name.core.model.localization.LocalizationSO;\n" + //
-						"\n" + //
-						"import lombok.Data;\n" + //
-						"import lombok.Generated;\n" + //
-						"\n" + //
-						"/**\n" + //
-						" * An object to hold data during the session.\n" + //
-						" *\n" + //
-						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-						" */\n" + //
-						"@Component\n" + //
-						"@Data\n" + //
-						"@Generated\n" + //
-						"@VaadinSessionScope\n" + //
-						"public class SessionData {\n" + //
-						"\n" + //
-						"	private static int counter = 0;\n" + //
-						"\n" + //
-						"	private SessionId id = new SessionId(\"" + APPLICATION_NAME.toLowerCase()
-						+ "-\" + (counter++));\n" + //
-						"	private LocalizationSO localization = LocalizationSO.DE;\n" + //
-						"	private Map<String, Object> parameters = new HashMap<>();\n" + //
-						"\n" + //
-						"	public String getUserName() {\n" + //
-						"		return \"N/A\";\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	public Optional<Object> findParameter(String id) {\n" + //
-						"		return Optional.ofNullable(parameters.get(id));\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	public void setParameter(String id, Object obj) {\n" + //
-						"		parameters.put(id, obj);\n" + //
-						"	}\n" + //
-						"\n" + //
-						"}";
+				return "package base.pack.age.name.gui;\n" //
+						+ "\n" //
+						+ "import static base.pack.age.name.util.Check.ensure;\n" //
+						+ "\n" //
+						+ "import java.util.HashMap;\n" //
+						+ "import java.util.List;\n" //
+						+ "import java.util.Map;\n" //
+						+ "import java.util.Optional;\n" //
+						+ "import java.util.Stack;\n" //
+						+ "\n" //
+						+ "import org.springframework.stereotype.Component;\n" //
+						+ "\n" //
+						+ "import com.vaadin.flow.spring.annotation.VaadinSessionScope;\n" //
+						+ "\n" //
+						+ "import base.pack.age.name.core.model.localization.LocalizationSO;\n" //
+						+ "\n" //
+						+ "import lombok.AllArgsConstructor;\n" //
+						+ "import lombok.Data;\n" //
+						+ "import lombok.EqualsAndHashCode;\n" //
+						+ "import lombok.Generated;\n" //
+						+ "import lombok.Getter;\n" //
+						+ "\n" //
+						+ "/**\n" //
+						+ " * An object to hold data during the session.\n" //
+						+ " *\n" //
+						+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+						+ " */\n" //
+						+ "@Component\n" //
+						+ "@Data\n" //
+						+ "@Generated\n" //
+						+ "@VaadinSessionScope\n" //
+						+ "public class SessionData {\n" //
+						+ "\n" //
+						+ "	@AllArgsConstructor\n" //
+						+ "	@EqualsAndHashCode\n" //
+						+ "	@Getter\n" //
+						+ "	public static class ReturnUrlData {\n" //
+						+ "\n" //
+						+ "		public ReturnUrlData(String url) {\n" //
+						+ "			this(url, Map.of());\n" //
+						+ "		}\n" //
+						+ "\n" //
+						+ "		private String url;\n" //
+						+ "		private Map<String, List<String>> parameters;\n" //
+						+ "\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	private static int counter = 0;\n" //
+						+ "\n" //
+						+ "	private SessionId id = new SessionId(\"application-name-\" + (counter++));\n" //
+						+ "	private LocalizationSO localization = LocalizationSO.DE;\n" //
+						+ "	private Map<String, Object> parameters = new HashMap<>();\n" //
+						+ "	private Stack<ReturnUrlData> returnUrlDatas = new Stack<>();\n" //
+						+ "\n" //
+						+ "	public void addReturnUrl(String url) {\n" //
+						+ "		addReturnUrl(url, Map.of());\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public void addReturnUrl(String url, Map<String, List<String>> parameters) {\n" //
+						+ "		ensure(url != null, \"url cannot be null!\");\n" //
+						+ "		ensure(!url.isEmpty(), \"url cannot be empty!\");\n" //
+						+ "		ensure(parameters != null, \"parameters cannot be null!\");\n" //
+						+ "		returnUrlDatas.push(new ReturnUrlData(url, parameters));\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public Optional<ReturnUrlData> getReturnUrl() {\n" //
+						+ "		return Optional.ofNullable(!returnUrlDatas.isEmpty() ? returnUrlDatas.pop() : null);\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public String getUserName() {\n" //
+						+ "		return \"N/A\";\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public Optional<Object> findParameter(String id) {\n" //
+						+ "		return Optional.ofNullable(parameters.get(id));\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public void setParameter(String id, Object obj) {\n" //
+						+ "		parameters.put(id, obj);\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "}";
 			}
 
 			@Test
@@ -100,58 +136,94 @@ public class SessionDataClassCodeGeneratorTest {
 		class CubeApplication {
 
 			private String getExpected() {
-				return "package base.pack.age.name.gui;\n" + //
-						"\n" + //
-						"import java.time.LocalDateTime;\n" + //
-						"import java.util.HashMap;\n" + //
-						"import java.util.Map;\n" + //
-						"import java.util.Optional;\n" + //
-						"\n" + //
-						"import org.springframework.stereotype.Component;\n" + //
-						"\n" + //
-						"import com.vaadin.flow.spring.annotation.VaadinSessionScope;\n" + //
-						"\n" + //
-						"import base.pack.age.name.core.model.localization.LocalizationSO;\n" + //
-						"import base.pack.age.name.core.service.JWTService.AuthorizationData;\n" + //
-						"import base.pack.age.name.gui.AccessChecker;\n" + //
-						"\n" + //
-						"import lombok.Data;\n" + //
-						"import lombok.Generated;\n" + //
-						"\n" + //
-						"/**\n" + //
-						" * An object to hold data during the session.\n" + //
-						" *\n" + //
-						" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-						" */\n" + //
-						"@Component\n" + //
-						"@Data\n" + //
-						"@Generated\n" + //
-						"@VaadinSessionScope\n" + //
-						"public class SessionData {\n" + //
-						"\n" + //
-						"	private static int counter = 0;\n" + //
-						"\n" + //
-						"	private AccessChecker accessChecker;\n" + //
-						"	private AuthorizationData authorizationData;\n" + //
-						"	private SessionId id = new SessionId(\"" + APPLICATION_NAME.toLowerCase()
-						+ "-\" + (counter++));\n" + //
-						"	private LocalizationSO localization = LocalizationSO.DE;\n" + //
-						"	private Map<String, Object> parameters = new HashMap<>();\n" + //
-						"	private LocalDateTime validUntil;\n" + //
-						"\n" + //
-						"	public String getUserName() {\n" + //
-						"		return authorizationData.getUser().getName();\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	public Optional<Object> findParameter(String id) {\n" + //
-						"		return Optional.ofNullable(parameters.get(id));\n" + //
-						"	}\n" + //
-						"\n" + //
-						"	public void setParameter(String id, Object obj) {\n" + //
-						"		parameters.put(id, obj);\n" + //
-						"	}\n" + //
-						"\n" + //
-						"}";
+				return "package base.pack.age.name.gui;\n" //
+						+ "\n" //
+						+ "import static base.pack.age.name.util.Check.ensure;\n" //
+						+ "\n" //
+						+ "import java.time.LocalDateTime;\n" //
+						+ "import java.util.HashMap;\n" //
+						+ "import java.util.List;\n" //
+						+ "import java.util.Map;\n" //
+						+ "import java.util.Optional;\n" //
+						+ "import java.util.Stack;\n" //
+						+ "\n" //
+						+ "import org.springframework.stereotype.Component;\n" //
+						+ "\n" //
+						+ "import com.vaadin.flow.spring.annotation.VaadinSessionScope;\n" //
+						+ "\n" //
+						+ "import base.pack.age.name.core.model.localization.LocalizationSO;\n" //
+						+ "import base.pack.age.name.core.service.JWTService.AuthorizationData;\n" //
+						+ "import base.pack.age.name.gui.AccessChecker;\n" //
+						+ "\n" //
+						+ "import lombok.AllArgsConstructor;\n" //
+						+ "import lombok.Data;\n" //
+						+ "import lombok.EqualsAndHashCode;\n" //
+						+ "import lombok.Generated;\n" //
+						+ "import lombok.Getter;\n" //
+						+ "\n" //
+						+ "/**\n" //
+						+ " * An object to hold data during the session.\n" //
+						+ " *\n" //
+						+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+						+ " */\n" //
+						+ "@Component\n" //
+						+ "@Data\n" //
+						+ "@Generated\n" //
+						+ "@VaadinSessionScope\n" //
+						+ "public class SessionData {\n" //
+						+ "\n" //
+						+ "	@AllArgsConstructor\n" //
+						+ "	@EqualsAndHashCode\n" //
+						+ "	@Getter\n" //
+						+ "	public static class ReturnUrlData {\n" //
+						+ "\n" //
+						+ "		public ReturnUrlData(String url) {\n" //
+						+ "			this(url, Map.of());\n" //
+						+ "		}\n" //
+						+ "\n" //
+						+ "		private String url;\n" //
+						+ "		private Map<String, List<String>> parameters;\n" //
+						+ "\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	private static int counter = 0;\n" //
+						+ "\n" //
+						+ "	private AccessChecker accessChecker;\n" //
+						+ "	private AuthorizationData authorizationData;\n" //
+						+ "	private SessionId id = new SessionId(\"application-name-\" + (counter++));\n" //
+						+ "	private LocalizationSO localization = LocalizationSO.DE;\n" //
+						+ "	private Map<String, Object> parameters = new HashMap<>();\n" //
+						+ "	private Stack<ReturnUrlData> returnUrlDatas = new Stack<>();\n" //
+						+ "	private LocalDateTime validUntil;\n" //
+						+ "\n" //
+						+ "	public void addReturnUrl(String url) {\n" //
+						+ "		addReturnUrl(url, Map.of());\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public void addReturnUrl(String url, Map<String, List<String>> parameters) {\n" //
+						+ "		ensure(url != null, \"url cannot be null!\");\n" //
+						+ "		ensure(!url.isEmpty(), \"url cannot be empty!\");\n" //
+						+ "		ensure(parameters != null, \"parameters cannot be null!\");\n" //
+						+ "		returnUrlDatas.push(new ReturnUrlData(url, parameters));\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public Optional<ReturnUrlData> getReturnUrl() {\n" //
+						+ "		return Optional.ofNullable(!returnUrlDatas.isEmpty() ? returnUrlDatas.pop() : null);\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public String getUserName() {\n" //
+						+ "		return authorizationData.getUser().getName();\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public Optional<Object> findParameter(String id) {\n" //
+						+ "		return Optional.ofNullable(parameters.get(id));\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	public void setParameter(String id, Object obj) {\n" //
+						+ "		parameters.put(id, obj);\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "}";
 			}
 
 			@Test

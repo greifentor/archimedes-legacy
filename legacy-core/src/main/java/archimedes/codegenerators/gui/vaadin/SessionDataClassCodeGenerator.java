@@ -33,6 +33,8 @@ public class SessionDataClassCodeGenerator extends AbstractModelCodeGenerator<GU
 		context.put("AccessCheckerPackageName", CubeNameGenerator.INSTANCE.getAccessCheckerPackageName(model));
 		context.put("ApplicationName", model.getApplicationName());
 		context.put("AuthorizationDataClassName", CubeNameGenerator.INSTANCE.getAuthorizationDataClassName(model));
+		context.put("CheckClassName", "Check");
+		context.put("CheckClassPackage", ServiceNameGenerator.INSTANCE.getUtilPackageName(model));
 		context.put("ClassName", getClassName(model, null));
 		context.put("CubeApplication", isCubeApplication(model));
 		context.put("JWTServiceInterfaceName", CubeNameGenerator.INSTANCE.getJWTServiceInterfaceName(model));

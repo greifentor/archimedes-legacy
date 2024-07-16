@@ -40,6 +40,7 @@ public class ComponentFactoryClassCodeGeneratorTest {
 			String s =
 					"package de.ollie.bookstore.gui.vaadin.component;\n" //
 							+ "\n" //
+							+ "import java.time.LocalDateTime;\n" //
 							+ "import java.util.Optional;\n" //
 							+ "import java.util.function.Consumer;\n" //
 							+ "import java.util.function.Supplier;\n" //
@@ -49,11 +50,14 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ "import org.apache.logging.log4j.Logger;\n" //
 							+ "import org.springframework.beans.factory.annotation.Autowired;\n" //
 							+ "\n" //
+							+ "import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;\n" //
 							+ "import com.vaadin.flow.component.ClickEvent;\n" //
+							+ "import com.vaadin.flow.component.HasValue.ValueChangeListener;\n" //
 							+ "import com.vaadin.flow.component.ItemLabelGenerator;\n" //
 							+ "import com.vaadin.flow.component.UI;\n" //
 							+ "import com.vaadin.flow.component.checkbox.Checkbox;\n" //
 							+ "import com.vaadin.flow.component.combobox.ComboBox;\n" //
+							+ "import com.vaadin.flow.component.datetimepicker.DateTimePicker;\n" //
 							+ "import com.vaadin.flow.component.textfield.IntegerField;\n" //
 							+ "import com.vaadin.flow.component.textfield.NumberField;\n" //
 							+ "import com.vaadin.flow.component.textfield.TextArea;\n" //
@@ -62,6 +66,7 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ "import de.ollie.bookstore.core.model.PublicationType;\n" //
 							+ "import de.ollie.bookstore.core.model.Book;\n" //
 							+ "import de.ollie.bookstore.core.model.Chapter;\n" //
+							+ "import de.ollie.bookstore.core.model.localization.LocalizationSO;\n" //
 							+ "import de.ollie.bookstore.core.service.localization.ResourceManager;\n" //
 							+ "import de.ollie.bookstore.gui.SessionData;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.ApplicationStartView;\n" //
@@ -273,6 +278,14 @@ public class ComponentFactoryClassCodeGeneratorTest {
 							+ "		textArea.setValue(fieldContent != null ? fieldContent : \"\");\n" //
 							+ "		textArea.setWidthFull();\n" //
 							+ "		return textArea;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	public DateTimePicker createDateTimePicker(String resourceId, LocalizationSO localization, LocalDateTime timestamp,\n" //
+							+ "			ValueChangeListener<ComponentValueChangeEvent<DateTimePicker, LocalDateTime>> listener) {\n" //
+							+ "		DateTimePicker dtp = new DateTimePicker(\n" //
+							+ "				resourceManager.getLocalizedString(resourceId, localization), timestamp, listener);\n" //
+							+ "		dtp.setWidthFull();\n" //
+							+ "		return dtp;\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "}";

@@ -1,5 +1,6 @@
 package ${PackageName};
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -9,11 +10,14 @@ import ${JavaxPackageName}.inject.Named;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.HasValue.ValueChangeListener;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -25,6 +29,7 @@ import ${EnumData.getEnumPackageName()}.${EnumData.getEnumClassName()};
 #foreach($MasterDataGridFieldRendererData in ${MasterDataGridFieldRendererCollection})
 import ${MasterDataGridFieldRendererData.getModelPackageName()}.${MasterDataGridFieldRendererData.getModelClassName()};
 #end
+import ${LocalizationSOPackageName}.${LocalizationSOClassName};
 import ${ResourceManagerInterfacePackageName}.${ResourceManagerInterfaceName};
 import ${SessionDataPackageName}.${SessionDataClassName};
 import ${ApplicationStartViewPackageName}.${ApplicationStartViewClassName};
@@ -239,6 +244,14 @@ public class ${ClassName} {
 		textArea.setValue(fieldContent != null ? fieldContent : "");
 		textArea.setWidthFull();
 		return textArea;
+	}
+
+	public DateTimePicker createDateTimePicker(String resourceId, ${LocalizationSOClassName} localization, LocalDateTime timestamp,
+			ValueChangeListener<ComponentValueChangeEvent<DateTimePicker, LocalDateTime>> listener) {
+		DateTimePicker dtp = new DateTimePicker(
+				resourceManager.getLocalizedString(resourceId, localization), timestamp, listener);
+		dtp.setWidthFull();
+		return dtp;
 	}
 
 }

@@ -40,11 +40,13 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.dependency.CssImport;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEvent;\n" + //
+					"import com.vaadin.flow.router.QueryParameters;\n" + //
 					"import com.vaadin.flow.router.Route;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.ATable;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
+					"import base.pack.age.name.gui.SessionData.ReturnUrlData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
@@ -143,7 +145,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												ATablePageView.URL,\n" + //
+					"												session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL)),\n"
+					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
@@ -177,23 +180,28 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		getElement().removeFromTree();\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	@Override\n" + //
-					"	public void save(Object model) {\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void save() {\n" + //
-					"		save(model);\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void remove() {\n" + //
-					"		serviceProvider.getATableService().delete(model);\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"}";
+					"	@Override\n" //
+					+ "	public void save(Object model) {\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	private void navigateBack() {\n" //
+					+ "		ReturnUrlData urlBack = session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL));\n" //
+					+ "		getUI().ifPresent(ui -> ui.navigate(urlBack.getUrl(), new QueryParameters(urlBack.getParameters())));\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void save() {\n" //
+					+ "		save(model);\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void remove() {\n" //
+					+ "		serviceProvider.getATableService().delete(model);\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "}";
 		}
 
 		@Test
@@ -224,12 +232,14 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.dependency.CssImport;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEvent;\n" + //
+					"import com.vaadin.flow.router.QueryParameters;\n" + //
 					"import com.vaadin.flow.router.Route;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.ATable;\n" + //
 					"import base.pack.age.name.core.service.AnotherTableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
+					"import base.pack.age.name.gui.SessionData.ReturnUrlData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
@@ -328,7 +338,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												ATablePageView.URL,\n" + //
+					"												session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL)),\n"
+					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
@@ -362,23 +373,28 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		getElement().removeFromTree();\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	@Override\n" + //
-					"	public void save(Object model) {\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void save() {\n" + //
-					"		save(model);\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void remove() {\n" + //
-					"		serviceProvider.getATableService().delete(model);\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"}";
+					"	@Override\n" //
+					+ "	public void save(Object model) {\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	private void navigateBack() {\n" //
+					+ "		ReturnUrlData urlBack = session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL));\n" //
+					+ "		getUI().ifPresent(ui -> ui.navigate(urlBack.getUrl(), new QueryParameters(urlBack.getParameters())));\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void save() {\n" //
+					+ "		save(model);\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void remove() {\n" //
+					+ "		serviceProvider.getATableService().delete(model);\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "}";
 		}
 
 		@Test
@@ -409,6 +425,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.dependency.CssImport;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEvent;\n" + //
+					"import com.vaadin.flow.router.QueryParameters;\n" + //
 					"import com.vaadin.flow.router.Route;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.AnotherHeirTable;\n" + //
@@ -419,6 +436,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.core.service.ReferencedTableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
+					"import base.pack.age.name.gui.SessionData.ReturnUrlData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
@@ -550,7 +568,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												ATablePageView.URL,\n" + //
+					"												session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL)),\n"
+					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
@@ -632,23 +651,28 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		getElement().removeFromTree();\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	@Override\n" + //
-					"	public void save(Object model) {\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void save() {\n" + //
-					"		save(model);\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void remove() {\n" + //
-					"		serviceProvider.getATableService().delete(model);\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(ATablePageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"}";
+					"	@Override\n" //
+					+ "	public void save(Object model) {\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	private void navigateBack() {\n" //
+					+ "		ReturnUrlData urlBack = session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL));\n" //
+					+ "		getUI().ifPresent(ui -> ui.navigate(urlBack.getUrl(), new QueryParameters(urlBack.getParameters())));\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void save() {\n" //
+					+ "		save(model);\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void remove() {\n" //
+					+ "		serviceProvider.getATableService().delete(model);\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "}";
 		}
 
 		@Test
@@ -676,12 +700,14 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.dependency.CssImport;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEvent;\n" + //
+					"import com.vaadin.flow.router.QueryParameters;\n" + //
 					"import com.vaadin.flow.router.Route;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.DifferentSubclassReferences;\n" + //
 					"import base.pack.age.name.core.service.ATableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
+					"import base.pack.age.name.gui.SessionData.ReturnUrlData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
@@ -785,7 +811,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												DifferentSubclassReferencesPageView.URL,\n" + //
+					"												session.getReturnUrl().orElse(new ReturnUrlData(DifferentSubclassReferencesPageView.URL)),\n"
+					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
@@ -819,23 +846,28 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		getElement().removeFromTree();\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	@Override\n" + //
-					"	public void save(Object model) {\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(DifferentSubclassReferencesPageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void save() {\n" + //
-					"		save(model);\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void remove() {\n" + //
-					"		serviceProvider.getDifferentSubclassReferencesService().delete(model);\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(DifferentSubclassReferencesPageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"}";
+					"	@Override\n" //
+					+ "	public void save(Object model) {\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	private void navigateBack() {\n" //
+					+ "		ReturnUrlData urlBack = session.getReturnUrl().orElse(new ReturnUrlData(DifferentSubclassReferencesPageView.URL));\n" //
+					+ "		getUI().ifPresent(ui -> ui.navigate(urlBack.getUrl(), new QueryParameters(urlBack.getParameters())));\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void save() {\n" //
+					+ "		save(model);\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void remove() {\n" //
+					+ "		serviceProvider.getDifferentSubclassReferencesService().delete(model);\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "}";
 			DataModel dataModel = readDataModel("Model-Inheritance.xml");
 			// Run
 			String returned =
@@ -862,6 +894,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.dependency.CssImport;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEvent;\n" + //
+					"import com.vaadin.flow.router.QueryParameters;\n" + //
 					"import com.vaadin.flow.router.Route;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.BHeirHeirTable;\n" + //
@@ -870,6 +903,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.core.service.BReferencedTableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
+					"import base.pack.age.name.gui.SessionData.ReturnUrlData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
@@ -986,7 +1020,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												BTablePageView.URL,\n" + //
+					"												session.getReturnUrl().orElse(new ReturnUrlData(BTablePageView.URL)),\n"
+					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
 					+ //
@@ -1044,23 +1079,28 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		getElement().removeFromTree();\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	@Override\n" + //
-					"	public void save(Object model) {\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(BTablePageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void save() {\n" + //
-					"		save(model);\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void remove() {\n" + //
-					"		serviceProvider.getBTableService().delete(model);\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(BTablePageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"}";
+					"	@Override\n" //
+					+ "	public void save(Object model) {\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	private void navigateBack() {\n" //
+					+ "		ReturnUrlData urlBack = session.getReturnUrl().orElse(new ReturnUrlData(BTablePageView.URL));\n" //
+					+ "		getUI().ifPresent(ui -> ui.navigate(urlBack.getUrl(), new QueryParameters(urlBack.getParameters())));\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void save() {\n" //
+					+ "		save(model);\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void remove() {\n" //
+					+ "		serviceProvider.getBTableService().delete(model);\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "}";
 			DataModel dataModel = readDataModel("Model-Inheritance.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("B_TABLE"));
@@ -1082,6 +1122,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import com.vaadin.flow.component.dependency.CssImport;\n" + //
 					"import com.vaadin.flow.router.BeforeEnterEvent;\n" + //
 					"import com.vaadin.flow.router.BeforeEvent;\n" + //
+					"import com.vaadin.flow.router.QueryParameters;\n" + //
 					"import com.vaadin.flow.router.Route;\n" + //
 					"\n" + //
 					"import base.pack.age.name.core.model.CTable;\n" + //
@@ -1090,6 +1131,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"import base.pack.age.name.core.service.CAnotherTableService;\n" + //
 					"import base.pack.age.name.core.service.localization.ResourceManager;\n" + //
 					"import base.pack.age.name.gui.SessionData;\n" + //
+					"import base.pack.age.name.gui.SessionData.ReturnUrlData;\n" + //
 					"import base.pack.age.name.gui.vaadin.UserAuthorizationChecker;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 					"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
@@ -1201,7 +1243,8 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												CTablePageView.URL,\n" + //
+					"												session.getReturnUrl().orElse(new ReturnUrlData(CTablePageView.URL)),\n"
+					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n" + //
 					"								resourceManager.getLocalizedString(\"CTableMaintenanceView.header.prefix.label\", session.getLocalization()) + getHeaderSuffix(model),\n" + //
@@ -1257,23 +1300,28 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"		getElement().removeFromTree();\n" + //
 					"	}\n" + //
 					"\n" + //
-					"	@Override\n" + //
-					"	public void save(Object model) {\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(CTablePageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void save() {\n" + //
-					"		save(model);\n" + //
-					"	}\n" + //
-					"\n" + //
-					"	@Override\n" + //
-					"	public void remove() {\n" + //
-					"		serviceProvider.getCTableService().delete(model);\n" + //
-					"		getUI().ifPresent(ui -> ui.navigate(CTablePageView.URL));\n" + //
-					"	}\n" + //
-					"\n" + //
-					"}";
+					"	@Override\n" //
+					+ "	public void save(Object model) {\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	private void navigateBack() {\n" //
+					+ "		ReturnUrlData urlBack = session.getReturnUrl().orElse(new ReturnUrlData(CTablePageView.URL));\n" //
+					+ "		getUI().ifPresent(ui -> ui.navigate(urlBack.getUrl(), new QueryParameters(urlBack.getParameters())));\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void save() {\n" //
+					+ "		save(model);\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public void remove() {\n" //
+					+ "		serviceProvider.getCTableService().delete(model);\n" //
+					+ "		navigateBack();\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "}";
 			DataModel dataModel = readDataModel("Model-ForeignKey.xml");
 			// Run
 			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel.getTableByName("C_TABLE"));
