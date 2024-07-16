@@ -1,6 +1,6 @@
 package ${PackageName};
 
-import javax.inject.Named;
+import ${JavaxPackageName}.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

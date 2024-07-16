@@ -79,21 +79,21 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 			return new String[] { AbstractClassCodeGenerator.ENUM };
 		case MODEL:
 			return new String[] {
-					ServiceNameGenerator.ALTERNATE_APPLICATION_PACKAGE_NAME,
-					ServiceNameGenerator.ALTERNATE_EXCEPTIONS_PACKAGE_NAME,
-					ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_INTERFACE_NAME_SUFFIX,
-					AbstractModelCodeGenerator.GLOBAL_ID,
-					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
-					ServiceNameGenerator.ALTERNATE_PAGE_PACKAGE_NAME,
-					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
-					ServiceNameGenerator.ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_SERVICE_IMPL_PACKAGE_NAME,
-					ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME };
+//					ServiceNameGenerator.ALTERNATE_APPLICATION_PACKAGE_NAME,
+//					ServiceNameGenerator.ALTERNATE_EXCEPTIONS_PACKAGE_NAME,
+//					ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_INTERFACE_NAME_SUFFIX,
+					AbstractModelCodeGenerator.GLOBAL_ID };
+//					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
+//					ServiceNameGenerator.ALTERNATE_PAGE_PACKAGE_NAME,
+//					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
+//					ServiceNameGenerator.ALTERNATE_SERVICE_IMPL_CLASS_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_SERVICE_IMPL_PACKAGE_NAME,
+//					ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_SERVICE_INTERFACE_PACKAGE_NAME };
 		case TABLE:
 			return new String[] {
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,

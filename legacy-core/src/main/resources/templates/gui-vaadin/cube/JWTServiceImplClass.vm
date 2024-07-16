@@ -5,7 +5,7 @@ import static ${UtilPackageName}.Check.ensure;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.inject.Named;
+import ${JavaxPackageName}.inject.Named;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

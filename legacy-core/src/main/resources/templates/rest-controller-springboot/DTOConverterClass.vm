@@ -3,7 +3,7 @@ package ${PackageName};
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Named;
+import ${JavaxPackageName}.inject.Named;
 
 #if ($ImportLocalDate)
 import ${ImportLocalDate};

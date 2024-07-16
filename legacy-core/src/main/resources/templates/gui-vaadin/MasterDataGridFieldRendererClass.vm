@@ -1,9 +1,9 @@
 package ${PackageName};
 
 #if ($HasEnums == "true")
-import javax.inject.Inject;
+import ${JavaxPackageName}.inject.Inject;
 #end
-import javax.inject.Named;
+import ${JavaxPackageName}.inject.Named;
 
 import ${ModelClassPackageName}.${ModelClassName};
 #foreach ($EnumData in $EnumColumns)

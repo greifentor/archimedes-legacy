@@ -2,8 +2,8 @@ package ${PackageName};
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import ${JavaxPackageName}.inject.Inject;
+import ${JavaxPackageName}.inject.Named;
 
 import ${DBOConverterPackageName}.${DBOConverterClassName};
 import ${JPARepositoryPackageName}.${JPARepositoryClassName};

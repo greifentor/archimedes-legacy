@@ -46,7 +46,6 @@ import archimedes.codegenerators.gui.vaadin.styles.VaadinCheckboxStylesCssFileGe
 import archimedes.codegenerators.gui.vaadin.styles.VaadinComboBoxStylesCssFileGenerator;
 import archimedes.codegenerators.gui.vaadin.styles.VaadinTextAreaStylesCssFileGenerator;
 import archimedes.codegenerators.gui.vaadin.styles.VaadinTextFieldStylesCssFileGenerator;
-import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.model.OptionType;
@@ -164,32 +163,32 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 					AbstractClassCodeGenerator.TEXT };
 		case MODEL:
 			return new String[] {
-					GUIVaadinNameGenerator.ALTERNATE_BUTTON_CLASS_NAME_SUFFIX,
-					GUIVaadinNameGenerator.ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX,
-					GUIVaadinNameGenerator.ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX,
-					GUIVaadinNameGenerator.ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX,
-					GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX,
-					GUIVaadinNameGenerator.ALTERNATE_GUI_VAADIN_MODULE_PREFIX,
-					GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX,
-					GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_PACKAGE_NAME,
-					GUIVaadinNameGenerator.ALTERNATE_GO_CLASS_NAME_SUFFIX,
-					GUIVaadinNameGenerator.ALTERNATE_GO_PACKAGE_NAME,
-					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
-					GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_CONVERTER_PACKAGE_NAME,
-					GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_PACKAGE_NAME,
-					GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME,
-					GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME,
-					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
-					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
-					LabelPropertiesGenerator.ALTERNATIVE_LABEL_MODULE_NAME,
+//					GUIVaadinNameGenerator.ALTERNATE_BUTTON_CLASS_NAME_SUFFIX,
+//					GUIVaadinNameGenerator.ALTERNATE_BUTTON_FACTORY_CLASS_NAME_SUFFIX,
+//					GUIVaadinNameGenerator.ALTERNATE_BUTTON_FACTORY_CONFIGURATION_CLASS_NAME_SUFFIX,
+//					GUIVaadinNameGenerator.ALTERNATE_BUTTON_GRID_CLASS_NAME_SUFFIX,
+//					GUIVaadinNameGenerator.ALTERNATE_MASTER_DATA_BUTTON_LAYOUT_CLASS_NAME_SUFFIX,
+//					GUIVaadinNameGenerator.ALTERNATE_GUI_VAADIN_MODULE_PREFIX,
+//					GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_CLASS_NAME_SUFFIX,
+//					GUIVaadinNameGenerator.ALTERNATE_GO_CONVERTER_PACKAGE_NAME,
+//					GUIVaadinNameGenerator.ALTERNATE_GO_CLASS_NAME_SUFFIX,
+//					GUIVaadinNameGenerator.ALTERNATE_GO_PACKAGE_NAME,
+//					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
+//					GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_CONVERTER_PACKAGE_NAME,
+//					GUIVaadinNameGenerator.ALTERNATE_PAGE_GO_PACKAGE_NAME,
+//					GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_CONVERTER_PACKAGE_NAME,
+//					GUIVaadinNameGenerator.ALTERNATE_PAGE_PARAMETERS_GO_PACKAGE_NAME,
+//					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
+//					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
+//					LabelPropertiesGenerator.ALTERNATIVE_LABEL_MODULE_NAME,
 					AbstractGUIVaadinClassCodeGenerator.CUBE_APPLICATION,
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 					ApplicationStartViewClassCodeGenerator.GUI_BASE_URL,
-					GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
-					GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME,
+//					GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
+//					GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME,
 					AbstractClassCodeGenerator.JAVAX_PACKAGE_NAME,
 					AbstractClassCodeGenerator.MODULE_MODE };
 		case TABLE:

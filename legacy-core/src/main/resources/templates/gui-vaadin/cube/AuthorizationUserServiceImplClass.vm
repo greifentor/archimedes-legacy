@@ -1,6 +1,6 @@
 package ${PackageName};
 
-import javax.inject.Named;
+import ${JavaxPackageName}.inject.Named;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 

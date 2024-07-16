@@ -10,7 +10,6 @@ import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.codegenerators.FindByUtils;
 import archimedes.codegenerators.NameGenerator;
-import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.model.OptionType;
@@ -79,32 +78,32 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 			return new String[] { AbstractCodeGenerator.ENUM };
 		case MODEL:
 			return new String[] {
-					PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX,
-					PersistenceJPANameGenerator.ALTERNATE_ADAPTER_PACKAGE_NAME,
-					PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX,
-					PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_PACKAGE_NAME,
-					PersistenceJPANameGenerator.ALTERNATE_ENTITY_CLASS_NAME_SUFFIX,
-					PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
-					ServiceNameGenerator.ALTERNATE_EXCEPTIONS_PACKAGE_NAME,
-					PersistenceJPANameGenerator.ALTERNATE_GENERATED_ADAPTER_CLASS_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
-					PersistenceJPANameGenerator.ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME,
-					PersistenceJPANameGenerator.ALTERNATE_PAGE_MODEL_PACKAGE_NAME,
-					PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME,
-					PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME,
-					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
-					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
-					PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX,
-					PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME,
-					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
+//					PersistenceJPANameGenerator.ALTERNATE_ADAPTER_CLASS_NAME_SUFFIX,
+//					PersistenceJPANameGenerator.ALTERNATE_ADAPTER_PACKAGE_NAME,
+//					PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_CLASS_NAME_SUFFIX,
+//					PersistenceJPANameGenerator.ALTERNATE_DBOCONVERTER_PACKAGE_NAME,
+//					PersistenceJPANameGenerator.ALTERNATE_ENTITY_CLASS_NAME_SUFFIX,
+//					PersistenceJPANameGenerator.ALTERNATE_ENTITY_PACKAGE_NAME,
+//					ServiceNameGenerator.ALTERNATE_EXCEPTIONS_PACKAGE_NAME,
+//					PersistenceJPANameGenerator.ALTERNATE_GENERATED_ADAPTER_CLASS_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
+//					PersistenceJPANameGenerator.ALTERNATE_PAGE_CONVERTER_PACKAGE_NAME,
+//					PersistenceJPANameGenerator.ALTERNATE_PAGE_MODEL_PACKAGE_NAME,
+//					PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_CONVERTER_PACKAGE_NAME,
+//					PersistenceJPANameGenerator.ALTERNATE_PAGE_PARAMETERS_MODEL_PACKAGE_NAME,
+//					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
+//					ServiceNameGenerator.ALTERNATE_PERSISTENCE_PORT_PACKAGE_NAME,
+//					PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_CLASS_NAME_SUFFIX,
+//					PersistenceJPANameGenerator.ALTERNATE_REPOSITORY_PACKAGE_NAME,
+//					AbstractClassCodeGenerator.ALTERNATE_MODULE_PREFIX,
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 					AbstractClassCodeGenerator.JAVAX_PACKAGE_NAME,
 			        AbstractCodeGenerator.MODULE_MODE,
-					AbstractClassCodeGenerator.REFERENCE_MODE,
-					PersistenceJPANameGenerator.ALTERNATE_TO_DBO_METHOD_NAME,
-					PersistenceJPANameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME };
+					AbstractClassCodeGenerator.REFERENCE_MODE };
+//					PersistenceJPANameGenerator.ALTERNATE_TO_DBO_METHOD_NAME,
+//					PersistenceJPANameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME };
 		case TABLE:
 			return new String[] {
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,

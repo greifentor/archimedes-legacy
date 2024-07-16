@@ -54,9 +54,9 @@ public class LocalizationCodeFactory extends AbstractClassCodeFactory implements
 		switch (optionType) {
 		case MODEL:
 			return new String[] {
-					LocalizationNameGenerator.ALTERNATE_LOCALIZATION_SO_PACKAGE_NAME,
-					LocalizationNameGenerator.ALTERNATE_RESOURCE_MANAGER_IMPL_PACKAGE_NAME,
-					LocalizationNameGenerator.ALTERNATE_RESOURCE_MANAGER_PACKAGE_NAME,
+//					LocalizationNameGenerator.ALTERNATE_LOCALIZATION_SO_PACKAGE_NAME,
+//					LocalizationNameGenerator.ALTERNATE_RESOURCE_MANAGER_IMPL_PACKAGE_NAME,
+//					LocalizationNameGenerator.ALTERNATE_RESOURCE_MANAGER_PACKAGE_NAME,
 					AbstractClassCodeGenerator.JAVAX_PACKAGE_NAME };
 		default:
 			return new String[0];
