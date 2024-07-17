@@ -87,6 +87,9 @@ Will be provided since version 2.1.1 is released.
 
 [Service](./legacy-core/src/main/java/archimedes/codegenerators/service/README.md)
 
+[Vaadin GUI](./legacy-core/src/main/java/archimedes/codegenerators/gui/vaadin/README.md)
+
+
 ### Templates
 
 Each Archimedes Code Factory works with Velocity templates. These are found in the sub folders of 
