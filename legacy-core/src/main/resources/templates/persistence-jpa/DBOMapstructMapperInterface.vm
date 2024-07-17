@@ -14,10 +14,12 @@ import org.springframework.core.convert.converter.Converter;
  * ${Generated}
  */
 @Mapper(componentModel = "spring")
-public interface ${ClassName} #if ($ConverterExtension)extends Converter<${ModelClassName}, ${DBOClassName}> #end{
+public interface ${ClassName} #if ($ConverterExtension)extends Converter<${ModelClassName}, ${DBOClassName}> #{else}extends ToModelConverter<${ModelClassName}, ${DBOClassName}> #end{
 
     ${DBOClassName} ${ToDBOMethodName}(${ModelClassName} model);
+#if ($ConverterExtension)
 
     ${ModelClassName} ${ToModelMethodName}(${DBOClassName} dbo);
+#end
 
 }

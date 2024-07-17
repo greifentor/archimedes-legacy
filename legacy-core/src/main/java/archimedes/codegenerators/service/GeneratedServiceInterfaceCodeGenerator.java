@@ -77,6 +77,10 @@ public class GeneratedServiceInterfaceCodeGenerator extends AbstractClassCodeGen
 		context.put("PagePackageName", nameGenerator.getPagePackageName(model));
 		context.put("PageParametersClassName", nameGenerator.getPageParametersClassName());
 		context.put("Subclasses", getSubclassData(model, table));
+		context
+				.put(
+						"SubclassSelectors",
+						table.getOptionByName(ServiceInterfaceCodeGenerator.SUPPRESS_SUBCLASS_SELECTORS) == null);
 	}
 
 	private List<SubclassData> getSubclassData(DataModel model, TableModel table) {

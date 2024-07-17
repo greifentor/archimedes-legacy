@@ -367,6 +367,74 @@ public class GeneratedServiceImplClassCodeGeneratorTest {
 	}
 
 	@Test
+	void happyRunForASimpleObject_Inheritance_withSuppressedSubclassSelectors() {
+		// Prepare
+		String expected = "package base.pack.age.name.core.service.impl;\n" + //
+				"\n" + //
+				"import java.util.List;\n" + //
+				"import java.util.Optional;\n" + //
+				"\n" + //
+				"import javax.inject.Inject;\n" + //
+				"\n" + //
+				"import base.pack.age.name.core.model.Page;\n" + //
+				"import base.pack.age.name.core.model.PageParameters;\n" + //
+				"import base.pack.age.name.core.model.ATable;\n" + //
+				"import base.pack.age.name.core.service.port.persistence.ATablePersistencePort;\n" + //
+				"import base.pack.age.name.core.service.ATableService;\n" + //
+				"import lombok.Generated;\n" + //
+				"\n" + //
+				"/**\n" + //
+				" * A generated service interface implementation for ATable management.\n" + //
+				" *\n" + //
+				" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+				" */\n" + //
+				"@Generated\n" + //
+				"public abstract class ATableGeneratedServiceImpl implements ATableService {\n" + //
+				"\n" + //
+				"	@Inject\n" + //
+				"	protected ATablePersistencePort persistencePort;\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public ATable create(ATable model) {\n" + //
+				"		return persistencePort.create(model);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public List<ATable> findAll() {\n" + //
+				"		return persistencePort.findAll();\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public Page<ATable> findAll(PageParameters pageParameters) {\n" + //
+				"		return persistencePort.findAll(pageParameters);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public Optional<ATable> findById(Long id) {\n" + //
+				"		return persistencePort.findById(id);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public ATable update(ATable model) {\n" + //
+				"		return persistencePort.update(model);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"	@Override\n" + //
+				"	public void delete(ATable model) {\n" + //
+				"		persistencePort.delete(model);\n" + //
+				"	}\n" + //
+				"\n" + //
+				"}";
+		DataModel dataModel = readDataModel("Model-Inheritance.xml");
+		TableModel table = dataModel.getTableByName("A_TABLE");
+		table.addOption(new Option(ServiceInterfaceCodeGenerator.SUPPRESS_SUBCLASS_SELECTORS));
+		// Run
+		String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+		// Check
+		assertEquals(expected, returned);
+	}
+
+	@Test
 	void happyRunForASimpleObject_ForeignKey_CascaseDeleteCodeOptionSet() {
 		// Prepare
 		String expected =

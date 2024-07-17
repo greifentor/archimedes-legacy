@@ -54,11 +54,9 @@ public class DBOMapstructMapperInterfaceCodeGeneratorTest {
 					" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 					" */\n" + //
 					"@Mapper(componentModel = \"spring\")\n" + //
-					"public interface ATableDBOMapper {\n" + //
+					"public interface ATableDBOMapper extends ToModelConverter<ATable, ATableDBO> {\n" + //
 					"\n" + //
 					"    ATableDBO toDBO(ATable model);\n" + //
-					"\n" + //
-					"    ATable toModel(ATableDBO dbo);\n" + //
 					"\n" + //
 					"}";
 			DataModel dataModel = readDataModel("Model.xml");

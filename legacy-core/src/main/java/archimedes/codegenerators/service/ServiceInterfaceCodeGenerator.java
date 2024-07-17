@@ -15,6 +15,8 @@ import archimedes.model.TableModel;
  */
 public class ServiceInterfaceCodeGenerator extends AbstractClassCodeGenerator<ServiceNameGenerator> {
 
+	public static final String SUPPRESS_SUBCLASS_SELECTORS = "SUPPRESS_SUBCLASS_SELECTORS";
+
 	public ServiceInterfaceCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"ServiceInterface.vm",

@@ -12,6 +12,8 @@ import archimedes.model.DataModel;
 
 public class ApplicationPropertiesFileGenerator extends AbstractFileGenerator {
 
+	public static final String SUPPRESS_APPLICATION_PROPERTIES_FILE = "SUPPRESS_APPLICATION_PROPERTIES_FILE";
+
 	public ApplicationPropertiesFileGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"ApplicationPropertiesFile.vm",
@@ -40,6 +42,11 @@ public class ApplicationPropertiesFileGenerator extends AbstractFileGenerator {
 	@Override
 	protected String getDefaultModuleName(DataModel dataModel) {
 		return "service";
+	}
+
+	@Override
+	protected boolean isToIgnoreFor(DataModel model, DataModel t) {
+		return super.isToIgnoreFor(model, t) || (model.getOptionByName(SUPPRESS_APPLICATION_PROPERTIES_FILE) != null);
 	}
 
 }

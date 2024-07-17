@@ -416,6 +416,49 @@ public class GeneratedServiceInterfaceCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void simpleInheritance_withSuppressedSubclassSelectors() {
+			// Prepare
+			String expected = "package base.pack.age.name.core.service;\n" + //
+					"\n" + //
+					"import java.util.List;\n" + //
+					"import java.util.Optional;\n" + //
+					"\n" + //
+					"import base.pack.age.name.core.model.Page;\n" + //
+					"import base.pack.age.name.core.model.PageParameters;\n" + //
+					"import base.pack.age.name.core.model.ATable;\n" + //
+					"import lombok.Generated;\n" + //
+					"\n" + //
+					"/**\n" + //
+					" * A generated service interface for ATable management.\n" + //
+					" *\n" + //
+					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
+					" */\n" + //
+					"@Generated\n" + //
+					"public interface ATableGeneratedService {\n" + //
+					"\n" + //
+					"	ATable create(ATable model);\n" + //
+					"\n" + //
+					"	List<ATable> findAll();\n" + //
+					"\n" + //
+					"	Page<ATable> findAll(PageParameters pageParameters);\n" + //
+					"\n" + //
+					"	Optional<ATable> findById(Long id);\n" + //
+					"\n" + //
+					"	ATable update(ATable model);\n" + //
+					"\n" + //
+					"	void delete(ATable model);\n" + //
+					"\n" + //
+					"}";
+			DataModel dataModel = readDataModel("Model-Inheritance.xml");
+			TableModel table = dataModel.getTableByName("A_TABLE");
+			table.addOption(new Option(ServiceInterfaceCodeGenerator.SUPPRESS_SUBCLASS_SELECTORS));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, table);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 }

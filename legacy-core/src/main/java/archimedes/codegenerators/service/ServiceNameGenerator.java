@@ -4,6 +4,7 @@ import archimedes.codegenerators.NameGenerator;
 import archimedes.model.DataModel;
 import archimedes.model.DomainModel;
 import archimedes.model.OptionListProvider;
+import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 /**
@@ -15,6 +16,7 @@ public class ServiceNameGenerator extends NameGenerator {
 
 	public static final ServiceNameGenerator INSTANCE = new ServiceNameGenerator();
 
+	public static final String ALTERNATIVE_APPLICATION_CLASS_NAME = "ALTERNATE_APPLICATION_CLASS_NAME";
 	public static final String ALTERNATE_APPLICATION_PACKAGE_NAME = "ALTERNATE_APPLICATION_PACKAGE_NAME";
 	public static final String ALTERNATE_EXCEPTIONS_PACKAGE_NAME = "ALTERNATE_EXCEPTIONS_PACKAGE_NAME";
 	public static final String ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX =
@@ -39,9 +41,20 @@ public class ServiceNameGenerator extends NameGenerator {
 	public static final String ALTERNATE_UTIL_PACKAGE_NAME = "ALTERNATE_UTILITIES_PACKAGE_NAME";
 
 	public String getApplicationClassName(DataModel model) {
-		return model != null
-				? (model.getApplicationName() != null ? deleteNonLetterCharacters(model.getApplicationName()) : "") + "Application"
-				: null;
+		return model == null
+				? null
+				: (getAlternativeApplicationClassName(model) != null
+						? getClassName(getAlternativeApplicationClassName(model))
+						: (model.getApplicationName() != null
+								? deleteNonLetterCharacters(model.getApplicationName())
+								: "") + "Application");
+	}
+
+	private String getAlternativeApplicationClassName(DataModel model) {
+		OptionModel om = model.getOptionByName(ALTERNATIVE_APPLICATION_CLASS_NAME);
+		return om == null
+				? null
+				: ((om.getParameter() == null) || om.getParameter().isEmpty() ? "Application" : om.getParameter());
 	}
 
 	private String deleteNonLetterCharacters(String s) {
@@ -95,9 +108,7 @@ public class ServiceNameGenerator extends NameGenerator {
 	}
 
 	public String getIdModelClassName(TableModel table) {
-		return table != null
-				? getClassName(table) + "Id"
-				: null;
+		return table != null ? getClassName(table) + "Id" : null;
 	}
 
 	public String getModelClassName(DomainModel domain, DataModel model) {
@@ -105,9 +116,7 @@ public class ServiceNameGenerator extends NameGenerator {
 	}
 
 	public String getModelClassName(TableModel table) {
-		return table != null
-				? getClassName(table) + getModelClassNameSuffix(table.getDataModel())
-				: null;
+		return table != null ? getClassName(table) + getModelClassNameSuffix(table.getDataModel()) : null;
 	}
 
 	public String getGeneratedModelClassName(TableModel table) {
@@ -139,9 +148,7 @@ public class ServiceNameGenerator extends NameGenerator {
 	}
 
 	public String getPersistencePortInterfaceName(TableModel table) {
-		return table != null
-				? getClassName(table) + getPersistencePortInterfaceNameSuffix(table)
-				: null;
+		return table != null ? getClassName(table) + getPersistencePortInterfaceNameSuffix(table) : null;
 	}
 
 	private String getPersistencePortInterfaceNameSuffix(TableModel table) {

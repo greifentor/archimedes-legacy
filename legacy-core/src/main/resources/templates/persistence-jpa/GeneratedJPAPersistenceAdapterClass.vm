@@ -13,6 +13,7 @@ import ${JavaxPackageName}.inject.Inject;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#if(${SubclassSelectors})
 #foreach($Subclass in $Subclasses)
 import ${Subclass.getModelClassNameQualified()};
 #end
@@ -21,6 +22,7 @@ import ${Subclass.getDboRepositoryClassNameQualified()};
 #end
 #foreach($Subclass in $Subclasses)
 import ${Subclass.getConverterClassNameQualified()};
+#end
 #end
 #foreach($FindBy in $FindBys)
 #if(${FindBy.isEnumType()})
@@ -109,11 +111,13 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 #end
 #end
 #end
+#if(${SubclassSelectors})
 #foreach($Subclass in $Subclasses)
 	@Inject
 	protected ${Subclass.getConverterClassName()} ${Subclass.getConverterAttributeName()};
 	@Inject
 	protected ${Subclass.getDboRepositoryClassName()} ${Subclass.getDboRepositoryAttributeName()};
+#end
 #end
 
 	@Inject
@@ -136,12 +140,14 @@ public abstract class ${ClassName} implements ${PersistencePortInterfaceName} {
 	public List<${ModelClassName}> findAll() {
 		return converter.${ToModelMethodName}(repository.findAll());
 	}
+#if(${SubclassSelectors})
 #foreach($Subclass in $Subclasses)
 
 	@Override
 	public List<${Subclass.getModelClassName()}> findAll${Subclass.getModelClassName()}() {
 		return ${Subclass.getConverterAttributeName()}.${ToModelMethodName}(${Subclass.getDboRepositoryAttributeName()}.findAll());
 	}
+#end
 #end
 
 	@Override

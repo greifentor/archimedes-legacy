@@ -84,7 +84,8 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 //					ServiceNameGenerator.ALTERNATE_GENERATED_PERSISTENCE_PORT_INTERFACE_NAME_SUFFIX,
 //					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_IMPL_CLASS_NAME_SUFFIX,
 //					ServiceNameGenerator.ALTERNATE_GENERATED_SERVICE_INTERFACE_NAME_SUFFIX,
-					AbstractModelCodeGenerator.GLOBAL_ID };
+					AbstractModelCodeGenerator.GLOBAL_ID,
+					ApplicationPropertiesFileGenerator.SUPPRESS_APPLICATION_PROPERTIES_FILE };
 //					ServiceNameGenerator.ALTERNATE_MODEL_CLASS_NAME_SUFFIX,
 //					ServiceNameGenerator.ALTERNATE_MODEL_PACKAGE_NAME,
 //					ServiceNameGenerator.ALTERNATE_PAGE_PACKAGE_NAME,
@@ -101,7 +102,8 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 					ModelClassCodeGenerator.IMPLEMENTS,
 					NameGenerator.MODULE,
 					AbstractClassCodeFactory.NO_GENERATION,
-					AbstractClassCodeGenerator.POJO_MODE };
+					AbstractClassCodeGenerator.POJO_MODE,
+					ServiceInterfaceCodeGenerator.SUPPRESS_SUBCLASS_SELECTORS };
 		default:
 			return new String[0];
 		}

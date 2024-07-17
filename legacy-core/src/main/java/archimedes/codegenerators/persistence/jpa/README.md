@@ -93,6 +93,14 @@ for an empty prefix.
 Values: 
 * **Off** - Suppresses the comment generation (CAUTION! This will suppress also overwriting already generated files!).
 
+
+#### MAPPERS
+
+Allows to switch to an alternative mapper generation. Passing the value ``mapstruct`` as option parameter will create
+mapstruct interfaces instead of converter classes. Take care that the required dependencies are in your POM file to
+avoid compilation errors.
+
+
 #### MODULE_MODE
 
 Creates a prefix for the output files with the module name of the code generator and the lowercase application name:
@@ -116,3 +124,9 @@ effect to the generated converters.
 #### REFERENCE_MODE
 
 Allow to choose the method of reference processing for a specific table. Description of the feature see above.
+
+
+#### SUPPRESS_SUBCLASS_SELECTORS
+
+Suppresses the generation of the ``find`` methods for subclasses in the ``GeneratedJPAPersistenceAdapterClassCodeGenerator``.
+Is usefull in combination with mapstruct mapper generation.

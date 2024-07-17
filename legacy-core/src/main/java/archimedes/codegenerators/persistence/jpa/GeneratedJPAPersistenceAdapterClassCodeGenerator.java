@@ -14,11 +14,13 @@ import archimedes.codegenerators.FindByUtils;
 import archimedes.codegenerators.GlobalIdOptionChecker;
 import archimedes.codegenerators.GlobalIdType;
 import archimedes.codegenerators.ListAccess.ListAccessConverterData;
+import archimedes.codegenerators.NoKeyValueFinder;
 import archimedes.codegenerators.NullableUtils;
 import archimedes.codegenerators.OptionGetter;
 import archimedes.codegenerators.ReferenceMode;
 import archimedes.codegenerators.Subclasses.SubclassData;
 import archimedes.codegenerators.TypeGenerator;
+import archimedes.codegenerators.service.ServiceInterfaceCodeGenerator;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
@@ -33,6 +35,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		extends AbstractClassCodeGenerator<PersistenceJPANameGenerator> {
 
 	private static final ServiceNameGenerator SERVICE_NAME_GENERATOR = ServiceNameGenerator.INSTANCE;
+	private static final NoKeyValueFinder NO_KEY_VALUE_FINDER = new NoKeyValueFinder();
 
 	public GeneratedJPAPersistenceAdapterClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
@@ -114,7 +117,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 										.setPackageName(
 												nameGenerator
 														.getDBOConverterPackageName(model, c.getReferencedTable()))));
-		context.put("NoKeyValue", getNoKeyValue(table));
+		context.put("NoKeyValue", NO_KEY_VALUE_FINDER.find(table.getPrimaryKeyColumns()));
 		context.put("PackageName", getPackageName(model, table));
 		context.put("PageClassName", ServiceNameGenerator.INSTANCE.getPageClassName());
 		context.put("PageConverterClassName", nameGenerator.getPageConverterClassName());
@@ -138,6 +141,10 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 						"PersistencePortPackageName",
 						ServiceNameGenerator.INSTANCE.getPersistencePortPackageName(model, table));
 		context.put("Subclasses", getSubclassData(model, table));
+		context
+				.put(
+						"SubclassSelectors",
+						table.getOptionByName(ServiceInterfaceCodeGenerator.SUPPRESS_SUBCLASS_SELECTORS) == null);
 		context.put("TableName", table.getName());
 		context.put("TableAttributeName", nameGenerator.getAttributeName(table.getName()));
 		context.put("ToDBOMethodName", nameGenerator.getToDBOMethodName(table));
@@ -146,14 +153,6 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 		if (GlobalIdOptionChecker.INSTANCE.hasGlobalIdTypeConfiguration(GlobalIdType.UUID, table)) {
 			importDeclarations.add("java.util", "UUID");
 		}
-	}
-
-	private String getNoKeyValue(TableModel table) {
-		ColumnModel[] pks = table.getPrimaryKeyColumns();
-		if (pks.length == 0) {
-			return "NO_KEY_FOUND";
-		}
-		return pks[0].isNotNull() ? "-1" : "null";
 	}
 
 	@Override

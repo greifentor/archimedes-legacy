@@ -11,8 +11,10 @@ import ${JavaxPackageName}.transaction.Transactional;
 import ${PagePackageName}.${PageClassName};
 import ${PagePackageName}.${PageParametersClassName};
 import ${ModelPackageName}.${ModelClassName};
+#if(${SubclassSelectors})
 #foreach($Subclass in $Subclasses)
 import ${Subclass.getModelClassNameQualified()};
+#end
 #end
 #foreach($FindBy in $FindBys)
 #if(!${FindBy.isSimpleType()})
@@ -64,12 +66,14 @@ public abstract class ${ClassName} implements ${ServiceInterfaceName} {
 		return persistencePort.findAll();
 	}
 
+#if(${SubclassSelectors})
 #foreach($Subclass in $Subclasses)
 	@Override
 	public List<${Subclass.getModelClassName()}> findAll${Subclass.getModelClassName()}() {
 		return persistencePort.findAll${Subclass.getModelClassName()}();
 	}
 
+#end
 #end
 	@Override
 	public ${PageClassName}<${ModelClassName}> findAll(${PageParametersClassName} pageParameters) {

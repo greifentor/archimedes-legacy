@@ -10,6 +10,7 @@ import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.codegenerators.FindByUtils;
 import archimedes.codegenerators.NameGenerator;
+import archimedes.codegenerators.service.ServiceInterfaceCodeGenerator;
 import archimedes.legacy.acf.event.CodeFactoryProgressionEventProvider;
 import archimedes.legacy.acf.gui.StandardCodeFactoryProgressionFrameUser;
 import archimedes.model.OptionType;
@@ -100,7 +101,7 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 					AbstractClassCodeGenerator.COMMENTS,
 					AbstractClassCodeGenerator.GENERATE_ID_CLASS,
 					AbstractClassCodeGenerator.JAVAX_PACKAGE_NAME,
-			        AbstractCodeGenerator.MODULE_MODE,
+					AbstractCodeGenerator.MODULE_MODE,
 					AbstractClassCodeGenerator.REFERENCE_MODE };
 //					PersistenceJPANameGenerator.ALTERNATE_TO_DBO_METHOD_NAME,
 //					PersistenceJPANameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME };
@@ -112,7 +113,8 @@ public class PersistenceJPACodeFactory extends AbstractClassCodeFactory implemen
 					AbstractClassCodeGenerator.POJO_MODE,
 					AbstractClassCodeGenerator.REFERENCE_MODE,
 					AbstractClassCodeGenerator.SUBCLASS,
-					AbstractClassCodeGenerator.SUPERCLASS };
+					AbstractClassCodeGenerator.SUPERCLASS,
+					ServiceInterfaceCodeGenerator.SUPPRESS_SUBCLASS_SELECTORS };
 		default:
 			return new String[0];
 		}

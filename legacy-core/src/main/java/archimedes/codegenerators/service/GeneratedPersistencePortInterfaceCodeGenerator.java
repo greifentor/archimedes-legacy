@@ -84,11 +84,15 @@ public class GeneratedPersistencePortInterfaceCodeGenerator extends AbstractClas
 		context.put("PagePackageName", nameGenerator.getPagePackageName(model));
 		context.put("PageParametersClassName", nameGenerator.getPageParametersClassName());
 		context.put("Subclasses", getSubclassData(model, table));
+		context
+				.put(
+						"SubclassSelectors",
+						table.getOptionByName(ServiceInterfaceCodeGenerator.SUPPRESS_SUBCLASS_SELECTORS) == null);
 	}
 
 	private List<SubclassData> getSubclassData(DataModel model, TableModel table) {
 		if (GlobalIdOptionChecker.INSTANCE.hasGlobalIdTypeConfiguration(GlobalIdType.UUID, table)) {
-			importDeclarations.add("java.FUCK", "UUID");
+			importDeclarations.add("java.util", "UUID");
 		}
 		return getSubclassTables(table)
 				.stream()

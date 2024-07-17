@@ -73,6 +73,25 @@ public class ServiceNameGeneratorTest {
 			assertNull(unitUnderTest.getApplicationClassName(null));
 		}
 
+		@Test
+		void modelWithALTERNATE_APPLICATION_CLASS_NAMEset() {
+			// Prepare
+			String value = "value";
+			Option o = new Option(ServiceNameGenerator.ALTERNATIVE_APPLICATION_CLASS_NAME, value);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATIVE_APPLICATION_CLASS_NAME)).thenReturn(o);
+			// Run & Check
+			assertEquals("Value", unitUnderTest.getApplicationClassName(model));
+		}
+
+		@Test
+		void modelWithALTERNATIVE_APPLICATION_CLASS_NAMEset_withEmptyValue() {
+			// Prepare
+			Option o = new Option(ServiceNameGenerator.ALTERNATIVE_APPLICATION_CLASS_NAME, null);
+			when(model.getOptionByName(ServiceNameGenerator.ALTERNATIVE_APPLICATION_CLASS_NAME)).thenReturn(o);
+			// Run & Check
+			assertEquals("Application", unitUnderTest.getApplicationClassName(model));
+		}
+
 	}
 
 	@DisplayName("Tests for application package names")

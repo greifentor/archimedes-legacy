@@ -83,6 +83,10 @@ public class GeneratedServiceImplClassCodeGenerator extends AbstractClassCodeGen
 		context.put("ServiceInterfaceName", nameGenerator.getServiceInterfaceName(table));
 		context.put("ServiceInterfacePackageName", nameGenerator.getServiceInterfacePackageName(model, table));
 		context.put("Subclasses", getSubclassData(model, table));
+		context
+				.put(
+						"SubclassSelectors",
+						table.getOptionByName(ServiceInterfaceCodeGenerator.SUPPRESS_SUBCLASS_SELECTORS) == null);
 	}
 
 	private List<SubclassData> getSubclassData(DataModel model, TableModel table) {
