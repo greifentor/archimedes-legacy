@@ -32,4 +32,8 @@ public interface CodeGenerator<T extends NamedObject> {
 		return Type.TABLE;
 	}
 
+	default boolean isDeprecated() {
+		return false;
+	}
+
 }

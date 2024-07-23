@@ -16,6 +16,13 @@ public class FindByUtils {
 
 	public static final String FIND_BY = "FIND_BY";
 
+	public static boolean hasNotBlanks(ColumnModel[] columns) {
+		return List
+				.of(columns)
+				.stream()
+				.anyMatch(column -> column.findOptionByName(AbstractClassCodeFactory.NOT_BLANK).isPresent());
+	}
+
 	public static boolean hasUniques(ColumnModel[] columns) {
 		return List.of(columns).stream().anyMatch(ColumnModel::isUnique);
 	}

@@ -33,20 +33,22 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 						// Domain
 						new ModelEnumCodeGenerator(this),
 						// Table
-						new ApplicationClassCodeGenerator(this),
-						new ApplicationPropertiesFileGenerator(this),
-						new CheckClassCodeGenerator(this),
 						new GeneratedModelClassCodeGenerator(this),
 						new GeneratedPersistencePortInterfaceCodeGenerator(this),
 						new GeneratedServiceImplClassCodeGenerator(this),
 						new GeneratedServiceInterfaceCodeGenerator(this),
 						new ModelClassCodeGenerator(this),
-						new NotNullConstraintViolationExceptionClassCodeGenerator(this),
 						new PageClassCodeGenerator(this),
 						new PageParametersClassCodeGenerator(this),
 						new PersistencePortInterfaceCodeGenerator(this),
 						new ServiceImplClassCodeGenerator(this),
 						new ServiceInterfaceCodeGenerator(this),
+						// Model
+						new ApplicationClassCodeGenerator(this),
+						new ApplicationPropertiesFileGenerator(this),
+						new CheckClassCodeGenerator(this),
+						new NotNullConstraintViolationExceptionClassCodeGenerator(this),
+						new PersistenceFailureExceptionClassCodeGenerator(this),
 						new UniqueConstraintViolationExceptionClassCodeGenerator(this));
 	}
 
@@ -74,7 +76,8 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 					FindByUtils.FIND_BY,
 					AbstractModelCodeGenerator.GLOBAL_ID,
 					AbstractClassCodeGenerator.INIT_WITH,
-					AbstractClassCodeGenerator.LIST_ACCESS };
+					AbstractClassCodeGenerator.LIST_ACCESS,
+					AbstractClassCodeFactory.NOT_BLANK };
 		case DOMAIN:
 			return new String[] { AbstractClassCodeGenerator.ENUM };
 		case MODEL:

@@ -50,6 +50,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -130,7 +131,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	protected void save() {\n" + //
 						"		model.setCount(integerFieldCount.getValue());\n" + //
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
-						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
+						"		try {\n" + //
+						"			observer.save(serviceProvider.getATableService().update(model));\n" + //
+						"		} catch (PersistenceFailureException pfe) {\n" + //
+						"			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n"
+						+ //
+						"		}\n" + //
 						"	}\n" + //
 						"\n" + //
 						"}";
@@ -173,6 +179,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -248,8 +255,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	@Override\n" + //
 						"	protected void save() {\n" + //
 						"		model.setAdate(dateTimePickerAdate.getValue());\n" + //
-						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
-						"	}\n" + //
+						"		try {\n" //
+						+ "			observer.save(serviceProvider.getATableService().update(model));\n" //
+						+ "		} catch (PersistenceFailureException pfe) {\n" //
+						+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+						+ "		}\n" //
+						+ "	}\n" + //
 						"\n" + //
 						"}";
 			}
@@ -291,6 +302,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -374,8 +386,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	@Override\n" + //
 						"	protected void save() {\n" + //
 						"		model.setRef(comboBoxRef.getValue());\n" + //
-						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
-						"	}\n" + //
+						"		try {\n" //
+						+ "			observer.save(serviceProvider.getATableService().update(model));\n" //
+						+ "		} catch (PersistenceFailureException pfe) {\n" //
+						+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+						+ "		}\n" //
+						+ "	}\n" + //
 						"\n" + //
 						"}";
 			}
@@ -415,6 +431,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -501,8 +518,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setEnumField(comboBoxEnumField.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
 						"		model.setLongtext(textAreaLongtext.getValue());\n" + //
-						"		observer.save(serviceProvider.getTableWithSpecialsService().update(model));\n" + //
-						"	}\n" + //
+						"		try {\n" //
+						+ "			observer.save(serviceProvider.getTableWithSpecialsService().update(model));\n" //
+						+ "		} catch (PersistenceFailureException pfe) {\n" //
+						+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+						+ "		}\n" //
+						+ "	}\n" + //
 						"\n" + //
 						"}";
 			}
@@ -555,6 +576,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -650,8 +672,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setAmountWithLimits(numberFieldAmountWithLimits.getValue());\n" + //
 						"		model.setCounterWithLimits(integerFieldCounterWithLimits.getValue());\n" + //
 						"		model.setWithSpecialDomain(integerFieldWithSpecialDomain.getValue());\n" + //
-						"		observer.save(serviceProvider.getTableWithNumberFieldService().update(model));\n" + //
-						"	}\n" + //
+						"		try {\n" //
+						+ "			observer.save(serviceProvider.getTableWithNumberFieldService().update(model));\n" //
+						+ "		} catch (PersistenceFailureException pfe) {\n" //
+						+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+						+ "		}\n" //
+						+ "	}\n" + //
 						"\n" + //
 						"}";
 				DataModel dataModel = readDataModel("Model.xml");
@@ -688,6 +714,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -768,8 +795,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	protected void save() {\n" + //
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
-						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
-						"	}\n" + //
+						"		try {\n" //
+						+ "			observer.save(serviceProvider.getATableService().update(model));\n" //
+						+ "		} catch (PersistenceFailureException pfe) {\n" //
+						+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+						+ "		}\n" //
+						+ "	}\n" + //
 						"\n" + //
 						"}";
 			}
@@ -808,6 +839,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -893,8 +925,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setName(textFieldName.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
-						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
-						"	}\n" + //
+						"		try {\n" //
+						+ "			observer.save(serviceProvider.getATableService().update(model));\n" //
+						+ "		} catch (PersistenceFailureException pfe) {\n" //
+						+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+						+ "		}\n" //
+						+ "	}\n" + //
 						"\n" + //
 						"}";
 			}
@@ -931,6 +967,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -1024,9 +1061,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"	protected void save() {\n" + //
 						"		model.setAnotherTable(comboBoxAnotherTable.getValue());\n" + //
 						"		model.setATable(comboBoxATable.getValue());\n" + //
-						"		observer.save(serviceProvider.getDifferentSubclassReferencesService().update(model));\n"
-						+ //
-						"	}\n" + //
+						"		try {\n" //
+						+ "			observer.save(serviceProvider.getDifferentSubclassReferencesService().update(model));\n" //
+						+ "		} catch (PersistenceFailureException pfe) {\n" //
+						+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+						+ "		}\n" //
+						+ "	}\n" + //
 						"\n" + //
 						"}";
 				DataModel dataModel = readDataModel("Model-Inheritance.xml");
@@ -1059,6 +1099,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 								+ "import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
 								+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
 								+ "import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" //
+								+ "import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" //
 								+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 								+ "import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" //
 								+ "import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" //
@@ -1148,7 +1189,11 @@ public class DetailsLayoutClassCodeGeneratorTest {
 								+ "		model.setName(textFieldName.getValue());\n" //
 								+ "		model.setAdditionalDescription(textFieldAdditionalDescription.getValue());\n" //
 								+ "		model.setReference(comboBoxReference.getValue());\n" //
-								+ "		observer.save(serviceProvider.getBTableService().update(model));\n" //
+								+ "		try {\n" //
+								+ "			observer.save(serviceProvider.getBTableService().update(model));\n" //
+								+ "		} catch (PersistenceFailureException pfe) {\n" //
+								+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+								+ "		}\n" //
 								+ "	}\n" //
 								+ "\n" //
 								+ "}";
@@ -1184,6 +1229,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -1275,8 +1321,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setName(textFieldName.getValue());\n" + //
 						"		model.setReference(comboBoxReference.getValue());\n" + //
-						"		observer.save(serviceProvider.getBTableService().update(model));\n" + //
-						"	}\n" + //
+						"		try {\n" //
+						+ "			observer.save(serviceProvider.getBTableService().update(model));\n" //
+						+ "		} catch (PersistenceFailureException pfe) {\n" //
+						+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+						+ "		}\n" //
+						+ "	}\n" + //
 						"\n" + //
 						"}";
 			}
@@ -1319,6 +1369,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -1425,8 +1476,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"		model.setAnotherTable(comboBoxAnotherTable.getValue());\n" + //
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setFlag(checkboxFlag.getValue());\n" + //
-						"		observer.save(serviceProvider.getATableService().update(model));\n" + //
-						"	}\n" + //
+						"		try {\n" //
+						+ "			observer.save(serviceProvider.getATableService().update(model));\n" //
+						+ "		} catch (PersistenceFailureException pfe) {\n" //
+						+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+						+ "		}\n" //
+						+ "	}\n" + //
 						"\n" + //
 						"}";
 				DataModel dataModel = readDataModel("Model-Preferences.xml");
@@ -1455,6 +1510,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						"import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" + //
+						"import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" + //
 						"import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" + //
 						"import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" + //
@@ -1550,8 +1606,12 @@ public class DetailsLayoutClassCodeGeneratorTest {
 						+ //
 						"		model.setDescription(textFieldDescription.getValue());\n" + //
 						"		model.setCounter(integerFieldCounter.getValue());\n" + //
-						"		observer.save(serviceProvider.getBTableService().update(model));\n" + //
-						"	}\n" + //
+						"		try {\n" //
+						+ "			observer.save(serviceProvider.getBTableService().update(model));\n" //
+						+ "		} catch (PersistenceFailureException pfe) {\n" //
+						+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+						+ "		}\n" //
+						+ "	}\n" + //
 						"\n" + //
 						"}";
 				DataModel dataModel = readDataModel("Model-Preferences.xml");
@@ -1591,6 +1651,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import base.pack.age.name.gui.vaadin.component.AbstractMasterDataBaseLayout;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ButtonFactory;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ComponentFactory;\n" //
+							+ "import base.pack.age.name.core.service.exception.PersistenceFailureException;\n" //
 							+ "import base.pack.age.name.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.RemoveConfirmDialog;\n" //
 							+ "import base.pack.age.name.gui.vaadin.component.ServiceProvider;\n" //
@@ -1684,7 +1745,11 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "\n" //
 							+ "	@Override\n" //
 							+ "	protected void save() {\n" //
-							+ "		observer.save(serviceProvider.getBlobTableService().update(model));\n" //
+							+ "		try {\n" //
+							+ "			observer.save(serviceProvider.getBlobTableService().update(model));\n" //
+							+ "		} catch (PersistenceFailureException pfe) {\n" //
+							+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+							+ "		}\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "}";
@@ -1724,6 +1789,7 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "import de.ollie.bookstore.gui.vaadin.component.ButtonFactory;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.layout.list.ChapterListDetailsLayout;\n" //
+							+ "import de.ollie.bookstore.core.service.exception.PersistenceFailureException;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGUIConfiguration;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.component.RemoveConfirmDialog;\n" //
 							+ "import de.ollie.bookstore.gui.vaadin.component.ServiceProvider;\n" //
@@ -1811,7 +1877,11 @@ public class DetailsLayoutClassCodeGeneratorTest {
 							+ "		model.setTitle(textFieldTitle.getValue());\n" //
 							+ "		model.setIsbn(textFieldIsbn.getValue());\n" //
 							+ "		model.setPublicationType(comboBoxPublicationType.getValue());\n" //
-							+ "		observer.save(serviceProvider.getBookService().update(model));\n" //
+							+ "		try {\n" //
+							+ "			observer.save(serviceProvider.getBookService().update(model));\n" //
+							+ "		} catch (PersistenceFailureException pfe) {\n" //
+							+ "			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));\n" //
+							+ "		}\n" //
 							+ "	}\n" //
 							+ "\n" //
 							+ "}";

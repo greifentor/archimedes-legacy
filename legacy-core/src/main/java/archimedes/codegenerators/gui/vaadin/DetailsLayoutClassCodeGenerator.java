@@ -43,6 +43,7 @@ public class DetailsLayoutClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("ClassName", getClassName(model, table));
 		context.put("CommentsOff", isCommentsOff(model, table));
 		context.put("ComponentFactoryClassName", componentFactoryClassName);
+		context.put("ExceptionsPackageName", serviceNameGenerator.getExceptionsPackageName(model));
 		context.put("GUIColumnDataCollection", guiColumnDataCollection);
 		context.put("GUIReferences", guiReferenceData);
 		context.put("HasSelectionElement", hasSelectionElements(guiReferenceData, guiColumnDataCollection));
