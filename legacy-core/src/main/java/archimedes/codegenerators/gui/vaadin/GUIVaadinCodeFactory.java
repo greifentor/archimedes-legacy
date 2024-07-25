@@ -7,6 +7,7 @@ import archimedes.acf.checker.ModelChecker;
 import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
+import archimedes.codegenerators.AbstractCodeGenerator;
 import archimedes.codegenerators.CodeGenerator;
 import archimedes.codegenerators.Filters;
 import archimedes.codegenerators.NameGenerator;
@@ -35,6 +36,7 @@ import archimedes.codegenerators.gui.vaadin.cube.JWTServiceImplClassCodeGenerato
 import archimedes.codegenerators.gui.vaadin.cube.JWTServiceInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.cube.WebAppConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.DetailsLayoutComboBoxItemLabelGeneratorInterfaceCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewCreateNewModelModificationInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewRendererInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataGUIConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataViewClassCodeGenerator;
@@ -95,6 +97,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						new ListDetailsLayoutClassCodeGenerator(this),
 						new MainMenuViewClassCodeGenerator(this),
 						new MaintenanceViewClassCodeGenerator(this),
+						new MaintenanceViewCreateNewModelModificationInterfaceCodeGenerator(this),
 						new MaintenanceViewRendererInterfaceCodeGenerator(this),
 						new MasterDataButtonLayoutClassCodeGenerator(this),
 						new MasterDataGridFieldRendererClassCodeGenerator(this),
@@ -190,7 +193,9 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 //					GUIVaadinNameGenerator.ALTERNATE_TO_GO_METHOD_NAME,
 //					GUIVaadinNameGenerator.ALTERNATE_TO_MODEL_METHOD_NAME,
 					AbstractClassCodeGenerator.JAVAX_PACKAGE_NAME,
-					AbstractClassCodeGenerator.MODULE_MODE };
+					AbstractClassCodeGenerator.MODULE_MODE,
+					AbstractCodeGenerator.SPRING_BOOT_VERSION,
+					AbstractGUIVaadinClassCodeGenerator.VAADIN_VERSION };
 		case TABLE:
 			return new String[] {
 					AbstractClassCodeFactory.NO_GENERATION,

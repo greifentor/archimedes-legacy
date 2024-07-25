@@ -16,6 +16,10 @@ import ${MasterDataGridRendererInterfacePackageName}.${MasterDataGridRendererInt
 
 import lombok.Generated;
 
+#if ($SpringBootVersion == "3")
+import org.springframework.context.annotation.Lazy;
+
+#end
 #if (!$CommentsOff)
 /**
  * An implementation of the MasterDataGridFieldRenderer interface for ${ModelDescription}s.
@@ -31,6 +35,9 @@ public class ${ClassName} implements MasterDataGridFieldRenderer<${ModelClassNam
 
 #if ($HasEnums == "true")
 	@Inject
+#if ($SpringBootVersion == "3")
+	@Lazy
+#end
 	private ${ComponentFactoryClassName} componentFactory;
 
 #end

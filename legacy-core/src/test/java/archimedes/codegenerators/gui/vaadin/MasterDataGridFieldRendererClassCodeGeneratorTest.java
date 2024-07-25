@@ -14,6 +14,7 @@ import archimedes.codegenerators.DataModelReader;
 import archimedes.legacy.scheme.ArchimedesObjectFactory;
 import archimedes.model.DataModel;
 import archimedes.model.TableModel;
+import archimedes.scheme.Option;
 import archimedes.scheme.xml.ModelXMLReader;
 
 @ExtendWith(MockitoExtension.class)
@@ -148,6 +149,64 @@ public class MasterDataGridFieldRendererClassCodeGeneratorTest {
 								+ "\n" //
 								+ "}";
 				DataModel dataModel = DataModelReader.readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+				TableModel tableModel = dataModel.getTableByName("BOOK");
+				// Run
+				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
+				// Check
+				assertEquals(expected, returned);
+				assertFalse(unitUnderTest.isToIgnoreFor(dataModel, dataModel.getTableByName("BOOK")));
+			}
+
+			@Test
+			void happyRunForASimpleObjectWithEnumField_SpringBoot3() {
+				String expected = "package de.ollie.bookstore.gui.vaadin.masterdata.renderer;\n" //
+						+ "\n" //
+						+ "import javax.inject.Inject;\n" //
+						+ "import javax.inject.Named;\n" //
+						+ "\n" //
+						+ "import de.ollie.bookstore.core.model.Book;\n" //
+						+ "import de.ollie.bookstore.core.model.PublicationType;\n" //
+						+ "import de.ollie.bookstore.gui.vaadin.component.ComponentFactory;\n" //
+						+ "import de.ollie.bookstore.gui.vaadin.masterdata.MasterDataGridFieldRenderer;\n" //
+						+ "\n" //
+						+ "import lombok.Generated;\n" //
+						+ "\n" //
+						+ "import org.springframework.context.annotation.Lazy;\n" //
+						+ "\n" //
+						+ "/**\n" //
+						+ " * An implementation of the MasterDataGridFieldRenderer interface for books.\n" //
+						+ " *\n" //
+						+ " * If necessary to override, remove 'GENERATED CODE ...' comment and annotation.\n" //
+						+ " *\n" //
+						+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+						+ " */\n" //
+						+ "@Generated\n" //
+						+ "@Named\n" //
+						+ "public class BookMasterDataGridFieldRenderer implements MasterDataGridFieldRenderer<Book> {\n" //
+						+ "\n" //
+						+ "	@Inject\n" //
+						+ "	@Lazy\n" //
+						+ "	private ComponentFactory componentFactory;\n" //
+						+ "\n" //
+						+ "	@Override\n" //
+						+ "	public Object getHeaderString(String fieldName, Book model) {\n" //
+						+ "		if (Book.PUBLICATIONTYPE.equals(fieldName)) {\n" //
+						+ "			return componentFactory.getPublicationTypeItemLabelGenerator().apply(model.getPublicationType());\n" //
+						+ "		}\n" //
+						+ "		return null;\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	@Override\n" //
+						+ "	public boolean hasRenderingFor(String fieldName) {\n" //
+						+ "		if (Book.PUBLICATIONTYPE.equals(fieldName) && (componentFactory.getPublicationTypeItemLabelGenerator() != null)) {\n" //
+						+ "			return true;\n" //
+						+ "		}\n" //
+						+ "		return false;\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "}";
+				DataModel dataModel = DataModelReader.readDataModel("Example-BookStore.xml", EXAMPLE_XMLS);
+				dataModel.addOption(new Option("SPRING_BOOT_VERSION", "3"));
 				TableModel tableModel = dataModel.getTableByName("BOOK");
 				// Run
 				String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, tableModel);
