@@ -15,6 +15,11 @@ Allows to set a prefix for the module where the generated sources are written in
 By default the module name without any prefix is "gui".
 
 
+#### SPRING_BOOT_VERSION
+
+Allows to set an alternative Spring Boot version. Set major versions only. The default is ``2``.
+
+
 #### VAADIN_VERSION
 
-Allows to set an alternative Vaadin version. Set major versions only. The default is ``23`.
+Allows to set an alternative Vaadin version. Set major versions only. The default is ``23``.

@@ -1,0 +1,7 @@
+package ${PackageName};
+
+public interface ${ClassName}<T> {
+
+	T modify(T model);
+
+}
