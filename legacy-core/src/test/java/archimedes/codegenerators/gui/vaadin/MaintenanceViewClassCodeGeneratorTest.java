@@ -145,7 +145,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL)),\n"
+					"												() -> session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL)),\n"
 					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
@@ -338,7 +338,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL)),\n"
+					"												() -> session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL)),\n"
 					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
@@ -568,7 +568,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL)),\n"
+					"												() -> session.getReturnUrl().orElse(new ReturnUrlData(ATablePageView.URL)),\n"
 					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
@@ -811,7 +811,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												session.getReturnUrl().orElse(new ReturnUrlData(DifferentSubclassReferencesPageView.URL)),\n"
+					"												() -> session.getReturnUrl().orElse(new ReturnUrlData(DifferentSubclassReferencesPageView.URL)),\n"
 					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
@@ -1020,7 +1020,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												session.getReturnUrl().orElse(new ReturnUrlData(BTablePageView.URL)),\n"
+					"												() -> session.getReturnUrl().orElse(new ReturnUrlData(BTablePageView.URL)),\n"
 					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n"
@@ -1243,7 +1243,7 @@ public class MaintenanceViewClassCodeGeneratorTest {
 					"										.createBackButton(\n" + //
 					"												resourceManager,\n" + //
 					"												this::getUI,\n" + //
-					"												session.getReturnUrl().orElse(new ReturnUrlData(CTablePageView.URL)),\n"
+					"												() -> session.getReturnUrl().orElse(new ReturnUrlData(CTablePageView.URL)),\n"
 					+ //
 					"												session),\n" + //
 					"						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),\n" + //

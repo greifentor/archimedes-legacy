@@ -13,14 +13,14 @@ import archimedes.model.DataModel;
  * @author ollie (28.07.2021)
  */
 public class PageParametersToPageableConverterClassCodeGenerator
-        extends AbstractModelCodeGenerator<PersistenceJPANameGenerator> {
+		extends AbstractModelCodeGenerator<PersistenceJPANameGenerator> {
 
 	public PageParametersToPageableConverterClassCodeGenerator(AbstractCodeFactory codeFactory) {
 		super(
 				"PageParametersToPageableConverterClass.vm",
 				PersistenceJPACodeFactory.TEMPLATE_FOLDER_PATH,
-		        PersistenceJPANameGenerator.INSTANCE,
-		        TypeGenerator.INSTANCE,
+				PersistenceJPANameGenerator.INSTANCE,
+				TypeGenerator.INSTANCE,
 				codeFactory);
 	}
 

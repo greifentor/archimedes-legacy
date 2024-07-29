@@ -57,7 +57,7 @@ public class ${ClassName} {
 	}
 
 	public ${ButtonClassName} createBackButton(${ResourceManagerInterfaceName} resourceManager, Supplier<Optional<UI>> uiSupplier,
-			${SessionDataClassName}.ReturnUrlData urlBack, ${SessionDataClassName} sessionData) {
+			Supplier<${SessionDataClassName}.ReturnUrlData> urlBack, ${SessionDataClassName} sessionData) {
 		${ButtonClassName} buttonBack =
 				createButton(
 						resourceManager.getLocalizedString("commons.button.back.text", sessionData.getLocalization()));
@@ -68,8 +68,8 @@ public class ${ClassName} {
 								.ifPresent(
 										ui -> ui
 												.navigate(
-														urlBack.getUrl(),
-														new QueryParameters(urlBack.getParameters()))));
+														urlBack.get().getUrl(),
+														new QueryParameters(urlBack.get().getParameters()))));
 		return buttonBack;
 	}
 
