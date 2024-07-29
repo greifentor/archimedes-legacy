@@ -125,7 +125,7 @@ public class ${ClassName} extends ${AbstractMasterDataBaseLayoutClassName} imple
 										.createBackButton(
 												resourceManager,
 												this::getUI,
-												session.getReturnUrl().orElse(new ReturnUrlData(${PageLayoutClassName}.URL)),
+												() -> session.getReturnUrl().orElse(new ReturnUrlData(${PageLayoutClassName}.URL)),
 												session),
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
 								resourceManager.getLocalizedString("${ClassName}.header.prefix.label", session.getLocalization()) + getHeaderSuffix(model),

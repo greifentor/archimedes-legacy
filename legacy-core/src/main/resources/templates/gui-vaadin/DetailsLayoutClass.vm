@@ -41,6 +41,7 @@ import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 #foreach ($ImportDeclaration in $ImportDeclarations.toList())
 import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
+import ${ExceptionsPackageName}.PersistenceFailureException;
 import ${MasterDataGUIConfigurationPackageName}.${MasterDataGUIConfigurationClassName};
 import ${RemoveConfirmDialogPackageName}.${RemoveConfirmDialogClassName};
 import ${VaadinComponentPackageName}.${ServiceProviderClassName};
@@ -398,7 +399,11 @@ textField${Preference.getFirstFieldNameCamelCase()}.focus());#end
 		// UNKNOWN ${Column.getFieldNameCamelCase()}
 	#end
 #end
-		observer.save(serviceProvider.get${ServiceInterfaceName}().update(model));
+		try {
+			observer.save(serviceProvider.get${ServiceInterfaceName}().update(model));
+		} catch (PersistenceFailureException pfe) {
+			PopupNotification.showError(pfe.getLocalizedMessage(resourceManager, session.getLocalization()));
+		}
 	}
 
 }

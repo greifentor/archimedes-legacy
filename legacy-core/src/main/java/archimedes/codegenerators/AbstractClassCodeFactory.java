@@ -26,6 +26,7 @@ import archimedes.model.TableModel;
 public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 
 	public static final String NO_GENERATION = "NO_GENERATION";
+	public static final String NOT_BLANK = "NOT_BLANK";
 	public static final String GENERATE_ONLY_FOR = "GENERATE_ONLY_FOR";
 
 	private static final Logger LOG = LogManager.getLogger(AbstractClassCodeFactory.class);
@@ -48,7 +49,28 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 							String fileName = codeGenerator.getSourceFileName(path, dataModel, domainModel);
 							String generatorName = codeGenerator.getName();
 							if (isReadyToOverride(fileName)) {
-								if (!codeGenerator.isToIgnoreFor(dataModel, domainModel)) {
+								if (codeGenerator.isDeprecated()) {
+									messageCollector
+											.add(
+													new Message(
+															generatorName,
+															Priority.WARN,
+															"Domain ignored by deprecated code generator: "
+																	+ domainModel.getName()));
+									if (new File(fileName).exists()) {
+										LOG
+												.warn(
+														"- ignored domain '{}' by deprecated generator: {}",
+														domainModel.getName(),
+														generatorName);
+									} else {
+										LOG
+												.info(
+														"- ignored domain '{}' by deprecated generator: {}",
+														domainModel.getName(),
+														generatorName);
+									}
+								} else if (!codeGenerator.isToIgnoreFor(dataModel, domainModel)) {
 									// incrementStepProgress(stepCounter, "- writing file: " + fileName);
 									LOG.info("CALLED generate for: " + generatorName);
 									codeGenerator.generate(path, basePackageName, dataModel, domainModel);
@@ -104,19 +126,41 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 							.forEach(codeGenerator -> {
 								String fileName = codeGenerator.getSourceFileName(path, dataModel, tableModel);
 								String generatorName = codeGenerator.getName();
-								if (isReadyToOverride(fileName)) {
+								if (codeGenerator.isDeprecated()) {
+									messageCollector
+											.add(
+													new Message(
+															generatorName,
+															Priority.WARN,
+															"Table ignored by deprecated code generator: "
+																	+ tableModel.getName()));
+									if (new File(fileName).exists()) {
+										LOG
+												.warn(
+														"- ignored table '{}' by deprecated generator: {}",
+														tableModel.getName(),
+														generatorName);
+									} else {
+										LOG
+												.info(
+														"- ignored table '{}' by deprecated generator: {}",
+														tableModel.getName(),
+														generatorName);
+									}
+								} else if (isReadyToOverride(fileName)) {
 									if (!codeGenerator.isToIgnoreFor(dataModel, tableModel)) {
 										incrementStepProgress(stepCounter, null);
 										LOG.info("CALLED generate for: " + generatorName);
 										try {
-										codeGenerator.generate(path, basePackageName, dataModel, tableModel);
-										LOG.info("FINISHED generation for: " + generatorName);
-										LOG.info("- wrote file to: {}", fileName);
+											codeGenerator.generate(path, basePackageName, dataModel, tableModel);
+											LOG.info("FINISHED generation for: " + generatorName);
+											LOG.info("- wrote file to: {}", fileName);
 										} catch (Exception e) {
 											LOG
 													.error(
 															"Error while generating with: " + generatorName
-																	+ ", table: " + tableModel.getName());
+																	+ ", table: " + tableModel.getName(),
+															e);
 										}
 									} else {
 										incrementStepProgress(stepCounter, null);
@@ -171,7 +215,19 @@ public abstract class AbstractClassCodeFactory extends AbstractCodeFactory {
 					String fileName = codeGenerator.getSourceFileName(path, dataModel, dataModel);
 					String generatorName = codeGenerator.getName();
 					if (codeGenerator.isOverrideAlways() || isReadyToOverride(fileName)) {
-						if (!codeGenerator.isToIgnoreFor(dataModel, dataModel)) {
+						if (codeGenerator.isDeprecated()) {
+							messageCollector
+									.add(
+											new Message(
+													generatorName,
+													Priority.WARN,
+													"Model ignored by deprecated code generator"));
+							if (new File(fileName).exists()) {
+								LOG.warn("- ignored model by deprecated generator: {}", generatorName);
+							} else {
+								LOG.info("- ignored model by deprecated generator: {}", generatorName);
+							}
+						} else if (!codeGenerator.isToIgnoreFor(dataModel, dataModel)) {
 							// incrementStepProgress(stepCounter, "- writing file: " + fileName);
 							LOG.info("CALLED generate for: " + generatorName);
 							codeGenerator.generate(path, basePackageName, dataModel);

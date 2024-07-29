@@ -109,7 +109,7 @@ public class ButtonFactoryClassCodeGeneratorTest {
 					"	}\n" + //
 					"\n" + //
 					"	public Button createBackButton(ResourceManager resourceManager, Supplier<Optional<UI>> uiSupplier,\n" //
-					+ "			SessionData.ReturnUrlData urlBack, SessionData sessionData) {\n" //
+					+ "			Supplier<SessionData.ReturnUrlData> urlBack, SessionData sessionData) {\n" //
 					+ "		Button buttonBack =\n" //
 					+ "				createButton(\n" //
 					+ "						resourceManager.getLocalizedString(\"commons.button.back.text\", sessionData.getLocalization()));\n" //
@@ -120,8 +120,8 @@ public class ButtonFactoryClassCodeGeneratorTest {
 					+ "								.ifPresent(\n" //
 					+ "										ui -> ui\n" //
 					+ "												.navigate(\n" //
-					+ "														urlBack.getUrl(),\n" //
-					+ "														new QueryParameters(urlBack.getParameters()))));\n" //
+					+ "														urlBack.get().getUrl(),\n" //
+					+ "														new QueryParameters(urlBack.get().getParameters()))));\n" //
 					+ "		return buttonBack;\n" //
 					+ "	}\n" //
 					+ "\n" //

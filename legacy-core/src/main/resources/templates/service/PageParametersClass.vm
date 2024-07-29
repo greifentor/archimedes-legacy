@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 /**
  * A page parameters to limit page access.
  *
- * GENERATED CODE !!! DO NOT CHANGE !!!
+ * ${Generated}
  */
 #end
 @Accessors(chain = true)
@@ -16,7 +16,20 @@ import lombok.experimental.Accessors;
 @Generated
 public class ${ClassName} {
 
+	public enum Direction {
+		ASC,
+		DESC;
+	}
+
+	@Accessors(chain = true)
+	@Data
+	public static class Sort {
+		private Direction direction;
+		private String[] fieldNames;
+	}
+
 	private int pageNumber;
 	private int entriesPerPage;
+	private Sort sort;
 
 }

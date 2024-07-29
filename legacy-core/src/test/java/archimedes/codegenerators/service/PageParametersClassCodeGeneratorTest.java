@@ -17,7 +17,6 @@ import archimedes.scheme.xml.ModelXMLReader;
 @ExtendWith(MockitoExtension.class)
 class PageParametersClassCodeGeneratorTest {
 
-
 	private static final String BASE_PACKAGE_NAME = "base.pack.age.name";
 
 	@Spy
@@ -43,28 +42,44 @@ class PageParametersClassCodeGeneratorTest {
 	}
 
 	private String createExpected(boolean suppressComment) {
-		String expected = "package " + BASE_PACKAGE_NAME + ".core.model;\n" + //
-				"\n" + //
-				"import lombok.Data;\n" + //
-				"import lombok.Generated;\n" + //
-				"import lombok.experimental.Accessors;\n" + //
-				"\n";
+		String expected =
+				"package base.pack.age.name.core.model;\n" //
+						+ "\n" //
+						+ "import lombok.Data;\n" //
+						+ "import lombok.Generated;\n" //
+						+ "import lombok.experimental.Accessors;\n" //
+						+ "\n";
 		if (!suppressComment) {
-			expected += "/**\n" + //
-					" * A page parameters to limit page access.\n" + //
-					" *\n" + //
-					" * GENERATED CODE !!! DO NOT CHANGE !!!\n" + //
-					" */\n";
+			expected +=
+					"/**\n" //
+							+ " * A page parameters to limit page access.\n" //
+							+ " *\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n";
 		}
-		expected += "@Accessors(chain = true)\n" + //
-				"@Data\n" + //
-				"@Generated\n" + //
-				"public class PageParameters {\n" + //
-				"\n" + //
-				"\tprivate int pageNumber;\n" + //
-				"\tprivate int entriesPerPage;\n" + //
-				"\n" + //
-				"}";
+		expected +=
+				"@Accessors(chain = true)\n" //
+						+ "@Data\n" //
+						+ "@Generated\n" //
+						+ "public class PageParameters {\n" //
+						+ "\n" //
+						+ "	public enum Direction {\n" //
+						+ "		ASC,\n" //
+						+ "		DESC;\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	@Accessors(chain = true)\n" //
+						+ "	@Data\n" //
+						+ "	public static class Sort {\n" //
+						+ "		private Direction direction;\n" //
+						+ "		private String[] fieldNames;\n" //
+						+ "	}\n" //
+						+ "\n" //
+						+ "	private int pageNumber;\n" //
+						+ "	private int entriesPerPage;\n" //
+						+ "	private Sort sort;\n" //
+						+ "\n" //
+						+ "}";
 		return expected;
 	}
 

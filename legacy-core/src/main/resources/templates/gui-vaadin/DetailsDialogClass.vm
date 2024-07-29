@@ -171,7 +171,7 @@ public class ${ClassName} extends Dialog {
 			model.set${FieldName}(event.getValue());
 	#elseif (${Column.getType()} == "TIMESTAMP")
 		dateTimePicker${FieldName} = componentFactory.createDateTimePicker("$ResourceId", session.getLocalization(), model.get${FieldName}(), event -> {
-			model.setCreationDate(event.getValue());
+			model.set${FieldName}(event.getValue());
 	#elseif (${Column.getType()} == "UPLOAD")
 		MultiFileMemoryBuffer buffer${FieldName} = new MultiFileMemoryBuffer();
 		upload${FieldName} = new Upload(buffer${FieldName});

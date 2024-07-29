@@ -65,6 +65,7 @@ public class Columns {
 		private String getterCall;
 		private String getterName;
 		private String initWith;
+		private boolean notBlank;
 		private boolean notNull;
 		private boolean pkMember;
 		private boolean reference;

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.apache.velocity.VelocityContext;
 
+import archimedes.codegenerators.AbstractClassCodeFactory;
 import archimedes.codegenerators.AbstractClassCodeGenerator;
 import archimedes.codegenerators.AbstractCodeFactory;
 import archimedes.codegenerators.Columns.ColumnData;
@@ -72,9 +73,14 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 										typeGenerator,
 										(c, m) -> ServiceNameGenerator.INSTANCE.getModelClassName(c.getDomain(), m),
 										d -> ServiceNameGenerator.INSTANCE.getModelPackageName(model, d)));
-		context.put("HasUniques", FindByUtils.hasUniques(table.getColumns()));
+		context.put("HasNotBlanks", FindByUtils.hasNotBlanks(table.getColumns()));
 		context.put("HasNotNulls", FindByUtils.hasNotNulls(table.getColumns()));
 		context.put("HasNoUniques", FindByUtils.hasNoUniques(table.getColumns()));
+		context
+				.put(
+						"HasValidation",
+						FindByUtils.hasNotBlanks(table.getColumns()) || FindByUtils.hasNotNulls(table.getColumns())
+								|| FindByUtils.hasNoUniques(table.getColumns()));
 		context
 				.put(
 						"HasObjectReferences",
@@ -170,6 +176,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 								.setFieldName(nameGenerator.getAttributeName(column))
 								.setFieldType(getType(column, referenceMode))
 								.setGetterCall(getGetterCall(column, model, referenceMode))
+								.setNotBlank(column.findOptionByName(AbstractClassCodeFactory.NOT_BLANK).isPresent())
 								.setNotNull(column.isNotNull())
 								.setPkMember(column.isPrimaryKey())
 								.setSimpleType(isSimpleType(getType(column, referenceMode)))
@@ -252,6 +259,7 @@ public class GeneratedJPAPersistenceAdapterClassCodeGenerator
 
 	@Override
 	protected boolean isToIgnoreFor(DataModel model, TableModel table) {
+
 		return hasDependentAttribute(model, table) || isSubclass(table) || isAMember(table);
 	}
 

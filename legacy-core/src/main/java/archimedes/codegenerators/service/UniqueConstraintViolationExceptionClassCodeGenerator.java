@@ -47,4 +47,9 @@ public class UniqueConstraintViolationExceptionClassCodeGenerator
 		return nameGenerator.getExceptionsPackageName(model);
 	}
 
+	@Override
+	public boolean isDeprecated() {
+		return true;
+	}
+
 }

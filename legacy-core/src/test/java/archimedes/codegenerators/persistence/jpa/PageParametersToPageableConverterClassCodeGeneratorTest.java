@@ -51,6 +51,7 @@ class PageParametersToPageableConverterClassCodeGeneratorTest {
 							"\n" + //
 							"import org.springframework.data.domain.PageRequest;\n" + //
 							"import org.springframework.data.domain.Pageable;\n" + //
+							"import org.springframework.data.domain.Sort.Direction;\n" + //
 							"\n" + //
 							"import base.pack.age.name.core.model.PageParameters;\n" + //
 							"\n" + //
@@ -63,19 +64,31 @@ class PageParametersToPageableConverterClassCodeGeneratorTest {
 						" * " + AbstractCodeGenerator.GENERATED_CODE + "\n" + //
 						" */\n";
 			}
-			s += "@Generated\n" + //
-					"@Named\n" +//
-					"public class PageParametersToPageableConverter {\n" + //
-					"\n" + //
-					"	public Pageable convert(PageParameters pageParameters) {\n" + //
-					"		if (pageParameters == null) {\n" + //
-					"			return null;\n" + //
-					"		}\n" + //
-					"		return PageRequest.of(pageParameters.getPageNumber(), pageParameters.getEntriesPerPage());" +
-					"\n" + //
-					"	}\n" + //
-					"\n" + //
-					"}";
+			s +=
+					"@Generated\n" //
+							+ "@Named\n" //
+							+ "public class PageParametersToPageableConverter {\n" //
+							+ "\n" //
+							+ "	public Pageable convert(PageParameters pageParameters) {\n" //
+							+ "		if (pageParameters == null) {\n" //
+							+ "			return null;\n" //
+							+ "		}\n" //
+							+ "		if (pageParameters.getSort() != null) {\n" //
+							+ "			return PageRequest\n" //
+							+ "					.of(\n" //
+							+ "							pageParameters.getPageNumber(),\n" //
+							+ "							pageParameters.getEntriesPerPage(),\n" //
+							+ "							getDirection(pageParameters.getSort().getDirection()),\n" //
+							+ "							pageParameters.getSort().getFieldNames());\n" //
+							+ "		}\n" //
+							+ "		return PageRequest.of(pageParameters.getPageNumber(), pageParameters.getEntriesPerPage());\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "	private Direction getDirection(PageParameters.Direction direction) {\n" //
+							+ "		return direction == PageParameters.Direction.ASC ? Direction.ASC : Direction.DESC;\n" //
+							+ "	}\n" //
+							+ "\n" //
+							+ "}";
 			return s;
 		}
 
