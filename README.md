@@ -25,6 +25,7 @@ Ensure that line endings will not be changed while checking out the projects. Th
 * [your work-space folder]
 * - archimedes-legacy
 * - dm-comp
+* - jasperreportschecker
 
 
 ## Build
