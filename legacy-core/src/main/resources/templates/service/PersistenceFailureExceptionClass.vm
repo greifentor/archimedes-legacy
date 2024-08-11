@@ -1,36 +1,24 @@
 package ${PackageName};
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import ${LocalizationModelPackageName}.${LocalizationSOClassName};
-import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
 import lombok.EqualsAndHashCode;
 import lombok.Generated;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 #if (!$CommentsOff)
 /**
- * A service exception for persistence failures.
+ * An exception for persistence misbehavior.
  *
  * GENERATED CODE !!! DO NOT CHANGE !!!
  */
 #end
 @Generated
-@Getter
-@RequiredArgsConstructor
-public class ${ClassName} extends RuntimeException {
-
-	static final String GENERAL_RESOURCE_ID = "persistence.failure.general.label";
-	static final String NO_ERRORS_FOUND_RESOURCE_ID = "persistence.failure.noErrorsFound.label";
-	static final String NOT_BLANK_CONSTRAINT_VIOLATION_RESOURCE_ID =
-			"persistence.failure.notBlankConstraintViolation.label";
-	static final String NOT_NULL_CONSTRAINT_VIOLATION_RESOURCE_ID =
-			"persistence.failure.notNullConstraintViolation.label";
-	static final String UNIQUE_CONSTRAINT_VIOLATION_RESOURCE_ID = "persistence.failure.uniqueConstraintViolation.label";
-	static final String VERSION_VIOLATION_RESOURCE_ID = "persistence.failure.versionViolation.label";
+public class ${ClassName} extends ServiceException {
 
 	public enum Reason {
 		GENERAL,
@@ -40,95 +28,44 @@ public class ${ClassName} extends RuntimeException {
 		VERSION;
 	}
 
-	@EqualsAndHashCode
+	@EqualsAndHashCode(callSuper = true)
 	@Getter
 	@ToString
-	public static class ValidationFailure {
+	public static class ValidationFailure extends ServiceException.ValidationFailure<Reason> {
 
-		public ValidationFailure(Reason reason) {
-			this.reason = reason;
-		}
+		private final List<String> attributeNames;
 
 		public ValidationFailure(Reason reason, String className, String... attributeNames) {
-			this(reason);
-			this.className = className;
-			for (String an : attributeNames) {
-				this.attributeNames.add(an);
-			}
+			super(reason);
+			this.attributeNames = Arrays.asList(attributeNames);
+			getProperties().put("className", className);
+			getProperties()
+					.put(
+							"attributeNames",
+							Arrays
+									.asList(attributeNames)
+									.stream()
+									.sorted()
+									.reduce((s0, s1) -> s0 + ", " + s1)
+									.orElse("-"));
 		}
 
-		private Reason reason;
-		private String className;
-		private List<String> attributeNames = new ArrayList<>();
+		public String getClassName() {
+			return getProperties().get("className");
+		}
 
 	}
 
-	private final String id;
 	private final List<ValidationFailure> validationFailures;
 
-	public String getLocalizedMessage(${ResourceManagerInterfaceName} resourceManager, ${LocalizationSOClassName} localization) {
-		if (validationFailures.isEmpty()) {
-			return resourceManager.getLocalizedString(NO_ERRORS_FOUND_RESOURCE_ID, localization);
-		}
-		return validationFailures
-				.stream()
-				.map(vf -> toLocalizedString(vf, resourceManager, localization))
-				.reduce((s0, s1) -> s0 + "\n" + s1)
-				.orElse("n/a");
+	public PersistenceFailureException(String id, List<ValidationFailure> validationFailures) {
+		super(Map.of("id", id));
+		this.validationFailures = validationFailures;
 	}
 
-	private String toLocalizedString(ValidationFailure validationFailure, ${ResourceManagerInterfaceName} resourceManager,
-			${LocalizationSOClassName} localization) {
-		if (validationFailure.getReason() == Reason.NOT_NULL) {
-			return resourceManager
-					.getLocalizedString(NOT_NULL_CONSTRAINT_VIOLATION_RESOURCE_ID, localization)
-					.replace("{0}", "" + getId())
-					.replace("{1}", validationFailure.getClassName())
-					.replace(
-							"{2}",
-							validationFailure
-									.getAttributeNames()
-									.stream()
-									.sorted((s0, s1) -> s0.compareTo(s1))
-									.reduce((s0, s1) -> s0 + ", " + s1)
-									.orElse("n/a"));
-		} else if (validationFailure.getReason() == Reason.NOT_BLANK) {
-			return resourceManager
-					.getLocalizedString(NOT_BLANK_CONSTRAINT_VIOLATION_RESOURCE_ID, localization)
-					.replace("{0}", "" + getId())
-					.replace("{1}", validationFailure.getClassName())
-					.replace(
-							"{2}",
-							validationFailure
-									.getAttributeNames()
-									.stream()
-									.sorted((s0, s1) -> s0.compareTo(s1))
-									.reduce((s0, s1) -> s0 + ", " + s1)
-									.orElse("n/a"));
-		} else if (validationFailure.getReason() == Reason.UNIQUE) {
-			return resourceManager
-					.getLocalizedString(UNIQUE_CONSTRAINT_VIOLATION_RESOURCE_ID, localization)
-					.replace("{0}", "" + getId())
-					.replace("{1}", validationFailure.getClassName())
-					.replace(
-							"{2}",
-							validationFailure
-									.getAttributeNames()
-									.stream()
-									.sorted((s0, s1) -> s0.compareTo(s1))
-									.reduce((s0, s1) -> s0 + ", " + s1)
-									.orElse("n/a"));
-
-		} else if (validationFailure.getReason() == Reason.VERSION) {
-			return resourceManager
-					.getLocalizedString(VERSION_VIOLATION_RESOURCE_ID, localization)
-					.replace("{0}", "" + getId())
-					.replace("{1}", validationFailure.getClassName());
-		}
-		return resourceManager
-				.getLocalizedString(GENERAL_RESOURCE_ID, localization)
-				.replace("{0}", "" + getId())
-				.replace("{1}", validationFailure.getClassName());
+	@Override
+	public List<ServiceException.ValidationFailure<? extends Enum<?>>> getValidationFailures() {
+		return validationFailures.stream().map(vf -> vf).collect(Collectors.toList());
 	}
 
 }
