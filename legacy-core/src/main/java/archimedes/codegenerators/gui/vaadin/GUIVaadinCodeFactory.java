@@ -40,6 +40,7 @@ import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewCreateNewM
 import archimedes.codegenerators.gui.vaadin.masterdata.MaintenanceViewRendererInterfaceCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataGUIConfigurationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.MasterDataViewClassCodeGenerator;
+import archimedes.codegenerators.gui.vaadin.masterdata.PopupNotificationClassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.masterdata.SelectableSubclassCodeGenerator;
 import archimedes.codegenerators.gui.vaadin.modelcheckers.ModelCheckerGuiEditorPosHasAValue;
 import archimedes.codegenerators.gui.vaadin.styles.READMEmdFileGenerator;
@@ -110,6 +111,7 @@ public class GUIVaadinCodeFactory extends AbstractClassCodeFactory implements Co
 						// new PageParametersGOClassCodeGenerator(this),
 						// new PageParametersGOConverterClassCodeGenerator(this),
 						// new PageGOConverterClassCodeGenerator(this),
+						new PopupNotificationClassCodeGenerator(this),
 						new RemoveConfirmDialogClassCodeGenerator(this),
 						new READMEmdFileGenerator(this),
 						new SelectionDialogClassCodeGenerator(this),

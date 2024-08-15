@@ -49,6 +49,7 @@ public class ServiceCodeFactory extends AbstractClassCodeFactory implements Code
 						new CheckClassCodeGenerator(this),
 						new NotNullConstraintViolationExceptionClassCodeGenerator(this),
 						new PersistenceFailureExceptionClassCodeGenerator(this),
+						new ServiceExceptionClassCodeGenerator(this),
 						new UniqueConstraintViolationExceptionClassCodeGenerator(this));
 	}
 

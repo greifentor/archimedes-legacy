@@ -1,0 +1,72 @@
+package ${PackageName};
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import ${LocalizationModelPackageName}.${LocalizationSOClassName};
+import ${ResourceManagerPackageName}.${ResourceManagerInterfaceName};
+import lombok.AccessLevel;
+import lombok.Generated;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+#if (!$CommentsOff)
+/**
+ * An exception for service misbehavior.
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
+#end
+@Generated
+public abstract class ${ClassName} extends RuntimeException {
+
+	protected static final String NO_ERROR = "NO_ERROR";
+
+	@Getter
+	@RequiredArgsConstructor
+	protected static class ValidationFailure<T extends Enum<?>> {
+
+		private final T reason;
+
+		private Map<String, String> properties = new HashMap<>();
+
+	}
+
+	@Getter(AccessLevel.PROTECTED)
+	private Map<String, String> properties = new HashMap<>();
+
+	protected abstract List<ValidationFailure<? extends Enum<?>>> getValidationFailures();
+
+	protected ${ClassName}(Map<String, String> passedProperties) {
+		passedProperties.forEach((k, v) -> properties.put(k, v));
+	}
+
+	public String getLocalizedMessage(ResourceManager resourceManager, LocalizationSO localization) {
+		if (getValidationFailures().isEmpty()) {
+			return resourceManager
+					.getLocalizedString(getClass().getSimpleName() + "." + NO_ERROR + ".label", localization);
+		}
+		return getValidationFailures()
+				.stream()
+				.map(vf -> toLocalizedMessage(vf, resourceManager, localization))
+				.reduce((s0, s1) -> s0 + "\n" + s1)
+				.orElse("-");
+	}
+
+	private String toLocalizedMessage(ValidationFailure<? extends Enum<?>> vf, ResourceManager resourceManager,
+			LocalizationSO localization) {
+		String s =
+				resourceManager
+						.getLocalizedString(
+								getClass().getSimpleName() + "." + vf.getReason().name() + ".label",
+								LocalizationSO.DE);
+		for (String k : vf.getProperties().keySet()) {
+			s = s.replace("{" + k + "}", vf.getProperties().get(k));
+		}
+		for (String k : getProperties().keySet()) {
+			s = s.replace("{" + k + "}", getProperties().get(k));
+		}
+		return s;
+	}
+}
