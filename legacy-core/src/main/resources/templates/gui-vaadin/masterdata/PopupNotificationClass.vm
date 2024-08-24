@@ -28,7 +28,7 @@ public class ${ClassName} {
 		Div text = createText(errorText);
 		Button closeButton = createCloseButton(notification);
 		HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-		layout.setAlignItem(Alignment.CENTER);
+		layout.setAlignItems(Alignment.CENTER);
 		notification.add(layout);
 		notification.setPosition(Position.TOP_STRETCH);
 		notification.open();

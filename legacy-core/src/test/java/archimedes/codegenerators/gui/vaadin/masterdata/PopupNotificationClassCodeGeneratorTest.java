@@ -80,7 +80,7 @@ public class PopupNotificationClassCodeGeneratorTest {
 							+ "		Div text = createText(errorText);\n" //
 							+ "		Button closeButton = createCloseButton(notification);\n" //
 							+ "		HorizontalLayout layout = new HorizontalLayout(text, closeButton);\n" //
-							+ "		layout.setAlignItem(Alignment.CENTER);\n" //
+							+ "		layout.setAlignItems(Alignment.CENTER);\n" //
 							+ "		notification.add(layout);\n" //
 							+ "		notification.setPosition(Position.TOP_STRETCH);\n" //
 							+ "		notification.open();\n" //

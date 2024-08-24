@@ -36,6 +36,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 
 	public static final String ALTERNATE_MODULE_PREFIX = "ALTERNATE_MODULE_PREFIX";
 	public static final String AUTO_INCREMENT = "AUTO_INCREMENT";
+	public static final String BACK_REFERENCE = "BACK_REFERENCE";
 	public static final String CASCADE_DELETE = "CASCADE_DELETE";
 	public static final String CODE = "CODE";
 	public static final String COMMENTS = "COMMENTS";
@@ -435,7 +436,7 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 									cm -> OptionGetter
 											.getParameterOfOptionByName(cm.getTable(), MEMBER_LIST)
 											.filter(s -> s.toUpperCase().equals("MEMBER"))
-											.isPresent())
+											.isPresent() && !cm.isOptionSet(BACK_REFERENCE))
 							.forEach(
 									cm -> l
 											.add(
