@@ -412,7 +412,8 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 	}
 
 	protected boolean isColumnReferencingAParent(ColumnModel column) {
-		return (column.getReferencedTable() != null) && isAParent(column.getReferencedTable());
+		return (column.getReferencedTable() != null) && isAParent(column.getReferencedTable())
+				&& !column.isOptionSet(BACK_REFERENCE);
 	}
 
 	protected boolean isAParent(TableModel table) {
