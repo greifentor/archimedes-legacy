@@ -116,6 +116,7 @@ public class JDBCModelExplorer {
 		return new JDBCImportData()
 				.setAdjustment(connectionData.getAdjustment())
 				.setConnection(connection)
+				.setDbExecMode(connectionData.getConnection().getDBMode())
 				.setIgnoreIndices(connectionData.isIgnoreIndices())
 				.setIgnoreTablePatterns(connectionData.getIgnoreTablePatterns())
 				.setImportOnlyTablePatterns(connectionData.getImportOnlyTablePatterns())

@@ -445,6 +445,9 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 															.setBackReferenceColumn(cm)
 															.setMemberTable(cm.getTable())));
 				});
+		if (table.isOptionSet(SUBCLASS)) {
+			l.addAll(getCompositionLists(getSuperclassTable(table)));
+		}
 		return l;
 	}
 
