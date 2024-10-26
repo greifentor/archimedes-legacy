@@ -3,7 +3,9 @@ package archimedes.codegenerators;
 import java.io.File;
 import java.io.StringWriter;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +16,7 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
 
+import archimedes.model.ColumnModel;
 import archimedes.model.DataModel;
 import archimedes.model.NamedObject;
 import archimedes.model.OptionModel;
@@ -93,6 +96,16 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 
 	protected String getQualifiedName(String packageName, String className) {
 		return ((packageName != null) && !packageName.isEmpty() ? packageName + "." : "") + className;
+	}
+
+	protected List<ColumnModel> getReferencingColumns(TableModel table, DataModel dataModel) {
+		List<ColumnModel> columns = new ArrayList<>();
+		for (ColumnModel column : dataModel.getAllColumns()) {
+			if (column.getReferencedTable() == table) {
+				columns.add(column);
+			}
+		}
+		return columns;
 	}
 
 	protected String processTemplate(VelocityContext context, String templateFileName) {

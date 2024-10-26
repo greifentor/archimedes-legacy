@@ -242,16 +242,6 @@ public abstract class AbstractClassCodeGenerator<N extends NameGenerator> extend
 								.orElse(ReferenceMode.ID));
 	}
 
-	protected List<ColumnModel> getReferencingColumns(TableModel table, DataModel dataModel) {
-		List<ColumnModel> columns = new ArrayList<>();
-		for (ColumnModel column : dataModel.getAllColumns()) {
-			if (column.getReferencedTable() == table) {
-				columns.add(column);
-			}
-		}
-		return columns;
-	}
-
 	protected List<ColumnModel> getAllColumns(List<ColumnModel> columns, TableModel table) {
 		columns.addAll(List.of(table.getColumns()));
 		TableModel superClassTable = getSuperclassTable(table);

@@ -53,11 +53,13 @@ public abstract class AbstractModelCodeGenerator<N extends NameGenerator> extend
 				.orElse(false);
 	}
 
-	public List<ServiceData> getServiceData(DataModel model) {
+	public List<ServiceData> getServiceData(DataModel model, boolean includeReferencing) {
 		return List
 				.of(model.getTables())
 				.stream()
-				.filter(table -> !isSubclass(table) && !isAMember(table) && !isNoGeneration(table))
+				.filter(
+						table -> (!isSubclass(table) && !isAMember(table) && !isNoGeneration(table))
+								|| (includeReferencing && isMemberReferencedByOtherMembers(table, model)))
 				.map(
 						table -> new ServiceData()
 								.setServiceAttributeName(
@@ -86,6 +88,13 @@ public abstract class AbstractModelCodeGenerator<N extends NameGenerator> extend
 				.getOptionByName(table, AbstractClassCodeGenerator.MEMBER_LIST)
 				.map(om -> isParameterEquals(om, "MEMBER"))
 				.orElse(false);
+	}
+
+	protected boolean isMemberReferencedByOtherMembers(TableModel table, DataModel model) {
+		return isAMember(table) && getReferencingColumns(table, model)
+				.stream()
+				.map(c -> c.getTable())
+				.anyMatch(rt -> (rt != null) && isAMember(rt));
 	}
 
 	protected boolean isParameterEquals(OptionModel om, String value) {

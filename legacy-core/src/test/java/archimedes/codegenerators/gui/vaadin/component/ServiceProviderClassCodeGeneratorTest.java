@@ -59,6 +59,42 @@ public class ServiceProviderClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void happyRun_detailsReferencesDetails() {
+			// Prepare
+			String expected =
+					"package de.ollie.task.gui.vaadin.component;\n" //
+							+ "\n" //
+							+ "import javax.inject.Named;\n" //
+							+ "\n" //
+							+ "import org.springframework.beans.factory.annotation.Autowired;\n" //
+							+ "\n" //
+							+ "import de.ollie.task.core.service.TaskService;\n" //
+							+ "\n" //
+							+ "import lombok.Generated;\n" //
+							+ "import lombok.Getter;\n" //
+							+ "\n" //
+							+ "/**\n" //
+							+ " * A service provider.\n" //
+							+ " *\n" //
+							+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+							+ " */\n" //
+							+ "@Generated\n" //
+							+ "@Getter\n" //
+							+ "@Named\n" //
+							+ "public class ServiceProvider {\n" //
+							+ "\n" //
+							+ "	@Autowired(required = false)\n" //
+							+ "	private TaskService taskService;\n" //
+							+ "\n" //
+							+ "}";
+			DataModel dataModel = readDataModel("Example-Tasks.xml", EXAMPLE_XMLS);
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel, dataModel);
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 }
