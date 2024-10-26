@@ -68,7 +68,7 @@ public class ComponentFactoryClassCodeGenerator extends AbstractModelCodeGenerat
 						serviceNameGenerator.getResourceManagerInterfacePackageName(model));
 		context.put("SessionDataClassName", nameGenerator.getSessionDataClassName(model));
 		context.put("SessionDataPackageName", nameGenerator.getSessionDataPackageName(model));
-		context.put("Services", getServiceData(model));
+		context.put("Services", getServiceData(model, true));
 		context.put("VaadinVersion", version);
 	}
 

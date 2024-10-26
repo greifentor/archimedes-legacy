@@ -25,7 +25,7 @@ public class ServiceProviderClassCodeGenerator extends AbstractModelCodeGenerato
 		context.put("ClassName", getClassName(model, model));
 		context.put("CommentsOff", isCommentsOff(model));
 		context.put("PackageName", getPackageName(model, model));
-		context.put("Services", getServiceData(model));
+		context.put("Services", getServiceData(model, false));
 	}
 
 	@Override
