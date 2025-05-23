@@ -15,6 +15,7 @@ public class Converters {
 	public static class ConverterData {
 		private String attributeName;
 		private String className;
+		private String columnName;
 	}
 
 }

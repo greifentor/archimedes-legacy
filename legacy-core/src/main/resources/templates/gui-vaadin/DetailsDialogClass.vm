@@ -30,6 +30,9 @@ import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 #end
 
 import ${ButtonPackageName}.${ButtonClassName};
+#foreach ($ReferencedMember in $ReferencedMembers)
+import ${ReferencedMember.getModelPackageName()}.${ReferencedMember.getModelClassName()};
+#end
 #foreach ($ImportDeclaration in $ImportDeclarations.toList())
 import ${ImportDeclaration.getSingleImportDeclaration()};
 #end
@@ -85,15 +88,21 @@ public class ${ClassName} extends Dialog {
 
 	private ${ModelClassName} model = new ${ModelClassName}();
 	private boolean newItem;
+#if (${ParentClassName})
+	private ${ParentClassName} parent;
+#end
 
 	public ${ClassName}(${ComponentFactoryClassName} componentFactory, ${MasterDataGUIConfigurationClassName} guiConfiguration,
-			Observer observer, ${SessionDataClassName} session, ${ModelClassName} model, ${ServiceProviderClassName} serviceProvider, boolean newItem) {
+			Observer observer, ${SessionDataClassName} session, ${ModelClassName} model, ${ServiceProviderClassName} serviceProvider, boolean newItem#if (${ParentClassName}), $ParentClassName parent#end) {
 		this.componentFactory = componentFactory;
 		this.guiConfiguration = guiConfiguration;
 		this.newItem = newItem;
 		this.observer = observer;
 		this.serviceProvider = serviceProvider;
 		this.session = session;
+#if (${ParentClassName})
+		this.parent = parent;
+#end
 		if (model != null) {
 #foreach ($Column in ${GUIColumnDataCollection.getColumns()})
 	#set($FieldName = "${Column.getFieldNameCamelCase()}")

@@ -122,7 +122,7 @@ public abstract class AbstractGUIVaadinClassCodeGenerator extends AbstractClassC
 		return getAllColumns(new ArrayList<>(), table)
 				.stream()
 				.filter(column -> column.isOptionSet(GUI_EDITOR_POS))
-				.filter(column -> column.getReferencedTable() != null)
+				.filter(column -> (column.getReferencedTable() != null) && !isAMember(column.getReferencedTable()))
 				.map(column -> createGUIReferenceData(column, maintenanceView))
 				.collect(Collectors.toSet())
 				.stream()

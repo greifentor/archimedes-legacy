@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -190,6 +191,36 @@ public abstract class AbstractCodeGenerator<N extends NameGenerator, T extends N
 
 	protected boolean isModuleModeSet(DataModel dataModel) {
 		return dataModel.getOptionByName(MODULE_MODE) != null;
+	}
+
+	protected boolean isNoGeneration(TableModel table) {
+		return table != null ? table.isOptionSet(AbstractClassCodeFactory.NO_GENERATION) : false;
+	}
+
+	protected boolean isAMember(TableModel table) {
+		return OptionGetter
+				.getOptionByName(table, AbstractClassCodeGenerator.MEMBER_LIST)
+				.map(om -> isParameterEquals(om, "MEMBER"))
+				.orElse(false);
+	}
+
+	protected boolean isMemberReferencedByOtherMembers(TableModel table, DataModel model) {
+		return isAMember(table) && getReferencingColumns(table, model)
+				.stream()
+				.map(c -> c.getTable())
+				.anyMatch(rt -> (rt != null) && isAMember(rt));
+	}
+
+	protected List<TableModel> getMemberReferencedByOtherMembers(TableModel table, DataModel model) {
+		return getReferencingColumns(table, model)
+				.stream()
+				.map(c -> c.getTable())
+				.filter(t -> isAMember(t))
+				.collect(Collectors.toList());
+	}
+
+	protected boolean isParameterEquals(OptionModel om, String value) {
+		return (om.getParameter() != null) && om.getParameter().toUpperCase().equals(value);
 	}
 
 	protected String getModuleName(DataModel dataModel) {

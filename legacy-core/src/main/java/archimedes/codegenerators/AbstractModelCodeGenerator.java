@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import archimedes.codegenerators.gui.vaadin.ServiceData;
 import archimedes.codegenerators.service.ServiceNameGenerator;
 import archimedes.model.DataModel;
-import archimedes.model.OptionModel;
 import archimedes.model.TableModel;
 
 public abstract class AbstractModelCodeGenerator<N extends NameGenerator> extends AbstractCodeGenerator<N, DataModel> {
@@ -77,28 +76,6 @@ public abstract class AbstractModelCodeGenerator<N extends NameGenerator> extend
 
 	protected boolean isSubclass(TableModel table) {
 		return table != null ? table.isOptionSet(AbstractClassCodeGenerator.SUBCLASS) : false;
-	}
-
-	protected boolean isNoGeneration(TableModel table) {
-		return table != null ? table.isOptionSet(AbstractClassCodeFactory.NO_GENERATION) : false;
-	}
-
-	protected boolean isAMember(TableModel table) {
-		return OptionGetter
-				.getOptionByName(table, AbstractClassCodeGenerator.MEMBER_LIST)
-				.map(om -> isParameterEquals(om, "MEMBER"))
-				.orElse(false);
-	}
-
-	protected boolean isMemberReferencedByOtherMembers(TableModel table, DataModel model) {
-		return isAMember(table) && getReferencingColumns(table, model)
-				.stream()
-				.map(c -> c.getTable())
-				.anyMatch(rt -> (rt != null) && isAMember(rt));
-	}
-
-	protected boolean isParameterEquals(OptionModel om, String value) {
-		return (om.getParameter() != null) && om.getParameter().toUpperCase().equals(value);
 	}
 
 	@Override

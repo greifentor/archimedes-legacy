@@ -63,7 +63,9 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 		context.put("ModelClassName", modelClassName);
 		context.put("ModelSuperClassName", modelSuperClassName);
 		context.put("PackageName", getPackageName(model, table));
+		context.put("ParentClassName", getParentClassName(table));
 		context.put("PreferenceData", getPreferenceData(table));
+		context.put("ReferencedMembers", getReferencedMemberData(table, model));
 		context.put("ResourceManagerInterfaceName", resourceManagerInterfaceName);
 		context.put("ServiceProviderClassName", nameGenerator.getServiceProviderClassName(model));
 		context.put("SessionDataClassName", sessionDataClassName);
@@ -82,8 +84,7 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 						cd -> LabelPropertiesGenerator
 								.addLabel(
 										nameGenerator.getDetailsLayoutClassName(model, table) + ".field."
-												+ cd.getFieldNameCamelCase().toLowerCase()
-												+ ".label",
+												+ cd.getFieldNameCamelCase().toLowerCase() + ".label",
 										nameGenerator.getClassName(cd.getFieldNameCamelCase())));
 	}
 
@@ -102,6 +103,43 @@ public class DetailsDialogClassCodeGenerator extends AbstractGUIVaadinClassCodeG
 			GUIColumnDataCollection guiColumnDataCollection) {
 		return ((guiReferenceData != null) && (guiReferenceData.size() > 0))
 				|| (guiColumnDataCollection.hasFieldType("ENUM"));
+	}
+
+	protected List<ReferencedMemberData> getReferencedMemberData(TableModel table, DataModel model) {
+		return isMemberReferencingOtherMembers(table)
+				? List
+						.of(table.getColumns())
+						.stream()
+						.filter(c -> c.getReferencedTable() != null)
+						.map(c -> c.getReferencedTable())
+						.map(
+								t -> new ReferencedMemberData()
+										.setAttributeName(serviceNameGenerator.getModelClassName(t))
+										.setModelClassName(serviceNameGenerator.getModelClassName(t))
+										.setModelPackageName(serviceNameGenerator.getModelPackageName(model, model)))
+						.collect(Collectors.toList())
+				: List.of();
+	}
+
+	private boolean isMemberReferencingOtherMembers(TableModel table) {
+		return isAMember(table) && List
+				.of(table.getColumns())
+				.stream()
+				.filter(c -> c.getReferencedTable() != null)
+				.map(c -> c.getReferencedTable())
+				.anyMatch(rt -> isAMember(rt));
+	}
+
+	protected String getParentClassName(TableModel table) {
+		return isMemberReferencingOtherMembers(table)
+				? List
+						.of(table.getColumns())
+						.stream()
+						.filter(c -> (c.getReferencedTable() != null) && isAParent(c.getReferencedTable()))
+						.map(c -> serviceNameGenerator.getClassName(c.getReferencedTable().getName()))
+						.findFirst()
+						.orElse(null)
+				: null;
 	}
 
 	@Override

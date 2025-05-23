@@ -1,7 +1,11 @@
 package archimedes.codegenerators.persistence.jpa;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,7 +60,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 								getColumnsIncludingInherited(table).toArray(new ColumnModel[0]),
 								table,
 								model,
-								referenceMode));
+								referenceMode, columnData));
 		context.put("DBOClassName", nameGenerator.getDBOClassName(table));
 		context
 				.put(
@@ -137,6 +141,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 			l
 					.add(
 							new ColumnData()
+									.setColumnName(cld.getMemberTable().getName())
 									.setFieldType("LIST")
 									.setFieldName(nameGenerator.getAttributeName(cld.getMemberTable().getName()) + "s")
 									.setGetterCall(
@@ -197,7 +202,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 	}
 
 	private List<ConverterData> getConverterData(ColumnModel[] columns, TableModel table, DataModel model,
-			ReferenceMode referenceMode) {
+			ReferenceMode referenceMode, List<ColumnData> columnData) {
 		if ((referenceMode != ReferenceMode.OBJECT) && !hasEnums(columns)) {
 			return List.of();
 		}
@@ -230,10 +235,11 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 								.add(
 										new ConverterData()
 												.setAttributeName(nameGenerator.getAttributeName(cn))
-												.setClassName(cn));
+												.setClassName(cn).setColumnName(cm.getName()));
 					});
 		});
-		return l;
+		addMissingConverterData(l, columnData);
+		return cleanUpDoubles(l);
 	}
 
 	private ConverterData toConverterData(ColumnModel column, DataModel model) {
@@ -243,7 +249,7 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 						: getClassName(column.getReferencedTable());
 		return new ConverterData()
 				.setAttributeName(nameGenerator.getAttributeName(dboConverterClassName))
-				.setClassName(dboConverterClassName);
+				.setClassName(dboConverterClassName).setColumnName(column.getName());
 	}
 
 	private List<ColumnData> getInheritedColumns(TableModel table, DataModel model, ReferenceMode referenceMode) {
@@ -327,6 +333,29 @@ public class DBOConverterClassCodeGenerator extends AbstractClassCodeGenerator<P
 			columns.addAll(getColumnsIncludingInherited(superclassTable));
 		}
 		return columns;
+	}
+
+	private void addMissingConverterData(List<ConverterData> l, List<ColumnData> columnData) {
+		columnData.stream().filter(cd -> cd.getConverterAttributeName() != null).forEach(cd -> {
+			if (findByName(l, cd.getConverterAttributeName()).isEmpty() && "LIST".equals(cd.getFieldType())) {
+				l.add(new ConverterData()
+						.setAttributeName(nameGenerator.getAttributeName(cd.getConverterAttributeName()))
+						.setClassName(nameGenerator.getClassName(cd.getConverterAttributeName()))
+						.setColumnName(cd.getColumnName()));
+			}
+		});
+	}
+
+	private Optional<ConverterData> findByName(List<ConverterData> l, String converterAttributeName) {
+		return l.stream().filter(cd -> cd.getAttributeName().equals(converterAttributeName)).findFirst();
+	}
+
+	private List<ConverterData> cleanUpDoubles(List<ConverterData> l) {
+		Map<String, ConverterData> m = new HashMap<>();
+		l.forEach(cd -> m.put(cd.getAttributeName(), cd));
+		return m.entrySet().stream().map(Entry::getValue)
+				.sorted((cd0, cd1) -> cd0.getAttributeName().compareTo(cd1.getAttributeName()))
+				.collect(Collectors.toList());
 	}
 
 	@Override

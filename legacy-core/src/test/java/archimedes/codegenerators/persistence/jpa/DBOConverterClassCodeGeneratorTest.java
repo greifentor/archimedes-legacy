@@ -869,6 +869,90 @@ public class DBOConverterClassCodeGeneratorTest {
 			assertEquals(expected, returned);
 		}
 
+		@Test
+		void parentsMemberListConverterIsAddedCorrectly() {
+			// Prepare
+			String expected = "package base.pack.age.name.persistence.converter;\n" //
+					+ "\n" //
+					+ "import java.util.List;\n" //
+					+ "import java.util.stream.Collectors;\n" //
+					+ "\n" //
+					+ "import javax.inject.Named;\n" //
+					+ "\n" //
+					+ "import lombok.Generated;\n" //
+					+ "import lombok.RequiredArgsConstructor;\n" //
+					+ "\n" //
+					+ "import base.pack.age.name.persistence.entity.DHeirTableDBO;\n" //
+					+ "import base.pack.age.name.core.model.DHeirTable;\n" //
+					+ "\n" //
+					+ "/**\n" //
+					+ " * A DBO converter for d_heir_tables.\n" //
+					+ " *\n" //
+					+ " * GENERATED CODE !!! DO NOT CHANGE !!!\n" //
+					+ " */\n" //
+					+ "@Generated\n" //
+					+ "@Named\n" //
+					+ "@RequiredArgsConstructor\n" //
+					+ "public class DHeirTableDBOConverter implements ToModelConverter<DHeirTable, DHeirTableDBO> {\n" //
+					+ "\n" //
+					+ "	private final DHeirReferencedTableDBOConverter dHeirReferencedTableDBOConverter;\n" //
+					+ "	private final DReferencedTableDBOConverter dReferencedTableDBOConverter;\n" //
+					+ "	private final ETableDBOConverter eTableDBOConverter;\n" //
+					+ "\n" //
+					+ "	public DHeirTableDBO toDBO(DHeirTable model) {\n" //
+					+ "		if (model == null) {\n" //
+					+ "			return null;\n" //
+					+ "		}\n" //
+					+ "		DHeirTableDBO dbo = new DHeirTableDBO();\n" //
+					+ "		dbo.setId(model.getId());\n" //
+					+ "		dbo.setHeirReference(dHeirReferencedTableDBOConverter.toDBO(model.getHeirReference()));\n" //
+					+ "		dbo.setName(model.getName());\n" //
+					+ "		dbo.setETables(eTableDBOConverter.toDBO(model.getETables()));\n" //
+					+ "		dbo.setReference(dReferencedTableDBOConverter.toDBO(model.getReference()));\n" //
+					+ "		dbo.setDescription(model.getDescription());\n" //
+					+ "		return dbo;\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	public List<DHeirTableDBO> toDBO(List<DHeirTable> models) {\n" //
+					+ "		if (models == null) {\n" //
+					+ "			return null;\n" //
+					+ "		}\n" //
+					+ "		return models.stream().map(this::toDBO).collect(Collectors.toList());\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public DHeirTable toModel(DHeirTableDBO dbo) {\n" //
+					+ "		if (dbo == null) {\n" //
+					+ "			return null;\n" //
+					+ "		}\n" //
+					+ "		DHeirTable model = new DHeirTable();\n" //
+					+ "		model.setId(dbo.getId());\n" //
+					+ "		model.setHeirReference(dHeirReferencedTableDBOConverter.toModel(dbo.getHeirReference()));\n" //
+					+ "		model.setName(dbo.getName());\n" //
+					+ "		model.setETables(eTableDBOConverter.toModel(dbo.getETables()));\n" //
+					+ "		model.setReference(dReferencedTableDBOConverter.toModel(dbo.getReference()));\n" //
+					+ "		model.setDescription(dbo.getDescription());\n" //
+					+ "		return model;\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "	@Override\n" //
+					+ "	public List<DHeirTable> toModel(List<DHeirTableDBO> dbos) {\n" //
+					+ "		if (dbos == null) {\n" //
+					+ "			return null;\n" //
+					+ "		}\n" //
+					+ "		return dbos.stream().map(this::toModel).collect(Collectors.toList());\n" //
+					+ "	}\n" //
+					+ "\n" //
+					+ "}";
+			DataModel dataModel = readDataModel("Model-Inheritance.xml");
+			dataModel.addOption(new Option(AbstractClassCodeGenerator.REFERENCE_MODE, "OBJECT"));
+			// Run
+			String returned = unitUnderTest.generate(BASE_PACKAGE_NAME, dataModel,
+					dataModel.getTableByName("D_HEIR_TABLE"));
+			// Check
+			assertEquals(expected, returned);
+		}
+
 	}
 
 	@Nested
@@ -1252,8 +1336,8 @@ public class DBOConverterClassCodeGeneratorTest {
 						"@RequiredArgsConstructor\n" + //
 						"public class BookDBOConverter implements ToModelConverter<Book, BookDBO> {\n" + //
 						"\n" + //
-						"	private final PublicationTypeDBOConverter publicationTypeDBOConverter;\n" + //
 						"	private final ChapterDBOConverter chapterDBOConverter;\n" + //
+						"	private final PublicationTypeDBOConverter publicationTypeDBOConverter;\n" + //
 						"\n" + //
 						"	public BookDBO toDBO(Book model) {\n" + //
 						"		if (model == null) {\n" + //
