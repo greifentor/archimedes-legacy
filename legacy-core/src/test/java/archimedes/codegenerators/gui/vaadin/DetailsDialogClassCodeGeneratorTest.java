@@ -404,7 +404,7 @@ public class DetailsDialogClassCodeGeneratorTest {
 								+ "						.createComboBox(\n" //
 								+ "								\"NoteDetailsLayout.field.relatedtodo.label\",\n" //
 								+ "								model.getRelatedTodo(),\n" //
-								+ "								task.getTodos().toArray(new Todo[task.getTodos().size()]),\n" //
+								+ "								serviceProvider.getTodoService().findAll().toArray(new Todo[0]),\n" //
 								+ "								session);\n" //
 								+ "		comboBoxRelatedTodo\n" //
 								+ "				.setItemLabelGenerator(\n" //
