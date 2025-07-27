@@ -50,6 +50,8 @@ public class DBTypeConverter {
 			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.ROWID) {
 			return new TypeSO().setSqlType(dataType);
+		} else if (dataType == Types.TIME) {
+			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.TIMESTAMP) {
 			return new TypeSO().setSqlType(dataType);
 		} else if (dataType == Types.VARCHAR) {
