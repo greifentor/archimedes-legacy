@@ -37,98 +37,73 @@ public class JDBCModelUpdater {
 
 	public void updateModel(DiagrammModel diagramm, GUIBundle guiBundle, final FrameArchimedes frameArchimedes,
 			DiagramComponentPanel<GUIObjectTypes> component) {
-		JDBCImportConnectionData connectionData =
-				new JDBCImportConnectionData().setConnections(diagramm.getDatabaseConnections());
-		JDBCImportManagerConfigurationDialog connectionDialog =
-				new JDBCImportManagerConfigurationDialog(connectionData, guiBundle);
+		JDBCImportConnectionData connectionData = new JDBCImportConnectionData()
+				.setConnections(diagramm.getDatabaseConnections());
+		JDBCImportManagerConfigurationDialog connectionDialog = new JDBCImportManagerConfigurationDialog(connectionData,
+				guiBundle);
 		connectionDialog.setVisible(true);
-		connectionDialog
-				.addEditorFrameListener(
-						new EditorFrameListener<EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame>>() {
-							@Override
-							public void eventFired(
-									final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
-								if (event.getEventType() == EditorFrameEventType.OK) {
-									final Thread t = new Thread(() -> {
-										ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 6);
-										UpdateReport report = null;
-										UpdateReport previousReport = null;
-										Vector<String> reportSummary = new Vector<>();
-										int pass = 0;
-										do {
-											try {
-												Diagramm d = (Diagramm) new JDBCImportManager()
-														.importDiagram(connectionData, mrpm::update);
-												if (d != null) {
-													previousReport = report;
-													report = new ModelUpdater(diagramm, d, Archimedes.Factory).update();
-													Counter counter = new Counter(0);
-													int max = report.getActions().size();
-													reportSummary.add("PASS " + pass++);
-													report.getActions().forEach(action -> {
-														mrpm
-																.update(
-																		new ModelReaderEvent(
-																				counter.inc(),
-																				max,
-																				5,
-																				ModelReaderEventType.MESSAGE,
-																				getActionString(action, guiBundle)));
-														reportSummary.add(getActionString(action, guiBundle));
-													});
-													mrpm.update(new ModelReaderEvent(max, max, 6, null, null));
-													mrpm.enableCloseButton();
-													if (report
-															.hasAtLeastOneActionInStatus(
-																	UpdateReportAction.Status.DONE)) {
-														diagramm.raiseAltered();
-													}
-													component.doRepaint();
-												}
-											} catch (Exception e) {
-												mrpm.setVisible(false);
-												LOG
-														.error(
-																"error detected while importing from JDBC connection: "
-																		+ e.getMessage());
-												new ExceptionDialog(
-														e,
-														guiBundle
-																.getResourceText(
-																		"Exception.ImportModel.text",
-																		e.getMessage()),
-														guiBundle);
+		connectionDialog.addEditorFrameListener(
+				new EditorFrameListener<EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame>>() {
+					@Override
+					public void eventFired(final EditorFrameEvent<DatabaseConnectionRecord, ConnectFrame> event) {
+						if (event.getEventType() == EditorFrameEventType.OK) {
+							final Thread t = new Thread(() -> {
+								ModelReaderProgressMonitor mrpm = new ModelReaderProgressMonitor(guiBundle, 6);
+								UpdateReport report = null;
+								UpdateReport previousReport = null;
+								Vector<String> reportSummary = new Vector<>();
+								int pass = 0;
+								do {
+									try {
+										Diagramm d = (Diagramm) new JDBCImportManager().importDiagram(connectionData,
+												mrpm::update);
+										if (d != null) {
+											previousReport = report;
+											report = new ModelUpdater(diagramm, d, Archimedes.Factory).update();
+											Counter counter = new Counter(0);
+											int max = report.getActions().size();
+											reportSummary.add("PASS " + pass++);
+											report.getActions().forEach(action -> {
+												mrpm.update(new ModelReaderEvent(counter.inc(), max, 5,
+														ModelReaderEventType.MESSAGE,
+														getActionString(action, guiBundle)));
+												reportSummary.add(getActionString(action, guiBundle));
+											});
+											mrpm.update(new ModelReaderEvent(max, max, 6, null, null));
+											mrpm.enableCloseButton();
+											if (report.hasAtLeastOneActionInStatus(UpdateReportAction.Status.DONE)) {
+												diagramm.raiseAltered();
 											}
-										} while ((report != null) && !report.equals(previousReport)
-												&& report.hasAtLeastOneActionInStatus(UpdateReportAction.Status.DONE)
-												&& mrpm.isVisible());
-										if (!reportSummary.isEmpty()) {
-											new FrameTextViewer(
-													reportSummary,
-													DefaultFrameTextViewerComponentFactory.INSTANCE,
-													guiBundle.getInifile(),
-													"Model Update Summary",
-													"");
+											component.doRepaint();
 										}
-									});
-									t.start();
+									} catch (Exception e) {
+										mrpm.setVisible(false);
+										LOG.error("error detected while importing from JDBC connection: "
+												+ e.getMessage());
+										e.printStackTrace();
+										new ExceptionDialog(e,
+												guiBundle.getResourceText("Exception.ImportModel.text", e.getMessage()),
+												guiBundle);
+									}
+								} while ((report != null) && !report.equals(previousReport)
+										&& report.hasAtLeastOneActionInStatus(UpdateReportAction.Status.DONE)
+										&& mrpm.isVisible());
+								if (!reportSummary.isEmpty()) {
+									new FrameTextViewer(reportSummary, DefaultFrameTextViewerComponentFactory.INSTANCE,
+											guiBundle.getInifile(), "Model Update Summary", "");
 								}
-							}
-						});
+							});
+							t.start();
+						}
+					}
+				});
 
 	}
 
 	private String getActionString(UpdateReportAction action, GUIBundle guiBundle) {
-		return String
-				.format(
-						"%3s - %s",
-						getStatusString(action.getStatus()),
-						guiBundle
-								.getResourceText(
-										action.getType() == null
-												? action.getMessage()
-												: "ModelUpdater.message." + action.getType() + ".text",
-										(Object[]) action.getValues()));
+		return String.format("%3s - %s", getStatusString(action.getStatus()), guiBundle.getResourceText(
+				action.getType() == null ? action.getMessage() : "ModelUpdater.message." + action.getType() + ".text",
+				(Object[]) action.getValues()));
 	}
 
 	private String getStatusString(UpdateReportAction.Status status) {

@@ -227,7 +227,6 @@
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
 					<finalName>${project.artifactId}-${project.version}-executable</finalName>
-					<classifier>jar</classifier>
 					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 				<executions>

@@ -15,11 +15,15 @@ import java.util.Vector;
 import logging.Logger;
 
 /**
- * Mit Hilfe dieser Implementierung eines typsicheren Enum werden SQL-Datentypen repr&auml;sentiert.
+ * Mit Hilfe dieser Implementierung eines typsicheren Enum werden SQL-Datentypen
+ * repr&auml;sentiert.
  * <P>
- * Die Funktionalit&auml;t der Methoden der Klasse wird stellenweise durch den in der Klasse DBExec eingestellten Modus
- * des bearbeiteten DBMS beeinflu&szlig;t. So liefert die Methode <TT>GetSQLType(DBType, DBExecMode)</TT> z. B. im
- * HSQL-Modus den Wert "longvarchar", anstatt der bei MSSQL und mySQL &uuml;blichen Bezeichnung "text".
+ * Die Funktionalit&auml;t der Methoden der Klasse wird stellenweise durch den
+ * in der Klasse DBExec eingestellten Modus des bearbeiteten DBMS
+ * beeinflu&szlig;t. So liefert die Methode
+ * <TT>GetSQLType(DBType, DBExecMode)</TT> z. B. im HSQL-Modus den Wert
+ * "longvarchar", anstatt der bei MSSQL und mySQL &uuml;blichen Bezeichnung
+ * "text".
  *
  * @author O.Lieshoff
  *
@@ -57,12 +61,14 @@ public final class DBType {
 	 *
 	 * @return Der Name des DBTypes.
 	 */
+	@Override
 	public String toString() {
 		return this.name;
 	}
 
 	/**
-	 * Pr&uuml;ft, ob der DBType eine L&auml;ngenangaben haben kann (z. B. varchar(20)).
+	 * Pr&uuml;ft, ob der DBType eine L&auml;ngenangaben haben kann (z. B.
+	 * varchar(20)).
 	 *
 	 * @return <TT>true</TT>, falls der DBType eine L&auml;ngenangabe haben kann.
 	 */
@@ -71,21 +77,24 @@ public final class DBType {
 	}
 
 	/**
-	 * Pr&uuml;ft, ob der DBType eine Nachkommastellenangaben haben kann (z. B. numeric(5, 2)).
+	 * Pr&uuml;ft, ob der DBType eine Nachkommastellenangaben haben kann (z. B.
+	 * numeric(5, 2)).
 	 *
-	 * @return <TT>true</TT>, falls der DBType eine Nachkommastellenangabe haben kann.
+	 * @return <TT>true</TT>, falls der DBType eine Nachkommastellenangabe haben
+	 *         kann.
 	 */
 	public boolean hasNKS() {
 		return this.hasNKS;
 	}
 
 	/**
-	 * Liefert den Namen des SQLTyps zum DBType in Abh&auml;ngigkeit zum angegebenen DBExecMode (LONGVARCHAR wird z. B.
-	 * unter MSSQL als TEXT angegeben.
+	 * Liefert den Namen des SQLTyps zum DBType in Abh&auml;ngigkeit zum angegebenen
+	 * DBExecMode (LONGVARCHAR wird z. B. unter MSSQL als TEXT angegeben.
 	 *
-	 * @param dbmode Der DBExecMode, zu dem der entsprechende SQLTyp-Name f&uuml;r den vorliegenden DBType geliefert
-	 *               werden soll.
-	 * @return Der Namen des SQLTyps zum DBType in Abh&auml;ngigkeit zum angegebenen DBExecMode.
+	 * @param dbmode Der DBExecMode, zu dem der entsprechende SQLTyp-Name f&uuml;r
+	 *               den vorliegenden DBType geliefert werden soll.
+	 * @return Der Namen des SQLTyps zum DBType in Abh&auml;ngigkeit zum angegebenen
+	 *         DBExecMode.
 	 */
 	public String toSQLType(DBExecMode dbmode) {
 		return GetSQLType(this, dbmode);
@@ -104,6 +113,7 @@ public final class DBType {
 	public static final DBType LONGVARBINARY = new DBType("LONGVARBINARY");
 	public static final DBType LONGVARCHAR = new DBType("LONGVARCHAR");
 	public static final DBType NUMERIC = new DBType("NUMERIC", true, true);
+	public static final DBType OTHER = new DBType("OTHER");
 	public static final DBType SMALLINT = new DBType("SMALLINT");
 	public static final DBType TIME = new DBType("TIME");
 	public static final DBType TIMESTAMP = new DBType("TIMESTAMP");
@@ -115,8 +125,8 @@ public final class DBType {
 	 * Konvertiert die angegebene java.sql.Types-Konstante in einen DBType.
 	 *
 	 * @param type Die zu konvertierende java.sql.Types-Konstante.
-	 * @return Der zur angegebenen Konstante passende DBType. Kann die Konstante nicht zugeordnet werden, so wird der
-	 *         Wert INTEGER zur&uuml;ckgegeben.
+	 * @return Der zur angegebenen Konstante passende DBType. Kann die Konstante
+	 *         nicht zugeordnet werden, so wird der Wert INTEGER zur&uuml;ckgegeben.
 	 */
 	public static DBType Convert(int type) {
 		switch (type) {
@@ -148,6 +158,8 @@ public final class DBType {
 			return LONGVARCHAR;
 		case Types.NUMERIC:
 			return NUMERIC;
+		case Types.OTHER:
+			return OTHER;
 		case Types.REAL:
 			return DOUBLE;
 		case Types.SMALLINT:
@@ -266,11 +278,13 @@ public final class DBType {
 	}
 
 	/**
-	 * Liefert einen DBType zum angegebenen String bzw. <TT>null</TT>, wenn der String auf keinen DBType pa&szlig;t.
+	 * Liefert einen DBType zum angegebenen String bzw. <TT>null</TT>, wenn der
+	 * String auf keinen DBType pa&szlig;t.
 	 *
-	 * @param s Der String, zu dem der passende DBType gesucht werden soll (der String mu&szlig; den Namen des DBTypes
-	 *          enthalten).
-	 * @return Der zu s passende DBType, oder <TT>null</TT>, wenn s keinen Namen eines DBTypes enth&auml;lt.
+	 * @param s Der String, zu dem der passende DBType gesucht werden soll (der
+	 *          String mu&szlig; den Namen des DBTypes enthalten).
+	 * @return Der zu s passende DBType, oder <TT>null</TT>, wenn s keinen Namen
+	 *         eines DBTypes enth&auml;lt.
 	 */
 	public static DBType valueOf(String s) {
 		for (int i = 0, len = TYPES.size(); i < len; i++) {
