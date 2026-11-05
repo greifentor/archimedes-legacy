@@ -143,6 +143,12 @@ import archimedes.model.gui.GUIObjectModel;
 import archimedes.model.gui.GUIViewModel;
 import archimedes.scheme.xml.DiagramXMLBuilder;
 import archimedes.scheme.xml.ModelXMLReader;
+import archimedes.ucg.yaml.DataModelToYamlModelConverter;
+import archimedes.ucg.yaml.UcgYamlModelReader;
+import archimedes.ucg.yaml.UcgYamlModelWriter;
+import archimedes.ucg.yaml.UcgYamlNames;
+import archimedes.ucg.yaml.YamlModelToDiagramConverter;
+import archimedes.ucg.yaml.model.YamlArchimedesSection;
 import baccara.files.PropertyFileManager;
 import baccara.gui.GUIBundle;
 import baccara.gui.PropertyResourceManager;
@@ -205,6 +211,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		DiagrammModelListener, EditorFrameListener<EditorFrameEvent<?, ? extends Window>>, GlobalListener,
 		GUIDiagramModelListener, ModelCheckerMessageListFrameListener, ModelCheckerThreadObserver, CodeFactoryListener {
 	private static final Logger LOG = Logger.getLogger(FrameArchimedes.class);
+	private static final String[] UCG_YAML_FILE_EXTENSIONS = { "yml", "yaml" };
 	private static final String RES_TABLE_FRAME_EDIT_TITLE = "TableFrame.edit.title";
 	private static final String RES_WARNING_MESSAGES_INFOS_DETECTED = "warning.messages.infos.detected.label";
 	private static final String RES_WARNING_MESSAGES_ERRORS_DETECTED = "warning.messages.errors.detected.label";
@@ -645,6 +652,7 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		fc.setAcceptAllFileFilterUsed(false);
 
 		final ExtensionFileFilter eff = new ExtensionFileFilter(new String[] { "ads", "xml" });
+		fc.addChoosableFileFilter(createUcgYamlFileFilter());
 		fc.setFileFilter(eff);
 		fc.setCurrentDirectory(new File(this.datenpfad));
 
@@ -700,6 +708,23 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			}
 		}
 
+		Diagramm ucgYamlDiagram = null;
+		if (isUcgYamlFile(fileName)) {
+			try {
+				ucgYamlDiagram = readUcgYamlFile(fileName);
+			} catch (Exception e) {
+				LOG.error("Error while reading UCG YAML file: " + fileName, e);
+				JOptionPane
+						.showMessageDialog(
+								null,
+								this.guiBundle.getResourceText("archimedes.open.file.ucg.yaml.error.text") + "\n\n"
+										+ e.getMessage(),
+								this.guiBundle.getResourceText("archimedes.open.file.ucg.yaml.error.title"),
+								JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		}
+
 		try {
 			this.dateiname = fileName;
 
@@ -711,6 +736,8 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 			} else if (fileName.toLowerCase().endsWith(".xml")) {
 				final ModelXMLReader reader = new ModelXMLReader(new ArchimedesObjectFactory());
 				this.diagramm = (Diagramm) reader.read(fileName);
+			} else if (ucgYamlDiagram != null) {
+				this.diagramm = ucgYamlDiagram;
 			}
 
 			this.diagramm.addDataModelListener(this);
@@ -748,6 +775,38 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		this.startChecker();
 	}
 
+	private static ExtensionFileFilter createUcgYamlFileFilter() {
+		return new ExtensionFileFilter(UCG_YAML_FILE_EXTENSIONS);
+	}
+
+	private static boolean isUcgYamlFile(String fileName) {
+		String lowerCaseFileName = fileName.toLowerCase();
+		for (String extension : UCG_YAML_FILE_EXTENSIONS) {
+			if (lowerCaseFileName.endsWith("." + extension)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Diagramm readUcgYamlFile(String fileName) throws IOException {
+		UcgYamlModelReader reader = new UcgYamlModelReader();
+		File archimedesFile = new File(UcgYamlNames.getArchimedesFileName(fileName));
+		YamlArchimedesSection archimedesSection =
+				archimedesFile.exists() ? reader.readArchimedesSection(archimedesFile.getAbsolutePath()) : null;
+		return (Diagramm) new YamlModelToDiagramConverter().convert(reader.read(fileName), archimedesSection);
+	}
+
+	private void writeUcgYamlFile(String fileName) throws IOException {
+		DataModelToYamlModelConverter converter = new DataModelToYamlModelConverter();
+		UcgYamlModelWriter writer = new UcgYamlModelWriter();
+		writer.write(converter.convert(this.diagramm), fileName);
+		writer
+				.write(
+						converter.convertToArchimedesSection(this.diagramm),
+						UcgYamlNames.getArchimedesFileName(fileName));
+	}
+
 	private void startChecker() {
 		final String path = this.diagramm.getCodePfad().replace("~", System.getProperty("user.home"));
 		List<ModelChecker> modelCheckers = new ArrayList<>(buildInModelCheckers);
@@ -768,7 +827,9 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 		fc.setAcceptAllFileFilterUsed(false);
 
 		final ExtensionFileFilter eff = new ExtensionFileFilter(new String[] { "ads", "xml" });
-		fc.setFileFilter(eff);
+		final ExtensionFileFilter ucgYamlFileFilter = createUcgYamlFileFilter();
+		fc.addChoosableFileFilter(ucgYamlFileFilter);
+		fc.setFileFilter(isUcgYamlFile(this.dateiname) ? ucgYamlFileFilter : eff);
 		fc.setCurrentDirectory(new File(this.datenpfad));
 		fc.setSelectedFile(new File(this.dateiname));
 
@@ -776,6 +837,9 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			dn = fc.getSelectedFile().getAbsolutePath();
+			if ((fc.getFileFilter() == ucgYamlFileFilter) && !isUcgYamlFile(dn)) {
+				dn = dn + "." + UCG_YAML_FILE_EXTENSIONS[0];
+			}
 			this.doDateiSpeichern(dn, false);
 		}
 	}
@@ -820,6 +884,20 @@ public class FrameArchimedes extends JFrameWithInifile implements ActionListener
 						stf.save(false);
 						this.dateiname = name;
 						this.diagramm.clearAltered();
+					}
+				} else if (isUcgYamlFile(name)) {
+					final int option =
+							JOptionPane
+									.showConfirmDialog(
+											null,
+											this.guiBundle.getResourceText("archimedes.save.file.ucg.yaml.warning.text"),
+											this.guiBundle.getResourceText("archimedes.save.file.ucg.yaml.warning.title"),
+											JOptionPane.YES_NO_OPTION);
+					if (option == JOptionPane.YES_OPTION) {
+						this.writeUcgYamlFile(name);
+						this.dateiname = name;
+						this.diagramm.clearAltered();
+						LOG.info("Written data model to UCG YAML file: " + name);
 					}
 				} else {
 					final FileWriter fw = new FileWriter(name, false);

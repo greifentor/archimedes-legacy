@@ -1,0 +1,58 @@
+classes:
+  - name: Author
+    attributes:
+      - name: id
+        enum: true
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        type:
+          name: String
+  - name: Book
+    properties:
+      - name: order
+        value: title DESC
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        enum: true
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: title
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 1
+        type:
+          name: String
+      - name: author
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 2
+        reference: true
+        type:
+          name: Author
+          properties:
+            - name: project-type
+              value: true
+enums:
+  - name: BookType
+    identifiers:
+    - HARDCOVER
+    - SOFTCOVER
